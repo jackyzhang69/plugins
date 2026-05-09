@@ -1,0 +1,20 @@
+{
+  "name": "jacky-plugins",
+  "owner": {
+    "name": "Jacky Zhang",
+    "url": "https://github.com/jackyzhang69"
+  },
+  "metadata": {
+    "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
+    "version": "0.5.0"
+  },
+  "plugins": [
+    {
+      "name": "formbro-cli",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs; drive local webform fills via the bundled FormBro CLI.",
+      "category": "productivity",
+      "source": "./plugins/formbro-cli",
+      "homepage": "https://formbro.ca/agent-integration"
+    }
+  ]
+}
