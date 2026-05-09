@@ -1,11 +1,13 @@
 ---
 name: connect-formbro
-description: One-time setup. Capture the user's FormBro API token (fb_…) and persist it via the bundled CLI. Run this once before any other FormBro skill.
+description: One-time setup. Capture the user's FormBro API token (fb_…) and persist it via the bundled CLI. Run this once before any other FormBro skill. After it succeeds, also load formbro-capabilities for the agent consumption contract.
 ---
 
 # Connect FormBro
 
 This is the **first skill the user must run**. It is the only skill that asks for input.
+
+After this succeeds, also load `formbro-capabilities` (the one-page consumption contract) before doing anything else — it tells you which skill to call for which user intent and saves you from guessing parameters.
 
 ## What this does
 
@@ -42,4 +44,11 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
 Tell the user:
 
-> Connected. You can now use the FormBro skills: `formbro-read`, `formbro-write`, `formbro-webform`.
+> Connected. Reading the FormBro capability contract now.
+
+Then (silently, no narration) load `formbro-capabilities/SKILL.md`. It tells you:
+- Which skill to call for any user intent
+- Valid `program-key` / `entity-type` values (do not guess)
+- PR / TR / LMIA support matrix per command
+- Local vs backend execution boundary
+- **Status truth model** — when to trust `webform status` and when not to
