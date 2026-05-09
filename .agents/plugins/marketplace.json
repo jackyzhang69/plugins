@@ -1,0 +1,23 @@
+{
+  "name": "jacky-plugins",
+  "owner": {
+    "name": "Jacky Zhang",
+    "url": "https://github.com/jackyzhang69"
+  },
+  "metadata": {
+    "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation) and future tools.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "formbro-cli",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel — all via the bundled FormBro CLI.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Watchpup Inc.",
+        "url": "https://formbro.ca"
+      },
+      "source": "./plugins/formbro-cli"
+    }
+  ]
+}
