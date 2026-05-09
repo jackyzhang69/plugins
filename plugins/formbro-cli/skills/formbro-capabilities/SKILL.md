@@ -102,6 +102,22 @@ This is a known limitation of `cli-rs` being a thin client without local runner 
 - For **ambiguous intent** (multiple plausible programs / entities), ask one specific clarifying question. Do not enumerate every possible interpretation.
 - When the CLI returns a structured error with a remediation hint (`"next_required_checks"`, `"hint"`, `"alternative"`), surface it verbatim. The CLI is the source of truth for what to try next.
 
+### 7.1 PARALLELIZE aggressively
+
+The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` is an independent process with its own HTTPS connection. There is no shared client to bottleneck on, no rate limit headache for normal use. **Run independent calls in parallel whenever you can:**
+
+- **Multi-entity fetches**: when the user asks about a case, fetch the application + each attached person + each related employer **at the same time**. Don't serialize 5 backend calls for "show me everything about case X" — fan them out.
+- **Multi-form PDF / Excel exports**: `export pdf` for IMM0008 + IMM5406 + IMM5645 + IMM5669 + IMM5709 should be 5 concurrent invocations, not sequential. Total wall time = slowest single fill, not the sum.
+- **Bulk validation**: validating 10 entities → 10 concurrent `validate by-id` calls.
+- **Cross-program search**: if the user names a person and you don't know which program their case is in, run `find` in parallel against TR + PR + LMIA scopes.
+- **Webform preflight + data fetch**: `webform preflight` + `applications get` + `applications persons` are independent; do them at once.
+
+**Sequencing only when there is a real data dependency.** `validate by-id` then `applications patch` must be serial (validate result drives the patch). Bulk reads do not.
+
+**Use your runtime's parallel-tool-call mechanism** (Codex's parallel tool execution, async batches, `asyncio.gather`, `Promise.all`, or whatever your harness offers). Concretely: emit multiple shell tool calls in a single response message and let the runtime execute them concurrently. The agent that takes 3 seconds for a 5-form export is doing it wrong; the right answer is well under a second.
+
+**Webform fills run on the user's machine** so heavy parallelism there can saturate their CPU — keep webform `start` calls serialized unless the user asks for parallel browser sessions explicitly. All other subcommands (read / write / validate / export / extract) are network-bound and parallelize cleanly.
+
 ## 8. Token & secret rules
 
 - **Never log the token value.** Mask any `fb_*` value as `fb_***` in any output.

@@ -1,6 +1,6 @@
 {
   "name": "formbro-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel.",
   "author": {
     "name": "Jacky Zhang",

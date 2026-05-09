@@ -1,0 +1,36 @@
+{
+  "$schema": "https://formbro.ca/schemas/runtime-manifest-v1.json",
+  "version": 1,
+  "binary": {
+    "name": "formbro",
+    "platforms": {
+      "darwin-arm64": {
+        "path": "bin/darwin-arm64/formbro",
+        "executable": true,
+        "checksumFile": "bin/darwin-arm64/formbro.sha256"
+      },
+      "darwin-x64": {
+        "path": "bin/darwin-x64/formbro",
+        "executable": true,
+        "checksumFile": "bin/darwin-x64/formbro.sha256"
+      },
+      "win32-x64": {
+        "path": "bin/win32-x64/formbro.exe",
+        "executable": true,
+        "checksumFile": "bin/win32-x64/formbro.exe.sha256"
+      }
+    },
+    "resolutionOrder": [
+      "${process.platform}-${process.arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true
+  },
+  "configHome": {
+    "darwin": "${HOME}/.formbro",
+    "win32":  "${USERPROFILE}/.formbro"
+  },
+  "configFile": "config.json",
+  "tokenEnvVar": "FORMBRO_API_TOKEN",
+  "defaultBaseUrl": "https://backend.formbro.ca"
+}
