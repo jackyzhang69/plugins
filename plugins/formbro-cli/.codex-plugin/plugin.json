@@ -1,6 +1,6 @@
 {
   "name": "formbro-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel.",
   "author": {
     "name": "Jacky Zhang",
@@ -9,7 +9,15 @@
   "homepage": "https://formbro.ca/agent-integration",
   "repository": "https://github.com/jackyzhang69/plugins",
   "license": "MIT",
-  "keywords": ["immigration", "canada", "ircc", "lmia", "tr", "pr", "formbro"],
+  "keywords": [
+    "immigration",
+    "canada",
+    "ircc",
+    "lmia",
+    "tr",
+    "pr",
+    "formbro"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "FormBro",
@@ -17,7 +25,10 @@
     "longDescription": "Read and write FormBro applicants, applications, employers, and programs; run AI-assisted document extraction; drive local Playwright/Chromium IRCC portal fills (the agent prepares; the user submits). The plugin bundles the FormBro Rust CLI for macOS Apple Silicon, macOS Intel, and Windows x64. The only thing the user ever inputs is their FormBro API token (fb_…), captured once by the connect-formbro skill.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://formbro.ca",
     "privacyPolicyURL": "https://formbro.ca/legal/agent-integration-privacy",
     "defaultPrompt": [
