@@ -1,0 +1,258 @@
+{
+  "Appointing": {
+    "dataId": "549R",
+    "type": "radio"
+  },
+  "Updating": {
+    "dataId": "550R",
+    "type": "radio"
+  },
+  "Cancelling": {
+    "dataId": "551R",
+    "type": "check"
+  },
+  "CancelAndAppointing": {
+    "dataId": "552R",
+    "type": "radio"
+  },
+  "Withdrawing": {
+    "dataId": "547R",
+    "type": "radio"
+  },
+  "SectionA.FamilyName": {
+    "dataId": "553R",
+    "type": "input"
+  },
+  "SectionA.GivenName": {
+    "dataId": "554R",
+    "type": "input"
+  },
+  "SectionA.DateOfBirth": {
+    "dataId": "555R",
+    "type": "input"
+  },
+  "SectionA.Email": {
+    "dataId": "556R",
+    "type": "input"
+  },
+  "SectionA.TelephoneOrAddress": {
+    "dataId": "557R",
+    "type": "input"
+  },
+  "SectionA.TypeOfApplication": {
+    "dataId": "558R",
+    "type": "input"
+  },
+  "SectionA.ApplicationNumber": {
+    "dataId": "559R",
+    "type": "input"
+  },
+  "SectionA.UCI": {
+    "dataId": "560R",
+    "type": "input"
+  },
+
+  "SectionB.FamilyName": {
+    "dataId": "561R",
+    "type": "input"
+  },
+  "SectionB.GivenName": {
+    "dataId": "562R",
+    "type": "input"
+  },
+  "SectionB.Uncompensated.FriendOrFamilyMember": {
+    "dataId": "69R",
+    "type": "radio"
+  },
+  "SectionB.Uncompensated.CICC": {
+    "dataId": "71R",
+    "type": "radio"
+  },
+  "SectionB.Uncompensated.CICCMembershipID": {
+    "dataId": "72R",
+    "type": "input"
+  },
+  "SectionB.Uncompensated.LawSociety": {
+    "dataId": "101R",
+    "type": "radio"
+  },
+  "SectionB.Uncompensated.LawSocietyProvince": {
+    "dataId": "74R",
+    "type": "input"
+  },
+  "SectionB.Uncompensated.LawSocietyMembershipID": {
+    "dataId": "68R",
+    "type": "input"
+  },
+  "SectionB.Uncompensated.QuebecLaw": {
+    "dataId": "100R",
+    "type": "radio"
+  },
+  "SectionB.Uncompensated.QuebecMembershipID": {
+    "dataId": "98R",
+    "type": "input"
+  },
+  "SectionB.Uncompensated.Other": {
+    "dataId": "102R",
+    "type": "radio"
+  },
+  "SectionB.Uncompensated.OtherDetail": {
+    "dataId": "99R",
+    "type": "input"
+  },
+  "SectionB.Compensated.CICC": {
+    "dataId": "97R",
+    "type": "radio"
+  },
+  "SectionB.Compensated.CICCMembershipID": {
+    "dataId": "94R",
+    "type": "input"
+  },
+  "SectionB.Compensated.LawSociety": {
+    "dataId": "96R",
+    "type": "radio"
+  },
+  "SectionB.Compensated.LawSocietyProvince": {
+    "dataId": "93R",
+    "type": "input"
+  },
+  "SectionB.Compensated.LawSocietyMembershipID": {
+    "dataId": "92R",
+    "type": "input"
+  },
+  "SectionB.Compensated.QuebecLaw": {
+    "dataId": "95R",
+    "type": "radio"
+  },
+  "SectionB.Compensated.QuebecMembershipID": {
+    "dataId": "91R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Organization": {
+    "dataId": "90R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Lawyer": {
+    "dataId": "89R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.MembershipID": {
+    "dataId": "88R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.AptUnit": {
+    "dataId": "87R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.StreetNum": {
+    "dataId": "86R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.StreetName": {
+    "dataId": "85R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.City": {
+    "dataId": "84R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.Province": {
+    "dataId": "83R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.Country": {
+    "dataId": "82R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Address.PostalCode": {
+    "dataId": "81R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Phone.CountryCode": {
+    "dataId": "80R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Phone.Number": {
+    "dataId": "79R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Fax.CountryCode": {
+    "dataId": "78R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Fax.Number": {
+    "dataId": "77R",
+    "type": "input"
+  },
+  "SectionB.ContactInformation.Email": {
+    "dataId": "76R",
+    "type": "input"
+  },
+  "SectionB.RepSignature": {
+    "dataId": "114R",
+    "type": "input"
+  },
+  "SectionB.RepDateSigned": {
+    "dataId": "113R",
+    "type": "input"
+  },
+  "SectionB.SupervisorSignature": {
+    "dataId": "112R",
+    "type": "input"
+  },
+  "SectionB.SupervisorDateSigned": {
+    "dataId": "111R",
+    "type": "input"
+  },
+
+  "SectionC.FamilyName": {
+    "dataId": "110R",
+    "type": "input"
+  },
+  "SectionC.GivenName": {
+    "dataId": "109R",
+    "type": "input"
+  },
+  "SectionC.Organization": {
+    "dataId": "108R",
+    "type": "input"
+  },
+
+  "SectionD.FamilyName": {
+    "dataId": "107R",
+    "type": "input"
+  },
+  "SectionD.GivenName": {
+    "dataId": "106R",
+    "type": "input"
+  },
+  "SectionD.Organization": {
+    "dataId": "105R",
+    "type": "input"
+  },
+  "SectionD.RepSignature": {
+    "dataId": "104R",
+    "type": "input"
+  },
+  "SectionD.RepDateSigned": {
+    "dataId": "103R",
+    "type": "input"
+  },
+
+  "SectionE.ApplicantSignature": {
+    "dataId": "122R",
+    "type": "input"
+  },
+  "SectionE.DateApplicantSigned": {
+    "dataId": "121R",
+    "type": "input"
+  },
+  "SectionE.SpouseSignature": {
+    "dataId": "120R",
+    "type": "input"
+  },
+  "SectionE.DateSpouseSigned": {
+    "dataId": "119R",
+    "type": "input"
+  }
+}

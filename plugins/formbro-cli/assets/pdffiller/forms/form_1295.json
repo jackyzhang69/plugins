@@ -1,0 +1,775 @@
+{
+    "ServiceIn": {
+        "dataId": "ServiceIn30918",
+        "type": "select",
+        "values": { "English": "01", "French": "02" },
+        "description": "I want service in language"
+    },
+    "UCIClientID": {
+        "dataId": "UCIClientID30921",
+        "type": "input"
+    },
+    "PersonalDetails.Name.FamilyName": {
+        "dataId": "FamilyName30924",
+        "type": "input"
+    },
+    "PersonalDetails.Name.GivenName": {
+        "dataId": "GivenName30925",
+        "type": "input"
+    },
+    "PersonalDetails.AliasName.AliasIndicator": {
+        "dataId": "AliasNameIndicator30930",
+        "type": "radio",
+        "description": "Do you have an alias?"
+    },
+    "PersonalDetails.AliasName.AliasFamilyName": {
+        "dataId": "AliasFamilyName30927",
+        "type": "input"
+    },
+    "PersonalDetails.AliasName.AliasGivenName": {
+        "dataId": "AliasGivenName30928",
+        "type": "input"
+    },
+    "PersonalDetails.Sex": {
+        "dataId": "Sex30932",
+        "type": "select",
+        "values": {
+            "F Female": "Female",
+            "M Male": "Male",
+            "U Unknown": "Unknown",
+            "X Another gender": "Unspecified"
+        }
+    },
+    "PersonalDetails.Dob.DOBYear": {
+        "dataId": "DOBYear30933",
+        "type": "input"
+    },
+    "PersonalDetails.Dob.DOBMonth": {
+        "dataId": "DOBMonth30934",
+        "type": "input"
+    },
+    "PersonalDetails.Dob.DOBDay": {
+        "dataId": "DOBDay30935",
+        "type": "input"
+    },
+    "PersonalDetails.Pob.PlaceBirthCity": {
+        "dataId": "PlaceBirthCity30936",
+        "type": "input"
+    },
+    "PersonalDetails.Pob.PlaceBirthCountry": {
+        "dataId": "PlaceBirthCountry30937",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "PersonalDetails.Citizenship": {
+        "dataId": "Citizenship30939",
+        "type": "select",
+        "values": "${Citizenship}"
+    },
+    "PersonalDetails.CurrentCOR.Country": {
+        "dataId": "Country30943",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "PersonalDetails.CurrentCOR.Status": {
+        "dataId": "Status30944",
+        "type": "select",
+        "values": {
+            "Citizen": "01",
+            "Permanent resident": "02",
+            "Visitor": "03",
+            "Worker": "04",
+            "Student": "05",
+            "Other": "06",
+            "Protected Person": "07",
+            "Refugee Claimant": "08",
+            "Foreign National": "09"
+        }
+    },
+    "PersonalDetails.CurrentCOR.Other": {
+        "dataId": "Other30945",
+        "type": "input"
+    },
+    "PersonalDetails.CurrentCOR.FromDate": {
+        "dataId": "FromDate30946",
+        "type": "input"
+    },
+    "PersonalDetails.CurrentCOR.ToDate": {
+        "dataId": "ToDate30947",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PCRIndicator": {
+        "dataId": "PCRIndicator30955",
+        "type": "radio"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR1.Country": {
+        "dataId": "Country30959",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR1.Status": {
+        "dataId": "Status30960",
+        "type": "select",
+        "values": "${ResidenceStatus}"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR1.Other": {
+        "dataId": "Other30961",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR1.FromDate": {
+        "dataId": "FromDate30962",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR1.ToDate": {
+        "dataId": "ToDate30963",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR2.Country": {
+        "dataId": "Country30965",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR2.Status": {
+        "dataId": "Status30966",
+        "type": "select",
+        "values": "${ResidenceStatus}"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR2.Other": {
+        "dataId": "Other30967",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR2.FromDate": {
+        "dataId": "FromDate30968",
+        "type": "input"
+    },
+    "PersonalDetails.PrevCOR.PreviousCOR2.ToDate": {
+        "dataId": "ToDate30969",
+        "type": "input"
+    },
+    "PersonalDetails.CountryWhereApplying.SameAsCORIndicator": {
+        "dataId": "SameAsCORIndicator30984",
+        "type": "radio"
+    },
+    "PersonalDetails.CountryWhereApplying.Country": {
+        "dataId": "Country30988",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "PersonalDetails.CountryWhereApplying.Status": {
+        "dataId": "Status30989",
+        "type": "select",
+        "values": "${ResidenceStatus}"
+    },
+    "PersonalDetails.CountryWhereApplying.Other": {
+        "dataId": "Other30990",
+        "type": "input"
+    },
+    "PersonalDetails.CountryWhereApplying.FromDate": {
+        "dataId": "FromDate30991",
+        "type": "input"
+    },
+    "PersonalDetails.CountryWhereApplying.ToDate": {
+        "dataId": "ToDate30992",
+        "type": "input"
+    },
+    "MaritalStatus.Current.MaritalStatus": {
+        "dataId": "MaritalStatus31003",
+        "type": "select",
+        "values": "${MaritalStatus_1295}"
+    },
+    "MaritalStatus.Current.MarriageDate": {
+        "dataId": "DateOfMarriage31004",
+        "type": "input"
+    },
+    "MaritalStatus.Current.FamilyName": {
+        "dataId": "FamilyName31009",
+        "type": "input"
+    },
+    "MaritalStatus.Current.GivenName": {
+        "dataId": "GivenName31010",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.PrevMarriedIndicator": {
+        "dataId": "PrevMarriedIndicator31015",
+        "type": "radio"
+    },
+    "MaritalStatus.PrevMarriage.FamilyName": {
+        "dataId": "PMFamilyName31021",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.GivenName": {
+        "dataId": "PMGivenName31023",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.TypeOfRelationship": {
+        "dataId": "TypeOfRelationship31028",
+        "type": "select",
+        "values": "${Relationship}"
+    },
+    "MaritalStatus.PrevMarriage.FromDate": {
+        "dataId": "FromDate31029",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.ToDate": {
+        "dataId": "ToDate31031",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.DOBDay": {
+        "dataId": "DOBDay31027",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.DOBMonth": {
+        "dataId": "DOBMonth31026",
+        "type": "input"
+    },
+    "MaritalStatus.PrevMarriage.DOBYear": {
+        "dataId": "DOBYear31025",
+        "type": "input"
+    },
+    "Languages.nativeLang": {
+        "dataId": "nativeLang31043",
+        "type": "select",
+        "values": "${Language}"
+    },
+    "Languages.FreqLang": {
+        "dataId": "lov31046",
+        "type": "select",
+        "values": { "English": "01", "French": "02"}
+    },
+    "Languages.communicateLang": {
+        "dataId": "ableToCommunicate31045",
+        "type": "select",
+        "values": "${CommunicateLanguage}"
+    },
+    "Languages.LangTestIndicator": {
+        "dataId": "LanguageTest31047",
+        "type": "radio"
+    },
+    "Passport.PassportNum": {
+        "dataId": "PassportNum31051",
+        "type": "input"
+    },
+    "Passport.CountryofIssue": {
+        "dataId": "CountryofIssue31053",
+        "type": "select",
+        "values": "${CountryAbbr}"
+    },
+    "Passport.IssueDate": {
+        "dataId": "IssueDate31055",
+        "type": "input"
+    },
+    "Passport.ExpiryDate": {
+        "dataId": "ExpiryDate31056",
+        "type": "input"
+    },
+    "Passport.TaiwanPIN": {
+        "dataId": "TaiwanPIN31063",
+        "type": "radio"
+    },
+    "Passport.IsraelPassportIndicator": {
+        "dataId": "IsraelPassportIndicator31064",
+        "type": "radio"
+    },
+    "NatID.natIDIndicator": {
+        "dataId": "natIDIndicator31068",
+        "type": "radio"
+    },
+    "NatID.DocNum": {
+        "dataId": "DocNum31071",
+        "type": "input"
+    },
+    "NatID.CountryofIssue": {
+        "dataId": "CountryofIssue31073",
+        "type": "select",
+        "values": "${CountryAbbr}"
+    },
+    "NatID.IssueDate": {
+        "dataId": "IssueDate31075",
+        "type": "input"
+    },
+    "NatID.ExpiryDate": {
+        "dataId": "ExpiryDate31076",
+        "type": "input"
+    },
+    "USCard.usCardIndicator": {
+        "dataId": "usCardIndicator31080",
+        "type": "radio"
+    },
+    "USCard.usCarddocs.DocNum": {
+        "dataId": "DocNum31083",
+        "type": "input"
+    },
+    "USCard.usCarddocs.ExpiryDate": {
+        "dataId": "ExpiryDate31084",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.POBox": {
+        "dataId": "POBox31090",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.AptUnit": {
+        "dataId": "AptUnit31092",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.StreetNum": {
+        "dataId": "StreetNum31094",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.Streetname": {
+        "dataId": "Streetname31096",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.City": {
+        "dataId": "CityTown31099",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.Country": {
+        "dataId": "Country31101",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "ContactInformation.Mailing.Prov": {
+        "dataId": "ProvinceState31103",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+    "ContactInformation.Mailing.PostalCode": {
+        "dataId": "PostalCode31105",
+        "type": "input"
+    },
+    "ContactInformation.Mailing.District": {
+        "dataId": "District31106",
+        "type": "input"
+    },
+    "ContactInformation.Resi.SameAsMailingInd": {
+        "dataId": "SameAsMailingIndicator31107",
+        "type": "radio"
+    },
+    "ContactInformation.Resi.AptUnit": {
+        "dataId": "AptUnit31110",
+        "type": "input"
+    },
+    "ContactInformation.Resi.StreetNum": {
+        "dataId": "StreetNum31112",
+        "type": "input"
+    },
+    "ContactInformation.Resi.Streetname": {
+        "dataId": "Streetname31114",
+        "type": "input"
+    },
+    "ContactInformation.Resi.City": {
+        "dataId": "CityTown31116",
+        "type": "input"
+    },
+    "ContactInformation.Resi.Country": {
+        "dataId": "Country31119",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "ContactInformation.Resi.Prov": {
+        "dataId": "ProvinceState31121",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+    "ContactInformation.Resi.PostalCode": {
+        "dataId": "PostalCode31123",
+        "type": "input"
+    },
+    "ContactInformation.Resi.District": {
+        "dataId": "District31124",
+        "type": "input"
+    },
+    "ContactInformation.Phone.CaUs": {
+        "dataId": "CanadaUS31128",
+        "type": "check"
+    },
+    "ContactInformation.Phone.Other": {
+        "dataId": "Other31129",
+        "type": "check"
+    },
+    "ContactInformation.Phone.Type": {
+        "dataId": "Type31127",
+        "type": "select",
+        "values": "${PhoneType}"
+    },
+    "ContactInformation.Phone.Ext": {
+        "dataId": "NumberExt31130",
+        "type": "input"
+    },
+    "ContactInformation.Phone.ActualNumber": {
+        "dataId": "ActualNumber31132",
+        "type": "input"
+    },
+    "ContactInformation.Phone.CountryCode": {
+        "dataId": "NumberCountry31131",
+        "type": "input"
+    },
+    "ContactInformation.Phone.AreaCode": {
+        "dataId": "AreaCode31134",
+        "type": "input"
+    },
+    "ContactInformation.Phone.FirstThree": {
+        "dataId": "FirstThree31135",
+        "type": "input"
+    },
+    "ContactInformation.Phone.LastFour": {
+        "dataId": "LastFive31136",
+        "type": "input"
+    },
+    "ContactInformation.Phone.IntlNumber": {
+        "dataId": "IntlNumber31138",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.CaUs": {
+        "dataId": "CanadaUS31141",
+        "type": "check"
+    },
+    "ContactInformation.AltPhone.Other": {
+        "dataId": "Other31142",
+        "type": "check"
+    },
+    "ContactInformation.AltPhone.Type": {
+        "dataId": "Type31140",
+        "type": "select",
+        "values": "${PhoneType}"
+    },
+    "ContactInformation.AltPhone.Ext": {
+        "dataId": "NumberExt31143",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.ActualNumber": {
+        "dataId": "ActualNumber31145",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.CountryCode": {
+        "dataId": "NumberCountry31144",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.AreaCode": {
+        "dataId": "AreaCode31147",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.FirstThree": {
+        "dataId": "FirstThree31148",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.LastFour": {
+        "dataId": "LastFive31149",
+        "type": "input"
+    },
+    "ContactInformation.AltPhone.IntlNumber": {
+        "dataId": "IntlNumber31151",
+        "type": "input"
+    },
+    "ContactInformation.Fax.CaUs": {
+        "dataId": "CanadaUS31155",
+        "type": "check"
+    },
+    "ContactInformation.Fax.Other": {
+        "dataId": "Other31156",
+        "type": "check"
+    },
+    "ContactInformation.Fax.Ext": {
+        "dataId": "NumberExt31157",
+        "type": "input"
+    },
+    "ContactInformation.Fax.CountryCode": {
+        "dataId": "NumberCountry31158",
+        "type": "input"
+    },
+    "ContactInformation.Fax.ActualNumber": {
+        "dataId": "ActualNumber31159",
+        "type": "input"
+    },
+    "ContactInformation.Fax.AreaCode": {
+        "dataId": "AreaCode31161",
+        "type": "input"
+    },
+    "ContactInformation.Fax.FirstThree": {
+        "dataId": "FirstThree31162",
+        "type": "input"
+    },
+    "ContactInformation.Fax.LastFour": {
+        "dataId": "LastFive31163",
+        "type": "input"
+    },
+    "ContactInformation.Fax.IntlNumber": {
+        "dataId": "IntlNumber31165",
+        "type": "input"
+    },
+    "ContactInformation.Email": {
+        "dataId": "Email31166",
+        "type": "input"
+    },
+    "DetailsOfWork.Purpose": {
+        "dataId": "WorkPermitType31170",
+        "type": "select",
+        "values": "${WorkPermitTypeAlt}"
+    },
+    "DetailsOfWork.Employer.Name": {
+        "dataId": "EmployerName31173",
+        "type": "input"
+    },
+    "DetailsOfWork.Employer.Addr": {
+        "dataId": "Address31175",
+        "type": "input"
+    },
+    "DetailsOfWork.Location.Prov": {
+        "dataId": "ProvinceState31179",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+    "DetailsOfWork.Location.City": {
+        "dataId": "CityTown31181",
+        "type": "select_city",
+        "province": "DetailsOfWork.Location.Prov"
+    },
+    "DetailsOfWork.Location.Addr": {
+        "dataId": "Address31182",
+        "type": "input"
+    },
+    "DetailsOfWork.Occupation.Job": {
+        "dataId": "jobTitle31185",
+        "type": "input"
+    },
+    "DetailsOfWork.Occupation.Desc": {
+        "dataId": "posDesc31186",
+        "type": "input"
+    },
+    "DetailsOfWork.Duration.FromDate": {
+        "dataId": "FromDate31188",
+        "type": "input"
+    },
+    "DetailsOfWork.Duration.ToDate": {
+        "dataId": "ToDate31189",
+        "type": "input"
+    },
+    "DetailsOfWork.LMO": {
+        "dataId": "LMO31191",
+        "type": "input"
+    },
+    "Education.EducationIndicator": {
+        "dataId": "EducationIndicator31204",
+        "type": "radio"
+    },
+    "Education.From.YYYY": {
+        "dataId": "FromYear31206",
+        "type": "input"
+    },
+    "Education.From.MM": {
+        "dataId": "FromMonth31207",
+        "type": "input"
+    },
+    "Education.FieldOfStudy": {
+        "dataId": "FieldOfStudy31210",
+        "type": "input"
+    },
+    "Education.School": {
+        "dataId": "School31211",
+        "type": "input"
+    },
+    "Education.To.YYYY": {
+        "dataId": "ToYear31208",
+        "type": "input"
+    },
+    "Education.To.MM": {
+        "dataId": "ToMonth31209",
+        "type": "input"
+    },
+    "Education.City": {
+        "dataId": "CityTown31212",
+        "type": "input"
+    },
+    "Education.Country": {
+        "dataId": "Country31214",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "Education.ProvState": {
+        "dataId": "ProvState31215",
+        "type": "select",
+        "values": "${ProvStateAbbr}"
+    },
+
+    "Employment.EmpRec1.From.YYYY": {
+        "dataId": "FromYear31220",
+        "type": "input"
+    },
+    "Employment.EmpRec1.From.MM": {
+        "dataId": "FromMonth31221",
+        "type": "input"
+    },
+    "Employment.EmpRec1.Occupation": {
+        "dataId": "Occupation31225",
+        "type": "input"
+    },
+    "Employment.EmpRec1.Employer": {
+        "dataId": "Employer31226",
+        "type": "input"
+    },
+    "Employment.EmpRec1.To.YYYY": {
+        "dataId": "ToYear31222",
+        "type": "input"
+    },
+    "Employment.EmpRec1.To.MM": {
+        "dataId": "ToMonth31223",
+        "type": "input"
+    },
+    "Employment.EmpRec1.City": {
+        "dataId": "CityTown31228",
+        "type": "input"
+    },
+    "Employment.EmpRec1.Country": {
+        "dataId": "Country31230",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "Employment.EmpRec1.ProvState": {
+        "dataId": "ProvState31231",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+
+    "Employment.EmpRec2.From.YYYY": {
+        "dataId": "FromYear31233",
+        "type": "input"
+    },
+    "Employment.EmpRec2.From.MM": {
+        "dataId": "FromMonth31234",
+        "type": "input"
+    },
+    "Employment.EmpRec2.Occupation": {
+        "dataId": "Occupation31238",
+        "type": "input"
+    },
+    "Employment.EmpRec2.Employer": {
+        "dataId": "Employer31239",
+        "type": "input"
+    },
+    "Employment.EmpRec2.To.YYYY": {
+        "dataId": "ToYear31235",
+        "type": "input"
+    },
+    "Employment.EmpRec2.To.MM": {
+        "dataId": "ToMonth31236",
+        "type": "input"
+    },
+    "Employment.EmpRec2.City": {
+        "dataId": "CityTown31241",
+        "type": "input"
+    },
+    "Employment.EmpRec2.Country": {
+        "dataId": "Country31243",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "Employment.EmpRec2.ProvState": {
+        "dataId": "ProvState31244",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+
+    "Employment.EmpRec3.From.YYYY": {
+        "dataId": "FromYear31246",
+        "type": "input"
+    },
+    "Employment.EmpRec3.From.MM": {
+        "dataId": "FromMonth31247",
+        "type": "input"
+    },
+    "Employment.EmpRec3.Occupation": {
+        "dataId": "Occupation31251",
+        "type": "input"
+    },
+    "Employment.EmpRec3.Employer": {
+        "dataId": "Employer31252",
+        "type": "input"
+    },
+    "Employment.EmpRec3.To.YYYY": {
+        "dataId": "ToYear31248",
+        "type": "input"
+    },
+    "Employment.EmpRec3.To.MM": {
+        "dataId": "ToMonth31249",
+        "type": "input"
+    },
+    "Employment.EmpRec3.City": {
+        "dataId": "CityTown31254",
+        "type": "input"
+    },
+    "Employment.EmpRec3.Country": {
+        "dataId": "Country31256",
+        "type": "select",
+        "values": "${Country}"
+    },
+    "Employment.EmpRec3.ProvState": {
+        "dataId": "ProvState31257",
+        "type": "select",
+        "values": "${CaProvinceAbbr}"
+    },
+
+    "BackgroundInfo.HealthQ.qANY": {
+        "dataId": "Choice31263",
+        "type": "radio"
+    },
+    "BackgroundInfo.HealthQ.qBNY": {
+        "dataId": "Choice31264",
+        "type": "radio"
+    },
+    "BackgroundInfo.HealthQ.MedicalDetails": {
+        "dataId": "MedicalDetails31262",
+        "type": "input"
+    },
+    "BackgroundInfo.PrevApplied.qANY": {
+        "dataId": "VisaChoice131267",
+        "type": "radio"
+    },
+    "BackgroundInfo.PrevApplied.qBNY": {
+        "dataId": "VisaChoice231268",
+        "type": "radio"
+    },
+    "BackgroundInfo.PrevApplied.qCNY": {
+        "dataId": "VisaChoice331271",
+        "type": "radio"
+    },
+    "BackgroundInfo.PrevApplied.DetailsOfApplying": {
+        "dataId": "refusedDetails31270",
+        "type": "input"
+    },
+    "BackgroundInfo.CustodyQ.qANY": {
+        "dataId": "Choice31274",
+        "type": "radio"
+    },
+    "BackgroundInfo.CustodyQ.Details": {
+        "dataId": "militaryServiceDetails31275",
+        "type": "input"
+    },
+    "BackgroundInfo.MilitaryQ.qANY": {
+        "dataId": "Choice31277",
+        "type": "radio"
+    },
+    "BackgroundInfo.MilitaryQ.Details": {
+        "dataId": "militaryServiceDetails31278",
+        "type": "input"
+    },
+    "BackgroundInfo.GovQ.qANY": {
+        "dataId": "Choice31280",
+        "type": "radio"
+    },
+    "BackgroundInfo.WitnessQ.qANY": {
+        "dataId": "Choice31282",
+        "type": "radio"
+    },
+    "Signature.FutureCommIndicator": {
+        "dataId": "Choice31284",
+        "type": "radio"
+    },
+    "Signature.Signature": {
+        "dataId": "TextField231285",
+        "type": "input"
+    },
+    "Signature.Date": {
+        "dataId": "C1CertificateIssueDate31286",
+        "type": "input"
+    }
+}

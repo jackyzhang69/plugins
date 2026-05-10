@@ -74,7 +74,7 @@ If you call a command in the wrong column, the CLI returns a structured 4xx erro
 |---|---|---|
 | `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `backend.formbro.ca`) | Required |
 | `applications` write, `persons` write, `employers` write, `validate *`, `extract *`, `notes add`, `uploads slots` | **Backend** call | Required |
-| **`fill`** (PDF, agent path) | **Backend today, local soon.** Output JSON's `engine` field (`backend` or `local`) tells you which. CLI surface stays the same when it flips. | Required today; **post-flip**: only the initial template fetch hits backend (cached afterward). |
+| **`fill`** (PDF, agent path) | **Local Rust XFA filler for 12 IRCC forms (~5-10 ms per form, no qpdf/Node/Python at runtime); auto-fallback to backend for IMM0008 and any unmapped form.** Backend is still hit for the per-application data payload (~200-400 ms). | Required for the data payload fetch. |
 | `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
 | **`webform start`** | **LOCAL — spawns a Node + Playwright + Chromium process on the user's machine.** Drives the IRCC / Service Canada portal in a real browser the user can see (with `--headless=false`). | Required (the local browser hits IRCC) |
 | `webform preflight`, `webform runtime-check` | LOCAL (no backend call needed for `runtime-check`) | varies |

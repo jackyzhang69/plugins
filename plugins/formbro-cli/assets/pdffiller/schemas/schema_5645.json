@@ -1,0 +1,275 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://formbro.local/pdf/5645.json",
+    "type": "object",
+    "properties": {
+        "ApplicationType": {
+            "type": "object",
+            "properties": {
+                "Visitor": { "type": "boolean" },
+                "Worker": { "type": "boolean" },
+                "Student": { "type": "boolean" },
+                "Other": { "type": "boolean" }
+            },
+            "anyOf": [
+                { "required": ["Visitor"] },
+                { "required": ["Worker"] },
+                { "required": ["Student"] },
+                { "required": ["Other"] }
+            ]
+        },
+        "SectionA": {
+            "type": "object",
+            "properties": {
+                "Applicant": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married-physically present", "Married-not physically present", "Single", "Widowed"]
+                        },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "PresentOccupation": { "type": "string" }
+                    },
+                    "required": ["Name", "MaritalStatus", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation"]
+                },
+                "Spouse": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married-physically present", "Married-not physically present", "Single", "Widowed"]
+                        },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "PresentOccupation": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Mother": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Father": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Signature": { "type": "string" },
+                "SignDate": { "type": "string", "format": "date" }
+            },
+            "required": ["Applicant"],
+            "if": {
+                "not": {
+                    "required": ["Spouse"]
+                }
+            },
+            "then": {
+                "required": ["Signature", "SignDate"]
+            }
+        },
+        "SectionB": {
+            "type": "object",
+            "properties": {
+                "Child1": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Child2": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Child3": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Child4": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Signature": { "type": "string" },
+                "SignDate": { "type": "string", "format": "date" }
+            }
+        },
+        "SectionC": {
+            "type": "object",
+            "properties": {
+                "Sibling1": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling2": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling3": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling4": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling5": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling6": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Sibling7": {
+                    "type": "object",
+                    "properties": {
+                        "Name": { "type": "string" },
+                        "MaritalStatus": {
+                            "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Legally separated", "Married", "Single", "Widowed"]
+                        },
+                        "Relationship": { "type": "string" },
+                        "DOB": { "type": "string", "format": "date" },
+                        "CountryOfBirth": { "type": "string" },
+                        "PresentAddress": { "type": "string" },
+                        "Accompany": { "type": "boolean" }
+                    },
+                    "required": ["Name", "MaritalStatus", "Relationship", "DOB", "CountryOfBirth", "PresentAddress", "PresentOccupation", "Accompany"]
+                },
+                "Signature": { "type": "string" },
+                "SignDate": { "type": "string", "format": "date" }
+            }
+        }
+    },
+    "required": ["ApplicationType", "SectionA", "SectionB", "SectionC"]
+}

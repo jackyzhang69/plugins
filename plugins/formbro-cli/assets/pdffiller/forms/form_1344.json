@@ -1,0 +1,817 @@
+{
+  "Application.Proceed": {
+    "dataId": "Proceed30020",
+    "type": "radio"
+  },
+  "Application.Language": {
+    "dataId": "LangPref30023",
+    "type": "select",
+    "values": { "English": "01", "French": "02" }
+  },
+  "Application.Co-signer": {
+    "dataId": "CoSignerInd30025",
+    "type": "radio"
+  },
+  "Application.FamilyName": {
+    "dataId": "PAFamilyName30027",
+    "type": "input"
+  },
+  "Application.GivenName": {
+    "dataId": "PAGivenName30028",
+    "type": "input"
+  },
+  "Application.Dob.DOBYear": {
+    "dataId": "DOBYear30030",
+    "type": "input"
+  },
+  "Application.Dob.DOBMonth": {
+    "dataId": "DOBMonth30031",
+    "type": "input"
+  },
+  "Application.Dob.DOBDay": {
+    "dataId": "DOBDay30032",
+    "type": "input"
+  },
+  "Application.Relationship": {
+    "dataId": "Relationship30034",
+    "type": "select",
+    "values": "${SponsorRelationship}"
+  },
+  "Application.Other": {
+    "dataId": "Other30035",
+    "type": "input"
+  },
+  "Application.ConjugalFromDate": {
+    "dataId": "RelationFrom30036",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Name.FamilyName": {
+    "dataId": "FamilyName30039",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Name.GivenName": {
+    "dataId": "GivenName30040",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.AliasName.AliasIndicator": {
+    "dataId": "AliasNameIndicator30044",
+    "type": "radio"
+  },
+  "Sponsor.PersonalDetails.AliasName.FamilyName": {
+    "dataId": "AliasFamilyName30045",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.AliasName.GivenName": {
+    "dataId": "AliasGivenName30046",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Sex": {
+    "dataId": "Sex30049",
+    "type": "select",
+    "values": {
+      "F Female": "Female",
+      "M Male": "Male",
+      "U Unknown": "Unknown",
+      "X Another gender": "Unspecified"
+    }
+  },
+  "Sponsor.PersonalDetails.Dob.DOBYear": {
+    "dataId": "DOBYear30053",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Dob.DOBMonth": {
+    "dataId": "DOBMonth30052",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Dob.DOBDay": {
+    "dataId": "DOBDay30051",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Pob.PlaceBirthCity": {
+    "dataId": "PlaceBirthCity30055",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.Pob.PlaceBirthCountry": {
+    "dataId": "PlaceBirthCountry30056",
+    "type": "select",
+    "values": "${Country}"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.Status": {
+    "dataId": "StatusInCan30058",
+    "type": "select",
+    "values": "${StatusInCanada}"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.FromDate": {
+    "dataId": "DateStatInCan30061",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.UCI": {
+    "dataId": "UCI30060",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.PRName.Same": {
+    "dataId": "SameNameInd30067",
+    "type": "radio"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.PRName.FamilyName": {
+    "dataId": "FamilyName30068",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.StatusInCanada.PRName.GivenName": {
+    "dataId": "GivenName30069",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.CurMarriage.Status": {
+    "dataId": "MaritalStatus30072",
+    "type": "select",
+    "values": "${MaritalStatus}"
+  },
+  "Sponsor.PersonalDetails.CurMarriage.DateOfMarriage": {
+    "dataId": "DateOfMarriage30073",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.CurMarriage.FamilyName": {
+    "dataId": "FamilyName30079",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.CurMarriage.GivenName": {
+    "dataId": "GivenName30080",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.PrevMarriedIndicator": {
+    "dataId": "PrevMarriedIndicator30083",
+    "type": "radio"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.FamilyName": {
+    "dataId": "PMFamilyName30084",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.GivenName": {
+    "dataId": "PMGivenName30085",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.Dob.DOBYear": {
+    "dataId": "DOBYear30087",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.Dob.DOBMonth": {
+    "dataId": "DOBMonth30088",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.Dob.DOBDay": {
+    "dataId": "DOBDay30089",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.Relationship": {
+    "dataId": "TypeOfRelationship30091",
+    "type": "select",
+    "values": "${Relationship}"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.FromDate": {
+    "dataId": "FromDate30093",
+    "type": "input"
+  },
+  "Sponsor.PersonalDetails.PrevMarriage.ToDate": {
+    "dataId": "ToDate30092",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.POBox": {
+    "dataId": "POBox30105",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.AptUnit": {
+    "dataId": "AptUnit30106",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.StreetNum": {
+    "dataId": "StreetNum30107",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.StreetName": {
+    "dataId": "Streetname30108",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.City": {
+    "dataId": "CityTown30110",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.Country": {
+    "dataId": "Country30111",
+    "type": "select",
+    "values": "${Country}"
+  },
+  "Sponsor.ContactInformation.Mailing.ProvState": {
+    "dataId": "ProvinceState30112",
+    "type": "select",
+    "values": "${ProvStateAbbr}"
+  },
+  "Sponsor.ContactInformation.Mailing.PostalCode": {
+    "dataId": "PostalCode30113",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Mailing.District": {
+    "dataId": "District30114",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.SameAsMailingInd": {
+    "dataId": "SameAsMailingIndicator30116",
+    "type": "radio"
+  },
+  "Sponsor.ContactInformation.Resi.AptUnit": {
+    "dataId": "AptUnit30118",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.StreetNum": {
+    "dataId": "StreetNum30119",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.StreetName": {
+    "dataId": "Streetname30120",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.City": {
+    "dataId": "CityTown30121",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.Country": {
+    "dataId": "Country30123",
+    "type": "select",
+    "values": "${Country}"
+  },
+  "Sponsor.ContactInformation.Resi.ProvState": {
+    "dataId": "ProvinceState30124",
+    "type": "select",
+    "values": "${ProvStateAbbr}"
+  },
+  "Sponsor.ContactInformation.Resi.PostalCode": {
+    "dataId": "PostalCode30125",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Resi.District": {
+    "dataId": "District30126",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.CaUs": {
+    "dataId": "CanadaUS30129",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.Phone.Other": {
+    "dataId": "Other30130",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.Phone.ActualNumber": {
+    "dataId": "ActualNumber30131",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.Type": {
+    "dataId": "Type30132",
+    "type": "select",
+    "values": "${PhoneType}"
+  },
+  "Sponsor.ContactInformation.Phone.CountryCode": {
+    "dataId": "NumberCountry30134",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.AreaCode": {
+    "dataId": "AreaCode30136",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.FirstThree": {
+    "dataId": "FirstThree30137",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.LastFour": {
+    "dataId": "LastFive30138",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.IntlNumber": {
+    "dataId": "IntlNumber30140",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Phone.Ext": {
+    "dataId": "NumberExt30133",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.CaUs": {
+    "dataId": "CanadaUS30142",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.AltPhone.Other": {
+    "dataId": "Other30143",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.AltPhone.Type": {
+    "dataId": "Type30145",
+    "type": "select",
+    "values": "${PhoneType}"
+  },
+  "Sponsor.ContactInformation.AltPhone.ActualNumber": {
+    "dataId": "ActualNumber30144",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.CountryCode": {
+    "dataId": "NumberCountry30147",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.AreaCode": {
+    "dataId": "AreaCode30149",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.FirstThree": {
+    "dataId": "FirstThree30150",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.LastFour": {
+    "dataId": "LastFive30151",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.IntlNumber": {
+    "dataId": "IntlNumber30153",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.AltPhone.Ext": {
+    "dataId": "NumberExt30146",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.CaUs": {
+    "dataId": "CanadaUS30157",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.Fax.Other": {
+    "dataId": "Other30158",
+    "type": "check"
+  },
+  "Sponsor.ContactInformation.Fax.ActualNumber": {
+    "dataId": "ActualNumber30161",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.CountryCode": {
+    "dataId": "NumberCountry30160",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.AreaCode": {
+    "dataId": "AreaCode30163",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.FirstThree": {
+    "dataId": "FirstThree30164",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.LastFour": {
+    "dataId": "LastFive30165",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.IntlNumber": {
+    "dataId": "IntlNumber30167",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Fax.Ext": {
+    "dataId": "NumberExt30159",
+    "type": "input"
+  },
+  "Sponsor.ContactInformation.Email": {
+    "dataId": "Email30169",
+    "type": "input"
+  },
+  "Sponsor.ResidencyDeclaration.CanadianOutside": {
+    "dataId": "LiveOutsideCan30172",
+    "type": "radio"
+  },
+  "Sponsor.ResidencyDeclaration.LiveInQuebec": {
+    "dataId": "LiveQC30173",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q1": {
+    "dataId": "Over18Ind30176",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q2": {
+    "dataId": "CanCitzInd30178",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q3": {
+    "dataId": "SpouseCLInd30180",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q4": {
+    "dataId": "ResideCanInd30182",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q5": {
+    "dataId": "PrevSponsored30184",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q6": {
+    "dataId": "PrevAppInd30186",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q7": {
+    "dataId": "SocialAssistInd30188",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q8": {
+    "dataId": "BankruptInd30190",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q9": {
+    "dataId": "PrevSocialInd30192",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q10": {
+    "dataId": "UndertakeInd30194",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q11": {
+    "dataId": "LeaveCanInd30196",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q12": {
+    "dataId": "LatePayInd30198",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q13": {
+    "dataId": "JailInd30200",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q14": {
+    "dataId": "SexOffInd30202",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q15": {
+    "dataId": "SupportPayInd30204",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q16": {
+    "dataId": "RevokeCitzInd30206",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q17": {
+    "dataId": "InadmissibleInd30208",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Q18": {
+    "dataId": "ActParlimentInd30210",
+    "type": "radio"
+  },
+  "Sponsor.EligibilityAccessment.Details": {
+    "dataId": "Details30212",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Name.FamilyName": {
+    "dataId": "FamilyName30216",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Name.GivenName": {
+    "dataId": "GivenName30217",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.AliasName.AliasIndicator": {
+    "dataId": "AliasNameIndicator30221",
+    "type": "radio"
+  },
+  "Co-signer.PersonalDetails.AliasName.FamilyName": {
+    "dataId": "AliasFamilyName30222",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.AliasName.GivenName": {
+    "dataId": "AliasGivenName30223",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Sex": {
+    "dataId": "Sex30225",
+    "type": "select",
+    "values": {
+      "F Female": "Female",
+      "M Male": "Male",
+      "U Unknown": "Unknown",
+      "X Another gender": "Unspecified"
+    }
+  },
+  "Co-signer.PersonalDetails.Dob.DOBYear": {
+    "dataId": "DOBYear30229",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Dob.DOBMonth": {
+    "dataId": "DOBMonth30228",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Dob.DOBDay": {
+    "dataId": "DOBDay30227",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Pob.PlaceBirthCity": {
+    "dataId": "PlaceBirthCity30231",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.Pob.PlaceBirthCountry": {
+    "dataId": "PlaceBirthCountry30232",
+    "type": "select",
+    "values": "${Country}"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.Status": {
+    "dataId": "StatusInCan30234",
+    "type": "select",
+    "values": "${StatusInCanada}"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.FromDate": {
+    "dataId": "DateStatInCan30237",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.UCI": {
+    "dataId": "UCI30236",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.PRName.Same": {
+    "dataId": "SameNameInd30243",
+    "type": "radio"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.PRName.FamilyName": {
+    "dataId": "FamilyName30244",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.StatusInCanada.PRName.GivenName": {
+    "dataId": "GivenName30245",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.CurMarriage.Relationship": {
+    "dataId": "Rel2Sponsor30248",
+    "type": "select",
+    "values": { "Spouse": "10", "Common-Law Partner": "01", "Other": "85" }
+  },
+  "Co-signer.PersonalDetails.CurMarriage.Other": {
+    "dataId": "Other30249",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.CurMarriage.Status": {
+    "dataId": "MaritalStatusNew30250",
+    "type": "select",
+    "values": "${MaritalStatus}"
+  },
+  "Co-signer.PersonalDetails.CurMarriage.DateOfMarriage": {
+    "dataId": "DateOfMarriage30252",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.CurMarriage.FamilyName": {
+    "dataId": "FamilyName30258",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.CurMarriage.GivenName": {
+    "dataId": "GivenName30259",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.PrevMarriedIndicator": {
+    "dataId": "PrevMarriedIndicator30261",
+    "type": "radio"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.FamilyName": {
+    "dataId": "PMFamilyName30263",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.GivenName": {
+    "dataId": "PMGivenName30263",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.Dob.DOBYear": {
+    "dataId": "DOBYear30278",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.Dob.DOBMonth": {
+    "dataId": "DOBMonth30279",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.Dob.DOBDay": {
+    "dataId": "DOBDay30280",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.Relationship": {
+    "dataId": "TypeOfRelationship30265",
+    "type": "select",
+    "values": "${Relationship}"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.FromDate": {
+    "dataId": "FromDate30267",
+    "type": "input"
+  },
+  "Co-signer.PersonalDetails.PrevMarriage.ToDate": {
+    "dataId": "ToDate30269",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.CaUs": {
+    "dataId": "CanadaUS30284",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.Phone.Other": {
+    "dataId": "Other30285",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.Phone.ActualNumber": {
+    "dataId": "ActualNumber30289",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.Type": {
+    "dataId": "Type30286",
+    "type": "select",
+    "values": "${PhoneType}"
+  },
+  "Co-signer.ContactInformation.Phone.CountryCode": {
+    "dataId": "NumberCountry30287",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.AreaCode": {
+    "dataId": "AreaCode30291",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.FirstThree": {
+    "dataId": "FirstThree30292",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.LastFour": {
+    "dataId": "LastFive30293",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.IntlNumber": {
+    "dataId": "IntlNumber30295",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Phone.Ext": {
+    "dataId": "NumberExt30288",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.CaUs": {
+    "dataId": "CanadaUS30297",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.AltPhone.Other": {
+    "dataId": "Other30298",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.AltPhone.ActualNumber": {
+    "dataId": "ActualNumber30302",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.Type": {
+    "dataId": "Type30299",
+    "type": "select",
+    "values": "${PhoneType}"
+  },
+  "Co-signer.ContactInformation.AltPhone.CountryCode": {
+    "dataId": "NumberCountry30300",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.AreaCode": {
+    "dataId": "AreaCode30304",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.FirstThree": {
+    "dataId": "FirstThree30305",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.LastFour": {
+    "dataId": "LastFive30306",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.IntlNumber": {
+    "dataId": "IntlNumber30308",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.AltPhone.Ext": {
+    "dataId": "NumberExt30301",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.CaUs": {
+    "dataId": "CanadaUS30312",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.Fax.Other": {
+    "dataId": "Other30313",
+    "type": "check"
+  },
+  "Co-signer.ContactInformation.Fax.ActualNumber": {
+    "dataId": "ActualNumber30316",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.CountryCode": {
+    "dataId": "NumberCountry30315",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.AreaCode": {
+    "dataId": "AreaCode30318",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.FirstThree": {
+    "dataId": "FirstThree30319",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.LastFour": {
+    "dataId": "LastFive30320",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.IntlNumber": {
+    "dataId": "IntlNumber30322",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Fax.Ext": {
+    "dataId": "NumberExt30314",
+    "type": "input"
+  },
+  "Co-signer.ContactInformation.Email": {
+    "dataId": "Email30324",
+    "type": "input"
+  },
+  "Co-signer.ResidencyDeclaration.CanadianOutside": {
+    "dataId": "LiveOutsideCan30328",
+    "type": "radio"
+  },
+  "Co-signer.ResidencyDeclaration.LiveInQuebec": {
+    "dataId": "LiveQC30327",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q1": {
+    "dataId": "Over18Ind30331",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q2": {
+    "dataId": "CanCitzInd30333",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q3": {
+    "dataId": "ResideCanInd30335",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q4": {
+    "dataId": "SocialAssistInd30337",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q5": {
+    "dataId": "BankruptInd30339",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q6": {
+    "dataId": "PrevSocialInd30341",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q7": {
+    "dataId": "UndertakeInd30343",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q8": {
+    "dataId": "LeaveCanInd30345",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q9": {
+    "dataId": "LatePayInd30347",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q10": {
+    "dataId": "JailInd30349",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q11": {
+    "dataId": "SexOffInd30351",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q12": {
+    "dataId": "SupportPayInd30353",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q13": {
+    "dataId": "RevokeCitzInd30355",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q14": {
+    "dataId": "InadmissibleInd30357",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Q15": {
+    "dataId": "ActParlimentInd30359",
+    "type": "radio"
+  },
+  "Co-signer.EligibilityAccessment.Details": {
+    "dataId": "Details30361",
+    "type": "input"
+  },
+  "Signatures.Sponsor.Signature": {
+    "dataId": "SponSiglbl30366",
+    "type": "input"
+  },
+  "Signatures.Sponsor.Date": {
+    "dataId": "SponSigDate30367",
+    "type": "input"
+  },
+  "Signatures.Co-signer.Signature": {
+    "dataId": "CoSignSiglbl30368",
+    "type": "input"
+  },
+  "Signatures.Co-signer.Date": {
+    "dataId": "CoSignSigDate30369",
+    "type": "input"
+  },
+  "Signatures.Applicant.Signature": {
+    "dataId": "PASiglbl30370",
+    "type": "input"
+  },
+  "Signatures.Applicant.Date": {
+    "dataId": "PASignDate30371",
+    "type": "input"
+  }
+}

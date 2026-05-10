@@ -1,6 +1,6 @@
 ---
 name: formbro-fill
-description: Agent-facing entrypoint for filling IRCC IMM PDF forms (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Use this skill for ANY user intent that mentions "fill PDF / IMM form / generate the IMM5257 / give me the filled PDF". Auto-detects TR vs PR from the application; rejects LMIA (which is webform-only). Stable agent surface — backend now, local engine soon, same command.
+description: Agent-facing entrypoint for filling IRCC IMM PDF forms (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Use this skill for ANY user intent that mentions "fill PDF / IMM form / generate the IMM5257 / give me the filled PDF". Auto-detects TR vs PR from the application; rejects LMIA (which is webform-only). Stable agent surface — local engine for 12 IRCC forms, auto-fallback to backend for IMM0008.
 ---
 
 # Fill IRCC IMM PDFs
@@ -26,7 +26,7 @@ This is the **only** agent-facing PDF skill. If a user says any of:
 ## What this command does (and what it does NOT)
 
 - ✅ One stable command for TR + PR PDF fills. **No `--program <category>` argument** — TR vs PR is detected from the application.
-- ✅ Output is JSON with a `files` array (each with `path`, `form`, `size_bytes`) plus an `engine` marker (`backend` today, `local` once PB-3+PB-4 ships).
+- ✅ Output is JSON with a `files` array (each with `path`, `form`, `size_bytes`) plus an `engine` marker (`local` for the 12 forms whose mapping ships in the plugin bundle, `backend` for IMM0008 and any unmapped form).
 - ✅ Multi-form requests are returned as individual `IMM<id>.pdf` files in the chosen output directory (no opaque ZIP for the agent to unpack).
 - ❌ Does **not** ask the user about TR vs PR. Pass `--program-key` only if auto-detection fails or the application doc is unusual.
 - ❌ Does **not** support LMIA. LMIA is webform-only (handled by `formbro-webform`).
@@ -54,20 +54,37 @@ If the user asks for a form that the program doesn't support, the CLI returns a 
 ```json
 {
   "ok": true,
-  "engine": "backend",
+  "engine": "local",
+  "engine_detail": {
+    "binary": "/.../plugins/formbro-cli/bin/darwin-arm64/pdf-fill-xfa",
+    "vendor_root": "/.../plugins/formbro-cli/assets/pdffiller"
+  },
   "category": "tr",
   "program_key": "sp-out",
   "app_id": "abc123",
   "files": [
-    { "path": "./out/IMM1294.pdf", "form": "1294", "size_bytes": 412035 },
-    { "path": "./out/IMM5645.pdf", "form": "5645", "size_bytes": 318772 }
+    { "path": "./out/IMM1294.pdf", "form": "1294", "size_bytes": 683949, "local_ms": 5 },
+    { "path": "./out/IMM5645.pdf", "form": "5645", "size_bytes": 1592349, "local_ms": 6 }
   ],
-  "elapsed_ms": 2840,
-  "note": "Local fill engine pending PB-3+PB-4. When shipped, `engine` flips to `local` and round-trip drops dramatically; CLI surface stays the same."
+  "elapsed_ms": 312
 }
 ```
 
-The `engine` field is the **only** way to know whether the round-trip went to the FormBro backend or stayed on the user's machine. Don't gate behavior on it; treat the contract (filled PDFs at the listed paths) as the source of truth.
+Or, when the local engine isn't applicable (form not in bundle, e.g., IMM0008):
+
+```json
+{
+  "ok": true,
+  "engine": "backend",
+  "engine_detail": {
+    "reason": "auto-fallback: requested forms have no local mapping",
+    "forms_lacking_local_mapping": ["0008"]
+  },
+  ...
+}
+```
+
+The `engine` field tells you whether the fill happened on the user's machine (local Rust XFA filler, ~5-10 ms per form) or via the FormBro backend (round-trip ~2-5 s). Treat the contract — filled PDFs at the listed paths — as the source of truth; the `engine` value is for telemetry only.
 
 ## Status truth model
 
@@ -85,13 +102,20 @@ Do not serialize per-form calls for a single application. That's the worst patte
 ## Reference (full subcommand)
 
 ```sh
-<formbro> fill --app-id <id> --forms IMM<id>,IMM<id>,...  [-o <dir>] [--program-key <key>]
+<formbro> fill --app-id <id> --forms IMM<id>,IMM<id>,... [-o <dir>] [--program-key <key>] [--engine auto|local|backend]
 ```
 
 - `--app-id` (required) — application id
 - `--forms` (required) — comma-separated list, `IMM` prefix optional (`IMM5257` ≡ `5257`)
 - `-o, --output` (default `.`) — directory to write PDFs into; created if missing
 - `--program-key` (auto-detected) — TR keys: `sp-out`, `sp-in`, `wp-out`, `wp-in`, `visa-out`, `visa-in`, `visitor-record`. PR keys: `general`, `express-entry`, `caregiver`, `spouse-sponsorship`, `parent-sponsorship`, `renewal`. LMIA keys are rejected.
+- `--engine` (default `auto`) — `auto`: use local Rust XFA filler when bundled and all requested forms have a local mapping, otherwise backend. `local`: force local; errors if any form lacks a mapping (currently IMM0008 must use backend). `backend`: force backend round-trip (slower; useful for parity testing).
+
+## Forms that fill locally (no backend round-trip beyond the data fetch)
+
+`0104, 1294, 1295, 1344, 5257, 5476, 5532, 5645, 5669, 5708, 5709, 5710` — 12 forms total. The bundled vendor pack ships pre-flattened PDF templates + dataset-path mappings so no qpdf, no Node, no Python is needed at runtime. Per-form fill takes ~5-10 ms.
+
+`0008` (PR generic application form) currently has no Rust mapping and auto-falls back to backend. Mixed requests (e.g., `IMM0008,IMM5406`) fall back as a whole to backend in the current build.
 
 ## What this skill replaces (for agent purposes)
 

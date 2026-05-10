@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://formbro.local/pdf/5476.json",
+  "type": "object",
+  "properties": {
+    "Appointing": { "type": "boolean" },
+    "Updating": { "type": "boolean" },
+    "Cancelling": { "type": "boolean" },
+    "CancelAndAppointing": { "type": "boolean" },
+    "Withdrawing": { "type": "boolean" },
+    "SectionA": {
+      "type": "object",
+      "properties": {
+        "FamilyName": { "type": "string" },
+        "GivenName": { "type": "string" },
+        "DateOfBirth": { "type": "string", "format": "date" },
+        "Email": { "type": "string" },
+        "TelephoneOrAddress": { "type": "string" },
+        "TypeOfApplication": { "type": "string" },
+        "ApplicationNumber" : { "type": "string" },
+        "UCI": { "type": "string" }
+      }
+    },
+    "SectionB": {
+      "type": "object",
+      "properties": {
+        "FamilyName": { "type": "string" },
+        "GivenName": { "type": "string" },
+        "Uncompensated": {
+          "type": "object",
+          "properties": {
+            "FriendOrFamilyMember": { "type": "boolean" },
+            "CICC": { "type": "boolean" },
+            "CICCMembershipID": { "type": "string" },
+            "LawSociety": { "type": "boolean" },
+            "LawSocietyProvince": { "type": "string" },
+            "LawSocietyMembershipID": { "type": "string" },
+            "QuebecLaw": { "type": "boolean" },
+            "QuebecMembershipID": { "type": "string" },
+            "Other": { "type": "boolean" },
+            "OtherDetail": { "type": "string" }
+          },
+          "allOf": [
+            {
+              "oneOf": [
+                { "properties": { "FriendOrFamilyMember": { "const": true } }, "required": ["FriendOrFamilyMember"] },
+                { "properties": { "CICC": { "const": true } }, "required": ["CICC"] },
+                { "properties": { "LawSociety": { "const": true } }, "required": ["LawSociety"] },
+                { "properties": { "QuebecLaw": { "const": true } }, "required": ["QuebecLaw"] },
+                { "properties": { "Other": { "const": true } }, "required": ["Other"] }
+              ]
+            },
+            {
+              "if": {
+                "properties": { "CICC": { "const": true } },
+                "required": ["CICC"]
+              },
+              "then": {
+                "required": ["CICCMembershipID"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "LawSociety": { "const": true } },
+                "required": ["LawSociety"]
+              },
+              "then": {
+                "required": ["LawSocietyProvince"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "QuebecLaw": { "const": true } },
+                "required": ["QuebecLaw"]
+              },
+              "then": {
+                "required": ["QuebecMembershipID"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "Other": { "const": true } },
+                "required": ["Other"]
+              },
+              "then": {
+                "required": ["OtherDetail"]
+              }
+            }
+          ]
+        },
+        "Compensated": {
+          "type": "object",
+          "properties": {
+            "CICC": { "type": "boolean" },
+            "CICCMembershipID": { "type": "string" },
+            "LawSociety": { "type": "boolean" },
+            "LawSocietyProvince": { "type": "string" },
+            "LawSocietyMembershipID": { "type": "string" },
+            "QuebecLaw": { "type": "boolean" },
+            "QuebecMembershipID": { "type": "string" }
+          },
+          "allOf": [
+            {
+              "oneOf": [
+                { "properties": { "CICC": { "const": true } }, "required": ["CICC"] },
+                { "properties": { "LawSociety": { "const": true } }, "required": ["LawSociety"] },
+                { "properties": { "QuebecLaw": { "const": true } }, "required": ["QuebecLaw"] }
+              ]
+            },
+            {
+              "if": {
+                "properties": { "CICC": { "const": true } },
+                "required": ["CICC"]
+              },
+              "then": {
+                "required": ["CICCMembershipID"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "LawSociety": { "const": true } },
+                "required": ["LawSociety"]
+              },
+              "then": {
+                "required": ["LawSocietyProvince", "LawSocietyMembershipID"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "QuebecLaw": { "const": true } },
+                "required": ["QuebecLaw"]
+              },
+              "then": {
+                "required": ["QuebecMembershipID"]
+              }
+            }
+          ]
+        },
+        "ContactInformation": {
+          "type": "object",
+          "properties": {
+            "Organization": { "type": "string" },
+            "Lawyer": { "type": "string" },
+            "MembershipID": { "type": "string" },
+            "Address": {
+              "type": "object",
+              "properties": {
+                "AptUnit": { "type": "string" },
+                "StreetNum": { "type": "string" },
+                "StreetName": { "type": "string" },
+                "City": { "type": "string" },
+                "Province": { "type": "string" },
+                "Country": { "type": "string" },
+                "PostalCode": { "type": "string" }
+              }
+            },
+            "Phone": {
+              "type": "object",
+              "properties": {
+                "CountryCode": { "type": "string" },
+                "Number": { "type": "string" }
+              }
+            },
+            "Fax": {
+              "type": "object",
+              "properties": {
+                "CountryCode": { "type": "string" },
+                "Number": { "type": "string" }
+              }
+            },
+            "Email": { "type": "string" }
+          }
+        },
+        "RepSignature": { "type": "string" },
+        "RepDateSigned": { "type": "string", "format": "date" },
+        "SupervisorSignature": { "type": "string" },
+        "SupervisorDateSigned": { "type": "string", "format": "date" }
+      },
+      "allOf": [
+        {
+          "oneOf": [
+            { "required": ["Uncompensated"] },
+            { "required": ["Compensated"] }
+          ]
+        },
+        { "required": ["ContactInformation"] }
+      ]
+    },
+    "SectionC": {
+      "type": "object",
+      "properties": {
+        "FamilyName": { "type": "string" },
+        "GivenName": { "type": "string" },
+        "Organization": { "type": "string" }
+      },
+      "required": ["FamilyName", "GivenName"]
+    },
+    "SectionD": {
+      "type": "object",
+      "properties": {
+        "FamilyName": { "type": "string" },
+        "GivenName": { "type": "string" },
+        "Organization": { "type": "string" },
+        "RepSignature": { "type": "string" },
+        "RepDateSigned": { "type": "string", "format": "date" }
+      }
+    },
+    "SectionE": {
+      "type": "object",
+      "properties": {
+        "ApplicantSignature": { "type": "string" },
+        "DateApplicantSigned": { "type": "string", "format": "date" },
+        "SpouseSignature": { "type": "string" },
+        "DateSpouseSigned": { "type": "string", "format": "date" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "properties": { "Appointing": { "const": true } }, "required": ["Appointing"] },
+        { "properties": { "Updating": { "const": true } }, "required": ["Updating"] },
+        { "properties": { "Cancelling": { "const": true } }, "required": ["Cancelling"] },
+        { "properties": { "CancelAndAppointing": { "const": true } }, "required": ["CancelAndAppointing"] },
+        { "properties": { "Withdrawing": { "const": true } }, "required": ["Withdrawing"] }
+      ]
+    },
+    {
+      "if": {
+        "properties": { "Appointing": { "const": true } },
+        "required": ["Appointing"]
+      },
+      "then": {
+        "required": ["SectionA", "SectionB", "SectionE"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "Updating": { "const": true } },
+        "required": ["Updating"]
+      },
+      "then": {
+        "required": ["SectionA", "SectionB", "SectionE"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "Cancelling": { "const": true } },
+        "required": ["Cancelling"]
+      },
+      "then": {
+        "required": ["SectionA", "SectionC", "SectionE"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "CancelAndAppointing": { "const": true } },
+        "required": ["CancelAndAppointing"]
+      },
+      "then": {
+        "required": ["SectionA", "SectionB", "SectionC", "SectionE"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "Withdrawing": { "const": true } },
+        "required": ["Withdrawing"]
+      },
+      "then": {
+        "required": ["SectionA", "SectionD", "SectionE"]
+      }
+    }
+  ]	
+}

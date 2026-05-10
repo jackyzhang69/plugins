@@ -1,0 +1,735 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://formbro.local/pdf/5257.json",
+    "type": "object",
+    "properties": {
+      "ServiceIn": { "enum": ["English", "French"] },
+      "UCIClientID": { "type": "string" },
+      "VisaType": { "enum": ["Visitor Visa", "Transit"] },
+      "PersonalDetails": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "object",
+            "properties": {
+              "FamilyName": { "type": "string" },
+              "GivenName": { "type": "string" }
+            },
+            "required": ["FamilyName"]
+          },
+          "AliasName": {
+            "type": "object",
+            "properties": {
+              "AliasIndicator": { "type": "boolean" },
+              "AliasFamilyName": { "type": "string" },
+              "AliasGivenName": { "type": "string" }
+            },
+            "dependencies": {
+              "AliasIndicator": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "AliasIndicator": { "const": false }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "AliasIndicator": { "const": true },
+                      "AliasFamilyName": { "$ref": "#/definitions/nonEmptyString" },
+                      "AliasGivenName": { "$ref": "#/definitions/nonEmptyString" }
+                    },
+                    "required": ["AliasFamilyName", "AliasGivenName"]
+                  }
+                ]
+              }
+            }
+          },
+          "Sex": { "enum": ["F Female", "M Male", "U Unknown", "X Another gender"]},
+          "Dob": {
+            "type": "object",
+            "properties": {
+              "DOBYear": { 
+                "type": "string",
+                "pattern": "^(19|20)\\d{2}$"
+              },
+              "DOBMonth": { 
+                "type": "string",
+                "pattern": "^(0[1-9]|1[0-2])$"
+              },
+              "DOBDay": { 
+                "type": "string",
+                "pattern": "^(0[1-9]|[12]\\d|3[01])$"
+              }
+            },
+            "required": ["DOBYear", "DOBMonth", "DOBDay"]
+          },
+          "Pob": {
+            "type": "object",
+            "properties": {
+              "PlaceBirthCity": { "type": "string" },
+              "PlaceBirthCountry": { "type": "string" }
+            },
+            "required": ["PlaceBirthCity", "PlaceBirthCountry"]
+          },
+          "Citizenship": { "type": "string" },
+          "CurrentCOR": {
+            "type": "object",
+            "properties": {
+              "Country": { "type": "string" },
+              "Status": { "enum": ["Citizen", "Permanent resident", "Visitor", "Worker", "Student", "Other", "Protected Person", "Refugee Claimant", "Foreign National"] },
+              "Other": { "type": "string" },
+              "FromDate": { "type": "string", "format": "date" },
+              "ToDate": { "type": "string", "format": "date" }
+            },
+            "required": ["Country", "Status"],
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "Status": { "enum": ["Visitor", "Worker", "Student", "Other"] } }
+                },
+                "then": {
+                  "required": ["FromDate", "ToDate"]
+                }
+              },
+              {
+                "if": {
+                  "properties": { "Status": { "const": "Other" } }
+                },
+                "then": {
+                  "required": ["Other"]
+                }
+              }
+            ]
+          },
+          "PrevCOR": {
+            "type": "object",
+            "properties": {
+              "PCRIndicator": { "type": "boolean" },
+              "PreviousCOR1": {
+                "type": "object",
+                "properties": {
+                  "Country": { "type": "string" },
+                  "Status": { "enum": ["Citizen", "Permanent resident", "Visitor", "Worker", "Student", "Other", "Protected Person", "Refugee Claimant", "Foreign National"] },
+                  "Other": { "type": "string" },
+                  "FromDate": { "type": "string", "format": "date" },
+                  "ToDate": { "type": "string", "format": "date" }
+                },
+                "required": ["Country", "Status", "FromDate", "ToDate"],
+                "if": {
+                  "properties": { "Status": { "const": "Other" } }
+                },
+                "then": {
+                  "required": ["Other"]
+                }
+              },
+              "PreviousCOR2": {
+                "type": "object",
+                "properties": {
+                  "Country": { "type": "string" },
+                  "Status": { "enum": ["Citizen", "Permanent resident", "Visitor", "Worker", "Student", "Other", "Protected Person", "Refugee Claimant", "Foreign National"] },
+                  "Other": { "type": "string" },
+                  "FromDate": { "type": "string", "format": "date" },
+                  "ToDate": { "type": "string", "format": "date" }
+                },
+                "required": ["Country", "Status", "FromDate", "ToDate"],
+                "if": {
+                  "properties": { "Status": { "const": "Other" } }
+                },
+                "then": {
+                  "required": ["Other"]
+                }
+              }
+            },
+            "required": ["PCRIndicator"],
+            "if": {
+              "properties": { "PCRIndicator": { "const": true } }
+            },
+            "then": {
+              "required": ["PreviousCOR1"]
+            }
+          },
+          "CountryWhereApplying": {
+            "type": "object",
+            "properties": {
+              "SameAsCORIndicator": { "type": "boolean" },
+              "Country": { "type": "string" },
+              "Status": { "enum": ["Citizen", "Permanent resident", "Visitor", "Worker", "Student", "Other", "Protected Person", "Refugee Claimant", "Foreign National"] },
+              "Other": { "type": "string" },
+              "FromDate": { "type": "string", "format": "date" },
+              "ToDate": { "type": "string", "format": "date" }
+            },
+            "required": ["SameAsCORIndicator"],
+            "if": {
+              "properties": { "SameAsCORIndicator": { "const": false } }
+            },
+            "then": {
+              "required": ["Country", "Status", "FromDate", "ToDate"],
+                "if": {
+                    "properties": { "Status": { "const": "Other" } }
+                },
+                "then": {
+                    "required": ["Other"]
+                }
+            }
+          }
+        },
+        "required": ["Name", "AliasName", "Dob", "Pob", "Citizenship", "CurrentCOR", "PrevCOR", "CountryWhereApplying"]
+      },
+      "MaritalStatus": {
+        "type": "object",
+        "properties": {
+          "Current": {
+            "type": "object",
+            "properties": {
+              "MaritalStatus": { 
+                "enum": ["Annulled Marriage", "Common-Law", "Divorced", "Married", "Legally Separated", "Single", "Unknown", "Widowed"]
+              },
+              "MarriageDate": { "type": "string", "format": "date" },
+              "FamilyName": { "type": "string" },
+              "GivenName": { "type": "string" }
+            },
+            "required": ["MaritalStatus"],
+            "if": {
+              "properties": {
+                "MaritalStatus": {
+                  "enum": ["Common-Law", "Married"]
+                }
+              }
+            },
+            "then": {
+              "required": ["MarriageDate", "FamilyName", "GivenName"]
+            }
+          },
+          "PrevMarriage": {
+            "type": "object",
+            "properties": {
+              "PrevMarriedIndicator": { "type": "boolean" },
+              "FamilyName": { "type": "string" },
+              "GivenName": { "type": "string" },
+              "TypeOfRelationship": { 
+                "enum": ["Common-Law", "Married"]
+              },
+              "FromDate": { "type": "string", "format": "date" },
+              "ToDate": { "type": "string", "format": "date" },
+              "DOBDay": { "type": "string" },
+              "DOBMonth": { "type": "string" },
+              "DOBYear": { "type": "string" }
+            },
+            "required": ["PrevMarriedIndicator"],
+            "if": {
+              "properties": { "PrevMarriedIndicator": { "const": true } }
+            },
+            "then": {
+              "required": ["FamilyName", "GivenName", "TypeOfRelationship", "FromDate", "ToDate", "DOBDay", "DOBMonth", "DOBYear"]
+            }
+          }
+        },
+        "required": ["Current", "PrevMarriage"]
+      },
+      "Languages": {
+        "type": "object",
+        "properties": {
+          "nativeLang": { "type": "string" },
+          "FreqLang": { "type": "string" },
+          "communicateLang": { "type": "string" },
+          "LangTestIndicator": { "type": "boolean" }
+        },
+        "required": ["nativeLang", "communicateLang", "LangTestIndicator"]
+      },
+      "Passport": {
+        "type": "object",
+        "properties": {
+          "PassportNum": { "type": "string" },
+          "CountryofIssue": { "type": "string" },
+          "IssueDate": { "type": "string", "format": "date" },
+          "ExpiryDate": { "type": "string", "format": "date" },
+          "TaiwanPIN": { "type": "boolean" },
+          "IsraelPassportIndicator": { "type": "boolean" }
+        },
+        "required": ["PassportNum", "CountryofIssue", "IssueDate", "ExpiryDate"]
+      },
+      "NatID": {
+        "type": "object",
+        "properties": {
+          "natIDIndicator": { "type": "boolean" },
+          "DocNum": { "type": "string" },
+          "CountryofIssue": { "type": "string" },
+          "IssueDate": { "type": "string" },
+          "ExpiryDate": { "type": "string" }
+        },
+        "required": ["natIDIndicator"],
+        "if": {
+          "properties": { "natIDIndicator": { "const": true } }
+        },
+        "then": {
+          "required": ["DocNum", "CountryofIssue", "IssueDate", "ExpiryDate"]
+        }
+      },
+      "USCard": {
+        "type": "object",
+        "properties": {
+          "usCardIndicator": { "type": "boolean" },
+          "usCarddocs": {
+            "type": "object",
+            "properties": {
+              "DocNum": { "type": "string" },
+              "ExpiryDate": { "type": "string", "format": "date" }
+            },
+            "required": ["DocNum", "ExpiryDate"]
+          }
+        },
+        "required": ["usCardIndicator"],
+        "if": {
+          "properties": { "usCardIndicator": { "const": true } }
+        },
+        "then": {
+          "required": ["usCarddocs"]
+        }
+      },
+      "ContactInformation": {
+        "type": "object",
+        "properties": {
+          "Mailing": {
+            "type": "object",
+            "properties": {
+              "POBox": { "type": "string" },
+              "AptUnit": { "type": "string" },
+              "StreetNum": { "type": "string" },
+              "Streetname": { "type": "string" },
+              "City": { "type": "string" },
+              "Country": { "type": "string" },
+              "Prov": { "type": "string" },
+              "PostalCode": { "type": "string" },
+              "District": { "type": "string" }
+            },
+            "required": ["Streetname", "City", "Country"]
+          },
+          "Resi": {
+            "type": "object",
+            "properties": {
+              "SameAsMailingInd": { "type": "boolean" },
+              "AptUnit": { "type": "string" },
+              "StreetNum": { "type": "string" },
+              "Streetname": { "type": "string" },
+              "City": { "type": "string" },
+              "Country": { "type": "string" },
+              "Prov": { "type": "string" },
+              "PostalCode": { "type": "string" },
+              "District": { "type": "string" }
+            },
+            "required": ["SameAsMailingInd"],
+            "if": {
+              "properties": { "SameAsMailingInd": { "const": false } }
+            },
+            "then": {
+              "required": ["Streetname", "City", "Country"]
+            }
+          },
+          "Phone": {
+            "type": "object",
+            "properties": {
+              "CaUs": { "type": "boolean" },
+              "Other": { "type": "boolean" },
+              "Type": { "type": "string" },
+              "ActualNumber": { "type": "string" },
+              "CountryCode": { "type": "string" },
+              "AreaCode": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "FirstThree": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "LastFour": { 
+                "type": "string",
+                "pattern": "^\\d{4}$"
+              },
+              "IntlNumber": { "type": "string" },
+              "Ext": { 
+                "type": "string",
+                "pattern": "^\\d{1,5}$"
+              }
+            },
+            "required": ["CaUs", "Other", "Type"]
+          },
+          "AltPhone": {
+            "type": "object",
+            "properties": {
+              "CaUs": { "type": "boolean" },
+              "Other": { "type": "boolean" },
+              "Type": { "type": "string" },
+              "ActualNumber": { "type": "string" },
+              "CountryCode": { "type": "string" },
+              "AreaCode": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "FirstThree": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "LastFour": { 
+                "type": "string",
+                "pattern": "^\\d{4}$"
+              },
+              "IntlNumber": { "type": "string" },
+              "Ext": { 
+                "type": "string",
+                "pattern": "^\\d{1,5}$"
+              }
+            },
+            "required": ["CaUs", "Other", "Type"]
+          },
+          "Fax": {
+            "type": "object",
+            "properties": {
+              "CaUs": { "type": "boolean" },
+              "Other": { "type": "boolean" },
+              "Type": { "type": "string" },
+              "ActualNumber": { "type": "string" },
+              "CountryCode": { "type": "string" },
+              "AreaCode": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "FirstThree": { 
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "LastFour": { 
+                "type": "string",
+                "pattern": "^\\d{4}$"
+              },
+              "IntlNumber": { "type": "string" },
+              "Ext": { 
+                "type": "string",
+                "pattern": "^\\d{1,5}$"
+              }
+            },
+            "required": ["CaUs", "Other"]
+          },
+          "Email": { 
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": ["Mailing", "Resi"]
+      },
+      "DetailsOfVisit": {
+        "type": "object",
+        "properties": {
+          "Purpose": { 
+            "enum": ["Business", "Tourism", "Short-Term Studies", "Returning Student", "Returning Worker", "Super Visa: For Parents or Grandparents", "Other", "Family Visit", "Visit"] 
+          },
+          "Other": { "type": "string" },
+          "FromDate": { "type": "string", "format": "date" },
+          "ToDate": { "type": "string", "format": "date" },
+          "Funds": { "type": "number" },
+          "VisitList": {
+            "type": "object",
+            "properties": {
+              "Rec1": {
+                "type": "object",
+                "properties": {
+                  "Name": { "type": "string" },
+                  "Relationship": { "type": "string" },
+                  "Addr": { "type": "string" }
+                },
+                "required": ["Name", "Addr"]
+              },
+              "Rec2": {
+                "type": "object",
+                "properties": {
+                  "Name": { "type": "string" },
+                  "Relationship": { "type": "string" },
+                  "Addr": { "type": "string" }
+                },
+                "required": ["Name", "Addr"]
+              }
+            },
+            "required": ["Rec1"]
+          }
+        },
+        "required": ["Purpose", "Funds", "FromDate", "ToDate", "VisitList"],
+        "if": {
+          "properties": { "Purpose": { "const": "Other" } }
+        },
+        "then": {
+          "required": ["Other"]
+        }
+      },
+      "Education": {
+        "type": "object",
+        "properties": {
+          "EducationIndicator": { "type": "boolean" },
+          "From": {
+            "type": "object",
+            "properties": {
+              "YYYY": { 
+                "type": "string",
+                "pattern": "^(19|20)\\d{2}$"
+              },
+              "MM": { 
+                "type": "string",
+                "pattern": "^(0[1-9]|1[0-2])$"
+              }
+            },
+            "required": ["YYYY", "MM"]
+          },
+          "To": {
+            "type": "object",
+            "properties": {
+              "YYYY": { 
+                "type": "string",
+                "pattern": "^(19|20)\\d{2}$"
+              },
+              "MM": { 
+                "type": "string",
+                "pattern": "^(0[1-9]|1[0-2])$"
+              }
+            },
+            "required": ["YYYY", "MM"]
+          },
+          "FieldOfStudy": { "type": "string" },
+          "School": { "type": "string" },
+          "City": { "type": "string" },
+          "Country": { "type": "string" },
+          "ProvState": { "type": "string" }
+        },
+        "required": ["EducationIndicator"],
+        "if": {
+          "properties": { "EducationIndicator": { "const": true } }
+        },
+        "then": {
+          "required": ["From", "To", "FieldOfStudy", "School", "City", "Country"]
+        }
+      },
+      "Employment": {
+        "type": "object",
+        "properties": {
+          "EmpRec1": {
+            "type": "object",
+            "properties": {
+              "From": {
+                "type": "object",
+                "properties": {
+                  "YYYY": { 
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": { 
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "To": {
+                "type": "object",
+                "properties": {
+                  "YYYY": { 
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": { 
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "Occupation": { "type": "string" },
+              "Employer": { "type": "string" },
+              "City": { "type": "string" },
+              "Country": { "type": "string" },
+              "ProvState": { "type": "string" }
+            },
+            "required": ["From", "Occupation", "Employer", "City", "Country"]
+          },
+          "EmpRec2": {
+            "type": "object",
+            "properties": {
+              "From": {
+                "type": "object",
+                "properties": {
+                  "YYYY": { 
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": { 
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "To": {
+                "type": "object",
+                "properties": {
+                  "YYYY": {
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": {
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "Occupation": { "type": "string" },
+              "Employer": { "type": "string" },
+              "City": { "type": "string" },
+              "Country": { "type": "string" },
+              "ProvState": { "type": "string" }
+            },
+            "required": ["From", "To", "Occupation", "Employer", "City", "Country"]
+          },
+          "EmpRec3": {
+            "type": "object",
+            "properties": {
+              "From": {
+                "type": "object",
+                "properties": {
+                  "YYYY": {
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": {
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "To": {
+                "type": "object",
+                "properties": {
+                  "YYYY": {
+                    "type": "string",
+                    "pattern": "^(19|20)\\d{2}$"
+                  },
+                  "MM": {
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])$"
+                  }
+                },
+                "required": ["YYYY", "MM"]
+              },
+              "Occupation": { "type": "string" },
+              "Employer": { "type": "string" },
+              "City": { "type": "string" },
+              "Country": { "type": "string" },
+              "ProvState": { "type": "string" }
+            },
+            "required": ["From", "To", "Occupation", "Employer", "City", "Country"]
+          }
+        },
+        "required": ["EmpRec1"]
+      },
+      "BackgroundInfo": {
+        "type": "object",
+        "properties": {
+          "HealthQ": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" },
+              "qBNY": { "type": "boolean" },
+              "MedicalDetails": { "type": "string" }
+            },
+            "required": ["qANY", "qBNY"],
+            "if": {
+              "anyOf": [
+                { "properties": { "qANY": { "const": true } } },
+                { "properties": { "qBNY": { "const": true } } }
+              ]
+            },
+            "then": {
+              "required": ["MedicalDetails"]
+            }
+          },
+          "PrevApplied": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" },
+              "qBNY": { "type": "boolean" },
+              "qCNY": { "type": "boolean" },
+              "DetailsOfApplying": { "type": "string" }
+            },
+            "required": ["qANY", "qBNY", "qCNY"],
+            "if": {
+              "anyOf": [
+                { "properties": { "qANY": { "const": true } } },
+                { "properties": { "qBNY": { "const": true } } },
+                { "properties": { "qCNY": { "const": true } } }
+              ]
+            },
+            "then": {
+              "required": ["DetailsOfApplying"]
+            }
+          },
+          "CustodyQ": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" },
+              "Details": { "type": "string" }
+            },
+            "required": ["qANY"],
+            "if": {
+              "properties": { "qANY": { "const": true } }
+            },
+            "then": {
+              "required": ["Details"]
+            }
+          },
+          "MilitaryQ": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" },
+              "Details": { "type": "string" }
+            },
+            "required": ["qANY"],
+            "if": {
+              "properties": { "qANY": { "const": true } }
+            },
+            "then": {
+              "required": ["Details"]
+            }
+          },
+          "GovQ": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" }
+            },
+            "required": ["qANY"]
+          },
+          "WitnessQ": {
+            "type": "object",
+            "properties": {
+              "qANY": { "type": "boolean" }
+            },
+            "required": ["qANY"]
+          }
+        },
+        "required": ["HealthQ", "PrevApplied", "CustodyQ", "MilitaryQ", "GovQ", "WitnessQ"]
+      },
+      "Signature": {
+        "type": "object",
+        "properties": {
+          "FutureCommIndicator": { "type": "boolean" },
+          "Signature": { "type": "string" },
+          "Date": { "type": "string", "format": "date" }
+        },
+        "required": ["FutureCommIndicator", "Signature", "Date"]
+      }
+    },
+    "required": ["ServiceIn", "VisaType", "PersonalDetails", "MaritalStatus", "Languages", "Passport", "ContactInformation", "NatID", "USCard", "Education", "Employment", "DetailsOfVisit", "BackgroundInfo", "Signature"],
+  
+    "definitions": {
+      "nonEmptyString": {
+          "type": "string",
+          "minLength": 1
+      }
+    }
+  }
