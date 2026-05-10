@@ -1,6 +1,6 @@
 ---
 name: formbro-fill
-description: Agent-facing entrypoint for filling IRCC IMM PDF forms (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Use this skill for ANY user intent that mentions "fill PDF / IMM form / generate the IMM5257 / give me the filled PDF". Auto-detects TR vs PR from the application; rejects LMIA (which is webform-only). Stable agent surface — local engine for 12 IRCC forms, auto-fallback to backend for IMM0008.
+description: Agent-facing entrypoint for filling IRCC IMM PDF forms (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Use this skill for ANY user intent that mentions "fill PDF / IMM form / generate the IMM5257 / give me the filled PDF". Auto-detects TR vs PR from the application; rejects LMIA (which is webform-only). Stable agent surface — local engine for all 13 IRCC forms, no backend round-trip for fill itself.
 ---
 
 # Fill IRCC IMM PDFs
@@ -26,7 +26,7 @@ This is the **only** agent-facing PDF skill. If a user says any of:
 ## What this command does (and what it does NOT)
 
 - ✅ One stable command for TR + PR PDF fills. **No `--program <category>` argument** — TR vs PR is detected from the application.
-- ✅ Output is JSON with a `files` array (each with `path`, `form`, `size_bytes`) plus an `engine` marker (`local` for the 12 forms whose mapping ships in the plugin bundle, `backend` for IMM0008 and any unmapped form).
+- ✅ Output is JSON with a `files` array (each with `path`, `form`, `size_bytes`) plus an `engine` marker. All 13 IRCC forms (incl. IMM0008) ship with a local mapping; `engine` reports `local` for the fill itself. Backend is still hit for the per-application data payload.
 - ✅ Multi-form requests are returned as individual `IMM<id>.pdf` files in the chosen output directory (no opaque ZIP for the agent to unpack).
 - ❌ Does **not** ask the user about TR vs PR. Pass `--program-key` only if auto-detection fails or the application doc is unusual.
 - ❌ Does **not** support LMIA. LMIA is webform-only (handled by `formbro-webform`).
@@ -113,9 +113,9 @@ Do not serialize per-form calls for a single application. That's the worst patte
 
 ## Forms that fill locally (no backend round-trip beyond the data fetch)
 
-`0104, 1294, 1295, 1344, 5257, 5476, 5532, 5645, 5669, 5708, 5709, 5710` — 12 forms total. The bundled vendor pack ships pre-flattened PDF templates + dataset-path mappings so no qpdf, no Node, no Python is needed at runtime. Per-form fill takes ~5-10 ms.
+`0008, 0104, 1294, 1295, 1344, 5257, 5476, 5532, 5645, 5669, 5708, 5709, 5710` — **all 13 IRCC PR/TR forms**. The bundled vendor pack ships pre-flattened PDF templates + dataset-path mappings so no qpdf, no Node, no Python is needed at runtime. Per-form fill takes ~5-10 ms (IMM0008 included).
 
-`0008` (PR generic application form) currently has no Rust mapping and auto-falls back to backend. Mixed requests (e.g., `IMM0008,IMM5406`) fall back as a whole to backend in the current build.
+The IMM0008 mapping is bootstrapped from the backend builder's authoritative field-path table (`backend/services/pdf_filling/imm0008_xfa.py: MAIN_FIELD_PATHS + DEPENDANT_FIELD_PATHS` → 135 fields total: 78 main + 57 dependant rows under `dependants[0].*`). For applications with multiple dependants, the current build covers the first dependant row; multi-row support arrives when the backend payload pushes additional rows.
 
 ## What this skill replaces (for agent purposes)
 

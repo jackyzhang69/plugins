@@ -1,0 +1,542 @@
+{
+  "pr.program": {
+    "dataId": "Program",
+    "type": "input"
+  },
+  "pr.category": {
+    "dataId": "Category",
+    "type": "select"
+  },
+  "pr.preferred_language": {
+    "dataId": "CorrespondenceLang",
+    "type": "select"
+  },
+  "application.interview_language": {
+    "dataId": "InterviewLang",
+    "type": "select"
+  },
+  "application.province": {
+    "dataId": "Prov",
+    "type": "select"
+  },
+  "application.city": {
+    "dataId": "CityTown",
+    "type": "input"
+  },
+  "personal.family_name": {
+    "dataId": "FamilyName",
+    "type": "input"
+  },
+  "personal.given_name": {
+    "dataId": "GivenName",
+    "type": "input"
+  },
+  "personal.other_name.family_name": {
+    "dataId": "AliasFamilyName",
+    "type": "input"
+  },
+  "personal.other_name.given_name": {
+    "dataId": "AliasGivenName",
+    "type": "input"
+  },
+  "personal.uci": {
+    "dataId": "UCI",
+    "type": "input"
+  },
+  "personal.sex": {
+    "dataId": "Sex",
+    "type": "select"
+  },
+  "personal.height": {
+    "dataId": "heightCM",
+    "type": "input"
+  },
+  "personal.eye_color": {
+    "dataId": "eyeColor",
+    "type": "select"
+  },
+  "personal.place_of_birth": {
+    "dataId": "PlaceBirthCity",
+    "type": "input"
+  },
+  "personal.country_of_birth": {
+    "dataId": "PlaceBirthCountry",
+    "type": "select"
+  },
+  "personal.citizenship1": {
+    "dataId": "Citizenship1",
+    "type": "select"
+  },
+  "personal.citizenship2": {
+    "dataId": "Citizenship2",
+    "type": "select"
+  },
+  "personal.current_residence.country": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "personal.current_residence.status": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "personal.current_residence.other_reason": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "personal.current_residence.start": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "personal.current_residence.end": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "personal.current_residence.canada.date": {
+    "dataId": "DateLastEntry",
+    "type": "input"
+  },
+  "personal.current_residence.canada.place": {
+    "dataId": "place",
+    "type": "input"
+  },
+  "personal.previous_residence.country1": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "personal.previous_residence.status1": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "personal.previous_residence.details1": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "personal.previous_residence.start1": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "personal.previous_residence.end1": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "personal.previous_residence.country2": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "personal.previous_residence.status2": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "personal.previous_residence.details2": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "personal.previous_residence.start2": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "personal.previous_residence.end2": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "personal.marital.status": {
+    "dataId": "MaritalStatus",
+    "type": "input"
+  },
+  "personal.marital.date": {
+    "dataId": "DateOfMarriage",
+    "type": "input"
+  },
+  "personal.marital.family_name": {
+    "dataId": "FamilyName",
+    "type": "input"
+  },
+  "personal.marital.given_name": {
+    "dataId": "GivenName",
+    "type": "input"
+  },
+  "personal.marital.previous.family_name": {
+    "dataId": "PMFamilyName",
+    "type": "input"
+  },
+  "personal.marital.previous.given_name": {
+    "dataId": "PMGivenName",
+    "type": "input"
+  },
+  "personal.marital.previous.type": {
+    "dataId": "TypeOfRelationship",
+    "type": "input"
+  },
+  "personal.marital.previous.start": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "personal.marital.previous.end": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "contact.address.pobox": {
+    "dataId": "POBox",
+    "type": "input"
+  },
+  "contact.address.apt": {
+    "dataId": "AptUnit",
+    "type": "input"
+  },
+  "contact.address.street_no": {
+    "dataId": "StreetNum",
+    "type": "input"
+  },
+  "contact.address.street_name": {
+    "dataId": "Streetname",
+    "type": "input"
+  },
+  "contact.address.city": {
+    "dataId": "CityTown",
+    "type": "input"
+  },
+  "contact.address.country": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "contact.address.province": {
+    "dataId": "ProvinceState",
+    "type": "select"
+  },
+  "contact.address.postal_code": {
+    "dataId": "PostalCode",
+    "type": "input"
+  },
+  "contact.address.district": {
+    "dataId": "District",
+    "type": "input"
+  },
+  "contact.address.residential.apt": {
+    "dataId": "AptUnit",
+    "type": "input"
+  },
+  "contact.address.residential.street_no": {
+    "dataId": "StreetNum",
+    "type": "input"
+  },
+  "contact.address.residential.street_name": {
+    "dataId": "Streetname",
+    "type": "input"
+  },
+  "contact.address.residential.city": {
+    "dataId": "CityTown",
+    "type": "input"
+  },
+  "contact.address.residential.country": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "contact.address.residential.province": {
+    "dataId": "ProvinceState",
+    "type": "select"
+  },
+  "contact.address.residential.postal_code": {
+    "dataId": "PostalCode",
+    "type": "input"
+  },
+  "contact.address.residential.district": {
+    "dataId": "District",
+    "type": "input"
+  },
+  "passport.number": {
+    "dataId": "PassportNum",
+    "type": "input"
+  },
+  "passport.country": {
+    "dataId": "CountryofIssue",
+    "type": "select"
+  },
+  "passport.issue_date": {
+    "dataId": "IssueDate",
+    "type": "input"
+  },
+  "passport.expiry_date": {
+    "dataId": "ExpiryDate",
+    "type": "input"
+  },
+  "national_id.number": {
+    "dataId": "DocNum",
+    "type": "input"
+  },
+  "national_id.country": {
+    "dataId": "CountryofIssue",
+    "type": "select"
+  },
+  "national_id.issue_date": {
+    "dataId": "IssueDate",
+    "type": "input"
+  },
+  "national_id.expiry_date": {
+    "dataId": "ExpiryDate",
+    "type": "input"
+  },
+  "us_pr_card.number": {
+    "dataId": "uscisNum",
+    "type": "input"
+  },
+  "us_pr_card.expiry_date": {
+    "dataId": "ExpiryDate",
+    "type": "input"
+  },
+  "education.level": {
+    "dataId": "levelEdu",
+    "type": "input"
+  },
+  "education.years": {
+    "dataId": "yearsOfEdu",
+    "type": "input"
+  },
+  "occupation.current": {
+    "dataId": "currentOccupation",
+    "type": "input"
+  },
+  "occupation.intended": {
+    "dataId": "intendedOccupation",
+    "type": "input"
+  },
+  "language.native": {
+    "dataId": "nativeLang",
+    "type": "select"
+  },
+  "language.communicate": {
+    "dataId": "communicateLang",
+    "type": "select"
+  },
+  "language.communicate.which_one": {
+    "dataId": "freqLang",
+    "type": "select"
+  },
+  "dependants[0].personal.family_name": {
+    "dataId": "FamilyName",
+    "type": "input"
+  },
+  "dependants[0].personal.given_name": {
+    "dataId": "GivenName",
+    "type": "input"
+  },
+  "dependants[0].personal.other_name.family_name": {
+    "dataId": "AliasFamilyName",
+    "type": "input"
+  },
+  "dependants[0].personal.other_name.given_name": {
+    "dataId": "AliasGivenName",
+    "type": "input"
+  },
+  "dependants[0].personal.uci": {
+    "dataId": "UCI",
+    "type": "input"
+  },
+  "dependants[0].personal.sex": {
+    "dataId": "Sex",
+    "type": "select"
+  },
+  "dependants[0].personal.height": {
+    "dataId": "heightCM",
+    "type": "input"
+  },
+  "dependants[0].personal.eye_color": {
+    "dataId": "eyeColor",
+    "type": "select"
+  },
+  "dependants[0].personal.place_of_birth": {
+    "dataId": "PlaceBirthCity",
+    "type": "input"
+  },
+  "dependants[0].personal.country_of_birth": {
+    "dataId": "PlaceBirthCountry",
+    "type": "select"
+  },
+  "dependants[0].personal.citizenship1": {
+    "dataId": "citizenship1",
+    "type": "select"
+  },
+  "dependants[0].personal.citizenship2": {
+    "dataId": "citizenship2",
+    "type": "select"
+  },
+  "dependants[0].personal.relationship": {
+    "dataId": "relationshipToapplicant",
+    "type": "select"
+  },
+  "dependants[0].personal.relationship.other": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "dependants[0].personal.not_accompany_reason": {
+    "dataId": "reason",
+    "type": "input"
+  },
+  "dependants[0].personal.dependant_type": {
+    "dataId": "TypeOfDepChildren",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.country": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "dependants[0].personal.current_residence.status": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.other_reason": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.start": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.end": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.canada.date": {
+    "dataId": "lastEntryDate",
+    "type": "input"
+  },
+  "dependants[0].personal.current_residence.canada.place": {
+    "dataId": "PlaceOfEntry",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.country1": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "dependants[0].personal.previous_residence.status1": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.details1": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.start1": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.end1": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.country2": {
+    "dataId": "Country",
+    "type": "select"
+  },
+  "dependants[0].personal.previous_residence.status2": {
+    "dataId": "Status",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.details2": {
+    "dataId": "Other",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.start2": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "dependants[0].personal.previous_residence.end2": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.status": {
+    "dataId": "MaritalStatus",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.date": {
+    "dataId": "DateOfMarriage",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.family_name": {
+    "dataId": "FamilyName",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.given_name": {
+    "dataId": "GivenName",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.previous.family_name": {
+    "dataId": "PMFamilyName",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.previous.given_name": {
+    "dataId": "PMGivenName",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.previous.type": {
+    "dataId": "TypeOfRelationship",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.previous.start": {
+    "dataId": "FromDate",
+    "type": "input"
+  },
+  "dependants[0].personal.marital.previous.end": {
+    "dataId": "ToDate",
+    "type": "input"
+  },
+  "dependants[0].passport.number": {
+    "dataId": "PassportNum",
+    "type": "input"
+  },
+  "dependants[0].passport.country": {
+    "dataId": "CountryofIssue",
+    "type": "select"
+  },
+  "dependants[0].passport.issue_date": {
+    "dataId": "IssueDate",
+    "type": "input"
+  },
+  "dependants[0].passport.expiry_date": {
+    "dataId": "ExpiryDate",
+    "type": "input"
+  },
+  "dependants[0].national_id.number": {
+    "dataId": "DocNum",
+    "type": "input"
+  },
+  "dependants[0].national_id.country": {
+    "dataId": "CountryofIssue",
+    "type": "select"
+  },
+  "dependants[0].national_id.issue_date": {
+    "dataId": "IssueDate",
+    "type": "input"
+  },
+  "dependants[0].national_id.expiry_date": {
+    "dataId": "ExpiryDate",
+    "type": "input"
+  },
+  "dependants[0].education.level": {
+    "dataId": "LevelEdu",
+    "type": "input"
+  },
+  "dependants[0].education.years": {
+    "dataId": "YearsOfedu",
+    "type": "input"
+  },
+  "dependants[0].occupation.current": {
+    "dataId": "currentOccupation",
+    "type": "input"
+  },
+  "dependants[0].occupation.intended": {
+    "dataId": "intendedOccupation",
+    "type": "input"
+  },
+  "dependants[0].language.native": {
+    "dataId": "nativeLang",
+    "type": "select"
+  },
+  "dependants[0].language.communicate": {
+    "dataId": "communicationLang",
+    "type": "select"
+  },
+  "dependants[0].language.communicate.which_one": {
+    "dataId": "freqLang",
+    "type": "select"
+  }
+}
