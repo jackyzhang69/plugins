@@ -1,7 +1,7 @@
 {
   "name": "formbro-cli",
-  "version": "0.3.0",
-  "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel.",
+  "version": "0.4.0",
+  "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs (agent surface: `formbro fill`, auto TR/PR detect); drive local webform fills.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://formbro.ca"
@@ -34,6 +34,7 @@
     "defaultPrompt": [
       "Use FormBro to find application status for <client name>.",
       "Use FormBro to start a new TR application for <client>.",
+      "Use FormBro to fill the IMM5257 + IMM5645 PDF for application <id>.",
       "Use FormBro to fill the IRCC portal for application <id>."
     ]
   }

@@ -24,7 +24,7 @@ description: READ THIS FIRST. One-page consumption contract for AI agents. Tells
 | "fill the IRCC portal / open browser and fill this case" | `formbro webform start --confirmed=true --headless=false` | formbro-webform (LOCAL MODE) |
 | "preflight / can webform fill this?" | `formbro webform preflight` | formbro-webform |
 | "check if my machine can run webform fills" | `formbro webform runtime-check` | formbro-webform |
-| "fill the IMM0008 / IMM5257 / IMM5710 PDF" | `formbro export pdf` (see PDF compatibility below) | formbro-write |
+| "fill the IMM0008 / IMM5257 / IMM5710 PDF" / "give me the filled PDF for case X" | `formbro fill --app-id <id> --forms IMM…,IMM… -o ./out/` | **formbro-fill** (single agent surface; auto-detects TR vs PR; rejects LMIA) |
 | "export this applicant / application as Excel" | `formbro export entity --entity-type <T> --entity-id <id> --output …` | formbro-write |
 | "audit / who did what when" | `formbro audit my` | formbro-read |
 
@@ -62,7 +62,8 @@ Roles vary per program (applicant / spouse / sponsor / employer / dependant / ap
 | `extract *` | ✅ | ✅ | ✅ | Program-aware via `--program-key` |
 | `webform start` (LOCAL) | ✅ | ✅ | ✅ | Different IRCC / Service Canada portals |
 | `webform preflight / runtime-check / status` | ✅ | ✅ | ✅ | See §6 about status truth |
-| `export pdf` | ✅ | ✅ (limited) | — | TR: full IMM PDF set. PR: subset. LMIA: not supported (use webform). |
+| **`fill`** (PDF, agent path) | ✅ | ✅ | ❌ | Auto-detects TR vs PR. LMIA explicitly rejected with hint to use `webform start`. See `formbro-fill` skill. |
+| `export pdf` (legacy transport) | ✅ | partial | — | TR-route-only in cli; **don't expose to agent** — use `fill`. Kept for raw-data preview / async-batch. |
 | `export entity` (Excel) | ✅ | ✅ | ✅ | Per-entity Excel export |
 
 If you call a command in the wrong column, the CLI returns a structured 4xx error with the right alternative — surface that error verbatim to the user, do not retry blindly.
@@ -73,7 +74,8 @@ If you call a command in the wrong column, the CLI returns a structured 4xx erro
 |---|---|---|
 | `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `backend.formbro.ca`) | Required |
 | `applications` write, `persons` write, `employers` write, `validate *`, `extract *`, `notes add`, `uploads slots` | **Backend** call | Required |
-| `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id) | Required |
+| **`fill`** (PDF, agent path) | **Backend today, local soon.** Output JSON's `engine` field (`backend` or `local`) tells you which. CLI surface stays the same when it flips. | Required today; **post-flip**: only the initial template fetch hits backend (cached afterward). |
+| `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
 | **`webform start`** | **LOCAL — spawns a Node + Playwright + Chromium process on the user's machine.** Drives the IRCC / Service Canada portal in a real browser the user can see (with `--headless=false`). | Required (the local browser hits IRCC) |
 | `webform preflight`, `webform runtime-check` | LOCAL (no backend call needed for `runtime-check`) | varies |
 | **`webform status`** | **Backend** read of last persisted run state — see §6 |

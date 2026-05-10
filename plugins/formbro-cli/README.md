@@ -9,7 +9,8 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 | [`connect-formbro`](./skills/connect-formbro/SKILL.md) | One-time setup. Capture FormBro API token → persist via CLI. **Run first.** |
 | [`formbro-capabilities`](./skills/formbro-capabilities/SKILL.md) | Agent consumption contract: intent → command router, PR/TR/LMIA support matrix, parameter cheat-sheets, status truth model. **Read second.** |
 | [`formbro-read`](./skills/formbro-read/SKILL.md) | Search / list / inspect applicants, applications, employers, programs, audit log. |
-| [`formbro-write`](./skills/formbro-write/SKILL.md) | Create / patch / delete persons, applications, employers; AI extraction; PDF / Excel export. |
+| [`formbro-write`](./skills/formbro-write/SKILL.md) | Create / patch / delete persons, applications, employers; AI extraction; Excel + advanced PDF export. |
+| [`formbro-fill`](./skills/formbro-fill/SKILL.md) | **PDF entry point for agents** — fill IRCC IMM PDFs (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Auto-detects TR vs PR; rejects LMIA. Single stable command (`formbro fill`) regardless of backend-vs-local engine. |
 | [`formbro-webform`](./skills/formbro-webform/SKILL.md) | **LOCAL MODE** Playwright IRCC / Service Canada portal fills — runs on the user's machine. Agent prepares; user submits. |
 
 ## The only thing the user inputs

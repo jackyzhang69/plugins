@@ -23,7 +23,7 @@ All commands shell out to the bundled `formbro` CLI (resolve via `runtime-manife
 | "create a new person quickly" | `<formbro> persons create --program-key <key> --role <role> [--first-name …] [--last-name …]` |
 | "create / update an LMIA employer" | `<formbro> employers create … / employers patch <id> --data '<json>'` |
 | "extract data from this text/document" | `<formbro> extract text --text "<text>" --entity-type <T> [--program-key <key>]` then `<formbro> extract apply-json --target-entity-id <id> --target-entity-type <T> --json '<json>'` |
-| "fill the IMM0008 / IMM5257 PDF for this case" | `<formbro> export pdf --program <key> --app-id <id> --forms IMM0008,IMM5406` (TR has full IMM coverage; PR has subset; LMIA: not supported — use webform) |
+| "fill the IMM0008 / IMM5257 PDF for this case" | **Use `formbro-fill` skill** — call `<formbro> fill --app-id <id> --forms IMM0008,IMM5406 -o ./out/`. Do NOT call `export pdf` for agent purposes; `export pdf` is TR-route-only in cli and doesn't auto-detect category. |
 | "export this applicant / application as Excel" | `<formbro> export entity --entity-type <T> --entity-id <id> --output app.xlsx` |
 | "what files can I attach to this case" | `<formbro> uploads slots --entity-type <T> --entity-id <id>` |
 | "add a note to <case>" | `<formbro> notes add --entity-id <id> --entity-type <T> --note "<text>"` |
@@ -46,12 +46,14 @@ Format is `<category-lc>-<program-key>-<role>`:
 
 If the exact entity-type is uncertain, run `<formbro> programs schema <program-key> --role <role>` to discover it from the registry. Do not invent slugs.
 
-### `forms` (for `export pdf`)
+### `forms` (for PDF generation — see `formbro-fill` for the agent path)
 TR: `IMM5257`, `IMM5645`, `IMM5707`, `IMM5708`, `IMM5709`, `IMM5710`, `IMM1294`, `IMM1295` (subset varies by program)
-PR: `IMM0008`, `IMM5406`, `IMM5562`, `IMM5669` (subset varies by program)
+PR: `IMM0008`, `IMM5406`, `IMM5532`, `IMM5562`, `IMM5669`, `IMM1344` (subset varies by program)
 LMIA: ❌ not applicable — LMIA is webform-only.
 
 If the user names a form the program doesn't support, the CLI returns a 400 with the supported set — surface that error.
+
+> **Agent rule of thumb for PDFs:** call `formbro fill` (in the `formbro-fill` skill). Only fall back to the `export pdf*` family below for explicit advanced flows the user asks for (raw data preview, async batch, blank template).
 
 ## Optimistic concurrency
 
