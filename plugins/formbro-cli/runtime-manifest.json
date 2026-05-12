@@ -1,48 +1,64 @@
 {
-  "$schema": "https://formbro.ca/schemas/runtime-manifest-v1.json",
-  "version": 2,
+  "$schema": "https://formbro.ca/schemas/runtime-manifest-v3.json",
+  "version": 3,
   "binary": {
     "name": "formbro",
     "platforms": {
       "darwin-arm64": {
-        "path": "bin/darwin-arm64/formbro",
-        "executable": true,
-        "checksumFile": "bin/darwin-arm64/formbro.sha256",
+        "entrypoint": "bin/darwin-arm64/formbro",
         "siblings": [
           "bin/darwin-arm64/pdf-fill-xfa",
-          "bin/darwin-arm64/extract-orig-oid",
-          "bin/darwin-arm64/qpdf",
-          "bin/darwin-arm64/normalize-imm0008"
-        ]
+          "bin/darwin-arm64/extract-orig-oid"
+        ],
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "320e12505a5e0c05370581f827d0637ac5dcb07be47f30b9878ebb2dff63e0f0"
+        }
       },
       "darwin-x64": {
-        "path": "bin/darwin-x64/formbro",
-        "executable": true,
-        "checksumFile": "bin/darwin-x64/formbro.sha256",
+        "entrypoint": "bin/darwin-x64/formbro",
         "siblings": [
           "bin/darwin-x64/pdf-fill-xfa",
-          "bin/darwin-x64/extract-orig-oid",
-          "bin/darwin-x64/qpdf",
-          "bin/darwin-x64/normalize-imm0008"
-        ]
+          "bin/darwin-x64/extract-orig-oid"
+        ],
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-darwin-x64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "d1fd25b4b15c571349490ea5d5ed1bd956c90cdf1bcddb083f9a6dd28b8fcd17"
+        }
       },
       "win32-x64": {
-        "path": "bin/win32-x64/formbro.exe",
-        "executable": true,
-        "checksumFile": "bin/win32-x64/formbro.exe.sha256",
+        "entrypoint": "bin/win32-x64/formbro.exe",
         "siblings": [
           "bin/win32-x64/pdf-fill-xfa.exe",
-          "bin/win32-x64/extract-orig-oid.exe",
-          "bin/win32-x64/qpdf.exe",
-          "bin/win32-x64/normalize-imm0008.exe"
-        ]
+          "bin/win32-x64/extract-orig-oid.exe"
+        ],
+        "lazy": {
+          "name": "formbro-pdfjs.exe",
+          "asset": "formbro-pdfjs-win32-x64.zip",
+          "archive": "zip",
+          "sha256": "9e160b2fa173cac346e2ed7ddb721cdd539305d09d086f83240e7741bf864756"
+        }
       }
     },
+    "release": {
+      "host": "github-releases",
+      "repo": "jackyzhang69/plugins",
+      "tag": "main-73f2cd8e4351a8a4b4b995f4e338e176644a9dcd"
+    },
     "resolutionOrder": [
-      "${process.platform}-${process.arch}"
+      "${platform}-${arch}"
     ],
     "fallbackBehavior": "fail",
     "verifyChecksum": true
+  },
+  "cacheDir": {
+    "darwin": "${HOME}/.cache/formbro-cli",
+    "linux": "${HOME}/.cache/formbro-cli",
+    "win32": "${LOCALAPPDATA}/formbro-cli/Cache"
   },
   "configHome": {
     "darwin": "${HOME}/.formbro",
