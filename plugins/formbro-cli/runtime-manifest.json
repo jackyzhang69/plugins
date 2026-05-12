@@ -14,7 +14,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "edde95c6ca447829ac1a64c8997e895834bb114a60d1086bbee5ca708076db06"
+          "sha256": "4329e0545c27f51bf04ef913a411ee53abb86263fc1ba989d6bf61b693736f03"
         }
       },
       "darwin-x64": {
@@ -27,7 +27,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-x64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "c4bddbe308b5a757d7340e7b5a6a795d4b27b3eb10669ad83d76fffacf112c87"
+          "sha256": "65f940c40c46089df09361f39125b7d6161aba0013d2e4839f41201af76c587f"
         }
       },
       "win32-x64": {
@@ -40,7 +40,7 @@
           "name": "formbro-pdfjs.exe",
           "asset": "formbro-pdfjs-win32-x64.zip",
           "archive": "zip",
-          "sha256": "4e129f5da5e5752acce27a4ea8ff4b71f3d8cf01850b9755186eb7f2f394df66"
+          "sha256": "db460845e21971c8d97966c8dd352a449020e65ea4cd76a5a253bc0377ca1567"
         }
       },
       "linux-x64": {
@@ -53,7 +53,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-linux-x64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "7b834d580398525cc95cad3d802cab498fb08605e805ebc6d48cbb17f0a902eb"
+          "sha256": "9bc231db407d1bd36627391ded6a28973102b5289e40b1a6e63e672c9c017feb"
         }
       },
       "linux-arm64": {
@@ -66,14 +66,14 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-linux-arm64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "3afc152c271181fefd0fee94162599caa586100994b52a1325b26ee97e25ba7c"
+          "sha256": "87f690a3819eb1ac08f5b63dec5ef8aba11f673c9200030b6b443545e10a70bb"
         }
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "main-57095f7b73f8d1b6fcaeed74fab5defd814811e3"
+      "tag": "main-2fad20b6870474c82be0bd9f55f921eda056ba54"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
