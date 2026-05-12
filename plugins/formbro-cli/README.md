@@ -51,3 +51,18 @@ The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of th
 - Not a Claude Desktop / Claude Code adapter — Codex App only.
 - Not a re-implementation of FormBro logic — every skill shells out to `formbro <subcommand>`.
 - Not a place to store credentials in source.
+
+## First-run note
+
+On first `formbro fill`, the plugin downloads `formbro-pdfjs` (~30–60 MB) from
+GitHub Releases (anonymous; no token required). Subsequent invocations reuse
+the cached binary at `~/.cache/formbro-cli/`. Pre-fetch with:
+
+    formbro doctor --fetch
+
+## Offline install (rare)
+
+If your network blocks github.com release downloads, manually download:
+    https://github.com/jackyzhang69/plugins/releases/download/<TAG>/formbro-pdfjs-<PLATFORM>.{tar.gz,zip}
+
+and extract into the plugin marketplace dir's `plugins/formbro-cli/bin/<PLATFORM>/`.
