@@ -14,7 +14,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "fd96e818c4d9cbaa5f1e1dbe944f25bac3513789c344bb2f4cc7ee58df744a00"
+          "sha256": "5edd6cff0e91d35f24eff47526a98fe647f2e1b191621201cbf2410b0d5bff01"
         }
       },
       "darwin-x64": {
@@ -27,7 +27,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-x64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "70510d1011197d304ce62ab59572458c3de787f76da7dda792812a010b24331c"
+          "sha256": "4a72502d0e91898c8258be41d6dbb88085e5551f8fe3b0ff71ecb52b13859c2d"
         }
       },
       "win32-x64": {
@@ -40,14 +40,40 @@
           "name": "formbro-pdfjs.exe",
           "asset": "formbro-pdfjs-win32-x64.zip",
           "archive": "zip",
-          "sha256": "78413e3f21d36105714b054b96db9f53202f1a2147fbd1b377074fe7fd47b954"
+          "sha256": "fa43461c3c2ac5fd90892603c83fc0c01b7c7ba33310ae9254eb8cb8f29cec6c"
+        }
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/formbro",
+        "siblings": [
+          "bin/linux-x64/pdf-fill-xfa",
+          "bin/linux-x64/extract-orig-oid"
+        ],
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-linux-x64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "947332ef7e6cfbd0b06d5b97f88362557361644cd02d197461c36ca1695fa028"
+        }
+      },
+      "linux-arm64": {
+        "entrypoint": "bin/linux-arm64/formbro",
+        "siblings": [
+          "bin/linux-arm64/pdf-fill-xfa",
+          "bin/linux-arm64/extract-orig-oid"
+        ],
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-linux-arm64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "43e71cd64fa70db0c08e58a9a8c131790c040ed86651bb9a251c5b8390d78244"
         }
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "v1.1.2"
+      "tag": "main-adbdf4201e32d70b8eefa27c70ae1e75b842ffe4"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
