@@ -1,23 +1,41 @@
 {
   "$schema": "https://formbro.ca/schemas/runtime-manifest-v1.json",
-  "version": 1,
+  "version": 2,
   "binary": {
     "name": "formbro",
     "platforms": {
       "darwin-arm64": {
         "path": "bin/darwin-arm64/formbro",
         "executable": true,
-        "checksumFile": "bin/darwin-arm64/formbro.sha256"
+        "checksumFile": "bin/darwin-arm64/formbro.sha256",
+        "siblings": [
+          "bin/darwin-arm64/pdf-fill-xfa",
+          "bin/darwin-arm64/extract-orig-oid",
+          "bin/darwin-arm64/qpdf",
+          "bin/darwin-arm64/normalize-imm0008"
+        ]
       },
       "darwin-x64": {
         "path": "bin/darwin-x64/formbro",
         "executable": true,
-        "checksumFile": "bin/darwin-x64/formbro.sha256"
+        "checksumFile": "bin/darwin-x64/formbro.sha256",
+        "siblings": [
+          "bin/darwin-x64/pdf-fill-xfa",
+          "bin/darwin-x64/extract-orig-oid",
+          "bin/darwin-x64/qpdf",
+          "bin/darwin-x64/normalize-imm0008"
+        ]
       },
       "win32-x64": {
         "path": "bin/win32-x64/formbro.exe",
         "executable": true,
-        "checksumFile": "bin/win32-x64/formbro.exe.sha256"
+        "checksumFile": "bin/win32-x64/formbro.exe.sha256",
+        "siblings": [
+          "bin/win32-x64/pdf-fill-xfa.exe",
+          "bin/win32-x64/extract-orig-oid.exe",
+          "bin/win32-x64/qpdf.exe",
+          "bin/win32-x64/normalize-imm0008.exe"
+        ]
       }
     },
     "resolutionOrder": [
@@ -28,7 +46,8 @@
   },
   "configHome": {
     "darwin": "${HOME}/.formbro",
-    "win32":  "${USERPROFILE}/.formbro"
+    "linux": "${HOME}/.formbro",
+    "win32": "${USERPROFILE}/.formbro"
   },
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",

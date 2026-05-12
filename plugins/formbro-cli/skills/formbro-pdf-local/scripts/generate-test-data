@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Skill-local wrapper around `cargo run --bin generate_test_data`
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+cd "$ROOT" && cargo run --release --bin generate_test_data -- "$@"
