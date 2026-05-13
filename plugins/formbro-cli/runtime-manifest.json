@@ -14,7 +14,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "8ead4828cf6939a8210b45aaaf01c54aabb0af5d7721fbd996ad4dcf81dd4802"
+          "sha256": "646a471c0202ee1272d5c953a3f2d7d6b215bc99b6cc27a84fd31f9f3610076e"
         }
       },
       "darwin-x64": {
@@ -27,7 +27,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-darwin-x64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "e66da31170f2a86d6a1d48000eccfd613f0e366e468c76bf52162a01fe20ddcc"
+          "sha256": "44ba306c1744ee8d0e1c2fbde1390628e538440ff8681eea06868a15ffec711b"
         }
       },
       "win32-x64": {
@@ -40,7 +40,7 @@
           "name": "formbro-pdfjs.exe",
           "asset": "formbro-pdfjs-win32-x64.zip",
           "archive": "zip",
-          "sha256": "901ed0db7e00515eb3563b2d792ba057871786f1c37b5a42494684ff404d47b4"
+          "sha256": "2cd3150127bd5d668ee3fbb8554a18b3391ea88429d8be3f83f538c4b3d18d09"
         }
       },
       "linux-x64": {
@@ -53,7 +53,7 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-linux-x64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "81a692bb2344166362b25288a54dfb29cf34654e81495bb246ccf3df7e1def62"
+          "sha256": "a1b26a6cb8fb721ea9ecca0834fb9ebb31a244fc7e7e4d0cdeecfae335f3add7"
         }
       },
       "linux-arm64": {
@@ -66,14 +66,14 @@
           "name": "formbro-pdfjs",
           "asset": "formbro-pdfjs-linux-arm64.tar.gz",
           "archive": "tar.gz",
-          "sha256": "8635b8bfc0e0aa17eb514c87d9e1f1e981999d1b7aab0b501dc16581fc4b4a5c"
+          "sha256": "ac70c757b652700e625a7f271d7eb6bbbb7618b02f065862b0bfd82217f2f554"
         }
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "v1.2.0"
+      "tag": "main-b9cea999c13ac59d5551645a45163d656c293d96"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
