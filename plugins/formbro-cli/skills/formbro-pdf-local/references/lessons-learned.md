@@ -125,13 +125,23 @@ Single-letter codes (`T` for Tourism, `B` for Business) are WRONG for forms usin
 
 ---
 
-### Trap 4 — AcroForm /V materialization
+### Trap 4 — AcroForm /V materialization (and when NOT to normalize)
 
-**Symptom**: form looks perfect in Adobe Acrobat; macOS Preview shows entirely blank fields.
+**Symptom**: form looks correct in Adobe Acrobat; macOS Preview shows entirely blank fields.
 
-**Root cause**: Rust filler writes datasets XML which Adobe resolves via XFA binding at render time. macOS Preview is not XFA-aware — it only reads AcroForm widget `/V` (value) entries. Rust filler does not write `/V`.
+**Root cause**: Rust filler writes XFA datasets XML. Adobe Acrobat resolves field values via XFA binding at render time — XFA-aware. macOS Preview is NOT XFA-aware; it only reads AcroForm widget `/V` entries. Rust filler does not write `/V`.
 
-**Fix**: always run `fill_with_bun_normalize` after any Rust fill operation. pdfjs `saveDocument()` in normalize mode reads the XFA datasets and materializes `/V` entries into the AcroForm widget dictionary. This is non-optional for all forms that have AcroForm widgets — which is all 15 current IRCC forms.
+**NOT a bug for XFA-only forms.** The following 12 forms are XFA-datasets-only and will always look blank in Preview — this is expected, correct behavior:
+- 5404, 5562 (XFA-packet-inject)
+- 0104, 1294, 1295, 1344, 5257, 5532, 5645, 5708, 5709, 5710 (datasets-rewrite)
+
+**Why normalize cannot be added to these forms**: adding `fill_with_bun_normalize` after the Rust fill would cause pdfjs `saveDocument()` to re-serialize the XFA tree. Forms with row-replication logic (5645, 1344, etc.) or no AcroForm widget bindings have their XFA datasets corrupted or silently dropped by pdfjs — breaking the pypdf parity gate.
+
+**Forms where normalize IS applied** (have AcroForm /V widget bindings that pdfjs can handle):
+- 0008: `fill_with_bun_normalize` runs after template-mutation
+- 5476, 5669: Bun setvalue path writes `/V` directly via `saveDocument()`
+
+**Verification for XFA-only forms**: use pypdf parity (see SOP below), NOT visual inspection in Preview. Adobe Acrobat is the authoritative visual viewer for these forms.
 
 ---
 
@@ -198,11 +208,13 @@ if ops.is_empty() {
 
 ### Trap 10 — 5476 widget gap (Preview blank, Acrobat works)
 
-**Symptom**: IMM5476 (and similar generic forms) render perfectly in Acrobat; Preview shows blank. `fill_generic` dispatch for 5476 was not routing through `fill_with_bun_normalize`.
+**Symptom**: IMM5476 renders correctly in Acrobat; Preview shows blank. `fill_generic` was routing 5476 through the datasets-rewrite path instead of the setvalue+Bun path.
 
-**Root cause**: `fill_generic` was returning Rust filler output directly without the Bun normalize step. Adobe Acrobat (XFA-aware) bound widgets at render time, but macOS Preview (AcroForm only) saw no `/V` entries.
+**Root cause**: 5476 has AcroForm widget bindings that pdfjs CAN correctly materialize without corrupting XFA structure (confirmed: 44/44 nodes, 0 missing in pypdf parity). Routing it through datasets-rewrite only (no /V write) meant Preview couldn't render it.
 
-**Fix**: ensure ALL `fill_generic` dispatch paths call `fill_with_bun_normalize` on the Rust filler output before returning. No form is exempt (except the empty-ops check in Trap 8).
+**Fix**: `fill_generic` now special-cases 5476 → `emit_setvalue_ops` + `fill_with_bun` (setvalue mode), same as 5669. pdfjs `saveDocument()` writes both AcroForm `/V` and re-serializes XFA datasets correctly.
+
+**Critical distinction**: this fix applies ONLY to forms where pdfjs can safely handle the XFA structure. Do NOT apply this pattern to forms with row-replication (5645, 1344, etc.) — pdfjs will corrupt those datasets. Verify with pypdf parity after ANY change to the `fill_generic` routing table.
 
 ---
 
@@ -228,6 +240,92 @@ if ops.is_empty() {
 
 ---
 
+### Trap 12 — pypdf oracle scripts not migrated from formbro
+
+**Symptom**: `pypdf_parity_acroform.py` exists only as a `.pyc` cache in `formbro/tools/pdf-fill-xfa/tests/fixtures/__pycache__/` — the `.py` source was removed when plugin tools were extracted to `formbro-plugin` (commit `5b194c18` in formbro). Plugin fixtures only had `pypdf_parity.py`, missing the AcroForm widget oracle.
+
+**Root cause**: commit `9a22155e` in formbro added `pypdf_parity_acroform.py`, then `5b194c18` deleted the entire `tools/` dir without migrating the new script.
+
+**Fix**: recovered via `git show 9a22155e:tools/pdf-fill-xfa/tests/fixtures/pypdf_parity_acroform.py` and copied to `pdf/pdf-fill-xfa/tests/fixtures/pypdf_parity_acroform.py`.
+
+**Rule**: whenever deleting a directory that contains test oracle scripts, explicitly grep for `*.py` oracle files and migrate them before deletion.
+
+---
+
+### Trap 13 — opening PDFs for visual inspection
+
+**Wrong**: `open filled.pdf` — uses macOS Preview, which cannot render XFA datasets. Form looks completely blank.
+
+**Wrong**: `open -a "Preview" filled.pdf` — same result.
+
+**Correct**:
+```bash
+# Visual inspection: always use Adobe Acrobat
+open -a "Adobe Acrobat" filled.pdf
+
+# Programmatic verification: always use pypdf
+python3 pdf/pdf-fill-xfa/tests/fixtures/pypdf_parity.py plugin.pdf backend_reference.pdf
+```
+
+For XFA-only forms (the 12 that don't get normalize), **pypdf parity is the authoritative verification method**. Adobe Acrobat confirms visual rendering. Preview is never useful for verifying XFA form fill.
+
+---
+
+## Full 15-Form Verification SOP
+
+Run this after ANY change to fill logic, form JSON, or XFA pathways:
+
+```bash
+cd pdf/pdf-fill-xfa
+
+# Step 1: regenerate all test output PDFs
+cargo test --release 2>&1 | tail -5
+# expect: test result: ok. N passed; 0 failed
+
+# Step 2: pypdf parity for all 11 generic forms
+PY=tests/fixtures/pypdf_parity.py
+OUT=target/test-output
+FX=tests/fixtures
+for form in 0104 1294 1295 1344 5257 5476 5532 5645 5708 5709 5710; do
+  python3 $PY $OUT/parity-${form}-plugin.pdf $FX/${form}_backend_reference.pdf 2>&1 | \
+    grep -E "missing|divergent" | awk -v f=$form '{print f": "$0}'
+done
+
+# Step 3: pypdf parity for bespoke forms
+python3 $PY $OUT/imm0008-plugin.pdf $FX/imm0008_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "0008: "$0}'
+python3 $PY $OUT/imm5406-plugin.pdf $FX/imm5406_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "5406: "$0}'
+python3 $PY $OUT/imm5562-plugin.pdf $FX/imm5562_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "5562: "$0}'
+python3 $PY $OUT/v2-5669-rust.pdf   $FX/5669_backend_reference.pdf    2>&1 | grep -E "missing|divergent" | awk '{print "5669: "$0}'
+
+# All lines should show: missing: 0  divergent: 0
+
+# Step 4: visual spot-check in Adobe Acrobat
+open -a "Adobe Acrobat" $OUT/imm0008-plugin.pdf $OUT/v2-5669-rust.pdf $OUT/parity-5476-plugin.pdf
+# Verify fields are filled and readable
+```
+
+**Expected output for a healthy codebase** (verified 2026-05-12, v1.2.0):
+
+| Form | backend nodes | plugin nodes | missing | divergent |
+|------|:---:|:---:|:---:|:---:|
+| 0008 | 103 | 103 | 0 | 0 |
+| 5406 | 41 | 41 | 0 | 0 |
+| 5562 | 15 | 15 | 0 | 0 |
+| 5669 | 108 | 108 | 0 | 0 |
+| 0104 | 7 | 11 | 0 | 0 |
+| 1294 | 121 | 122 | 0 | 0 |
+| 1295 | 119 | 120 | 0 | 0 |
+| 1344 | 136 | 138 | 0 | 0 |
+| 5257 | 113 | 114 | 0 | 0 |
+| 5476 | 44 | 44 | 0 | 0 |
+| 5532 | 57 | 57 | 0 | 0 |
+| 5645 | 55 | 55 | 0 | 0 |
+| 5708 | 119 | 120 | 0 | 0 |
+| 5709 | 130 | 131 | 0 | 0 |
+| 5710 | 117 | 118 | 0 | 0 |
+
+---
+
 ## Pre-commit Checklist
 
 Before merging ANY form change (new form, update, or fix):
@@ -244,7 +342,8 @@ Before merging ANY form change (new form, update, or fix):
 
 - **Do not** reach into `~/formbro/backend/vendor/pdffiller/` from plugin code. Use `pdf/vendor/`. The two copies diverge independently; plugin code must only depend on `pdf/vendor/`.
 - **Do not** skip the Bun normalize pass for any form except when ops is provably empty (Trap 8). Always materialize `/V` widgets.
-- **Do not** trust pypdf parity alone as the sole acceptance signal. Visual verification in both Adobe Acrobat and macOS Preview is required.
+- **Do not** use macOS Preview to verify XFA PDF fill. Preview cannot render XFA datasets — forms always look blank regardless of whether data is present. Use pypdf parity for programmatic verification; use Adobe Acrobat (`open -a "Adobe Acrobat" file.pdf`) for visual spot-check.
+- **Do not** add `fill_with_bun_normalize` to generic XFA forms (0104, 1294, 1295, 1344, 5257, 5532, 5645, 5708, 5709, 5710) — pdfjs will corrupt row-replication datasets and break pypdf parity. These forms are XFA-only by design; Adobe Acrobat renders them correctly.
 - **Do not** manually edit `form_<id>.json` LOV code values. Regenerate via `extract-dataset-paths` and re-verify; manual edits drift on next IRCC form update.
 - **Do not** push to main without running `./scripts/verify-all.sh`. A fix for one form must not break the other 14.
 - **Do not** use `Object::Name(b"datasets")` when constructing XFA packet array entries — use `Object::String(b"datasets", StringFormat::Literal)` (Pathway 2 specific).
