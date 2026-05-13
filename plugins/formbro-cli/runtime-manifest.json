@@ -10,20 +10,12 @@
           "bin/darwin-arm64/pdf-fill-xfa",
           "bin/darwin-arm64/extract-orig-oid"
         ],
-        "lazy": [
-          {
-            "name": "formbro-pdfjs",
-            "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "3fcc730ad4f0386d981a0dbf8edf72c4d80e298562f3fcfe8bbead2d4accae36"
-          },
-          {
-            "name": "webform-worker",
-            "asset": "webform-worker-darwin-arm64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "fcebe12da11833dfbdcaefabc1c435bfc0c2623f6978c3cf65ed3373934fbbb3"
-          }
-        ]
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "28dd51efdee71abe63202e11130ae23b74fb27b2a20b9e60456ef4d94d77bc74"
+        }
       },
       "darwin-x64": {
         "entrypoint": "bin/darwin-x64/formbro",
@@ -31,20 +23,12 @@
           "bin/darwin-x64/pdf-fill-xfa",
           "bin/darwin-x64/extract-orig-oid"
         ],
-        "lazy": [
-          {
-            "name": "formbro-pdfjs",
-            "asset": "formbro-pdfjs-darwin-x64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "c8f540ec10ca546379b314b7ce0eacff5345de7a47cb48d6939ce009998067f3"
-          },
-          {
-            "name": "webform-worker",
-            "asset": "webform-worker-darwin-x64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "12c1ca8bb8e61397475f8edd3ed7a296c9f4a1cdd27f225754edc7034ebbdf3e"
-          }
-        ]
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-darwin-x64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "57f0ae9abef6242de0b29057053bc8e84918c9d99f0c1a4d106c9d6743b1d622"
+        }
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/formbro.exe",
@@ -52,20 +36,12 @@
           "bin/win32-x64/pdf-fill-xfa.exe",
           "bin/win32-x64/extract-orig-oid.exe"
         ],
-        "lazy": [
-          {
-            "name": "formbro-pdfjs.exe",
-            "asset": "formbro-pdfjs-win32-x64.zip",
-            "archive": "zip",
-            "sha256": "558b6b158eda6375db25016823db1e7755ae987729fc68d5e53080e88454b448"
-          },
-          {
-            "name": "webform-worker.exe",
-            "asset": "webform-worker-win32-x64.zip",
-            "archive": "zip",
-            "sha256": "75b22d2e2b012e67e6c4362ea1fe64dc93c294b2cea47b7fbf5e4f3c4923021f"
-          }
-        ]
+        "lazy": {
+          "name": "formbro-pdfjs.exe",
+          "asset": "formbro-pdfjs-win32-x64.zip",
+          "archive": "zip",
+          "sha256": "9fe950348fd291a843d9786307b0bbf8fdf1d925a293833a73a0942625b9c161"
+        }
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/formbro",
@@ -73,20 +49,12 @@
           "bin/linux-x64/pdf-fill-xfa",
           "bin/linux-x64/extract-orig-oid"
         ],
-        "lazy": [
-          {
-            "name": "formbro-pdfjs",
-            "asset": "formbro-pdfjs-linux-x64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "c2866378a8aa87c86cb1b283e220117d185c13506fdcc85f61254e661aee07ec"
-          },
-          {
-            "name": "webform-worker",
-            "asset": "webform-worker-linux-x64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "95e6323e798434803d16aef0284e46b662b68bc429eeb7f626ca40fbd467eb86"
-          }
-        ]
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-linux-x64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "c2822f2513bd9f9a41dfecd30e4809f2e6ca78cc5f1ab1bc372b5430613d6626"
+        }
       },
       "linux-arm64": {
         "entrypoint": "bin/linux-arm64/formbro",
@@ -94,20 +62,18 @@
           "bin/linux-arm64/pdf-fill-xfa",
           "bin/linux-arm64/extract-orig-oid"
         ],
-        "lazy": [
-          {
-            "name": "formbro-pdfjs",
-            "asset": "formbro-pdfjs-linux-arm64.tar.gz",
-            "archive": "tar.gz",
-            "sha256": "9a78f6918ed9e1c7ff5ae0b46b5944d7517513b2b850590068c9b9da440ec429"
-          }
-        ]
+        "lazy": {
+          "name": "formbro-pdfjs",
+          "asset": "formbro-pdfjs-linux-arm64.tar.gz",
+          "archive": "tar.gz",
+          "sha256": "af68e92478de41060d1ec4e7773dd92d1d53002fd4d53437c44ecdb0a4e0df4c"
+        }
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "v1.3.1"
+      "tag": "main-10ac0bb96c091d2d5fb13a61895ca5e6d80f0f34"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
