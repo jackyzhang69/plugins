@@ -41,11 +41,30 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 
 ## Sequencing rules
 
-1. **First time on a machine:** run `runtime-check`. If it returns non-zero, the local Playwright runtime is missing — surface the error message; user typically needs to run a one-time setup.
+1. **First time on a machine:** run `runtime-check`. If Chromium hasn't been fetched yet, the bundled worker downloads it (~336 MB once, into `~/.formbro/runtime/chromium-<rev>/`). Subsequent calls reuse the cache.
 2. **Before every `start`:** run `preflight`. It returns missing / blocking validation errors. Do not start a fill that preflight rejects — the run will burn time and abort mid-portal.
 3. **Confirm before `start`:** `webform start` opens a browser, navigates to IRCC, and **types into a real portal session**. Confirm with the user once.
 4. **Set `--headless=false` on the first fill of a new program** so the user can watch what's happening; flip to true once they trust it.
 5. If a fill is killed mid-run, `webform start` with the same `--app-id` resumes from the last persisted step — no need to start over.
+
+## Bundled worker daemon (v1.3.0+)
+
+As of plugin v1.3.0, the webform pipeline is **fully self-contained**:
+- The `formbro` CLI auto-spawns a long-lived `webform-worker` daemon (sibling binary, Bun-compiled).
+- Daemon listens on a per-user Unix socket / Windows named pipe (`~/.formbro/runtime/formbro-worker-<user>.sock`).
+- BrowserContext is fresh per fill (no cookie leakage); Chromium binary stays warm; daemon idles out after 15 min.
+- You do NOT need to install Node or run `~/formbro/desktop`; the worker is bundled.
+
+Daemon management (rarely needed; mostly debugging):
+
+| Command | Use case |
+|---|---|
+| `formbro webform daemon status` | "Is the daemon running? Which Chromium rev?" |
+| `formbro webform daemon stop` | Before uninstalling the plugin; force a clean reload |
+| `formbro webform daemon restart` | After upgrading Chromium revision |
+| `formbro webform daemon prune-chromium` | Reclaim disk space — deletes non-current Chromium revs |
+
+The `FORMBRO_WEBFORM_RUNNER` env-var override (legacy from pre-v1.3.0) is **deprecated** and will be removed in v1.4.0; it falls back to running the old `.cjs` runner only if the bundled worker binary is missing.
 
 ## Program coverage (which portals are wired)
 
