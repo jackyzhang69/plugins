@@ -15,13 +15,13 @@
             "name": "formbro-pdfjs",
             "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "65e984a05162b8d82f6ea258afe11af1fac83d87007c0e3516a8a613d5f199f9"
+            "sha256": "3847d2ed065c6fd1a938f8f3bc4fd6d059f30b5ddf6172e2c11a5d7a83b59c0a"
           },
           {
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "66cc10f89b884a2ff736be15a5f0ac1004fc2879d5a45ce7364fa1651485294c"
+            "sha256": "4dd82ea88f2ae4cef391d1f43d89f3bc0a56852734da87b3ef44fd610a2aac84"
           }
         ]
       },
@@ -36,13 +36,13 @@
             "name": "formbro-pdfjs",
             "asset": "formbro-pdfjs-darwin-x64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "ba53095fed7af47cac56222c69ec66d7536aa0ee490533f862dbc94491e077c8"
+            "sha256": "7c663078716dbd17f1cc2e34f0865e912378cd912612e9c4fad97eadbe012bcf"
           },
           {
             "name": "webform-worker",
             "asset": "webform-worker-darwin-x64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "bc5a2fce4f52c571ddd3c3be9918abc3e795761f8a0fee6d1c48834b497ae2e2"
+            "sha256": "0f939c7dbbe0a92984d2f95539a8c6ff33842ef7aa9522f44952184fa991a7d6"
           }
         ]
       },
@@ -57,13 +57,13 @@
             "name": "formbro-pdfjs.exe",
             "asset": "formbro-pdfjs-win32-x64.zip",
             "archive": "zip",
-            "sha256": "6ffe3d7c223cb59c7b7423cd7c91e623209fe10350bcc051ea4dce84acb1c0f9"
+            "sha256": "978fe34b894bec1f767fcf65d73ac4ab14f2766f138a3915551d7fda3d94e764"
           },
           {
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "c74723b93f0ef91f3db125b71739b197c5ad4aa407d74690ecc78030e9bcb3d4"
+            "sha256": "4d8fd2b0e3fb962d60134441dcc0add6f6eaf0c5a17f4ea80c1245cdd4e813dc"
           }
         ]
       },
@@ -78,13 +78,13 @@
             "name": "formbro-pdfjs",
             "asset": "formbro-pdfjs-linux-x64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "c724930fc9ffd5dd225dbdf36dcdfcb8a474e215b328107efed359db850402d9"
+            "sha256": "6186cccafdacb10f1b5ad5c123b384305685e1bd800c0051cc3d677838e19b74"
           },
           {
             "name": "webform-worker",
             "asset": "webform-worker-linux-x64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "afef34afb5aa31235c4b038ae20d4b55d779115f7a412074122e97441178109f"
+            "sha256": "ecd57f5f90635b795caf455441af4aae8475a556d6e51fe018ea3a9b85fab6cb"
           }
         ]
       },
@@ -99,7 +99,7 @@
             "name": "formbro-pdfjs",
             "asset": "formbro-pdfjs-linux-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "d8049cd703c2b68f31497516a88756ccff513e4044ad5c597ba2b2fdbdf559bc"
+            "sha256": "dec7bae0990a019b89fdf33f8a415339145816ff07b68a108e1fcb361cb41f9b"
           }
         ]
       }
@@ -107,7 +107,7 @@
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "v1.4.0"
+      "tag": "main-cd5faf50190838b30bb0e85338072c5d988a3e8a"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
