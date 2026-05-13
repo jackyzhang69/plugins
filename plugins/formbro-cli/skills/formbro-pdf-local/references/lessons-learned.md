@@ -5,6 +5,89 @@ Real traps, real fixes — every item below was hit in production development.
 
 ---
 
+## 🔴 META-LESSON — Why "filled" PDFs sometimes look empty (5 root-cause families)
+
+**This symptom has hit 5+ times across sessions, each with a different underlying cause.** Every time, the same "green signals" (file size, %PDF magic, parity gate, exit 0, `local_ms` nonzero) lied. Below are the 5 root-cause families with the concrete incident + commit that fixed each one. Use this as a checklist before declaring any fill successful.
+
+### Family 1 — Pathway routing bug: bespoke priority overrode backend's real data
+**Incident** (2026-05-13, commit `02fab6c`): IMM0008 via plugin local path → Acrobat shows all blank.
+**Chain**: backend returns `data_type=datasets_xml` + pre-built XML; `fill.rs::fill_local` writes XML to `--datasets-xml` and writes `{}` to `--input` payload file. `run_cli` then unconditionally built `bespoke_xml_0008 = Imm0008Builder.build_datasets_xml(&payload)` from the `{}` placeholder → empty XML. Priority `bespoke > prebuilt` at L731 made empty bespoke win → real backend XML discarded.
+**Fix**: skip bespoke when `args.datasets_xml.is_some()` (`pdf-fill-xfa/src/lib.rs::run_cli`).
+**Trigger pattern**: any "backend pre-built / plugin byte-injects" two-stage pathway where priority is written wrong.
+
+### Family 2 — Dispatch table miss: form silently fell off the local engine
+**Incident** (2026-05-13, commit `4574cbd`): IMM5406 `--engine local` reported "no local mapping bundled".
+**Chain**: `cli/src/commands/fill.rs::local_supported_forms()` scanned `vendor/forms/{form_*,orig_oid_*}.json` to enumerate local-capable forms. IMM5406 is bespoke Rust (Pathway 2, LOV baked into binary, no JSON in vendor pack). Scan missed it.
+**Fix**: explicit `BESPOKE_LOCAL_FORMS = ["5406"]` whitelist gated on `vendor/pdfs/<form>.pdf` existence.
+**Trigger pattern**: any new bespoke Rust pathway that doesn't use vendor JSON.
+
+### Family 3 — Pathway implementation bug: wrote XML instead of PDF
+**Incident** (2026-05-13, commit `4574cbd` second hunk): IMM5562 produced a file with `<?xml` first bytes, not `%PDF-`.
+**Chain**: `run_cli` 5562 branch built bespoke datasets XML then `fs::write(&args.output, xml_bytes)` — skipped `fill_pdf_incremental_with_datasets`. Output size non-zero, exit 0, looked successful at every layer except actually opening the file.
+**Fix**: wire `fill_pdf_incremental_with_datasets(&vendor_root, "5562", &xml_bytes, IvMode::Random)`.
+**Trigger pattern**: adding a new bespoke branch and forgetting the final PDF-injection step. `fs::write` won't complain — bytes are bytes.
+
+### Family 4 — Viewer blindness: `/Fields=0` forms are forever blank in macOS Preview
+**Incident** (recurring, most recently commit `9c81e96`): users open IMM5406/5562/5645/5709 in Preview, see blank, file bugs.
+**Chain**: these IRCC blank templates have `/Fields=0` — no AcroForm widgets at all. Data lives only in XFA datasets. macOS Preview is XFA-blind, only renders AcroForm `/V` values. The fill works correctly; the viewer is the wrong tool.
+**Anti-fix I tried (don't repeat)**: adding `fill_with_bun_normalize` to a `/Fields=0` form, hoping pdfjs would materialize widgets — it returns `ops_applied:0` because there are no widget targets to write. Pure overhead. Reverted in `9c81e96`.
+**Fix**: diagnostic only.
+```bash
+python3 -c "from pypdf import PdfReader; r=PdfReader('<form>.pdf'); a=r.trailer['/Root']['/AcroForm'].get_object(); print('/Fields=', len(a.get('/Fields', [])))"
+```
+`/Fields=0` → **Adobe Acrobat only**. Confirmed `/Fields=0`: 5406, 5562, 5645, plus most datasets-rewrite forms (0104, 1294, 1295, 1344, 5532, 5708, 5709, 5710). `/Fields≥1`: 0008, 5257, 5476, 5669.
+**Trigger pattern**: every time a non-technical user verifies a fill in Preview. Permanent — fix is documentation, not code.
+
+### Family 5 — Verification blindness (meta): green signals don't measure content
+The 4 above are concrete symptoms of one structural problem. Every fix above was masked by:
+- ✘ Tests pass (parity gates compare XFA structure skeletons, NOT user data)
+- ✘ File size reasonable
+- ✘ `%PDF-` magic (only proves it parses as PDF)
+- ✘ `local_ms` nonzero (only proves binary ran)
+- ✘ `"ok": true` (only proves exit 0)
+- ✘ Adobe Acrobat "shows something" (could be the blank template's lines and labels)
+
+**Three orthogonal properties get conflated:**
+1. **Format validity** — `%PDF-`, parses, opens in viewer
+2. **Process completion** — binary ran, exit 0, file written
+3. **Content correctness** — user data actually present in output
+
+Tests, parity gates, and file size measure (1) and (2). They do NOT measure (3). The only thing that measures (3) is grepping the output for known user data.
+
+**Mandatory verification protocol — run for EVERY fill before declaring success**:
+
+```bash
+NEEDLES=("Wang" "Meili" "Nanjing")  # 3 high-signal strings unique to the input application
+
+python3 -c "
+import sys
+from pypdf import PdfReader
+r = PdfReader(sys.argv[1])
+acro = r.trailer.get('/Root', {}).get('/AcroForm')
+xfa = ''
+if acro:
+    a = acro.get_object()
+    for i in range(0, len(a.get('/XFA', [])), 2):
+        if 'datasets' in str(a['/XFA'][i]):
+            xfa = a['/XFA'][i+1].get_object().get_data().decode('utf-8','replace')
+            break
+fields = r.get_fields() or {}
+v_blob = ' '.join(str(f.value or '') for f in fields.values() if hasattr(f, 'value'))
+for n in sys.argv[2:]:
+    print(f'  {n}: datasets={xfa.count(n)}, /V={v_blob.count(n)}')
+" "$OUTPUT_PDF" "${NEEDLES[@]}"
+```
+
+**Decision rule**: ALL needles must show non-zero count in either `datasets` OR `/V`. If every needle is 0 in both, the fill is silently broken — investigate root cause, do not ship.
+
+**What to say in reports**:
+- ❌ Bad: "IMM5406 filled ✅ (1.87 MB, %PDF magic, 8ms)"
+- ✅ Good: "IMM5406 output: 1.87 MB. Datasets Wang×N, Meili×M, Nanjing×K → data confirmed."
+
+Tests, parity gates, file size, and visual "looks like a form" are necessary but NOT sufficient evidence of correct fill. Only the data-needle grep is dispositive.
+
+---
+
 ## The 4 Fill Pathways (full details)
 
 ### Pathway 1 — Template-mutation (bespoke IMM0008)
@@ -37,7 +120,7 @@ Source PDF lacks a datasets packet entirely. Build a datasets XML document from 
 - `pdf/pdf-fill-xfa/src/incremental.rs::inject_xfa_packet` — inserts a new `(name, stream)` pair into the `/XFA` array; handles both encrypted and unencrypted PDFs
 - `pdf/pdf-fill-xfa/src/bespoke/imm5406.rs` — form-specific field path definitions and the synthesized datasets XML builder
 
-**End step**: always `fill_with_bun_normalize` after injection.
+**End step**: **conditional**. Only call `fill_with_bun_normalize` if the blank PDF template has `/Fields ≠ 0` (AcroForm widgets present). For pure XFA-only templates (`/Fields=0`, e.g. IMM5406), normalize discovers items but applies 0 ops (no widget targets) — pure latency overhead, skip it. The filled PDF is visible in Adobe Acrobat / Reader either way. (Lesson 2026-05-13: earlier doc said "always normalize" — corrected after discovering IMM5406 blank-PDF has 0 widgets.)
 
 **Pitfalls**:
 - V4/R4 AES encryption — lopdf cannot mutate encrypted streams in place; must use a qpdf-flattened copy as the injection target (Trap 11)
@@ -131,9 +214,15 @@ Single-letter codes (`T` for Tourism, `B` for Business) are WRONG for forms usin
 
 **Root cause**: Rust filler writes XFA datasets XML. Adobe Acrobat resolves field values via XFA binding at render time — XFA-aware. macOS Preview is NOT XFA-aware; it only reads AcroForm widget `/V` entries. Rust filler does not write `/V`.
 
-**NOT a bug for XFA-only forms.** The following 12 forms are XFA-datasets-only and will always look blank in Preview — this is expected, correct behavior:
-- 5404, 5562 (XFA-packet-inject)
-- 0104, 1294, 1295, 1344, 5257, 5532, 5645, 5708, 5709, 5710 (datasets-rewrite)
+**NOT a bug for XFA-only forms.** The following forms have `/Fields=0` (no AcroForm widgets) — they are XFA-datasets-only and will always look blank in Preview. This is expected, correct behavior. Open in **Adobe Acrobat / Reader (DC)** which is XFA-aware:
+- **5406, 5562** (XFA-packet-inject + bespoke datasets-XML; `/Fields=0`)
+- 0104, 1294, 1295, 1344, 5257, 5532, 5645, 5708, 5709, 5710 (datasets-rewrite; all `/Fields=0` except 5257 has `/Fields=1` but only as XFA-binding artifact)
+
+**Diagnostic to classify any form**:
+```bash
+python3 -c "from pypdf import PdfReader; r=PdfReader('<form>.pdf'); a=r.trailer['/Root']['/AcroForm'].get_object(); print('/Fields=', len(a.get('/Fields', [])))"
+```
+`/Fields=0` → XFA-only, Adobe Acrobat required to view. `/Fields≥1` → may render in Preview after normalize.
 
 **Why normalize cannot be added to these forms**: adding `fill_with_bun_normalize` after the Rust fill would cause pdfjs `saveDocument()` to re-serialize the XFA tree. Forms with row-replication logic (5645, 1344, etc.) or no AcroForm widget bindings have their XFA datasets corrupted or silently dropped by pdfjs — breaking the pypdf parity gate.
 

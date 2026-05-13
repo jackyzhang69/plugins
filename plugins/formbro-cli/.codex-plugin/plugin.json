@@ -1,6 +1,6 @@
 {
   "name": "formbro-cli",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs (agent surface: `formbro fill`, auto TR/PR detect); drive local webform fills.",
   "author": {
     "name": "Jacky Zhang",
