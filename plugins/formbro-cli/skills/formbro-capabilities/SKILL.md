@@ -7,6 +7,33 @@ description: READ THIS FIRST. One-page consumption contract for AI agents. Tells
 
 **Read this once on plugin load.** It tells you, in one page, which skill / subcommand to call for any user intent, and what to never guess.
 
+## 0. Resolving the `formbro` binary
+
+The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by either Codex or Claude Code. Throughout these skills, `<formbro>` or the literal token `formbro` mean **"the bundled binary at this resolved path"**, not a `PATH` lookup.
+
+**Resolution order (use the first that resolves to an existing executable):**
+
+1. **`$FORMBRO_BIN`** — explicit override. Honor if set.
+2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches the OS/arch (`darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64`, `windows-x64`).
+3. **Claude Code plugin dir** — `$CLAUDE_PLUGIN_ROOT/bin/<platform>/formbro` (Claude Code sets `CLAUDE_PLUGIN_ROOT` when invoking a plugin's skill).
+4. **`which formbro`** — if the user has installed it on PATH manually.
+
+One-liner an agent can paste into a shell to capture the path:
+
+```bash
+FORMBRO_BIN="$(
+  [ -n "$FORMBRO_BIN" ] && echo "$FORMBRO_BIN" \
+  || ls -1d "$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/"*/bin/darwin-arm64/formbro 2>/dev/null | sort -V | tail -1 \
+  || ([ -n "$CLAUDE_PLUGIN_ROOT" ] && echo "$CLAUDE_PLUGIN_ROOT/bin/darwin-arm64/formbro") \
+  || command -v formbro
+)"
+"$FORMBRO_BIN" --help
+```
+
+Once `$FORMBRO_BIN` is set in the shell, every other command in this skill works by replacing the leading `formbro` with `"$FORMBRO_BIN"`.
+
+**Why this matters**: previously the docs wrote `formbro <subcommand>` assuming PATH was set, which silently fails in Codex (binary lives in cache, not PATH). Don't waste tool calls hunting for it — resolve once at session start.
+
 ## 1. Skill router by user intent
 
 | User says (any phrasing) | Call | Skill |
@@ -21,7 +48,7 @@ description: READ THIS FIRST. One-page consumption contract for AI agents. Tells
 | "patch / update <field> on <entity>" | `formbro <applicants\|applications\|employers\|persons> patch …` | formbro-write |
 | "attach / replace / remove <person> from this application" | `formbro applications attach\|replace-person\|remove-person …` | formbro-write |
 | "extract data from this text / document" | `formbro extract text` then `formbro extract apply-json` | formbro-write |
-| "fill the IRCC portal / open browser and fill this case" | `formbro webform start --confirmed=true --headless=false` | formbro-webform (LOCAL MODE) |
+| "fill the IRCC portal / open browser and fill this case" | `formbro webform start --confirmed --headless false` | formbro-webform (LOCAL MODE) |
 | "preflight / can webform fill this?" | `formbro webform preflight` | formbro-webform |
 | "check if my machine can run webform fills" | `formbro webform runtime-check` | formbro-webform |
 | "fill the IMM0008 / IMM5257 / IMM5710 PDF" / "give me the filled PDF for case X" | `formbro fill --app-id <id> --forms IMM…,IMM… -o ./out/` | **formbro-fill** (single agent surface; auto-detects TR vs PR; rejects LMIA) |
@@ -100,7 +127,7 @@ This is a known limitation of `cli-rs` being a thin client without local runner 
 ## 7. Default execution behavior
 
 - If user intent is unambiguous AND no extra parameters are needed AND the operation is **not destructive** (delete, set-status, webform start), **run it directly**. Do not narrate a plan first.
-- For **destructive** operations (`employers delete`, `applicants delete`, `applications set-status`, `webform start --confirmed=true`), confirm with the user once, then run.
+- For **destructive** operations (`employers delete`, `applicants delete`, `applications set-status`, `webform start --confirmed`), confirm with the user once, then run.
 - For **ambiguous intent** (multiple plausible programs / entities), ask one specific clarifying question. Do not enumerate every possible interpretation.
 - When the CLI returns a structured error with a remediation hint (`"next_required_checks"`, `"hint"`, `"alternative"`), surface it verbatim. The CLI is the source of truth for what to try next.
 
@@ -118,7 +145,23 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 
 **Use your runtime's parallel-tool-call mechanism** (Codex's parallel tool execution, async batches, `asyncio.gather`, `Promise.all`, or whatever your harness offers). Concretely: emit multiple shell tool calls in a single response message and let the runtime execute them concurrently. The agent that takes 3 seconds for a 5-form export is doing it wrong; the right answer is well under a second.
 
-**Webform fills run on the user's machine** so heavy parallelism there can saturate their CPU — keep webform `start` calls serialized unless the user asks for parallel browser sessions explicitly. All other subcommands (read / write / validate / export / extract) are network-bound and parallelize cleanly.
+### 7.2 Concurrency boundary — definitive table
+
+| Group | Default mode | Why |
+|---|---|---|
+| `find`, `applications get/list/status`, `employers list/get`, `programs *`, `audit my` | **PARALLEL** | read-only HTTPS |
+| `validate by-id`, `validate person`, `webform preflight`, `webform runtime-check` | **PARALLEL** | read-only / pure check |
+| `fill` (PDF) — multiple forms in **one** `formbro fill` call | already parallel internally — let the CLI do it | local Rust filler stages forms concurrently |
+| `fill` (PDF) — across **different applications** | **PARALLEL** | independent applications |
+| `extract text`, `extract apply-json` (read steps) | **PARALLEL** | independent |
+| `applications patch`, `employers patch`, `persons patch` (mutations on **different** entities) | **PARALLEL** | no shared state |
+| `applications patch` on the **same** entity, sequentially with `validate by-id` | **SERIAL** | data dependency |
+| `webform start` (local browser + worker daemon) | **SERIAL — ALWAYS** | the worker daemon is a singleton process per user; two concurrent `start` calls fight for the same Unix socket / Chromium instance |
+| `webform daemon start/stop/restart/prune-chromium` | **SERIAL** | manage singleton; concurrent calls race |
+
+Rule of thumb: **anything involving the local browser or the local worker daemon is serial. Everything else is parallel.**
+
+If the docs are unclear for a new command, default to PARALLEL for read-only / network-bound subcommands and SERIAL for anything that touches `~/.formbro/runtime/*` (the daemon socket / pid file / Chromium cache).
 
 ## 8. Token & secret rules
 

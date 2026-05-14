@@ -17,7 +17,7 @@ description: LOCAL MODE — runs Playwright + Chromium on the user's machine to 
 
 | If the user says… | Run |
 |---|---|
-| "fill the IRCC portal for this case" / "open browser and fill this case" | `<formbro> webform start --app-id <id> --program-key <key> --confirmed=true --headless=false` (CONFIRM first) |
+| "fill the IRCC portal for this case" / "open browser and fill this case" | `<formbro> webform start --app-id <id> --program-key <key> --confirmed --headless false` (CONFIRM first) |
 | "preflight this case for webform fill" / "is this case ready to fill?" | `<formbro> webform preflight --app-id <id> --program-key <key>` |
 | "can my machine even run webform fills?" | `<formbro> webform runtime-check` (no --app-id needed) |
 | "what's the status of the webform fill on case X" | See **Status truth model** below — `webform status` is unreliable in local mode |
@@ -84,8 +84,8 @@ For LMIA there are also Job Bank invitations etc. that are LMIA-specific webform
 <formbro> webform status     --app-id <id> --program-key <key>       # BACKEND-persisted; see truth model
 <formbro> webform start      --app-id <id> --program-key <key> \
                              [--case-id <id>] \
-                             --confirmed=true \
-                             [--headless=false]
+                             --confirmed \
+                             [--headless false]
 ```
 
 ## What this skill does NOT do
