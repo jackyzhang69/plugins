@@ -44,7 +44,10 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 1. **First time on a machine:** run `runtime-check`. If Chromium hasn't been fetched yet, the bundled worker downloads it (~336 MB once, into `~/.formbro/runtime/chromium-<rev>/`). Subsequent calls reuse the cache.
 2. **Before every `start`:** run `preflight`. It returns missing / blocking validation errors. Do not start a fill that preflight rejects — the run will burn time and abort mid-portal.
 3. **Confirm before `start`:** `webform start` opens a browser, navigates to IRCC, and **types into a real portal session**. Confirm with the user once.
-4. **Set `--headless=false` on the first fill of a new program** so the user can watch what's happening; flip to true once they trust it.
+4. **Headless default depends on who's driving:**
+   - **Interactive user, first fill of a new program** → `--headless false` (visible Chromium so the user can watch).
+   - **Agent-driven / unattended / repeat fills** → `--headless true` (no browser window, no user observing). This is the safe default for AI agents that are running tasks without a human at the keyboard.
+   - You may always override by asking the user. When in doubt for an unattended run, choose `--headless true` — completion semantics are identical, just no visible window.
 5. If a fill is killed mid-run, `webform start` with the same `--app-id` resumes from the last persisted step — no need to start over.
 
 ## Bundled worker daemon (v1.3.0+)

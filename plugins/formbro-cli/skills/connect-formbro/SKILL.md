@@ -5,18 +5,26 @@ description: One-time setup. Capture the user's FormBro API token (fb_…) and p
 
 # Connect FormBro
 
-This is the **first skill the user must run**. It is the only skill that asks for input.
+## Skill load order (resolves any apparent contradiction)
 
-After this succeeds, also load `formbro-capabilities` (the one-page consumption contract) before doing anything else — it tells you which skill to call for which user intent and saves you from guessing parameters.
+Two different time-scales:
+- **`connect-formbro` (THIS skill)** is the **one-time setup ritual** — runs once per user/machine to capture the API token + verify cache freshness. Then it tells you to load `formbro-capabilities`.
+- **`formbro-capabilities`** is the **every-session reference contract** — load it (and keep it loaded) for every interaction. Its description says "READ THIS FIRST" because, once setup is done, capabilities is what an agent reads first on each subsequent session.
 
-## What this does
+So: **`connect-formbro` once → then `formbro-capabilities` every session**, including the very first one. Both can be true.
+
+## Already-connected fast path
+
+If `~/.formbro/config.json` exists from a previous session AND `formbro whoami` returns 200, the user is already connected. Skip the token capture (step 1) and the login step (step 4) — **but still run the doctor self-check (step 3)** because plugin upgrades happen out-of-band and you should detect a stale cache on every session start.
+
+## What this does (first-time path)
 
 Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again.
 
 ## How it works
 
 1. Ask the user for their FormBro API token. The token starts with `fb_`. The user gets it from https://formbro.ca → Settings → API Tokens → Create token.
-2. Resolve the bundled `formbro` binary by reading `runtime-manifest.json` in the plugin root and looking up `binary.platforms[<platform>-<arch>].path`. Platform values: `darwin-arm64`, `darwin-x64`, `win32-x64`. On macOS, `chmod +x` the binary if not already executable.
+2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §0 (the canonical resolver: `$FORMBRO_BIN_OVERRIDE` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §0's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh

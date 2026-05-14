@@ -70,21 +70,9 @@ If the user asks for a form that the program doesn't support, the CLI returns a 
 }
 ```
 
-Or, when the local engine isn't applicable (form not in bundle, e.g., IMM0008):
+Since v1.4.x, **all 13 IRCC forms (IMM0008 included) fill via the local Rust XFA path**. The backend is hit only to deliver the per-application datasets XML (~200–400 ms); the actual byte mutation runs on the user's machine. `engine: "backend"` should not appear under normal operation with a current plugin; if it does, it's a sign of an old cached plugin (refresh via the `formbro doctor --json --no-fetch` ritual in `connect-formbro`).
 
-```json
-{
-  "ok": true,
-  "engine": "backend",
-  "engine_detail": {
-    "reason": "auto-fallback: requested forms have no local mapping",
-    "forms_lacking_local_mapping": ["0008"]
-  },
-  ...
-}
-```
-
-The `engine` field tells you whether the fill happened on the user's machine (local Rust XFA filler, ~5-10 ms per form) or via the FormBro backend (round-trip ~2-5 s). Treat the contract — filled PDFs at the listed paths — as the source of truth; the `engine` value is for telemetry only.
+Treat the contract — filled PDFs at `files[].path` with `ok: true` — as the source of truth. The `engine` field is for telemetry only.
 
 ## Status truth model
 

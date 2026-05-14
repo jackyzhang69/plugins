@@ -204,7 +204,8 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 | Group | Default mode | Why |
 |---|---|---|
 | `find`, `applications get/list/status/by-status`, `employers list/get`, `programs *`, `audit my`, `whoami`, `health` | **PARALLEL** | read-only HTTPS |
-| `validate by-id`, `validate person`, `webform preflight`, `webform runtime-check`, `webform status`, `webform daemon status`, `doctor` (with or without `--no-fetch`) | **PARALLEL** | read-only / pure check |
+| `validate by-id`, `validate person`, `webform preflight`, `webform status`, `webform daemon status`, `doctor` (with or without `--no-fetch`) | **PARALLEL** | read-only / pure check |
+| `webform runtime-check` | **SERIAL** (first call) → **PARALLEL** (subsequent) | First call spawns the singleton worker daemon (singleton lock file under `~/.formbro/runtime/`); subsequent calls just health-ping it. Sandboxed environments without `flock`/named-socket support will fail on first call — that's an environment limitation, not a docs bug. |
 | `fill` (PDF) — multiple forms in **one** `formbro fill` call | already parallel internally — let the CLI do it | local Rust filler stages forms concurrently |
 | `fill` (PDF) — across **different applications** | **PARALLEL** | independent applications |
 | `extract text`, `extract apply-json` (read steps) | **PARALLEL** | independent |
