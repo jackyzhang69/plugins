@@ -17,7 +17,21 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
 1. Ask the user for their FormBro API token. The token starts with `fb_`. The user gets it from https://formbro.ca → Settings → API Tokens → Create token.
 2. Resolve the bundled `formbro` binary by reading `runtime-manifest.json` in the plugin root and looking up `binary.platforms[<platform>-<arch>].path`. Platform values: `darwin-arm64`, `darwin-x64`, `win32-x64`. On macOS, `chmod +x` the binary if not already executable.
-3. Run:
+3. **Plugin cache freshness self-check (mandatory):**
+
+   ```sh
+   <BUNDLED_FORMBRO> doctor --json
+   ```
+
+   Parse the response. If `cache.stale == true`, **tell the user verbatim**:
+
+   > Your FormBro plugin cache is stale: running version `<cache.version>`, latest available `<cache.latest_available>`. Refresh via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before proceeding, or this session may hit known fixed bugs (Bun JIT OOM on Apple Silicon, action schema mismatch, etc.).
+
+   If `cache.stale == false` or `cache.location == "not_in_cache"` (dev install), proceed silently.
+
+   This check is cheap (one local fs scan, no network) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
+
+4. Run:
 
    ```sh
    <BUNDLED_FORMBRO> login --token <USER_TOKEN>
@@ -25,7 +39,7 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
    Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path.
 
-4. Verify by running:
+5. Verify by running:
 
    ```sh
    <BUNDLED_FORMBRO> whoami
