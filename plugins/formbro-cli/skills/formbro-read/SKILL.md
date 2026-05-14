@@ -1,11 +1,52 @@
 ---
 name: formbro-read
-description: Read-only operations. Use for any "find / search / list / get / status / audit" intent. Requires connect-formbro to have been run first. See formbro-capabilities for the full intent → command router.
+description: "Read-only FormBro operations — find, list, get, status, audit. For person-to-application-id lookup use the canonical `find --include applications` path or `applications resolve`. Requires connect-formbro first. Full router: see formbro-capabilities."
+when_to_use: "Trigger phrases: find/search/look up a person; what's the status of a case; list applications; what applications does someone have; show employer / audit log / programs."
 ---
 
 # Read FormBro data
 
-All commands shell out to the bundled `formbro` CLI (resolve via `runtime-manifest.json`). All output is JSON on stdout; structured errors go to stderr with non-zero exit.
+All commands shell out to the bundled `formbro` CLI (resolve via `formbro-capabilities/SKILL.md` §B). All output is JSON on stdout; structured errors go to stderr with non-zero exit.
+
+## Person → application_id (THE canonical path)
+
+For any "fill for `<person>`" / "find `<person>`'s case" intent, this is the standard chain:
+
+**Option 1 — `find` with applications included** (most flexible; gives full context):
+```bash
+formbro find "<person name>" --include applications --limit 10
+```
+Sample response:
+```json
+{
+  "results": [
+    {
+      "id": "6a062b…", "name": "Meili Wang",
+      "email": "…", "phone": "…",
+      "applications": [
+        { "id": "<application_id>", "program": "PR General",
+          "program_key": "general", "status": "in_progress",
+          "created": "2026-05-14" }
+      ]
+    }
+  ],
+  "total": 1
+}
+```
+
+**Option 2 — `applications resolve`** (one-shot, returns unique/ambiguous/none):
+```bash
+formbro applications resolve --query "<person>" --program-key <key>
+```
+Returns `{match: "unique", application_id: "…", applicant_name: "…"}` directly, or `{match: "ambiguous", candidates: [...]}` / `{match: "none"}`.
+
+**Important matching rule** (programs with older data): backend may return `program_key: ""` (empty) for some applications. Both `resolve` and the v1.5.0 `webform start-by-name` already match by `app.program_key` OR the normalised `program` field (`"PR General"` → strip `"PR "` → lowercase → `"general"`). Don't hand-roll this match yourself; use the CLI.
+
+**`list` vs `inventory` semantic distinction** (read carefully):
+- `applications list` calls `/api/dashboard/applications` — filters by active status (draft / in_progress / submitted / in_review / additional_documents_requested). Use this when you want the consultant's active workbench.
+- `applications inventory` calls `/api/mcp/find` wildcard — returns EVERY application regardless of status (incl. empty/archived). Use this for batch tests, audit sweeps, finding cases with bad seed data, or any "give me all" intent.
+
+If `list` returns empty unexpectedly, try `inventory` to confirm whether the data exists at all vs whether it's just non-active.
 
 ## Quick router (user intent → exact command)
 

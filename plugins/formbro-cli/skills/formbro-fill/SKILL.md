@@ -1,6 +1,13 @@
 ---
 name: formbro-fill
 description: Agent-facing entrypoint for filling IRCC IMM PDF forms (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Use this skill for ANY user intent that mentions "fill PDF / IMM form / generate the IMM5257 / give me the filled PDF". Auto-detects TR vs PR from the application; rejects LMIA (which is webform-only). Stable agent surface — local engine for all 13 IRCC forms, no backend round-trip for fill itself.
+when_to_use: |-
+  Trigger phrases (PDF intent, NOT webform):
+    - "fill IMM0008 / IMM5257 / IMM5710 / IMM5406 / etc."
+    - "give me the filled PDFs for case X"
+    - "generate the IMM forms for <person>'s application"
+    - "I need IMM5645 + IMM5710 for <client>"
+  NOT for: "fill the webform" / "open the portal" → use formbro-webform.
 ---
 
 # Fill IRCC IMM PDFs

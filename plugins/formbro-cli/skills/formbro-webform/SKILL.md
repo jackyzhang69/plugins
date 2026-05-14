@@ -1,26 +1,81 @@
 ---
 name: formbro-webform
 description: LOCAL MODE — runs Playwright + Chromium on the user's machine to fill IRCC / Service Canada portals. Never submits; stops at "Ready to submit". Requires connect-formbro to have been run first.
+when_to_use: |-
+  Trigger phrases (web portal intent, NOT PDF):
+    - "fill the webform for <person>"
+    - "open the IRCC portal and fill"
+    - "automate the LMIA Job Bank application"
+    - "preflight this case for webform fill"
+    - "can my machine run a fill / is the worker daemon up"
+  NOT for: "fill the PDF" / "give me IMM0008" → use formbro-fill.
 ---
 
 # FormBro webforms — LOCAL MODE
 
-> ## ⚠ THIS RUNS ON THE USER'S MACHINE
->
-> `webform start` is **not** a backend job. It spawns Playwright + Chromium **locally** and drives the IRCC / Service Canada portal in a real browser the user can see (with `--headless=false`).
->
-> - The browser opens on the **user's screen**, not in the cloud.
-> - The fill stops at "Ready to submit" / equivalent. **The CLI never clicks final submit** — the user does.
-> - If the user is on a different machine than where the agent is running (e.g., remote SSH session), tell them this fact and ask them to run from their own desktop.
+## Agent happy path (start here)
 
-## Quick router (user intent → exact command)
+User says "fill the webform for &lt;person&gt;" → run **one** command:
 
-| If the user says… | Run |
+```bash
+formbro webform start-by-name \
+  --query "<person name>" \
+  --program-key <general|express-entry|spouse-sponsorship|caregiver|sp-out|wp-out|visa-out|...> \
+  --confirmed \
+  [--headless false]      # add when the user wants to watch a visible browser
+```
+
+Behaviour:
+- Resolves the name → application id within that program-key.
+- Returns `match: "unique"` → runs preflight + start automatically.
+- Returns `match: "ambiguous"` → emits `candidates[]` JSON; you pick an id and call `webform start --app-id <id>` directly.
+- Returns `match: "none"` → name doesn't exist in that program; ask user to confirm name/program.
+- Returns the compact summary `{ok, status, progress, steps_completed, application_id, program_key, elapsed_ms}` on success. Add `--debug-events` to also get the full WebFiller event trace in the response.
+
+**`--headless` default is `true`** — agents running unattended should leave it off. Only pass `--headless false` when there's a human at the keyboard who wants to watch Chromium.
+
+**`--debug-events` sensitivity warning**: passing `--debug-events` attaches the full WebFiller event trace to the response. Events may include in-flight portal field values (applicant data being typed into IRCC inputs) and may include IRCC session identifiers. Treat the output as PII-equivalent: do NOT forward it to third-party tools or paste it into chat with anyone other than the user whose case it is.
+
+**Daemon socket security**: the worker daemon listens on `~/.formbro/runtime/formbro-worker-<user>.sock` (Unix) / per-user named pipe (Windows). On Unix the socket is created mode `0600` and only the owning user can connect. The bundled `formbro` binary talks to it via the `worker_ipc` client. No remote / cross-user attach surface exists. If you see another user's account in the daemon log, that's a serious bug — escalate immediately.
+
+For lower-level control (already-resolved id, manual preflight, etc.) skip below to the **Reference** section.
+
+## ⚠ THIS RUNS ON THE USER'S MACHINE
+
+- `webform start*` spawns Playwright + Chromium **locally**. The browser opens on the user's screen, not in the cloud.
+- The fill stops at "Ready to submit". **The CLI never clicks final submit** — the user does.
+- If the agent is running on a different machine than the user's desktop (e.g. remote SSH), tell the user this and ask them to invoke from their own desktop.
+
+## Why the first call is slow — DO NOT assume stuck
+
+The first `webform runtime-check` (or first `start*`) on a fresh machine / fresh plugin version takes **20–60 seconds**. This is expected, not a bug. It does two one-time things:
+
+1. **Unpacks the bundled Chromium** into `~/.formbro/runtime/chromium-<rev>/` (one tarball per plugin version).
+2. **Starts the long-lived `webform-worker` daemon** — listens on `~/.formbro/runtime/formbro-worker-<user>.sock`.
+
+Subsequent calls reuse the cached Chromium + warm daemon; they respond in ≤2 s.
+
+**Progress signal during slow startup**: the worker emits a log line every ~5 s while initialising. If your harness can tail the daemon log, you'll see steady output.
+
+**What "actually stuck" looks like**:
+- No log line for **≥90 s**, AND
+- `~/.formbro/runtime/formbro-worker-*.sock` is missing, AND
+- `formbro webform daemon status` errors / hangs.
+
+If all three are true, suspect a real bug — run `formbro webform daemon restart`, then re-try. If still stuck, capture `formbro doctor --json` and ask the user to file an issue.
+
+Under 90 s with no socket, just **wait** — it's the one-time unpack.
+
+## Routing table (for non-happy-path intents)
+
+| User intent | Command |
 |---|---|
-| "fill the IRCC portal for this case" / "open browser and fill this case" | `<formbro> webform start --app-id <id> --program-key <key> --confirmed --headless false` (CONFIRM first) |
-| "preflight this case for webform fill" / "is this case ready to fill?" | `<formbro> webform preflight --app-id <id> --program-key <key>` |
-| "can my machine even run webform fills?" | `<formbro> webform runtime-check` (no --app-id needed) |
-| "what's the status of the webform fill on case X" | See **Status truth model** below — `webform status` is unreliable in local mode |
+| "fill the webform for <person>" | `webform start-by-name --query <name> --program-key <key> --confirmed` |
+| "fill the webform for application <id>" | `webform start --app-id <id> --program-key <key> --confirmed` |
+| "is this case ready to fill?" | `webform preflight --app-id <id> --program-key <key>` |
+| "can my machine even run webform fills?" | `webform runtime-check` |
+| "what's the status of the last fill on case X" | `webform status` — but see **Status truth model** below |
+| "resolve a name to an application id" | `applications resolve --query <name> --program-key <key>` |
 
 ## Status truth model — KNOWN LIMITATION (read this)
 
@@ -67,7 +122,7 @@ Daemon management (rarely needed; mostly debugging):
 | `formbro webform daemon restart` | After upgrading Chromium revision |
 | `formbro webform daemon prune-chromium` | Reclaim disk space — deletes non-current Chromium revs |
 
-The `FORMBRO_WEBFORM_RUNNER` env-var override (legacy from pre-v1.3.0) is **deprecated** and will be removed in v1.4.0; it falls back to running the old `.cjs` runner only if the bundled worker binary is missing.
+The worker daemon binary is resolved in this order: `$FB_WORKER_BIN` (env override, for dev) → sibling to `formbro` in the same `bin/<platform>/` directory (production). There is **no** other fallback path; references to a legacy `FORMBRO_WEBFORM_RUNNER` env var in old docs were removed — that variable was never implemented in v1.3.0+.
 
 ## Program coverage (which portals are wired)
 

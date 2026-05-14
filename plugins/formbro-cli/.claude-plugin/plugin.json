@@ -1,7 +1,7 @@
 {
   "name": "formbro-cli",
   "description": "Canadian immigration form automation via the FormBro CLI.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://formbro.ca"

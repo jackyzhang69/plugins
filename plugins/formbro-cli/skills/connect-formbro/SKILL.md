@@ -1,6 +1,12 @@
 ---
 name: connect-formbro
 description: One-time setup. Capture the user's FormBro API token (fb_…) and persist it via the bundled CLI. Run this once before any other FormBro skill. After it succeeds, also load formbro-capabilities for the agent consumption contract.
+when_to_use: |-
+  Trigger phrases:
+    - "connect to formbro / set up formbro"
+    - "log in to formbro / save my fb_ token"
+    - "configure formbro plugin / use this token"
+    - first invocation of any formbro skill when ~/.formbro/config.json missing
 ---
 
 # Connect FormBro
@@ -28,10 +34,11 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh
-   <BUNDLED_FORMBRO> doctor --json --no-fetch
+   <BUNDLED_FORMBRO> doctor --json --no-fetch --check-upgrade
    ```
 
-   The `--no-fetch` flag is **required** — it skips bootstrap (which can hit the network + write to the cache dir) and guarantees a pure local read.
+   - `--no-fetch` is **required** — skips bootstrap (which can hit the network + write to the cache dir) and guarantees a pure local cache read.
+   - `--check-upgrade` adds one lightweight call to the GitHub Tags API to detect newer plugin releases. Cost: ~200-500 ms. Failure is non-fatal — `upgrade.checked: false` with a `check_failed_reason`. **Surface upgrade warnings to the user when `upgrade.upgrade_available: true`** so they don't hit already-fixed bugs.
 
    **Failure handling — before parsing JSON:**
    - If the command exits non-zero **OR** prints anything that doesn't parse as JSON: abort the connect flow. Surface the raw output to the user with the message "FormBro CLI doctor check failed — the bundled binary may not be installed correctly. Verify your plugin install and re-run." **Do not proceed to step 4 (login).**
@@ -48,6 +55,15 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
      Wait for user direction before continuing.
    - Any other shape (missing fields, unexpected `cache.location` value): proceed but warn — log "doctor returned unexpected cache shape; continuing".
+
+   **Also branch on `upgrade.upgrade_available`** (only when --check-upgrade ran):
+
+   - `upgrade.upgrade_available == true`: tell the user verbatim:
+
+     > A newer FormBro plugin version (`<upgrade.latest>`) is available; you're on `<upgrade.current>`. New releases often ship bug fixes for issues you might hit. Recommend upgrading via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before continuing. Want to upgrade now, or proceed anyway?
+
+     If user says proceed: continue.
+   - `upgrade.checked == false`: log "upgrade check failed (reason); proceeding with current version" and continue silently — don't bother the user with network errors.
 
    This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
 
@@ -78,7 +94,12 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
 Tell the user:
 
-> Connected. Reading the FormBro capability contract now.
+> Connected as `<email from whoami>`. FormBro plugin v`<doctor.binary_version>` ready.
+>
+> **Quick reference** (you can ask me for any of these):
+> - "fill the webform for `<person name>`" — one-step: resolve + preflight + fill
+> - "find `<person>`'s applications" — name → application ids
+> - "is my plugin healthy / which backend am I on" — runs `formbro doctor --json`
 
 Then (silently, no narration) load `formbro-capabilities/SKILL.md`. It tells you:
 - Which skill to call for any user intent

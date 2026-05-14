@@ -1,6 +1,14 @@
 ---
 name: formbro-write
 description: Mutations + extraction + validation + PDF/Excel export. Validate before patching. Confirm with user before delete or status-change. Requires connect-formbro to have been run first. See formbro-capabilities for the full intent → command router and parameter cheat-sheets.
+when_to_use: |-
+  Trigger phrases (writes / mutations / pre-submit checks):
+    - "create / update / patch / set the X field on Y"
+    - "attach / replace / remove <person> from <application>"
+    - "validate / is this ready to submit / can I send X"
+    - "extract data from this <doc/text> for case X"
+    - "export <entity> as Excel"
+    - "delete <employer / applicant> / change status to <S>"
 ---
 
 # Write FormBro data

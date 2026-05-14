@@ -1,6 +1,8 @@
 {
   "name": "formbro-cli",
-  "version": "0.6.8",
+  "version": "0.7.1",
+  "min_supported_version": "0.6.0",
+  "deprecated_versions_note": "Plugin versions pinning marketplace tags below v1.4.3 (in the jackyzhang69/plugins repo) were removed in the v1.5.0 cleanup because their commit trees contained pre-v1.4.x IP-bearing mapping JSONs. If a user is on an older cached version, run the doctor check and follow the upgrade hint.",
   "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs (agent surface: `formbro fill`, auto TR/PR detect); drive local webform fills.",
   "author": {
     "name": "Jacky Zhang",

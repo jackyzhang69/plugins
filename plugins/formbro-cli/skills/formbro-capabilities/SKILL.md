@@ -1,13 +1,40 @@
 ---
 name: formbro-capabilities
 description: READ THIS FIRST. One-page consumption contract for AI agents. Tells you exactly which FormBro skill to call for any user intent, which commands are PR / TR / LMIA only, what runs locally vs in the backend, and which status sources to trust. Read this before guessing parameters or trying commands.
+when_to_use: |-
+  Load on plugin start; reload whenever a user asks anything formbro-related.
+  Trigger phrases: "fill the webform for X", "find X case", "list applications", "PDF for case X",
+  "is this ready to submit", "check formbro status", "my token / which backend".
 ---
 
 # FormBro plugin — agent consumption contract
 
 **Read this once on plugin load.** It tells you, in one page, which skill / subcommand to call for any user intent, and what to never guess.
 
-## 0. Resolving the `formbro` binary
+## Agent quick router — TOP 20 LINES (read this first)
+
+User said this → call this exact command (binary resolution: §B; full router with TR/PR/LMIA detail: §1):
+
+| User intent | Command (one-hop preferred) |
+|---|---|
+| "fill the webform for `<person>`" | `formbro webform start-by-name --query "<person>" --program-key <key> --confirmed` |
+| "fill PDF / IMM forms for `<person>`'s case" | `formbro fill --app-id <id> --forms IMM…,IMM…` (see formbro-fill) |
+| "find / look up `<person>`" | `formbro find "<person>" --include applications --limit 10` |
+| "list ALL cases / inventory / audit sweep" | `formbro applications inventory [--program-key <key>]` (v1.5.0+; returns every status incl. empty) |
+| "list my active workbench" | `formbro applications list [--program-key <key>]` (dashboard semantics: only active statuses) |
+| "is this case ready to submit" | `formbro webform preflight --app-id <id> --program-key <key>` |
+| "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
+| "can my machine even run a fill" | `formbro webform runtime-check` |
+| "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
+| "plugin out of date?" | `formbro doctor --check-upgrade` |
+
+Two semantic distinctions to NEVER conflate:
+- `applications list` = consultant's active workbench (dashboard scope; filters by active status)
+- `applications inventory` = every application in the account regardless of state (audit / batch / debugging)
+
+Routing detail below is supplementary — start with this 20-line table.
+
+## §B. Resolving the `formbro` binary
 
 The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by either Codex or Claude Code. Throughout these skills, `<formbro>` or the literal token `formbro` mean **"the bundled binary at this resolved path"**, not a `PATH` lookup.
 

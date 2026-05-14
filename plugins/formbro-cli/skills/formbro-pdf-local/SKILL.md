@@ -1,6 +1,6 @@
 ---
 name: formbro-pdf-local
-description: 100% local IRCC PDF form filling (no backend). 4 fill pathways for XFA/AcroForm PDFs. Triggers (中): PDF 填表, IRCC 表格, plugin PDF. Triggers (EN): IRCC PDF fill, plugin PDF, local PDF form, XFA, AcroForm.
+description: "100% local IRCC PDF form filling (no backend). 4 fill pathways for XFA/AcroForm PDFs. Trigger phrases — Chinese: PDF 填表, IRCC 表格, plugin PDF. English: IRCC PDF fill, plugin PDF, local PDF form, XFA, AcroForm."
 ---
 
 # formbro-pdf-local — Skill
