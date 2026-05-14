@@ -18,19 +18,73 @@ The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by
 3. **Claude Code plugin dir** — `$CLAUDE_PLUGIN_ROOT/bin/<platform>/formbro` (Claude Code sets `CLAUDE_PLUGIN_ROOT` when invoking a plugin's skill).
 4. **`which formbro`** — if the user has installed it on PATH manually.
 
-One-liner an agent can paste into a shell to capture the path:
+**Portable resolver (bash; works on darwin / linux; for Windows agents use PowerShell variant below):**
 
 ```bash
-FORMBRO_BIN="$(
-  [ -n "$FORMBRO_BIN" ] && echo "$FORMBRO_BIN" \
-  || ls -1d "$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/"*/bin/darwin-arm64/formbro 2>/dev/null | sort -V | tail -1 \
-  || ([ -n "$CLAUDE_PLUGIN_ROOT" ] && echo "$CLAUDE_PLUGIN_ROOT/bin/darwin-arm64/formbro") \
-  || command -v formbro
-)"
-"$FORMBRO_BIN" --help
+# Detect platform → cache subdir name used by both codex and claude.
+case "$(uname -s)-$(uname -m)" in
+  Darwin-arm64)  PLAT=darwin-arm64 ;;
+  Darwin-x86_64) PLAT=darwin-x64 ;;
+  Linux-x86_64)  PLAT=linux-x64 ;;
+  Linux-aarch64) PLAT=linux-arm64 ;;
+  *) echo "unsupported platform: $(uname -s)-$(uname -m)" >&2; return 1 2>/dev/null || exit 1 ;;
+esac
+
+# Walk a search list in priority order; pick first existing executable.
+FORMBRO_BIN=""
+_cand_paths=(
+  "${FORMBRO_BIN_OVERRIDE:-}"
+  "${CLAUDE_PLUGIN_ROOT:+$CLAUDE_PLUGIN_ROOT/bin/$PLAT/formbro}"
+)
+# Codex cache may have several version dirs; agent picks the *highest* one.
+# We use python sort (universally available) — POSIX `sort -V` is not portable.
+_codex_root="$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli"
+if [ -d "$_codex_root" ]; then
+  _latest_codex=$(python3 - "$_codex_root" <<'PY' 2>/dev/null
+import os, sys
+root = sys.argv[1]
+def keyfn(d):
+    try:    return tuple(int(x) for x in d.split('.'))
+    except: return (-1,)
+dirs = [d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d))]
+dirs.sort(key=keyfn)
+print(os.path.join(root, dirs[-1]) if dirs else "", end="")
+PY
+)
+  [ -n "$_latest_codex" ] && _cand_paths+=("$_latest_codex/bin/$PLAT/formbro")
+fi
+_cand_paths+=("$(command -v formbro 2>/dev/null)")
+
+for _p in "${_cand_paths[@]}"; do
+  if [ -n "$_p" ] && [ -x "$_p" ]; then FORMBRO_BIN="$_p"; break; fi
+done
+
+if [ -z "$FORMBRO_BIN" ]; then
+  echo "FormBro CLI not found on this host. Install the formbro-cli plugin first." >&2
+  return 1 2>/dev/null || exit 1
+fi
+export FORMBRO_BIN
+"$FORMBRO_BIN" --help >/dev/null || { echo "FormBro CLI at $FORMBRO_BIN is not runnable" >&2; return 1 2>/dev/null || exit 1; }
 ```
 
-Once `$FORMBRO_BIN` is set in the shell, every other command in this skill works by replacing the leading `formbro` with `"$FORMBRO_BIN"`.
+**Windows PowerShell variant** (codex on Windows installs to `$env:USERPROFILE\.codex\...`):
+
+```powershell
+$plat = "windows-x64"
+$cands = @($env:FORMBRO_BIN_OVERRIDE)
+if ($env:CLAUDE_PLUGIN_ROOT) { $cands += "$env:CLAUDE_PLUGIN_ROOT\bin\$plat\formbro.exe" }
+$codexRoot = "$env:USERPROFILE\.codex\plugins\cache\jacky-plugins\formbro-cli"
+if (Test-Path $codexRoot) {
+  $latest = Get-ChildItem $codexRoot -Directory | Where-Object { $_.Name -match '^\d+(\.\d+){1,3}$' } | Sort-Object { [version]$_.Name } | Select-Object -Last 1
+  if ($latest) { $cands += "$($latest.FullName)\bin\$plat\formbro.exe" }
+}
+$cands += (Get-Command formbro -ErrorAction SilentlyContinue).Source
+$env:FORMBRO_BIN = $cands | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+```
+
+Once `$FORMBRO_BIN` is set, **every command in this doc and every other formbro skill** that starts with the bare token `formbro` should be invoked as `"$FORMBRO_BIN"` (bash) / `& $env:FORMBRO_BIN` (PowerShell). The bare `formbro` token is shorthand throughout these docs; the resolution rule applies uniformly.
+
+**Trust-boundary note**: the `command -v formbro` fallback trusts the ambient PATH. Prefer the explicit cache paths above when both are available; PATH lookup is the last resort, not the canonical answer.
 
 **Why this matters**: previously the docs wrote `formbro <subcommand>` assuming PATH was set, which silently fails in Codex (binary lives in cache, not PATH). Don't waste tool calls hunting for it — resolve once at session start.
 
@@ -48,7 +102,7 @@ Once `$FORMBRO_BIN` is set in the shell, every other command in this skill works
 | "patch / update <field> on <entity>" | `formbro <applicants\|applications\|employers\|persons> patch …` | formbro-write |
 | "attach / replace / remove <person> from this application" | `formbro applications attach\|replace-person\|remove-person …` | formbro-write |
 | "extract data from this text / document" | `formbro extract text` then `formbro extract apply-json` | formbro-write |
-| "fill the IRCC portal / open browser and fill this case" | `formbro webform start --confirmed --headless false` | formbro-webform (LOCAL MODE) |
+| "fill the IRCC portal / open browser and fill this case" | `formbro webform start --app-id <id> --program-key <key> --confirmed --headless false` (full signature — see `formbro-webform` skill) | formbro-webform (LOCAL MODE) |
 | "preflight / can webform fill this?" | `formbro webform preflight` | formbro-webform |
 | "check if my machine can run webform fills" | `formbro webform runtime-check` | formbro-webform |
 | "fill the IMM0008 / IMM5257 / IMM5710 PDF" / "give me the filled PDF for case X" | `formbro fill --app-id <id> --forms IMM…,IMM… -o ./out/` | **formbro-fill** (single agent surface; auto-detects TR vs PR; rejects LMIA) |
@@ -149,15 +203,18 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 
 | Group | Default mode | Why |
 |---|---|---|
-| `find`, `applications get/list/status`, `employers list/get`, `programs *`, `audit my` | **PARALLEL** | read-only HTTPS |
-| `validate by-id`, `validate person`, `webform preflight`, `webform runtime-check` | **PARALLEL** | read-only / pure check |
+| `find`, `applications get/list/status/by-status`, `employers list/get`, `programs *`, `audit my`, `whoami`, `health` | **PARALLEL** | read-only HTTPS |
+| `validate by-id`, `validate person`, `webform preflight`, `webform runtime-check`, `webform status`, `webform daemon status`, `doctor` (with or without `--no-fetch`) | **PARALLEL** | read-only / pure check |
 | `fill` (PDF) — multiple forms in **one** `formbro fill` call | already parallel internally — let the CLI do it | local Rust filler stages forms concurrently |
 | `fill` (PDF) — across **different applications** | **PARALLEL** | independent applications |
 | `extract text`, `extract apply-json` (read steps) | **PARALLEL** | independent |
+| `notes add`, `uploads slots` (different entities) | **PARALLEL** | independent state |
+| `export entity`, `export pdf` (across different applications / entities) | **PARALLEL** | independent fetches |
 | `applications patch`, `employers patch`, `persons patch` (mutations on **different** entities) | **PARALLEL** | no shared state |
 | `applications patch` on the **same** entity, sequentially with `validate by-id` | **SERIAL** | data dependency |
 | `webform start` (local browser + worker daemon) | **SERIAL — ALWAYS** | the worker daemon is a singleton process per user; two concurrent `start` calls fight for the same Unix socket / Chromium instance |
 | `webform daemon start/stop/restart/prune-chromium` | **SERIAL** | manage singleton; concurrent calls race |
+| `login` (writes `~/.formbro/config.json`) | **SERIAL** | shared writeable config file |
 
 Rule of thumb: **anything involving the local browser or the local worker daemon is serial. Everything else is parallel.**
 

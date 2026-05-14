@@ -20,16 +20,28 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh
-   <BUNDLED_FORMBRO> doctor --json
+   <BUNDLED_FORMBRO> doctor --json --no-fetch
    ```
 
-   Parse the response. If `cache.stale == true`, **tell the user verbatim**:
+   The `--no-fetch` flag is **required** — it skips bootstrap (which can hit the network + write to the cache dir) and guarantees a pure local read.
 
-   > Your FormBro plugin cache is stale: running version `<cache.version>`, latest available `<cache.latest_available>`. Refresh via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before proceeding, or this session may hit known fixed bugs (Bun JIT OOM on Apple Silicon, action schema mismatch, etc.).
+   **Failure handling — before parsing JSON:**
+   - If the command exits non-zero **OR** prints anything that doesn't parse as JSON: abort the connect flow. Surface the raw output to the user with the message "FormBro CLI doctor check failed — the bundled binary may not be installed correctly. Verify your plugin install and re-run." **Do not proceed to step 4 (login).**
 
-   If `cache.stale == false` or `cache.location == "not_in_cache"` (dev install), proceed silently.
+   **Branching on the parsed JSON** (in order — first matching branch wins):
 
-   This check is cheap (one local fs scan, no network) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
+   - `cache.location == "not_in_cache"`: dev install or manual install. Proceed silently.
+   - `cache.stale == false`: cache is current. Proceed silently.
+   - `cache.stale == true`: tell the user verbatim:
+
+     > Your FormBro plugin cache is stale: running version `<cache.version>` from `<cache.location>` cache, latest available `<cache.latest_available>`. Refresh via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before proceeding, or this session may hit known-fixed bugs (Bun JIT OOM on Apple Silicon, action schema mismatch, etc.).
+     >
+     > If you want to proceed anyway: say so explicitly and I'll continue.
+
+     Wait for user direction before continuing.
+   - Any other shape (missing fields, unexpected `cache.location` value): proceed but warn — log "doctor returned unexpected cache shape; continuing".
+
+   This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
 
 4. Run:
 
