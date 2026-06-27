@@ -1,0 +1,44 @@
+{
+  "name": "formbro-cli",
+  "version": "0.7.10",
+  "min_supported_version": "0.6.0",
+  "deprecated_versions_note": "Plugin versions pinning marketplace tags below v1.4.3 (in the jackyzhang69/plugins repo) were removed in the v1.5.0 cleanup because their commit trees contained pre-v1.4.x IP-bearing mapping JSONs. If a user is on an older cached version, run the doctor check and follow the upgrade hint.",
+  "description": "Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write applications/persons/employers, validate, fill IRCC IMM PDFs, and drive local webform fills.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://formbro.ca"
+  },
+  "homepage": "https://formbro.ca/agent-integration",
+  "repository": "https://github.com/jackyzhang69/plugins",
+  "license": "MIT",
+  "keywords": [
+    "immigration",
+    "canada",
+    "ircc",
+    "lmia",
+    "tr",
+    "pr",
+    "formbro"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "FormBro",
+    "shortDescription": "Canadian immigration form automation via the FormBro CLI.",
+    "longDescription": "Use the bundled FormBro Rust CLI as the only boundary for FormBro operations: import new cases from Excel/CSV/Word/PDF/image/text-derived JSON contracts, read and write applicants, applications, employers, and programs, validate before saving, fill IRCC IMM PDFs, and drive local Playwright/Chromium IRCC portal fills (the agent prepares; the user submits). The plugin bundles binaries for macOS Apple Silicon, macOS Intel, and Windows x64. The only thing the user ever inputs is their FormBro API token (fb_…), captured once by the connect-formbro skill.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://formbro.ca",
+    "privacyPolicyURL": "https://formbro.ca/legal/agent-integration-privacy",
+    "defaultPrompt": [
+      "Use FormBro to find application status for <client name>.",
+      "Use FormBro to import a new PR General case from these Excel files.",
+      "Use FormBro to start a new TR application for <client>.",
+      "Use FormBro to fill the IMM5257 + IMM5645 PDF for application <id>.",
+      "Use FormBro to fill the IRCC portal for application <id>."
+    ]
+  }
+}

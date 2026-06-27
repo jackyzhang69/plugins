@@ -1,0 +1,32 @@
+{
+  "name": "jacky-plugins",
+  "owner": {
+    "name": "Jacky Zhang",
+    "url": "https://github.com/jackyzhang69"
+  },
+  "metadata": {
+    "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
+    "version": "0.8.5"
+  },
+  "plugins": [
+    {
+      "name": "formbro-cli",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel — all via the bundled FormBro CLI.",
+      "version": "0.7.10",
+      "author": {
+        "name": "Jacky Zhang",
+        "url": "https://formbro.ca"
+      },
+      "source": "./plugins/formbro-cli"
+    },
+    {
+      "name": "easybooks-cli",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
+      "version": "0.4.1",
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "source": "./plugins/easybooks-cli"
+    }
+  ]
+}

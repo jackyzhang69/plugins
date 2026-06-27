@@ -1,0 +1,74 @@
+{
+  "$schema": "https://formbro.ca/schemas/runtime-manifest-v3.json",
+  "version": 3,
+  "binary": {
+    "name": "formbro",
+    "platforms": {
+      "darwin-arm64": {
+        "entrypoint": "bin/darwin-arm64/formbro",
+        "siblings": [
+          "bin/darwin-arm64/pdf-fill-xfa",
+          "bin/darwin-arm64/extract-orig-oid"
+        ],
+        "lazy": [
+          {
+            "name": "formbro-pdfjs",
+            "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
+            "archive": "tar.gz",
+            "sha256": "78bc3fbc7ae08f821b95deb46c46b09a09dc8790bd5ad0062c3db5eac80fb3be"
+          },
+          {
+            "name": "webform-worker",
+            "asset": "webform-worker-darwin-arm64.tar.gz",
+            "archive": "tar.gz",
+            "sha256": "a4f5d640b07f30248599084e12429fc64415c1a6ddbeded24196ff681c0d48fd"
+          }
+        ]
+      },
+      "win32-x64": {
+        "entrypoint": "bin/win32-x64/formbro.exe",
+        "siblings": [
+          "bin/win32-x64/pdf-fill-xfa.exe",
+          "bin/win32-x64/extract-orig-oid.exe"
+        ],
+        "lazy": [
+          {
+            "name": "formbro-pdfjs.exe",
+            "asset": "formbro-pdfjs-win32-x64.zip",
+            "archive": "zip",
+            "sha256": "e9f84dec763b3aa2c2f404b20e474546b2f6e7fb1006f937b73d06375100fed4"
+          },
+          {
+            "name": "webform-worker.exe",
+            "asset": "webform-worker-win32-x64.zip",
+            "archive": "zip",
+            "sha256": "6ee9cff936d07fa84335564c5210e2287db066dd103b097ad63f9ee24d3c8583"
+          }
+        ]
+      }
+    },
+    "release": {
+      "host": "github-releases",
+      "repo": "jackyzhang69/plugins",
+      "tag": "plugin-build-dev"
+    },
+    "resolutionOrder": [
+      "${platform}-${arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true
+  },
+  "cacheDir": {
+    "darwin": "${HOME}/.cache/formbro-cli",
+    "linux": "${HOME}/.cache/formbro-cli",
+    "win32": "${LOCALAPPDATA}/formbro-cli/Cache"
+  },
+  "configHome": {
+    "darwin": "${HOME}/.formbro",
+    "linux": "${HOME}/.formbro",
+    "win32": "${USERPROFILE}/.formbro"
+  },
+  "configFile": "config.json",
+  "tokenEnvVar": "FORMBRO_API_TOKEN",
+  "defaultBaseUrl": "https://backend.formbro.ca"
+}

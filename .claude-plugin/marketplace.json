@@ -1,0 +1,30 @@
+{
+  "name": "jacky-plugins",
+  "owner": {
+    "name": "Jacky Zhang",
+    "url": "https://github.com/jackyzhang69"
+  },
+  "metadata": {
+    "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
+    "version": "0.8.5"
+  },
+  "plugins": [
+    {
+      "name": "formbro-cli",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs; drive local webform fills via the bundled FormBro CLI.",
+      "category": "productivity",
+      "source": "./plugins/formbro-cli",
+      "homepage": "https://formbro.ca/agent-integration",
+      "version": "0.7.10"
+    },
+    {
+      "name": "easybooks-cli",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
+      "version": "0.4.1",
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "source": "./plugins/easybooks-cli"
+    }
+  ]
+}

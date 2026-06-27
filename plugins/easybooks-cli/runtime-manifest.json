@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "binary": {
+    "name": "easybooks",
+    "platforms": {
+      "darwin-arm64": {
+        "entrypoint": "bin/darwin-arm64/easybooks"
+      },
+      "win32-x64": {
+        "entrypoint": "bin/win32-x64/easybooks.exe"
+      }
+    },
+    "resolutionOrder": [
+      "${platform}-${arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true,
+    "binaryOverrideEnvVar": "EASYBOOKS_BIN"
+  },
+  "configHome": {
+    "darwin": "${HOME}/.easybooks",
+    "linux": "${HOME}/.easybooks",
+    "win32": "${USERPROFILE}/.easybooks"
+  },
+  "configFile": "config.json",
+  "defaultBaseUrl": "https://easybooks.jackyzhang.app"
+}
