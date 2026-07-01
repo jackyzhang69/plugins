@@ -42,8 +42,9 @@ The user generates it once at https://formbro.ca → Settings → API Tokens. Th
 | Platform key | Binary path |
 |---|---|
 | `darwin-arm64` | `bin/darwin-arm64/formbro` |
-| `darwin-x64` | `bin/darwin-x64/formbro` |
 | `win32-x64` | `bin/win32-x64/formbro.exe` |
+
+Current marketplace builds ship bundled binaries for macOS Apple Silicon and Windows x64 only. Other platforms must use a separately installed `FORMBRO_BIN`/PATH binary until a signed bundle is published for that platform.
 
 Each skill resolves `${process.platform}-${process.arch}` against `binary.platforms`, verifies the matching `.sha256` sidecar, marks the file executable on POSIX, then shells out to it.
 

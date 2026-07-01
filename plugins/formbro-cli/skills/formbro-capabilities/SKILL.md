@@ -52,32 +52,40 @@ The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by
 **Resolution order (use the first that resolves to an existing executable):**
 
 1. **`$FORMBRO_BIN`** — explicit override. Honor if set.
-2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches the OS/arch (`darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64`, `windows-x64`).
+2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches a bundled OS/arch. Current public marketplace bundles ship `darwin-arm64` and `win32-x64`.
 3. **Claude Code plugin dir** — `$CLAUDE_PLUGIN_ROOT/bin/<platform>/formbro` (Claude Code sets `CLAUDE_PLUGIN_ROOT` when invoking a plugin's skill).
 4. **`which formbro`** — if the user has installed it on PATH manually.
 
 **Portable resolver (bash; works on darwin / linux; for Windows agents use PowerShell variant below):**
 
 ```bash
-# Detect platform → cache subdir name used by both codex and claude.
+# Explicit override wins before platform detection; useful for dev installs on
+# platforms where the public package does not ship a bundled binary.
+_formbro_override="${FORMBRO_BIN:-${FORMBRO_BIN_OVERRIDE:-}}"
+if [ -n "$_formbro_override" ] && [ -x "$_formbro_override" ]; then
+  FORMBRO_BIN="$_formbro_override"
+  export FORMBRO_BIN
+  "$FORMBRO_BIN" --help >/dev/null || { echo "FormBro CLI at $FORMBRO_BIN is not runnable" >&2; return 1 2>/dev/null || exit 1; }
+  return 0 2>/dev/null || exit 0
+fi
+
+# Detect bundled platform → cache subdir name used by both codex and claude.
+# Current public POSIX bundle includes darwin-arm64 only; Windows agents use
+# the PowerShell resolver below for win32-x64.
 case "$(uname -s)-$(uname -m)" in
   Darwin-arm64)  PLAT=darwin-arm64 ;;
-  Darwin-x86_64) PLAT=darwin-x64 ;;
-  Linux-x86_64)  PLAT=linux-x64 ;;
-  Linux-aarch64) PLAT=linux-arm64 ;;
-  *) echo "unsupported platform: $(uname -s)-$(uname -m)" >&2; return 1 2>/dev/null || exit 1 ;;
+  *) PLAT="" ;;
 esac
 
 # Walk a search list in priority order; pick first existing executable.
 FORMBRO_BIN=""
 _cand_paths=(
-  "${FORMBRO_BIN_OVERRIDE:-}"
-  "${CLAUDE_PLUGIN_ROOT:+$CLAUDE_PLUGIN_ROOT/bin/$PLAT/formbro}"
+  "${CLAUDE_PLUGIN_ROOT:+${PLAT:+$CLAUDE_PLUGIN_ROOT/bin/$PLAT/formbro}}"
 )
 # Codex cache may have several version dirs; agent picks the *highest* one.
 # We use python sort (universally available) — POSIX `sort -V` is not portable.
 _codex_root="$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli"
-if [ -d "$_codex_root" ]; then
+if [ -n "$PLAT" ] && [ -d "$_codex_root" ]; then
   _latest_codex=$(python3 - "$_codex_root" <<'PY' 2>/dev/null
 import os, sys
 root = sys.argv[1]
@@ -98,7 +106,7 @@ for _p in "${_cand_paths[@]}"; do
 done
 
 if [ -z "$FORMBRO_BIN" ]; then
-  echo "FormBro CLI not found on this host. Install the formbro-cli plugin first." >&2
+  echo "FormBro CLI not found on this host. Current public bundles support darwin-arm64 (and win32-x64 via PowerShell). Install a platform-specific CLI and set FORMBRO_BIN if needed." >&2
   return 1 2>/dev/null || exit 1
 fi
 export FORMBRO_BIN
