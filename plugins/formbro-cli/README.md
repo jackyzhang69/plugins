@@ -58,13 +58,17 @@ The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of th
 
 ## Install / upgrade acceptance contract for agents
 
-When installing, upgrading, or debugging this plugin, do not infer success from `codex plugin list` alone. That command reports the marketplace package surface; the bundled runtime can drift. The acceptance check is the bundled CLI's own doctor output:
+When installing, upgrading, or debugging this plugin, do not infer success from `codex plugin list` alone. That command reports the marketplace package surface; the loaded skill path and bundled runtime can both drift. Treat this as a three-layer check: loaded skill path, installed plugin package, bundled CLI runtime.
+
+First check that the current agent session is actually loading skills from the expected cache directory. If a thread's skill root still points at an older directory such as `~/.codex/plugins/cache/jacky-plugins/formbro-cli/0.7.10/skills` while the installed package is newer, that thread is stale. Reinstall the plugin if needed, then start a fresh Codex thread; do not keep using the stale skill text as the source of truth.
+
+Then run the bundled CLI's own doctor output:
 
 ```bash
 formbro doctor --json --no-fetch --check-upgrade
 ```
 
-Treat the install/upgrade as complete only when the resolved bundled binary is runnable, `runtime_error` is `null`, `cache.stale` is `false`, and `binary_version` matches the expected signed runtime release. If network is restricted, an upgrade-check network failure is not by itself a local install failure; still report that remote freshness could not be checked.
+Treat the install/upgrade as complete only when the loaded skill path is from the expected installed package, the resolved bundled binary is runnable, `runtime_error` is `null`, `cache.stale` is `false`, and `binary_version` matches the expected signed runtime release. If network is restricted, an upgrade-check network failure is not by itself a local install failure; still report that remote freshness could not be checked.
 
 This package version may move for skills/docs/agent-contract changes while the bundled CLI binary remains on the previous signed runtime release. Do not "fix" that by editing `runtime-manifest.json` or binary checksums unless the actual signed binaries changed.
 
