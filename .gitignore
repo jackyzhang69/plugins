@@ -1,3 +1,4 @@
 dist/
 *.log
 .DS_Store
+.codex-marketplace-install.json

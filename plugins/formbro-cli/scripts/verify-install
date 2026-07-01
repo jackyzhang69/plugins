@@ -84,6 +84,26 @@ def run_json(command: list[str], timeout: int = 60) -> tuple[dict[str, Any] | No
         return None, f"invalid JSON from {' '.join(command)}: {exc}", proc.returncode
 
 
+def run_text(command: list[str], timeout: int = 30) -> tuple[str | None, str | None]:
+    try:
+        proc = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout,
+        )
+    except FileNotFoundError:
+        return None, f"command not found: {command[0]}"
+    except subprocess.TimeoutExpired:
+        return None, f"command timed out after {timeout}s: {' '.join(command)}"
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout).strip()
+        return None, detail or f"command failed: {' '.join(command)}"
+    return proc.stdout.strip(), None
+
+
 def list_version_dirs(root: Path) -> list[str]:
     if not root.exists():
         return []
@@ -128,6 +148,47 @@ def residue_counts() -> dict[str, Any]:
         "sample_staging": staging_dirs[-5:],
         "sample_backups": backup_dirs[-5:],
     }
+
+
+def marketplace_metadata(plugin_entry: dict[str, Any] | None) -> dict[str, Any]:
+    source_path = ((plugin_entry or {}).get("source") or {}).get("path")
+    result: dict[str, Any] = {
+        "source_path": source_path,
+        "marketplace_root": None,
+        "metadata_path": None,
+        "metadata_exists": False,
+        "metadata_revision": None,
+        "git_head": None,
+        "revision_matches_head": None,
+        "error": None,
+    }
+    if not source_path:
+        return result
+
+    plugin_source = Path(source_path).expanduser()
+    root = plugin_source.parents[1] if len(plugin_source.parents) > 1 else plugin_source.parent
+    metadata_path = root / ".codex-marketplace-install.json"
+    result["marketplace_root"] = str(root)
+    result["metadata_path"] = str(metadata_path)
+    if not metadata_path.exists():
+        return result
+
+    result["metadata_exists"] = True
+    try:
+        metadata = load_json(metadata_path)
+        result["metadata_revision"] = metadata.get("revision")
+    except Exception as exc:  # noqa: BLE001 - diagnostic output only
+        result["error"] = f"metadata_read_failed: {exc}"
+        return result
+
+    head, err = run_text(["git", "-C", str(root), "rev-parse", "HEAD"])
+    if err:
+        result["error"] = f"git_head_failed: {err}"
+        return result
+
+    result["git_head"] = head
+    result["revision_matches_head"] = result["metadata_revision"] == head
+    return result
 
 
 def main() -> int:
@@ -183,6 +244,17 @@ def main() -> int:
     elif plugin_entry.get("version") != expected_version:
         failures.append("codex_plugin_list_version_mismatch")
         next_actions.append("Run: codex plugin add formbro-cli@jacky-plugins")
+
+    marketplace_meta = marketplace_metadata(plugin_entry)
+    if marketplace_meta.get("error"):
+        warnings.append(f"marketplace_metadata_unverified: {marketplace_meta['error']}")
+    if marketplace_meta.get("metadata_exists") and marketplace_meta.get("revision_matches_head") is False:
+        message = "stale_marketplace_install_metadata"
+        if args.strict_residue:
+            failures.append(message)
+        else:
+            warnings.append(message)
+        next_actions.append("Move stale .codex-marketplace-install.json aside or regenerate marketplace metadata.")
 
     doctor: dict[str, Any] | None = None
     binary_path: Path | None = None
@@ -259,6 +331,7 @@ def main() -> int:
         },
         "codex_plugin_list": plugin_entry,
         "doctor": doctor,
+        "marketplace_metadata": marketplace_meta,
         "residue": residue,
         "warnings": sorted(set(warnings)),
         "failures": sorted(set(failures)),

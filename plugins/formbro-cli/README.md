@@ -72,7 +72,7 @@ If the verifier is being run from an installed cache, use the cache copy, for ex
 ~/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/scripts/verify-install --strict-residue
 ```
 
-The verifier is read-only. It checks the installed version directories, `codex plugin list --json`, the currently loaded skill path when supplied, the bundled binary, `formbro doctor`, and marketplace staging/backup residue. A non-zero exit means the install is not complete.
+The verifier is read-only. It checks the installed version directories, `codex plugin list --json`, the currently loaded skill path when supplied, the bundled binary, `formbro doctor`, marketplace staging/backup residue, and stale local marketplace install metadata such as `.codex-marketplace-install.json`. A non-zero exit means the install is not complete.
 
 First check that the current agent session is actually loading skills from the expected cache directory. If a thread's skill root still points at an older directory such as `~/.codex/plugins/cache/jacky-plugins/formbro-cli/0.7.10/skills` while the installed package is newer, that thread is stale. Reinstall the plugin if needed, then start a fresh Codex thread; do not keep using the stale skill text as the source of truth.
 
