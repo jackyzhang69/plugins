@@ -1,13 +1,15 @@
 ---
 name: formbro-capabilities
-description: READ THIS FIRST. One-page consumption contract for AI agents. Tells you exactly which FormBro skill to call for any user intent, how to verify install/upgrade health, which commands are PR / TR / LMIA only, what runs locally vs in the backend, and which status sources to trust. Read this before guessing parameters or trying commands.
+description: READ THIS FIRST. One-page consumption contract for AI agents. Tells you exactly which FormBro skill to call for any user intent, which commands are PR / TR / LMIA only, what runs locally vs in the backend, and which status sources to trust. Read this before guessing parameters or trying commands.
+when_to_use: |-
+  Load on plugin start; reload whenever a user asks anything formbro-related.
+  Trigger phrases: "fill the webform for X", "find X case", "list applications", "PDF for case X",
+  "is this ready to submit", "check formbro status", "my token / which backend".
 ---
 
 # FormBro plugin — agent consumption contract
 
 **Read this once on plugin load and reload it whenever a user asks anything FormBro-related.** It tells you which skill / subcommand to call for each user intent, and what to never guess.
-
-Use when: load on plugin start; reload whenever a user asks anything FormBro-related. Trigger phrases include "fill the webform for X", "find X case", "list applications", "PDF for case X", "is this ready to submit", "check formbro status", "my token / which backend", and "install/update/upgrade FormBro plugin".
 
 ## 0. Non-negotiable operating rules
 
@@ -16,22 +18,6 @@ Use when: load on plugin start; reload whenever a user asks anything FormBro-rel
 3. **For new cases from external files, use `import`, not ad hoc cloning.** Ask FormBro for the contract/schema with `formbro import contract`, generate JSON locally, run `import apply-json --dry-run`, then rerun without `--dry-run` only when valid.
 4. **For existing entities, use `extract` / `validate` / `patch`.** Do not use the new-case import path to mutate an existing applicant/application/employer.
 5. **Never guess program keys, entity types, or command flags.** Use `programs list`, `programs describe`, `programs schema`, and `--help`. Current flags use `--program-key`, not legacy `--program`.
-
-## 0.1 Install / upgrade acceptance protocol — do this before declaring success
-
-Use this section whenever the user asks to install, update, upgrade, refresh, debug, or verify the FormBro plugin. Do not make future agents rediscover this from trial and error.
-
-1. **Resolve the bundled binary first** using §B. Prefer `$FORMBRO_BIN`, then the Codex plugin cache, then the Claude plugin root, and only then ambient `PATH`.
-2. **Check the loaded skill path.** If the current thread says FormBro skills are loaded from an older cache directory, for example `~/.codex/plugins/cache/jacky-plugins/formbro-cli/0.7.10/skills`, while `codex plugin list --json` reports a newer package, the thread is stale. Reinstall if needed, then start a fresh Codex thread before trusting the skill text.
-3. **Run the authoritative health check** with the resolved binary: `formbro doctor --json --no-fetch --check-upgrade`. This is the acceptance check for plugin freshness and runtime health.
-4. **Do not trust `codex plugin list` alone.** It reports the marketplace package surface. The loaded skill path and bundled CLI runtime can drift independently; `binary_version`, `cache.version`, `cache.stale`, and `runtime_error` from `doctor` are the runtime truth for the CLI layer.
-5. **Success criteria:** the loaded skill path points at the expected installed package; the resolved binary runs; `runtime_error` is `null`; `cache.stale` is `false`; `binary_version` matches the expected signed runtime release; and any upgrade check either succeeds or is explicitly reported as blocked by network.
-6. **Network boundary:** if `--check-upgrade` cannot reach GitHub/API because the current sandbox has no network, do not call the install broken. Say remote freshness is unverified, then still report the local `binary_version`, `cache.version`, and `cache.stale` result.
-7. **Version boundary:** plugin package version (`.codex-plugin/plugin.json`) is independent from CLI binary version. Docs/skills may bump the plugin package without changing `runtime-manifest.json`, release tag, checksums, or `binary_version`. Change binary metadata only when signed binaries actually changed.
-8. **Cache cleanup boundary:** old cache/staging directories are artifacts. Do not edit manifests to match a stale path. After successful reinstall and doctor verification, stale version directories can be ignored or removed/moved aside, but a running thread may still retain old skill text until a new thread is created.
-9. **If doctor fails or shows drift:** reinstall from the configured marketplace with `codex plugin add formbro-cli@jacky-plugins`; rerun doctor. If it still fails, inspect `runtime-manifest.json` and signed release assets before editing docs or blaming FormBro data.
-10. **After changing plugin source:** bump the plugin package version, validate the plugin, reinstall it locally, then start a new Codex thread before testing new skills. Current threads may keep old loaded skill text.
-11. **Codex PATH alias warning:** `WARNING: proceeding, even though we could not create PATH aliases` comes from Codex CLI trying to write `CODEX_HOME/tmp/arg0` under sandbox restrictions. It is not a FormBro backend, token, CLI binary, or marketplace error. Fix Codex writable roots/alias directory or run the plugin manager outside that sandbox; do not rotate tokens or debug applications for this warning.
 
 ## Agent quick router — TOP 20 LINES (read this first)
 

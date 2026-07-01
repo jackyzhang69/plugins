@@ -68,6 +68,17 @@ When you already know the exact patch shape, direct patch commands are acceptabl
 <formbro> employers patch <employer_id> --data '<json_object>'
 ```
 
+### Safe field patches inside arrays
+
+For a single field inside an existing array row, use `--set` with bracket indexes:
+
+```sh
+<formbro> persons patch <person_id> --program-key <key> --set 'education[0].country=China'
+<formbro> applications patch <app_id> --program-key <key> --set 'backgrounds[0].background.education.details[0].country=China'
+```
+
+Do **not** send a whole array in `--data` just to update one field. Arrays are authoritative in normal JSON patches; a payload like `{"education":[{"country":"China"}]}` can replace the row and discard sibling fields. Indexed `--set` paths are converted by the CLI to backend path updates, preserving existing row fields.
+
 ## Quick router (user intent → exact command)
 
 | If the user says… | Run |
@@ -76,7 +87,7 @@ When you already know the exact patch shape, direct patch commands are acceptabl
 | "validate this person for <program>" | `<formbro> validate person --person-id <id> --program-key <key> [--role applicant]` |
 | "validate this raw data before I patch" | `<formbro> validate data --entity-type <T> --data '<json>'` |
 | "start a new <program> application for <person>" | `<formbro> applications start --program-key <key> --applicant-id <id>` |
-| "patch <field> on this application" | `<formbro> applications patch <id> --program-key <key> --data '<json>'` |
+| "patch <field> on this application" | `<formbro> applications patch <id> --program-key <key> --set path=value` for scalar/indexed fields; use `--data '<json>'` only for intentional object/array replacement |
 | "attach / replace / remove a person on application" | `<formbro> applications attach\|replace-person\|remove-person --app-id <id> --role <role> --person-id <id>` |
 | "set application status to <new>" | `<formbro> applications set-status --app-id <id> --program-key <key> --status <new>` — **CONFIRM with user first** |
 | "create a new person quickly" | `<formbro> persons create --program-key <key> --role <role> [--first-name …] [--last-name …]` |
@@ -128,11 +139,11 @@ Patches accept `--expected-version <n>`. Use this whenever you have just read th
 <formbro> applications replace-person --app-id <id> --role <role> --person-id <id>
 <formbro> applications remove-person  --app-id <id> --role <role> --person-id <id>
 <formbro> applications set-status --app-id <id> --program-key <key> --status <new> [--expected-version <v>]
-<formbro> applications patch <app_id> --program-key <key> --data '<json_object>' [--expected-version <v>]
+<formbro> applications patch <app_id> --program-key <key> --data '<json_object>' [--set 'path=value'] [--expected-version <v>]
 
 # Persons / employers
 <formbro> persons create --program-key <key> --role <role> [...]
-<formbro> persons patch <person_id> --data '<json_object>' [--expected-version <v>]
+<formbro> persons patch <person_id> --program-key <key> --data '<json_object>' [--set 'path=value'] [--expected-version <v>]
 <formbro> employers create --company-name <name> [...]
 <formbro> employers patch <employer_id> --data '<json_object>'
 <formbro> employers delete <employer_id>     # CONFIRM first

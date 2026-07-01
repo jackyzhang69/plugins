@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
-    "version": "1.5.13"
+    "version": "1.5.16"
   },
   "plugins": [
     {
@@ -15,7 +15,7 @@
       "category": "productivity",
       "source": "./plugins/formbro-cli",
       "homepage": "https://formbro.ca/agent-integration",
-      "version": "1.5.13"
+      "version": "1.5.16"
     },
     {
       "name": "easybooks-cli",
