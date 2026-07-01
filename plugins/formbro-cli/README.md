@@ -56,6 +56,22 @@ See the repo-root [README](../../README.md) for `codex plugin marketplace add` /
 
 The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of the FormBro product semver. Plugin bumps follow plugin-schema needs, not FormBro release cadence.
 
+## Install / upgrade acceptance contract for agents
+
+When installing, upgrading, or debugging this plugin, do not infer success from `codex plugin list` alone. That command reports the marketplace package surface; the bundled runtime can drift. The acceptance check is the bundled CLI's own doctor output:
+
+```bash
+formbro doctor --json --no-fetch --check-upgrade
+```
+
+Treat the install/upgrade as complete only when the resolved bundled binary is runnable, `runtime_error` is `null`, `cache.stale` is `false`, and `binary_version` matches the expected signed runtime release. If network is restricted, an upgrade-check network failure is not by itself a local install failure; still report that remote freshness could not be checked.
+
+This package version may move for skills/docs/agent-contract changes while the bundled CLI binary remains on the previous signed runtime release. Do not "fix" that by editing `runtime-manifest.json` or binary checksums unless the actual signed binaries changed.
+
+Deprecated marketplace tags below `v1.4.3` were intentionally removed in the `v1.5.0` cleanup because their commit trees contained pre-v1.4.x IP-bearing mapping JSONs. If a user is on an older cached version, run the doctor check and follow its upgrade hint; do not restore old tags or old cached mapping files.
+
+Known Codex warning: `WARNING: proceeding, even though we could not create PATH aliases` is a Codex CLI sandbox/`CODEX_HOME/tmp/arg0` issue, not a FormBro plugin or token issue. Fix the Codex alias directory/writable roots or run the plugin manager outside that sandbox; do not debug FormBro backend or reinstall tokens for that warning.
+
 ## What this plugin is NOT
 
 - Not an MCP server. (For MCP, see `https://mcp.formbro.ca` or the upstream `formbro-mcp-server` npm package.)
