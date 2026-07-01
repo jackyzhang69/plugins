@@ -21,6 +21,7 @@ Use when: load on plugin start; reload whenever a user asks anything FormBro-rel
 
 Use this section whenever the user asks to install, update, upgrade, refresh, debug, or verify the FormBro plugin. Do not make future agents rediscover this from trial and error.
 
+0. **Run the read-only verifier when present.** From the plugin source or installed cache, run `scripts/verify-install --strict-residue`. If the current session exposes a FormBro skill root, pass it as `--loaded-skill-path <path>`. A non-zero exit means the install/upgrade is not complete.
 1. **Resolve the bundled binary first** using §B. Prefer `$FORMBRO_BIN`, then the Codex plugin cache, then the Claude plugin root, and only then ambient `PATH`.
 2. **Check the loaded skill path.** If the current thread says FormBro skills are loaded from an older cache directory, for example `~/.codex/plugins/cache/jacky-plugins/formbro-cli/0.7.10/skills`, while `codex plugin list --json` reports a newer package, the thread is stale. Reinstall if needed, then start a fresh Codex thread before trusting the skill text.
 3. **Run the authoritative health check** with the resolved binary: `formbro doctor --json --no-fetch --check-upgrade`. This is the acceptance check for plugin freshness and runtime health.

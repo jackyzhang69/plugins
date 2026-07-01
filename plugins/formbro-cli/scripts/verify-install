@@ -1,0 +1,272 @@
+#!/usr/bin/env python3
+"""Verify the installed FormBro Codex plugin cache and bundled CLI runtime.
+
+This script is intentionally read-only and JSON-first so agents can run it
+before declaring a FormBro plugin install or upgrade complete.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import platform
+import re
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+
+PLUGIN_ID = "formbro-cli@jacky-plugins"
+PLUGIN_NAME = "formbro-cli"
+MARKETPLACE = "jacky-plugins"
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def semver_key(value: str) -> tuple[int, ...]:
+    parts = []
+    for token in re.split(r"[.+-]", value):
+        if token.isdigit():
+            parts.append(int(token))
+        else:
+            parts.append(-1)
+    return tuple(parts or [-1])
+
+
+def platform_key() -> str | None:
+    system = platform.system().lower()
+    machine = platform.machine().lower()
+    if system == "darwin" and machine in {"arm64", "aarch64"}:
+        return "darwin-arm64"
+    if system == "windows" and machine in {"amd64", "x86_64"}:
+        return "win32-x64"
+    return None
+
+
+def runtime_binary_version(runtime_manifest: dict[str, Any]) -> str | None:
+    tag = (
+        runtime_manifest.get("binary", {})
+        .get("release", {})
+        .get("tag")
+    )
+    if isinstance(tag, str):
+        match = re.search(r"(\d+\.\d+\.\d+(?:[.+-][A-Za-z0-9.]+)?)$", tag)
+        if match:
+            return match.group(1)
+    return None
+
+
+def run_json(command: list[str], timeout: int = 60) -> tuple[dict[str, Any] | None, str | None, int]:
+    try:
+        proc = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout,
+        )
+    except FileNotFoundError:
+        return None, f"command not found: {command[0]}", 127
+    except subprocess.TimeoutExpired:
+        return None, f"command timed out after {timeout}s: {' '.join(command)}", 124
+
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout).strip()
+        return None, detail or f"command failed: {' '.join(command)}", proc.returncode
+    try:
+        return json.loads(proc.stdout), None, proc.returncode
+    except json.JSONDecodeError as exc:
+        return None, f"invalid JSON from {' '.join(command)}: {exc}", proc.returncode
+
+
+def list_version_dirs(root: Path) -> list[str]:
+    if not root.exists():
+        return []
+    return sorted(
+        [p.name for p in root.iterdir() if p.is_dir()],
+        key=semver_key,
+    )
+
+
+def loaded_skill_version(path_value: str | None) -> str | None:
+    if not path_value:
+        return None
+    normalized = path_value.replace("\\", "/")
+    match = re.search(r"/formbro-cli/([^/]+)/skills(?:/|$)", normalized)
+    return match.group(1) if match else None
+
+
+def codex_plugin_entry() -> tuple[dict[str, Any] | None, str | None]:
+    data, err, _ = run_json(["codex", "plugin", "list", "--json"], timeout=30)
+    if err:
+        return None, err
+    for entry in data.get("installed", []):
+        if entry.get("pluginId") == PLUGIN_ID:
+            return entry, None
+    return None, f"{PLUGIN_ID} not found in codex plugin list"
+
+
+def residue_counts() -> dict[str, Any]:
+    base = Path.home() / ".codex" / ".tmp" / "marketplaces"
+    staging = base / ".staging"
+    backups = base / ".backups"
+    staging_dirs = sorted(
+        str(p) for p in staging.glob("marketplace-upgrade-*") if p.is_dir()
+    ) if staging.exists() else []
+    backup_dirs = sorted(
+        str(p) for p in backups.iterdir() if p.is_dir()
+    ) if backups.exists() else []
+    return {
+        "marketplaces_tmp": str(base),
+        "staging_count": len(staging_dirs),
+        "backup_count": len(backup_dirs),
+        "sample_staging": staging_dirs[-5:],
+        "sample_backups": backup_dirs[-5:],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Verify FormBro Codex plugin installed cache and runtime."
+    )
+    parser.add_argument("--loaded-skill-path", help="Skill path visible in the current agent session.")
+    parser.add_argument("--expected-version", help="Expected plugin package version.")
+    parser.add_argument("--expected-binary-version", help="Expected bundled FormBro CLI binary version.")
+    parser.add_argument("--skip-doctor", action="store_true", help="Skip running formbro doctor.")
+    parser.add_argument("--strict-residue", action="store_true", help="Fail if marketplace staging/backup residue exists.")
+    args = parser.parse_args()
+
+    plugin_root = Path(__file__).resolve().parents[1]
+    manifest = load_json(plugin_root / ".codex-plugin" / "plugin.json")
+    runtime_manifest = load_json(plugin_root / "runtime-manifest.json")
+    expected_version = args.expected_version or manifest["version"]
+    expected_binary_version = (
+        args.expected_binary_version
+        or runtime_binary_version(runtime_manifest)
+        or expected_version
+    )
+
+    cache_root = Path.home() / ".codex" / "plugins" / "cache" / MARKETPLACE / PLUGIN_NAME
+    version_dirs = list_version_dirs(cache_root)
+    active_version = version_dirs[-1] if version_dirs else None
+    active_path = cache_root / active_version if active_version else None
+    platform_name = platform_key()
+    failures: list[str] = []
+    warnings: list[str] = []
+    next_actions: list[str] = []
+
+    if expected_version not in version_dirs:
+        failures.append("expected_package_version_missing_from_cache")
+        next_actions.append("Run: codex plugin add formbro-cli@jacky-plugins")
+    if active_version != expected_version:
+        failures.append("active_installed_cache_version_mismatch")
+        next_actions.append("Reinstall the plugin, then open a fresh Codex thread.")
+
+    extra_versions = [v for v in version_dirs if v != expected_version]
+    if extra_versions:
+        failures.append("stale_installed_cache_versions_present")
+        next_actions.append("Move old version dirs aside after the expected version passes doctor.")
+
+    loaded_version = loaded_skill_version(args.loaded_skill_path)
+    if args.loaded_skill_path and loaded_version != expected_version:
+        failures.append("loaded_skill_path_stale_or_unrecognized")
+        next_actions.append("Start a fresh Codex thread so it loads skills from the current plugin cache.")
+
+    plugin_entry, plugin_entry_error = codex_plugin_entry()
+    if plugin_entry_error:
+        warnings.append(f"codex_plugin_list_unavailable: {plugin_entry_error}")
+    elif plugin_entry.get("version") != expected_version:
+        failures.append("codex_plugin_list_version_mismatch")
+        next_actions.append("Run: codex plugin add formbro-cli@jacky-plugins")
+
+    doctor: dict[str, Any] | None = None
+    binary_path: Path | None = None
+    if not args.skip_doctor:
+        if not active_path:
+            failures.append("no_active_plugin_cache")
+        elif not platform_name:
+            failures.append("unsupported_host_platform_for_bundled_binary")
+        else:
+            binary_path = active_path / "bin" / platform_name / ("formbro.exe" if platform_name == "win32-x64" else "formbro")
+            if not binary_path.exists():
+                failures.append("bundled_binary_missing")
+            else:
+                doctor, err, _ = run_json([
+                    str(binary_path),
+                    "doctor",
+                    "--json",
+                    "--no-fetch",
+                    "--check-upgrade",
+                ])
+                if err:
+                    failures.append("doctor_failed")
+                    next_actions.append(f"Inspect bundled binary: {binary_path}")
+                    warnings.append(f"doctor_error: {err}")
+                elif doctor:
+                    cache = doctor.get("cache") or {}
+                    upgrade = doctor.get("upgrade") or {}
+                    if doctor.get("binary_version") != expected_binary_version:
+                        failures.append("doctor_binary_version_mismatch")
+                    if cache.get("version") != expected_version:
+                        failures.append("doctor_cache_version_mismatch")
+                    if cache.get("stale") is not False:
+                        failures.append("doctor_cache_stale")
+                    if doctor.get("runtime_error") is not None:
+                        failures.append("doctor_runtime_error")
+                    if upgrade.get("checked") is False:
+                        reason = str(upgrade.get("check_failed_reason") or "")
+                        if "network" in reason.lower() or "github" in reason.lower():
+                            warnings.append("remote_upgrade_check_unverified")
+                        else:
+                            warnings.append("remote_upgrade_check_failed")
+
+    residue = residue_counts()
+    if residue["staging_count"] or residue["backup_count"]:
+        message = (
+            f"marketplace_tmp_residue_present: staging={residue['staging_count']} "
+            f"backups={residue['backup_count']}"
+        )
+        if args.strict_residue:
+            failures.append("marketplace_tmp_residue_present")
+        else:
+            warnings.append(message)
+        next_actions.append("Move stale ~/.codex/.tmp/marketplaces/.staging and .backups dirs aside after install verification.")
+
+    result = {
+        "ok": not failures,
+        "plugin_id": PLUGIN_ID,
+        "plugin_root": str(plugin_root),
+        "expected": {
+            "package_version": expected_version,
+            "binary_version": expected_binary_version,
+        },
+        "installed_cache": {
+            "root": str(cache_root),
+            "versions": version_dirs,
+            "active_version": active_version,
+            "active_path": str(active_path) if active_path else None,
+            "platform": platform_name,
+            "binary_path": str(binary_path) if binary_path else None,
+        },
+        "loaded_skill": {
+            "path": args.loaded_skill_path,
+            "version": loaded_version,
+        },
+        "codex_plugin_list": plugin_entry,
+        "doctor": doctor,
+        "residue": residue,
+        "warnings": sorted(set(warnings)),
+        "failures": sorted(set(failures)),
+        "next_actions": sorted(set(next_actions)),
+    }
+    print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0 if result["ok"] else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
