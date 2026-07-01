@@ -107,7 +107,7 @@ Format is `<category-lc>-<program-key>-<role>`:
 If the exact entity-type is uncertain, run `<formbro> programs schema <program-key> --role <role>` to discover it from the registry. Do not invent slugs.
 
 ### `forms` (for PDF generation — see `formbro-fill` for the agent path)
-TR: `IMM5257`, `IMM5645`, `IMM5707`, `IMM5708`, `IMM5709`, `IMM5710`, `IMM1294`, `IMM1295` (subset varies by program)
+TR: `IMM5257`, `IMM5645`, `IMM5708`, `IMM5709`, `IMM5710`, `IMM1294`, `IMM1295` (subset varies by program)
 PR: `IMM0008`, `IMM5406`, `IMM5532`, `IMM5562`, `IMM5669`, `IMM1344` (subset varies by program)
 LMIA: ❌ not applicable — LMIA is webform-only.
 

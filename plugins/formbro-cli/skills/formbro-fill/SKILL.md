@@ -106,7 +106,7 @@ Do not serialize per-form calls for a single application. That's the worst patte
 - `--forms` (required) — comma-separated list, `IMM` prefix optional (`IMM5257` ≡ `5257`)
 - `-o, --output` (default `.`) — directory to write PDFs into; created if missing
 - `--program-key` (auto-detected) — TR keys: `sp-out`, `sp-in`, `wp-out`, `wp-in`, `visa-out`, `visa-in`, `visitor-record`. PR keys: `general`, `express-entry`, `caregiver`, `spouse-sponsorship`, `parent-sponsorship`, `renewal`. LMIA keys are rejected.
-- `--engine` (default `auto`) — `auto`: use local Rust XFA filler when bundled and all requested forms have a local mapping, otherwise backend. `local`: force local; errors if any form lacks a mapping (currently IMM0008 must use backend). `backend`: force backend round-trip (slower; useful for parity testing).
+- `--engine` (default `auto`) — `auto`: use local Rust XFA filler when bundled and all requested forms have a local mapping, otherwise backend. `local`: force local; errors if any form lacks a mapping. `backend`: force backend round-trip (slower; useful for parity testing).
 
 ## Forms that fill locally (no backend round-trip beyond the data fetch)
 

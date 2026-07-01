@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
-    "version": "0.8.5"
+    "version": "1.5.13"
   },
   "plugins": [
     {
       "name": "formbro-cli",
       "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel — all via the bundled FormBro CLI.",
-      "version": "0.7.10",
+      "version": "1.5.13",
       "author": {
         "name": "Jacky Zhang",
         "url": "https://formbro.ca"
