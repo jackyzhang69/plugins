@@ -56,40 +56,6 @@ See the repo-root [README](../../README.md) for `codex plugin marketplace add` /
 
 The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of the FormBro product semver. Plugin bumps follow plugin-schema needs, not FormBro release cadence.
 
-## Install / upgrade acceptance contract for agents
-
-When installing, upgrading, or debugging this plugin, do not infer success from `codex plugin list` alone. That command reports the marketplace package surface; the loaded skill path and bundled runtime can both drift. Treat this as a three-layer check: loaded skill path, installed plugin package, bundled CLI runtime.
-
-Run the plugin verifier first when it is available:
-
-```bash
-scripts/verify-install --strict-residue
-```
-
-If the verifier is being run from an installed cache, use the cache copy, for example:
-
-```bash
-~/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/scripts/verify-install --strict-residue
-```
-
-The verifier is read-only. It checks the installed version directories, `codex plugin list --json`, the currently loaded skill path when supplied, the bundled binary, `formbro doctor`, marketplace staging/backup residue, and stale local marketplace install metadata such as `.codex-marketplace-install.json`. A non-zero exit means the install is not complete.
-
-First check that the current agent session is actually loading skills from the expected cache directory. If a thread's skill root still points at an older directory such as `~/.codex/plugins/cache/jacky-plugins/formbro-cli/0.7.10/skills` while the installed package is newer, that thread is stale. Reinstall the plugin if needed, then start a fresh Codex thread; do not keep using the stale skill text as the source of truth.
-
-Then run the bundled CLI's own doctor output:
-
-```bash
-formbro doctor --json --no-fetch --check-upgrade
-```
-
-Treat the install/upgrade as complete only when the loaded skill path is from the expected installed package, the resolved bundled binary is runnable, `runtime_error` is `null`, `cache.stale` is `false`, and `binary_version` matches the expected signed runtime release. If network is restricted, an upgrade-check network failure is not by itself a local install failure; still report that remote freshness could not be checked.
-
-This package version may move for skills/docs/agent-contract changes while the bundled CLI binary remains on the previous signed runtime release. Do not "fix" that by editing `runtime-manifest.json` or binary checksums unless the actual signed binaries changed.
-
-Deprecated marketplace tags below `v1.4.3` were intentionally removed in the `v1.5.0` cleanup because their commit trees contained pre-v1.4.x IP-bearing mapping JSONs. If a user is on an older cached version, run the doctor check and follow its upgrade hint; do not restore old tags or old cached mapping files.
-
-Known Codex warning: `WARNING: proceeding, even though we could not create PATH aliases` is a Codex CLI sandbox/`CODEX_HOME/tmp/arg0` issue, not a FormBro plugin or token issue. Fix the Codex alias directory/writable roots or run the plugin manager outside that sandbox; do not debug FormBro backend or reinstall tokens for that warning.
-
 ## What this plugin is NOT
 
 - Not an MCP server. (For MCP, see `https://mcp.formbro.ca` or the upstream `formbro-mcp-server` npm package.)
