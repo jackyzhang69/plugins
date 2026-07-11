@@ -1,0 +1,18 @@
+{
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://github.com/jackyzhang69"
+  },
+  "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
+  "homepage": "https://github.com/jackyzhang69/anypdf",
+  "keywords": [
+    "pdf",
+    "forms",
+    "automation",
+    "agent"
+  ],
+  "license": "MIT",
+  "name": "anypdf",
+  "repository": "https://github.com/jackyzhang69/plugins",
+  "version": "0.1.0"
+}
