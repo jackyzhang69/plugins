@@ -33,7 +33,7 @@ The user generates it once at https://formbro.ca → Settings → API Tokens. Th
 
 - Token is **never** printed. Skills mask any `fb_*` value as `fb_***`.
 - Token is **never** written into any file other than the CLI's own `config.json`.
-- Token is **never** transmitted to anything other than `https://backend.formbro.ca` (the value baked into `runtime-manifest.json`).
+- Token is **never** transmitted to anything other than `https://formbro-api.jackyzhang.app` (the value baked into `runtime-manifest.json`).
 
 ## Per-platform binary selection
 
