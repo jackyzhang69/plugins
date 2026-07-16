@@ -58,7 +58,7 @@ The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of th
 
 ## What this plugin is NOT
 
-- Not an MCP server. (For MCP, see `https://mcp.formbro.ca` or the upstream `formbro-mcp-server` npm package.)
+- Not an MCP server. The former public MCP endpoint is decommissioned; use the bundled CLI for agent integrations.
 - Not a Claude Desktop / Claude Code adapter — Codex App only.
 - Not a re-implementation of FormBro logic — every skill shells out to `formbro <subcommand>`.
 - Not a place to store credentials in source.

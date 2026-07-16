@@ -241,7 +241,7 @@ If you call a command in the wrong column, the CLI returns a structured 4xx erro
 
 | Command group | Where it runs | Network |
 |---|---|---|
-| `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `backend.formbro.ca`) | Required |
+| `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `formbro-api.jackyzhang.app`) | Required |
 | `applications` write, `persons` write, `employers` write, `validate *`, `extract *`, `notes add`, `uploads slots` | **Backend** call | Required |
 | **`fill`** (PDF, agent path) | **Local-first PDF fill.** Standard bundled PR/TR PDFs, including IMM5669, fill locally; backend fallback is an exception path for runtime failure or genuinely unsupported future forms. Treat `ok: true` + `files[]` as success; repeated `engine=backend` is a readiness signal. | Required for payload fetch and backend fallback. |
 | `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
