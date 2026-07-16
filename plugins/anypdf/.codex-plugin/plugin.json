@@ -1,7 +1,7 @@
 {
   "id": "anypdf",
   "name": "anypdf",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
   "skills": "./skills/",
   "author": {
