@@ -48,3 +48,20 @@ The plugin source is a single directory (`plugins/formbro-cli/`) containing:
 ## License
 
 MIT (see [LICENSE](./LICENSE)).
+<!-- ANYPDF-INSTALL-BEGIN -->
+## AnyPDF
+
+Install the public plugin:
+
+```sh
+codex plugin marketplace add jackyzhang69/plugins
+codex plugin add anypdf@jacky-plugins
+```
+
+Claude Code:
+
+```sh
+claude plugin marketplace add jackyzhang69/plugins
+claude plugin install anypdf@jacky-plugins
+```
+<!-- ANYPDF-INSTALL-END -->

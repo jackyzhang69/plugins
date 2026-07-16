@@ -1,0 +1,61 @@
+{
+  "backend": {
+    "minimum_api_version": "1.0.0"
+  },
+  "binaries": [],
+  "build_timestamp": "2026-07-16T19:38:28.951461Z",
+  "files": [
+    {
+      "path": ".claude-plugin/plugin.json",
+      "sha256": "c5f7b8134d811804f4717ea04cbccc29c0e185425ca925315eaf067f487a3f71",
+      "size_bytes": 1062
+    },
+    {
+      "path": ".codex-plugin/plugin.json",
+      "sha256": "c5f7b8134d811804f4717ea04cbccc29c0e185425ca925315eaf067f487a3f71",
+      "size_bytes": 1062
+    },
+    {
+      "path": "README.md",
+      "sha256": "617a4c35c24e326ea8ee4f36418b55783bf943afbc791297c5ce2c85a596707e",
+      "size_bytes": 2411
+    },
+    {
+      "path": "bin/anypdf",
+      "sha256": "4607c0b35ca7c967252f749d65826fd72b76daafad6b994f1e983d58d6dd25a8",
+      "size_bytes": 123
+    },
+    {
+      "path": "client/anypdf_client.py",
+      "sha256": "f10177a2250dc3c4f925386404be197c46f2f872a3d28c9e6916bb54b8abef74",
+      "size_bytes": 64006
+    },
+    {
+      "path": "skills/anypdf-feedback/SKILL.md",
+      "sha256": "43aef332d7069a3286b48efad83e0c6522a5a5a202042a4ab2117d079b1df657",
+      "size_bytes": 909
+    },
+    {
+      "path": "skills/anypdf-fill/SKILL.md",
+      "sha256": "f1f9e5770197868aafb4c87f16b028c234c4835514c97738552c58a48c95e007",
+      "size_bytes": 2030
+    },
+    {
+      "path": "skills/anypdf-form-intake/SKILL.md",
+      "sha256": "e7ae565f7bd090a4f3ac979d3201e0fc52823c724551cffeaa5604c41cfae51a",
+      "size_bytes": 1182
+    },
+    {
+      "path": "skills/connect-anypdf/SKILL.md",
+      "sha256": "7dc3f24826affb512eab71367fac6b76ace3a9411c3233f01d4d04780e925ccb",
+      "size_bytes": 1733
+    }
+  ],
+  "package_name": "anypdf-plugin",
+  "package_type": "public",
+  "platform": "universal",
+  "schema": "https://anypdf.dev/schemas/manifest.schema.json",
+  "schema_version": "2.0.0",
+  "signing_key_id": "local-dev",
+  "version": "0.2.0"
+}

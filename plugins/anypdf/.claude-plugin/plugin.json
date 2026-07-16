@@ -1,18 +1,35 @@
 {
+  "id": "anypdf",
+  "name": "anypdf",
+  "version": "0.2.0",
+  "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
+  "skills": "./skills/",
   "author": {
     "name": "Jacky Zhang",
-    "url": "https://github.com/jackyzhang69"
+    "url": "https://github.com/jackyzhang69/plugins"
   },
-  "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
-  "homepage": "https://github.com/jackyzhang69/anypdf",
+  "homepage": "https://github.com/jackyzhang69/plugins",
+  "repository": "https://github.com/jackyzhang69/plugins",
+  "license": "MIT",
   "keywords": [
     "pdf",
     "forms",
     "automation",
     "agent"
   ],
-  "license": "MIT",
-  "name": "anypdf",
-  "repository": "https://github.com/jackyzhang69/plugins",
-  "version": "0.1.0"
+  "interface": {
+    "displayName": "AnyPDF",
+    "shortDescription": "Server-owned PDF forms for agents",
+    "longDescription": "Discover, validate, fill, intake, and report feedback for PDF forms through the AnyPDF server-owned workflow.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/jackyzhang69/plugins",
+    "defaultPrompt": [
+      "Use AnyPDF's server-owned workflow to discover, validate, and fill a registered PDF form."
+    ]
+  }
 }

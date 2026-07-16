@@ -1,31 +1,32 @@
 ---
 name: anypdf-form-intake
-description: Use when a user has a blank PDF form that may not yet be supported by AnyPDF.
+description: Submit an explicitly confirmed blank PDF as a new AnyPDF form request.
 ---
 
-# AnyPDF Form Intake
+# New PDF request
 
-In an installed plugin, read `runtime-manifest.json` at the plugin root and run
-the current platform's `anypdf` path. Do not assume it is on `PATH`.
+Use this workflow only after the user explicitly confirms the selected PDF is
+a blank form template and consents to upload it. The client checks `%PDF-`,
+SHA-256, and a 50 MiB maximum before using a short-lived signed upload grant.
 
-Inspect and submit only a blank form template. Do not submit a completed or
-partially filled PDF, source evidence, or identity document.
+```bash
+anypdf intake submit --pdf /absolute/blank-form.pdf \
+  --confirm-blank --idempotency-key <stable-key>
+```
 
-## Workflow
+Keep the same idempotency key for a safe retry. If the server returns
+`awaiting_upload`, the client uploads the declared file and finalizes it. Then
+inspect one status response at a time:
 
-1. Confirm the PDF is blank and the user consents to upload it.
-2. Run `anypdf intake submit --pdf /absolute/form.pdf --confirm-blank --json`.
-3. If status is `known`, follow the returned fill command; do not create a new registration.
-4. If status is `queued`, report the `submission_id` and check later with
-   `anypdf intake status --submission-id ID --json`.
-5. Treat `rejected`, `failed`, or `needs_review` as non-fillable states. Never
-   promise support until status is `active`.
+```bash
+anypdf intake status --submission-id <submission_id>
+```
 
-The CLI performs local inspection and hashing before upload. Keep output JSON
-intact so submission ids and typed error codes remain actionable.
+`known_exact` means an existing registered form can be used. `queued` or
+`needs_review` means the server has not activated support; never promise a fill
+until status is `active`/`known_exact`. Treat `rejected` and `failed` as terminal
+non-fillable states.
 
-## Common mistakes
-
-- Never remove `--confirm-blank` or infer consent.
-- Never upload a filled PDF as a template.
-- Never bypass a rejected validation or invent a form id.
+Never remove `--confirm-blank`. Never upload a filled form, source evidence,
+identity document, or another private document. The client never prints PDF
+bytes or signed upload tokens.

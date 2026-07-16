@@ -1,27 +1,29 @@
 ---
 name: anypdf-feedback
-description: Use when a user reports an AnyPDF plugin, CLI, fill, validation, or form-specific problem.
+description: Submit and inspect a redacted AnyPDF bug report.
 ---
 
-# AnyPDF Feedback
+# Bug report
 
-In an installed plugin, read `runtime-manifest.json` at the plugin root and run
-the current platform's `anypdf` path. Do not assume it is on `PATH`.
+Create a small JSON report with `summary`, `description`, and
+`reproduction_steps`; include stable context such as `form_id`, `error_code`,
+`phase`, `plugin_version`, and `platform` when known. Set
+`consent_diagnostics` explicitly. Submit it with a stable idempotency key:
 
-Create a small JSON report, then submit it with:
+```bash
+anypdf feedback submit --report /absolute/report.json \
+  --idempotency-key <stable-key>
+```
 
-`anypdf feedback submit --report /absolute/report.json --json`
+Inspect one status response at a time:
 
-Include `idempotency_key`, `summary`, `description`, `reproduction_steps`, and
-stable context such as `error_code`, `phase`, `form_id`, `plugin_version`,
-`platform`, and `architecture`. Set `consent_diagnostics` explicitly.
-Diagnostics are optional and should contain only minimal structured facts such
-as exit code. Never include tokens, secrets, source documents, filled PDFs,
-identity data, raw logs, or environment dumps.
+```bash
+anypdf feedback status --report-id <report_id>
+```
 
-Check progress with:
+The server deduplicates matching reports. Report the returned status without
+promising a repair or release date.
 
-`anypdf feedback status --report-id ID --json`
-
-Duplicate reports are linked to the original issue and do not create another
-repair job. Report the returned status without promising a release date.
+Diagnostics must contain only minimal structured facts and only when the user
+consents. Never include tokens, secrets, raw logs, environment dumps, PDF
+bytes, source evidence, filled documents, or identity data.

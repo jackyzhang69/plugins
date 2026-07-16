@@ -1,63 +1,7 @@
 {
-  "platforms": {
-    "darwin-arm64": {
-      "anypdf": {
-        "path": "bin/darwin-arm64/anypdf",
-        "sha256": "0198906f83f376fcfe4c498dc05db13684ceff79915fd70db9689a2323a249a9"
-      },
-      "anypdf-fill": {
-        "path": "bin/darwin-arm64/anypdf-fill",
-        "sha256": "acafda1019fb9048eeaa4a3e7680218f5daad43a89f5c6de132a34e3fc103029"
-      },
-      "formbro-pdfjs": {
-        "path": "bin/darwin-arm64/formbro-pdfjs",
-        "sha256": "ac1142bf7446dc919afaa5d6e354121253837263eadc61b9a08c379acc6ee690"
-      }
-    },
-    "darwin-x64": {
-      "anypdf": {
-        "path": "bin/darwin-x64/anypdf",
-        "sha256": "31a2b8ede12821c09a313593b1180f6d1fef40d80302753d5c40f30cdb578a31"
-      },
-      "anypdf-fill": {
-        "path": "bin/darwin-x64/anypdf-fill",
-        "sha256": "6a1b09968c3cdf536a0ba45f7d9be7986d3e99af36d6d147201327a2f2afccb6"
-      },
-      "formbro-pdfjs": {
-        "path": "bin/darwin-x64/formbro-pdfjs",
-        "sha256": "15853cd57989fceba1ac30c0c5e1b4745e94dfd255300368c19a4e0de1c7fa2e"
-      }
-    },
-    "linux-x64": {
-      "anypdf": {
-        "path": "bin/linux-x64/anypdf",
-        "sha256": "d48033376f7a837eec3aaca97583ed6f00edadd261142a130f93b2677cd739bb"
-      },
-      "anypdf-fill": {
-        "path": "bin/linux-x64/anypdf-fill",
-        "sha256": "9c0daf3fccda79200069933d62ce7bf80d9068b2407ab307399300a3fb116407"
-      },
-      "formbro-pdfjs": {
-        "path": "bin/linux-x64/formbro-pdfjs",
-        "sha256": "3173500136c0cc9491506ff77d25771ba04f7ef664818f25144a685a243af319"
-      }
-    },
-    "win32-x64": {
-      "anypdf": {
-        "path": "bin/win32-x64/anypdf.exe",
-        "sha256": "020657794233ddecf0f75d033e4eba0e3d587d37ecace06610c50ab10c62a6cf"
-      },
-      "anypdf-fill": {
-        "path": "bin/win32-x64/anypdf-fill.exe",
-        "sha256": "47774b9d09f2399b9724e5e221028634abd7ce3963ddde0e834b7718c045da80"
-      },
-      "formbro-pdfjs": {
-        "path": "bin/win32-x64/formbro-pdfjs.exe",
-        "sha256": "e93bd24519dad4b9cb013cce7e046407a56e854dca30facaaaed572094ddce9a"
-      }
-    }
-  },
-  "schema_version": "1",
-  "source_sha": "a15b52a195645e2acb0aa6859c2d745257d3f7d1",
-  "version": "0.1.0"
+  "manifest_sha256": "262b4a6616830d1e5bc29102250484e8f169385cbbc7b671af93affac5acb79a",
+  "platform": "universal",
+  "schema_version": "2",
+  "source_sha": "c2b309b5dc58b6874a9c92b1b2b7338a4815b6e7",
+  "version": "0.2.0"
 }
