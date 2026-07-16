@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-16T20:18:54.168067Z",
+  "build_timestamp": "2026-07-16T20:24:10.526584Z",
   "files": [
     {
       "path": ".claude-plugin/plugin.json",
