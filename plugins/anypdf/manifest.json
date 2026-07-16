@@ -3,16 +3,16 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-16T20:27:31.647709Z",
+  "build_timestamp": "2026-07-16T20:28:26.582693Z",
   "files": [
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "2204befb2dc8cd9c67ce029c3a5ad1ec9ec2f732a1e56a57ca89aa1df327070c",
+      "sha256": "e7eb1fc4081ebc87f090c86f8a686a275425d2768d00d65988993180c148b8e5",
       "size_bytes": 1062
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "2204befb2dc8cd9c67ce029c3a5ad1ec9ec2f732a1e56a57ca89aa1df327070c",
+      "sha256": "e7eb1fc4081ebc87f090c86f8a686a275425d2768d00d65988993180c148b8e5",
       "size_bytes": 1062
     },
     {
@@ -57,5 +57,5 @@
   "schema": "https://anypdf.dev/schemas/manifest.schema.json",
   "schema_version": "2.0.0",
   "signing_key_id": "local-dev",
-  "version": "0.2.1"
+  "version": "0.2.2"
 }

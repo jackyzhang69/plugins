@@ -29,7 +29,7 @@
     {
   "name": "anypdf",
   "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://github.com/jackyzhang69/plugins"
