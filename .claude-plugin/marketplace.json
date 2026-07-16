@@ -15,7 +15,7 @@
       "homepage": "https://formbro.ca/agent-integration",
       "name": "formbro-cli",
       "source": "./plugins/formbro-cli",
-      "version": "1.5.26"
+      "version": "1.5.27"
     },
     {
       "author": {
@@ -27,16 +27,16 @@
       "version": "0.4.1"
     },
     {
-  "name": "anypdf",
-  "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
-  "version": "0.2.2",
-  "author": {
-    "name": "Jacky Zhang",
-    "url": "https://github.com/jackyzhang69/plugins"
-  },
-  "category": "productivity",
-  "source": "./plugins/anypdf",
-  "homepage": "https://github.com/jackyzhang69/plugins"
-}
+      "name": "anypdf",
+      "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
+      "version": "0.2.2",
+      "author": {
+        "name": "Jacky Zhang",
+        "url": "https://github.com/jackyzhang69/plugins"
+      },
+      "category": "productivity",
+      "source": "./plugins/anypdf",
+      "homepage": "https://github.com/jackyzhang69/plugins"
+    }
   ]
 }
