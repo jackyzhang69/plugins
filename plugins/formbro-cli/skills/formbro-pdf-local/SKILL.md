@@ -18,7 +18,7 @@ vendored IRCC PDFs.
 | 1. Template-mutation | Bespoke deep XFA forms (IMM0008) | `pdf-fill-xfa/src/bespoke/<form>/{template_mutation,apply}.rs` |
 | 2. XFA-packet-inject | Bespoke without datasets stream (IMM5406) | `pdf-fill-xfa/src/incremental.rs::inject_xfa_packet` |
 | 3. Datasets-rewrite | 12 generic forms (filler.rs) | `pdf-fill-xfa/src/filler.rs::fill_pdf` |
-| 4. Setvalue+Bun | AcroForm-only forms (IMM5476, IMM5669) | `pdf-fill-xfa/src/filler.rs::emit_setvalue_ops` + `lib.rs::fill_with_bun` |
+| 4. Setvalue+Bun | AcroForm-only forms (IMM5476, IMM5669) | `lib.rs::fill_setvalue_bundle` (backend-resolved `set_widget_value` ops via `--fill-bundle`) + `lib.rs::fill_with_bun` |
 
 **Preview visibility by pathway**:
 

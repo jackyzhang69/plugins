@@ -100,7 +100,10 @@ Path('~/formbro-plugin/pdf/pdf-fill-xfa/tests/fixtures/<form_id>_backend_referen
 
 For Pathway 3 (generic): edit `pdf/pdf-fill-xfa/src/lib.rs::fill_generic` to handle `"<form_id>"` (usually nothing to change if filler.rs paths are present).
 
-For Pathway 4 (setvalue+Bun): edit `pdf/pdf-fill-xfa/src/lib.rs` to add `pub fn fill_<form_id>` (mirror `fill_5669`).
+For Pathway 4 (setvalue+Bun): no plugin-side Rust change needed. `lib.rs::fill_setvalue_bundle` is generic — it
+applies whatever `set_widget_value` ops the backend resolves for `--form <form_id>` via `--fill-bundle`
+(pathway `"setvalue"`). The field-name → dataId mapping is backend-only IP; do not add a per-form mapping
+file or function in the plugin (see IMM5669, VENDOR.md 2026-07-20 entry).
 
 For Pathways 1+2 (bespoke): create `pdf/pdf-fill-xfa/src/bespoke/<form>/` with `mod.rs`, `apply.rs`, `template_mutation.rs` (if Pathway 1). Add `pub fn fill_<form>` in `lib.rs`.
 

@@ -5,6 +5,10 @@ when_to_use: |-
   Load on plugin start; reload whenever a user asks anything formbro-related.
   Trigger phrases: "fill the webform for X", "find X case", "list applications", "PDF for case X",
   "is this ready to submit", "check formbro status", "my token / which backend".
+  Also: a bare/ambiguous first mention of "formbro" with no other task content — "@formbro", "formbro",
+  "hi formbro", "what can formbro do", "how do I use formbro" — route this to connect-formbro first if
+  ~/.formbro/config.json is missing, otherwise treat it as "explain what you can do" and answer from this
+  contract directly.
 ---
 
 # FormBro plugin — agent consumption contract
@@ -18,6 +22,7 @@ when_to_use: |-
 3. **For new cases from external files, use `import`, not ad hoc cloning.** Ask FormBro for the contract/schema with `formbro import contract`, generate JSON locally, run `import apply-json --dry-run`, then rerun without `--dry-run` only when valid.
 4. **For existing entities, use `extract` / `validate` / `patch`.** Do not use the new-case import path to mutate an existing applicant/application/employer.
 5. **Never guess program keys, entity types, or command flags.** Use `programs list`, `programs describe`, `programs schema`, and `--help`. Current flags use `--program-key`, not legacy `--program`.
+6. **`validate` passing alone is NOT "ready to submit" for automated webform filling.** `validate by-id` / `validate person` checks the SAVED DATA MODEL only (schema + business rules) — it never touches the government-portal adapter. `webform preflight` is the only check that dry-runs that adapter/transform layer against real data. Before telling a user or agent a case is fill-ready, both must return clean — or call `webform start` without `--confirmed` (dry run), which already chains `validate` → `preflight` → compute-actions internally before opening a browser. Never report "ready to submit" / "fill-ready" off a single one of these checks.
 
 ## Agent quick router — TOP 20 LINES (read this first)
 
@@ -33,11 +38,12 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "find / look up `<person>`" | `formbro find "<person>" --include applications --limit 10` |
 | "list ALL cases / inventory / audit sweep" | `formbro applications inventory [--program-key <key>]` (v1.5.0+; returns every status incl. empty) |
 | "list my active workbench" | `formbro applications list [--program-key <key>]` (dashboard semantics: only active statuses) |
-| "is this case ready to submit" | `formbro webform preflight --app-id <id> --program-key <key>` |
+| "is this case ready to submit" (for webform fill) | BOTH `formbro validate by-id --entity-type <T> --entity-id <id>` AND `formbro webform preflight --app-id <id> --program-key <key>` must be clean (Rule 6) — or `webform start` without `--confirmed` for a dry run that chains both |
 | "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
 | "plugin out of date?" | `formbro doctor --check-upgrade` |
+| "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>"` — **always confirm the draft with the user first** (see `tell-jacky` skill) |
 
 Two semantic distinctions to NEVER conflate:
 - `applications list` = consultant's active workbench (dashboard scope; filters by active status)
@@ -142,7 +148,7 @@ Once `$FORMBRO_BIN` is set, **every command in this doc and every other formbro 
 | "what's the status of <case/applicant>" | `formbro applications get <id>` (TR/PR/LMIA all) **OR** `formbro applications status <id>` | formbro-read |
 | "list cases for <client>" or "all <program> applications" | `formbro applications list --program-key <key>` | formbro-read |
 | "show me employer <name>" | `formbro employers list --search` then `employers get` | formbro-read |
-| "validate this application / can I submit?" | `formbro validate by-id --entity-type <T> --entity-id <id>` | formbro-write (see param map below) |
+| "validate this application / can I submit?" | `formbro validate by-id --entity-type <T> --entity-id <id>` — data-model check only; if the case will go through automated webform filling this is NOT sufficient on its own, also run `webform preflight` (Rule 6) | formbro-write (see param map below) |
 | "validate this person before I attach them" | `formbro validate person --person-id <id> --program-key <key>` | formbro-write |
 | "create a new <program> application for <person>" | `formbro applications start --program-key <key> --applicant-id <id>` | formbro-write |
 | "patch / update <field> on <entity>" | `formbro <applicants\|applications\|employers\|persons> patch …` | formbro-write |
@@ -150,11 +156,12 @@ Once `$FORMBRO_BIN` is set, **every command in this doc and every other formbro 
 | "import / create a case from user file(s)" | `formbro import contract --program-key <key>` → local agent reads files and generates JSON → `formbro import apply-json --program-key <key> --json '<json>' --dry-run` → rerun without `--dry-run` | formbro-write |
 | "extract/patch data into an existing entity" | `formbro extract contract` then local agent generates JSON then `formbro extract apply-json` | formbro-write |
 | "fill the IRCC portal / open browser and fill this case" | `formbro webform start --app-id <id> --program-key <key> --confirmed --headless false` (full signature — see `formbro-webform` skill) | formbro-webform (LOCAL MODE) |
-| "preflight / can webform fill this?" | `formbro webform preflight` | formbro-webform |
+| "preflight / can webform fill this?" | `formbro webform preflight` — portal-adapter dry run only; does NOT re-check data-model validity, run `validate` too before calling a case fill-ready (Rule 6) | formbro-webform |
 | "check if my machine can run webform fills" | `formbro webform runtime-check` | formbro-webform |
 | "fill the IMM0008 / IMM5257 / IMM5710 PDF" / "give me the filled PDF for case X" | `formbro fill --app-id <id> --forms IMM…,IMM… -o ./out/` | **formbro-fill** (single agent surface; auto-detects TR vs PR; rejects LMIA) |
 | "export this applicant / application as Excel" | `formbro export entity --entity-type <T> --entity-id <id> --output …` | formbro-write |
 | "audit / who did what when" | `formbro audit my` | formbro-read |
+| "tell Jacky about a bug / feature request / knowledge tip" | `formbro feedback create --type <type> --title "<t>" --description "<d>" [--url <url>] [--context-json '<json>'] [--image <path>]` — draft-confirm before sending | **tell-jacky** |
 
 ## 1.1 External file intake decision tree
 
@@ -192,6 +199,7 @@ This is the full agent-facing command surface. Prefer the quick router above; us
 | Validation | `validate data`, `validate by-id`, `validate person`, `validate operation` |
 | Mutations | `persons create/patch`, `applicants patch/delete`, `applications start/attach/replace-person/remove-person/set-status/patch`, `employers create/patch/delete`, `notes add` |
 | File slots / output | `uploads slots`, `export entity/data/template/pdf/pdf-async/pdf-status/pdf-result/pdf-check/extension`, `fill` |
+| Feedback ("Tell Jacky") | `feedback create` (feature request / bug report / knowledge tip, optional images) — see `tell-jacky` skill |
 | Local portal automation | `webform runtime-check/preflight/start/jobbank-invite/status`, `webform daemon start/stop/status/restart/prune-chromium` |
 | Plugin/vendor maintenance | `pdf bundle`, `pdf verify` |
 

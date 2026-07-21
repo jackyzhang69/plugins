@@ -155,9 +155,16 @@ Source PDF has no datasets stream AND synthesizing one is not viable. Instead, e
 
 **When to use**: AcroForm-only forms (IMM5669); forms where Pathway 2 bootstrap is too complex or the template binding is nonstandard.
 
+**2026-07-20 — mapping IP moved backend-only.** The field-name → dataId mapping used to ship as a
+plaintext `src/embedded/form_5669.json` compiled into the plugin binary via `include_str!`, consumed by a
+now-deleted `filler.rs::emit_setvalue_ops`. That mapping now lives ONLY in
+`apps/backend/data/pdffiller/forms/form_5669.json` (backend `SetValuePayloadToOpsCompiler`). The plugin
+receives already-resolved `set_widget_value` ops over the wire and never sees the mapping. See VENDOR.md's
+2026-07-20 entry.
+
 **Files involved**:
-- `pdf/pdf-fill-xfa/src/filler.rs::emit_setvalue_ops` — builds the `Vec<(String, Value)>` ops list from form spec + payload
-- `pdf/pdf-fill-xfa/src/lib.rs::fill_5669` — form-specific entrypoint; calls `emit_setvalue_ops` then `fill_with_bun`
+- `pdf/pdf-fill-xfa/src/lib.rs::fill_setvalue_bundle` — takes backend-resolved `set_widget_value` ops
+  (from `--fill-bundle` pathway `"setvalue"`) and forwards them to `fill_with_bun`; generic across forms
 - `pdf/pdf-fill-xfa/src/lib.rs::fill_with_bun(source_bytes, ops)` — spawns Bun subprocess with ops JSON on stdin; pdfjs applies each via `annotationStorage.setValue`, saves, returns modified bytes on stdout
 
 **Pitfalls**:
@@ -384,7 +391,8 @@ done
 python3 $PY $OUT/imm0008-plugin.pdf $FX/imm0008_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "0008: "$0}'
 python3 $PY $OUT/imm5406-plugin.pdf $FX/imm5406_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "5406: "$0}'
 python3 $PY $OUT/imm5562-plugin.pdf $FX/imm5562_backend_reference.pdf 2>&1 | grep -E "missing|divergent" | awk '{print "5562: "$0}'
-python3 $PY $OUT/v2-5669-rust.pdf   $FX/5669_backend_reference.pdf    2>&1 | grep -E "missing|divergent" | awk '{print "5669: "$0}'
+# 5669: no local mapping/fixture exists anymore (2026-07-20, mapping is backend-only IP) — verify via
+#   cargo test --test phase1_smoke p1t4_imm5669_fill_bundle_setvalue_smoke
 
 # All lines should show: missing: 0  divergent: 0
 

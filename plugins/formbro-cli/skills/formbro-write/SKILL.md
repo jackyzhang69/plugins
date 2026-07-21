@@ -18,6 +18,8 @@ All commands shell out to the bundled `formbro` CLI. Resolve it once via `formbr
 
 **Cardinal rule:** every write that affects FormBro data must go through the bundled CLI. Never bypass this skill with direct backend requests or database writes. Every write that affects an existing entity should be preceded by a `validate` call (see end of this file) and, for status changes / deletes, an explicit user confirmation.
 
+**`validate` ≠ webform fill-ready.** `validate` here checks the saved data model (schema + business rules) only — it does not exercise the government-portal adapter. If the case is headed to automated webform filling, `validate` passing is NOT sufficient on its own; `webform preflight` must also return clean (see `formbro-capabilities` Rule 6 and the `formbro-webform` skill).
+
 ## External files: import vs extract vs patch
 
 The CLI is intentionally JSON-first. It does **not** directly read Excel/CSV/DOCX/PDF/image file paths in the agent-native import flow. The agent reads local files, converts them to JSON or text, then sends that JSON/text through the CLI.

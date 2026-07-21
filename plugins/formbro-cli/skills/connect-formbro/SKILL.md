@@ -7,6 +7,9 @@ when_to_use: |-
     - "log in to formbro / save my fb_ token"
     - "configure formbro plugin / use this token"
     - first invocation of any formbro skill when ~/.formbro/config.json missing
+    - a bare/ambiguous first mention of "formbro" with no other task content — "@formbro", "formbro",
+      "hi formbro", "hey formbro", "what can formbro do", "how do I use formbro", "help with formbro" —
+      treat any of these, on their own, as an implicit request to get started
 ---
 
 # Connect FormBro
@@ -30,6 +33,12 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 ## How it works
 
 1. Ask the user for their FormBro API token. The token starts with `fb_`. The user gets it from https://formbro.ca → Settings → API Tokens → Create token.
+
+   Note: new tokens default to **read** scope. Most FormBro skills need **write** scope too
+   (mutations, imports, and `tell-jacky` feedback submission all fail with a 403 on a read-only
+   token). The CLI cannot mint or upgrade a token itself — if the user hits a write-scope 403
+   later, send them back to Settings → API Tokens to edit the token in place (no need to
+   regenerate) rather than troubleshooting the CLI.
 2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §0 (the canonical resolver: `$FORMBRO_BIN_OVERRIDE` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §0's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
 
@@ -109,7 +118,7 @@ Tell the user:
 > Connected as `<email from whoami>`. FormBro plugin v`<doctor.binary_version>` ready.
 >
 > **Quick reference** (you can ask me for any of these):
-> - "fill the webform for `<person name>`" — one-step: resolve + preflight + fill
+> - "fill the webform for `<person name>`" — one-step: resolve + validate + preflight + fill
 > - "find `<person>`'s applications" — name → application ids
 > - "is my plugin healthy / which backend am I on" — runs `formbro doctor --json`
 
