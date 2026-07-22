@@ -89,10 +89,10 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 ## Bundled worker daemon (v1.3.0+)
 
 As of plugin v1.3.0, the webform pipeline is **fully self-contained**:
-- The `formbro` CLI auto-spawns a long-lived `webform-worker` daemon (sibling binary, Bun-compiled).
+- The `formbro` CLI auto-spawns a long-lived `webform-worker` daemon. The worker ships as a renamed **platform Node binary** plus a sibling `cli.js` (ESM, built via `bun build --target=node`) and a `package.json` marker; the daemon is spawned as `node cli.js daemon` (D1-a Node-runtime contract — not a Bun-compiled exe).
 - Daemon listens on a per-user Unix socket / Windows named pipe (`~/.formbro/runtime/formbro-worker-<user>.sock`).
 - BrowserContext is fresh per fill (no cookie leakage); Chromium binary stays warm; daemon idles out after 15 min.
-- You do NOT need to install Node or run `~/formbro/desktop`; the worker is bundled.
+- You do NOT need to install Node separately — the plugin bundles the platform Node binary alongside the worker's `cli.js`. Do not run `~/formbro/desktop` for this pipeline.
 
 Daemon management (rarely needed; mostly debugging):
 
