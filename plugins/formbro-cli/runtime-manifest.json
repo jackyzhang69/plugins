@@ -15,13 +15,13 @@
             "name": "formbro-pdfjs",
             "asset": "formbro-pdfjs-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "10ad5e802bc43ecf6105962c8eb6f0172c69f6d5ca6b6a1c9f7dea15bfcf75e1"
+            "sha256": "2aa4d0da8fb5e64397cc7609d31b70e24d56a675c8c97f9e4c7b2425a86f5c50"
           },
           {
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "02849f025125a999242882ca0c5b65d9c22f4a30fd08ff5bdb2f945c058c93e6"
+            "sha256": "f6eddb72b28d41f63a4665e9990f0edc496a647cc48d868495f31114eba835db"
           }
         ]
       },
@@ -36,13 +36,13 @@
             "name": "formbro-pdfjs.exe",
             "asset": "formbro-pdfjs-win32-x64.zip",
             "archive": "zip",
-            "sha256": "0ee4cb195af7ca614e30c0a3f5605143edef2dc37856376c265d41ba214d31ac"
+            "sha256": "69ba8255f31a69a648664610e18752ca9b59d97b86a3a13572fb25eb2bea0095"
           },
           {
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "7f4a70a2b6bc8ce919c0564e6e847120f9a40d1035f0183e5220b28002bd786d"
+            "sha256": "908bf5aa1d9e3959663e5795a65d6c821e88bd5b38f0dc5a989c7e6bab858dc5"
           }
         ]
       }
@@ -50,7 +50,7 @@
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "plugin-v1.5.44"
+      "tag": "plugin-v1.5.45"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
