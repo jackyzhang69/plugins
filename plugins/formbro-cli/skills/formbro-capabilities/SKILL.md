@@ -251,7 +251,7 @@ If you call a command in the wrong column, the CLI returns a structured 4xx erro
 |---|---|---|
 | `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `formbro-api.jackyzhang.app`) | Required |
 | `applications` write, `persons` write, `employers` write, `validate *`, `extract *`, `notes add`, `uploads slots` | **Backend** call | Required |
-| **`fill`** (PDF, agent path) | **Local-first PDF fill.** Standard bundled PR/TR PDFs, including IMM5669, fill locally; backend fallback is an exception path for runtime failure or genuinely unsupported future forms. Treat `ok: true` + `files[]` as success; repeated `engine=backend` is a readiness signal. | Required for payload fetch and backend fallback. |
+| **`fill`** (PDF, agent path) | **Backend-rendered PDF fill.** The CLI calls the saved-application `fill-pdf` endpoint, saves a returned PDF or safely extracts a returned ZIP, and emits local paths in `files[]`. Existing files are never overwritten. | Required. |
 | `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
 | **`webform start`** | **LOCAL — spawns a Node + Playwright + Chromium process on the user's machine.** Drives the IRCC / Service Canada portal in a real browser the user can see (with `--headless=false`). | Required (the local browser hits IRCC) |
 | `webform preflight`, `webform runtime-check` | LOCAL (no backend call needed for `runtime-check`) | varies |
@@ -302,7 +302,7 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 | `find`, `applications get/list/status/by-status`, `employers list/get`, `programs *`, `audit my`, `whoami`, `health` | **PARALLEL** | read-only HTTPS |
 | `validate by-id`, `validate person`, `webform preflight`, `webform status`, `webform daemon status`, `doctor` (with or without `--no-fetch`) | **PARALLEL** | read-only / pure check |
 | `webform runtime-check` | **SERIAL** (first call) → **PARALLEL** (subsequent) | First call spawns the singleton worker daemon (singleton lock file under `~/.formbro/runtime/`); subsequent calls just health-ping it. Sandboxed environments without `flock`/named-socket support will fail on first call — that's an environment limitation, not a docs bug. |
-| `fill` (PDF) — multiple forms in **one** `formbro fill` call | already parallel internally — let the CLI do it | local Rust filler stages forms concurrently |
+| `fill` (PDF) — multiple forms in **one** `formbro fill` call | one call — let the backend render the requested set | one authenticated request returns a PDF or ZIP |
 | `fill` (PDF) — across **different applications** | **PARALLEL** | independent applications |
 | `extract text`, `extract apply-json` (read steps) | **PARALLEL** | independent |
 | `notes add`, `uploads slots` (different entities) | **PARALLEL** | independent state |

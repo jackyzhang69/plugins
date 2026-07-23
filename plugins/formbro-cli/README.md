@@ -10,9 +10,8 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 | [`formbro-capabilities`](./skills/formbro-capabilities/SKILL.md) | Agent consumption contract: mandatory CLI boundary, intent → command router, external-file import decision tree, full command surface, PR/TR/LMIA support matrix, parameter cheat-sheets, status truth model. **Read on every FormBro session.** |
 | [`formbro-read`](./skills/formbro-read/SKILL.md) | Search / list / inspect applicants, applications, employers, programs, audit log. |
 | [`formbro-write`](./skills/formbro-write/SKILL.md) | Create / patch / delete persons, applications, employers; import new cases from external files via JSON contract; patch existing entities; validation; Excel + advanced PDF export. |
-| [`formbro-fill`](./skills/formbro-fill/SKILL.md) | **PDF entry point for agents** — fill IRCC IMM PDFs (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Auto-detects TR vs PR; rejects LMIA. Single stable command (`formbro fill`) regardless of backend-vs-local engine. |
+| [`formbro-fill`](./skills/formbro-fill/SKILL.md) | **PDF entry point for agents** — fill IRCC IMM PDFs (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Auto-detects TR vs PR; rejects LMIA. The backend renders the PDFs and the CLI writes collision-safe local outputs. |
 | [`formbro-webform`](./skills/formbro-webform/SKILL.md) | **LOCAL MODE** Playwright IRCC / Service Canada portal fills — runs on the user's machine. Agent prepares; user submits. |
-| [`formbro-pdf-local`](./skills/formbro-pdf-local/SKILL.md) | Developer/maintenance reference for bundled local IRCC PDF filling internals. Normal agents should prefer `formbro-fill`. |
 
 ## Agent contract
 
@@ -65,15 +64,6 @@ The plugin's `version` (in `.codex-plugin/plugin.json`) is **independent** of th
 
 ## First-run note
 
-On first `formbro fill`, the plugin downloads `formbro-pdfjs` (~30–60 MB) from
-GitHub Releases (anonymous; no token required). Subsequent invocations reuse
-the cached binary at `~/.cache/formbro-cli/`. Pre-fetch with:
-
-    formbro doctor --fetch
-
-## Offline install (rare)
-
-If your network blocks github.com release downloads, manually download:
-    https://github.com/jackyzhang69/plugins/releases/download/<TAG>/formbro-pdfjs-<PLATFORM>.{tar.gz,zip}
-
-and extract into the plugin marketplace dir's `plugins/formbro-cli/bin/<PLATFORM>/`.
+`formbro fill` needs only the bundled CLI plus backend connectivity. It does not
+download or execute a local PDF runtime. `formbro doctor --fetch` is reserved for
+pre-fetching the local webform worker used by `formbro webform ...`.

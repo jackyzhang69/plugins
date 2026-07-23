@@ -98,11 +98,12 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
    <BUNDLED_FORMBRO> doctor --json --fetch
    ```
 
-   This prepares lazy runtimes (PDF helper + webform worker) before the first real
-   fill. If this step succeeds, agents should not later need to manually extract
-   `webform-worker`, set `FB_WORKER_BIN`, or force PDF backend mode just to get a
-   normal case running. If it fails, surface the `runtime_error` / `live.hint`
-   from the JSON and stop before claiming the plugin is ready.
+   This prepares the lazy webform worker and verifies the live backend before the
+   first real operation. PDF fills are backend-rendered and need no local runtime.
+   If this step succeeds, agents should not later need to manually extract
+   `webform-worker` or set `FB_WORKER_BIN`. If it fails, surface the
+   `runtime_error` / `live.hint` from the JSON and stop before claiming the plugin
+   is ready.
 
 ## Token rules — never break
 
