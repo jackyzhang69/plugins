@@ -126,7 +126,7 @@ LMIA: ❌ not applicable — LMIA is webform-only.
 
 If the user names a form the program doesn't support, the CLI returns a 400 with the supported set — surface that error.
 
-> **Agent rule of thumb for PDFs:** call `formbro fill` (in the `formbro-fill` skill). Only fall back to the `export pdf*` family below for explicit advanced flows the user asks for (raw data preview, async batch, blank template).
+> **Agent rule of thumb for PDFs:** call `formbro fill` (in the `formbro-fill` skill). Only fall back to the `export pdf*` family below for explicit advanced flows the user asks for (raw data preview, sync batch, blank template).
 
 ## Optimistic concurrency
 
@@ -173,9 +173,6 @@ Patches accept `--expected-version <n>`. Use this whenever you have just read th
 <formbro> export data     --form-id <FORM> --data '<json>' --output <path> [--program-key <key>] [--language en|fr]
 <formbro> export template --form-id <FORM> --output <path> [--language en|fr]
 <formbro> export pdf      --program-key <key> --app-id <id> --forms <FORM,FORM,...> [--output <path>]
-<formbro> export pdf-async --program-key <key> --app-id <id> --forms <FORM,FORM,...>
-<formbro> export pdf-status <task_id>
-<formbro> export pdf-result <task_id> --output <path>
 <formbro> export pdf-check  --program-key <key> --app-id <id> --forms <FORM,FORM,...>
 <formbro> export extension  --program-key <key> --app-id <id>
 ```

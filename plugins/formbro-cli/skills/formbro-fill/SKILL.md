@@ -89,7 +89,7 @@ Use one `formbro fill` call for multiple forms in the same application. Calls fo
 
 ## Legacy export boundary
 
-`formbro export pdf`, `pdf-async`, `pdf-status`, and `pdf-result` remain legacy or explicit advanced transports. Do not use them for ordinary agent PDF requests.
+`formbro export pdf` remains a legacy transport. `pdf-async`, `pdf-status`, and `pdf-result` have been removed; the backend no longer provides async PDF task endpoints. Use `formbro fill` for all agent PDF requests.
 
 ## Version
 

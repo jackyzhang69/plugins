@@ -198,7 +198,7 @@ This is the full agent-facing command surface. Prefer the quick router above; us
 | Existing-entity extraction / patch intake | `extract contract`, `extract text`, `extract apply-json`, `extract task-status/models/formats/clear-cache` |
 | Validation | `validate data`, `validate by-id`, `validate person`, `validate operation` |
 | Mutations | `persons create/patch`, `applicants patch/delete`, `applications start/attach/replace-person/remove-person/set-status/patch`, `employers create/patch/delete`, `notes add` |
-| File slots / output | `uploads slots`, `export entity/data/template/pdf/pdf-async/pdf-status/pdf-result/pdf-check/extension`, `fill` |
+| File slots / output | `uploads slots`, `export entity/data/template/pdf/pdf-check/extension`, `fill` |
 | Feedback ("Tell Jacky") | `feedback create` (feature request / bug report / knowledge tip, optional images) — see `tell-jacky` skill |
 | Local portal automation | `webform runtime-check/preflight/start/jobbank-invite/status`, `webform daemon start/stop/status/restart/prune-chromium` |
 | Plugin/vendor maintenance | `pdf bundle`, `pdf verify` |
@@ -240,7 +240,7 @@ Roles vary per program (applicant / spouse / sponsor / employer / dependant / ap
 | `webform start` (LOCAL) | ✅ | ✅ | ✅ | Different IRCC / Service Canada portals |
 | `webform preflight / runtime-check / status` | ✅ | ✅ | ✅ | See §6 about status truth |
 | **`fill`** (PDF, agent path) | ✅ | ✅ | ❌ | Auto-detects TR vs PR. LMIA explicitly rejected with hint to use `webform start`. See `formbro-fill` skill. |
-| `export pdf` (legacy transport) | ✅ | partial | — | TR-route-only in cli; **don't expose to agent** — use `fill`. Kept for raw-data preview / async-batch. |
+| `export pdf` (legacy transport) | ✅ | partial | — | TR-route-only in cli; **don't expose to agent** — use `fill`. Kept for raw-data preview / sync batch. |
 | `export entity` (Excel) | ✅ | ✅ | ✅ | Per-entity Excel export |
 
 If you call a command in the wrong column, the CLI returns a structured 4xx error with the right alternative — surface that error verbatim to the user, do not retry blindly.
@@ -252,7 +252,7 @@ If you call a command in the wrong column, the CLI returns a structured 4xx erro
 | `find`, `applicants *`, `applications *` (read), `employers *`, `programs *`, `audit my` | **Backend** call (HTTPS to `formbro-api.jackyzhang.app`) | Required |
 | `applications` write, `persons` write, `employers` write, `validate *`, `extract *`, `notes add`, `uploads slots` | **Backend** call | Required |
 | **`fill`** (PDF, agent path) | **Backend-rendered PDF fill.** The CLI calls the saved-application `fill-pdf` endpoint, saves a returned PDF or safely extracts a returned ZIP, and emits local paths in `files[]`. Existing files are never overwritten. | Required. |
-| `export pdf`, `pdf-async`, `pdf-status`, `pdf-result`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary or task id). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
+| `export pdf`, `pdf-check`, `export entity / data / template` | **Backend** call (returns binary). `export pdf` is the legacy transport — use `fill` from agent path. | Required |
 | **`webform start`** | **LOCAL — spawns a Node + Playwright + Chromium process on the user's machine.** Drives the IRCC / Service Canada portal in a real browser the user can see (with `--headless=false`). | Required (the local browser hits IRCC) |
 | `webform preflight`, `webform runtime-check` | LOCAL (no backend call needed for `runtime-check`) | varies |
 | **`webform status`** | **Backend** read of last persisted run state — see §6 |
