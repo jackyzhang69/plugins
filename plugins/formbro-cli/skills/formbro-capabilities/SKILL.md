@@ -122,7 +122,7 @@ export FORMBRO_BIN
 **Windows PowerShell variant** (codex on Windows installs to `$env:USERPROFILE\.codex\...`):
 
 ```powershell
-$plat = "windows-x64"
+$plat = "win32-x64"
 $cands = @($env:FORMBRO_BIN_OVERRIDE)
 if ($env:CLAUDE_PLUGIN_ROOT) { $cands += "$env:CLAUDE_PLUGIN_ROOT\bin\$plat\formbro.exe" }
 $codexRoot = "$env:USERPROFILE\.codex\plugins\cache\jacky-plugins\formbro-cli"

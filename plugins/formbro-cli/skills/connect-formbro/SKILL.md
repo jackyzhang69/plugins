@@ -39,7 +39,7 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
    token). The CLI cannot mint or upgrade a token itself — if the user hits a write-scope 403
    later, send them back to Settings → API Tokens to edit the token in place (no need to
    regenerate) rather than troubleshooting the CLI.
-2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §0 (the canonical resolver: `$FORMBRO_BIN_OVERRIDE` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §0's portable resolver.
+2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh
