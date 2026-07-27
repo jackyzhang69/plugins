@@ -28,11 +28,11 @@ If `~/.formbro/config.json` exists from a previous session AND `formbro whoami` 
 
 ## What this does (first-time path)
 
-Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again.
+Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again. **Never ask the user to paste a token into chat.** The normal human flow is local entry at the CLI's hidden terminal prompt; `FORMBRO_API_TOKEN` remains an explicit automation override.
 
 ## How it works
 
-1. Ask the user for their FormBro API token. The token starts with `fb_`. The user gets it from https://formbro.ca → Settings → API Tokens → Create token.
+1. Tell the user to generate a FormBro API token at https://formbro.ca → Settings → API Tokens → Create token. The token starts with `fb_`. Never ask the user to reveal it in chat or an agent tool call.
 
    Note: new tokens default to **read** scope. Most FormBro skills need **write** scope too
    (mutations, imports, and `tell-jacky` feedback submission all fail with a 403 on a read-only
@@ -76,13 +76,13 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
    This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
 
-4. Run:
+4. Tell the user to run the login command in their own terminal and enter the token at the hidden prompt. The token never enters argv, shell history, chat, or an agent tool request:
 
    ```sh
-   <BUNDLED_FORMBRO> login --token <USER_TOKEN>
+   <BUNDLED_FORMBRO> login --token-stdin
    ```
 
-   Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path.
+   The user reports only whether it succeeded. Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path. Non-interactive automation may use a governed stdin secret channel or `FORMBRO_API_TOKEN`, but skills must not construct a token-bearing pipe.
 
 5. Verify by running:
 
@@ -108,7 +108,7 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 ## Token rules — never break
 
 - **Never log the token value.** Mask it as `fb_***` in any output you show the user.
-- **Never write the token into any file other than the CLI's own `config.json`.** That file is what the CLI's `--token` flag writes; do not write your own copy elsewhere.
+- **Never write the token into any file other than the CLI's own `config.json`.** The CLI's stdin login writes that file; do not write your own copy elsewhere.
 - **Never embed the token into prompts, tool descriptions, or example commands** you generate. Always use `fb_***` as a placeholder when you show example commands.
 - The token is a long-lived bearer credential. If exposed, the user must rotate it at formbro.ca → Settings → API Tokens.
 

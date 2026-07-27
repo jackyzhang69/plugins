@@ -5,8 +5,10 @@ description: Fill a registered PDF form through the AnyPDF server-owned workflow
 
 # Registered PDF fill
 
-Use the packaged `anypdf` text launcher. Credentials come only from
-`ANYPDF_BACKEND_URL` and `ANYPDF_TOKEN`; never ask for or echo a token.
+Use the packaged `anypdf` text launcher. First use `connect-anypdf` to save the
+credential locally; normal commands then need no environment setup. Never ask
+the user to place a token in an argument or echo a token. An explicit
+`ANYPDF_TOKEN` environment override is supported only for automation.
 
 1. Resolve the user's form request and show all candidates when there is no
    single clear match:

@@ -5,10 +5,13 @@ only public skills, a small Python 3.11 standard-library HTTPS client, and
 documentation. It has no native executable, PDF template, private mapping, or
 verification key.
 
-Credentials are read only from `ANYPDF_BACKEND_URL` and `ANYPDF_TOKEN` in the
-host environment. Never put a token in an argument, prompt, report, log, or
-file. HTTP is accepted only for loopback development URLs; all other backends
-must use HTTPS.
+The client uses `https://anypdf.jackyzhang.app` by default. Run the
+`connect-anypdf` skill once to verify a token supplied on stdin and save it in
+the mode-0600 local config at `~/.anypdf/config.json`. The backend URL may be
+overridden with `ANYPDF_BACKEND_URL`; `ANYPDF_TOKEN` remains an explicit,
+ephemeral automation override. Neither value belongs in plugin files, prompts,
+reports, logs, or command arguments. HTTP is accepted only for loopback
+development URLs; all other backends must use HTTPS.
 
 ## Registered PDF fill
 

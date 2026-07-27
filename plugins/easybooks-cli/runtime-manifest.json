@@ -10,9 +10,7 @@
         "entrypoint": "bin/win32-x64/easybooks.exe"
       }
     },
-    "resolutionOrder": [
-      "${platform}-${arch}"
-    ],
+    "resolutionOrder": ["${platform}-${arch}"],
     "fallbackBehavior": "fail",
     "verifyChecksum": true,
     "binaryOverrideEnvVar": "EASYBOOKS_BIN"

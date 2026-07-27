@@ -26,7 +26,7 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 
 A FormBro API token (starts with `fb_…`).
 
-The user generates it once at https://formbro.ca → Settings → API Tokens. The `connect-formbro` skill then runs `formbro login --token <token>`, which writes `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json` on Windows). Every other skill reads from that config — the token is never asked for again, never echoed, and never stored anywhere except that single file.
+The user generates it once at https://formbro.ca → Settings → API Tokens, then runs `formbro login --token-stdin` locally and enters it at the hidden prompt. The CLI writes `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json` on Windows). Every other skill reads from that config — the token never enters argv, chat, shell history, or agent tool input; it is never asked for again, never echoed, and never stored anywhere except that single file.
 
 ## Token safety (enforced by skill text)
 
