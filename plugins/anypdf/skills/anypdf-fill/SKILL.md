@@ -26,8 +26,18 @@ Use the packaged `anypdf` text launcher. Credentials come only from
    anypdf validate --form-id IMM5257 --version <version> --input /absolute/data.json
    ```
 
-   Validation errors stop submission. Warnings require explicit user
-   confirmation before proceeding.
+   Extraction rules (server-owned; do not invent a private procedure):
+   - Read `agent_extraction_contract` and, when present, top-level
+     `schema["x-anypdf-guidance"]` (labels, source hints, cross-field rules).
+   - Extract only facts supported by the user's materials. Align keys exactly
+     to the schema. Preserve enum labels and boolean values exactly.
+   - Date format follows each field's own `format` / guidance notes — do not
+     force a global date pattern when the field disagrees.
+   - Never invent missing required facts. Ask the user. Leave unknown optional
+     fields absent.
+   - Validation errors stop submission. Warnings require explicit user
+     confirmation before proceeding (confirm each warning with the user).
+   - MUST surface each validate `infos[]` item to the user (path+message); never invent data to clear them.
 
 3. Submit exactly one idempotent job. Keep the same key when retrying a request:
 

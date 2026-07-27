@@ -2,26 +2,13 @@
 
 AnyPDF is a universal, server-owned PDF workflow client. The package contains
 only public skills, a small Python 3.11 standard-library HTTPS client, and
-documentation. It has no native executable, PDF template, server-owned mapping data, or
+documentation. It has no native executable, PDF template, private mapping, or
 verification key.
 
-Credentials may be injected ephemerally through `ANYPDF_BACKEND_URL` and
-`ANYPDF_TOKEN`, or stored by `anypdf auth login` in the OS-adapted private
-connection file. Environment variables take precedence over that local file.
-Never put a token in an argument, prompt, report, log, or ordinary package
+Credentials are read only from `ANYPDF_BACKEND_URL` and `ANYPDF_TOKEN` in the
+host environment. Never put a token in an argument, prompt, report, log, or
 file. HTTP is accepted only for loopback development URLs; all other backends
-must use HTTPS. Run `anypdf doctor --json` before connecting; use
-`--token-stdin` for login.
-
-## Install from the public marketplace
-
-Register the marketplace, then add AnyPDF with the current public plugin
-commands:
-
-```bash
-codex plugin marketplace add jackyzhang69/plugins
-codex plugin add anypdf@jacky-plugins
-```
+must use HTTPS.
 
 ## Registered PDF fill
 
