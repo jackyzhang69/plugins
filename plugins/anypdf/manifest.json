@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-27T22:20:29.547585Z",
+  "build_timestamp": "2026-07-27T22:37:23.059417Z",
   "files": [
     {
       "path": "README.md",
@@ -17,8 +17,8 @@
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "839a6af92ee78c81c1f60c788ea18e74c460a07abc4cf071795168e658a1e045",
-      "size_bytes": 66419
+      "sha256": "1f0e54d63a410662ab6eb9efaf9883c67ccbddc09067513b5e21895ece7cbe47",
+      "size_bytes": 67609
     },
     {
       "path": "scripts/verify-install",
@@ -51,6 +51,6 @@
   "platform": "universal",
   "schema": "https://anypdf.dev/schemas/manifest.schema.json",
   "schema_version": "2.0.0",
-  "signing_key_id": "anypdf-release-f0f2a92a6dd838553ff4da62dd47023fe370f3d9",
-  "version": "0.3.1"
+  "signing_key_id": "anypdf-release-3c0967527a3545bbee7e8bd7a4ea2518a540de22",
+  "version": "0.3.2"
 }
