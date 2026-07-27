@@ -29,6 +29,11 @@ Use the packaged `anypdf` text launcher. Credentials come only from
    Extraction rules (server-owned; do not invent a private procedure):
    - Read `agent_extraction_contract` and, when present, top-level
      `schema["x-anypdf-guidance"]` (labels, source hints, cross-field rules).
+   - Read the sibling `user_knowledge` block: this user's own saved filling
+     requirements for this form. They are **advisory** — where one disagrees
+     with the schema or `x-anypdf-guidance`, the server-owned side wins.
+     Tell the user which of them you applied this time, e.g. "applied 2 of your
+     saved requirements: ...". Take the count from the response, never assume it.
    - Extract only facts supported by the user's materials. Align keys exactly
      to the schema. Preserve enum labels and boolean values exactly.
    - Date format follows each field's own `format` / guidance notes — do not
@@ -66,6 +71,28 @@ Use the packaged `anypdf` text launcher. Credentials come only from
 
    The client bounds the download, verifies `%PDF-` and any server checksum,
    and writes atomically. It refuses symlinks and existing output paths.
+
+## Remembering how this user wants forms filled
+
+When the user states a standing preference about **how** to fill a form —
+"employer name always in full legal form", "I give you dates as YYYY-MM-DD",
+"only fill part A" — save it and tell them you did:
+
+```bash
+anypdf knowledge add --form-id IMM5257 --rule "employer name in full legal form"
+anypdf knowledge list --form-id IMM5257
+anypdf knowledge remove --id <rule-id>
+```
+
+- Record **how to fill**, never **what to fill**. "Use the registered company
+  name" is a rule; "the employer is Acme Ltd" is the user's data and does not
+  belong here.
+- Say so in the moment: "Saved — I'll fill this form that way from now on."
+  A requirement the user cannot see is one they can never correct.
+- Replacing an earlier requirement is explicit: pass `--supersedes-id <old>`.
+  Two rules that contradict each other will both be applied otherwise.
+- Use `--origin agent_proposed` only for a rule you proposed and the user
+  confirmed; `user_authored` is for what they asked for directly.
 
 Never upload source PDFs, identity documents, or filled evidence as part of a
 registered fill. Keep stdout JSON intact and report typed stderr errors.

@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-27T00:45:45.554324Z",
+  "build_timestamp": "2026-07-27T06:36:19.144558Z",
   "files": [
     {
       "path": "README.md",
@@ -17,8 +17,8 @@
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "5009d0fa893e5757f5d02022ef23225a8cc9b7bf48c3d3c5224eb26b75975061",
-      "size_bytes": 41239
+      "sha256": "595ed3b025d700b1294c7487ff6866d742a5c719a3ec1badef98f6025503d803",
+      "size_bytes": 43142
     },
     {
       "path": "skills/anypdf-feedback/SKILL.md",
@@ -27,8 +27,8 @@
     },
     {
       "path": "skills/anypdf-fill/SKILL.md",
-      "sha256": "bcaf7639dc157f78451aeacc57fadbc4d027b3d0fd4965db9798f9e03500de33",
-      "size_bytes": 2779
+      "sha256": "c95687659435e9661ac6fe88b2c8c64e4cf0b93285c78958f495b45691d0bdc8",
+      "size_bytes": 4205
     },
     {
       "path": "skills/anypdf-form-intake/SKILL.md",
@@ -41,6 +41,6 @@
   "platform": "universal",
   "schema": "https://anypdf.dev/schemas/manifest.schema.json",
   "schema_version": "2.0.0",
-  "signing_key_id": "anypdf-release-f20ec23bb9dbbaea92f8124b8b0ed90edd8e4617",
-  "version": "0.2.3"
+  "signing_key_id": "anypdf-release-036367badf35a5fe414496bdaf7f55c406b4d00a",
+  "version": "0.2.4"
 }
