@@ -10,6 +10,11 @@ credential locally; normal commands then need no environment setup. Never ask
 the user to place a token in an argument or echo a token. An explicit
 `ANYPDF_TOKEN` environment override is supported only for automation.
 
+This server-owned path is mandatory. Never substitute local repository code,
+`pypdf`, ReportLab, or another generic PDF writer for a registered fill. A PDF
+produced outside the submitted AnyPDF job is not an AnyPDF result; stop instead
+of returning it as a fallback.
+
 1. Resolve the user's form request and show all candidates when there is no
    single clear match:
 

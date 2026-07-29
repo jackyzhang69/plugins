@@ -1,7 +1,7 @@
 {
-  "manifest_sha256": "0dfb60dc07eecf118915a3b92ea001080f7c8fb5b6348d108225320730869666",
+  "manifest_sha256": "3808bb5cb64aa3bc9a3c602730c343ed5f1882010782768e3471c52368d378d9",
   "platform": "universal",
   "schema_version": "2",
-  "source_sha": "3c0967527a3545bbee7e8bd7a4ea2518a540de22",
-  "version": "0.3.2"
+  "source_sha": "c7661037e60d5d4525bcae39ddf389780f563326",
+  "version": "0.3.3"
 }

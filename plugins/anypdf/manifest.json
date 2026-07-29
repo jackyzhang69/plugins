@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-27T22:37:23.059417Z",
+  "build_timestamp": "2026-07-29T02:06:32.186988Z",
   "files": [
     {
       "path": "README.md",
@@ -17,7 +17,7 @@
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "1f0e54d63a410662ab6eb9efaf9883c67ccbddc09067513b5e21895ece7cbe47",
+      "sha256": "3979ec9b7f5055be75badf002d6ef2e45c490433f9dd5ae9a856bcc8e6874024",
       "size_bytes": 67609
     },
     {
@@ -32,13 +32,13 @@
     },
     {
       "path": "skills/anypdf-fill/SKILL.md",
-      "sha256": "6d612f8ef80141ed9817a558ea65756df945d60bf7760c0be528037b87b4aa3a",
-      "size_bytes": 4363
+      "sha256": "c4450e80147d785b275319dc3656639f67adb10b82bdae4cdb280da147895cc4",
+      "size_bytes": 4631
     },
     {
       "path": "skills/anypdf-form-intake/SKILL.md",
-      "sha256": "e7ae565f7bd090a4f3ac979d3201e0fc52823c724551cffeaa5604c41cfae51a",
-      "size_bytes": 1182
+      "sha256": "69bb1f3accca860e18cb19d8840abffb5da416b571e09782dbe65c84a33c5d00",
+      "size_bytes": 1995
     },
     {
       "path": "skills/connect-anypdf/SKILL.md",
@@ -51,6 +51,6 @@
   "platform": "universal",
   "schema": "https://anypdf.dev/schemas/manifest.schema.json",
   "schema_version": "2.0.0",
-  "signing_key_id": "anypdf-release-3c0967527a3545bbee7e8bd7a4ea2518a540de22",
-  "version": "0.3.2"
+  "signing_key_id": "anypdf-release-c7661037e60d5d4525bcae39ddf389780f563326",
+  "version": "0.3.3"
 }
