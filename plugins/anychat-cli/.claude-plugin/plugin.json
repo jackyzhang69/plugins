@@ -1,7 +1,7 @@
 {
   "name": "anychat-cli",
-  "version": "0.1.0",
-  "description": "Search and export your own local chat archive via the AnyChat CLI.",
+  "version": "0.1.2",
+  "description": "Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from anychat-capabilities; Tell Jacky feedback goes to Portal after user confirm.",
   "author": {
     "name": "Jacky Zhang"
   }

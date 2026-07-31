@@ -1,42 +1,57 @@
 ---
 name: anychat-capabilities
 description: >-
-  READ THIS FIRST for AnyChat. Intent → CLI router for local chat archive
-  queries, media download, setup, and Tell Jacky. Load every AnyChat session.
+  READ THIS FIRST for AnyChat. One-page consumption contract for AI agents:
+  what AnyChat can do, how to resolve the binary, which skill/command to call
+  for each user intent, and how to answer "what can you do / how do I use
+  anychat" without guessing. Load on plugin start and whenever the user asks
+  anything AnyChat-related.
 when_to_use: |-
-  Any anychat / local chat archive / "search my wechat-like chats" intent after connect.
+  Load on plugin start; reload whenever a user asks anything anychat-related.
+  Trigger phrases: "search my chats", "export messages with X", "download images
+  from group Y", "anychat setup", "doctor", "tell Jacky".
+  Also: a bare/ambiguous first mention of "anychat" with no other task —
+  "@anychat", "anychat", "hi anychat", "what can anychat do", "how do I use
+  anychat" — if not logged in, route to connect-anychat first; otherwise answer
+  from this contract (self-intro) directly.
 ---
 
-# AnyChat — agent consumption contract
+# AnyChat plugin — agent consumption contract
 
-**All archive operations go through the `anychat` CLI.** Do not reimplement parsing. Do not invent database paths or keys.
+**Read this once on plugin load and reload it whenever a user asks anything AnyChat-related.**
 
-## §B. Resolve binary
+AnyChat is a **local chat archive** helper: the user searches/exports **their own**
+chat history that already lives on this computer. Content stays on the machine.
+Only Portal login + optional redacted “Tell Jacky” feedback leave the device.
 
-1. `$ANYCHAT_BIN` if set and executable  
-2. macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` or on `PATH`  
-3. Plugin cache (pick platform):  
-   - macOS arm64: `…/anychat-cli/<ver>/bin/darwin-arm64/anychat`  
-   - Windows x64: `…/anychat-cli/<ver>/bin/win32-x64/anychat.exe`  
-4. `command -v anychat` / `where anychat` on Windows  
+## 0. Non-negotiable rules
 
-Export `ANYCHAT_BIN` once per session.
-
-## Non-negotiable rules
-
-1. **Strict modes** — every query has exactly one `--mode`. Friend and group never mix.  
-2. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).  
-3. **No secrets in feedback** — never send tokens, message bodies, or attachment bytes without explicit redacted draft + user confirm.  
-4. **Content stays local** — only Portal auth/feedback leave the machine.  
+1. **All archive ops go through the bundled `anychat` CLI.** Do not invent DB paths, keys, or reimplement decrypt/query.
+2. **Strict modes** — every query has exactly one `--mode`. Friend and group never mix.
+3. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).
+4. **No secrets in feedback** — no tokens, keys, message bodies, friend names/wxids, or attachment bytes unless the user explicitly approves a redacted draft.
 5. Prefer `--format json` when chaining agent steps.
 
-## Intent router
+## Self-intro (when user asks “what can you do?”)
 
-| User intent | Command |
-|-------------|---------|
-| Connect / token | `login --token … --accept-personal-use` → **connect-anychat** |
-| Health | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
-| First-time local access | **anychat-setup** → `setup` |
+Answer in product language, short bullets:
+
+- **Connect** once with a free Portal token (`connect-anychat` / `login`).
+- **Setup** local archive access on this Mac or Windows PC (`setup` + doctor).
+- **Search** friends, groups, person-across-groups, global keyword.
+- **Export** transcripts (text/json/md) and **download** attachments (image/voice/file/video/link cards).
+- **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
+
+Platforms: **macOS Apple Silicon** and **Windows x64**. Not a bot; does not send messages.
+
+## Agent quick router
+
+| User intent | Command / skill |
+|-------------|-----------------|
+| "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → **connect-anychat** |
+| Connect / token | **connect-anychat** → `login --token … --accept-personal-use` |
+| Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
+| First-time local access | **anychat-setup** → `setup` / `setup --yes` |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
 | Person across all groups | `query --mode person-in-groups --target "…"` |
@@ -52,9 +67,21 @@ Export `ANYCHAT_BIN` once per session.
 | Export transcript | `export --mode … --target … -o ./anychat-export/messages.json` |
 | List attachments | `media list --mode friend --target "…" --type image\|voice\|file\|all` |
 | Download one / all | `media download --id … -o dir` / `media download-all …` |
-| Voice playable + text | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
-| Tell Jacky | **tell-jacky** skill (confirm draft first) |
+| Voice → playable | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
+| Tell Jacky | **tell-jacky** (confirm draft first) → `feedback create --user-confirmed` |
 | Saved nicknames | `alias set/list/rm` · `recents` |
+
+## §B. Resolve binary
+
+1. `$ANYCHAT_BIN` if set and executable  
+2. macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` or `PATH`  
+3. Plugin cache (platform-specific):  
+   - macOS arm64: `…/anychat-cli/<ver>/bin/darwin-arm64/anychat`  
+   - Windows x64: `…/anychat-cli/<ver>/bin/win32-x64/anychat.exe`  
+4. Claude: `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`  
+5. `command -v anychat` / `where anychat` (last resort)
+
+Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 
 ## Mode cheat-sheet
 
@@ -67,6 +94,14 @@ Export `ANYCHAT_BIN` once per session.
 | `me-in-groups` / `me-in-group` | self in groups |
 | `multi-in-group` | multiple people in one group |
 
+## Execution boundaries
+
+| Work | Where |
+|------|--------|
+| Unlock / query / export / media copy | **Local CLI** (user machine) |
+| Login entitlement / Tell Jacky submit | **Portal** `account.jackyzhang.app` (accountd) |
+| Chat message bodies | **Never uploaded** |
+
 ## After success (stickiness, light touch)
 
 - Offer at most **one** soft “try next” suggestion.  
@@ -75,4 +110,4 @@ Export `ANYCHAT_BIN` once per session.
 
 ## Product language
 
-Describe the product as a **local chat archive** helper. Do not discuss encryption, keys, or extraction methods with the user.
+Describe as a **local chat archive** helper. Do not discuss encryption, keys, or extraction methods with the user.
