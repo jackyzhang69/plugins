@@ -1,0 +1,35 @@
+{
+  "version": 3,
+  "binary": {
+    "name": "anychat",
+    "platforms": {
+      "darwin-arm64": {
+        "entrypoint": "bin/darwin-arm64/anychat",
+        "sha256": "a7fd828649e52a9210a5bec2c04082dcb9718e442f6c2fed253baf3cc17c6866"
+      }
+    },
+    "release": {
+      "host": "github-releases",
+      "repo": "jackyzhang69/plugins",
+      "tag": "anychat-v0.1.0"
+    },
+    "resolutionOrder": [
+      "${platform}-${arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true
+  },
+  "cacheDir": {
+    "darwin": "${HOME}/.cache/anychat-cli",
+    "linux": "${HOME}/.cache/anychat-cli",
+    "win32": "${LOCALAPPDATA}/anychat-cli/Cache"
+  },
+  "configHome": {
+    "darwin": "${HOME}/.anychat",
+    "linux": "${HOME}/.anychat",
+    "win32": "${USERPROFILE}/.anychat"
+  },
+  "configFile": "config.json",
+  "tokenEnvVar": "ANYCHAT_TOKEN",
+  "defaultBaseUrl": "https://account.jackyzhang.app"
+}

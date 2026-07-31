@@ -1,0 +1,8 @@
+{
+  "name": "anychat-cli",
+  "version": "0.1.0",
+  "description": "Search and export your own local chat archive via the AnyChat CLI.",
+  "author": {
+    "name": "Jacky Zhang"
+  }
+}

@@ -7,6 +7,7 @@ Codex App plugins by [Jacky Zhang](https://github.com/jackyzhang69).
 | Name | Version | Description |
 |---|---|---|
 | [formbro-cli](./plugins/formbro-cli) | 0.1.0 | Canadian immigration form automation (FormBro). Read/write applicants, applications, employers; AI-assisted document extraction; local Playwright-driven IRCC portal fills. The bundled CLI works on macOS Apple Silicon, macOS Intel, and Windows x64. |
+| [anychat-cli](./plugins/anychat-cli) | 0.1.0 | Personal **local chat archive** CLI for agents. Free Portal token; content stays on your machine. Ships `darwin-arm64`. |
 
 ## Install in Codex App
 

@@ -1,0 +1,39 @@
+{
+  "name": "anychat-cli",
+  "version": "0.1.0",
+  "min_supported_version": "0.1.0",
+  "description": "Search and export your own local chat archive (friends, groups, attachments) via the AnyChat CLI. Free Portal token. Content stays on your machine.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "repository": "https://github.com/jackyzhang69/plugins",
+  "license": "MIT",
+  "keywords": [
+    "chat",
+    "local-archive",
+    "export",
+    "anychat"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyChat",
+    "shortDescription": "Query your own local chat archive from the agent.",
+    "longDescription": "Use the bundled AnyChat CLI to search friends and groups, export transcripts, and download attachments from your personal local chat archive. Setup is a one-time wizard; only a free Portal token is required. Chat content never leaves your machine except optional redacted feedback you explicitly approve.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "privacyPolicyURL": "https://jackyzhang.app/legal/anychat-privacy",
+    "defaultPrompt": [
+      "Use AnyChat to show my recent chat with <friend name>.",
+      "Use AnyChat to search all chats for keyword <word>.",
+      "Use AnyChat to list images from my chat with <friend> and download them.",
+      "Use AnyChat to show what <person> said across all groups.",
+      "Tell Jacky about a AnyChat bug or feature idea."
+    ]
+  }
+}
