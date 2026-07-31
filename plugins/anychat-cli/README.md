@@ -25,3 +25,6 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
 Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
 Package both platforms: `plugin/scripts/verify-install`.
+
+Connect (secure): `printf %s "$TOKEN" | anychat login --token-stdin --accept-personal-use`.  
+Tell Jacky: `anychat feedback create … --user-confirmed` (Portal + local mirror fallback).

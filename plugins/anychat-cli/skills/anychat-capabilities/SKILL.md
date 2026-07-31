@@ -49,7 +49,7 @@ Platforms: **macOS Apple Silicon** and **Windows x64**. Not a bot; does not send
 | User intent | Command / skill |
 |-------------|-----------------|
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → **connect-anychat** |
-| Connect / token | **connect-anychat** → `login --token … --accept-personal-use` |
+| Connect / token | **connect-anychat** → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
 | First-time local access | **anychat-setup** → `setup` / `setup --yes` |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
