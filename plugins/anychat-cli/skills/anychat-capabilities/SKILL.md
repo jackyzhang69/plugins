@@ -66,7 +66,7 @@ Platforms: **macOS Apple Silicon** and **Windows x64**. Not a bot; does not send
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → **connect-anychat** |
 | Connect / token | **connect-anychat** → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
-| First-time local access | **anychat-setup** → `setup` / `setup --yes` |
+| First-time local access | **anychat-setup** → `prepare-access` (if needed) then `setup --yes` |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
 | Person across all groups | `query --mode person-in-groups --target "…"` |

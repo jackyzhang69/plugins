@@ -16,26 +16,30 @@ novice-friendly. Do not explain internal mechanisms.
 
 ## Talk to the human
 
-Report only major stages (need chat app logged in → need one elevated helper step → self-check names → ready). Do not dump raw `doctor --json` into chat; say “还没准备好本机档案 / 已经可以用了”. Follow `anychat-capabilities` § **Talk to the human**.
+Report only major stages (need chat app logged in → one-time prepare-access → self-check names → ready). Do not dump raw `doctor --json` into chat; say “还没准备好本机档案 / 已经可以用了”. Never mention keys, databases, or helper binary names. Follow `anychat-capabilities` § **Talk to the human**.
 
 ## Steps
 
-1. `anychat doctor --json` — note `wechat_running`, `archive_ready`, `setup_complete`, `os`.
+1. `anychat doctor --json` — note readiness flags for *your* decision; speak product language to the user.
 2. Ensure the chat app is **installed and logged in** on this computer (macOS or Windows).
-3. If status is `setup_unsupported` (non macOS/Windows), stop and explain this platform is not ready.
+3. If this OS is not macOS/Windows, stop and explain not supported yet.
 4. Run:
 
 ```bash
 "$ANYCHAT_BIN" setup --yes
 ```
 
-5. If setup prints an elevated helper command:
-   - **macOS:** user pastes into Terminal and types their Mac password (agents never collect passwords).
-   - **Windows:** user pastes into **Administrator** PowerShell / cmd (agents never collect admin passwords).
-6. If setup fails with a product support code:
-   - Show the code to the user.
-   - Offer **tell-jacky** bug report (redacted).
-7. On success, run a **self-check**:
+5. If setup says on-device access is not ready:
+
+```bash
+"$ANYCHAT_BIN" prepare-access
+"$ANYCHAT_BIN" setup --yes
+```
+
+   - User may need to approve one elevated step / Mac password (agents never collect passwords).
+6. If setup fails with a product code (`E_SETUP_*`):
+   - Tell the user in plain language; optionally offer **tell-jacky** (redacted).
+7. On success, self-check:
 
 ```bash
 "$ANYCHAT_BIN" friends list --limit 5 --json
@@ -44,28 +48,17 @@ Report only major stages (need chat app logged in → need one elevated helper s
    Show sample display names; ask: “这是你的账号吗？”  
    Only after confirm, proceed to queries.
 
-8. Demo value (optional):
+8. Demo value (optional): `anychat recents` or a short friend query.
 
-```bash
-"$ANYCHAT_BIN" recents
-# or a short friend query if user names someone
-```
+## macOS / Windows notes (user-facing)
 
-## macOS notes (user-facing)
-
-- If the OS blocks a helper app: **System Settings → Privacy & Security → Open Anyway**.
-- If a Terminal line is printed for admin approval: user pastes it and types **their Mac password** (agents never collect passwords).
-- May require the chat app running and logged in.
-
-## Windows notes (user-facing)
-
-- Chat app must be **running and logged in** during setup.
-- If SmartScreen blocks the helper: **More info → Run anyway**.
-- Elevated helper: paste the printed line into **Administrator PowerShell**.
-- Binary path: plugin `bin/win32-x64/anychat.exe` (or `$ANYCHAT_BIN`).
+- Chat app must stay open and logged in during first-time access.
+- OS may ask to open a helper or approve Administrator once — user does that themselves.
+- Do not invent hex keys, DB paths, or internal filenames for the user.
 
 ## Never
 
 - Ask the user for hex keys or database paths.
 - Run destructive deletes.
 - Upload chat content during setup.
+- Explain how access works (encryption, process scan, etc.).
