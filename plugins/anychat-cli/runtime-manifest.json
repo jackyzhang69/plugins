@@ -5,17 +5,17 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "8444565999d5e7806347afc88eb74405a124595f302488b153cb7b31fc5dc754"
+        "sha256": "390bc15d7fd93e8d2072751ee426f2e9bca14a85a9d38732c07266b4c0f5ca46"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
-        "sha256": "4f00e8c9e2651ba9443159ec4331e3c88c6d4f8e54d1b4bea0820dc5ef71301b"
+        "sha256": "40a7d26024ecc0c84188e60018eb760630c328b95111ce251ae72945c3c1063e"
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anychat-v0.1.3"
+      "tag": "anychat-v0.1.4"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
