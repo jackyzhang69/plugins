@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verify staged plugin package is install-ready (darwin-arm64).
+# Verify staged plugin package is install-ready (darwin-arm64 + win32-x64).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REPO="$(cd "$ROOT/.." && pwd)"
@@ -18,51 +18,97 @@ test -d "$ROOT/skills/tell-jacky"
 grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI' \
   "$ROOT/skills/anychat-media/SKILL.md"
 
-# Stage binary if missing (from cargo target or install-local path)
-BIN_DIR="$ROOT/bin/darwin-arm64"
-mkdir -p "$BIN_DIR"
-BIN="$BIN_DIR/anychat"
-if [[ ! -x "$BIN" ]]; then
-  if [[ -x "${HOME}/.local/bin/anychat" ]]; then
-    cp -f "${HOME}/.local/bin/anychat" "$BIN"
-  else
-    (
-      cd "$REPO"
-      cargo build --release
-      TARGET_DIR="$(cargo metadata --format-version 1 --no-deps | python3 -c 'import sys,json; print(json.load(sys.stdin)["target_directory"])')"
-      cp -f "$TARGET_DIR/release/anychat" "$BIN"
-    )
-  fi
-  chmod +x "$BIN"
-fi
+TARGET_DIR="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps | python3 -c 'import sys,json; print(json.load(sys.stdin)["target_directory"])')"
 
-"$BIN" --help >/dev/null
-"$BIN" doctor --json >/dev/null || true
-
-# Checksum sidecar
-python3 - "$BIN" <<'PY'
+stage_sha() {
+  local bin="$1"
+  python3 - "$bin" <<'PY'
 import hashlib, pathlib, sys
 p = pathlib.Path(sys.argv[1])
 h = hashlib.sha256(p.read_bytes()).hexdigest()
-sidecar = p.with_suffix(p.suffix + ".sha256") if p.suffix else pathlib.Path(str(p) + ".sha256")
-# anychat has no suffix — write anychat.sha256
 sidecar = p.parent / (p.name + ".sha256")
 sidecar.write_text(h + "\n")
-print("sha256", h)
+print(p.name, "sha256", h)
+print(h)
 PY
+}
 
-# Update runtime-manifest sha256
-python3 - "$ROOT" <<'PY'
+update_manifest_platform() {
+  local platform="$1"
+  local entrypoint="$2"
+  local bin_path="$3"
+  python3 - "$ROOT" "$platform" "$entrypoint" "$bin_path" <<'PY'
 import hashlib, json, pathlib, sys
-root = pathlib.Path(sys.argv[1])
-binp = root / "bin/darwin-arm64/anychat"
+root, platform, entrypoint, bin_path = sys.argv[1:5]
+binp = pathlib.Path(bin_path)
 h = hashlib.sha256(binp.read_bytes()).hexdigest()
-mani = root / "runtime-manifest.json"
+mani = pathlib.Path(root) / "runtime-manifest.json"
 m = json.loads(mani.read_text())
-m.setdefault("binary", {}).setdefault("platforms", {}).setdefault("darwin-arm64", {})["sha256"] = h
-m["binary"]["platforms"]["darwin-arm64"]["entrypoint"] = "bin/darwin-arm64/anychat"
+plat = m.setdefault("binary", {}).setdefault("platforms", {}).setdefault(platform, {})
+plat["sha256"] = h
+plat["entrypoint"] = entrypoint
 mani.write_text(json.dumps(m, indent=2) + "\n")
-print("runtime-manifest updated")
+print(f"runtime-manifest {platform} updated")
 PY
+}
 
-echo "verify-install: ok"
+# --- darwin-arm64 (native on Apple Silicon host) ---
+BIN_DIR_D="$ROOT/bin/darwin-arm64"
+mkdir -p "$BIN_DIR_D"
+BIN_D="$BIN_DIR_D/anychat"
+if [[ ! -x "$BIN_D" ]]; then
+  if [[ -x "${HOME}/.local/bin/anychat" ]]; then
+    cp -f "${HOME}/.local/bin/anychat" "$BIN_D"
+  elif [[ -x "$TARGET_DIR/release/anychat" ]]; then
+    cp -f "$TARGET_DIR/release/anychat" "$BIN_D"
+  else
+    (
+      cd "$REPO"
+      cargo build --release -p anychat --bin anychat
+    )
+    cp -f "$TARGET_DIR/release/anychat" "$BIN_D"
+  fi
+  chmod +x "$BIN_D"
+fi
+"$BIN_D" --help >/dev/null
+"$BIN_D" doctor --json >/dev/null || true
+stage_sha "$BIN_D" >/dev/null
+update_manifest_platform "darwin-arm64" "bin/darwin-arm64/anychat" "$BIN_D"
+
+# Stage macOS access helper if present (optional next to CLI).
+if [[ -x "$REPO/tools/access_scan" ]]; then
+  cp -f "$REPO/tools/access_scan" "$BIN_DIR_D/access_scan"
+  chmod +x "$BIN_DIR_D/access_scan"
+  stage_sha "$BIN_DIR_D/access_scan" >/dev/null || true
+fi
+
+# --- win32-x64 (cross-compile from this Mac) ---
+WIN_TARGET="x86_64-pc-windows-gnu"
+BIN_DIR_W="$ROOT/bin/win32-x64"
+mkdir -p "$BIN_DIR_W"
+BIN_W="$BIN_DIR_W/anychat.exe"
+HELPER_W="$BIN_DIR_W/access_scan.exe"
+
+need_win_build=0
+[[ -f "$BIN_W" ]] || need_win_build=1
+[[ -f "$HELPER_W" ]] || need_win_build=1
+if [[ "$need_win_build" -eq 1 ]]; then
+  (
+    cd "$REPO"
+    rustup target add "$WIN_TARGET" >/dev/null 2>&1 || true
+    cargo build --release --target "$WIN_TARGET" --bins
+  )
+fi
+if [[ -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" ]]; then
+  cp -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" "$BIN_W"
+fi
+if [[ -f "$TARGET_DIR/$WIN_TARGET/release/access_scan.exe" ]]; then
+  cp -f "$TARGET_DIR/$WIN_TARGET/release/access_scan.exe" "$HELPER_W"
+fi
+test -f "$BIN_W"
+test -f "$HELPER_W"
+stage_sha "$BIN_W" >/dev/null
+stage_sha "$HELPER_W" >/dev/null
+update_manifest_platform "win32-x64" "bin/win32-x64/anychat.exe" "$BIN_W"
+
+echo "verify-install: ok (darwin-arm64 + win32-x64)"

@@ -16,19 +16,22 @@ novice-friendly. Do not explain internal mechanisms.
 
 ## Steps
 
-1. `anychat doctor --json` — note `wechat_running`, `archive_ready`, `setup_complete`.
-2. Ensure the chat app is **installed and logged in** on this Mac.
-3. If platform is Windows and status is `setup_unsupported`, stop and explain not ready yet.
+1. `anychat doctor --json` — note `wechat_running`, `archive_ready`, `setup_complete`, `os`.
+2. Ensure the chat app is **installed and logged in** on this computer (macOS or Windows).
+3. If status is `setup_unsupported` (non macOS/Windows), stop and explain this platform is not ready.
 4. Run:
 
 ```bash
 "$ANYCHAT_BIN" setup --yes
 ```
 
-5. If setup fails with a product support code:
+5. If setup prints an elevated helper command:
+   - **macOS:** user pastes into Terminal and types their Mac password (agents never collect passwords).
+   - **Windows:** user pastes into **Administrator** PowerShell / cmd (agents never collect admin passwords).
+6. If setup fails with a product support code:
    - Show the code to the user.
    - Offer **tell-jacky** bug report (redacted).
-6. On success, run a **self-check**:
+7. On success, run a **self-check**:
 
 ```bash
 "$ANYCHAT_BIN" friends list --limit 5 --json
@@ -37,7 +40,7 @@ novice-friendly. Do not explain internal mechanisms.
    Show sample display names; ask: “这是你的账号吗？”  
    Only after confirm, proceed to queries.
 
-7. Demo value (optional):
+8. Demo value (optional):
 
 ```bash
 "$ANYCHAT_BIN" recents
@@ -49,6 +52,13 @@ novice-friendly. Do not explain internal mechanisms.
 - If the OS blocks a helper app: **System Settings → Privacy & Security → Open Anyway**.
 - If a Terminal line is printed for admin approval: user pastes it and types **their Mac password** (agents never collect passwords).
 - May require the chat app running and logged in.
+
+## Windows notes (user-facing)
+
+- Chat app must be **running and logged in** during setup.
+- If SmartScreen blocks the helper: **More info → Run anyway**.
+- Elevated helper: paste the printed line into **Administrator PowerShell**.
+- Binary path: plugin `bin/win32-x64/anychat.exe` (or `$ANYCHAT_BIN`).
 
 ## Never
 

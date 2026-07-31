@@ -14,9 +14,11 @@ when_to_use: |-
 ## §B. Resolve binary
 
 1. `$ANYCHAT_BIN` if set and executable  
-2. `$HOME/.local/bin/anychat`  
-3. Plugin cache: `…/anychat-cli/<ver>/bin/darwin-arm64/anychat`  
-4. `command -v anychat`
+2. macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` or on `PATH`  
+3. Plugin cache (pick platform):  
+   - macOS arm64: `…/anychat-cli/<ver>/bin/darwin-arm64/anychat`  
+   - Windows x64: `…/anychat-cli/<ver>/bin/win32-x64/anychat.exe`  
+4. `command -v anychat` / `where anychat` on Windows  
 
 Export `ANYCHAT_BIN` once per session.
 

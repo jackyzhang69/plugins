@@ -1,8 +1,8 @@
-# anychat-cli (staged public plugin)
+# anychat-cli (public plugin)
 
-Staged tree for eventual publish to `jackyzhang69/plugins`.
+Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
-**Ships:** skills + runtime-manifest + (later) prebuilt binaries only.  
+**Ships:** skills + runtime-manifest + prebuilt binaries.  
 **Does not ship:** source, keys, decrypt notes, research trees.
 
 ## Skills
@@ -16,7 +16,12 @@ Staged tree for eventual publish to `jackyzhang69/plugins`.
 | `anychat-media` | Attachment list / download |
 | `tell-jacky` | Feedback (confirm first) |
 
-## Binary
+## Platforms
 
-Dev: install with `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
-Release: place under `bin/darwin-arm64/anychat` before marketplace publish.
+| Platform | Binary |
+|----------|--------|
+| macOS Apple Silicon | `bin/darwin-arm64/anychat` (+ optional `access_scan`) |
+| Windows x64 | `bin/win32-x64/anychat.exe` + `access_scan.exe` |
+
+Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
+Package both platforms: `plugin/scripts/verify-install`.
