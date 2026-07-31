@@ -14,6 +14,10 @@ when_to_use: |-
 Enable local archive access for **this user on this computer**. Keep instructions
 novice-friendly. Do not explain internal mechanisms.
 
+## Talk to the human
+
+Report only major stages (need chat app logged in → need one elevated helper step → self-check names → ready). Do not dump raw `doctor --json` into chat; say “还没准备好本机档案 / 已经可以用了”. Follow `anychat-capabilities` § **Talk to the human**.
+
 ## Steps
 
 1. `anychat doctor --json` — note `wechat_running`, `archive_ready`, `setup_complete`, `os`.

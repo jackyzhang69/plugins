@@ -20,6 +20,10 @@ Submits feedback to the **Portal / accountd** product-feedback store (same owner
 token as login), via the bundled `anychat` CLI. Resolve the binary once via
 `anychat-capabilities` §B.
 
+## Talk to the human
+
+Show the draft in plain language; after submit say “已发给 Jacky，编号 …” without pasting full CLI JSON unless they ask. Follow `anychat-capabilities` § **Talk to the human**.
+
 **Cardinal rule:** every submission goes through `anychat feedback create` with
 `--user-confirmed`. Never call Portal endpoints directly. Never send without
 showing the user the exact type/title/description/context/images first.

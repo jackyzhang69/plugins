@@ -28,3 +28,9 @@ Package both platforms: `plugin/scripts/verify-install`.
 
 Connect (secure): `printf %s "$TOKEN" | anychat login --token-stdin --accept-personal-use`.  
 Tell Jacky: `anychat feedback create … --user-confirmed` (Portal + local mirror fallback).
+
+## Talk to the human
+
+Host agents must follow **anychat-capabilities → Talk to the human** (and
+platform-vault `delivery/plugin-policy.md`): plain product language, major
+stages only—do not lead the chat with paths, `--help`, or raw JSON.

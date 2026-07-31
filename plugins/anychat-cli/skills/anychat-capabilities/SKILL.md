@@ -24,13 +24,28 @@ AnyChat is a **local chat archive** helper: the user searches/exports **their ow
 chat history that already lives on this computer. Content stays on the machine.
 Only Portal login + optional redacted “Tell Jacky” feedback leave the device.
 
+## Talk to the human (mandatory — load with this skill)
+
+Governed by platform-vault `delivery/plugin-policy.md` § *Host-agent conversation with the human*.
+
+When speaking to the **person in the chat** (not when writing tool args):
+
+1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
+2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
+3. **Major stages only.** Report at phase changes: need connect → need setup → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls.
+4. **Product language.** “Local chat archive on this computer.” Never discuss encryption, keys, database paths, or extraction with the user unless they ask for technical depth.
+5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已登录，但还不是管理员” / “还没完成第一次本机设置”).
+6. **Mask secrets.** Never paste tokens or keys into chat.
+
+Host UIs may still show tool cards; **your written reply** must still follow this section.
+
 ## 0. Non-negotiable rules
 
 1. **All archive ops go through the bundled `anychat` CLI.** Do not invent DB paths, keys, or reimplement decrypt/query.
 2. **Strict modes** — every query has exactly one `--mode`. Friend and group never mix.
 3. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).
 4. **No secrets in feedback** — no tokens, keys, message bodies, friend names/wxids, or attachment bytes unless the user explicitly approves a redacted draft.
-5. Prefer `--format json` when chaining agent steps.
+5. Prefer `--format json` when chaining agent steps **internally**; follow **Talk to the human** when reporting results.
 
 ## Self-intro (when user asks “what can you do?”)
 
@@ -110,4 +125,4 @@ Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 
 ## Product language
 
-Describe as a **local chat archive** helper. Do not discuss encryption, keys, or extraction methods with the user.
+Describe as a **local chat archive** helper. Do not discuss encryption, keys, or extraction methods with the user. See **Talk to the human** above.

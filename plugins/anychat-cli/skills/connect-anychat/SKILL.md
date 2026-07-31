@@ -14,6 +14,10 @@ when_to_use: |-
 
 # Connect AnyChat
 
+## Talk to the human
+
+Keep chat plain: “需要先登录一次免费账号” / “登录成功，下一步准备本机档案”. Do not paste `whoami --json` or full CLI help into the reply (use them only as tools). Follow `anychat-capabilities` § **Talk to the human**.
+
 ## Already connected
 
 If `anychat whoami` succeeds and entitlement is valid, skip token capture.
