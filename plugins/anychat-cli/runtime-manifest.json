@@ -5,7 +5,7 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "3bf6a7d6761ca5b51b2bdf21a3a8f337b3c5110b5ca209078f33bbb0869396f2"
+        "sha256": "cb86cec9a95de6a84c822da03ef524058fc0ef64eb08e282f9b2ceb3f2fd4234"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
