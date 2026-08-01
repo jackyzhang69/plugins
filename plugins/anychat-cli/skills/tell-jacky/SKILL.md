@@ -36,7 +36,7 @@ showing the user the exact type/title/description/context/images first.
 | `title` | yes | ≤200 chars |
 | `description` | yes | concrete; for bugs prefer verbatim product error + support_code |
 | `url` | no | optional page URL |
-| `context-json` | no | e.g. `{"support_code":"E_SETUP_PENDING","os":"windows"}` |
+| `context-json` | no | e.g. `{"support_code":"E_LOCAL_ACCESS_TIMEOUT","os":"windows"}` |
 | `image` | no | local screenshot path(s); confirm each |
 
 CLI always stamps `context.source = anychat-cli` and client platform metadata.

@@ -69,19 +69,24 @@ chmod +x "$BIN_D"
 stage_sha "$BIN_D" >/dev/null
 update_manifest_platform "darwin-arm64" "bin/darwin-arm64/anychat" "$BIN_D"
 
-# Stage macOS access helper if present (optional next to CLI).
-if [[ -x "$REPO/tools/access_scan" ]]; then
-  cp -f "$REPO/tools/access_scan" "$BIN_DIR_D/access_scan"
-  chmod +x "$BIN_DIR_D/access_scan"
-  stage_sha "$BIN_DIR_D/access_scan" >/dev/null || true
-fi
+# Always compile and stage the product-named macOS local-access component.
+# Reusing a prior binary could reintroduce internal console output or stale code.
+rm -f "$BIN_DIR_D/access_scan" "$BIN_DIR_D/access_scan.sha256"
+MAC_ACCESS_BUILD="$TARGET_DIR/release/anychat-access-macos"
+cc -O2 -Wall -Wextra -o "$MAC_ACCESS_BUILD" "$REPO/tools/access_scan.c" \
+  -framework Foundation -framework Security
+strip -x "$MAC_ACCESS_BUILD"
+cp -f "$MAC_ACCESS_BUILD" "$BIN_DIR_D/anychat-access"
+chmod +x "$BIN_DIR_D/anychat-access"
+stage_sha "$BIN_DIR_D/anychat-access" >/dev/null
 
 # --- win32-x64 (cross-compile from this Mac) ---
 WIN_TARGET="x86_64-pc-windows-gnu"
 BIN_DIR_W="$ROOT/bin/win32-x64"
 mkdir -p "$BIN_DIR_W"
 BIN_W="$BIN_DIR_W/anychat.exe"
-HELPER_W="$BIN_DIR_W/access_scan.exe"
+HELPER_W="$BIN_DIR_W/anychat-access.exe"
+rm -f "$BIN_DIR_W/access_scan.exe" "$BIN_DIR_W/access_scan.exe.sha256"
 
 # Same rule for Windows: staged files are outputs, never build inputs.
 (
@@ -92,8 +97,8 @@ HELPER_W="$BIN_DIR_W/access_scan.exe"
 if [[ -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" ]]; then
   cp -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" "$BIN_W"
 fi
-if [[ -f "$TARGET_DIR/$WIN_TARGET/release/access_scan.exe" ]]; then
-  cp -f "$TARGET_DIR/$WIN_TARGET/release/access_scan.exe" "$HELPER_W"
+if [[ -f "$TARGET_DIR/$WIN_TARGET/release/anychat-access.exe" ]]; then
+  cp -f "$TARGET_DIR/$WIN_TARGET/release/anychat-access.exe" "$HELPER_W"
 fi
 test -f "$BIN_W"
 test -f "$HELPER_W"

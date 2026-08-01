@@ -2,8 +2,9 @@
 
 Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
-**Ships:** skills + runtime-manifest + prebuilt binaries.  
-**Does not ship:** source, keys, decrypt notes, research trees.
+**Ships:** skills, install metadata, and prebuilt product components.
+
+**Does not ship:** user data or private development materials.
 
 ## Skills
 
@@ -20,8 +21,10 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
 | Platform | Binary |
 |----------|--------|
-| macOS Apple Silicon | `bin/darwin-arm64/anychat` (+ optional `access_scan`) |
-| Windows x64 | `bin/win32-x64/anychat.exe` + `access_scan.exe` |
+| macOS Apple Silicon | AnyChat + bundled on-device access component |
+| Windows x64 | AnyChat + bundled on-device access component |
+
+Supported chat app: **WeChat/Weixin 4.1 or newer**. Older versions are not supported.
 
 Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
 Package both platforms: `plugin/scripts/verify-install`.

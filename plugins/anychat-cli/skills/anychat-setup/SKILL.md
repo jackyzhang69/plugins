@@ -21,7 +21,7 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ## Steps
 
 1. `anychat doctor --json` â€” note readiness flags for *your* decision; speak product language to the user.
-2. Ensure the chat app is **installed and logged in** on this computer (macOS or Windows).
+2. Ensure **WeChat/Weixin 4.1 or newer** is installed and logged in on this computer. Older versions are not supported; stop and ask the user to update instead of attempting access.
 3. If this OS is not macOS/Windows, stop and explain not supported yet.
 4. Run:
 
@@ -37,7 +37,7 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ```
 
    - User may need to approve one elevated step / Mac password (agents never collect passwords).
-6. If setup fails with a product code (`E_SETUP_*`):
+6. If setup fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, or `E_WINDOWS_*`):
    - Tell the user in plain language; optionally offer **tell-jacky** (redacted).
 7. On success, self-check:
 
@@ -53,12 +53,12 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ## macOS / Windows notes (user-facing)
 
 - Chat app must stay open and logged in during first-time access.
-- OS may ask to open a helper or approve Administrator once â€” user does that themselves.
-- Do not invent hex keys, DB paths, or internal filenames for the user.
+- OS may ask the user to approve one local-access step; the user does that themselves.
+- Do not invent or expose internal access material, local storage paths, or component filenames.
 
 ## Never
 
-- Ask the user for hex keys or database paths.
+- Ask the user for internal access material or local storage paths.
 - Run destructive deletes.
 - Upload chat content during setup.
-- Explain how access works (encryption, process scan, etc.).
+- Explain internal access implementation details.
