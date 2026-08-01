@@ -25,7 +25,7 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ## Steps
 
 1. `anychat doctor --json` â€” note readiness flags for *your* decision; speak product language to the user.
-2. Ensure the archive comes from **WeChat/Weixin 4.1 or newer** and the chat app is logged in on this computer. Older archive versions are not supported; stop and ask the user to update. Automatic first-time access may still be unavailable for a particular OS/app build; report `E_LOCAL_ACCESS_METHOD_UNAVAILABLE` honestly rather than saying the app is older or unsupported.
+2. Ensure the archive comes from **WeChat/Weixin 4.1 or newer** and the chat app is logged in on this computer. Older archive versions are not supported; stop and ask the user to update. On Windows, keep the **main** WeChat/Weixin window open and fully signed in (helper processes alone are not enough). Automatic first-time access may still be unavailable for a particular OS/app build or local security posture; report `E_LOCAL_ACCESS_METHOD_UNAVAILABLE` honestly rather than saying the app is older or unsupported, and offer one retry after a normal re-login.
 3. If this OS is not macOS/Windows, stop and explain not supported yet.
 4. Run:
 
@@ -57,6 +57,7 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ## macOS / Windows notes (user-facing)
 
 - Chat app must stay open and logged in during first-time access.
+- Windows often runs several WeChat/Weixin processes; the signed-in main window is what matters.
 - OS may ask the user to approve one local-access step; the user does that themselves.
 - Do not invent or expose internal access material, local storage paths, or component filenames.
 
