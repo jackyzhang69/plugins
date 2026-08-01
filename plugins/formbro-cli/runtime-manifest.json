@@ -13,7 +13,8 @@
             "archive": "tar.gz",
             "sha256": "f35e7ebf2c6fbfb8171c05a90d320b079e51218e8a2f5e7158c0950cac4be249"
           }
-        ]
+        ],
+        "sha256": "c3e231dc8aebd76634bf2cd9965c45310ef91291cf4be66f5adeead92eeca036"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/formbro.exe",

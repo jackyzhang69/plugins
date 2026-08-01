@@ -17,7 +17,7 @@ Resolve the bundled CLI via `formbro-capabilities/SKILL.md` §B before running a
 
 **`--debug-events` sensitivity warning**: events may include in-flight portal field values + IRCC session ids. Treat output as PII-equivalent.
 
-**Daemon socket security**: `~/.formbro/runtime/formbro-worker-<user>.sock` mode 0600; only the owning user can connect. No cross-user attach surface.
+**Daemon socket security**: `~/.jackyzhang.app/formbro/runtime/formbro-worker-<user>.sock` mode 0600; only the owning user can connect. No cross-user attach surface.
 
 ## ⚠ THIS RUNS ON THE USER'S MACHINE
 
@@ -29,8 +29,8 @@ Resolve the bundled CLI via `formbro-capabilities/SKILL.md` §B before running a
 
 The first `webform runtime-check` (or first `start*`) on a fresh machine / fresh plugin version takes **20–60 seconds**. This is expected, not a bug. It does two one-time things:
 
-1. **Unpacks the bundled Chromium** into `~/.formbro/runtime/chromium-<rev>/` (one tarball per plugin version).
-2. **Starts the long-lived `webform-worker` daemon** — listens on `~/.formbro/runtime/formbro-worker-<user>.sock`.
+1. **Unpacks the bundled Chromium** into `~/.jackyzhang.app/formbro/runtime/chromium-<rev>/` (one tarball per plugin version).
+2. **Starts the long-lived `webform-worker` daemon** — listens on `~/.jackyzhang.app/formbro/runtime/formbro-worker-<user>.sock`.
 
 Subsequent calls reuse the cached Chromium + warm daemon; they respond in ≤2 s.
 
@@ -38,7 +38,7 @@ Subsequent calls reuse the cached Chromium + warm daemon; they respond in ≤2 s
 
 **What "actually stuck" looks like**:
 - No log line for **≥90 s**, AND
-- `~/.formbro/runtime/formbro-worker-*.sock` is missing, AND
+- `~/.jackyzhang.app/formbro/runtime/formbro-worker-*.sock` is missing, AND
 - `formbro webform daemon status` errors / hangs.
 
 If all three are true, suspect a real bug — run `formbro webform daemon restart`, then re-try. If still stuck, capture `formbro doctor --json` and ask the user to file an issue.
@@ -76,7 +76,7 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 
 ## Sequencing rules
 
-1. **First time on a machine:** run `runtime-check`. If Chromium hasn't been fetched yet, the bundled worker downloads it (~336 MB once, into `~/.formbro/runtime/chromium-<rev>/`). Subsequent calls reuse the cache.
+1. **First time on a machine:** run `runtime-check`. If Chromium hasn't been fetched yet, the bundled worker downloads it (~336 MB once, into `~/.jackyzhang.app/formbro/runtime/chromium-<rev>/`). Subsequent calls reuse the cache.
 2. **For a normal fill:** call `webform start --query ...` or `webform start --app-id ...` directly after confirmation. `start` already performs resolve, validation, preflight, compute-actions, and only then opens the browser.
 3. **Use standalone `preflight` only for inspection/debugging:** run it when the user asks "is this ready to fill?" or when a previous `start` returned a structured blocking error. **`preflight` alone confirms portal-fill mechanics only — it is NOT a substitute for `validate`** (see `formbro-capabilities` Rule 6): a case can pass `preflight` and still fail `validate`'s data-model/business-rule checks. Before telling a user or agent a case is fully ready, run BOTH `validate` and `preflight`, or just use `start` without `--confirmed`, which already chains `validate` → `preflight` → compute-actions internally. Do not add a mandatory extra `preflight` call in front of every `start`; that duplicates work.
 4. **Confirm before `start`:** `webform start` opens a browser, navigates to IRCC, and **types into a real portal session**. Confirm with the user once.
@@ -90,7 +90,7 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 
 As of plugin v1.3.0, the webform pipeline is **fully self-contained**:
 - The `formbro` CLI auto-spawns a long-lived `webform-worker` daemon. The worker ships as a renamed **platform Node binary** plus a sibling `cli.js` (ESM, built via `bun build --target=node`) and a `package.json` marker; the daemon is spawned as `node cli.js daemon` (D1-a Node-runtime contract — not a Bun-compiled exe).
-- Daemon listens on a per-user Unix socket / Windows named pipe (`~/.formbro/runtime/formbro-worker-<user>.sock`).
+- Daemon listens on a per-user Unix socket / Windows named pipe (`~/.jackyzhang.app/formbro/runtime/formbro-worker-<user>.sock`).
 - BrowserContext is fresh per fill (no cookie leakage); Chromium binary stays warm; daemon idles out after 15 min.
 - You do NOT need to install Node separately — the plugin bundles the platform Node binary alongside the worker's `cli.js`. Do not run `~/formbro/desktop` for this pipeline.
 
