@@ -52,5 +52,5 @@
   "schema": "https://anypdf.dev/schemas/manifest.schema.json",
   "schema_version": "2.0.0",
   "signing_key_id": "anypdf-release-c7661037e60d5d4525bcae39ddf389780f563326",
-  "version": "0.3.3"
+  "version": "0.3.4"
 }

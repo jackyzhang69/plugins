@@ -3,7 +3,7 @@ name: connect-anychat
 description: >-
   One-time setup. Capture the user's free Portal token and persist it via the
   AnyChat CLI (`anychat login --token-stdin`). Run this before any other AnyChat
-  skill when ~/.anychat/config.json is missing.
+  skill when ~/.jackyzhang.app/token/jz.json (token) and ~/.jackyzhang.app/anychat/ (runtime) is missing.
 when_to_use: |-
   Trigger phrases:
     - "connect to anychat / set up anychat"
@@ -65,5 +65,5 @@ Discouraged override (history / process list risk):
 
 - Never echo the full token.
 - Never put the secret on process argv when avoidable (`--token-stdin` first).
-- Store only via CLI (`~/.anychat/config.json`).
+- Store only via CLI (`~/.jackyzhang.app/token/jz.json (token) and ~/.jackyzhang.app/anychat/ (runtime)`).
 - Never put a real token value in skill examples.

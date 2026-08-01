@@ -19,7 +19,7 @@ anypdf login --json
 Do not ask for the token in chat or put it in an agent tool call, pipe, argument,
 shell history, prompt text, report, log, or output. The launcher reads it locally,
 verifies the token with the backend, and then
-writes only the token to `~/.anypdf/config.json` using an atomic mode-0600 file
+writes only the token to `~/.jackyzhang.app/token/jz.json` using an atomic mode-0600 file
 inside a mode-0700 directory. A failed verification never writes a credential.
 
 After login, normal commands automatically reuse the saved credential:

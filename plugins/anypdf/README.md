@@ -1,4 +1,4 @@
-# AnyPDF Codex Plugin
+# AnyPDF Claude Code Plugin
 
 AnyPDF is a universal, server-owned PDF workflow client. The package contains
 only public skills, a small Python 3.11 standard-library HTTPS client, and
@@ -7,7 +7,7 @@ verification key.
 
 The client uses `https://anypdf.jackyzhang.app` by default. Run the
 `connect-anypdf` skill once to verify a token supplied on stdin and save it in
-the mode-0600 local config at `~/.anypdf/config.json`. The backend URL may be
+the mode-0600 local config at `~/.jackyzhang.app/token/jz.json`. The backend URL may be
 overridden with `ANYPDF_BACKEND_URL`; `ANYPDF_TOKEN` remains an explicit,
 ephemeral automation override. Neither value belongs in plugin files, prompts,
 reports, logs, or command arguments. HTTP is accepted only for loopback

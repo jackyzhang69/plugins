@@ -5,7 +5,7 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "c34ba0cbb673fcc1eca90a38cc45fdb95f8d1e297732d3724e7a81980689df82"
+        "sha256": "3bf6a7d6761ca5b51b2bdf21a3a8f337b3c5110b5ca209078f33bbb0869396f2"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
@@ -15,7 +15,7 @@
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anychat-v0.1.6"
+      "tag": "anychat-v0.1.7"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -29,9 +29,9 @@
     "win32": "${LOCALAPPDATA}/anychat-cli/Cache"
   },
   "configHome": {
-    "darwin": "${HOME}/.anychat",
-    "linux": "${HOME}/.anychat",
-    "win32": "${USERPROFILE}/.anychat"
+    "darwin": "${HOME}/.jackyzhang.app/anychat",
+    "linux": "${HOME}/.jackyzhang.app/anychat",
+    "win32": "${USERPROFILE}/.jackyzhang.app/anychat"
   },
   "configFile": "config.json",
   "tokenEnvVar": "ANYCHAT_TOKEN",
