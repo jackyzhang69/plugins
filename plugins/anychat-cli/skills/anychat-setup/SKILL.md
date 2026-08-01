@@ -41,8 +41,10 @@ Report only major stages (need chat app logged in â†’ one-time prepare-access â†
 ```
 
    - User may need to approve one elevated step / Mac password (agents never collect passwords).
-6. If setup fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, or `E_WINDOWS_*`):
-   - Tell the user in plain language; optionally offer **tell-jacky** (redacted).
+6. If setup / prepare-access fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, or `E_WINDOWS_*`):
+   - Tell the user in plain language.
+   - When automatic access is unavailable (`E_LOCAL_ACCESS_METHOD_UNAVAILABLE`, timeout, or budget), the CLI already saved a **redacted access diagnosis** and printed how to send it.
+   - Offer **tell-jacky** once: diagnosis attaches automatically on `feedback create` (user still confirms the draft). Do not ask the user to invent technical fields.
 7. On success, self-check:
 
 ```bash

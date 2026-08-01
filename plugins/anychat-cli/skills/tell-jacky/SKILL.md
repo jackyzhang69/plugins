@@ -41,15 +41,18 @@ showing the user the exact type/title/description/context/images first.
 | `description` | yes | concrete; for bugs prefer verbatim product error + support_code |
 | `url` | no | optional page URL |
 | `context-json` | no | e.g. `{"support_code":"E_LOCAL_ACCESS_TIMEOUT","os":"windows"}` |
+| access diagnosis | auto | After `prepare-access` fails, CLI attaches a **redacted** `access_diagnosis` (counts only: scan MiB, process count, support_code, wall time). Opt out with `--no-access-diagnosis`. |
 | `image` | no | local screenshot path(s); confirm each |
 
 CLI always stamps `context.source = anychat-cli` and client platform metadata.
+When diagnosis is present, show the user that a redacted environment package will be attached — no keys, paths, or chat text.
 
 ## Router
 
 | User says… | After draft confirm, run |
 |---|---|
-| bug / CLI error | `feedback create --type bug-report --title "…" --description "…" [--context-json '…'] --user-confirmed` |
+| bug / CLI error | `feedback create --type bug-report --title "…" --description "…" [--context-json '…'] --user-confirmed` (diagnosis auto-attaches if present) |
+| access setup fail | Prefer short description; diagnosis from last `prepare-access` is auto-attached unless `--no-access-diagnosis` |
 | feature | `feedback create --type feature-request --title "…" --description "…" --user-confirmed` |
 | tip | `feedback create --type knowledge-tip --title "…" --description "…" --user-confirmed` |
 | + screenshot | add `--image <path>` per confirmed file |
