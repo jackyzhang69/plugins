@@ -56,20 +56,14 @@ PY
 BIN_DIR_D="$ROOT/bin/darwin-arm64"
 mkdir -p "$BIN_DIR_D"
 BIN_D="$BIN_DIR_D/anychat"
-if [[ ! -x "$BIN_D" ]]; then
-  if [[ -x "${HOME}/.local/bin/anychat" ]]; then
-    cp -f "${HOME}/.local/bin/anychat" "$BIN_D"
-  elif [[ -x "$TARGET_DIR/release/anychat" ]]; then
-    cp -f "$TARGET_DIR/release/anychat" "$BIN_D"
-  else
-    (
-      cd "$REPO"
-      cargo build --release -p anychat --bin anychat
-    )
-    cp -f "$TARGET_DIR/release/anychat" "$BIN_D"
-  fi
-  chmod +x "$BIN_D"
-fi
+# Always build from this checkout. Reusing ~/.local/bin or a previously staged
+# binary can silently ship an older version under a newer plugin manifest.
+(
+  cd "$REPO"
+  cargo build --release --bin anychat
+)
+cp -f "$TARGET_DIR/release/anychat" "$BIN_D"
+chmod +x "$BIN_D"
 "$BIN_D" --help >/dev/null
 "$BIN_D" doctor --json >/dev/null || true
 stage_sha "$BIN_D" >/dev/null
@@ -89,16 +83,12 @@ mkdir -p "$BIN_DIR_W"
 BIN_W="$BIN_DIR_W/anychat.exe"
 HELPER_W="$BIN_DIR_W/access_scan.exe"
 
-need_win_build=0
-[[ -f "$BIN_W" ]] || need_win_build=1
-[[ -f "$HELPER_W" ]] || need_win_build=1
-if [[ "$need_win_build" -eq 1 ]]; then
-  (
-    cd "$REPO"
-    rustup target add "$WIN_TARGET" >/dev/null 2>&1 || true
-    cargo build --release --target "$WIN_TARGET" --bins
-  )
-fi
+# Same rule for Windows: staged files are outputs, never build inputs.
+(
+  cd "$REPO"
+  rustup target add "$WIN_TARGET" >/dev/null 2>&1 || true
+  cargo build --release --target "$WIN_TARGET" --bins
+)
 if [[ -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" ]]; then
   cp -f "$TARGET_DIR/$WIN_TARGET/release/anychat.exe" "$BIN_W"
 fi
