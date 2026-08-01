@@ -24,7 +24,7 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 | macOS Apple Silicon | AnyChat + bundled on-device access component |
 | Windows x64 | AnyChat + bundled on-device access component |
 
-Supported chat app: **WeChat/Weixin 4.1 or newer**. Older versions are not supported.
+Supported archive family: **WeChat/Weixin 4.1 or newer**. Automatic first-time access depends on the OS and chat-app build.
 
 Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
 Package both platforms: `plugin/scripts/verify-install`.

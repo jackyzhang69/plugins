@@ -9,6 +9,10 @@ when_to_use: |-
 
 # AnyChat setup
 
+## Advisory marketplace check
+
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+
 ## Goal
 
 Enable local archive access for **this user on this computer**. Keep instructions
@@ -21,7 +25,7 @@ Report only major stages (need chat app logged in → one-time prepare-access �
 ## Steps
 
 1. `anychat doctor --json` — note readiness flags for *your* decision; speak product language to the user.
-2. Ensure **WeChat/Weixin 4.1 or newer** is installed and logged in on this computer. Older versions are not supported; stop and ask the user to update instead of attempting access.
+2. Ensure the archive comes from **WeChat/Weixin 4.1 or newer** and the chat app is logged in on this computer. Older archive versions are not supported; stop and ask the user to update. Automatic first-time access may still be unavailable for a particular OS/app build; report `E_LOCAL_ACCESS_METHOD_UNAVAILABLE` honestly rather than saying the app is older or unsupported.
 3. If this OS is not macOS/Windows, stop and explain not supported yet.
 4. Run:
 

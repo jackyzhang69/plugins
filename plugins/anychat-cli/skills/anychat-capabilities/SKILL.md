@@ -18,6 +18,10 @@ when_to_use: |-
 
 # AnyChat plugin — agent consumption contract
 
+## Advisory marketplace check
+
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+
 **Read this once on plugin load and reload it whenever a user asks anything AnyChat-related.**
 
 AnyChat is a **local chat archive** helper: the user searches/exports **their own**
@@ -57,7 +61,7 @@ Answer in product language, short bullets:
 - **Export** transcripts (text/json/md) and **download** attachments (image/voice/file/video/link cards).
 - **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
 
-Platforms: **macOS Apple Silicon** and **Windows x64**, with **WeChat/Weixin 4.1 or newer**. Older chat-app versions are not supported. Not a bot; does not send messages.
+Platforms: **macOS Apple Silicon** and **Windows x64**, for the **WeChat/Weixin 4.1 or newer archive family**. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
 
 ## Agent quick router
 

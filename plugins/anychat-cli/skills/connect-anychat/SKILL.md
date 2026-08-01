@@ -14,6 +14,10 @@ when_to_use: |-
 
 # Connect AnyChat
 
+## Advisory marketplace check
+
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+
 ## Talk to the human
 
 Keep chat plain: “需要先登录一次免费账号” / “登录成功，下一步准备本机档案”. Do not paste `whoami --json` or full CLI help into the reply (use them only as tools). Follow `anychat-capabilities` § **Talk to the human**.
