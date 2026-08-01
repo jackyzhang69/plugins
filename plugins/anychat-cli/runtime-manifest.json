@@ -29,9 +29,9 @@
     "win32": "${LOCALAPPDATA}/anychat-cli/Cache"
   },
   "configHome": {
-    "darwin": "/Users/jacky/.jackyzhang.app/anychat",
-    "linux": "/Users/jacky/.jackyzhang.app/anychat",
-    "win32": "/.jackyzhang.app/anychat"
+    "darwin": "${HOME}/.jackyzhang.app/anychat",
+    "linux": "${HOME}/.jackyzhang.app/anychat",
+    "win32": "${USERPROFILE}/.jackyzhang.app/anychat"
   },
   "configFile": "config.json",
   "tokenEnvVar": "ANYCHAT_TOKEN",
