@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-08-01T05:00:12.684138Z",
+  "build_timestamp": "2026-08-01T05:22:46.269425Z",
   "files": [
     {
       "path": "README.md",
@@ -58,5 +58,5 @@
   ],
   "schema_version": "2",
   "source_sha": "6a2bbfdb98ea87208eced9d0b4604dd25920b78a",
-  "version": "0.3.4"
+  "version": "0.3.5"
 }
