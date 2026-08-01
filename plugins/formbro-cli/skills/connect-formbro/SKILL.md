@@ -6,7 +6,7 @@ when_to_use: |-
     - "connect to formbro / set up formbro"
     - "log in to formbro / save my fb_ token"
     - "configure formbro plugin / use this token"
-    - first invocation of any formbro skill when ~/.formbro/config.json missing
+    - first invocation of any formbro skill when ~/.jackyzhang.app/token/jz.json (shared owner token) + ~/.jackyzhang.app/formbro/ (runtime) missing
     - a bare/ambiguous first mention of "formbro" with no other task content — "@formbro", "formbro",
       "hi formbro", "hey formbro", "what can formbro do", "how do I use formbro", "help with formbro" —
       treat any of these, on their own, as an implicit request to get started
@@ -24,22 +24,16 @@ So: **`connect-formbro` once → then `formbro-capabilities` every session**, in
 
 ## Already-connected fast path
 
-If `~/.formbro/config.json` exists from a previous session AND `formbro whoami` returns 200, the user is already connected. Skip the token capture (step 1) and the login step (step 4) — **but still run the doctor self-check (step 3)** because plugin upgrades happen out-of-band and you should detect a stale cache on every session start.
+If `~/.jackyzhang.app/token/jz.json (shared owner token) + ~/.jackyzhang.app/formbro/ (runtime)` exists from a previous session AND `formbro whoami` returns 200, the user is already connected. Skip the token capture (step 1) and the login step (step 4) — **but still run the doctor self-check (step 3)** because plugin upgrades happen out-of-band and you should detect a stale cache on every session start.
 
 ## What this does (first-time path)
 
-Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again. **Never ask the user to paste a token into chat.** The normal human flow is local entry at the CLI's hidden terminal prompt; `FORMBRO_API_TOKEN` remains an explicit automation override.
+Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again.
 
 ## How it works
 
-1. Tell the user to generate a FormBro API token at https://formbro.ca → Settings → API Tokens → Create token. The token starts with `fb_`. Never ask the user to reveal it in chat or an agent tool call.
-
-   Note: new tokens default to **read** scope. Most FormBro skills need **write** scope too
-   (mutations, imports, and `tell-jacky` feedback submission all fail with a 403 on a read-only
-   token). The CLI cannot mint or upgrade a token itself — if the user hits a write-scope 403
-   later, send them back to Settings → API Tokens to edit the token in place (no need to
-   regenerate) rather than troubleshooting the CLI.
-2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
+1. Ask the user for their FormBro API token. The token starts with `fb_`. The user gets it from https://formbro.ca → Settings → API Tokens → Create token.
+2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN_OVERRIDE` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh
@@ -76,13 +70,13 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
    This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
 
-4. Tell the user to run the login command in their own terminal and enter the token at the hidden prompt. The token never enters argv, shell history, chat, or an agent tool request:
+4. Run:
 
    ```sh
-   <BUNDLED_FORMBRO> login --token-stdin
+   <BUNDLED_FORMBRO> login --token <USER_TOKEN>
    ```
 
-   The user reports only whether it succeeded. Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path. Non-interactive automation may use a governed stdin secret channel or `FORMBRO_API_TOKEN`, but skills must not construct a token-bearing pipe.
+   Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path.
 
 5. Verify by running:
 
@@ -108,7 +102,7 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 ## Token rules — never break
 
 - **Never log the token value.** Mask it as `fb_***` in any output you show the user.
-- **Never write the token into any file other than the CLI's own `config.json`.** The CLI's stdin login writes that file; do not write your own copy elsewhere.
+- **Never write the token into any file other than the CLI's own `config.json`.** That file is what the CLI's `--token` flag writes; do not write your own copy elsewhere.
 - **Never embed the token into prompts, tool descriptions, or example commands** you generate. Always use `fb_***` as a placeholder when you show example commands.
 - The token is a long-lived bearer credential. If exposed, the user must rotate it at formbro.ca → Settings → API Tokens.
 
@@ -119,7 +113,7 @@ Tell the user:
 > Connected as `<email from whoami>`. FormBro plugin v`<doctor.binary_version>` ready.
 >
 > **Quick reference** (you can ask me for any of these):
-> - "fill the webform for `<person name>`" — one-step: resolve + validate + preflight + fill
+> - "fill the webform for `<person name>`" — one-step: resolve + preflight + fill
 > - "find `<person>`'s applications" — name → application ids
 > - "is my plugin healthy / which backend am I on" — runs `formbro doctor --json`
 
