@@ -3,22 +3,27 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-07-29T02:06:32.186988Z",
+  "build_timestamp": "2026-08-01T05:00:12.684138Z",
   "files": [
     {
       "path": "README.md",
-      "sha256": "0e23c2fd56e9b36bc6d5bc6f97dad0722a7b288aaa10bbb7d44604734dd8d146",
-      "size_bytes": 2208
+      "sha256": "056da42ffaa3ef18eeb231e1a66d2570d50d0148ca89a84c63420fe39af59198",
+      "size_bytes": 2224
     },
     {
       "path": "bin/anypdf",
-      "sha256": "4607c0b35ca7c967252f749d65826fd72b76daafad6b994f1e983d58d6dd25a8",
-      "size_bytes": 123
+      "sha256": "f25c639647a48d5929d1eeb03419b6f050e172bd5475db399fd7dfd85a15b025",
+      "size_bytes": 5016208
+    },
+    {
+      "path": "bin/anypdf.sha256",
+      "sha256": "105e0a076e0041d7cf140c5f4a48b61621d59df636e9c171c2e25f1323b3179b",
+      "size_bytes": 65
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "3979ec9b7f5055be75badf002d6ef2e45c490433f9dd5ae9a856bcc8e6874024",
-      "size_bytes": 67609
+      "sha256": "812581b9f61898d12edec4855a4ec736e1054670d82f9f419a067a9aa217dd87",
+      "size_bytes": 68340
     },
     {
       "path": "scripts/verify-install",
@@ -37,20 +42,21 @@
     },
     {
       "path": "skills/anypdf-form-intake/SKILL.md",
-      "sha256": "69bb1f3accca860e18cb19d8840abffb5da416b571e09782dbe65c84a33c5d00",
-      "size_bytes": 1995
+      "sha256": "17ac82e9c2e6fcfef700f7509c756f47428671d28d44ef2f8f4db022cce206fa",
+      "size_bytes": 7376
+    },
+    {
+      "path": "skills/anypdf-form-intake/scripts/anypdf_intake_batch.py",
+      "sha256": "b1e01854a5b94c468cf0a2dc26e9eb54941c217f5afe68510181460a464f0797",
+      "size_bytes": 31993
     },
     {
       "path": "skills/connect-anypdf/SKILL.md",
-      "sha256": "31362b40df351b37de7b5f9aecedd972e26b9da2907abf820d1a53607ba5ca16",
-      "size_bytes": 1463
+      "sha256": "96f64ac116f39fcf15fb7630387a3cb56a47553743d16b1a66bde8f3745a5934",
+      "size_bytes": 1473
     }
   ],
-  "package_name": "anypdf-plugin",
-  "package_type": "public",
-  "platform": "universal",
-  "schema": "https://anypdf.dev/schemas/manifest.schema.json",
-  "schema_version": "2.0.0",
-  "signing_key_id": "anypdf-release-c7661037e60d5d4525bcae39ddf389780f563326",
+  "schema_version": "2",
+  "source_sha": "6a2bbfdb98ea87208eced9d0b4604dd25920b78a",
   "version": "0.3.4"
 }
