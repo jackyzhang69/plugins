@@ -3,7 +3,7 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-08-01T05:22:46.269425Z",
+  "build_timestamp": "2026-08-02T04:54:46.269975Z",
   "files": [
     {
       "path": "README.md",
@@ -12,17 +12,17 @@
     },
     {
       "path": "bin/anypdf",
-      "sha256": "f25c639647a48d5929d1eeb03419b6f050e172bd5475db399fd7dfd85a15b025",
-      "size_bytes": 5016208
+      "sha256": "3aae87758fd6aa74f555ddb49703a50537cf6e70a87408b1c03b04187cff79ff",
+      "size_bytes": 5016784
     },
     {
       "path": "bin/anypdf.sha256",
-      "sha256": "105e0a076e0041d7cf140c5f4a48b61621d59df636e9c171c2e25f1323b3179b",
+      "sha256": "c1af6dc4587e7e13cb1421f1492fd73ae1ff5cba23c8f28389321db4ca1e2569",
       "size_bytes": 65
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "812581b9f61898d12edec4855a4ec736e1054670d82f9f419a067a9aa217dd87",
+      "sha256": "b4f4d706182fa6818e548126c528b0d89aa31c5b3cb46ed28a5d5179a618a5cb",
       "size_bytes": 68340
     },
     {
@@ -57,6 +57,6 @@
     }
   ],
   "schema_version": "2",
-  "source_sha": "6a2bbfdb98ea87208eced9d0b4604dd25920b78a",
+  "source_sha": "086d56c943c008b6654fdccf4a9736e7d04f4835",
   "version": "0.3.5"
 }
