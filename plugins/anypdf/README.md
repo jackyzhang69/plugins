@@ -1,4 +1,4 @@
-# AnyPDF Claude Code Plugin
+# AnyPDF Codex Plugin
 
 AnyPDF is a universal, server-owned PDF workflow client. The package contains
 only public skills, a small Python 3.11 standard-library HTTPS client, and

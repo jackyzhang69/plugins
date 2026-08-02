@@ -3,27 +3,22 @@
     "minimum_api_version": "1.0.0"
   },
   "binaries": [],
-  "build_timestamp": "2026-08-02T04:54:46.269975Z",
+  "build_timestamp": "2026-08-02T07:41:37.928546Z",
   "files": [
     {
       "path": "README.md",
-      "sha256": "056da42ffaa3ef18eeb231e1a66d2570d50d0148ca89a84c63420fe39af59198",
-      "size_bytes": 2224
+      "sha256": "e366d6f73b718f04a062c21e44b0af9302765a1b38f6708804cb932516dfde80",
+      "size_bytes": 2218
     },
     {
       "path": "bin/anypdf",
-      "sha256": "3aae87758fd6aa74f555ddb49703a50537cf6e70a87408b1c03b04187cff79ff",
-      "size_bytes": 5016784
-    },
-    {
-      "path": "bin/anypdf.sha256",
-      "sha256": "c1af6dc4587e7e13cb1421f1492fd73ae1ff5cba23c8f28389321db4ca1e2569",
-      "size_bytes": 65
+      "sha256": "4607c0b35ca7c967252f749d65826fd72b76daafad6b994f1e983d58d6dd25a8",
+      "size_bytes": 123
     },
     {
       "path": "client/anypdf_client.py",
-      "sha256": "b4f4d706182fa6818e548126c528b0d89aa31c5b3cb46ed28a5d5179a618a5cb",
-      "size_bytes": 68340
+      "sha256": "146c14327503ceb63d9cc937a47ea87d7cb1c5777f1d8becbb3080011f650bb2",
+      "size_bytes": 73683
     },
     {
       "path": "scripts/verify-install",
@@ -32,8 +27,8 @@
     },
     {
       "path": "skills/anypdf-feedback/SKILL.md",
-      "sha256": "43aef332d7069a3286b48efad83e0c6522a5a5a202042a4ab2117d079b1df657",
-      "size_bytes": 909
+      "sha256": "0c23ad0b3fe4850346b448f5e2eb265eea9115202cf8540a2f9525d5e1d2c3c7",
+      "size_bytes": 248
     },
     {
       "path": "skills/anypdf-fill/SKILL.md",
@@ -42,21 +37,25 @@
     },
     {
       "path": "skills/anypdf-form-intake/SKILL.md",
-      "sha256": "17ac82e9c2e6fcfef700f7509c756f47428671d28d44ef2f8f4db022cce206fa",
-      "size_bytes": 7376
-    },
-    {
-      "path": "skills/anypdf-form-intake/scripts/anypdf_intake_batch.py",
-      "sha256": "b1e01854a5b94c468cf0a2dc26e9eb54941c217f5afe68510181460a464f0797",
-      "size_bytes": 31993
+      "sha256": "69bb1f3accca860e18cb19d8840abffb5da416b571e09782dbe65c84a33c5d00",
+      "size_bytes": 1995
     },
     {
       "path": "skills/connect-anypdf/SKILL.md",
       "sha256": "96f64ac116f39fcf15fb7630387a3cb56a47553743d16b1a66bde8f3745a5934",
       "size_bytes": 1473
+    },
+    {
+      "path": "skills/tell-jacky/SKILL.md",
+      "sha256": "b59261b59a076113dd93bef383b3227154a797be8164f081bfa0febe2da9f467",
+      "size_bytes": 1213
     }
   ],
-  "schema_version": "2",
-  "source_sha": "086d56c943c008b6654fdccf4a9736e7d04f4835",
+  "package_name": "anypdf-plugin",
+  "package_type": "public",
+  "platform": "universal",
+  "schema": "https://anypdf.dev/schemas/manifest.schema.json",
+  "schema_version": "2.0.0",
+  "signing_key_id": "anypdf-release-db81e323af4f5c6d61b0887cb80e435934d1c36c",
   "version": "0.3.5"
 }

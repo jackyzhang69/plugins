@@ -28,6 +28,16 @@
     },
     {
       "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
+      "name": "anychat-cli",
+      "source": "./plugins/anychat-cli",
+      "version": "0.1.14"
+    },
+    {
+      "author": {
         "name": "Jacky Zhang",
         "url": "https://github.com/jackyzhang69/anypdf"
       },
@@ -36,17 +46,7 @@
       "homepage": "https://github.com/jackyzhang69/anypdf",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.3.3"
-    },
-    {
-      "author": {
-        "name": "Jacky Zhang"
-      },
-      "category": "productivity",
-      "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
-      "name": "anychat-cli",
-      "source": "./plugins/anychat-cli",
-      "version": "0.1.14"
+      "version": "0.3.5"
     }
   ]
 }
