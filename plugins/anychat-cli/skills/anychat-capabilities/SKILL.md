@@ -22,6 +22,20 @@ when_to_use: |-
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
 
+## Advisory inbox check (Tell Jacky replies)
+
+On the first authenticated AnyChat action in each host-agent session, run this as a separate best-effort step before the requested core action:
+
+```bash
+"$ANYCHAT_BIN" feedback inbox --json
+```
+
+- Show each unread reply to the human in plain language before marking it read.
+- After a reply was successfully displayed, run `"$ANYCHAT_BIN" feedback read --update-id <id>` for that reply. Never mark it read first.
+- If the inbox request or mark-read fails, warn briefly and continue the requested core action; notification failure never changes the core command's exit result.
+- Never inject inbox data into another command's JSON stdout. Inbox/read remain separate commands.
+- Run the check once per authenticated host-agent session, not before every command.
+
 **Read this once on plugin load and reload it whenever a user asks anything AnyChat-related.**
 
 AnyChat is a **local chat archive** helper: the user searches/exports **their own**
@@ -88,6 +102,7 @@ Platforms: **macOS Apple Silicon** and **Windows x64**, for the **WeChat/Weixin 
 | Download one / all | `media download --id … -o dir` / `media download-all …` |
 | Voice → playable | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
 | Tell Jacky | **tell-jacky** (confirm draft first) → `feedback create --user-confirmed` |
+| Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) |
 | Saved nicknames | `alias set/list/rm` · `recents` |
 
 ## §B. Resolve binary

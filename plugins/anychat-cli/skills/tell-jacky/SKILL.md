@@ -16,9 +16,47 @@ when_to_use: |-
 
 # Tell Jacky (AnyChat)
 
+**plugin_id:** `anychat`
+
+## Multi-plugin sessions
+
+- Mid AnyChat flow → this skill.
+- No product cue → **ask which product** before drafting.
+- Draft always names **AnyChat**.
+
+Auth: CLI exchanges the owner portal token for an `aud=anychat` JWT before POST; do not call HTTP yourself.
+
+
 ## Advisory marketplace check
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+
+## Advisory inbox check (Tell Jacky replies)
+
+On the first authenticated AnyChat action in each host-agent session, run a
+best-effort check for unread replies Jacky sent you, before doing the requested
+core action:
+
+```bash
+"$ANYCHAT_BIN" feedback inbox --json
+```
+
+- If there are unread replies, **show each one to the human** in plain language
+  (event type + message). Only **after** a reply is successfully displayed, mark
+  it read:
+  ```bash
+  "$ANYCHAT_BIN" feedback read --update-id <id>
+  ```
+- The server never marks anything read on the inbox GET — you mark each reply
+  read individually, and only after the human has seen it. Repeating `read` is
+  idempotent.
+- **Best-effort, non-blocking:** if `feedback inbox` errors or the network is
+  down, treat it as a warning and continue with the requested core command. Never
+  fail the user's request because the inbox check failed.
+- **Never inject** inbox/reply data into another command's JSON stdout. Inbox and
+  read are their own explicit commands; this check is a separate agent step, not a
+  hidden mutation of another command's output.
+- Run this once per session load, not before every command.
 
 Submits feedback to the **Portal / accountd** product-feedback store (same owner
 token as login), via the bundled `anychat` CLI. Resolve the binary once via
@@ -77,7 +115,10 @@ Wait for explicit go-ahead. No exceptions.
 
 - CLI prints JSON + `id` and `delivery` (`portal` or `local_only` if offline).
 - Report the `id` to the user. Do not promise fix dates.
-- `feedback status --id …` / `feedback list` inspect own items.
+- `feedback status --id …` / `feedback list` inspect own items; `feedback status`
+  also shows Jacky's additive reply history when present.
+- `feedback inbox` shows unread replies; mark each read with
+  `feedback read --update-id <id>` after showing it (see Advisory inbox check).
 
 ## Failure handling
 
