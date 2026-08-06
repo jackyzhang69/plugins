@@ -1,6 +1,6 @@
 ---
 name: tell-jacky
-description: Submit a feature request, bug report, or knowledge tip to FormBro on the user's behalf ("Tell Jacky"). Collects title/description/context/URL/images from the conversation, always shows a draft for user confirmation before sending, and follows PII-safe defaults since FormBro handles immigration case data. Requires connect-formbro to have been run first, and a write-scoped token.
+description: Submit a feature request, bug report, or knowledge tip to FormBro on the user's behalf ("Tell Jacky"). Collects title/description/context/images from the conversation, always shows a draft for user confirmation before sending, and follows PII-safe defaults since FormBro handles immigration case data. Requires connect-formbro to have been run first, and a write-scoped token.
 when_to_use: |-
   Trigger phrases:
     - "tell Jacky about this"
@@ -29,10 +29,11 @@ exact title/description/context/images first and getting explicit confirmation �
 | `title` | yes | short summary, ≤200 chars |
 | `description` | yes | the full text — the more concrete the better, especially for bug reports |
 | `url` | no | a relevant page/portal URL; merged into `context.page_url` |
+| `application-id` | required for `bug-report` | exact FormBro application ID; backend verifies it belongs to the submitting user |
 | `context-json` | no | escape hatch for extra structured fields (see below); merged under `context` |
 | `image` | no | local screenshot path(s), repeatable; uploaded after create |
 
-Useful `--context-json` fields (all optional): `program_key`, `application_id`, `entity_type`,
+Useful `--context-json` fields (all optional): `program_key`, `entity_type`,
 `action_type`, `error_message`. `context.source` is always stamped `"formbro-cli"` by the CLI
 itself — you cannot and should not try to set it.
 
@@ -40,7 +41,7 @@ itself — you cannot and should not try to set it.
 
 | If the user says… | Draft, confirm, then run |
 |---|---|
-| "tell Jacky about this bug" / agent hit a CLI error worth reporting | `<formbro> feedback create --type bug-report --title "<short>" --description "<verbatim error + what you were doing>" [--url <portal url>] [--context-json '{"error_message":"<verbatim>","application_id":"<id>"}']` |
+| "tell Jacky about this bug" / agent hit a CLI error worth reporting | `<formbro> feedback create --type bug-report --title "<short>" --description "<verbatim error + what you were doing>" --application-id "<exact application id>" [--context-json '{"error_message":"<verbatim>"}']` |
 | "file a feature request" | `<formbro> feedback create --type feature-request --title "<short>" --description "<what and why>"` |
 | "this is a good tip, save it" | `<formbro> feedback create --type knowledge-tip --title "<short>" --description "<the tip>"` |
 | any of the above + user shared a screenshot | add one `--image <path>` per file, confirmed individually (see PII section) |
@@ -53,8 +54,9 @@ itself — you cannot and should not try to set it.
   output into `description` and/or `context.error_message` — do not paraphrase or summarize it
   away. Verbatim text is what the `bug_report` auto-triage (system_errors correlation) actually
   keys off of.
-- Don't chase completeness for its own sake. A title + description is a valid, submittable
-  feedback entry — `url`, `context-json`, and `image` are enrichments, not requirements.
+- Every bug report must be bound to the exact application involved. If the user supplied an
+  applicant/entity ID instead, stop and ask for the application ID. Feature requests and
+  knowledge tips still require only title + description.
 
 ## Mandatory draft confirmation — every submission, no exceptions
 
@@ -69,9 +71,8 @@ data; nothing leaves the user's machine without them seeing it first.
 
 ## PII guidance
 
-- Do **not** auto-populate `context` with case identifiers (`applicant_id`, `employer_id`,
-  `application_id`) or verbatim applicant field values (names, dates of birth, case numbers)
-  unless the user explicitly asks you to include them.
+- For a bug report, include only the required exact `application_id`; do not add applicant IDs,
+  employer IDs, or verbatim applicant field values unless the user explicitly asks.
 - When capturing verbatim error text for a bug report, scan it for anything that looks like
   personal data (names, SIN-like numbers, emails, case document contents) and flag it to the user
   as part of the confirmation step rather than silently including or silently stripping it — let

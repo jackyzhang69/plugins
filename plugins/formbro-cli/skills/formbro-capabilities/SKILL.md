@@ -7,7 +7,7 @@ when_to_use: |-
   "is this ready to submit", "check formbro status", "my token / which backend".
   Also: a bare/ambiguous first mention of "formbro" with no other task content — "@formbro", "formbro",
   "hi formbro", "what can formbro do", "how do I use formbro" — route this to connect-formbro first if
-  ~/.jackyzhang.app/formbro/config.json is missing, otherwise treat it as "explain what you can do" and answer from this
+  ~/.formbro/config.json is missing, otherwise treat it as "explain what you can do" and answer from this
   contract directly.
 ---
 
@@ -43,7 +43,7 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
 | "plugin out of date?" | `formbro doctor --check-upgrade` |
-| "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>"` — **always confirm the draft with the user first** (see `tell-jacky` skill) |
+| "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>" [--application-id "<exact application id>"]` — `--application-id` is mandatory for bug reports; **always confirm the draft with the user first** (see `tell-jacky` skill) |
 
 Two semantic distinctions to NEVER conflate:
 - `applications list` = consultant's active workbench (dashboard scope; filters by active status)
@@ -301,7 +301,7 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 |---|---|---|
 | `find`, `applications get/list/status/by-status`, `employers list/get`, `programs *`, `audit my`, `whoami`, `health` | **PARALLEL** | read-only HTTPS |
 | `validate by-id`, `validate person`, `webform preflight`, `webform status`, `webform daemon status`, `doctor` (with or without `--no-fetch`) | **PARALLEL** | read-only / pure check |
-| `webform runtime-check` | **SERIAL** (first call) → **PARALLEL** (subsequent) | First call spawns the singleton worker daemon (singleton lock file under `~/.jackyzhang.app/formbro/runtime/`); subsequent calls just health-ping it. Sandboxed environments without `flock`/named-socket support will fail on first call — that's an environment limitation, not a docs bug. |
+| `webform runtime-check` | **SERIAL** (first call) → **PARALLEL** (subsequent) | First call spawns the singleton worker daemon (singleton lock file under `~/.formbro/runtime/`); subsequent calls just health-ping it. Sandboxed environments without `flock`/named-socket support will fail on first call — that's an environment limitation, not a docs bug. |
 | `fill` (PDF) — multiple forms in **one** `formbro fill` call | one call — let the backend render the requested set | one authenticated request returns a PDF or ZIP |
 | `fill` (PDF) — across **different applications** | **PARALLEL** | independent applications |
 | `extract text`, `extract apply-json` (read steps) | **PARALLEL** | independent |
@@ -311,14 +311,14 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 | `applications patch` on the **same** entity, sequentially with `validate by-id` | **SERIAL** | data dependency |
 | `webform start` (local browser + worker daemon) | **SERIAL — ALWAYS** | the worker daemon is a singleton process per user; two concurrent `start` calls fight for the same Unix socket / Chromium instance |
 | `webform daemon start/stop/restart/prune-chromium` | **SERIAL** | manage singleton; concurrent calls race |
-| `login` (writes `~/.jackyzhang.app/formbro/config.json`) | **SERIAL** | shared writeable config file |
+| `login` (writes `~/.formbro/config.json`) | **SERIAL** | shared writeable config file |
 
 Rule of thumb: **anything involving the local browser or the local worker daemon is serial. Everything else is parallel.**
 
-If the docs are unclear for a new command, default to PARALLEL for read-only / network-bound subcommands and SERIAL for anything that touches `~/.jackyzhang.app/formbro/runtime/*` (the daemon socket / pid file / Chromium cache).
+If the docs are unclear for a new command, default to PARALLEL for read-only / network-bound subcommands and SERIAL for anything that touches `~/.formbro/runtime/*` (the daemon socket / pid file / Chromium cache).
 
 ## 8. Token & secret rules
 
 - **Never log the token value.** Mask any `fb_*` value as `fb_***` in any output.
-- The user's token lives only in `~/.jackyzhang.app/formbro/config.json` (or `%USERPROFILE%\.formbro\config.json`). Captured once by `connect-formbro`.
+- The user's token lives only in `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json`). Captured once by `connect-formbro`.
 - Do not write the token anywhere else, do not include it in example commands, do not echo it back.
