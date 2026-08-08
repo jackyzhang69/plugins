@@ -1,10 +1,39 @@
-# AnyPDF — temporarily delisted
+# AnyPDF Codex Plugin
 
-The AnyPDF plugin is not currently listed in this marketplace.
+AnyPDF is a server-owned PDF workflow client. The package contains public
+skills, a platform-matched native `anypdf` client, its SHA-256 sidecar, and
+documentation. It contains no PDF template, private mapping, admin tool, or
+server credential.
 
-The previous package shipped its client as readable source. That is no longer how we distribute
-product code, so the source was removed and the listing withdrawn rather than left pointing at a
-package that cannot run.
+The client uses `https://anypdf.jackyzhang.app` by default. Run the
+`connect-anypdf` skill once to verify a token supplied on stdin and save it in
+the mode-0600 local config at `~/.jackyzhang.app/token/jz.json`. The backend URL may be
+overridden with `ANYPDF_BACKEND_URL` for development or self-hosting. Neither
+value belongs in plugin files, prompts, reports, logs, or command arguments.
+HTTP is accepted only for loopback development URLs; all other backends must
+use HTTPS.
 
-AnyPDF returns here once the client ships as a self-contained per-platform binary with a checksum,
-the same shape `anychat-cli` already uses.
+## Registered PDF fill
+
+Use `anypdf-fill` to resolve a registered form, fetch its schema, validate the
+user's data, submit one idempotent server job, and retrieve the retained result.
+The server owns templates, mappings, revision locking, and PDF execution. A
+status invocation performs exactly one GET; follow the server's `Retry-After`
+value with a later status invocation until `succeeded` or `failed`.
+
+## New PDF request
+
+Use `anypdf-form-intake` when the user provides a PDF form template to register
+or request support. Do not ask them to re-confirm that it is blank. The client
+checks the PDF header, size, and SHA-256, then uses the server's signed upload
+and finalize flow. Never upload source evidence, identity documents, or other
+private non-template documents through this path.
+
+## Bug report
+
+Use `anypdf-feedback` to submit a small redacted JSON report and inspect its
+status. Diagnostics are opt-in and must contain stable facts only; never include
+tokens, secrets, raw logs, PDF bytes, or identity data.
+
+The client is non-interactive and JSON-first. See each skill for the exact
+workflow and command examples.

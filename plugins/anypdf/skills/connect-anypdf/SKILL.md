@@ -33,5 +33,6 @@ anypdf forms catalog
 `whoami` returns only public token metadata (id, type, scopes, form allowlist,
 status, and expiry), never the raw token or owner secrets. `doctor` checks local
 backend resolution and credential safety without making an unsolicited remote
-request. `logout` removes only the saved local credential; an explicit
-`ANYPDF_TOKEN` environment override remains caller-owned and is not modified.
+request. `logout` removes only the saved local credential. The native client has no
+environment credential override; the saved platform token is the only credential
+source.

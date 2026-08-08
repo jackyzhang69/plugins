@@ -21,7 +21,7 @@
       "author": {
         "name": "Jacky Zhang"
       },
-      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
       "version": "0.5.9"
@@ -35,6 +35,18 @@
       "name": "anychat-cli",
       "source": "./plugins/anychat-cli",
       "version": "0.1.15"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang",
+        "url": "https://github.com/jackyzhang69/anypdf"
+      },
+      "category": "productivity",
+      "description": "Secure agent-native PDF form discovery, validation, filling, intake, and feedback.",
+      "homepage": "https://github.com/jackyzhang69/anypdf",
+      "name": "anypdf",
+      "source": "./plugins/anypdf",
+      "version": "0.5.0"
     }
   ]
 }

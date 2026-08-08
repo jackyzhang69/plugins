@@ -5,10 +5,10 @@ description: Fill a registered PDF form through the AnyPDF server-owned workflow
 
 # Registered PDF fill
 
-Use the packaged `anypdf` text launcher. First use `connect-anypdf` to save the
+Use the packaged native `anypdf` client. First use `connect-anypdf` to save the
 credential locally; normal commands then need no environment setup. Never ask
-the user to place a token in an argument or echo a token. An explicit
-`ANYPDF_TOKEN` environment override is supported only for automation.
+the user to place a token in an argument or echo a token. The packaged native
+client reads only the saved platform token.
 
 This server-owned path is mandatory. Never substitute local repository code,
 `pypdf`, ReportLab, or another generic PDF writer for a registered fill. A PDF
@@ -30,10 +30,8 @@ tools unless the user asks for technical detail. Never show credentials.
    anypdf forms catalog
    ```
 
-   Do not guess a form or version. The official packaged Python client's
-   `preferences` command is deprecated and does not rerank `forms resolve`;
-   never rely on it. Do not remove or reinterpret a functional native Rust
-   discovery profile when operating a native installation.
+   Do not guess a form or version. `forms resolve` is the only supported discovery
+   path; never invent a ranking or silently choose among candidates.
 
 2. Fetch the chosen schema and build data matching its `schema_version`:
 
