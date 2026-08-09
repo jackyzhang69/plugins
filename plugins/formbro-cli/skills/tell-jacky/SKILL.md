@@ -96,6 +96,6 @@ data; nothing leaves the user's machine without them seeing it first.
 
 - **403 with a scope message** (`"Token scope [...] insufficient; need 'write' ..."`): the
   connected token only has `read` scope. Tell the user: enable **write** scope on your existing
-  FormBro API token at Settings → API Tokens (edit in place — no need to regenerate), then retry.
+  FormBro API token at the account Portal at https://jackyzhang.app/account/tokens (edit in place — no need to regenerate), then retry.
 - Any other error: surface the CLI's structured error verbatim (see `output::print_error`
   conventions used across every FormBro command) rather than guessing at a fix.

@@ -319,6 +319,6 @@ If the docs are unclear for a new command, default to PARALLEL for read-only / n
 
 ## 8. Token & secret rules
 
-- **Never log the token value.** Mask any `fb_*` value as `fb_***` in any output.
+- **Never log the token value.** Mask any `jz_*` value as `jz_***` in any output.
 - The user's token lives only in `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json`). Captured once by `connect-formbro`.
 - Do not write the token anywhere else, do not include it in example commands, do not echo it back.

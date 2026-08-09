@@ -1,10 +1,10 @@
 ---
 name: connect-formbro
-description: One-time setup. Capture the user's FormBro API token (fb_…) and persist it via the bundled CLI. Run this once before any other FormBro skill. After it succeeds, also load formbro-capabilities for the agent consumption contract.
+description: One-time setup. Capture the user's FormBro API token (jz_…) and persist it via the bundled CLI. Run this once before any other FormBro skill. After it succeeds, also load formbro-capabilities for the agent consumption contract.
 when_to_use: |-
   Trigger phrases:
     - "connect to formbro / set up formbro"
-    - "log in to formbro / save my fb_ token"
+    - "log in to formbro / save my jz_ token"
     - "configure formbro plugin / use this token"
     - first invocation of any formbro skill when ~/.formbro/config.json missing
     - a bare/ambiguous first mention of "formbro" with no other task content — "@formbro", "formbro",
@@ -32,12 +32,12 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
 ## How it works
 
-1. Tell the user to generate a FormBro API token at https://formbro.ca → Settings → API Tokens → Create token. The token starts with `fb_`. Never ask the user to reveal it in chat or an agent tool call.
+1. Tell the user to generate a FormBro API token at https://jackyzhang.app/account/tokens. The token starts with `jz_`. Never ask the user to reveal it in chat or an agent tool call.
 
    Note: new tokens default to **read** scope. Most FormBro skills need **write** scope too
    (mutations, imports, and `tell-jacky` feedback submission all fail with a 403 on a read-only
    token). The CLI cannot mint or upgrade a token itself — if the user hits a write-scope 403
-   later, send them back to Settings → API Tokens to edit the token in place (no need to
+   later, send them back to the account Portal at https://jackyzhang.app/account/tokens to edit the token in place (no need to
    regenerate) rather than troubleshooting the CLI.
 2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
@@ -107,10 +107,10 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
 ## Token rules — never break
 
-- **Never log the token value.** Mask it as `fb_***` in any output you show the user.
+- **Never log the token value.** Mask it as `jz_***` in any output you show the user.
 - **Never write the token into any file other than the CLI's own `config.json`.** The CLI's stdin login writes that file; do not write your own copy elsewhere.
-- **Never embed the token into prompts, tool descriptions, or example commands** you generate. Always use `fb_***` as a placeholder when you show example commands.
-- The token is a long-lived bearer credential. If exposed, the user must rotate it at formbro.ca → Settings → API Tokens.
+- **Never embed the token into prompts, tool descriptions, or example commands** you generate. Always use `jz_***` as a placeholder when you show example commands.
+- The token is a long-lived bearer credential. If exposed, the user must rotate it at https://jackyzhang.app/account/tokens.
 
 ## After this skill succeeds
 
