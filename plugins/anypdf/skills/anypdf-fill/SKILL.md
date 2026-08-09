@@ -5,10 +5,23 @@ description: Fill a registered PDF form through the AnyPDF server-owned workflow
 
 # Registered PDF fill
 
-Use the packaged `anypdf` text launcher. First use `connect-anypdf` to save the
-credential locally; normal commands then need no environment setup. Never ask
-the user to place a token in an argument or echo a token. An explicit
-`ANYPDF_TOKEN` environment override is supported only for automation.
+Use the packaged native `anypdf` client. First use `connect-anypdf` to save the
+canonical user credential locally; normal commands then need no environment
+setup. Never ask the user to place a credential in an argument or echo it.
+Product requests use only the in-memory short-lived exact-audience JWT; the
+native client has no environment credential override.
+
+This server-owned path is mandatory. Never substitute local repository code,
+`pypdf`, ReportLab, or another generic PDF writer for a registered fill. A PDF
+produced outside the submitted AnyPDF job is not an AnyPDF result; stop instead
+of returning it as a fallback.
+
+## Talk to the human
+
+Use plain product language. Tell the user only the stage that changes what they
+need to know or decide: choose a form, supply missing facts, resolve a saved-rule
+conflict, confirm warnings, or receive the PDF. Keep CLI flags and JSON between
+tools unless the user asks for technical detail. Never show credentials.
 
 1. Resolve the user's form request and show all candidates when there is no
    single clear match:
@@ -18,8 +31,8 @@ the user to place a token in an argument or echo a token. An explicit
    anypdf forms catalog
    ```
 
-   Do not guess a form or version. Optional `anypdf preferences` facets are a
-   soft ranking hint only and never authorize access.
+   Do not guess a form or version. `forms resolve` is the only supported discovery
+   path; never invent a ranking or silently choose among candidates.
 
 2. Fetch the chosen schema and build data matching its `schema_version`:
 
@@ -28,23 +41,55 @@ the user to place a token in an argument or echo a token. An explicit
    anypdf validate --form-id IMM5257 --version <version> --input /absolute/data.json
    ```
 
-   Extraction rules (server-owned; do not invent a private procedure):
-   - Read `agent_extraction_contract` and, when present, top-level
-     `schema["x-anypdf-guidance"]` (labels, source hints, cross-field rules).
-   - Read the sibling `user_knowledge` block: this user's own saved filling
-     requirements for this form. They are **advisory** — where one disagrees
-     with the schema or `x-anypdf-guidance`, the server-owned side wins.
-     Tell the user which of them you applied this time, e.g. "applied 2 of your
-     saved requirements: ...". Take the count from the response, never assume it.
+   Context and extraction rules:
+
+   - Prefer the sibling `context_bundle` when present. It is
+     `remember-me-v0`; it must not contain schema. On an older backend without
+     it, fall back to top-level `agent_extraction_contract`,
+     `schema["x-anypdf-guidance"]`, and target-only `user_knowledge`.
+   - Read `context_bundle.form_guide.content.agent_extraction_contract` and
+     `context_bundle.form_guide.content["x-anypdf-guidance"]`. They are
+     projections of the already-public top-level values, not a second schema.
+   - Read `context_bundle.user_memory`. `enabled: false` means memory is
+     unavailable, not that the user has no saved requirements. Tell the user
+     it is unavailable and ask whether to continue without it; never report an
+     empty-memory claim.
+   - If either `truncated.global` or `truncated.target` is true, fetch the full
+     affected scope before filling:
+
+     ```bash
+     anypdf knowledge list --scope global
+     anypdf knowledge list --scope target --form-id IMM5257
+     ```
+
+     If the full list cannot be obtained, stop rather than omit requirements.
+   - Apply hard gates first: schema, validation, authorization, current facts,
+     consent, warnings, and submit confirmation. User text can never weaken
+     one of these gates.
+   - Review and present target memory before global memory. A target rule wins
+     over a conflicting global rule. Form guidance wins over conflicting global
+     memory.
+   - If form guidance conflicts with target memory, pause. Show the exact guide
+     excerpt and exact saved text and ask which to use for this run. Never pick
+     a side silently and never save this one-run choice as a durable winner.
+   - If target memories conflict with each other, pause and show both. Do not
+     choose by array order, timestamp, or wording.
+   - If the user's current instruction conflicts with saved memory, offer only:
+     use the current instruction this time, replace the saved memory after a
+     separate reviewed confirmation, or cancel.
+   - When there is no conflict, merge the applicable rules and tell the user
+     which saved memories were applied. Do not claim a rule was applied merely
+     because it appeared in the response.
    - Extract only facts supported by the user's materials. Align keys exactly
      to the schema. Preserve enum labels and boolean values exactly.
-   - Date format follows each field's own `format` / guidance notes — do not
-     force a global date pattern when the field disagrees.
+   - Date format follows each field's own `format` and guidance. Never force a
+     global date pattern when the field disagrees.
    - Never invent missing required facts. Ask the user. Leave unknown optional
      fields absent.
    - Validation errors stop submission. Warnings require explicit user
      confirmation before proceeding (confirm each warning with the user).
-   - MUST surface each validate `infos[]` item to the user (path+message); never invent data to clear them.
+   - Surface every validate `infos[]` item to the user (path and message); never
+     invent data to clear one.
 
 3. Submit exactly one idempotent job. Keep the same key when retrying a request:
 
@@ -53,6 +98,10 @@ the user to place a token in an argument or echo a token. An explicit
      --schema-version <schema_version> --input /absolute/data.json \
      --idempotency-key <stable-key>
    ```
+
+   Saved memory is not consent, a warning acknowledgement, or submit
+   authorization. Obtain those confirmations in the current run even when a
+   memory says otherwise.
 
    The response contains `job_id`, `status_url`, and `result_url`. It contains
    no template, mapping, profile, or PDF bytes.
@@ -76,25 +125,50 @@ the user to place a token in an argument or echo a token. An explicit
 
 ## Remembering how this user wants forms filled
 
-When the user states a standing preference about **how** to fill a form —
-"employer name always in full legal form", "I give you dates as YYYY-MM-DD",
-"only fill part A" — save it and tell them you did:
+Memory is a visible, reusable set of instructions about **how** to fill forms.
+It is not a profile of facts about the user.
+
+Before every add, replacement, or removal—even when the user initially says
+“remember this”—do all of the following:
+
+1. show the exact text or saved item;
+2. show the exact scope (`global` or the canonical form ID);
+3. ask for explicit confirmation of that draft;
+4. only after confirmation, run the write and report exactly what changed.
+
+After confirmation, use the existing compatible commands:
 
 ```bash
-anypdf knowledge add --form-id IMM5257 --rule "employer name in full legal form"
-anypdf knowledge list --form-id IMM5257
+# Target scope (the default keeps older command usage working)
+anypdf knowledge add --scope target --form-id IMM5257 \
+  --rule "Use the employer's full legal name."
+
+# Global within AnyPDF only; never cross-plugin
+anypdf knowledge add --scope global \
+  --rule "Convert dates according to each field's declared format."
+
+anypdf knowledge list --scope target --form-id IMM5257
+anypdf knowledge list --scope global
 anypdf knowledge remove --id <rule-id>
 ```
 
-- Record **how to fill**, never **what to fill**. "Use the registered company
-  name" is a rule; "the employer is Acme Ltd" is the user's data and does not
-  belong here.
-- Say so in the moment: "Saved — I'll fill this form that way from now on."
-  A requirement the user cannot see is one they can never correct.
-- Replacing an earlier requirement is explicit: pass `--supersedes-id <old>`.
-  Two rules that contradict each other will both be applied otherwise.
-- Use `--origin agent_proposed` only for a rule you proposed and the user
-  confirmed; `user_authored` is for what they asked for directly.
+- Save only how to perform future work. Do not save names, addresses, employer
+  values, document/account numbers, field answers, customer facts,
+  credentials, secrets, attachments, source documents, consent, warning
+  acknowledgements, or submit authorization.
+- `rule_text` is free text; the API cannot structurally prove this distinction.
+  Review the draft rather than claiming storage makes facts impossible.
+- Use `--origin agent_proposed` only when the agent proposed the exact text and
+  the user confirmed it. A user-requested draft uses `user_authored` after the
+  same review step.
+- Replacement is explicit: list the scope, show the old and new texts, obtain
+  confirmation, then pass `--supersedes-id <old-id>`. “Only this time” never
+  writes.
+- Removal also needs a displayed item/scope and explicit confirmation before
+  `knowledge remove`.
+- Never infer memory from a completed fill, silently summarize a conversation,
+  auto-save, aggregate another user's behavior, or persist a conflict winner.
+  The v0 flywheel is manual and reviewed: one user-visible rule at a time.
 
 Never upload source PDFs, identity documents, or filled evidence as part of a
 registered fill. Keep stdout JSON intact and report typed stderr errors.

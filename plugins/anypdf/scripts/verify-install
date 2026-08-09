@@ -1,117 +1,125 @@
-#!/usr/bin/env python3
-"""Read-only JSON verifier for an installed AnyPDF marketplace plugin."""
+#!/bin/sh
+set -eu
 
-from __future__ import annotations
+usage() {
+  printf '%s\n' 'Usage: scripts/verify-install --expected-version <version> [--loaded-skill-path <path>] [--strict-residue]' >&2
+}
+EXPECTED=""
+LOADED=""
+STRICT=0
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --expected-version) [ "$#" -ge 2 ] || { usage; exit 2; }; EXPECTED=$2; shift 2 ;;
+    --loaded-skill-path) [ "$#" -ge 2 ] || { usage; exit 2; }; LOADED=$2; shift 2 ;;
+    --strict-residue) STRICT=1; shift ;;
+    --help) usage; exit 0 ;;
+    *) usage; exit 2 ;;
+  esac
+done
+[ -n "$EXPECTED" ] || { usage; exit 2; }
 
-import argparse
-import json
-from pathlib import Path
-import subprocess
-import sys
+ROOT=$(CDPATH=; cd -- "$(dirname -- "$0")/.." && pwd)
+FAILURES=""
+WARNINGS=""
+add_failure() { FAILURES="$FAILURES${FAILURES:+,}\"$1\""; }
+add_warning() { WARNINGS="$WARNINGS${WARNINGS:+,}\"$1\""; }
 
+runtime="$ROOT/runtime-manifest.json"
+manifest="$ROOT/manifest.json"
+if [ ! -f "$runtime" ] && [ -f "$manifest" ]; then
+  runtime="$manifest"
+fi
+if [ ! -f "$runtime" ]; then
+  add_failure package_manifest_missing
+else
+  runtime_version=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$runtime" | head -n 1)
+  if [ "$runtime_version" != "$EXPECTED" ]; then
+    if [ "$runtime" = "$ROOT/runtime-manifest.json" ]; then
+      add_failure runtime_manifest_version_mismatch
+    else
+      add_failure package_manifest_version_mismatch
+    fi
+  fi
+  if [ "$runtime" = "$ROOT/runtime-manifest.json" ]; then
+    source_sha=$(sed -n 's/.*"source_sha"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$runtime" | head -n 1)
+  else
+    source_sha=0000000000000000000000000000000000000000
+  fi
+  if ! printf '%s\n' "$source_sha" | grep -Eq '^[0-9a-f]{40}$'; then
+    add_failure runtime_source_sha_invalid
+  fi
+fi
 
-PLUGIN_ID = "anypdf@jacky-plugins"
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64) PLATFORM=darwin-arm64 ;;
+  Darwin:x86_64) PLATFORM=darwin-x64 ;;
+  Linux:x86_64) PLATFORM=linux-x64 ;;
+  *) add_failure unsupported_platform; PLATFORM=unknown ;;
+esac
+BINARY="$ROOT/bin/$PLATFORM/anypdf"
+CHECKSUM="$ROOT/bin/$PLATFORM/anypdf.sha256"
+if [ "$PLATFORM" = unknown ] || [ ! -x "$BINARY" ]; then
+  add_failure native_client_missing
+else
+  version_output=$($BINARY --version 2>/dev/null || true)
+  [ "$version_output" = "anypdf $EXPECTED" ] || add_failure client_version_mismatch
+  [ -f "$CHECKSUM" ] || add_failure checksum_missing
+  if [ -f "$CHECKSUM" ]; then
+    if command -v shasum >/dev/null 2>&1; then
+      actual_sha=$(shasum -a 256 "$BINARY" | awk '{print $1}')
+    elif command -v sha256sum >/dev/null 2>&1; then
+      actual_sha=$(sha256sum "$BINARY" | awk '{print $1}')
+    else
+      actual_sha=""
+      add_failure checksum_tool_missing
+    fi
+    declared_sha=$(awk 'NR == 1 {print $1}' "$CHECKSUM")
+    [ -n "$actual_sha" ] && [ "$actual_sha" = "$declared_sha" ] || add_failure checksum_mismatch
+  fi
+  if [ "$runtime" = "$ROOT/runtime-manifest.json" ]; then
+    grep -Fq "\"entrypoint\": \"bin/$PLATFORM/anypdf\"" "$runtime" 2>/dev/null || add_failure runtime_platform_mismatch
+  else
+    grep -Fq "\"platform\": \"$PLATFORM\"" "$runtime" 2>/dev/null || add_failure package_manifest_platform_mismatch
+    grep -Fq "\"path\": \"bin/$PLATFORM/anypdf\"" "$runtime" 2>/dev/null || add_failure package_manifest_binary_mismatch
+  fi
+fi
 
+if command -v codex >/dev/null 2>&1; then
+  installed=$(codex plugin list --json 2>/dev/null || true)
+  plugin_state=$(printf '%s' "$installed" | tr '\n' ' ' | sed -E 's/},[[:space:]]*\{/}\n\{/g' | EXPECTED_VERSION="$EXPECTED" awk '
+BEGIN { found = 0; matched = 0; expected = ENVIRON["EXPECTED_VERSION"] }
+/"pluginId"[[:space:]]*:[[:space:]]*"anypdf@jacky-plugins"/ {
+  found = 1
+  if ($0 ~ ("\\\"version\\\"[[:space:]]*:[[:space:]]*\\\"" expected "\\\"")) matched = 1
+}
+END {
+  if (matched) print "match"
+  else if (found) print "mismatch"
+  else print "missing"
+}')
+  case "$plugin_state" in
+    match) : ;;
+    missing|invalid) add_failure codex_plugin_not_installed ;;
+    mismatch) add_failure codex_plugin_version_mismatch ;;
+    *) add_failure codex_plugin_list_invalid ;;
+  esac
+else
+  add_warning codex_plugin_list_unavailable
+fi
 
-def read_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+if [ -n "$LOADED" ]; then
+  case "$LOADED" in
+    */anypdf/$EXPECTED/skills/*) : ;;
+    *) add_failure loaded_skill_path_version_mismatch ;;
+  esac
+fi
 
+for residue_root in "$HOME/.codex/.tmp/marketplaces/.staging" "$HOME/.codex/.tmp/marketplaces/.backups"; do
+  if [ -d "$residue_root" ] && find "$residue_root" -mindepth 1 -maxdepth 1 -type d -name 'marketplace-upgrade-*' -print -quit | grep -q .; then
+    if [ "$STRICT" -eq 1 ]; then add_failure marketplace_upgrade_residue_present; else add_warning marketplace_upgrade_residue_present; fi
+  fi
+done
 
-def run(command: list[str]) -> tuple[subprocess.CompletedProcess[str] | None, str | None]:
-    try:
-        completed = subprocess.run(
-            command,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-            timeout=60,
-        )
-    except (FileNotFoundError, subprocess.TimeoutExpired) as error:
-        return None, str(error)
-    if completed.returncode:
-        return completed, (completed.stderr or completed.stdout).strip() or f"exit {completed.returncode}"
-    return completed, None
-
-
-def marketplace_residue() -> list[str]:
-    root = Path.home() / ".codex" / ".tmp" / "marketplaces"
-    candidates = [root / ".staging", root / ".backups"]
-    return [
-        str(path)
-        for candidate in candidates
-        if candidate.exists()
-        for path in candidate.glob("marketplace-upgrade-*")
-        if path.is_dir()
-    ]
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Verify an AnyPDF marketplace installation.")
-    parser.add_argument("--expected-version", required=True)
-    parser.add_argument("--loaded-skill-path")
-    parser.add_argument("--strict-residue", action="store_true")
-    args = parser.parse_args()
-
-    root = Path(__file__).resolve().parents[1]
-    failures: list[str] = []
-    warnings: list[str] = []
-
-    manifest = read_json(root / "manifest.json")
-    runtime = read_json(root / "runtime-manifest.json")
-    if manifest.get("version") != args.expected_version:
-        failures.append("package_manifest_version_mismatch")
-    if runtime.get("version") != args.expected_version:
-        failures.append("runtime_manifest_version_mismatch")
-    if runtime.get("platform") != "universal":
-        failures.append("runtime_platform_mismatch")
-    if not isinstance(runtime.get("source_sha"), str) or len(runtime["source_sha"]) != 40:
-        failures.append("runtime_source_sha_invalid")
-
-    client, client_error = run([str(root / "bin" / "anypdf"), "--version"])
-    if client_error:
-        failures.append("client_version_check_failed")
-        warnings.append(client_error)
-    elif client is not None and client.stdout.strip() != f"anypdf {args.expected_version}":
-        failures.append("client_version_mismatch")
-
-    installed, installed_error = run(["codex", "plugin", "list", "--json"])
-    if installed_error:
-        warnings.append(f"codex_plugin_list_unavailable:{installed_error}")
-    else:
-        try:
-            entries = json.loads(installed.stdout).get("installed", []) if installed is not None else []
-        except json.JSONDecodeError as error:
-            entries = []
-            warnings.append(f"codex_plugin_list_invalid:{error}")
-        entry = next((item for item in entries if item.get("pluginId") == PLUGIN_ID), None)
-        if not entry or entry.get("version") != args.expected_version:
-            failures.append("codex_plugin_list_version_mismatch")
-
-    if args.loaded_skill_path:
-        normalized = args.loaded_skill_path.replace("\\", "/")
-        if f"/anypdf/{args.expected_version}/skills/" not in normalized:
-            failures.append("loaded_skill_path_version_mismatch")
-
-    residue = marketplace_residue()
-    if residue:
-        if args.strict_residue:
-            failures.append("marketplace_upgrade_residue_present")
-        else:
-            warnings.append("marketplace_upgrade_residue_present")
-
-    result = {
-        "ok": not failures,
-        "failures": sorted(set(failures)),
-        "next_actions": [] if not failures else ["Reinstall anypdf from jacky-plugins and rerun this verifier."],
-        "plugin_root": str(root),
-        "residue": residue,
-        "warnings": sorted(set(warnings)),
-    }
-    print(json.dumps(result, sort_keys=True))
-    return 0 if result["ok"] else 1
-
-
-if __name__ == "__main__":
-    sys.exit(main())
-
+if [ -z "$FAILURES" ]; then OK=true; else OK=false; fi
+printf '{"failures":[%s],"next_actions":%s,"ok":%s,"plugin_root":"%s","warnings":[%s]}\n' "$FAILURES" '[]' "$OK" "$ROOT" "$WARNINGS"
+[ "$OK" = true ]

@@ -1,17 +1,18 @@
 # AnyPDF Codex Plugin
 
-AnyPDF is a universal, server-owned PDF workflow client. The package contains
-only public skills, a small Python 3.11 standard-library HTTPS client, and
-documentation. It has no native executable, PDF template, private mapping, or
-verification key.
+AnyPDF is a server-owned PDF workflow client. The package contains public
+skills, a platform-matched native `anypdf` client, its SHA-256 sidecar, and
+documentation. It contains no PDF template, private mapping, admin tool, or
+server credential.
 
 The client uses `https://anypdf.jackyzhang.app` by default. Run the
-`connect-anypdf` skill once to verify a token supplied on stdin and save it in
-the mode-0600 local config at `~/.anypdf/config.json`. The backend URL may be
-overridden with `ANYPDF_BACKEND_URL`; `ANYPDF_TOKEN` remains an explicit,
-ephemeral automation override. Neither value belongs in plugin files, prompts,
-reports, logs, or command arguments. HTTP is accepted only for loopback
-development URLs; all other backends must use HTTPS.
+`connect-anypdf` skill once to verify a credential supplied on stdin and save
+only the mode-0600 canonical user slot at
+`~/.jackyzhang.app/token/user.json`. The backend URL may be overridden with
+`ANYPDF_BACKEND_URL` for development or self-hosting. Product requests use
+only an in-memory short-lived exact-audience JWT. Neither value belongs in
+plugin files, prompts, reports, logs, or command arguments. HTTP is accepted
+only for loopback development URLs; all other backends must use HTTPS.
 
 ## Registered PDF fill
 
@@ -23,24 +24,17 @@ value with a later status invocation until `succeeded` or `failed`.
 
 ## New PDF request
 
-Use `anypdf-form-intake` only when the user has explicitly confirmed that a PDF
-is a blank form template. The client checks the PDF header, size, and SHA-256,
-then uses the server's signed upload and finalize flow. Never upload a filled
-form, source evidence, identity document, or any other private document.
+Use `anypdf-form-intake` when the user provides a PDF form template to register
+or request support. Do not ask them to re-confirm that it is blank. The client
+checks the PDF header, size, and SHA-256, then uses the server's signed upload
+and finalize flow. Never upload source evidence, identity documents, or other
+private non-template documents through this path.
 
 ## Bug report
 
 Use `anypdf-feedback` to submit a small redacted JSON report and inspect its
 status. Diagnostics are opt-in and must contain stable facts only; never include
 tokens, secrets, raw logs, PDF bytes, or identity data.
-
-## Optional discovery preferences
-
-`anypdf preferences get`, `set`, `clear`, and `catalog` support non-secret local
-facets as a soft ranking hint. Preferences never filter or authorize a form.
-Missing preferences preserve global behavior. If a resolve request returns
-multiple candidates, show them and ask the user to choose a form/version; do not
-guess.
 
 The client is non-interactive and JSON-first. See each skill for the exact
 workflow and command examples.
