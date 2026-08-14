@@ -6,9 +6,10 @@ description: Fill a registered PDF form through the AnyPDF server-owned workflow
 # Registered PDF fill
 
 Use the packaged native `anypdf` client. First use `connect-anypdf` to save the
-credential locally; normal commands then need no environment setup. Never ask
-the user to place a token in an argument or echo a token. The packaged native
-client reads only the saved platform token.
+canonical user credential locally; normal commands then need no environment
+setup. Never ask the user to place a credential in an argument or echo it.
+Product requests use only the in-memory short-lived exact-audience JWT; the
+native client has no environment credential override.
 
 This server-owned path is mandatory. Never substitute local repository code,
 `pypdf`, ReportLab, or another generic PDF writer for a registered fill. A PDF

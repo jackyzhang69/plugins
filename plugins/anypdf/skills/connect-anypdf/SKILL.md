@@ -1,28 +1,65 @@
 ---
 name: connect-anypdf
-description: Connect the public AnyPDF client once using a token supplied only on stdin.
+description: Connect the public AnyPDF client once using a canonical credential supplied only on stdin.
 ---
+
+## Shared platform token (host agent — mandatory)
+
+- Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only).
+- **One connect for the whole platform.** If this file already exists from any other official plugin, do **not** ask the human to log in again.
+- On load, if `user.json` is missing but a legacy on-disk `jz_` exists (`token/user.json`, product-local config token fields), **migrate immediately** by running this product's CLI `whoami`/`doctor`/any authenticated command (load-time migrate is built in). User must feel no re-paste.
+- Only when no migratable `jz_` exists: complete connect once using the token-delivery rules below. After that, every registered plugin reuses the same slot.
+- Never print or log the raw token. Prefer masked doctor/whoami output.
+- Do not create product-local durable token files.
+
+## Token delivery to the host agent (connect) — LOCKED 2026-08-14
+
+The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves.
+
+Accept input in this order:
+
+1. **File containing the token (preferred).** If the human provides a filesystem path (e.g. `~/Desktop/jacky-token.txt`) or an attached/readable file whose contents are a single `jz_…` value (optional surrounding whitespace/newline only):
+   - Read the file in the agent tool channel.
+   - Pipe the token to the product CLI via stdin only: `login --token-stdin` (or the product's equivalent).
+   - Do **not** put the token on argv, in chat echo, in logs, or in screenshots.
+   - Confirm success with masked doctor/whoami only.
+
+2. **Plaintext token in chat (allowed, discouraged).** If the human pastes a raw `jz_…` into the conversation:
+   - **Warn once** in plain language: prefer a local file path next time so the secret is not retained in chat history; do **not** refuse.
+   - Proceed immediately: feed that value to `login --token-stdin` via a non-echoing agent-side pipe (temp file mode 0600 deleted after use is OK; never `echo TOKEN |` in a way that lands in shell history if avoidable).
+   - Do not repeat the raw token back in the reply.
+
+3. **No token yet.** Ask the human to send either a **file path** (best) or paste the token. Still do not ask them to run terminal commands.
+
+Hard rules:
+
+- `--token <value>` / argv secrets remain **forbidden** for the CLI.
+- Agent may read a user-supplied path and stdin-feed the CLI; that is the supported file path.
+- After any successful connect, other plugins must not re-prompt when `user.json` is present.
+
 
 # Connect AnyPDF
 
 The public client defaults to `https://anypdf.jackyzhang.app`. To use another
 backend for local development, set `ANYPDF_BACKEND_URL` for this invocation;
-the URL is resolved each time and is never written into the credential file.
+the URL is resolved each time and is never written into the credential slot.
 
-Tell the user to run this in their own terminal and enter the token at the
-non-echoing prompt (the token is not a command-line argument or agent input):
+Run for the user this in their own terminal and enter the credential at the
+non-echoing prompt (the value is not a command-line argument or agent input):
 
 ```bash
 anypdf login --json
 ```
 
-Do not ask for the token in chat or put it in an agent tool call, pipe, argument,
-shell history, prompt text, report, log, or output. The launcher reads it locally,
-verifies the token with the backend, and then
-writes only the token to `~/.jackyzhang.app/token/jz.json` using an atomic mode-0600 file
-inside a mode-0700 directory. A failed verification never writes a credential.
+Do not ask for the credential in chat or put it in an agent tool call, pipe,
+argument, shell history, prompt text, report, log, or output. The launcher reads
+stdin, verifies it through accountd, and atomically writes only the mode-0600
+canonical user slot `~/.jackyzhang.app/token/user.json` inside a mode-0700
+directory. A failed verification never writes a slot.
 
-After login, normal commands automatically reuse the saved credential:
+Subsequent commands exchange the user slot for a short-lived exact-audience JWT
+held only in process memory; the durable value is never sent to the AnyPDF
+product API:
 
 ```bash
 anypdf whoami --json
@@ -33,6 +70,5 @@ anypdf forms catalog
 `whoami` returns only public token metadata (id, type, scopes, form allowlist,
 status, and expiry), never the raw token or owner secrets. `doctor` checks local
 backend resolution and credential safety without making an unsolicited remote
-request. `logout` removes only the saved local credential. The native client has no
-environment credential override; the saved platform token is the only credential
-source.
+request. `logout` removes only the saved user slot. The native client has no
+environment credential override.

@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+# verify-package: READ-ONLY consistency gate for the staged plugin package.
+#
+# Asserts that runtime-manifest.json, the release tag, component versions, the
+# sha256 hashes, and the staged assets all agree. It FAILS on any drift and
+# NEVER writes the manifest, sidecars, or binaries. It is idempotent: running it
+# twice cannot change anything on disk.
+#
+# Allowed platforms (hard allowlist): darwin-arm64, win32-x64 only. Any other
+# platform key, or a missing key, is a failure.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"   # plugin/
+REPO="$(cd "$ROOT/.." && pwd)"             # repo root
+
+MANIFEST="$ROOT/runtime-manifest.json"
+test -f "$MANIFEST" || { echo "verify-package: missing runtime-manifest.json" >&2; exit 1; }
+
+# Required skill directories (read-only existence gate). A package missing any
+# of these is incomplete and must FAIL.
+REQUIRED_SKILLS=(
+  anychat-capabilities
+  connect-anychat
+  anychat-setup
+  anychat-query
+  anychat-media
+  tell-jacky
+)
+for s in "${REQUIRED_SKILLS[@]}"; do
+  test -d "$ROOT/skills/$s"     || { echo "verify-package: required skill dir missing: skills/$s" >&2; exit 1; }
+done
+
+# Voice STT contract must remain present in the shipped skill text.
+grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat-media/SKILL.md"   || { echo "verify-package: voice STT contract missing from anychat-media" >&2; exit 1; }
+
+PKG_VERSION="$(cd "$REPO" && python3 -c 'import tomllib; print(tomllib.loads(open("Cargo.toml","rb").read().decode())["package"]["version"])')"
+EXPECTED_TAG="anychat-v${PKG_VERSION}"
+
+# All checks run in one Python process so partial writes are impossible and the
+# script is purely read-only.
+python3 - "$MANIFEST" "$ROOT" "$PKG_VERSION" "$EXPECTED_TAG" <<'PY'
+import hashlib, json, pathlib, sys
+
+manifest_path, root, pkg_version, expected_tag = sys.argv[1:5]
+root = pathlib.Path(root)
+m = json.loads(pathlib.Path(manifest_path).read_text())
+errors = []
+
+def sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+ALLOWED = ["darwin-arm64", "win32-x64"]
+
+# 1. Manifest schema version.
+if m.get("version") != 4:
+    errors.append(f"manifest.version is {m.get('version')!r}, expected 4")
+
+# 2. Platforms allowlist: enforced globally and per component.
+allowed = m.get("allowedPlatforms")
+if allowed != ALLOWED:
+    errors.append(f"allowedPlatforms is {allowed!r}, expected {ALLOWED!r}")
+
+for comp in ("binary", "helper"):
+    sect = m.get(comp)
+    if not isinstance(sect, dict):
+        errors.append(f"manifest missing '{comp}' section")
+        continue
+    plats = sect.get("platforms", {})
+    plat_keys = sorted(plats.keys())
+    if plat_keys != ALLOWED:
+        errors.append(f"{comp}.platforms keys {plat_keys!r} != allowlist {ALLOWED!r}")
+
+# 3. Component metadata: version + verifyChecksum.
+for comp in ("binary", "helper"):
+    sect = m.get(comp, {})
+    if sect.get("version") != pkg_version:
+        errors.append(
+            f"{comp}.version is {sect.get('version')!r}, expected Cargo version {pkg_version!r}"
+        )
+    if sect.get("verifyChecksum") is not True:
+        errors.append(f"{comp}.verifyChecksum must be true")
+
+# 4. Release tag must encode the package version.
+tag = m.get("binary", {}).get("release", {}).get("tag", "")
+if tag != expected_tag:
+    errors.append(f"binary.release.tag is {tag!r}, expected {expected_tag!r}")
+
+# 5. Per-platform entrypoint + sha256 + sidecar consistency (READ-ONLY).
+for comp in ("binary", "helper"):
+    sect = m.get(comp, {})
+    for plat in ALLOWED:
+        entry = sect.get("platforms", {}).get(plat, {})
+        rel = entry.get("entrypoint")
+        recorded = entry.get("sha256")
+        if not rel or not recorded:
+            errors.append(f"{comp}.{plat}: missing entrypoint or sha256")
+            continue
+        artifact = root / rel
+        if not artifact.is_file():
+            errors.append(f"{comp}.{plat}: staged artifact missing: {rel}")
+            continue
+        actual = sha256(artifact)
+        if actual != recorded:
+            errors.append(
+                f"{comp}.{plat}: sha256 drift for {rel}: manifest={recorded} actual={actual}"
+            )
+        sidecar = artifact.parent / (artifact.name + ".sha256")
+        if not sidecar.is_file():
+            errors.append(f"{comp}.{plat}: sidecar missing: {sidecar.name}")
+        else:
+            side_val = sidecar.read_text().strip().split()[0]
+            if side_val != recorded:
+                errors.append(
+                    f"{comp}.{plat}: sidecar {sidecar.name}={side_val} != manifest {recorded}"
+                )
+
+# 6. Version consistency for the main binary on the native host. We can only
+#    execute the darwin-arm64 main binary on this Apple Silicon host; the helper
+#    has no --version flag and Windows artifacts cannot run here. Their integrity
+#    is pinned by sha256 (checked above) + same-checkout build (stage-package).
+import subprocess
+main_darwin = root / m.get("binary", {}).get("platforms", {}).get("darwin-arm64", {}).get("entrypoint", "")
+if main_darwin.is_file():
+    try:
+        out = subprocess.run(
+            [str(main_darwin), "--version"],
+            capture_output=True, text=True, timeout=15,
+        )
+        if out.returncode != 0 or pkg_version not in out.stdout:
+            errors.append(
+                f"main binary --version did not report {pkg_version!r}: "
+                f"rc={out.returncode} stdout={out.stdout!r}"
+            )
+    except Exception as exc:  # pragma: no cover - host-dependent
+        errors.append(f"could not run main binary --version: {exc}")
+
+if errors:
+    print("verify-package: FAIL — release chain drift detected:", file=sys.stderr)
+    for e in errors:
+        print(f"  - {e}", file=sys.stderr)
+    sys.exit(1)
+
+print(
+    f"verify-package: ok  (version {pkg_version}, tag {expected_tag}, "
+    f"main + helper verified for {', '.join(ALLOWED)})"
+)
+PY

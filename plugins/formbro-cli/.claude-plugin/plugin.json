@@ -1,7 +1,7 @@
 {
   "name": "formbro-cli",
   "description": "Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write entities, validate, fill IMM PDFs, and drive local webform fills.",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://formbro.ca"

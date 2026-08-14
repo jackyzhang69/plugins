@@ -26,8 +26,9 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
 Supported archive family: **WeChat/Weixin 4.1 or newer**. Automatic first-time access depends on the OS and chat-app build.
 
-Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat`.  
-Package both platforms: `plugin/scripts/verify-install`.
+Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat` + `~/.local/bin/anychat-access`.  
+Stage both platforms (writes manifest + sidecars): `scripts/stage-package` (repo-level dev tool).  
+Verify staged package consistency (read-only gate): `plugin/scripts/verify-package`.
 
 Connect (secure): `printf %s "$TOKEN" | anychat login --token-stdin --accept-personal-use`.  
 Tell Jacky: `anychat feedback create … --user-confirmed` (Portal + local mirror fallback).

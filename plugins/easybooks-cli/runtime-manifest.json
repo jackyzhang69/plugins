@@ -4,17 +4,16 @@
     "name": "easybooks",
     "platforms": {
       "darwin-arm64": {
-        "entrypoint": "bin/darwin-arm64/easybooks"
+        "path": "bin/darwin-arm64/easybooks",
+        "sha256": "8e521c7ebccf437c4378b729ef335a6da196685d3642573c53590c4c676a52b5"
       },
       "win32-x64": {
-        "entrypoint": "bin/win32-x64/easybooks.exe"
+        "path": "bin/win32-x64/easybooks.exe",
+        "sha256": "b59dbd1da1c50281053c5ff6cfb49113001068daabc08427f98ea55f446a994a"
       }
-    },
-    "resolutionOrder": ["${platform}-${arch}"],
-    "fallbackBehavior": "fail",
-    "verifyChecksum": true,
-    "binaryOverrideEnvVar": "EASYBOOKS_BIN"
+    }
   },
+  "plugin_version": "0.5.10",
   "configHome": {
     "darwin": "${HOME}/.easybooks",
     "linux": "${HOME}/.easybooks",
