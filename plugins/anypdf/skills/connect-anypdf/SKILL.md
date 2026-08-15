@@ -5,12 +5,16 @@ description: Connect the public AnyPDF client once using a canonical credential 
 
 ## Shared platform token (host agent — mandatory)
 
-- Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only).
-- **One connect for the whole platform.** If this file already exists from any other official plugin, do **not** ask the human to log in again.
-- On load, if `user.json` is missing but a legacy on-disk `jz_` exists (`token/user.json`, product-local config token fields), **migrate immediately** by running this product's CLI `whoami`/`doctor`/any authenticated command (load-time migrate is built in). User must feel no re-paste.
-- Only when no migratable `jz_` exists: complete connect once using the token-delivery rules below. After that, every registered plugin reuses the same slot.
+- Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only; `credential_kind=user`, `slot=user`).
+- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, and EasyBooks all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
+- **Consumption differs by product; the durable token does not.**
+  - **Exchange mode** (`anychat`, `anypdf`, `anyweb`, EasyBooks/`eb`): CLI calls `POST /v1/token/exchange` with `aud=<product>` and uses a short-lived memory-only JWT on product routes. Raw `jz_` is not a product bearer.
+  - **Introspect mode** (`formbro`): CLI/API sends raw `jz_`; FormBro backend calls accountd `POST /v1/api-tokens/introspect`. `aud=formbro` exchange is invalid (`unknown_audience`).
+- Retired local prefixes (`fb_`, `ap_live_`, `eb_live_`, …) are not Portal credentials — never ask the human to paste them into a Portal plugin.
+- On load, if `user.json` is missing but a legacy on-disk `jz_` exists (`token/jz.json` or migratable product-local fields), **migrate immediately** via this product CLI `whoami`/`doctor`/login path. User must feel no re-paste.
 - Never print or log the raw token. Prefer masked doctor/whoami output.
-- Do not create product-local durable token files.
+- Do not create product-local durable token files. Plugin runtime stays under `~/.jackyzhang.app/<plugin_id>/` only.
+
 
 ## Token delivery to the host agent (connect) — LOCKED 2026-08-14
 
