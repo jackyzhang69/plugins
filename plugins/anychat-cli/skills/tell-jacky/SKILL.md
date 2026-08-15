@@ -78,7 +78,7 @@ showing the user the exact type/title/description/context/images first.
 | `title` | yes | ≤200 chars |
 | `description` | yes | concrete; for bugs prefer verbatim product error + support_code |
 | `url` | no | optional page URL |
-| `context-json` | no | e.g. `{"support_code":"E_LOCAL_ACCESS_TIMEOUT","os":"windows"}` |
+| `context-json` | no | Scalar diagnostic metadata only, e.g. `{"support_code":"E_LOCAL_ACCESS_TIMEOUT","component":"wechat"}`; chat content, contacts, paths, and unknown fields are rejected |
 | access diagnosis | auto | After `prepare-access` fails, CLI attaches a **redacted** `access_diagnosis` (counts only: scan MiB, process count, support_code, wall time). Opt out with `--no-access-diagnosis`. |
 | `image` | no | local screenshot path(s); confirm each |
 

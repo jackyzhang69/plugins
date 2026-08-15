@@ -17,14 +17,16 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 | `anychat-media` | Attachment list / download |
 | `tell-jacky` | Feedback (confirm first) |
 
-## Platforms
+## Platforms and stable sources
 
-| Platform | Binary |
-|----------|--------|
-| macOS Apple Silicon | AnyChat + bundled on-device access component |
-| Windows x64 | AnyChat + bundled on-device access component |
+| Platform | Stable source scope |
+|----------|---------------------|
+| macOS Apple Silicon | Explicitly verified WeChat profiles + iMessage + Telegram Postbox profile |
+| Windows x64 | Explicitly verified WeChat/Weixin profiles only; Telegram, Signal, and WhatsApp remain behind later native gates |
 
-Supported archive family: **WeChat/Weixin 4.1 or newer**. Automatic first-time access depends on the OS and chat-app build.
+Unknown chat-app builds fail closed. “4.1 or newer” is not a universal compatibility promise: archive readability, automatic first-time acquisition, schema, and media are separately verified per exact profile.
+
+See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the unreleased v0.2 candidate matrix, limitations, rollback commands, and remaining human gates.
 
 Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat` + `~/.local/bin/anychat-access`.  
 Stage both platforms (writes manifest + sidecars): `scripts/stage-package` (repo-level dev tool).  

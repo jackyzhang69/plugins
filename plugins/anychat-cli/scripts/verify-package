@@ -15,6 +15,7 @@ REPO="$(cd "$ROOT/.." && pwd)"             # repo root
 
 MANIFEST="$ROOT/runtime-manifest.json"
 test -f "$MANIFEST" || { echo "verify-package: missing runtime-manifest.json" >&2; exit 1; }
+test ! -L "$MANIFEST" || { echo "verify-package: runtime-manifest.json must not be a symlink" >&2; exit 1; }
 
 # Required skill directories (read-only existence gate). A package missing any
 # of these is incomplete and must FAIL.
@@ -80,12 +81,30 @@ for comp in ("binary", "helper"):
     if sect.get("verifyChecksum") is not True:
         errors.append(f"{comp}.verifyChecksum must be true")
 
-# 4. Release tag must encode the package version.
+# 4. Public plugin descriptors must identify the same package version. A
+# release with a fresh runtime manifest but stale host metadata is not valid.
+for rel in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json"):
+    descriptor_path = root / rel
+    try:
+        if descriptor_path.is_symlink() or not descriptor_path.is_file():
+            raise ValueError("descriptor is missing or a symlink")
+        descriptor = json.loads(descriptor_path.read_text())
+    except Exception as exc:
+        errors.append(f"could not parse {rel}: {exc}")
+        continue
+    if descriptor.get("name") != "anychat-cli":
+        errors.append(f"{rel}.name is {descriptor.get('name')!r}, expected 'anychat-cli'")
+    if descriptor.get("version") != pkg_version:
+        errors.append(
+            f"{rel}.version is {descriptor.get('version')!r}, expected Cargo version {pkg_version!r}"
+        )
+
+# 5. Release tag must encode the package version.
 tag = m.get("binary", {}).get("release", {}).get("tag", "")
 if tag != expected_tag:
     errors.append(f"binary.release.tag is {tag!r}, expected {expected_tag!r}")
 
-# 5. Per-platform entrypoint + sha256 + sidecar consistency (READ-ONLY).
+# 6. Per-platform entrypoint + sha256 + sidecar consistency (READ-ONLY).
 for comp in ("binary", "helper"):
     sect = m.get(comp, {})
     for plat in ALLOWED:
@@ -95,9 +114,18 @@ for comp in ("binary", "helper"):
         if not rel or not recorded:
             errors.append(f"{comp}.{plat}: missing entrypoint or sha256")
             continue
+        expected_rel = {
+            ("binary", "darwin-arm64"): "bin/darwin-arm64/anychat",
+            ("binary", "win32-x64"): "bin/win32-x64/anychat.exe",
+            ("helper", "darwin-arm64"): "bin/darwin-arm64/anychat-access",
+            ("helper", "win32-x64"): "bin/win32-x64/anychat-access.exe",
+        }[(comp, plat)]
+        if rel != expected_rel:
+            errors.append(f"{comp}.{plat}: entrypoint {rel!r} != {expected_rel!r}")
+            continue
         artifact = root / rel
-        if not artifact.is_file():
-            errors.append(f"{comp}.{plat}: staged artifact missing: {rel}")
+        if artifact.is_symlink() or not artifact.is_file():
+            errors.append(f"{comp}.{plat}: staged artifact missing or unsafe: {rel}")
             continue
         actual = sha256(artifact)
         if actual != recorded:
@@ -105,8 +133,8 @@ for comp in ("binary", "helper"):
                 f"{comp}.{plat}: sha256 drift for {rel}: manifest={recorded} actual={actual}"
             )
         sidecar = artifact.parent / (artifact.name + ".sha256")
-        if not sidecar.is_file():
-            errors.append(f"{comp}.{plat}: sidecar missing: {sidecar.name}")
+        if sidecar.is_symlink() or not sidecar.is_file():
+            errors.append(f"{comp}.{plat}: sidecar missing or unsafe: {sidecar.name}")
         else:
             side_val = sidecar.read_text().strip().split()[0]
             if side_val != recorded:
@@ -114,7 +142,34 @@ for comp in ("binary", "helper"):
                     f"{comp}.{plat}: sidecar {sidecar.name}={side_val} != manifest {recorded}"
                 )
 
-# 6. Version consistency for the main binary on the native host. We can only
+# The shipped bin tree is an exact allowlist. Stale, extra, symlinked, or
+# special entries must not hitchhike in a package after a profile change.
+expected_bin_files = set()
+for comp in ("binary", "helper"):
+    for entry in m.get(comp, {}).get("platforms", {}).values():
+        rel = entry.get("entrypoint")
+        if rel:
+            expected_bin_files.add(rel)
+            expected_bin_files.add(rel + ".sha256")
+bin_root = root / "bin"
+actual_bin_files = set()
+if bin_root.exists():
+    for path in bin_root.rglob("*"):
+        rel = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            errors.append(f"unsafe symlink in bin tree: {rel}")
+        elif path.is_file():
+            actual_bin_files.add(rel)
+        elif not path.is_dir():
+            errors.append(f"unsafe special entry in bin tree: {rel}")
+extra_bin = sorted(actual_bin_files - expected_bin_files)
+missing_bin = sorted(expected_bin_files - actual_bin_files)
+if extra_bin:
+    errors.append(f"unexpected files in bin tree: {extra_bin!r}")
+if missing_bin:
+    errors.append(f"missing files in bin tree: {missing_bin!r}")
+
+# 7. Version consistency for the main binary on the native host. We can only
 #    execute the darwin-arm64 main binary on this Apple Silicon host; the helper
 #    has no --version flag and Windows artifacts cannot run here. Their integrity
 #    is pinned by sha256 (checked above) + same-checkout build (stage-package).

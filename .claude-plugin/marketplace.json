@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
-    "version": "1.8.3"
+    "version": "1.8.4"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -15,7 +15,7 @@
       "homepage": "https://formbro.ca/agent-integration",
       "name": "formbro-cli",
       "source": "./plugins/formbro-cli",
-      "version": "1.8.3"
+      "version": "1.8.4"
     },
     {
       "author": {
@@ -24,7 +24,7 @@
       "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
-      "version": "0.5.10"
+      "version": "0.5.11"
     },
     {
       "author": {
@@ -34,7 +34,7 @@
       "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
       "name": "anychat-cli",
       "source": "./plugins/anychat-cli",
-      "version": "0.1.16"
+      "version": "0.1.17"
     },
     {
       "author": {

@@ -5,15 +5,15 @@
     "platforms": {
       "darwin-arm64": {
         "path": "bin/darwin-arm64/easybooks",
-        "sha256": "8e521c7ebccf437c4378b729ef335a6da196685d3642573c53590c4c676a52b5"
+        "sha256": "af60806747d36a63344632d5dcd673c0e0641f1e96a95ed562c5d401a76f3545"
       },
       "win32-x64": {
         "path": "bin/win32-x64/easybooks.exe",
-        "sha256": "b59dbd1da1c50281053c5ff6cfb49113001068daabc08427f98ea55f446a994a"
+        "sha256": "abab14c7861019ede53a0b82e9df2fe0267e958c0c797fa0a8b87f0cdde63fd2"
       }
     }
   },
-  "plugin_version": "0.5.10",
+  "plugin_version": "0.5.11",
   "configHome": {
     "darwin": "${HOME}/.easybooks",
     "linux": "${HOME}/.easybooks",

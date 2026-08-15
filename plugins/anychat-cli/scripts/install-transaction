@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+# Atomic, backup-first installer for the native AnyChat main/helper pair.
+# No backup is ever deleted automatically. Purge requires an explicit backup ID.
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+usage:
+  install-transaction install <source-main> <source-helper> <dest-dir> <backup-root>
+  install-transaction list <backup-root>
+  install-transaction rollback <backup-id> <dest-dir> <backup-root>
+  install-transaction purge <backup-id> <backup-root>
+EOF
+  exit 2
+}
+
+die() { echo "install-transaction: $*" >&2; exit 1; }
+sha256() { shasum -a 256 "$1" | awk '{print $1}'; }
+version_of() { "$1" --version | awk '{print $NF}'; }
+is_version_less() {
+  python3 - "$1" "$2" <<'PY'
+import re, sys
+def parts(value): return tuple(map(int, re.findall(r"[0-9]+", value)))
+a, b = parts(sys.argv[1]), parts(sys.argv[2])
+n = max(len(a), len(b)); a += (0,) * (n-len(a)); b += (0,) * (n-len(b))
+raise SystemExit(0 if a < b else 1)
+PY
+}
+safe_id() { [[ "$1" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]]; }
+
+reject_symlink() {
+  local path="$1"
+  [[ ! -L "$path" ]] || die "refusing symlink path: $path"
+  python3 - "$path" <<'PY' || die "refusing path with a symlink ancestor: $path"
+import os, pathlib, sys
+p = pathlib.Path(os.path.abspath(os.path.expanduser(sys.argv[1])))
+for candidate in (p, *p.parents):
+    if candidate.exists() and candidate.is_symlink():
+        # macOS exposes root-owned /var, /tmp, and /etc aliases. They are OS
+        # topology, not user-controlled output ancestors.
+        if str(candidate) in {"/var", "/tmp", "/etc"} and candidate.lstat().st_uid == 0:
+            continue
+        raise SystemExit(1)
+PY
+}
+
+prepare_roots() {
+  local dest="$1" backups="$2"
+  reject_symlink "$dest"
+  reject_symlink "$backups"
+  mkdir -p "$dest" "$backups"
+  chmod 700 "$backups"
+  reject_symlink "$dest/anychat"
+  reject_symlink "$dest/anychat-access"
+}
+
+lock_root() {
+  local backups="$1"
+  LOCK_DIR="$backups/.install-lock"
+  mkdir "$LOCK_DIR" 2>/dev/null || die "another install/rollback is active"
+  trap 'rm -rf -- "${TMP_MAIN:-}" "${TMP_HELP:-}" "${PENDING:-}" 2>/dev/null || true; rmdir "${LOCK_DIR:-}" 2>/dev/null || true' EXIT
+}
+
+verify_pair() {
+  local main="$1" helper="$2"
+  [[ -f "$main" && ! -L "$main" && -x "$main" ]] || die "invalid main binary: $main"
+  [[ -f "$helper" && ! -L "$helper" && -x "$helper" ]] || die "invalid helper binary: $helper"
+  "$main" --version >/dev/null 2>&1 || die "main binary version probe failed"
+}
+
+backup_current() {
+  local dest="$1" backups="$2"
+  local main="$dest/anychat" helper="$dest/anychat-access"
+  if [[ ! -e "$main" && ! -e "$helper" ]]; then
+    BACKUP_ID=""
+    return
+  fi
+  [[ -f "$main" && ! -L "$main" && -f "$helper" && ! -L "$helper" ]] \
+    || die "installed main/helper pair is incomplete or unsafe"
+  BACKUP_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
+  safe_id "$BACKUP_ID" || die "internal backup id error"
+  local candidate="$backups/$BACKUP_ID"
+  mkdir "$candidate" || die "backup id collision"
+  PENDING="$candidate"
+  chmod 700 "$PENDING"
+  cp -p "$main" "$PENDING/anychat"
+  cp -p "$helper" "$PENDING/anychat-access"
+  chmod 700 "$PENDING/anychat" "$PENDING/anychat-access"
+  {
+    echo 'schema_version=1'
+    echo "main_sha256=$(sha256 "$PENDING/anychat")"
+    echo "helper_sha256=$(sha256 "$PENDING/anychat-access")"
+  } >"$PENDING/manifest"
+  chmod 600 "$PENDING/manifest"
+  PENDING=""
+}
+
+install_pair() {
+  local src_main="$1" src_helper="$2" dest="$3" backups="$4"
+  prepare_roots "$dest" "$backups"
+  verify_pair "$src_main" "$src_helper"
+  if [[ "${LOCK_HELD:-0}" != 1 ]]; then
+    lock_root "$backups"
+    LOCK_HELD=1
+  fi
+  if [[ -x "$dest/anychat" && "${ALLOW_DOWNGRADE:-0}" != 1 ]]; then
+    current_version="$(version_of "$dest/anychat")"
+    candidate_version="$(version_of "$src_main")"
+    if is_version_less "$candidate_version" "$current_version"; then
+      die "refusing implicit downgrade $current_version -> $candidate_version; use rollback with a named backup"
+    fi
+  fi
+  backup_current "$dest" "$backups"
+
+  TMP_MAIN="$(mktemp "$dest/.anychat.install.XXXXXX")"
+  TMP_HELP="$(mktemp "$dest/.anychat-access.install.XXXXXX")"
+  cp "$src_main" "$TMP_MAIN"
+  cp "$src_helper" "$TMP_HELP"
+  chmod 755 "$TMP_MAIN" "$TMP_HELP"
+  [[ -z "${EXPECTED_MAIN_SHA:-}" || "$(sha256 "$TMP_MAIN")" == "$EXPECTED_MAIN_SHA" ]]     || die "staged main does not match the authenticated backup"
+  [[ -z "${EXPECTED_HELP_SHA:-}" || "$(sha256 "$TMP_HELP")" == "$EXPECTED_HELP_SHA" ]]     || die "staged helper does not match the authenticated backup"
+  "$TMP_MAIN" --version >/dev/null 2>&1 || die "staged main binary version probe failed"
+
+  local had_old=0
+  [[ -n "$BACKUP_ID" ]] && had_old=1
+  if ! mv -f "$TMP_MAIN" "$dest/anychat"; then
+    die "failed to publish main binary"
+  fi
+  TMP_MAIN=""
+  if ! mv -f "$TMP_HELP" "$dest/anychat-access"; then
+    if [[ "$had_old" == 1 ]]; then
+      cp "$backups/$BACKUP_ID/anychat" "$dest/anychat"
+      cp "$backups/$BACKUP_ID/anychat-access" "$dest/anychat-access"
+      chmod 755 "$dest/anychat" "$dest/anychat-access"
+    else
+      rm -f "$dest/anychat"
+    fi
+    die "failed to publish helper; previous pair restored"
+  fi
+  TMP_HELP=""
+  verify_pair "$dest/anychat" "$dest/anychat-access"
+  if [[ -n "$BACKUP_ID" ]]; then
+    echo "installed; previous pair preserved as backup $BACKUP_ID"
+  else
+    echo "installed; no previous pair existed"
+  fi
+}
+
+read_manifest_value() {
+  local manifest="$1" key="$2"
+  sed -n "s/^${key}=//p" "$manifest"
+}
+
+verify_backup() {
+  local dir="$1"
+  [[ -d "$dir" && ! -L "$dir" ]] || die "backup does not exist"
+  [[ -f "$dir/manifest" && ! -L "$dir/manifest" ]] || die "backup manifest missing"
+  [[ "$(read_manifest_value "$dir/manifest" schema_version)" == 1 ]] || die "unsupported backup manifest"
+  [[ "$(read_manifest_value "$dir/manifest" main_sha256)" == "$(sha256 "$dir/anychat")" ]] \
+    || die "backup main checksum mismatch"
+  [[ "$(read_manifest_value "$dir/manifest" helper_sha256)" == "$(sha256 "$dir/anychat-access")" ]] \
+    || die "backup helper checksum mismatch"
+  verify_pair "$dir/anychat" "$dir/anychat-access"
+}
+
+cmd="${1:-}"; shift || true
+case "$cmd" in
+  install)
+    [[ $# == 4 ]] || usage
+    install_pair "$1" "$2" "$3" "$4"
+    ;;
+  list)
+    [[ $# == 1 ]] || usage
+    backups="$1"; reject_symlink "$backups"; mkdir -p "$backups"; chmod 700 "$backups"
+    find "$backups" -mindepth 1 -maxdepth 1 -type d -name '????????T??????Z-*' -print \
+      | sed 's#.*/##' | sort
+    ;;
+  rollback)
+    [[ $# == 3 ]] || usage
+    id="$1"; dest="$2"; backups="$3"
+    safe_id "$id" || die "invalid backup id"
+    prepare_roots "$dest" "$backups"
+    lock_root "$backups"; LOCK_HELD=1
+    verify_backup "$backups/$id"
+    EXPECTED_MAIN_SHA="$(read_manifest_value "$backups/$id/manifest" main_sha256)"
+    EXPECTED_HELP_SHA="$(read_manifest_value "$backups/$id/manifest" helper_sha256)"
+    ALLOW_DOWNGRADE=1
+    install_pair "$backups/$id/anychat" "$backups/$id/anychat-access" "$dest" "$backups"
+    ;;
+  purge)
+    [[ $# == 2 ]] || usage
+    id="$1"; backups="$2"
+    safe_id "$id" || die "invalid backup id"
+    reject_symlink "$backups"
+    lock_root "$backups"; LOCK_HELD=1
+    verify_backup "$backups/$id"
+    rm -rf -- "$backups/$id"
+    echo "purged backup $id"
+    ;;
+  *) usage ;;
+esac

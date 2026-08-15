@@ -11,7 +11,7 @@
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "8d6a07863762871738cc95b28f1d4fe451238430a66caa846249a2262cf55a86"
+            "sha256": "588bf89962662ea39cfdc1f43f2d17962aef3809f91ffb5bd66e90f7f1a352d1"
           }
         ]
       },
@@ -22,7 +22,7 @@
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "d751561f7a99eb62a58152f9f64b4de2237a7127155ba76dd9faecaeba4ec84b"
+            "sha256": "636170750c1f8eab0bce02c21f9009615bbd852b02fa00bae440a2b56fa508a0"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "plugin-v1.8.3"
+      "tag": "plugin-v1.8.4"
     },
     "resolutionOrder": [
       "${platform}-${arch}"

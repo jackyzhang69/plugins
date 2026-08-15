@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
-    "version": "1.8.2"
+    "version": "1.8.4"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -14,19 +14,19 @@
         "name": "Jacky Zhang",
         "url": "https://formbro.ca"
       },
-      "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel — all via the bundled FormBro CLI.",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel \u2014 all via the bundled FormBro CLI.",
       "name": "formbro-cli",
       "source": "./plugins/formbro-cli",
-      "version": "1.8.2"
+      "version": "1.8.4"
     },
     {
       "author": {
         "name": "Jacky Zhang"
       },
-      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
-      "version": "0.5.9"
+      "version": "0.5.11"
     },
     {
       "author": {
@@ -36,7 +36,7 @@
       "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
       "name": "anychat-cli",
       "source": "./plugins/anychat-cli",
-      "version": "0.1.15"
+      "version": "0.1.17"
     },
     {
       "author": {

@@ -60,7 +60,7 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 ## 0. Non-negotiable rules
 
 1. **All archive ops go through the bundled `anychat` CLI.** Do not invent local storage paths, access material, or reimplement product internals.
-2. **Strict modes** — every query has exactly one `--mode`. Friend and group never mix.
+2. **Strict scopes** — legacy WeChat scoped queries use exactly one `--mode`; source-qualified/fan-out queries use `--source` or `--all-sources` and never mix legacy scope flags.
 3. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).
 4. **No secrets in feedback** — no credentials, private access material, message bodies, friend names/wxids, or attachment bytes unless the user explicitly approves a redacted draft.
 5. Prefer `--format json` when chaining agent steps **internally**; follow **Talk to the human** when reporting results.
@@ -71,11 +71,11 @@ Answer in product language, short bullets:
 
 - **Connect** once with a free Portal token (`connect-anychat` / `login`).
 - **Setup** local archive access on this Mac or Windows PC (`setup` + doctor).
-- **Search** friends, groups, person-across-groups, global keyword.
-- **Export** transcripts (text/json/md) and **download** attachments (image/voice/file/video/link cards).
+- **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
+- **Export** transcripts, **download** supported attachments, and create a local hash-verifiable evidence bundle.
 - **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
 
-Platforms: **macOS Apple Silicon** and **Windows x64**, for the **WeChat/Weixin 4.1 or newer archive family**. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
+Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and the verified Telegram local-cache profile. Windows x64 currently retains verified WeChat support; other Windows connectors stay unavailable until their own native tests pass. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
 
 ## Agent quick router
 
@@ -92,6 +92,8 @@ Platforms: **macOS Apple Silicon** and **Windows x64**, for the **WeChat/Weixin 
 | Multi people in one group | `query --mode multi-in-group --target "A" --person "B" --group "…"` |
 | My messages in groups | `query --mode me-in-groups` / `me-in-group --group "…"` |
 | Global keyword | `search --keyword "…" --days 90` |
+| Search all stable local sources | `search --keyword "…" --all-sources --format json` |
+| Create / verify local evidence | `evidence create --all-sources --output <new-dir>` / `evidence verify --bundle <dir>` |
 | Keyword + context | `query … --keyword "…" --context 2` |
 | List friends / groups | `friends list` / `groups list [--limit N]` |
 | Group member roster | `groups members --query "…" --json` |
