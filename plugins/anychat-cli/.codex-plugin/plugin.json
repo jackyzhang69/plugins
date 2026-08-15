@@ -1,6 +1,6 @@
 {
   "name": "anychat-cli",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "min_supported_version": "0.1.0",
   "description": "Search and export your own local chat archive (friends, groups, attachments) via the AnyChat CLI. Free Portal token. Content stays on your machine.",
   "author": {
