@@ -3,8 +3,8 @@
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anyimmi",
-      "sha256": "93526368b34a9a5d9f5d0c834e209121dd5e051fa17a74ad47df668a875eab11",
-      "size_bytes": 3118000,
+      "sha256": "0b4f747a0a8126b8f67c83bee7213555a15a139a04be25654d3fce2e4df30e22",
+      "size_bytes": 3134560,
       "checksum": "bin/darwin-arm64/anyimmi.sha256"
     }
   }
