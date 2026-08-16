@@ -5,7 +5,7 @@ description: Retrieve Canadian immigration practitioner field notes, unwritten o
 
 # Canadian Immigration Practitioner Field Notes (`immi-fieldnotes`)
 
-Access 11,800+ real-world practitioner field discussions and unwritten operational insights. This skill retrieves practical case handling consensus, IRCC portal glitches and workarounds, border flagpoling tendencies, processing time delays, and officer-specific evaluation quirks that are **never documented in official manuals**.
+Access synthesized real-world practitioner field discussions and unwritten operational insights. This skill retrieves practical case handling consensus, IRCC portal glitches and workarounds, border flagpoling tendencies, processing time delays, and officer-specific evaluation quirks that are **never documented in official manuals**.
 
 ---
 

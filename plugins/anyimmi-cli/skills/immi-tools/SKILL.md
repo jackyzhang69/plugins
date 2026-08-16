@@ -5,7 +5,7 @@ description: Canadian Immigration Intelligence & Practical Tools Plugin powered 
 
 # ImmiTools - Canadian Immigration Intelligence & Practical Tools
 
-The `immi-tools` skill provides authorized AI agents with deterministic access to official Canadian immigration knowledge, statutory calculators, and 54,000+ Federal Court case law precedents.
+The `immi-tools` skill provides authorized AI agents with deterministic access to official Canadian immigration knowledge, statutory calculators, and Canadian Federal Court case law precedents.
 
 ## Talk to the human (Mandatory Interaction Protocol)
 
@@ -22,7 +22,7 @@ When interacting with the user during immigration research and document drafting
 ## Available Capabilities
 
 1. **Federal Court Precedent Retrieval (`caselaw`)**:
-   - Queries 54k+ Canadian Federal Court immigration decisions.
+   - Queries authoritative Canadian Federal Court immigration decisions.
    - Extracts verbatim *Legal Ratio* excerpts, neutral citations, judgment dates, and validity status.
    - Used for submission letters, procedural fairness responses (PFR), and refusal reconsiderations.
 
@@ -31,7 +31,7 @@ When interacting with the user during immigration research and document drafting
    - Provides exact official policy references for study permits, work permits, Express Entry, and family sponsorship.
 
 3. **Practitioner Field Notes & Unwritten Operational Insights (`notes`)**:
-   - Queries 11,800+ real-world practitioner field discussions and unwritten operational insights.
+   - Queries synthesized real-world practitioner field discussions and unwritten operational insights.
    - Reveals system quirks, Webform reconciliation delays, port-of-entry flagpoling habits, and consultant consensus without exposing source or PII.
 
 4. **Statutory Calculations (`clb`, `wage`)**:

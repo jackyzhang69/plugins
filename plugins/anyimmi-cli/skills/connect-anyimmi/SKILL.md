@@ -13,13 +13,7 @@ Tell the user to run this in their own terminal and enter the token at the non-e
 anyimmi login
 ```
 
-Or non-interactively via stdin:
-
-```bash
-echo "<token>" | anyimmi login --token-stdin --json
-```
-
-Do not ask for the token in chat or put it in an agent tool call, pipe, argument, shell history, prompt text, report, log, or output. The launcher reads it locally, and writes only the token to `~/.jackyzhang.app/token/jz.json` using an atomic mode-0600 file inside a mode-0700 directory.
+Do not ask for the token in chat or put it in an agent tool call, pipe, argument, shell history, prompt text, report, log, or output. The launcher reads it locally, and writes only the token to `~/.jackyzhang.app/token/user.json` using an atomic mode-0600 file inside a mode-0700 directory.
 
 After login, normal commands automatically reuse the saved credential:
 
