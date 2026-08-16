@@ -84,7 +84,7 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → **connect-anychat** |
 | Connect / token | **connect-anychat** → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
-| First-time local access | **anychat-setup** → `prepare-access` (if needed) then `setup --yes` |
+| First-time local access | **anychat-setup** → read `doctor --json` `setup_plan`; direct preparation only when allowed, otherwise present its host-agent choices |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
 | Person across all groups | `query --mode person-in-groups --target "…"` |

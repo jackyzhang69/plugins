@@ -20,32 +20,34 @@ novice-friendly. Do not explain internal mechanisms.
 
 ## Talk to the human
 
-Report only major stages (need chat app logged in → one-time prepare-access → self-check names → ready). Do not dump raw `doctor --json` into chat; say “还没准备好本机档案 / 已经可以用了”. Never mention keys, databases, or helper binary names. Follow `anychat-capabilities` § **Talk to the human**.
+Report only major stages (need chat app logged in → choose a version path when required → one-time local preparation → self-check names → ready). Do not dump raw `doctor --json` into chat; say “还没准备好本机档案 / 已经可以用了”. Never mention keys, databases, or helper binary names. Follow `anychat-capabilities` § **Talk to the human**.
 
 ## Steps
 
-1. `anychat doctor --json` — note readiness flags for *your* decision; speak product language to the user.
-2. Ensure the archive comes from **WeChat/Weixin 4.1 or newer** and the chat app is logged in on this computer. Older archive versions are not supported; stop and ask the user to update. On Windows, keep the **main** WeChat/Weixin window open and fully signed in (helper processes alone are not enough). Automatic first-time access may still be unavailable for a particular OS/app build or local security posture; report `E_LOCAL_ACCESS_METHOD_UNAVAILABLE` honestly rather than saying the app is older or unsupported, and offer one retry after a normal re-login.
-3. If this OS is not macOS/Windows, stop and explain not supported yet.
-4. Run:
+1. Run `anychat doctor --json`. Treat its `setup_plan` as the only setup-routing authority; do not compare versions yourself.
+2. If this OS is not macOS/Windows, stop and explain not supported yet. On Windows, keep the **main** WeChat/Weixin window open and fully signed in (helper processes alone are not enough).
+3. Route exactly by `setup_plan.state`:
 
-```bash
-"$ANYCHAT_BIN" setup --yes
-```
+   - `ready` — run `anychat setup --yes`, then continue to the self-check.
+   - `prepare_supported` — the detected version is in the direct first-time range. Run the preparation sequence below without asking the user to choose a version path.
+   - `version_choice_required` — do **not** run `prepare-access`. Show the two `setup_plan.choices` by translating each choice's `customer_message` into the user's language; identify the choice whose `recommended` field is true. After the user chooses, follow that choice's `host_agent_steps` exactly. Never install, uninstall, downgrade, or upgrade WeChat/Weixin silently.
+   - `client_upgrade_required` — ask the user to update WeChat/Weixin into the 4.1.0–4.1.10 range, then rerun `doctor --json`.
+   - `version_confirmation_required` — ask the user to resolve the detected-version ambiguity, then rerun `doctor --json`. Never guess.
 
-5. If setup says on-device access is not ready:
+4. Direct preparation sequence (`prepare_supported` only):
 
 ```bash
 "$ANYCHAT_BIN" prepare-access
 "$ANYCHAT_BIN" setup --yes
 ```
 
-   - User may need to approve one elevated step / Mac password (agents never collect passwords).
-6. If setup / prepare-access fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, or `E_WINDOWS_*`):
+   The user may need to approve one elevated step / Mac password; agents never collect passwords.
+5. If setup / prepare-access fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, `E_WECHAT_*`, or `E_WINDOWS_*`):
    - Tell the user in plain language.
-   - When automatic access is unavailable (`E_LOCAL_ACCESS_METHOD_UNAVAILABLE`, timeout, or budget), the CLI already saved a **redacted access diagnosis** and printed how to send it.
+   - For `E_WECHAT_VERSION_CHOICE_REQUIRED`, rerun `doctor --json` and use its two choices; do not offer a retry loop.
+   - For a low-version method failure (`E_LOCAL_ACCESS_METHOD_UNAVAILABLE`, timeout, or budget), the CLI already saved a **redacted access diagnosis** and printed how to send it.
    - Offer **tell-jacky** once: diagnosis attaches automatically on `feedback create` (user still confirms the draft). Do not ask the user to invent technical fields.
-7. On success, self-check:
+6. On success, self-check:
 
 ```bash
 "$ANYCHAT_BIN" friends list --limit 5 --json
@@ -54,7 +56,7 @@ Report only major stages (need chat app logged in → one-time prepare-access �
    Show sample display names; ask: “这是你的账号吗？”  
    Only after confirm, proceed to queries.
 
-8. Demo value (optional): `anychat recents` or a short friend query.
+7. Demo value (optional): `anychat recents` or a short friend query.
 
 ## macOS / Windows notes (user-facing)
 

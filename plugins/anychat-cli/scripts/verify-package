@@ -34,7 +34,8 @@ done
 # Voice STT contract must remain present in the shipped skill text.
 grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat-media/SKILL.md"   || { echo "verify-package: voice STT contract missing from anychat-media" >&2; exit 1; }
 
-PKG_VERSION="$(cd "$REPO" && python3 -c 'import tomllib; print(tomllib.loads(open("Cargo.toml","rb").read().decode())["package"]["version"])')"
+PKG_VERSION="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps 2>/dev/null \
+  | python3 -c 'import sys,json; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"] == "anychat"))')"
 EXPECTED_TAG="anychat-v${PKG_VERSION}"
 
 # All checks run in one Python process so partial writes are impossible and the
