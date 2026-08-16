@@ -1,0 +1,18 @@
+{
+  "name": "anyimmi",
+  "version": "1.0.0",
+  "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore",
+  "type": "plugin",
+  "entrypoint": "bin/anyimmi",
+  "skills": [
+    "skills/connect-anyimmi/SKILL.md",
+    "skills/tell-jacky/SKILL.md",
+    "skills/immi-tools/SKILL.md",
+    "skills/immi-caselaw/SKILL.md",
+    "skills/immi-policy/SKILL.md",
+    "skills/immi-fieldnotes/SKILL.md",
+    "skills/immi-clb/SKILL.md"
+  ],
+  "author": "Jacky Zhang",
+  "license": "Proprietary"
+}

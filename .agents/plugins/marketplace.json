@@ -47,6 +47,17 @@
       "name": "anypdf",
       "source": "./plugins/anypdf",
       "version": "0.5.3"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang",
+        "url": "https://github.com/jackyzhang69/anyimmi"
+      },
+      "category": "productivity",
+      "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore: Federal Court precedent legal ratios, official IRCC policy manuals & Help Centre Q&As, synthesized practitioner field insights, and statutory CLB benchmark calculators.",
+      "name": "anyimmi-cli",
+      "source": "./plugins/anyimmi-cli",
+      "version": "1.0.0"
     }
   ]
 }
