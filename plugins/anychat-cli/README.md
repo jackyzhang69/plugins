@@ -24,9 +24,9 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 | macOS Apple Silicon | Explicitly verified WeChat profiles + iMessage + Telegram Postbox profile |
 | Windows x64 | Explicitly verified WeChat/Weixin profiles only; Telegram, Signal, and WhatsApp remain behind later native gates |
 
-Unknown chat-app builds fail closed. Direct first-time preparation is limited to WeChat/Weixin 4.1.0–4.1.10; newer versions require existing local access or the host-agent-guided temporary/permanent downgrade choices. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
+Unknown chat-app builds fail closed. When multiple detected WeChat/Weixin builds coexist, `setup_plan.version_confirmation_choices` gives the host agent exact user-confirmed selection arguments; invented or stale builds are rejected. Direct first-time preparation is limited to 4.1.0–4.1.10; newer versions require existing local access or the host-agent-guided temporary/permanent downgrade choices. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
 
-See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the unreleased v0.2 candidate matrix, limitations, rollback commands, and remaining human gates.
+See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the current release changes and package coverage.
 
 Dev (macOS): `../scripts/install-local.sh` → `~/.local/bin/anychat` + `~/.local/bin/anychat-access`.  
 Stage both platforms (writes manifest + sidecars): `scripts/stage-package` (repo-level dev tool).  

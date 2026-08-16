@@ -1,16 +1,12 @@
-# AnyChat 0.1.20
+# AnyChat 0.1.21
 
 ## User-visible changes
 
-- First-time WeChat/Weixin setup now follows one version-aware plan on macOS and Windows.
-- When existing local access is already ready, setup continues directly regardless of the currently installed WeChat/Weixin version.
-- WeChat/Weixin 4.1.0 through 4.1.10 can use direct first-time preparation.
-- WeChat/Weixin 4.1.11 or newer stops before preparation and asks the customer to choose one of two explicit paths:
-  - keep WeChat/Weixin at 4.1.10 or below; or
-  - temporarily use 4.1.10 or below for one-time preparation, then upgrade again (recommended).
-- Host agents receive exact steps for the selected path. AnyChat never installs, downgrades, or upgrades WeChat/Weixin silently.
-- macOS permission failures are no longer mislabeled as Windows failures.
-- Private admin feedback lists now default to unprocessed (`received`) items. Listing all statuses requires explicit `--all`.
+- When multiple WeChat/Weixin builds coexist, `doctor --json` now returns an actionable `setup_plan.version_confirmation_choices` entry for every detected build.
+- After the user chooses, the host agent records the exact detected build with `anychat setup --confirm-wechat-build <exact-build>`.
+- `doctor`, `prepare-access`, and `sources connect wechat` all reuse that recorded confirmation while the exact build remains live-detected.
+- Invented or stale build values fail closed with `E_WECHAT_VERSION_CONFIRMATION_INVALID`; they never bypass live detection.
+- Existing access material still continues directly, and the 4.1.0–4.1.10 versus newer-version routing remains unchanged.
 
 ## Package coverage
 

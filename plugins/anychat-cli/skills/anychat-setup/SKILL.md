@@ -32,7 +32,7 @@ Report only major stages (need chat app logged in → choose a version path when
    - `prepare_supported` — the detected version is in the direct first-time range. Run the preparation sequence below without asking the user to choose a version path.
    - `version_choice_required` — do **not** run `prepare-access`. Show the two `setup_plan.choices` by translating each choice's `customer_message` into the user's language; identify the choice whose `recommended` field is true. After the user chooses, follow that choice's `host_agent_steps` exactly. Never install, uninstall, downgrade, or upgrade WeChat/Weixin silently.
    - `client_upgrade_required` — ask the user to update WeChat/Weixin into the 4.1.0–4.1.10 range, then rerun `doctor --json`.
-   - `version_confirmation_required` — ask the user to resolve the detected-version ambiguity, then rerun `doctor --json`. Never guess.
+   - `version_confirmation_required` — show the detected versions from `setup_plan.version_confirmation_choices`. After the user identifies the version to use, run that choice's exact `host_agent_args` (`anychat setup --confirm-wechat-build <exact-build>`), then rerun `doctor --json`. The CLI records the confirmation and validates it against fresh detection; never guess or invent a build string.
 
 4. Direct preparation sequence (`prepare_supported` only):
 
