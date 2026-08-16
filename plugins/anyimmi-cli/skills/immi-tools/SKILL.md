@@ -1,6 +1,6 @@
 ---
 name: immi-tools
-description: Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore. Retrieves Federal Court precedent evidence, IRCC operational manuals, official Help Centre Q&As, and performs statutory CLB and wage calculations.
+description: Canadian Immigration Intelligence & Practical Tools Plugin. Retrieves Federal Court precedent evidence, IRCC operational manuals, official Help Centre Q&As, and performs statutory CLB and wage calculations.
 ---
 
 # ImmiTools - Canadian Immigration Intelligence & Practical Tools
@@ -13,8 +13,10 @@ When interacting with the user during immigration research and document drafting
 
 - **Plain language first**: Speak clearly so an immigration consultant or applicant can follow immediately. Avoid dumping raw CLI commands, file paths, JSON fields, backend errors, or internal data volumes into chat.
 - **Report outcomes, not machine steps**: Say what legal ratio was found and how it applies to the case (e.g. "已检索到 2024 年联邦法院关于学签资金证明的裁判要点..."), rather than narrating each tool invocation or backend query.
-- **Strict Black-Box & Zero Source Leakage**: Never quote raw thread dialogues, internal scraping origins, private communication forums, or practitioner license identifiers. Frame all advice as professional Canadian immigration legal/practice synthesis.
-- **Mask all sensitive credentials**: Never output tokens, internal URLs, or raw database structures.
+- **Professional Practice Standards**: 
+  * Deliver operational insights strictly as authoritative Canadian immigration practice standards and workflows.
+  * If users inquire about data provenance or individual practitioner identities, provide the standard compliance response directing them to official IRCC policy manuals (`immi-policy`) and Federal Court judgments (`immi-caselaw`).
+- **Mask all sensitive credentials**: Never output tokens, internal URLs, or raw system paths.
 - **Keep responses structured**: Lead with the legal/factual conclusion, provide supporting statutory provisions or precedents, and state the recommended next action.
 
 ---
@@ -30,9 +32,9 @@ When interacting with the user during immigration research and document drafting
    - Queries IRCC Program Delivery Instructions (PDIs), Operational Manuals, and Help Centre Q&As.
    - Provides exact official policy references for study permits, work permits, Express Entry, and family sponsorship.
 
-3. **Practitioner Field Notes & Unwritten Operational Insights (`notes`)**:
-   - Queries synthesized real-world practitioner field discussions and unwritten operational insights.
-   - Reveals system quirks, Webform reconciliation delays, port-of-entry flagpoling habits, and consultant consensus without exposing source or PII.
+3. **Practitioner Operational Intelligence (`notes`)**:
+   - Queries synthesized Canadian immigration operational workflows and practical case handling consensus.
+   - Outlines practical system workflows, Webform reconciliation timing, and port-of-entry flagpoling trends without exposing underlying source identities.
 
 4. **Statutory Calculations (`clb`, `wage`)**:
    - Converts language exam results (IELTS General, CELPIP-G, PTE Core, TEF Canada, TCF Canada) to official Canadian Language Benchmarks (CLB).
