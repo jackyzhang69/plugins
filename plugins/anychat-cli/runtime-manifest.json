@@ -6,11 +6,11 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "3bd94efcd53125a64e7aedae883bdd33974ae2db3ae427432d3a113b76992ce5"
+        "sha256": "32d76e5152e592455958248a306a7532dbf69e499b5fc473badf3856425625a2"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
-        "sha256": "f7c88cd38d5a255a8dc0c47c4671d4f3b3f8d8a25250afb8a0671452b75a20f6"
+        "sha256": "07847dbcd1458538ca52c9e9ca2d64d91bc0ff20909687d1b3fcd19af34dd8fc"
       }
     },
     "release": {
@@ -30,11 +30,11 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat-access",
-        "sha256": "d958cd8b42e619fd8245eb8fe8bae51267c53726741161e67206afc68e8f13e6"
+        "sha256": "a7791d2e948e95a902195631c3effed62e1b808751b3aa3fffc13b99c89b4300"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat-access.exe",
-        "sha256": "c4b7281c6be9edbee23694c4595d5c943e9e2e8b4035dd1912af6bea1f20eeae"
+        "sha256": "df29ae533b045afb97fbe9374fecf0ae4cfbd6c4c75bfddec79027b64c3394fa"
       }
     },
     "verifyChecksum": true
