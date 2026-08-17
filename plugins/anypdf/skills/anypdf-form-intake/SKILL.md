@@ -5,35 +5,33 @@ description: Submit a PDF template as a new AnyPDF form request.
 
 # New PDF request
 
-Use this workflow when the user provides a PDF form template to register or
-request support. The client checks `%PDF-`, SHA-256, and a 50 MiB maximum before
-using a short-lived signed upload grant. Do not ask the user to re-confirm that
-the file is blank; the submitted PDF is the template input.
+Use this workflow only when the user provides an issuing-authority official blank PDF template to
+register or request support. Do not submit a filled form,
+an identity document, or another private document. Before sending, the client
+locally checks the `%PDF-` header, the 50 MiB maximum, and the SHA-256 hash. It
+then sends exactly one raw PDF POST to the intake endpoint. The command itself
+is the only confirmation; do not add a second interactive blank-template
+confirmation.
 
 ```bash
 anypdf intake submit --pdf /absolute/form.pdf \
   --idempotency-key <stable-key>
 ```
 
-Keep the same idempotency key for a safe retry. If the server returns
-`awaiting_upload`, the client uploads the declared file and finalizes it. Then
-inspect one status response at a time:
+Use a stable idempotency key and reuse that same key when retrying the same
+file. The command returns one JSON receipt; there is no signed upload,
+finalize, status/poll, queue, job, run, or watcher step.
 
-```bash
-anypdf intake status --submission-id <submission_id>
-```
+The receipt has exactly one of these results:
 
-`known_exact` means an existing registered form can be used. `queued` or
-`needs_review` means the server has not activated support; never promise a fill
-until status is `active`/`known_exact`. Intake owns provenance and queueing only.
-For a PDF in an already-supported pathway, the admin pipeline must synthesize,
-test, and certify missing form-specific assets rather than classify their absence
-as an unsupported engine. During official-source binding, a non-identical
-submitted template is preserved and superseded by a new source-bound submission/run
-using the issuing authority's latest official HTTPS PDF. `rejected` and `failed`
-are terminal for that exact submission, not proof that the generic pathway is
-unsupported; any retry requires a new governed source/run or a repaired capability.
+- `known_exact`: an existing published revision matches this PDF; continue the
+  registered form flow.
+- `new_source`: record the returned `source_sha256`; it cannot be filled yet.
+  Follow-up capability building is handled by the shared AnyPDF agents.
+- `rejected`: the input is rejected and no source is accepted.
 
-Never upload source evidence, identity documents, or other private non-template
-documents through this path. The client never prints PDF bytes or signed upload
-tokens.
+HTTP 200 and 201 can each return any of these results; do not infer the result
+from the HTTP status.
+
+If the wrong file was sent, use `tell-jacky` to request deletion and include the
+exact returned `source_sha256`。不要在删除请求中附带原文件或其他无关内容。

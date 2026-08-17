@@ -2,7 +2,7 @@
 name: tell-jacky
 description: >-
   Submit a feature request, bug report, or knowledge tip for AnyPDF ("Tell
-  Jacky") to the Portal feedback backend via the bundled CLI. Always show a
+  Jacky") to the Portal product-feedback backend via the bundled CLI. Always show a
   draft and get explicit user confirmation before sending. Requires
   connect-anypdf (login) first. plugin_id is bound to anypdf.
 ---
@@ -11,7 +11,7 @@ description: >-
 
 **plugin_id:** `anypdf`
 
-Inbox: Portal / accountd `product_feedback` (not the private engineering bug queue).
+Inbox: Portal / accountd `product_feedback`.
 
 ## Talk to the human
 
@@ -31,7 +31,3 @@ anypdf feedback status --report-id <id>
 ```
 
 Never put tokens, PDF bytes, filled field values, or customer identity in the report.
-
-## Deprecated alias
-
-`anypdf-feedback` is the same flow; prefer `tell-jacky`.
