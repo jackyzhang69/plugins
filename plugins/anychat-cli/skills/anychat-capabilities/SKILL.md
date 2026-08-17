@@ -109,13 +109,12 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 
 ## §B. Resolve binary
 
-1. `$ANYCHAT_BIN` if set and executable  
-2. macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` or `PATH`  
-3. Plugin cache (platform-specific):  
-   - macOS arm64: `…/anychat-cli/<ver>/bin/darwin-arm64/anychat`  
-   - Windows x64: `…/anychat-cli/<ver>/bin/win32-x64/anychat.exe`  
-4. Claude: `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`  
-5. `command -v anychat` / `where anychat` (last resort)
+1. `$ANYCHAT_BIN` if set, executable, and matching native platform  
+2. Active plugin runtime (highest priority for agent plugins):  
+   - Claude plugin root / cache: `…/anychat-cli/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`  
+3. Canonical standalone installation:  
+   - macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` (must sit next to `anychat-access`; verify not an older version than plugin manifest)  
+4. `command -v anychat` / `where anychat` (last resort fallback)
 
 Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 

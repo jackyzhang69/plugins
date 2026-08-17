@@ -10,6 +10,7 @@ usage:
   install-transaction list <backup-root>
   install-transaction rollback <backup-id> <dest-dir> <backup-root>
   install-transaction purge <backup-id> <backup-root>
+  install-transaction gc <backup-root> [keep-count]
 EOF
   exit 2
 }
@@ -57,7 +58,25 @@ prepare_roots() {
 lock_root() {
   local backups="$1"
   LOCK_DIR="$backups/.install-lock"
-  mkdir "$LOCK_DIR" 2>/dev/null || die "another install/rollback is active"
+  if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+    # Check if existing lock is stale (> 60s)
+    local lock_age=0
+    if [[ -d "$LOCK_DIR" ]]; then
+      local mtime
+      mtime=$(stat -f %m "$LOCK_DIR" 2>/dev/null || stat -c %Y "$LOCK_DIR" 2>/dev/null || echo 0)
+      local now
+      now=$(date +%s)
+      lock_age=$(( now - mtime ))
+      if [[ "$lock_age" -gt 60 ]]; then
+        rmdir "$LOCK_DIR" 2>/dev/null || rm -rf "$LOCK_DIR" 2>/dev/null || true
+        mkdir "$LOCK_DIR" 2>/dev/null || die "another install/rollback is active (stale lock cleanup failed)"
+      else
+        die "another install/rollback is active (lock age: ${lock_age}s)"
+      fi
+    else
+      die "another install/rollback is active"
+    fi
+  fi
   trap 'rm -rf -- "${TMP_MAIN:-}" "${TMP_HELP:-}" "${PENDING:-}" 2>/dev/null || true; rmdir "${LOCK_DIR:-}" 2>/dev/null || true' EXIT
 }
 
@@ -144,6 +163,31 @@ install_pair() {
   else
     echo "installed; no previous pair existed"
   fi
+  if [[ "${ANYCHAT_AUTO_GC:-1}" != 0 ]]; then
+    gc_backups "$backups" "${ANYCHAT_MAX_BACKUPS:-3}"
+  fi
+}
+
+gc_backups() {
+  local backups="$1" keep="${2:-3}"
+  [[ -d "$backups" ]] || return 0
+  reject_symlink "$backups"
+  local all_backups=()
+  while IFS= read -r id; do
+    [[ -n "$id" ]] && all_backups+=("$id")
+  done < <(find "$backups" -mindepth 1 -maxdepth 1 -type d -name '????????T??????Z-*' -print | sed 's#.*/##' | sort)
+
+  local count="${#all_backups[@]}"
+  if [[ "$count" -gt "$keep" ]]; then
+    local to_remove=$(( count - keep ))
+    for (( i=0; i<to_remove; i++ )); do
+      local purge_id="${all_backups[i]}"
+      if [[ -d "$backups/$purge_id" ]]; then
+        rm -rf -- "$backups/$purge_id"
+        echo "gc: purged old backup $purge_id (retaining latest $keep)"
+      fi
+    done
+  fi
 }
 
 read_manifest_value() {
@@ -196,6 +240,13 @@ case "$cmd" in
     verify_backup "$backups/$id"
     rm -rf -- "$backups/$id"
     echo "purged backup $id"
+    ;;
+  gc)
+    [[ $# == 1 || $# == 2 ]] || usage
+    backups="$1"; keep="${2:-3}"
+    reject_symlink "$backups"
+    lock_root "$backups"; LOCK_HELD=1
+    gc_backups "$backups" "$keep"
     ;;
   *) usage ;;
 esac
