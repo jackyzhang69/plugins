@@ -86,7 +86,7 @@ Under 90 s with no socket, just **wait** — it's the one-time unpack.
 |---|---|
 | "fill the webform for <person>" | `webform start --query <name> --program-key <key> --confirmed` |
 | "fill the webform for application <id>" | `webform start --app-id <id> --program-key <key> --confirmed` |
-| "invite Job Bank candidates for posting <id>" | `webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2|4 [--max-invites 3] --confirmed` |
+| "invite Job Bank candidates for posting <id>" | `webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2|4 [--max-invites 3] --confirmed` — `<rcic_id>` comes from `formbro rcic list` (account-level RCIC profile id, NOT the CICC number / user id / email) |
 | "is this case ready to fill?" | dry-run: `webform start --app-id <id> --program-key <key>` (no --confirmed) → returns dry-run envelope listing the would_do steps |
 | "can my machine even run webform fills?" | `webform runtime-check` |
 | "what's the status of the last fill on case X" | `webform status` — but see **Status truth model** below |
@@ -166,6 +166,8 @@ LMIA webform fills still go through `webform start` with `--program-key hws|lws|
                                  --confirmed \
                                  [--headless false]
 ```
+
+`--rcic-id` / `case.rcic_id` value source: `formbro rcic list` returns the account's RCIC profiles; use the listed `id`. RCIC profiles are account-level (web: Settings → RCIC) — `persons create` cannot make them, and backend validation rejects anything that is not the profile id (no CICC number, portal UUID, user id, or email).
 
 ## What this skill does NOT do
 

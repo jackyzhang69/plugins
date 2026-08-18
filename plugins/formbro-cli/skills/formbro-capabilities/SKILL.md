@@ -77,12 +77,15 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
+| "list my RCIC profiles / what is my rcic_id" | `formbro rcic list` (returns id, names, rcic_number, company) |
 | "plugin out of date?" | `formbro doctor --check-upgrade` |
 | "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>" [--application-id "<exact application id>"]` — `--application-id` is mandatory for bug reports; **always confirm the draft with the user first** (see `tell-jacky` skill) |
 
 Two semantic distinctions to NEVER conflate:
 - `applications list` = consultant's active workbench (dashboard scope; filters by active status)
 - `applications inventory` = every application in the account regardless of state (audit / batch / debugging)
+
+`case.rcic_id` note: the value backend validation expects is the id of an **account-level RCIC profile** — discover it with `formbro rcic list` (created in the web app under Settings → RCIC, or via `POST /api/rcic`). Link it to an application with `formbro applications patch <application-id> --set case.rcic_id=<rcic-id>`. `persons create` does NOT create RCIC profiles (they are credential-bearing account records, not application persons).
 
 Routing detail below is supplementary — start with this 20-line table.
 
