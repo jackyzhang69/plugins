@@ -34,7 +34,15 @@ tools unless the user asks for technical detail. Never show credentials.
    Do not guess a form or version. `forms resolve` is the only supported discovery
    path; never invent a ranking or silently choose among candidates.
 
-2. Fetch the chosen schema and build data matching its `schema_version`:
+2. When the user's source materials are Office (docx/xlsx/pptx) or PDF, run
+   `anypdf read --input <absolute-path>` first (default `--mode content`) and
+   extract facts from that Markdown. Use `--mode structure` only when you need
+   the mechanical XFA/AcroForm field tree for fill mapping. `read` does not
+   upload the original file. Photos, screenshots, and scans: do not use
+   `read`; look at the image or original yourself. Never upload those source
+   files to AnyPDF fill or intake.
+
+3. Fetch the chosen schema and build data matching its `schema_version`:
 
    ```bash
    anypdf forms schema --form-id IMM5257 --version <version>
@@ -105,7 +113,7 @@ tools unless the user asks for technical detail. Never show credentials.
    - Surface every validate `infos[]` item to the user (path and message); never
      invent data to clear one.
 
-3. Submit exactly one idempotent job. Keep the same key when retrying a request:
+4. Submit exactly one idempotent job. Keep the same key when retrying a request:
 
    ```bash
    anypdf fill submit --form-id IMM5257 --version <version> \
@@ -120,7 +128,7 @@ tools unless the user asks for technical detail. Never show credentials.
    The response contains `job_id`, `status_url`, and `result_url`. It contains
    no template, mapping, profile, or PDF bytes.
 
-4. Poll manually. Each invocation performs one GET; wait according to
+5. Poll manually. Each invocation performs one GET; wait according to
    `Retry-After` and invoke status again. Do not implement a long-held poll or a
    business completion timeout:
 

@@ -54,11 +54,17 @@ case "$(uname -s):$(uname -m)" in
   Darwin:arm64) PLATFORM=darwin-arm64 ;;
   Darwin:x86_64) PLATFORM=darwin-x64 ;;
   Linux:x86_64) PLATFORM=linux-x64 ;;
+  MINGW*:x86_64|MINGW*:amd64|MSYS*:x86_64|MSYS*:amd64|CYGWIN*:x86_64|CYGWIN*:amd64|Windows_NT:x86_64|Windows_NT:amd64) PLATFORM=windows-x64 ;;
   *) add_failure unsupported_platform; PLATFORM=unknown ;;
 esac
-BINARY="$ROOT/bin/$PLATFORM/anypdf"
-CHECKSUM="$ROOT/bin/$PLATFORM/anypdf.sha256"
-if [ "$PLATFORM" = unknown ] || [ ! -x "$BINARY" ]; then
+if [ "$PLATFORM" = windows-x64 ]; then
+  ENTRYPOINT="bin/$PLATFORM/anypdf.exe"
+else
+  ENTRYPOINT="bin/$PLATFORM/anypdf"
+fi
+BINARY="$ROOT/$ENTRYPOINT"
+CHECKSUM="$ROOT/$ENTRYPOINT.sha256"
+if [ "$PLATFORM" = unknown ] || [ ! -f "$BINARY" ]; then
   add_failure native_client_missing
 else
   version_output=$($BINARY --version 2>/dev/null || true)
@@ -77,10 +83,10 @@ else
     [ -n "$actual_sha" ] && [ "$actual_sha" = "$declared_sha" ] || add_failure checksum_mismatch
   fi
   if [ "$runtime" = "$ROOT/runtime-manifest.json" ]; then
-    grep -Fq "\"entrypoint\": \"bin/$PLATFORM/anypdf\"" "$runtime" 2>/dev/null || add_failure runtime_platform_mismatch
+    grep -Fq "\"entrypoint\": \"$ENTRYPOINT\"" "$runtime" 2>/dev/null || add_failure runtime_platform_mismatch
   else
     grep -Fq "\"platform\": \"$PLATFORM\"" "$runtime" 2>/dev/null || add_failure package_manifest_platform_mismatch
-    grep -Fq "\"path\": \"bin/$PLATFORM/anypdf\"" "$runtime" 2>/dev/null || add_failure package_manifest_binary_mismatch
+    grep -Fq "\"path\": \"$ENTRYPOINT\"" "$runtime" 2>/dev/null || add_failure package_manifest_binary_mismatch
   fi
 fi
 

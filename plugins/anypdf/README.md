@@ -20,6 +20,12 @@ Use `anypdf-fill` to resolve a registered form, fetch its schema, validate the
 user's data, submit one idempotent request, and retrieve the retained result.
 The server owns templates, mappings, revision locking, and PDF execution.
 
+When the user's source materials are Office or PDF, run `anypdf read --input
+<absolute-path>` first. That command stays on this machine: it does not upload
+the original file. Extracted text may be used by the host agent; fill JSON
+still follows the existing fill path. Photos, screenshots, and scans are not
+read this way — look at the original yourself.
+
 ## New PDF request
 
 Use `anypdf-form-intake` only when the user provides an issuing-authority official blank PDF template
@@ -51,5 +57,6 @@ Use `tell-jacky` to draft a small product feedback report, show it to the user,
 and submit it only after explicit confirmation. Diagnostics are opt-in and must
 contain stable facts only; never include tokens, secrets, raw logs, or PDF bytes.
 
-The client is non-interactive and JSON-first. See each skill for the exact
-workflow and command examples.
+The client is non-interactive. Every command except `read` is JSON-first;
+`read` prints Markdown. See each skill for the exact workflow and command
+examples.
