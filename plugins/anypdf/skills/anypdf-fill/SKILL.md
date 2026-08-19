@@ -82,6 +82,20 @@ tools unless the user asks for technical detail. Never show credentials.
      because it appeared in the response.
    - Extract only facts supported by the user's materials. Align keys exactly
      to the schema. Preserve enum labels and boolean values exactly.
+   - A string choice is never guessed. When a field has `enum`, use one of
+     those exact strings. When it has `x-anypdf-choice.resolve: true`, first
+     supply every declared `depends_on` fact, then request the field through
+     the existing validation command:
+
+     ```bash
+     anypdf validate --form-id IMM5257 --version <version> \
+       --input /absolute/partial-data.json \
+       --resolve-choice application.city
+     ```
+
+     Use only the returned `choices[].allowed_values`. If a validation error
+     includes `allowed_values`, repair that field from the returned list; never
+     infer an internal code, alias, or spelling.
    - Date format follows each field's own `format` and guidance. Never force a
      global date pattern when the field disagrees.
    - Never invent missing required facts. Ask the user. Leave unknown optional

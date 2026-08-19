@@ -57,7 +57,7 @@
       "description": "Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback.",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.5.6"
+      "version": "0.5.7"
     }
   ]
 }
