@@ -1,6 +1,6 @@
-# anydoc-cli (public plugin)
+# anydoc (public plugin)
 
-Published under `jackyzhang69/plugins` → `plugins/anydoc-cli/`.
+Published under `jackyzhang69/plugins` → `plugins/anydoc/`.
 
 **Ships:** skills, install metadata, and prebuilt AnyDoc CLI binaries for macOS Apple Silicon and Windows x64.
 

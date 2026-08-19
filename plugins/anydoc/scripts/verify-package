@@ -118,8 +118,8 @@ for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
     except Exception as exc:
         errors.append(f"{rel}: {exc}")
         continue
-    if doc.get("name") != "anydoc-cli":
-        errors.append(f"{rel} name is {doc.get('name')!r}, expected anydoc-cli")
+    if doc.get("name") != "anydoc":
+        errors.append(f"{rel} name is {doc.get('name')!r}, expected anydoc")
     if binary.get("version") and doc.get("version") != binary.get("version"):
         errors.append(f"{rel} version {doc.get('version')!r} != binary.version")
 

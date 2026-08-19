@@ -1,5 +1,5 @@
 {
-  "name": "anydoc-cli",
+  "name": "anydoc",
   "version": "0.1.0",
   "min_supported_version": "0.1.0",
   "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky.",

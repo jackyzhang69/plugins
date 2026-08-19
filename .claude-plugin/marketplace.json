@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
-    "version": "1.8.8"
+    "version": "1.8.9"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -54,8 +54,8 @@
       },
       "category": "productivity",
       "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.",
-      "name": "anydoc-cli",
-      "source": "./plugins/anydoc-cli",
+      "name": "anydoc",
+      "source": "./plugins/anydoc",
       "version": "0.1.0"
     }
   ]
