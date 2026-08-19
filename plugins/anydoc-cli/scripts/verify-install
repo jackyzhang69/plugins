@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# verify-install: run the staged host binary's doctor --json.
+# Local install-acceptance probe. Not notarization evidence.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+os="$(uname -s)"
+arch="$(uname -m)"
+case "$os:$arch" in
+  Darwin:arm64) plat=darwin-arm64; name=anydoc ;;
+  Darwin:x86_64) plat=darwin-x64; name=anydoc ;;
+  MINGW*|MSYS*|CYGWIN*) plat=win32-x64; name=anydoc.exe ;;
+  *) echo "verify-install: unsupported host $os $arch" >&2; exit 1 ;;
+esac
+BIN="$ROOT/bin/$plat/$name"
+test -f "$BIN" || { echo "verify-install: missing $BIN" >&2; exit 1; }
+test ! -L "$BIN" || { echo "verify-install: refusing symlink: $BIN" >&2; exit 1; }
+if [[ -z "${JACKYZHANG_APP_HOME:-}" ]]; then
+  JACKYZHANG_APP_HOME="$(mktemp -d "${TMPDIR:-/tmp}/anydoc-verify-install.XXXXXX")"
+  export JACKYZHANG_APP_HOME
+fi
+RAW="$("$BIN" doctor --json)"
+python3 - "$RAW" <<'PY'
+import json, sys
+doc = json.loads(sys.argv[1])
+if doc.get("ok") is not True:
+    raise SystemExit(f"verify-install: doctor ok is {doc.get('ok')!r}")
+if doc.get("product") != "anydoc":
+    raise SystemExit(f"verify-install: product is {doc.get('product')!r}")
+print("verify-install: ok product=anydoc")
+PY

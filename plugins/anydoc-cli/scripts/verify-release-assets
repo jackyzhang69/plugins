@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Post-upload remote gate: release tag/assets must match the already verified
+# local runtime manifest. Network access is intentional and mandatory here.
+set -euo pipefail
+umask 077
+ROOT="${ANYDOC_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+MANIFEST="$ROOT/runtime-manifest.json"
+"$ROOT/scripts/verify-package" >/dev/null
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+IFS=$'\t' read -r REPO TAG < <(python3 - "$MANIFEST" <<'PY'
+import json, re, sys
+m = json.load(open(sys.argv[1]))
+r = m["binary"]["release"]
+repo, tag = r.get("repo", ""), r.get("tag", "")
+if r.get("host") != "github-releases" or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo):
+    raise SystemExit("invalid GitHub release metadata")
+if r.get("status") != "published":
+    raise SystemExit("verify-release-assets requires a published manifest")
+if not re.fullmatch(r"[A-Za-z0-9_.+-]+", tag):
+    raise SystemExit("invalid release tag")
+print(f"{repo}\t{tag}")
+PY
+)
+API="https://api.github.com/repos/$REPO/releases/tags/$TAG"
+curl -fsSL --proto '=https' --tlsv1.2 \
+  -H 'Accept: application/vnd.github+json' \
+  -H 'X-GitHub-Api-Version: 2022-11-28' \
+  "$API" >"$TMP/release.json"
+
+python3 - "$MANIFEST" "$TMP/release.json" "$TMP/plan" <<'PY'
+import json, pathlib, sys
+manifest, release, output = map(pathlib.Path, sys.argv[1:])
+m = json.loads(manifest.read_text())
+r = json.loads(release.read_text())
+if r.get("tag_name") != m["binary"]["release"]["tag"]:
+    raise SystemExit("remote release tag does not match manifest")
+if r.get("draft") or r.get("prerelease"):
+    raise SystemExit("remote release is draft or prerelease")
+assets = {}
+for a in r.get("assets", []):
+    name, url = a.get("name"), a.get("browser_download_url")
+    if not name or not url or name in assets:
+        raise SystemExit("remote release has missing or duplicate asset names")
+    if a.get("state") != "uploaded" or not isinstance(a.get("size"), int) or a["size"] <= 0:
+        raise SystemExit(f"remote asset is not fully uploaded: {name}")
+    if not url.startswith("https://github.com/"):
+        raise SystemExit("remote asset URL is not an HTTPS GitHub URL")
+    assets[name] = url
+expected = {}
+for platform, record in m["binary"]["platforms"].items():
+    name = pathlib.PurePosixPath(record["entrypoint"]).name
+    expected[name] = record["sha256"]
+missing = sorted(set(expected) - set(assets))
+if missing:
+    raise SystemExit(f"remote release is missing assets: {missing}")
+with output.open("w") as f:
+    for name in sorted(expected):
+        f.write(f"{name}\t{expected[name]}\t{assets[name]}\n")
+PY
+
+while IFS=$'\t' read -r name expected url; do
+  curl -fsSL --proto '=https' --tlsv1.2 "$url" -o "$TMP/$name"
+  actual="$(shasum -a 256 "$TMP/$name" | awk '{print $1}')"
+  [[ "$actual" == "$expected" ]] || {
+    echo "verify-release-assets: sha256 mismatch for $name" >&2
+    exit 1
+  }
+done <"$TMP/plan"
+
+echo "verify-release-assets: ok ($REPO $TAG; all manifest assets match GitHub)"

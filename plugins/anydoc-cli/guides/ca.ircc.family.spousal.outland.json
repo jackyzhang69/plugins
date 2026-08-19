@@ -1,0 +1,54 @@
+{
+  "id": "ca.ircc.family.spousal.outland",
+  "title": "Canada IRCC family sponsorship (spousal, outland) — assembly conventions",
+  "kind": "assembly_conventions",
+  "classifier": false,
+  "submission_ready": false,
+  "guide_version": "2026-08-19",
+  "official_sources": [
+    {
+      "label": "IRCC: Sponsor your spouse, partner or child",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/family-sponsorship/spouse-partner-children.html"
+    }
+  ],
+  "constraints": {
+    "max_file_bytes": 4194304,
+    "photo_layout": [1, 2, 4],
+    "heic": "export_jpeg_or_png_first",
+    "office": "convert_to_pdf_when_converter_present",
+    "encrypted_pdf": "copy_or_rename_only",
+    "interactive_pdf": "copy_or_rename_only",
+    "signed_pdf": "copy_or_rename_only"
+  },
+  "assembly": {
+    "output_directory_pattern": "IRCC-Spousal-Sponsorship-{date}",
+    "output_layout": "flat",
+    "filename_style": "english-safe",
+    "overwrite_existing": false,
+    "photo": {
+      "layout": [1, 2, 4],
+      "fit": "fit",
+      "crop": false,
+      "captions": "as_written_in_the_approved_plan"
+    },
+    "office": {
+      "convert": true,
+      "macros": "refuse",
+      "remote_links": "refuse",
+      "encrypted": "copy_or_rename_only"
+    },
+    "heic": {
+      "decode": false,
+      "human_action": "Export JPEG or PNG first, then image_to_pdf."
+    }
+  },
+  "notes": [
+    "This guide is assembly convention only. It does not classify documents and does not name required evidence.",
+    "It never claims a package is submission_ready or complete enough to file.",
+    "Encrypted, form, and signed PDFs are copy or rename only.",
+    "HEIC/HEIF must be exported to JPEG or PNG before image_to_pdf.",
+    "Office files convert only when the local converter is present; macros and remote links are refused.",
+    "Portal upload size is commonly 4 MiB per file (4194304 bytes). Over-budget files fail unless the plan names an explicit compress budget.",
+    "Photo sheets use a 1, 2, or 4 cell grid, fit without crop, and keep order and captions as the approved plan wrote them."
+  ]
+}

@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# verify-package: READ-ONLY consistency gate for the staged plugin package.
+#
+# Asserts runtime-manifest.json, skill dirs, staged hashes, and leak-closed
+# rules. NEVER writes the manifest, sidecars, or binaries. Idempotent.
+#
+# Optional arg: plugin root (default: this script's parent). Tests may pass a
+# temporary copy. Unpublished trees may omit staged binaries. A published
+# tree must stage both allowed platforms and still admit notarization=not_done.
+set -euo pipefail
+
+ROOT="$(cd "${1:-$(dirname "$0")/..}" && pwd)"
+REPO="$(cd "$ROOT/.." && pwd)"
+
+MANIFEST="$ROOT/runtime-manifest.json"
+test -f "$MANIFEST" || { echo "verify-package: missing runtime-manifest.json" >&2; exit 1; }
+test ! -L "$MANIFEST" || { echo "verify-package: runtime-manifest.json must not be a symlink" >&2; exit 1; }
+
+for rel in .claude-plugin/plugin.json .codex-plugin/plugin.json; do
+  test -f "$ROOT/$rel" || { echo "verify-package: missing $rel" >&2; exit 1; }
+  test ! -L "$ROOT/$rel" || { echo "verify-package: $rel must not be a symlink" >&2; exit 1; }
+done
+
+REQUIRED_SKILLS=(anydoc-assemble connect-anydoc tell-jacky)
+for s in "${REQUIRED_SKILLS[@]}"; do
+  test -d "$ROOT/skills/$s" || { echo "verify-package: required skill dir missing: skills/$s" >&2; exit 1; }
+done
+
+PKG_VERSION=""
+if command -v cargo >/dev/null 2>&1 && [[ -f "$REPO/Cargo.toml" ]]; then
+  PKG_VERSION="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps 2>/dev/null \
+    | python3 -c 'import sys,json; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"] == "jz-anydoc"))' \
+    || true)"
+fi
+
+python3 - "$MANIFEST" "$ROOT" "$PKG_VERSION" <<'PY'
+import hashlib, json, pathlib, sys
+
+manifest_path, root, pkg_version = sys.argv[1:4]
+root = pathlib.Path(root)
+m = json.loads(pathlib.Path(manifest_path).read_text())
+errors = []
+
+ALLOWED = ["darwin-arm64", "win32-x64"]
+FORBIDDEN_NAMES = {"user.json", "jz.json", ".env"}
+FORBIDDEN_SUFFIX = {".dylib", ".dll", ".so", ".tgz"}
+ENTRY = {
+    "darwin-arm64": "bin/darwin-arm64/anydoc",
+    "win32-x64": "bin/win32-x64/anydoc.exe",
+}
+
+def sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+if m.get("version") != 1:
+    errors.append(f"manifest.version is {m.get('version')!r}, expected 1")
+if m.get("product") != "anydoc":
+    errors.append(f"manifest.product is {m.get('product')!r}, expected 'anydoc'")
+
+allowed = m.get("allowedPlatforms")
+if allowed != ALLOWED:
+    errors.append(f"allowedPlatforms is {allowed!r}, expected {ALLOWED!r}")
+
+binary = m.get("binary")
+if not isinstance(binary, dict):
+    errors.append("manifest missing binary section")
+    binary = {}
+
+if binary.get("name") != "anydoc":
+    errors.append(f"binary.name is {binary.get('name')!r}, expected 'anydoc'")
+if binary.get("verifyChecksum") is not True:
+    errors.append("binary.verifyChecksum must be true")
+if pkg_version and binary.get("version") != pkg_version:
+    errors.append(
+        f"binary.version is {binary.get('version')!r}, expected Cargo version {pkg_version!r}"
+    )
+
+release = binary.get("release") if isinstance(binary.get("release"), dict) else {}
+if release.get("notarization") != "not_done":
+    errors.append("binary.release.notarization must be not_done (notarization is not done)")
+
+status = release.get("status")
+platforms = binary.get("platforms") if isinstance(binary.get("platforms"), dict) else {}
+unexpected = sorted(set(platforms) - set(ALLOWED))
+if unexpected:
+    errors.append(f"binary.platforms has platforms outside allowlist: {unexpected!r}")
+
+if status == "unpublished":
+    if release.get("marketplace") != "not_claimed":
+        errors.append("unpublished package must keep marketplace=not_claimed")
+    if release.get("host") not in (None, "unassigned"):
+        errors.append(f"unpublished host is {release.get('host')!r}")
+elif status == "published":
+    if release.get("marketplace") != "claimed":
+        errors.append("published package must set marketplace=claimed")
+    if release.get("host") != "github-releases":
+        errors.append("published host must be github-releases")
+    if release.get("repo") != "jackyzhang69/plugins":
+        errors.append("published repo must be jackyzhang69/plugins")
+    if release.get("tag") != f"anydoc-v{binary.get('version')}":
+        errors.append(
+            f"published tag is {release.get('tag')!r}, expected anydoc-v{binary.get('version')}"
+        )
+    missing = [p for p in ALLOWED if p not in platforms]
+    if missing:
+        errors.append(f"published package missing platforms: {missing!r}")
+else:
+    errors.append(f"binary.release.status is {status!r}")
+
+pdfium = m.get("pdfium") if isinstance(m.get("pdfium"), dict) else {}
+if pdfium.get("packaged") is True:
+    errors.append("pdfium.packaged must be false; binaries are not vendored")
+
+for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
+    path = root / rel
+    try:
+        doc = json.loads(path.read_text())
+    except Exception as exc:
+        errors.append(f"{rel}: {exc}")
+        continue
+    if doc.get("name") != "anydoc-cli":
+        errors.append(f"{rel} name is {doc.get('name')!r}, expected anydoc-cli")
+    if binary.get("version") and doc.get("version") != binary.get("version"):
+        errors.append(f"{rel} version {doc.get('version')!r} != binary.version")
+
+expected_bin_files = set()
+for plat, entry in platforms.items():
+    if not isinstance(entry, dict):
+        errors.append(f"binary.platforms.{plat} is not an object")
+        continue
+    rel = entry.get("entrypoint")
+    recorded = entry.get("sha256")
+    want = ENTRY.get(plat)
+    if rel != want:
+        errors.append(f"{plat}: entrypoint {rel!r} != {want!r}")
+        continue
+    if not recorded:
+        errors.append(f"{plat}: missing sha256")
+        continue
+    artifact = root / rel
+    if artifact.is_symlink() or not artifact.is_file():
+        errors.append(f"{plat}: staged artifact missing or unsafe: {rel}")
+        continue
+    actual = sha256(artifact)
+    if actual != recorded:
+        errors.append(f"{plat}: sha256 drift for {rel}: manifest={recorded} actual={actual}")
+    sidecar = artifact.parent / (artifact.name + ".sha256")
+    if sidecar.is_symlink() or not sidecar.is_file():
+        errors.append(f"{plat}: sidecar missing or unsafe: {sidecar.name}")
+    else:
+        side_val = sidecar.read_text().strip().split()[0]
+        if side_val != recorded:
+            errors.append(f"{plat}: sidecar {sidecar.name}={side_val} != manifest {recorded}")
+    expected_bin_files.add(rel)
+    expected_bin_files.add(rel + ".sha256")
+
+bin_root = root / "bin"
+actual_bin_files = set()
+if bin_root.exists():
+    for path in bin_root.rglob("*"):
+        rel = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            errors.append(f"unsafe symlink in bin tree: {rel}")
+        elif path.is_file():
+            actual_bin_files.add(rel)
+        elif not path.is_dir():
+            errors.append(f"unsafe special entry in bin tree: {rel}")
+extra_bin = sorted(actual_bin_files - expected_bin_files)
+missing_bin = sorted(expected_bin_files - actual_bin_files)
+if extra_bin:
+    errors.append(f"unexpected files in bin tree: {extra_bin!r}")
+if missing_bin:
+    errors.append(f"missing files in bin tree: {missing_bin!r}")
+
+for path in root.rglob("*"):
+    name = path.name
+    rel = path.relative_to(root).as_posix()
+    if name == "target" and (path.is_dir() or path.is_symlink()):
+        errors.append("plugin/target must not exist")
+    if name in FORBIDDEN_NAMES or name.startswith(".env."):
+        errors.append(f"forbidden file in plugin tree: {rel}")
+    if path.suffix in FORBIDDEN_SUFFIX and (path.is_file() or path.is_symlink()):
+        errors.append(f"refusing packaged native library or tgz: {rel}")
+
+if errors:
+    print("verify-package: FAIL — package drift or honesty violation:", file=sys.stderr)
+    for item in errors:
+        print(f"  - {item}", file=sys.stderr)
+    sys.exit(1)
+
+staged = ",".join(platforms) if platforms else "(none)"
+print(
+    f"verify-package: ok  (product anydoc, status {status}, staged {staged}, "
+    f"notarization={release.get('notarization')})"
+)
+PY
