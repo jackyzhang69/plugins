@@ -108,6 +108,10 @@ tools unless the user asks for technical detail. Never show credentials.
      global date pattern when the field disagrees.
    - Never invent missing required facts. Ask the user. Leave unknown optional
      fields absent.
+   - Two fill modes are both valid: wait until required facts are complete, or
+     fill now and treat validate `missing_required_field` /
+     `missing_recommended_field` warnings as the user's list of fields to
+     complete later on the PDF. Do not invent facts to clear a warning.
    - Validation errors stop submission. Warnings require explicit user
      confirmation before proceeding (confirm each warning with the user).
    - Surface every validate `infos[]` item to the user (path and message); never
