@@ -9,7 +9,7 @@ description: Connect the public AnyPDF client once using the shared Portal user 
 
 Do not call whichever `anypdf` is first on PATH.
 
-Platform: macOS arm64 `darwin-arm64`; macOS x64 `darwin-x64`; Linux x64 `linux-x64`; Windows x64 `windows-x64` (`anypdf.exe`).
+Platform: macOS arm64 `darwin-arm64`; Windows x64 `windows-x64` (`anypdf.exe`).
 
 This skill is loaded from a public plugin package. The package root is the directory that contains `runtime-manifest.json` two parents above this file (`skills/connect-anypdf/SKILL.md`).
 
