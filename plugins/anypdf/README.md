@@ -5,6 +5,9 @@ skills, a platform-matched native `anypdf` client, its SHA-256 sidecar, and
 documentation. It contains no PDF template, private mapping, admin tool, or
 server credential.
 
+Load `anypdf-capabilities` first. When the user asks what AnyPDF can do,
+answer from the live CLI (`forms catalog`, `doctor`), not a remembered list.
+
 The client uses `https://anypdf.jackyzhang.app` by default. Use the
 `connect-anypdf` skill once to verify a credential supplied on stdin and save
 only the mode-0600 canonical user slot at

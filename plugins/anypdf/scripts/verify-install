@@ -82,6 +82,20 @@ else
     declared_sha=$(awk 'NR == 1 {print $1}' "$CHECKSUM")
     [ -n "$actual_sha" ] && [ "$actual_sha" = "$declared_sha" ] || add_failure checksum_mismatch
   fi
+  # Every PATH winner must match the packaged version. A leftover cargo or
+  # host-cache binary that sorts first is an install failure.
+  if command -v anypdf >/dev/null 2>&1; then
+    if command -v type >/dev/null 2>&1; then
+      path_bins=$(type -a -p anypdf 2>/dev/null || true)
+    else
+      path_bins=$(command -v anypdf 2>/dev/null || true)
+    fi
+    for path_bin in $path_bins; do
+      [ -n "$path_bin" ] || continue
+      path_ver=$("$path_bin" --version 2>/dev/null || true)
+      [ "$path_ver" = "anypdf $EXPECTED" ] || add_failure path_anypdf_version_mismatch
+    done
+  fi
   if [ "$runtime" = "$ROOT/runtime-manifest.json" ]; then
     grep -Fq "\"entrypoint\": \"$ENTRYPOINT\"" "$runtime" 2>/dev/null || add_failure runtime_platform_mismatch
   else

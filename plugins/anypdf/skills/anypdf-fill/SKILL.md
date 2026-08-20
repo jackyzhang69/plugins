@@ -5,9 +5,13 @@ description: Fill a registered PDF form through the AnyPDF server-owned workflow
 
 # Registered PDF fill
 
-Use the packaged native `anypdf` client. First use `connect-anypdf` to save the
-canonical user credential locally; normal commands then need no environment
-setup. Never ask the user to place a credential in an argument or echo it.
+Use the packaged native `anypdf` client. First use `connect-anypdf`, which
+repairs from the just-installed package binary into
+`~/.jackyzhang.app/plugins/anypdf/current`. Then every command below is
+`$ANYPDF`, which is
+`~/.jackyzhang.app/plugins/anypdf/current/bin/<platform>/anypdf`
+(Windows: `anypdf.exe` under `windows-x64`). Do not call whichever `anypdf`
+is first on PATH. Never ask the user to place a credential in an argument or echo it.
 Product requests use only the in-memory short-lived exact-audience JWT; the
 native client has no environment credential override.
 
@@ -27,15 +31,15 @@ tools unless the user asks for technical detail. Never show credentials.
    single clear match:
 
    ```bash
-   anypdf forms resolve --query "IMM 5257"
-   anypdf forms catalog
+   $ANYPDF forms resolve --query "IMM 5257"
+   $ANYPDF forms catalog
    ```
 
    Do not guess a form or version. `forms resolve` is the only supported discovery
    path; never invent a ranking or silently choose among candidates.
 
 2. When the user's source materials are Office (docx/xlsx/pptx) or PDF, run
-   `anypdf read --input <absolute-path>` first (default `--mode content`) and
+   `$ANYPDF read --input <absolute-path>` first (default `--mode content`) and
    extract facts from that Markdown. Use `--mode structure` only when you need
    the mechanical XFA/AcroForm field tree for fill mapping. `read` does not
    upload the original file. Photos, screenshots, and scans: do not use
@@ -45,8 +49,8 @@ tools unless the user asks for technical detail. Never show credentials.
 3. Fetch the chosen schema and build data matching its `schema_version`:
 
    ```bash
-   anypdf forms schema --form-id IMM5257 --version <version>
-   anypdf validate --form-id IMM5257 --version <version> --input /absolute/data.json
+   $ANYPDF forms schema --form-id IMM5257 --version <version>
+   $ANYPDF validate --form-id IMM5257 --version <version> --input /absolute/data.json
    ```
 
    Context and extraction rules:
@@ -66,8 +70,8 @@ tools unless the user asks for technical detail. Never show credentials.
      affected scope before filling:
 
      ```bash
-     anypdf knowledge list --scope global
-     anypdf knowledge list --scope target --form-id IMM5257
+     $ANYPDF knowledge list --scope global
+     $ANYPDF knowledge list --scope target --form-id IMM5257
      ```
 
      If the full list cannot be obtained, stop rather than omit requirements.
@@ -96,7 +100,7 @@ tools unless the user asks for technical detail. Never show credentials.
      the existing validation command:
 
      ```bash
-     anypdf validate --form-id IMM5257 --version <version> \
+     $ANYPDF validate --form-id IMM5257 --version <version> \
        --input /absolute/partial-data.json \
        --resolve-choice application.city
      ```
@@ -120,7 +124,7 @@ tools unless the user asks for technical detail. Never show credentials.
 4. Submit exactly one idempotent job. Keep the same key when retrying a request:
 
    ```bash
-   anypdf fill submit --form-id IMM5257 --version <version> \
+   $ANYPDF fill submit --form-id IMM5257 --version <version> \
      --schema-version <schema_version> --input /absolute/data.json \
      --idempotency-key <stable-key>
    ```
@@ -137,13 +141,13 @@ tools unless the user asks for technical detail. Never show credentials.
    business completion timeout:
 
    ```bash
-   anypdf fill status --job-id <job_id>
+   $ANYPDF fill status --job-id <job_id>
    ```
 
    On `succeeded`, download to a new explicit absolute path:
 
    ```bash
-   anypdf fill download --job-id <job_id> --output /absolute/result.pdf
+   $ANYPDF fill download --job-id <job_id> --output /absolute/result.pdf
    ```
 
    The client bounds the download, verifies `%PDF-` and any server checksum,
@@ -166,16 +170,16 @@ After confirmation, use the existing compatible commands:
 
 ```bash
 # Target scope (the default keeps older command usage working)
-anypdf knowledge add --scope target --form-id IMM5257 \
+$ANYPDF knowledge add --scope target --form-id IMM5257 \
   --rule "Use the employer's full legal name."
 
 # Global within AnyPDF only; never cross-plugin
-anypdf knowledge add --scope global \
+$ANYPDF knowledge add --scope global \
   --rule "Convert dates according to each field's declared format."
 
-anypdf knowledge list --scope target --form-id IMM5257
-anypdf knowledge list --scope global
-anypdf knowledge remove --id <rule-id>
+$ANYPDF knowledge list --scope target --form-id IMM5257
+$ANYPDF knowledge list --scope global
+$ANYPDF knowledge remove --id <rule-id>
 ```
 
 - Save only how to perform future work. Do not save names, addresses, employer

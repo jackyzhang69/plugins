@@ -38,6 +38,16 @@
     },
     {
       "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.",
+      "name": "anydoc",
+      "source": "./plugins/anydoc",
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "Jacky Zhang",
         "url": "https://github.com/jackyzhang69/anypdf"
       },
@@ -46,17 +56,7 @@
       "homepage": "https://github.com/jackyzhang69/anypdf",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.6.1"
-    },
-    {
-      "author": {
-        "name": "Jacky Zhang"
-      },
-      "category": "productivity",
-      "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.",
-      "name": "anydoc",
-      "source": "./plugins/anydoc",
-      "version": "0.1.0"
+      "version": "0.6.2"
     }
   ]
 }
