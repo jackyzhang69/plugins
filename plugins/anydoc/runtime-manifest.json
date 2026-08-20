@@ -3,15 +3,15 @@
   "product": "anydoc",
   "binary": {
     "name": "anydoc",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "f5ba6f382366cbd4ebbb8e10f79e9f6728d485903ae48fb1e2f80401cb941261"
+        "sha256": "e76c402ff30ff0ac7d3d68d62714d0bffb89f65203460bb5c6c0e3f8697186ac"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "314a45653331d1ea8f58b7f73d3a5c7b8d8dde2ebb80a85c21304475b4af87b7"
+        "sha256": "64a1fb5c90126b091b6d745b2d369648a633b50518eea522ed89a688ea719b3f"
       }
     },
     "release": {
@@ -20,7 +20,7 @@
       "notarization": "not_done",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anydoc-v0.1.0"
+      "tag": "anydoc-v0.1.1"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -32,11 +32,22 @@
     "darwin-arm64",
     "win32-x64"
   ],
+  "packageHome": {
+    "darwin": "${HOME}/.jackyzhang.app/plugins/anydoc/current",
+    "linux": "${HOME}/.jackyzhang.app/plugins/anydoc/current",
+    "win32": "${USERPROFILE}/.jackyzhang.app/plugins/anydoc/current"
+  },
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anydoc",
     "linux": "${HOME}/.jackyzhang.app/anydoc",
     "win32": "${USERPROFILE}/.jackyzhang.app/anydoc"
   },
+  "tokenHome": {
+    "darwin": "${HOME}/.jackyzhang.app/token",
+    "linux": "${HOME}/.jackyzhang.app/token",
+    "win32": "${USERPROFILE}/.jackyzhang.app/token"
+  },
+  "tokenFile": "user.json",
   "configFile": "config.json",
   "defaultBaseUrl": "https://account.jackyzhang.app",
   "pdfium": {

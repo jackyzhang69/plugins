@@ -111,6 +111,24 @@ pdfium = m.get("pdfium") if isinstance(m.get("pdfium"), dict) else {}
 if pdfium.get("packaged") is True:
     errors.append("pdfium.packaged must be false; binaries are not vendored")
 
+def require_home(section, needle):
+    homes = m.get(section)
+    if not isinstance(homes, dict):
+        errors.append(f"missing {section}")
+        return
+    for key in ("darwin", "linux", "win32"):
+        val = homes.get(key)
+        if not isinstance(val, str) or needle not in val.replace("\\", "/"):
+            errors.append(f"{section}.{key} is {val!r}, expected to contain {needle!r}")
+        if ".anydoc" in str(val) and "jackyzhang.app" not in str(val):
+            errors.append(f"{section}.{key} must not use a product-local ~/.anydoc home")
+
+require_home("packageHome", ".jackyzhang.app/plugins/anydoc/current")
+require_home("configHome", ".jackyzhang.app/anydoc")
+require_home("tokenHome", ".jackyzhang.app/token")
+if m.get("tokenFile") != "user.json":
+    errors.append(f"tokenFile is {m.get('tokenFile')!r}, expected 'user.json'")
+
 for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
     path = root / rel
     try:

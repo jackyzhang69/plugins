@@ -16,8 +16,14 @@ AnyDoc inspects mechanical facts and executes an **approved** packing list.
 It does not classify documents, does not OCR, does not fill official forms,
 and never says a package is ready to submit.
 
-Resolve the binary: `$ANYDOC_BIN` if set, otherwise `anydoc` on PATH.
-On Windows use `anydoc.exe`. Export `ANYDOC_BIN` once per session.
+Resolve the binary once per session, then export `ANYDOC_BIN`:
+
+1. `$ANYDOC_BIN` if already set.
+2. Canonical install: `$JACKYZHANG_APP_HOME/plugins/anydoc/current/bin/<platform>/anydoc` (Windows: `anydoc.exe`). Default home is `~/.jackyzhang.app`. Platforms: `darwin-arm64` or `win32-x64`.
+3. If that tree is missing, run `"$PACKAGE_BIN" doctor --repair-install --json` from this marketplace package, then use the canonical path.
+4. Do not prefer a random `anydoc` on PATH over the canonical tree.
+
+Runtime data is `~/.jackyzhang.app/anydoc/`. Credentials are `~/.jackyzhang.app/token/user.json`. Never a second product token file.
 
 ## Talk to the human (mandatory)
 

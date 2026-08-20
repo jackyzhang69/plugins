@@ -1,3 +1,11 @@
+# AnyDoc 0.1.1
+
+## User-visible
+
+- Canonical public package now lives at `~/.jackyzhang.app/plugins/anydoc/current`.
+- `anydoc doctor --repair-install` copies this marketplace package into that tree, then deletes the previous tree if the OS allows it.
+- Runtime stays in `~/.jackyzhang.app/anydoc/`. Shared login stays in `~/.jackyzhang.app/token/user.json`.
+
 # AnyDoc 0.1.0
 
 ## User-visible

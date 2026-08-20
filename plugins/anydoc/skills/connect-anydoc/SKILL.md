@@ -20,7 +20,8 @@ when_to_use: |-
 - **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, and AnyDoc share this file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say AnyDoc needs a different Portal token.
 - AnyDoc is **exchange mode**: the CLI calls `POST /v1/token/exchange` with `aud=anydoc` and keeps a short-lived JWT in memory. Raw `jz_` is not a product bearer.
 - Never print or log the raw token. Confirm with `anydoc doctor --json` (`credential.configured`) or a masked `anydoc whoami --json`.
-- Do not create a product-local durable token file. Runtime stays under `~/.jackyzhang.app/anydoc/`.
+- Do not create a product-local durable token file. Runtime stays under `~/.jackyzhang.app/anydoc/`. The public package lives at `~/.jackyzhang.app/plugins/anydoc/current`.
+- After a marketplace install or update, run `"$PACKAGE_BIN" doctor --repair-install --json` from this plugin package, then use `~/.jackyzhang.app/plugins/anydoc/current/bin/<platform>/anydoc`.
 
 ## Already connected
 
