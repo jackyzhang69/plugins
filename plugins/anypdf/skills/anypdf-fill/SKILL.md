@@ -111,7 +111,14 @@ tools unless the user asks for technical detail. Never show credentials.
    - Date format follows each field's own `format` and guidance. Never force a
      global date pattern when the field disagrees.
    - Never invent missing required facts. Ask the user. Leave unknown optional
-     fields absent.
+     fields absent, except the published `x-anypdf-guidance.absence_defaults`
+     list (today: US PR / US green card = No only). If user materials and
+     private memory still have no value for that published field, fill the
+     published default. Target memory may override; if it conflicts with the
+     guide, pause as above. After fill, tell the user once using the validate
+     `infos[]` message. Do not invent a No for passport, national ID, alias,
+     military, background, CSQ, or any unpublished indicator to satisfy
+     Acrobat Validate.
    - Two fill modes are both valid: wait until required facts are complete, or
      fill now and treat validate `missing_required_field` /
      `missing_recommended_field` warnings as the user's list of fields to
