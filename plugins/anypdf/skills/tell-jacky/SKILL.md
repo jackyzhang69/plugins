@@ -17,7 +17,11 @@ Inbox: Portal / accountd `product_feedback`.
 
 Show the draft in plain language; after submit say “已发给 Jacky，编号 …” without pasting full CLI JSON unless they ask.
 
-**Cardinal rule:** every submission goes through `anypdf feedback submit` after the user confirms the draft. Never call Portal HTTP directly.
+Run **connect-anypdf** first so the installed package repairs the canonical
+client slot. Set `ANYPDF` to that slot as instructed there; every agent command
+below uses `$ANYPDF`, never whichever `anypdf` is first on PATH.
+
+**Cardinal rule:** every submission goes through `$ANYPDF feedback submit` after the user confirms the draft. Never call Portal HTTP directly.
 
 ## Multi-plugin sessions
 
@@ -26,8 +30,21 @@ Show the draft in plain language; after submit say “已发给 Jacky，编号 �
 - Draft always names **AnyPDF**.
 
 ```bash
-anypdf feedback submit --report /absolute/report.json --idempotency-key <stable-key>
-anypdf feedback status --report-id <id>
+$ANYPDF feedback submit --report /absolute/report.json --idempotency-key <stable-key>
+$ANYPDF feedback status --report-id <id>
 ```
 
 Never put tokens, PDF bytes, filled field values, or customer identity in the report.
+
+## Recovery before escalation
+
+Tell Jacky is not the first recovery step. First inspect typed recovery and
+finish the bounded supported action in **anypdf-fill**: one status re-read,
+one same-key retry where authorized, one readiness retry, or reconnect through
+**connect-anypdf** after transport authentication is exhausted. Only a
+reportable or reproducibly exhausted problem is eligible here.
+
+Prepare a plain, redacted draft that describes the outcome, not tool internals.
+Exclude submitted values, PDF files, credentials, local paths, raw command
+output, and stack traces. Show the draft and wait for explicit human consent;
+never send feedback automatically.

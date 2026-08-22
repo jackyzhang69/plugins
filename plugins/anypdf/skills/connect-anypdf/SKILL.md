@@ -64,3 +64,10 @@ $ANYPDF whoami --json
 Say only whether AnyPDF connected and what the person can do next. If connection is needed, give the single local command above without asking for the credential itself. Do not expose token contents, internal HTTP, local paths, or raw JSON. A successful `whoami` reports only the user id, product role, scopes, form access, and expiry.
 
 After a marketplace install or update, run `"$PACKAGE_BIN" doctor --repair-install`, then `$ANYPDF doctor`. The live copy is `~/.jackyzhang.app/plugins/anypdf/current`. If `doctor` reports a different version than the marketplace plugin, repair again from `$PACKAGE_BIN` before filling.
+
+## Recovery before escalation
+
+Keep typed recovery details between tools. For a fill problem, follow the
+bounded recovery procedure in **anypdf-fill** before suggesting
+**tell-jacky**. Reconnect only after the client's one automatic authentication
+retry has already failed; never send feedback automatically.

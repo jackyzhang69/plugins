@@ -52,3 +52,9 @@ $ANYPDF forms catalog --json
 After a marketplace install or update, **connect-anypdf** repairs from this
 package into `~/.jackyzhang.app/plugins/anypdf/current`. Later agent commands
 use `$ANYPDF` at that `current` binary, not whichever `anypdf` is first on PATH.
+
+## Recovery before escalation
+
+Keep typed recovery details between tools and explain the next choice in plain
+language. Follow the bounded recovery procedure in **anypdf-fill** before
+suggesting **tell-jacky**. Never send feedback automatically.

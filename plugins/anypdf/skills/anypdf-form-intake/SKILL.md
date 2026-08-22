@@ -5,6 +5,12 @@ description: Submit a PDF template as a new AnyPDF form request.
 
 # New PDF request
 
+## Talk to the human
+
+Explain only whether the official blank template was recognized, needs support,
+or was rejected, and what the person can do next. Keep command details and JSON
+between tools. Never show credentials, source paths, or private document facts.
+
 Use this workflow only when the user provides an issuing-authority official blank PDF template to
 register or request support. Do not submit a filled form,
 an identity document, or another private document. Before sending, the client
@@ -13,8 +19,12 @@ then sends exactly one raw PDF POST to the intake endpoint. The command itself
 is the only confirmation; do not add a second interactive blank-template
 confirmation.
 
+Run **connect-anypdf** first so the installed package repairs the canonical
+client slot. Set `ANYPDF` to that slot as instructed there; every agent command
+below uses `$ANYPDF`, never whichever `anypdf` is first on PATH.
+
 ```bash
-anypdf intake submit --pdf /absolute/form.pdf \
+$ANYPDF intake submit --pdf /absolute/form.pdf \
   --idempotency-key <stable-key>
 ```
 
@@ -35,3 +45,9 @@ from the HTTP status.
 
 If the wrong file was sent, use `tell-jacky` to request deletion and include the
 exact returned `source_sha256`。不要在删除请求中附带原文件或其他无关内容。
+
+## Recovery before escalation
+
+Keep typed recovery details between tools and explain the next choice plainly.
+For a fill problem, use the bounded recovery procedure in **anypdf-fill**
+before suggesting **tell-jacky**. Never send feedback automatically.

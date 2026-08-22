@@ -209,3 +209,25 @@ $ANYPDF knowledge remove --id <rule-id>
 
 Never upload source PDFs, identity documents, or filled evidence as part of a
 registered fill. Keep stdout JSON intact and report typed stderr errors.
+
+## Recovery before escalation
+
+Use `fill readiness` before submitting. Keep its typed recovery details between
+tools and explain only the practical next step to the person. `ready` can be
+submitted; `needs_user_action` means show every warning and ask for explicit
+confirmation, then submit once with `--allow-incomplete --confirmation-handle
+<handle>`; `blocked` means correct the stated facts or complete the stated
+manual action. Do not copy warning or data hashes into the recommended path.
+
+For a failed job, re-read its status once. Follow only the server action:
+correct input, rerun readiness once, wait, reconnect through
+**connect-anypdf** after transport authentication has already been exhausted,
+or retry the same request at most once with the same idempotency key. Continue
+unopened independent forms only when `continue_independent_forms` is true; a
+completed PDF is always retained. Never blind-loop, change facts, weaken a
+gate, or claim a PDF exists when it was not delivered.
+
+Suggest **tell-jacky** only after a reportable typed action or an exhausted,
+reproducible supported recovery. Draft a plain, redacted report with no field
+values, PDF files, credentials, local paths, raw output, or stack traces; send
+it only after the person explicitly confirms the draft. Never send feedback automatically.
