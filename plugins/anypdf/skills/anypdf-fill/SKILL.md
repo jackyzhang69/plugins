@@ -105,9 +105,9 @@ tools unless the user asks for technical detail. Never show credentials.
        --resolve-choice application.city
      ```
 
-     Use only the returned `choices[].allowed_values`. If a validation error
-     includes `allowed_values`, repair that field from the returned list; never
-     infer an internal code, alias, or spelling.
+     Use the returned certified choice values; never infer an internal code,
+     alias, or spelling. For a fill issue that offers allowed values, read only
+     `assessment.issues[].allowed_values`; never read raw validation `errors`.
    - Date format follows each field's own `format` and guidance. Never force a
      global date pattern when the field disagrees.
    - Never invent missing required facts. Ask the user. Leave unknown optional
@@ -123,8 +123,11 @@ tools unless the user asks for technical detail. Never show credentials.
      fill now and treat validate `missing_required_field` /
      `missing_recommended_field` warnings as the user's list of fields to
      complete later on the PDF. Do not invent facts to clear a warning.
-   - Validation errors stop submission. Warnings require explicit user
-     confirmation before proceeding (confirm each warning with the user).
+   - Show only the safe `assessment.issues` projection. For fields that will
+     stay blank, list those fields, ask for one confirmation, then continue
+     and deliver the PDF with those fields left editable. Never display raw
+     `errors` fields, submitted values, backend messages, or internal paths.
+     Blocking assessment issues still stop submission.
    - Surface every validate `infos[]` item to the user (path and message); never
      invent data to clear one.
 
