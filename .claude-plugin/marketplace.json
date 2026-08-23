@@ -56,7 +56,7 @@
       "homepage": "https://github.com/jackyzhang69/anypdf",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.6.8"
+      "version": "0.7.0"
     }
   ]
 }
