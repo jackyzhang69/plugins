@@ -3,12 +3,12 @@ name: connect-anydoc
 description: >-
   One-time setup. Capture the user's Portal token and persist it via
   `anydoc login --token-stdin`. Skip if ~/.jackyzhang.app/token/user.json
-  already exists from any official plugin. Assemble/inspect stay offline
-  and do not require this skill.
+  already exists from any official plugin. Inspect and explicit manual plans
+  stay offline; saved private-model operations require this skill.
 when_to_use: |-
   Trigger phrases:
     - "connect to anydoc / log in to anydoc / save my portal token"
-    - first Tell-Jacky, whoami, or Remember Me intent when not logged in
+    - first Tell-Jacky, whoami, Guides, or private-model intent when not logged in
     - do not run this only to inspect or assemble a folder
 ---
 
@@ -35,9 +35,9 @@ If `credential.configured` is true, stop. Do not ask for another token. `login` 
 
 `whoami` may return `unknown_audience` until accountd has `anydoc` deployed. That is an exchange fact, not a reason to collect a second token.
 
-## Offline assemble does not need login
+## Manual assemble does not need login
 
-`doctor` / `inspect` / `plan` / `assemble` / `verify` work without connect. Do not block a packing session on login.
+`doctor` / `inspect` and an explicitly approved `manual_plan` work without connect. Resolving, saving, replacing, exporting, or forgetting the user's private assembly model uses accountd and therefore requires connect. Never collect a second token.
 
 ## Token delivery (host agent — mandatory)
 

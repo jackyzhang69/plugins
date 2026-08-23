@@ -6,7 +6,7 @@
 #
 # Optional arg: plugin root (default: this script's parent). Tests may pass a
 # temporary copy. Unpublished trees may omit staged binaries. A published
-# tree must stage both allowed platforms and still admit notarization=not_done.
+# tree must stage its allowed platform. Signed releases carry pinned Pdfium.
 set -euo pipefail
 
 ROOT="$(cd "${1:-$(dirname "$0")/..}" && pwd)"
@@ -41,12 +41,14 @@ root = pathlib.Path(root)
 m = json.loads(pathlib.Path(manifest_path).read_text())
 errors = []
 
-ALLOWED = ["darwin-arm64", "win32-x64"]
+ALLOWED = ["darwin-arm64"]
 FORBIDDEN_NAMES = {"user.json", "jz.json", ".env"}
 FORBIDDEN_SUFFIX = {".dylib", ".dll", ".so", ".tgz"}
 ENTRY = {
     "darwin-arm64": "bin/darwin-arm64/anydoc",
-    "win32-x64": "bin/win32-x64/anydoc.exe",
+}
+PDFIUM_ENTRY = {
+    "darwin-arm64": "bin/darwin-arm64/libpdfium.dylib",
 }
 
 def sha256(path):
@@ -76,14 +78,17 @@ if pkg_version and binary.get("version") != pkg_version:
     )
 
 release = binary.get("release") if isinstance(binary.get("release"), dict) else {}
-if release.get("notarization") != "not_done":
-    errors.append("binary.release.notarization must be not_done (notarization is not done)")
+notarization = release.get("notarization")
+if notarization not in ("not_done", "accepted"):
+    errors.append(f"binary.release.notarization is invalid: {notarization!r}")
 
 status = release.get("status")
 platforms = binary.get("platforms") if isinstance(binary.get("platforms"), dict) else {}
 unexpected = sorted(set(platforms) - set(ALLOWED))
 if unexpected:
     errors.append(f"binary.platforms has platforms outside allowlist: {unexpected!r}")
+if any(platform != "darwin-arm64" for platform in platforms):
+    errors.append("public release ships only darwin-arm64")
 
 if status == "unpublished":
     if release.get("marketplace") != "not_claimed":
@@ -108,8 +113,7 @@ else:
     errors.append(f"binary.release.status is {status!r}")
 
 pdfium = m.get("pdfium") if isinstance(m.get("pdfium"), dict) else {}
-if pdfium.get("packaged") is True:
-    errors.append("pdfium.packaged must be false; binaries are not vendored")
+pdfium_packaged = pdfium.get("packaged") is True
 
 def require_home(section, needle):
     homes = m.get(section)
@@ -142,6 +146,7 @@ for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
         errors.append(f"{rel} version {doc.get('version')!r} != binary.version")
 
 expected_bin_files = set()
+expected_native_libraries = set()
 for plat, entry in platforms.items():
     if not isinstance(entry, dict):
         errors.append(f"binary.platforms.{plat} is not an object")
@@ -171,6 +176,53 @@ for plat, entry in platforms.items():
             errors.append(f"{plat}: sidecar {sidecar.name}={side_val} != manifest {recorded}")
     expected_bin_files.add(rel)
     expected_bin_files.add(rel + ".sha256")
+    native = entry.get("pdfium") if isinstance(entry.get("pdfium"), dict) else None
+    signing = entry.get("signing")
+    if pdfium_packaged:
+        if native is None:
+            errors.append(f"{plat}: packaged Pdfium record is missing")
+        else:
+            native_rel = native.get("path")
+            native_sha = native.get("sha256")
+            want_native = PDFIUM_ENTRY.get(plat)
+            if native_rel != want_native:
+                errors.append(f"{plat}: Pdfium path {native_rel!r} != {want_native!r}")
+            elif not native_sha:
+                errors.append(f"{plat}: Pdfium sha256 is missing")
+            else:
+                native_path = root / native_rel
+                if native_path.is_symlink() or not native_path.is_file():
+                    errors.append(f"{plat}: packaged Pdfium missing or unsafe: {native_rel}")
+                elif sha256(native_path) != native_sha:
+                    errors.append(f"{plat}: Pdfium sha256 drift for {native_rel}")
+                sidecar = root / (native_rel + ".sha256")
+                if sidecar.is_symlink() or not sidecar.is_file():
+                    errors.append(f"{plat}: Pdfium sidecar missing: {native_rel}.sha256")
+                elif sidecar.read_text().strip().split()[0] != native_sha:
+                    errors.append(f"{plat}: Pdfium sidecar hash drift: {native_rel}.sha256")
+                expected_bin_files.add(native_rel)
+                expected_bin_files.add(native_rel + ".sha256")
+                expected_native_libraries.add(native_rel)
+        allowed_signing = {
+            "darwin-arm64": {"unsigned", "signed_same_team_hardened_runtime"},
+        }.get(plat, set())
+        if signing not in allowed_signing:
+            errors.append(f"{plat}: invalid signing status {signing!r}")
+    elif native is not None:
+        errors.append(f"{plat}: Pdfium record exists while pdfium.packaged is false")
+
+if pdfium_packaged:
+    signing_values = {entry.get("signing") for entry in platforms.values() if isinstance(entry, dict)}
+    fully_signed = signing_values == {"signed_same_team_hardened_runtime"}
+    fully_unsigned = signing_values == {"unsigned"}
+    if not (fully_signed or fully_unsigned):
+        errors.append("package cannot mix signed and unsigned platform artifacts")
+    if fully_signed and notarization != "accepted":
+        errors.append("fully signed package requires notarization=accepted")
+    if fully_unsigned and notarization != "not_done":
+        errors.append("unsigned development package requires notarization=not_done")
+elif notarization == "accepted":
+    errors.append("notarization=accepted requires packaged Pdfium and signed platform artifacts")
 
 bin_root = root / "bin"
 actual_bin_files = set()
@@ -197,7 +249,8 @@ for path in root.rglob("*"):
         errors.append("plugin/target must not exist")
     if name in FORBIDDEN_NAMES or name.startswith(".env."):
         errors.append(f"forbidden file in plugin tree: {rel}")
-    if path.suffix in FORBIDDEN_SUFFIX and (path.is_file() or path.is_symlink()):
+    if (path.suffix in FORBIDDEN_SUFFIX and rel not in expected_native_libraries
+            and (path.is_file() or path.is_symlink())):
         errors.append(f"refusing packaged native library or tgz: {rel}")
 
 if errors:

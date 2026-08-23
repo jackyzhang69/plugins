@@ -1,3 +1,9 @@
+# AnyDoc 0.2.0
+
+- Adds accountd-hosted typed private assembly models, exact model state handling, Teach Me after authoritative absence only, and plan/receipt v2 authority binding.
+- Removes the old local preference-string knowledge command without migration or fallback.
+- Ships a signed and Apple-notarized macOS Apple Silicon binary with pinned Pdfium. Windows is not included in this release.
+
 # AnyDoc 0.1.1
 
 ## User-visible
@@ -13,7 +19,7 @@
 - Inspect a local folder of PDFs, photos, and Office files.
 - Approve a fully expanded packing list, then assemble into a new subdirectory.
 - Copy/rename, unencrypted PDF page ops, image-to-PDF, Office-to-PDF when LibreOffice is present, explicit compression, photo sheets.
-- Optional Portal login for Tell Jacky / Guides / Remember Me. Packing stays offline.
+- Optional Portal login for Tell Jacky and Guides. Explicit manual packing stays offline.
 
 ## Package coverage
 

@@ -3,8 +3,8 @@ name: anydoc-assemble
 description: >-
   Pack a messy local document folder using only the AnyDoc CLI: inspect facts,
   write a fully expanded plan, get the human to approve, assemble, verify.
-  Offline-capable. Login is optional via connect-anydoc (Tell-Jacky / guides /
-  Remember Me). The host agent and the user own all semantic judgment.
+  Manual plans are offline-capable. Saved assembly models use connect-anydoc.
+  The host agent and the user own all semantic judgment.
 when_to_use: |-
   "pack this folder", "assemble the upload package", "inspect this client
   directory", "rename and merge these PDFs", "build the IRCC document folder".
@@ -19,7 +19,7 @@ and never says a package is ready to submit.
 Resolve the binary once per session, then export `ANYDOC_BIN`:
 
 1. `$ANYDOC_BIN` if already set.
-2. Canonical install: `$JACKYZHANG_APP_HOME/plugins/anydoc/current/bin/<platform>/anydoc` (Windows: `anydoc.exe`). Default home is `~/.jackyzhang.app`. Platforms: `darwin-arm64` or `win32-x64`.
+2. Canonical install: `$JACKYZHANG_APP_HOME/plugins/anydoc/current/bin/darwin-arm64/anydoc`. Default home is `~/.jackyzhang.app`. AnyDoc 0.2.0 supports macOS Apple Silicon.
 3. If that tree is missing, run `"$PACKAGE_BIN" doctor --repair-install --json` from this marketplace package, then use the canonical path.
 4. Do not prefer a random `anydoc` on PATH over the canonical tree.
 
@@ -40,13 +40,46 @@ When speaking to the person in the chat (not when writing tool args):
 
 1. **All packing goes through the AnyDoc CLI.** Do not copy files yourself to “help.”
 2. **Workflow commands are only AnyDoc.** Do not instruct the host to resolve or execute another product’s binary. If this machine happens to have some other local text-extraction capability, you may use it as an optional aid to *understand* a file. It is never a required step, never named as a product, and never written into the packing workflow.
-3. **Login is optional.** Inspect / plan / assemble / verify stay offline and do not require an account. Use **connect-anydoc** only when the human wants Tell-Jacky, `whoami`, Guides, or Remember Me. If `token/user.json` already exists from any official plugin, do not ask them to log in again.
+3. **Login follows the chosen authority.** Inspect and an explicitly user-provided `manual_plan` stay offline. Resolving or changing a saved private model requires **connect-anydoc**. If `token/user.json` already exists from any official plugin, do not ask them to log in again.
 4. **Approve before assemble.** Unapproved plans are refused.
 5. **Plan must be fully expanded.** Concrete `from` / `to` / page lists. No “merge the important ones.”
 6. **Encrypted, form, or signed PDFs:** copy or rename only. Do not split, merge, rotate, compress, normalize, or put them on a photo sheet.
 7. **Do not OCR. Do not call a model to invent captions or categories.**
 
-## End-to-end (this version, offline-capable)
+## Choose the assembly authority first
+
+Before inspecting or organizing a model-bound case, identify one exact `case_type` and check the user's accountd-hosted private model:
+
+```bash
+"$ANYDOC_BIN" models resolve --case-type <exact-case-type> --json
+```
+
+Treat the returned state literally:
+
+| State | Required host action |
+|---|---|
+| `model_found` | Show its name and revision. Use that exact model, and bind its `model_id`, `revision`, and `model_hash` into the plan. Only here may you say the work follows the user's saved habit. |
+| `model_absent` | Start **Teach Me** below. This is the only state that permits Teach Me. |
+| `model_unavailable` | Stop the model flow. Say the saved model cannot be checked now. Do not call it absent, do not Teach Me, and do not silently switch to a manual plan. |
+| `model_invalid` | Stop. Say the saved model response failed validation. Do not use it or Teach Me. |
+| exact case type is ambiguous | This is the host state `model_ambiguous`: show the concrete choices and ask the human. Do not guess and do not Teach Me. |
+
+A Public Guide is visible reference material only. Show any conflict between it and the private model and pause for the human's decision. A Guide never replaces a document list and never becomes hidden authority.
+
+The only offline alternative is a complete `manual_plan` explicitly supplied or approved by the user as the authority. Backend failure never authorizes this fallback, and the host must label it `manual_plan`, not “saved habit.”
+
+## Teach Me (only after `model_absent`)
+
+1. Ask for one representative **document list** from the same case type. Do not infer a reusable model from the current messy folder, a finished package, or a Public Guide alone.
+2. Locally extract only the reusable structure: ordered final deliverables, what content each deliverable contains, which role needs it, and the named condition for when it applies.
+3. Remove RCIC receipt/check marks, provided/missing status, customer names, file paths, current-case facts, role bindings, condition results, and execution actions. These never go to accountd.
+4. Build a strict `anydoc.assembly-model.draft.v1` JSON document and run `models validate --model <draft.json> --json` offline.
+5. Show the **entire** model to the human in plain language: every ordered output filename pattern, included content, role, and named condition. Ask for explicit confirmation; partial summaries are not confirmation.
+6. Only after that yes, run `models save --model <draft.json> --user-confirmed --json`. Report the returned `model_id`, `revision`, and `model_hash`. Use `models replace` with `--expected-revision` for later full replacements; use `models forget` only after a separate explicit confirmation.
+
+The saved asset is an abstract model, never a case record. Do not upload the document list itself or any client document.
+
+## End-to-end
 
 Work inside the user’s folder. Prefer writing `inspection.json`, `document-map.json`, `assembly-plan.json`, and `approval-receipt.json` next to the materials (not inside the delivered subdirectory).
 
@@ -57,7 +90,14 @@ Work inside the user’s folder. Prefer writing `inspection.json`, `document-map
 
 Read the JSON. For every file, either you can describe it to the human or the tool already marked the unit unreadable. When the Office converter is installed, Office pages are real pages; when it is missing, Office units stay `office_pages_require_renderer` (that is not silent).
 
-You write `document-map.json` (`generated_by=host_agent`) — summaries and suggested splits. You write a fully expanded `assembly-plan.json`.
+You write `document-map.json` (`generated_by=host_agent`) — summaries and suggested splits. You write a fully expanded plan v2 `assembly-plan.json`.
+
+Its `authority.kind` is exactly one of:
+
+- `manual_plan`, for a complete plan explicitly supplied or approved as the basis by the user.
+- `private_model`, with exact `case_type`, `model_id`, `revision`, `model_hash`; local `role_bindings` and `condition_results`; and `action_mappings` that bind every output `to` to one `deliverable_id`, and every source `from` to one `content_id`.
+
+For `private_model`, every action output and source must be mapped exactly once. Those bindings remain in the local plan and approval receipt flow; never upload them to accountd. Plan v1 is rejected and must be regenerated, not silently upgraded.
 
 ```bash
 "$ANYDOC_BIN" plan validate --input /absolute/folder --plan /absolute/assembly-plan.json --json
@@ -105,4 +145,4 @@ If assemble was interrupted: `resume --input …`. To drop scratch files only: `
 - Inspect a messy folder of PDFs, photos, and Office files.
 - You and the user choose names, order, and what to keep.
 - After you approve the list, AnyDoc builds a new folder of copies and assembled PDFs.
-- Offline-capable. Login is optional (`connect-anydoc`) and is not part of packing. Not a lawyer. Not a form filler.
+- Explicit manual plans are offline-capable. Saved private models are accountd-hosted and require `connect-anydoc` to resolve. Not a lawyer. Not a form filler.

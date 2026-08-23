@@ -2,9 +2,9 @@
 
 Published under `jackyzhang69/plugins` → `plugins/anydoc/`.
 
-**Ships:** skills, install metadata, and prebuilt AnyDoc CLI binaries for macOS Apple Silicon and Windows x64.
+**Ships:** skills, install metadata, and a prebuilt AnyDoc CLI for macOS Apple Silicon.
 
-**Does not ship:** customer documents, tokens, Pdfium libraries, or private development materials.
+**Never ships:** customer documents, tokens, or private development materials. Pdfium ships only when `runtime-manifest.json` declares `pdfium.packaged=true`; the package verifier then requires the exact pinned library and checksum for each platform.
 
 ## Skills
 
@@ -14,22 +14,22 @@ Published under `jackyzhang69/plugins` → `plugins/anydoc/`.
 | `connect-anydoc` | Optional Portal token once (shared `user.json`) |
 | `tell-jacky` | Feedback (confirm first) |
 
-Packing is offline. Do not block inspect/assemble on login.
+Inspect and an explicitly approved manual plan stay offline. Saved private models use the shared Portal login; backend failure never silently becomes a manual plan.
 
 ## Platforms
 
 | Platform | Binary |
 |----------|--------|
 | macOS Apple Silicon | `bin/darwin-arm64/anydoc` |
-| Windows x64 | `bin/win32-x64/anydoc.exe` |
 
 Unsupported platforms fail closed. Checksums are required.
 
-This version is **not Apple-notarized** and **not Windows-signed**. macOS Gatekeeper may ask the human to allow the binary. Pdfium is not vendored; `doctor` reports `pdfium_unavailable` until a pinned library is present. Packing still works without it.
+Signing and Pdfium delivery are stated in `runtime-manifest.json`, not inferred from filenames. AnyDoc 0.2.0 packages pinned Pdfium and must pass same-Team hardened-runtime plus Apple notarization gates. Windows is outside the 0.2.0 public package.
 
 ## Honesty
 
 - AnyDoc inspects facts and executes an approved packing list.
+- Model-bound packing first resolves one exact accountd-hosted private model; only authoritative absence starts Teach Me.
 - It does not classify documents, OCR, fill official forms, or say a pack is ready to file.
 - Encrypted / form / signed PDFs are copy-or-rename only.
 - HEIC must be exported to JPEG or PNG first.
@@ -37,5 +37,5 @@ This version is **not Apple-notarized** and **not Windows-signed**. macOS Gateke
 Connect (secure): `printf %s "$TOKEN" | anydoc login --token-stdin`.  
 Tell Jacky: `anydoc feedback create … --user-confirmed`.
 
-Stage both platforms (repo-level): `scripts/stage-package`.  
+Stage the macOS package (repo-level): `scripts/stage-package`.
 Verify staged package: `plugin/scripts/verify-package`.
