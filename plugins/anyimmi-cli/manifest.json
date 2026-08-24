@@ -1,6 +1,6 @@
 {
   "name": "anyimmi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore",
   "type": "plugin",
   "entrypoint": "bin/anyimmi",

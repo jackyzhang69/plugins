@@ -47,7 +47,7 @@
       "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore: Federal Court precedent legal ratios, official IRCC policy manuals & Help Centre Q&As, synthesized practitioner field insights, and statutory CLB benchmark calculators.",
       "name": "anyimmi-cli",
       "source": "./plugins/anyimmi-cli",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     {
       "author": {
