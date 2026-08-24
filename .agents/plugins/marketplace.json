@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
-    "version": "1.8.10"
+    "version": "1.8.11"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -10,11 +10,9 @@
   },
   "plugins": [
     {
-      "author": {
-        "name": "Jacky Zhang",
-        "url": "https://formbro.ca"
-      },
-      "description": "Canadian immigration form automation: read/write applications, persons, employers; drive webform fills; export PDFs/Excel \u2014 all via the bundled FormBro CLI.",
+      "category": "productivity",
+      "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs; drive local webform fills via the bundled FormBro CLI.",
+      "homepage": "https://formbro.ca/agent-integration",
       "name": "formbro-cli",
       "source": "./plugins/formbro-cli",
       "version": "1.8.7"
@@ -26,7 +24,7 @@
       "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
-      "version": "0.5.13"
+      "version": "0.5.16"
     },
     {
       "author": {
@@ -36,28 +34,19 @@
       "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
       "name": "anychat-cli",
       "source": "./plugins/anychat-cli",
-      "version": "0.1.24"
-    },
-    {
-      "author": {
-        "name": "Jacky Zhang",
-        "url": "https://github.com/jackyzhang69/anyimmi"
-      },
-      "category": "productivity",
-      "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore: Federal Court precedent legal ratios, official IRCC policy manuals & Help Centre Q&As, synthesized practitioner field insights, and statutory CLB benchmark calculators.",
-      "name": "anyimmi-cli",
-      "source": "./plugins/anyimmi-cli",
-      "version": "1.0.1"
+      "version": "0.1.25"
     },
     {
       "author": {
         "name": "Jacky Zhang",
         "url": "https://github.com/jackyzhang69/anypdf"
       },
+      "category": "productivity",
       "description": "Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback.",
+      "homepage": "https://github.com/jackyzhang69/anypdf",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.7.2"
+      "version": "0.7.3"
     },
     {
       "author": {
@@ -68,6 +57,16 @@
       "name": "anydoc",
       "source": "./plugins/anydoc",
       "version": "0.2.1"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy, practitioner field notes, and CLB conversion via the bundled AnyImmi CLI.",
+      "name": "anyimmi-cli",
+      "source": "./plugins/anyimmi-cli",
+      "version": "1.0.2"
     }
   ]
 }

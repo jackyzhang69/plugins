@@ -1,10 +1,10 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anyimmi",
-      "sha256": "3f27200bcde018c6fc8c0a83e524669dc9abd93a9c315a594caf7d4b58189afb",
-      "size_bytes": 3151712,
+      "sha256": "2611d7eb128b5dd3c832b6f34c2302d1273fb4e41ae4edf86ec837c71769e1f8",
+      "size_bytes": 3168224,
       "checksum": "bin/darwin-arm64/anyimmi.sha256"
     }
   }

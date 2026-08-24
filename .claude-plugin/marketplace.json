@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
-    "version": "1.8.10"
+    "version": "1.8.11"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -24,7 +24,7 @@
       "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
-      "version": "0.5.15"
+      "version": "0.5.16"
     },
     {
       "author": {
@@ -34,7 +34,7 @@
       "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
       "name": "anychat-cli",
       "source": "./plugins/anychat-cli",
-      "version": "0.1.24"
+      "version": "0.1.25"
     },
     {
       "author": {
@@ -57,6 +57,16 @@
       "name": "anydoc",
       "source": "./plugins/anydoc",
       "version": "0.2.1"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy, practitioner field notes, and CLB conversion via the bundled AnyImmi CLI.",
+      "name": "anyimmi-cli",
+      "source": "./plugins/anyimmi-cli",
+      "version": "1.0.2"
     }
   ]
 }

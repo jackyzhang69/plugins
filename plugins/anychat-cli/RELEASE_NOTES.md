@@ -1,3 +1,9 @@
+# AnyChat 0.1.25
+
+## User-visible changes
+
+- Product Signals now cover the full command funnel: search, export, media list/download, friends, groups, sessions, doctor, and completed setup. Fail-open, calling-thread, 500ms.
+
 # AnyChat 0.1.24
 
 ## User-visible changes
