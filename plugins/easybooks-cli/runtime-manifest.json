@@ -5,20 +5,28 @@
     "platforms": {
       "darwin-arm64": {
         "path": "bin/darwin-arm64/easybooks",
-        "sha256": "af60806747d36a63344632d5dcd673c0e0641f1e96a95ed562c5d401a76f3545"
+        "sha256": "56e9db6ce862a7c91e736cfc56a9f158061809155893ac4bb6e31c361c33cbe8"
       },
       "win32-x64": {
         "path": "bin/win32-x64/easybooks.exe",
-        "sha256": "abab14c7861019ede53a0b82e9df2fe0267e958c0c797fa0a8b87f0cdde63fd2"
+        "sha256": "25d4e7c6a118576b0f4edb625455827a8d6acc9402035ad8f702c68db1661e54"
       }
-    }
+    },
+    "resolutionOrder": [
+      "${platform}-${arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true,
+    "binaryOverrideEnvVar": "EASYBOOKS_BIN"
   },
-  "plugin_version": "0.5.11",
   "configHome": {
     "darwin": "${HOME}/.easybooks",
     "linux": "${HOME}/.easybooks",
     "win32": "${USERPROFILE}/.easybooks"
   },
   "configFile": "config.json",
-  "defaultBaseUrl": "https://easybooks.jackyzhang.app"
+  "defaultBaseUrl": "https://easybooks.jackyzhang.app",
+  "source_sha": "693f7251432f5a7d0e532a83d96f0586807bed65",
+  "source_repo": "jackyzhang69/easybooks-plugin",
+  "source_tag": "plugin-v0.5.14"
 }
