@@ -1,3 +1,9 @@
+# AnyDoc 0.2.2
+
+- Product Signals funnel: inspect, plan validate/approve, verify, render-page,
+  extract-text, and doctor now emit after a real attempt. Assemble still emits
+  on success and failure. Fail-open.
+
 # AnyDoc 0.2.1
 
 - Reports completed assemble to Product Signals.

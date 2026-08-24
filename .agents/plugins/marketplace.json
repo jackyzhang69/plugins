@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
-    "version": "1.8.11"
+    "version": "1.8.10"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -53,20 +53,20 @@
         "name": "Jacky Zhang"
       },
       "category": "productivity",
-      "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon.",
-      "name": "anydoc",
-      "source": "./plugins/anydoc",
-      "version": "0.2.1"
+      "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy, practitioner field notes, and CLB conversion via the bundled AnyImmi CLI.",
+      "name": "anyimmi-cli",
+      "source": "./plugins/anyimmi-cli",
+      "version": "1.0.2"
     },
     {
       "author": {
         "name": "Jacky Zhang"
       },
       "category": "productivity",
-      "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy, practitioner field notes, and CLB conversion via the bundled AnyImmi CLI.",
-      "name": "anyimmi-cli",
-      "source": "./plugins/anyimmi-cli",
-      "version": "1.0.2"
+      "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon.",
+      "name": "anydoc",
+      "source": "./plugins/anydoc",
+      "version": "0.2.2"
     }
   ]
 }
