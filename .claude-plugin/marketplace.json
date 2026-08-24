@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Plugins by Jacky Zhang. Includes FormBro CLI for Canadian immigration form automation.",
-    "version": "1.8.10"
+    "version": "1.8.12"
   },
   "name": "jacky-plugins",
   "owner": {
