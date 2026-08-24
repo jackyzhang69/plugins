@@ -1,3 +1,8 @@
+# AnyDoc 0.2.1
+
+- Reports completed assemble to Product Signals.
+- Fail-open: a Signals outage does not block packing.
+
 # AnyDoc 0.2.0
 
 - Adds accountd-hosted typed private assembly models, exact model state handling, Teach Me after authoritative absence only, and plan/receipt v2 authority binding.

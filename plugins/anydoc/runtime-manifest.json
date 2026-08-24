@@ -3,14 +3,14 @@
   "product": "anydoc",
   "binary": {
     "name": "anydoc",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "5890814f9412654cf7dafa8543008226ee7ca1c40d185c49fdb8272527127782",
+        "sha256": "2e636de3bf375cabb74177a0574151507fdcf22c0629e92e709f0ada0275f2e8",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "92dc00d6257574f846d9043d420ae59c3e55f7d62855fd5478b35393de7bafe5"
+          "sha256": "a1a0c4931068e2c17b90f73d6706da6a5cc818839bc1775dfa064915c3e183cf"
         },
         "signing": "signed_same_team_hardened_runtime"
       }
@@ -21,7 +21,7 @@
       "notarization": "accepted",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anydoc-v0.2.0"
+      "tag": "anydoc-v0.2.1"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
