@@ -15,7 +15,7 @@ when_to_use: |-
 ## Shared platform token (host agent — mandatory)
 
 - Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only; `credential_kind=user`, `slot=user`).
-- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, and EasyBooks all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
+- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, AnyDoc, and AnyImmi all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
 - **Consumption differs by product; the durable token does not.**
   - **Exchange mode** (`anychat`, `anypdf`, `anyweb`, EasyBooks/`eb`): CLI calls `POST /v1/token/exchange` with `aud=<product>` and uses a short-lived memory-only JWT on product routes. Raw `jz_` is not a product bearer.
   - **Introspect mode** (`formbro`): CLI/API sends raw `jz_`; FormBro backend calls accountd `POST /v1/api-tokens/introspect`. `aud=formbro` exchange is invalid (`unknown_audience`).
@@ -25,15 +25,20 @@ when_to_use: |-
 - Do not create product-local durable token files. Plugin runtime stays under `~/.jackyzhang.app/<plugin_id>/` only.
 
 
-## Token delivery to the host agent (connect) — LOCKED 2026-08-14
+## Token delivery to the host agent (connect) — LOCKED 2026-08-24
 
-The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves.
+Same contract as every official plugin. The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves. This block is the whole connect path; later steps must not replace it with a human-typed terminal prompt.
 
 Accept input in this order:
 
 1. **File containing the token (preferred).** If the human provides a filesystem path (e.g. `~/Desktop/jacky-token.txt`) or an attached/readable file whose contents are a single `jz_…` value (optional surrounding whitespace/newline only):
    - Read the file in the agent tool channel.
-   - Pipe the token to the product CLI via stdin only: `login --token-stdin` (or the product's equivalent).
+   - Pipe the token to the product CLI via stdin only:
+
+```bash
+printf %s "$(cat -- "$TOKEN_FILE")" | "$ANYCHAT_BIN" login --token-stdin --accept-personal-use
+```
+
    - Do **not** put the token on argv, in chat echo, in logs, or in screenshots.
    - Confirm success with masked doctor/whoami only.
 
@@ -73,40 +78,18 @@ Force offline-only: `ANYCHAT_PORTAL_OFFLINE=1`.
 Optional hard revalidation on each query: `ANYCHAT_FORCE_REVALIDATE=1`.
 Still run `anychat doctor` when setup may be incomplete.
 
-## First-time path (secure — primary)
+## First-time path
 
-1. Ask the user for their **Portal** API token (free AnyChat product — no wallet).
+1. Confirm personal-use terms with the user (own data, own machine only).
 2. Resolve the `anychat` binary (see `anychat-capabilities` §B).
-3. Confirm personal-use terms with the user (own data, own machine only).
-4. Have the **user** enter the token locally so it never appears in chat/transcripts.
-   Preferred CLI path (token on stdin, **not** on argv):
-
-```bash
-# User pastes token into a local hidden prompt, or pipes from a local secret store:
-printf %s "$TOKEN" | "$ANYCHAT_BIN" login --token-stdin --accept-personal-use
-```
-
-Interactive TTY (agent prints the command; user types token themselves):
-
-```bash
-"$ANYCHAT_BIN" login --token-stdin --accept-personal-use
-```
-
-**Do not** put the raw token into a shell command that will be logged as argv.
-
-Discouraged override (history / process list risk):
-
-```bash
-"$ANYCHAT_BIN" login --token "<token>" --accept-personal-use
-```
-
-5. Mask any token in logs as `****` / prefix only.
-6. Then: `anychat doctor` → if `setup_needed`, load **anychat-setup**.
-7. Load **anychat-capabilities** for the session router.
+3. Follow **Token delivery** above. Product flag: `--accept-personal-use`. Never print a TTY login command. Never use `--token`.
+4. Mask any token in logs as `****` / prefix only.
+5. Then: `anychat doctor` → if `setup_needed`, load **anychat-setup**.
+6. Load **anychat-capabilities** for the session router.
 
 ## Token rules
 
 - Never echo the full token.
-- Never put the secret on process argv when avoidable (`--token-stdin` first).
-- Store only via CLI (`~/.jackyzhang.app/token/user.json (token) and ~/.jackyzhang.app/anychat/ (runtime)`).
+- Never put the secret on process argv (`--token` is forbidden; `--token-stdin` only).
+- Store only via CLI (`~/.jackyzhang.app/token/user.json` and `~/.jackyzhang.app/anychat/` runtime).
 - Never put a real token value in skill examples.

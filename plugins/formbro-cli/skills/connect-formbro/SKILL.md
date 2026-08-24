@@ -15,7 +15,7 @@ when_to_use: |-
 ## Shared platform token (host agent — mandatory)
 
 - Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only; `credential_kind=user`, `slot=user`).
-- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, and EasyBooks all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
+- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, AnyDoc, and AnyImmi all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
 - **Consumption differs by product; the durable token does not.**
   - **Exchange mode** (`anychat`, `anypdf`, `anyweb`, EasyBooks/`eb`): CLI calls `POST /v1/token/exchange` with `aud=<product>` and uses a short-lived memory-only JWT on product routes. Raw `jz_` is not a product bearer.
   - **Introspect mode** (`formbro`): CLI/API sends raw `jz_`; FormBro backend calls accountd `POST /v1/api-tokens/introspect`. `aud=formbro` exchange is invalid (`unknown_audience`).
@@ -25,15 +25,20 @@ when_to_use: |-
 - Do not create product-local durable token files. Plugin runtime stays under `~/.jackyzhang.app/<plugin_id>/` only.
 
 
-## Token delivery to the host agent (connect) — LOCKED 2026-08-14
+## Token delivery to the host agent (connect) — LOCKED 2026-08-24
 
-The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves.
+Same contract as every official plugin. The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves. This block is the whole connect path; later steps must not replace it with a human-typed terminal prompt.
 
 Accept input in this order:
 
 1. **File containing the token (preferred).** If the human provides a filesystem path (e.g. `~/Desktop/jacky-token.txt`) or an attached/readable file whose contents are a single `jz_…` value (optional surrounding whitespace/newline only):
    - Read the file in the agent tool channel.
-   - Pipe the token to the product CLI via stdin only: `login --token-stdin` (or the product's equivalent).
+   - Pipe the token to the product CLI via stdin only:
+
+```bash
+printf %s "$(cat -- "$TOKEN_FILE")" | "$FORMBRO_BIN" login --token-stdin
+```
+
    - Do **not** put the token on argv, in chat echo, in logs, or in screenshots.
    - Confirm success with masked doctor/whoami only.
 
@@ -67,18 +72,18 @@ If `~/.formbro/config.json` exists from a previous session AND `formbro whoami` 
 
 ## What this does (first-time path)
 
-Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again. **Never ask the user to paste a token into chat.** The normal human flow is local entry at the CLI's hidden terminal prompt; `FORMBRO_API_TOKEN` remains an explicit automation override.
+Persists the user's FormBro API token through the bundled `formbro` CLI so that every subsequent skill (read / write / webform / export) can call the FormBro backend without ever seeing the raw token again. Follow **Token delivery** above: file path preferred, chat paste allowed with one warning, never a human-typed terminal prompt. `FORMBRO_API_TOKEN` remains an explicit automation override.
 
 ## How it works
 
-1. Tell the user to generate a FormBro API token at https://jackyzhang.app/account/tokens. The token starts with `jz_`. Never ask the user to reveal it in chat or an agent tool call.
+1. If they do not yet have a Portal token, send them to https://jackyzhang.app/account/tokens to create one (`jz_`). Then follow **Token delivery** — ask for a file path (preferred) or a paste. Never ask them to type it in a terminal.
 
    Note: new tokens default to **read** scope. Most FormBro skills need **write** scope too
    (mutations, imports, and `tell-jacky` feedback submission all fail with a 403 on a read-only
    token). The CLI cannot mint or upgrade a token itself — if the user hits a write-scope 403
    later, send them back to the account Portal at https://jackyzhang.app/account/tokens to edit the token in place (no need to
    regenerate) rather than troubleshooting the CLI.
-2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
+2. **Resolve the bundled `formbro` binary** — defer to `formbro-capabilities/SKILL.md` §B (the canonical resolver: `$FORMBRO_BIN_OVERRIDE` → codex cache → claude cache → `command -v`). Set `$FORMBRO_BIN` in the shell once; subsequent commands in every FormBro skill use that. The earlier "read `runtime-manifest.json`" instruction is obsolete and has been replaced by §B's portable resolver.
 3. **Plugin cache freshness self-check (mandatory):**
 
    ```sh
@@ -115,13 +120,13 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
    This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.
 
-4. Run for the user the login command in their own terminal and enter the token at the hidden prompt. The token never enters argv, shell history, chat, or an agent tool request:
+4. The host agent runs login. Follow **Token delivery** above. File preferred:
 
    ```sh
-   <BUNDLED_FORMBRO> login --token-stdin
+   printf %s "$(cat -- "$TOKEN_FILE")" | <BUNDLED_FORMBRO> login --token-stdin
    ```
 
-   The user reports only whether it succeeded. Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path. Non-interactive automation may use a governed stdin secret channel or `FORMBRO_API_TOKEN`, but skills must not construct a token-bearing pipe.
+   Do not tell the user to run this in their own terminal. Do not use `--token`. Output is JSON: `{"status":"ok","path":"/Users/.../.formbro/config.json"}`. The CLI writes the token + default backend URL to that path. Non-interactive automation may use a governed stdin secret channel or `FORMBRO_API_TOKEN`.
 
 5. Verify by running:
 
