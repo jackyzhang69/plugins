@@ -1,8 +1,9 @@
-# AnyChat 0.1.23
+# AnyChat 0.1.24
 
 ## User-visible changes
 
-- `anychat whoami` now prints the Portal account email when accountd includes it on the short-lived identity token.
+- Authenticated searches now emit Product Signals (`search_results_returned`) by default. Emission is fail-open and runs on the calling thread so the CLI does not exit before the event is posted.
+- Direct first-time WeChat setup on Windows stops at 4.1.10.30; 4.1.10.31+ fail closed instead of being sent into prepare-access.
 
 ## Package coverage
 

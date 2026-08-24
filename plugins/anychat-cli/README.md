@@ -24,7 +24,7 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 | macOS Apple Silicon | Explicitly verified WeChat profiles + iMessage + Telegram Postbox profile |
 | Windows x64 | Explicitly verified WeChat/Weixin profiles only; Telegram, Signal, and WhatsApp remain behind later native gates |
 
-Unknown chat-app builds fail closed. `setup_plan.agent` is the only first-time-setup protocol for host agents: say `say_to_user` to the human, run `host_agent_args` yourself, and never send the human to a terminal. A unique running WeChat/Weixin build is selected automatically. Invented or stale confirmed builds are rejected. Direct first-time preparation is limited to 4.1.0–4.1.10; newer versions default to agent-handled reporting, not a WeChat downgrade. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
+Unknown chat-app builds fail closed. `setup_plan.agent` is the only first-time-setup protocol for host agents: say `say_to_user` to the human, run `host_agent_args` yourself, and never send the human to a terminal. A unique running WeChat/Weixin build is selected automatically. Invented or stale confirmed builds are rejected. Direct first-time preparation is limited to 4.1.0–4.1.10 (Windows: through 4.1.10.30); newer versions default to agent-handled reporting, not a WeChat downgrade. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
 
 See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the current release changes and package coverage.
 
