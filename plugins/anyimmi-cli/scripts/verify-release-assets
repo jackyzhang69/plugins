@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# verify-release-assets: official AnyImmi release requires darwin-arm64 + win32-x64.
+# Option B: missing win32-x64 is FAIL. No waiver.
+set -euo pipefail
+ROOT="${PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+test -f "$ROOT/bin/darwin-arm64/anyimmi" || { echo "verify-release-assets: missing bin/darwin-arm64/anyimmi" >&2; exit 1; }
+test -f "$ROOT/bin/win32-x64/anyimmi.exe" || { echo "verify-release-assets: missing bin/win32-x64/anyimmi.exe (option B: no official release without Windows)" >&2; exit 1; }
+echo "verify-release-assets: ok"

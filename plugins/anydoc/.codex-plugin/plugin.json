@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "AnyDoc",
     "shortDescription": "Inspect a folder and assemble an approved document pack.",
-    "longDescription": "Use the bundled AnyDoc CLI to inspect PDFs, photos, and Office files in a local folder, show a packing list, wait for the human to approve, then copy/rename/split/merge/convert into a new subdirectory. Native text extraction runs before host vision/OCR. Packing stays local. Login is optional for private assembly models and Tell Jacky. AnyDoc does not classify documents, does not OCR, does not fill official forms, and never says a pack is ready to file. macOS Apple Silicon and Windows x64; signing state is authoritative only in runtime-manifest.json.",
+    "longDescription": "Use the bundled AnyDoc CLI (anydoc router skill) to inspect PDFs, photos, and Office files in a local folder, show a packing list, wait for the human to approve, then copy/rename/split/merge/convert into a new subdirectory. Native text extraction runs before host vision/OCR. Packing stays local. Login is optional for private assembly models and Tell Jacky. AnyDoc does not classify documents, does not OCR, does not fill official forms, and never says a pack is ready to file. macOS Apple Silicon and Windows x64; signing state is authoritative only in runtime-manifest.json.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": [

@@ -1,0 +1,37 @@
+{
+  "name": "anypdf",
+  "version": "0.7.3",
+  "min_supported_version": "0.1.0",
+  "description": "Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "repository": "https://github.com/jackyzhang69/plugins",
+  "license": "MIT",
+  "keywords": [
+    "pdf",
+    "forms",
+    "anypdf",
+    "tell-jacky"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyPDF",
+    "shortDescription": "Fill official PDF forms through the AnyPDF CLI.",
+    "longDescription": "Use the bundled AnyPDF CLI (anypdf router skill) to fill registered PDF forms, submit an official blank template when a form is missing, and send Jacky a note. Answer from the live CLI, never a remembered form list. macOS Apple Silicon and Windows x64.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "What can AnyPDF do?",
+      "Fill IMM5257 with this data.",
+      "Submit this official blank PDF as a new form request.",
+      "Tell Jacky about an AnyPDF bug or feature idea."
+    ]
+  }
+}

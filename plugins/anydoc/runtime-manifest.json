@@ -68,5 +68,6 @@
     "source": "https://github.com/bblanchon/pdfium-binaries",
     "packaged": true,
     "note": "Pinned Pdfium libraries are packaged per platform and verified by sha256."
-  }
+  },
+  "source_sha": "81d8a64b5a435ec322b22641334e41ed5715e076"
 }

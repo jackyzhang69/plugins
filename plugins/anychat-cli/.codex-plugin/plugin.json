@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "AnyChat",
     "shortDescription": "Query your own local chat archive from the agent.",
-    "longDescription": "Use the bundled AnyChat CLI to search friends and groups, export transcripts, and download attachments from your personal local chat archive on macOS (Apple Silicon) or Windows x64. Setup is a one-time wizard; only a free Portal token is required. Chat content never leaves your machine except optional redacted Tell Jacky feedback you explicitly approve. On bare 'anychat' / 'what can you do' questions, load anychat-capabilities and introduce the product from that contract.",
+    "longDescription": "Use the bundled AnyChat CLI to search friends and groups, export transcripts, and download attachments from your personal local chat archive on macOS (Apple Silicon) or Windows x64. Setup is a one-time wizard; only a free Portal token is required. Chat content never leaves your machine except optional redacted Tell Jacky feedback you explicitly approve. On bare 'anychat' / 'what can you do' questions, load the anychat router skill and introduce the product from that contract.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": [

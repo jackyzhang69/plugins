@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# verify-package: read-only shape gate for a packed formbro-cli tree.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# When run from source, plugin-metadata is the metadata root; when packed,
+# this script lives at scripts/ next to skills/.
+if [ -d "$ROOT/plugin-metadata" ]; then
+  META="$ROOT/plugin-metadata"
+  SKILLS="$ROOT/.agents/skills"
+else
+  META="$ROOT"
+  SKILLS="$ROOT/skills"
+fi
+test -f "$META/runtime-manifest.json"
+test -f "$SKILLS/formbro/SKILL.md" || { echo "verify-package: missing skills/formbro/SKILL.md" >&2; exit 1; }
+count="$(find "$SKILLS" -name SKILL.md | wc -l | tr -d ' ')"
+# Source tree may also contain developer-only formbro-pdf-local/SKILL.md.
+if [ -d "$ROOT/plugin-metadata" ]; then
+  test -f "$ROOT/.agents/skills/formbro-pdf-local/SKILL.md"
+else
+  test "$count" = "1" || { echo "verify-package: packed tree must have exactly 1 SKILL.md, found $count" >&2; exit 1; }
+fi
+echo "verify-package: ok"

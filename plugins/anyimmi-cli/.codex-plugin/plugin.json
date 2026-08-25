@@ -1,5 +1,41 @@
 {
-  "name": "anyimmi-cli",
+  "name": "anyimmi",
   "version": "1.0.2",
-  "description": "Canadian Immigration Intelligence & Practical Tools Plugin powered by ImmiCore. Federal Court precedents, IRCC policies, synthesized field insights, and CLB conversion."
+  "min_supported_version": "1.0.0",
+  "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "homepage": "https://jackyzhang.app",
+  "license": "Proprietary",
+  "keywords": [
+    "immigration",
+    "canada",
+    "ircc",
+    "caselaw",
+    "precedents",
+    "clb",
+    "anyimmi",
+    "immicore"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyImmi",
+    "shortDescription": "Canadian Immigration Intelligence & Practical Tools Plugin.",
+    "longDescription": "Use the anyimmi router skill for deterministic access to Canadian Federal Court precedent legal ratios, synthesized practitioner field insights, IRCC Program Delivery Instructions, Help Centre Q&As, and statutory language calculators. Zero backend AI cost; host agent drives all case reasoning and synthesis.",
+    "developerName": "Jacky Zhang",
+    "category": "Legal & Productivity",
+    "capabilities": [
+      "Read",
+      "Calculate"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "Search Canadian Federal Court precedents for <legal issue> with anyimmi.",
+      "Check IRCC official policy guidance for <topic>.",
+      "Search practitioner field notes for <operational issue>.",
+      "Calculate CLB level for <IELTS/CELPIP scores>."
+    ]
+  }
 }

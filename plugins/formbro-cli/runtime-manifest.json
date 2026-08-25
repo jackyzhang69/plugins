@@ -50,5 +50,6 @@
   },
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",
-  "defaultBaseUrl": "https://formbro-api.jackyzhang.app"
+  "defaultBaseUrl": "https://formbro-api.jackyzhang.app",
+  "source_sha": "0b64ef4b4bb6fe78cdc983e417a0322e61229798"
 }

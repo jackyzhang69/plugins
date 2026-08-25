@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# verify-install: run the staged host binary's doctor --json.
+# Local install-acceptance probe. Not notarization evidence.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+os="$(uname -s)"
+arch="$(uname -m)"
+case "$os:$arch" in
+  Darwin:arm64) plat=darwin-arm64; name=anychat ;;
+  MINGW*|MSYS*|CYGWIN*) plat=win32-x64; name=anychat.exe ;;
+  *) echo "verify-install: unsupported host $os $arch" >&2; exit 1 ;;
+esac
+BIN="$ROOT/bin/$plat/$name"
+test -f "$BIN" || { echo "verify-install: missing $BIN" >&2; exit 1; }
+test ! -L "$BIN" || { echo "verify-install: refusing symlink: $BIN" >&2; exit 1; }
+if [[ -z "${JACKYZHANG_APP_HOME:-}" ]]; then
+  JACKYZHANG_APP_HOME="$(mktemp -d "${TMPDIR:-/tmp}/anychat-verify-install.XXXXXX")"
+  export JACKYZHANG_APP_HOME
+fi
+"$BIN" --version >/dev/null
+RAW="$("$BIN" doctor --json)"
+python3 -c 'import json,sys; json.loads(sys.stdin.read())' <<<"$RAW" \
+  || { echo "verify-install: doctor --json is not JSON" >&2; exit 1; }
+echo "verify-install: ok"

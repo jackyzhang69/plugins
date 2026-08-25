@@ -54,10 +54,10 @@ case "$(uname -s):$(uname -m)" in
   Darwin:arm64) PLATFORM=darwin-arm64 ;;
   Darwin:x86_64) PLATFORM=darwin-x64 ;;
   Linux:x86_64) PLATFORM=linux-x64 ;;
-  MINGW*:x86_64|MINGW*:amd64|MSYS*:x86_64|MSYS*:amd64|CYGWIN*:x86_64|CYGWIN*:amd64|Windows_NT:x86_64|Windows_NT:amd64) PLATFORM=windows-x64 ;;
+  MINGW*:x86_64|MINGW*:amd64|MSYS*:x86_64|MSYS*:amd64|CYGWIN*:x86_64|CYGWIN*:amd64|Windows_NT:x86_64|Windows_NT:amd64) PLATFORM=win32-x64 ;;
   *) add_failure unsupported_platform; PLATFORM=unknown ;;
 esac
-if [ "$PLATFORM" = windows-x64 ]; then
+if [ "$PLATFORM" = win32-x64 ]; then
   ENTRYPOINT="bin/$PLATFORM/anypdf.exe"
 else
   ENTRYPOINT="bin/$PLATFORM/anypdf"

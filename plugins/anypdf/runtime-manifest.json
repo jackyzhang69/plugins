@@ -8,9 +8,9 @@
       "size_bytes": 11337360,
       "signing": "unsigned"
     },
-    "windows-x64": {
-      "checksum": "bin/windows-x64/anypdf.exe.sha256",
-      "entrypoint": "bin/windows-x64/anypdf.exe",
+    "win32-x64": {
+      "checksum": "bin/win32-x64/anypdf.exe.sha256",
+      "entrypoint": "bin/win32-x64/anypdf.exe",
       "package_manifest_sha256": "d3cd2d8d57c8ed84dd297ebac571915d4ac827c9b4213972a7380e105bd029b3",
       "sha256": "9110ada511a745522f3e495786e5331d4a1469f3864467f38f5fe6c673b78994",
       "size_bytes": 21550972,
@@ -18,6 +18,6 @@
     }
   },
   "schema_version": "3",
-  "source_sha": "65847f37a7a81b93cbd90e20098853c7ab3b1a6a",
+  "source_sha": "a5a8156aa631f82a7454e6439f0ba486636728b5",
   "version": "0.7.3"
 }

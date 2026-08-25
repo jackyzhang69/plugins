@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -e
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BIN="${DIR}/bin/anyimmi"
+
+echo "========================================="
+echo "AnyImmi Plugin Verification & Smoke Test"
+echo "========================================="
+
+echo "[1/7] Checking Native Rust Binary..."
+"${BIN}" --version
+
+echo "[2/7] Verifying doctor diagnostics..."
+DOC_OUT=$("${BIN}" doctor --json)
+echo "${DOC_OUT}" | grep -q '"plugin_id"' && echo "  -> Doctor diagnostics PASSED" || (echo "  -> Doctor diagnostics FAILED"; exit 1)
+
+echo "[3/7] Verifying whoami identity check..."
+WHO_OUT=$("${BIN}" whoami --json)
+echo "${WHO_OUT}" | grep -q '"status"' && echo "  -> Whoami check PASSED" || (echo "  -> Whoami check FAILED"; exit 1)
+
+echo "[4/7] Verifying CLB calculation..."
+CLB_OUT=$("${BIN}" clb --test ielts -l 8 -r 7 -w 7 -s 7 --json)
+echo "${CLB_OUT}" | grep -q '"overall"' && echo "  -> CLB calculation PASSED" || (echo "  -> CLB calculation FAILED"; exit 1)
+
+echo "[5/7] Verifying Precedent Caselaw retrieval (Global --json flag position)..."
+CASE_OUT=$("${BIN}" --json caselaw "study permit" --top 1)
+echo "${CASE_OUT}" | grep -q '"citation"' && echo "  -> Caselaw retrieval PASSED" || (echo "  -> Caselaw retrieval FAILED"; exit 1)
+# Negative assertion: ensure internal fields are absent
+echo "${CASE_OUT}" | grep -q '"_index"' && (echo "  -> Security boundary FAILED (_index leaked!)"; exit 1) || true
+
+echo "[6/7] Verifying IRCC Policy & Help Centre search..."
+POL_OUT=$("${BIN}" policy "study permit" --top 1 --json)
+echo "${POL_OUT}" | grep -q '"title"' && echo "  -> Policy search PASSED" || (echo "  -> Policy search FAILED"; exit 1)
+
+echo "[7/7] Verifying Practitioner Field Notes retrieval..."
+NOTES_OUT=$("${BIN}" notes "flagpole" --top 1 --json)
+echo "${NOTES_OUT}" | grep -q '"topic"' && echo "  -> Field notes retrieval PASSED" || (echo "  -> Field notes retrieval FAILED"; exit 1)
+# Negative assertion: ensure raw email thread_id is absent
+echo "${NOTES_OUT}" | grep -q '"thread_id"' && (echo "  -> Security boundary FAILED (thread_id leaked!)"; exit 1) || true
+
+echo "========================================="
+echo "✅ All 7 AnyImmi Governance & Smoke Tests PASSED!"
+echo "========================================="

@@ -55,5 +55,6 @@
   },
   "configFile": "config.json",
   "tokenEnvVar": "ANYCHAT_TOKEN",
-  "defaultBaseUrl": "https://account.jackyzhang.app"
+  "defaultBaseUrl": "https://account.jackyzhang.app",
+  "source_sha": "8d63f119e36f40e9e5bad680e907acfb00e95b66"
 }

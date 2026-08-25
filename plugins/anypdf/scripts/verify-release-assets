@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# verify-release-assets: require darwin-arm64 + win32-x64 when bin/ is present.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+if [ ! -d "$ROOT/bin" ]; then
+  echo "verify-release-assets: no bin/ (source tree); skip"
+  exit 0
+fi
+test -f "$ROOT/bin/darwin-arm64/anypdf" || { echo "missing darwin-arm64 anypdf" >&2; exit 1; }
+test -f "$ROOT/bin/win32-x64/anypdf.exe" || { echo "missing win32-x64 anypdf.exe" >&2; exit 1; }
+echo "verify-release-assets: ok"

@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "FormBro",
     "shortDescription": "Canadian immigration form automation via the FormBro CLI.",
-    "longDescription": "Use the bundled FormBro Rust CLI as the only boundary for FormBro operations: import new cases from Excel/CSV/Word/PDF/image/text-derived JSON contracts, read and write applicants, applications, employers, and programs, validate before saving, fill IRCC IMM PDFs, and drive local Playwright/Chromium IRCC portal fills (the agent prepares; the user submits). The plugin bundles binaries for macOS Apple Silicon and Windows x64. The only thing the user ever inputs is their FormBro API token (jz_…), captured once by the connect-formbro skill.",
+    "longDescription": "Use the bundled FormBro Rust CLI as the only boundary for FormBro operations: import new cases from Excel/CSV/Word/PDF/image/text-derived JSON contracts, read and write applicants, applications, employers, and programs, validate before saving, fill IRCC IMM PDFs, and drive local Playwright/Chromium IRCC portal fills (the agent prepares; the user submits). The plugin bundles binaries for macOS Apple Silicon and Windows x64. The only thing the user ever inputs is their FormBro API token (jz_…), captured once via the formbro router skill.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": [

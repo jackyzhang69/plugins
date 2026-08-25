@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# verify-package: packed AnyPDF tree has the single router skill and host metadata.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+test -f "$ROOT/skills/anypdf/SKILL.md"
+test -f "$ROOT/.claude-plugin/plugin.json"
+count="$(find "$ROOT/skills" -name SKILL.md | wc -l | tr -d ' ')"
+test "$count" = "1" || { echo "verify-package: expected 1 SKILL.md, found $count" >&2; exit 1; }
+echo "verify-package: ok"
