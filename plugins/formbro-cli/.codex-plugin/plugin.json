@@ -1,6 +1,6 @@
 {
   "name": "formbro-cli",
-  "version": "1.8.8",
+  "version": "1.8.9",
   "min_supported_version": "0.6.0",
   "deprecated_versions_note": "Plugin versions pinning marketplace tags below v1.4.3 (in the jackyzhang69/plugins repo) were removed in the v1.5.0 cleanup because their commit trees contained pre-v1.4.x IP-bearing mapping JSONs. If a user is on an older cached version, run the doctor check and follow the upgrade hint.",
   "description": "Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write applications/persons/employers, validate, fill IRCC IMM PDFs, and drive local webform fills.",
