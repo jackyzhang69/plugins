@@ -19,20 +19,13 @@ test ! -L "$MANIFEST" || { echo "verify-package: runtime-manifest.json must not 
 
 # Required skill directories (read-only existence gate). A package missing any
 # of these is incomplete and must FAIL.
-REQUIRED_SKILLS=(
-  anychat-capabilities
-  connect-anychat
-  anychat-setup
-  anychat-query
-  anychat-media
-  tell-jacky
-)
-for s in "${REQUIRED_SKILLS[@]}"; do
-  test -d "$ROOT/skills/$s"     || { echo "verify-package: required skill dir missing: skills/$s" >&2; exit 1; }
-done
+test -f "$ROOT/skills/anychat/SKILL.md" || { echo "verify-package: required skill missing: skills/anychat/SKILL.md" >&2; exit 1; }
+test -d "$ROOT/skills/anychat/references" || { echo "verify-package: required references dir missing: skills/anychat/references" >&2; exit 1; }
+skill_count="$(find "$ROOT/skills" -name SKILL.md | wc -l | tr -d ' ')"
+test "$skill_count" = "1" || { echo "verify-package: expected exactly 1 SKILL.md, found $skill_count" >&2; exit 1; }
 
 # Voice STT contract must remain present in the shipped skill text.
-grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat-media/SKILL.md"   || { echo "verify-package: voice STT contract missing from anychat-media" >&2; exit 1; }
+grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat/references/media.md"   || { echo "verify-package: voice STT contract missing from skills/anychat/references/media.md" >&2; exit 1; }
 
 PKG_VERSION="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps 2>/dev/null \
   | python3 -c 'import sys,json; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"] == "anychat"))')"
