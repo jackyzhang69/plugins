@@ -18,7 +18,7 @@ Drop a receipt or an invoice — or ask the agent to scan your connected Gmail f
 - The agent may read local text / image / PDF / email content itself to extract structured data, but the moment data is recorded, listed, or mutated it goes through `easybooks ...`.
 - New transactions from files / email use: parse locally → `easybooks tx import-json --dry-run` → confirm → `easybooks tx import-json`.
 - Invoices use: prepare JSON → `easybooks invoice create --dry-run` → confirm → `easybooks invoice create`, then optionally `easybooks invoice send <invoice_id>`.
-- Runtime truth is the bundled binary's `commands --json` plus the `easybooks` router.
+- Runtime truth is `easybooks commands --json` plus the `easybooks` router skill. Never from memory of an older release.
 
 ## The only thing the user inputs
 
