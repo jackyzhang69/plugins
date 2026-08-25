@@ -11,7 +11,18 @@
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "19b09820d54b9e8b212a3f29aa547ac0b19b09a5eb50338556bdf8d01a968246"
+            "sha256": "TO_BE_FILLED_BY_CI"
+          }
+        ]
+      },
+      "darwin-x64": {
+        "entrypoint": "bin/darwin-x64/formbro",
+        "lazy": [
+          {
+            "name": "webform-worker",
+            "asset": "webform-worker-darwin-x64.tar.gz",
+            "archive": "tar.gz",
+            "sha256": "TO_BE_FILLED_BY_CI"
           }
         ]
       },
@@ -22,15 +33,30 @@
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "b815412fb7c1cd5a4a2c5ca82f8b4c2718066abdd0004d1dc8a3208594527c1a"
+            "sha256": "TO_BE_FILLED_BY_CI"
           }
         ]
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/formbro",
+        "lazy": [
+          {
+            "name": "webform-worker",
+            "asset": "webform-worker-linux-x64.tar.gz",
+            "archive": "tar.gz",
+            "sha256": "TO_BE_FILLED_BY_CI"
+          }
+        ]
+      },
+      "linux-arm64": {
+        "entrypoint": "bin/linux-arm64/formbro",
+        "lazy": []
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "plugin-v1.8.7"
+      "tag": "TO_BE_FILLED_BY_CI"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -51,5 +77,5 @@
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",
   "defaultBaseUrl": "https://formbro-api.jackyzhang.app",
-  "source_sha": "0b64ef4b4bb6fe78cdc983e417a0322e61229798"
+  "source_sha": "f4dd6930928cc9906b41d480a1c7aa8b03736977"
 }

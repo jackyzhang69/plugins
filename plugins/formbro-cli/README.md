@@ -21,7 +21,7 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 
 A FormBro API token (starts with `jz_…`).
 
-The user generates it once at https://https://jackyzhang.app/account/tokens, then runs `formbro login --token-stdin` locally and enters it at the hidden prompt. The CLI writes `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json` on Windows). Every other skill reads from that config — the token never enters argv, chat, shell history, or agent tool input; it is never asked for again, never echoed, and never stored anywhere except that single file.
+The user generates it once at https://jackyzhang.app/account/tokens. The host agent then pipes a token file: `printf %s "$(cat -- "$TOKEN_FILE")" | formbro login --token-stdin`. Do not tell the human to type it in a terminal. The CLI writes `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json` on Windows). Every other skill reads from that config — the token never enters argv, shell history, or logs; it is never asked for again, never echoed, and never stored anywhere except that single file.
 
 ## Token safety (enforced by skill text)
 
