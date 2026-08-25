@@ -21,9 +21,10 @@ for rel in .claude-plugin/plugin.json .codex-plugin/plugin.json; do
   test ! -L "$ROOT/$rel" || { echo "verify-package: $rel must not be a symlink" >&2; exit 1; }
 done
 
-REQUIRED_SKILLS=(anydoc-assemble connect-anydoc tell-jacky)
+REQUIRED_SKILLS=(anydoc)
 for s in "${REQUIRED_SKILLS[@]}"; do
   test -d "$ROOT/skills/$s" || { echo "verify-package: required skill dir missing: skills/$s" >&2; exit 1; }
+  test -f "$ROOT/skills/$s/SKILL.md" || { echo "verify-package: missing skills/$s/SKILL.md" >&2; exit 1; }
 done
 
 PKG_VERSION=""
