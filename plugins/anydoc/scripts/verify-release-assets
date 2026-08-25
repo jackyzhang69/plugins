@@ -54,12 +54,17 @@ for a in r.get("assets", []):
         raise SystemExit("remote asset URL is not an HTTPS GitHub API URL")
     assets[name] = url
 expected = {}
+asset_names = {
+    "darwin-arm64": ("anydoc-darwin-arm64", "libpdfium-darwin-arm64.dylib"),
+    "win32-x64": ("anydoc-win32-x64.exe", "pdfium-win32-x64.dll"),
+}
 for platform, record in m["binary"]["platforms"].items():
-    name = pathlib.PurePosixPath(record["entrypoint"]).name
+    if platform not in asset_names:
+        raise SystemExit(f"unsupported release platform: {platform}")
+    name, native_name = asset_names[platform]
     expected[name] = record["sha256"]
     native = record.get("pdfium") if isinstance(record.get("pdfium"), dict) else None
     if native:
-        native_name = pathlib.PurePosixPath(native["path"]).name
         expected[native_name] = native["sha256"]
 missing = sorted(set(expected) - set(assets))
 if missing:

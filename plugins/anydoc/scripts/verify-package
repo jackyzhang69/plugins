@@ -6,7 +6,7 @@
 #
 # Optional arg: plugin root (default: this script's parent). Tests may pass a
 # temporary copy. Unpublished trees may omit staged binaries. A published
-# tree must stage its allowed platform. Signed releases carry pinned Pdfium.
+# tree must stage its allowed platforms. Official releases carry pinned Pdfium.
 set -euo pipefail
 
 ROOT="$(cd "${1:-$(dirname "$0")/..}" && pwd)"
@@ -41,14 +41,16 @@ root = pathlib.Path(root)
 m = json.loads(pathlib.Path(manifest_path).read_text())
 errors = []
 
-ALLOWED = ["darwin-arm64"]
+ALLOWED = ["darwin-arm64", "win32-x64"]
 FORBIDDEN_NAMES = {"user.json", "jz.json", ".env"}
 FORBIDDEN_SUFFIX = {".dylib", ".dll", ".so", ".tgz"}
 ENTRY = {
     "darwin-arm64": "bin/darwin-arm64/anydoc",
+    "win32-x64": "bin/win32-x64/anydoc.exe",
 }
 PDFIUM_ENTRY = {
     "darwin-arm64": "bin/darwin-arm64/libpdfium.dylib",
+    "win32-x64": "bin/win32-x64/pdfium.dll",
 }
 
 def sha256(path):
@@ -87,8 +89,6 @@ platforms = binary.get("platforms") if isinstance(binary.get("platforms"), dict)
 unexpected = sorted(set(platforms) - set(ALLOWED))
 if unexpected:
     errors.append(f"binary.platforms has platforms outside allowlist: {unexpected!r}")
-if any(platform != "darwin-arm64" for platform in platforms):
-    errors.append("public release ships only darwin-arm64")
 
 if status == "unpublished":
     if release.get("marketplace") != "not_claimed":
@@ -178,6 +178,7 @@ for plat, entry in platforms.items():
     expected_bin_files.add(rel + ".sha256")
     native = entry.get("pdfium") if isinstance(entry.get("pdfium"), dict) else None
     signing = entry.get("signing")
+    native_signing = native.get("signing") if isinstance(native, dict) else None
     if pdfium_packaged:
         if native is None:
             errors.append(f"{plat}: packaged Pdfium record is missing")
@@ -205,24 +206,44 @@ for plat, entry in platforms.items():
                 expected_native_libraries.add(native_rel)
         allowed_signing = {
             "darwin-arm64": {"unsigned", "signed_same_team_hardened_runtime"},
+            "win32-x64": {"unsigned"},
         }.get(plat, set())
         if signing not in allowed_signing:
             errors.append(f"{plat}: invalid signing status {signing!r}")
+        if native_signing != signing:
+            errors.append(
+                f"{plat}: Pdfium signing {native_signing!r} must match platform signing {signing!r}"
+            )
     elif native is not None:
         errors.append(f"{plat}: Pdfium record exists while pdfium.packaged is false")
 
 if pdfium_packaged:
-    signing_values = {entry.get("signing") for entry in platforms.values() if isinstance(entry, dict)}
-    fully_signed = signing_values == {"signed_same_team_hardened_runtime"}
-    fully_unsigned = signing_values == {"unsigned"}
-    if not (fully_signed or fully_unsigned):
-        errors.append("package cannot mix signed and unsigned platform artifacts")
-    if fully_signed and notarization != "accepted":
-        errors.append("fully signed package requires notarization=accepted")
+    signing_by_platform = {
+        platform: entry.get("signing")
+        for platform, entry in platforms.items()
+        if isinstance(entry, dict)
+    }
+    official_release = signing_by_platform == {
+        "darwin-arm64": "signed_same_team_hardened_runtime",
+        "win32-x64": "unsigned",
+    }
+    fully_unsigned = set(signing_by_platform) == set(ALLOWED) and set(
+        signing_by_platform.values()
+    ) == {"unsigned"}
+    if not (official_release or fully_unsigned):
+        errors.append("package must be fully unsigned development or notarized macOS plus unsigned Windows release")
+    if official_release and notarization != "accepted":
+        errors.append("official release requires macOS notarization=accepted")
     if fully_unsigned and notarization != "not_done":
         errors.append("unsigned development package requires notarization=not_done")
 elif notarization == "accepted":
     errors.append("notarization=accepted requires packaged Pdfium and signed platform artifacts")
+
+source_commit = release.get("source_commit")
+if not isinstance(source_commit, str) or len(source_commit) != 40 or any(
+    ch not in "0123456789abcdef" for ch in source_commit
+):
+    errors.append("binary.release.source_commit must be a lowercase 40-character git commit")
 
 bin_root = root / "bin"
 actual_bin_files = set()

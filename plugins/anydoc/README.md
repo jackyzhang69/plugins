@@ -2,7 +2,8 @@
 
 Published under `jackyzhang69/plugins` → `plugins/anydoc/`.
 
-**Ships:** skills, install metadata, and a prebuilt AnyDoc CLI for macOS Apple Silicon.
+**Ships:** skills, install metadata, and prebuilt AnyDoc CLI packages for macOS
+Apple Silicon and Windows x64 after both platforms pass native acceptance.
 
 **Never ships:** customer documents, tokens, or private development materials. Pdfium ships only when `runtime-manifest.json` declares `pdfium.packaged=true`; the package verifier then requires the exact pinned library and checksum for each platform.
 
@@ -21,10 +22,15 @@ Inspect and an explicitly approved manual plan stay offline. Saved private model
 | Platform | Binary |
 |----------|--------|
 | macOS Apple Silicon | `bin/darwin-arm64/anydoc` |
+| Windows x64 | `bin/win32-x64/anydoc.exe` |
 
 Unsupported platforms fail closed. Checksums are required.
 
-Signing and Pdfium delivery are stated in `runtime-manifest.json`, not inferred from filenames. AnyDoc 0.2.0 packages pinned Pdfium and must pass same-Team hardened-runtime plus Apple notarization gates. Windows is outside the 0.2.0 public package.
+Signing and Pdfium delivery are stated in `runtime-manifest.json`, not inferred
+from filenames. AnyDoc 0.3.0 requires macOS same-Team hardened-runtime signing
+plus Apple notarization. Its Windows executable and `pdfium.dll` are deliberately
+unsigned, same-source-commit artifacts protected by SHA-256 and Windows-native
+acceptance.
 
 ## Honesty
 

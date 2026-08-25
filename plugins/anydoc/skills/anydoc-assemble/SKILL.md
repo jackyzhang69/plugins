@@ -12,14 +12,25 @@ when_to_use: |-
 
 # AnyDoc assemble — host agent contract
 
-AnyDoc inspects mechanical facts and executes an **approved** packing list.
-It does not classify documents, does not OCR, does not fill official forms,
-and never says a package is ready to submit.
+AnyDoc organizes the final forms and supporting documents that the user intends
+to submit to IRCC or another receiving institution. Its native reader inspects
+every supported source first, extracts available page text, and records previews
+and protection facts before the host makes semantic decisions. Consume that
+batch evidence; do not reopen every normally readable document. Use the active
+host's already-authorized vision/OCR only for scans or images with no usable
+text, encrypted/unsupported content, XFA placeholder-only pages, or remaining
+identity/meaning ambiguity. Never send customer material to a second model,
+subagent, reviewer, feedback, telemetry, or another product. Never say a package
+is ready to submit.
+
+The binary does not classify documents or run OCR. The host records the semantic
+decision and its evidence basis; AnyDoc then enforces exact source accounting,
+person/claim consistency, and approval freshness.
 
 Resolve the binary once per session, then export `ANYDOC_BIN`:
 
 1. `$ANYDOC_BIN` if already set.
-2. Canonical install: `$JACKYZHANG_APP_HOME/plugins/anydoc/current/bin/darwin-arm64/anydoc`. Default home is `~/.jackyzhang.app`. AnyDoc 0.2.0 supports macOS Apple Silicon.
+2. Canonical install: `$JACKYZHANG_APP_HOME/plugins/anydoc/current/bin/darwin-arm64/anydoc` on macOS Apple Silicon, or `%USERPROFILE%\.jackyzhang.app\plugins\anydoc\current\bin\win32-x64\anydoc.exe` on Windows x64. Never use a binary for a different platform.
 3. If that tree is missing, run `"$PACKAGE_BIN" doctor --repair-install --json` from this marketplace package, then use the canonical path.
 4. Do not prefer a random `anydoc` on PATH over the canonical tree.
 
@@ -39,12 +50,15 @@ When speaking to the person in the chat (not when writing tool args):
 ## Non-negotiable rules
 
 1. **All packing goes through the AnyDoc CLI.** Do not copy files yourself to “help.”
-2. **Workflow commands are only AnyDoc.** Do not instruct the host to resolve or execute another product’s binary. If this machine happens to have some other local text-extraction capability, you may use it as an optional aid to *understand* a file. It is never a required step, never named as a product, and never written into the packing workflow.
+2. **Workflow commands are only AnyDoc.** Do not resolve or execute another product's binary. Use only the active host's already-authorized reading/vision/OCR capability to understand files; do not delegate customer content to another model or agent.
 3. **Login follows the chosen authority.** Inspect and an explicitly user-provided `manual_plan` stay offline. Resolving or changing a saved private model requires **connect-anydoc**. If `token/user.json` already exists from any official plugin, do not ask them to log in again.
-4. **Approve before assemble.** Unapproved plans are refused.
+4. **Approve before assemble.** Unapproved plans are refused. A file added,
+   removed, renamed, or replaced after approval invalidates the old approval.
 5. **Plan must be fully expanded.** Concrete `from` / `to` / page lists. No “merge the important ones.”
 6. **Encrypted, form, or signed PDFs:** copy or rename only. Do not split, merge, rotate, compress, normalize, or put them on a photo sheet.
-7. **Do not OCR. Do not call a model to invent captions or categories.**
+7. **Do not ask the AnyDoc binary to OCR.** Use its native text first; read only
+   unresolved scans visually in this primary session. Do not invent a subject,
+   caption, category, exclusion reason, or condition result.
 
 ## Choose the assembly authority first
 
@@ -73,7 +87,7 @@ The only offline alternative is a complete `manual_plan` explicitly supplied or 
 1. Ask for one representative **document list** from the same case type. Do not infer a reusable model from the current messy folder, a finished package, or a Public Guide alone.
 2. Locally extract only the reusable structure: ordered final deliverables, what content each deliverable contains, which role needs it, and the named condition for when it applies.
 3. Remove RCIC receipt/check marks, provided/missing status, customer names, file paths, current-case facts, role bindings, condition results, and execution actions. These never go to accountd.
-4. Build a strict `anydoc.assembly-model.draft.v1` JSON document and run `models validate --model <draft.json> --json` offline.
+4. Build a strict `anydoc-assembly-model-v2` draft and run `models validate --model <draft.json> --json` offline. Explicitly choose `single|per_person`, the exact filename template, `shared|per_person` content ownership, and `case|subject` condition scope.
 5. Show the **entire** model to the human in plain language: every ordered output filename pattern, included content, role, and named condition. Ask for explicit confirmation; partial summaries are not confirmation.
 6. Only after that yes, run `models save --model <draft.json> --user-confirmed --json`. Report the returned `model_id`, `revision`, and `model_hash`. Use `models replace` with `--expected-revision` for later full replacements; use `models forget` only after a separate explicit confirmation.
 
@@ -81,23 +95,67 @@ The saved asset is an abstract model, never a case record. Do not upload the doc
 
 ## End-to-end
 
-Work inside the user’s folder. Prefer writing `inspection.json`, `document-map.json`, `assembly-plan.json`, and `approval-receipt.json` next to the materials (not inside the delivered subdirectory).
+Work inside the user’s folder. Keep local semantic artifacts under
+`<input>/.anydoc-work/`: `inspection.json`, `document-map.json`,
+`assembly-plan.json`, and `approval-receipt.json`. Final snapshots go only to
+`<input>/anydoc-output/v001`, then `v002`, `v003`, and so on. Never overwrite a
+snapshot or alter the user's originals.
 
 ```bash
 "$ANYDOC_BIN" doctor --json
 "$ANYDOC_BIN" inspect --input /absolute/folder --json
 ```
 
-Read the JSON. For every file, either you can describe it to the human or the tool already marked the unit unreadable. When the Office converter is installed, Office pages are real pages; when it is missing, Office units stay `office_pages_require_renderer` (that is not silent).
+Read the inspection JSON first. For a page with usable native text, use that
+evidence directly. Open/render only unresolved pages. For every per-person
+source, record the stable local `person_id` actually supported by the content
+and `subject_evidence=native_text|host_vision_ocr|user_confirmed`. A filename is
+not proof of ownership. Office text produced through the sandboxed converter is
+reported as converted native evidence with the converter identity. Conversion
+failure stays unreadable/pending; it never becomes permission to exclude.
 
-You write `document-map.json` (`generated_by=host_agent`) — summaries and suggested splits. You write a fully expanded plan v2 `assembly-plan.json`.
+Write `document-map.json` (`generated_by=host_agent`) with summaries, suggested
+splits, and observed subjects. Then write a fully expanded Plan v3.
 
 Its `authority.kind` is exactly one of:
 
 - `manual_plan`, for a complete plan explicitly supplied or approved as the basis by the user.
-- `private_model`, with exact `case_type`, `model_id`, `revision`, `model_hash`; local `role_bindings` and `condition_results`; and `action_mappings` that bind every output `to` to one `deliverable_id`, and every source `from` to one `content_id`.
+- `private_model`, embedding the complete validated v2 model plus local
+  `people`, scoped `condition_results`, `scope`, and `action_mappings`. Each
+  source mapping binds pages to one model claim and, for per-person claims,
+  records both `subject_person_id` and the host's
+  `observed_subject_person_id`.
 
-For `private_model`, every action output and source must be mapped exactly once. Those bindings remain in the local plan and approval receipt flow; never upload them to accountd. Plan v1 is rejected and must be regenerated, not silently upgraded.
+Plan v3 also has required `excluded_sources[]`. Actions are the included set;
+anything else currently in the folder is pending unless it appears in this
+explicit exclusion list or is reported as deterministic OS metadata. Reasons
+are only `information_collection`, `superseded_editable_source`, `duplicate`,
+or `user_excluded`:
+
+- Information-collection worksheets, questionnaires, checklists, internal
+  notes, and working drafts are excluded from the submission assembly by
+  default when the content evidence supports that judgment.
+- An editable Office source for an already-final PDF is excluded by default
+  only when it points to that included final PDF and the evidence basis is
+  recorded. A flattened or wet signature is valid evidence; a digital-signature
+  field is not required.
+- Exact duplicates must have identical SHA-256 and point directly to the
+  included canonical source.
+- `user_excluded` requires the user's explicit confirmation.
+
+If the user specifically asks to include one of these files, put it in an
+action instead; included and excluded can never overlap. Exclusion never
+deletes, moves, or edits the original and never claims legal irrelevance.
+
+For `private_model`, every produced action unit is mapped exactly once. The
+compiler checks exact output count/name, per-person conditions, role
+cardinality, subject identity, claim ownership, and cross-person reuse.
+Uncollected model material is `model pending`, not an invalid case: validate/show
+may succeed while it is pending; `scope=selected` can finish one known person's
+output without pretending absent materials were collected. A file that is
+actually present but neither included nor excluded is separately `source
+pending` and always blocks approval. Plan v1/v2 is rejected and regenerated,
+never silently upgraded.
 
 ```bash
 "$ANYDOC_BIN" plan validate --input /absolute/folder --plan /absolute/assembly-plan.json --json
@@ -112,13 +170,16 @@ Show the human the packing list in plain language, including estimated pages/siz
 "$ANYDOC_BIN" verify --input /absolute/folder --plan /absolute/assembly-plan.json --receipt /absolute/approval-receipt.json --json
 ```
 
-If assemble was interrupted: `resume --input …`. To drop scratch files only: `clean --input …` (does not delete sources or the delivered folder).
+If assemble was interrupted: `resume --input …`. To drop scratch files only:
+`clean --input …`. It preserves the inspection, document map, plans, receipts,
+output history, sources, and all `anydoc-output/vNNN` snapshots. Re-inspection
+skips both AnyDoc roots and flags copied-back prior outputs.
 
 ## Plan actions this version can execute
 
 | op | Meaning |
 |---|---|
-| `copy` / `rename` / `copy_and_rename` | Preserve bytes into a **new** subdirectory (default `anydoc-assembled`) |
+| `copy` / `rename` / `copy_and_rename` | Preserve bytes into a new immutable snapshot such as `anydoc-output/v001` |
 | `select_pdf_pages` / `split_pdf` / `merge_pdf` / `reorder_pages` / `rotate_pages` | Unencrypted, unsigned, non-form PDFs only |
 | `image_to_pdf` | JPEG, PNG, WebP, TIFF. JPEG is not recompressed. HEIC is refused |
 | `office_to_pdf` | DOC, DOCX, RTF, XLSX, PPTX, ODT when the Office converter is present. Macros and remote links are refused. Encrypted Office is copy-only. No text-reflow fallback. |
@@ -136,7 +197,7 @@ If assemble was interrupted: `resume --input …`. To drop scratch files only: `
 | HEIC photo | This version cannot convert HEIC. Export JPEG or PNG first. |
 | Encrypted official PDF | It will be copied as-is. It will not be split. |
 | File over a portal size | This version compresses only when the packing list names an explicit byte budget. If it still cannot reach that size, it fails. It will not split the file for you. |
-| Scan / photo, no text | You look at the file (or a preview if present). The tool does not read the picture. |
+| Scan / photo, no text | You must inspect it with the active host's authorized vision/OCR in this primary session. The AnyDoc binary does not read the picture, and customer content cannot go to another agent/model. |
 | Relationship photos | The packing list names the order, captions, and 1/2/4 grid. The tool fits each photo in its cell and does not crop or invent captions. If a caption is too long, that is a warning — the grid stays as approved. |
 | Verify ok | The pack matches the approved list. That is not permission to file anything. |
 

@@ -1,3 +1,22 @@
+# AnyDoc 0.3.0
+
+- Assembly Model v2 represents both one combined multi-person file and one
+  named file per person, with person-scoped conditions and claim ownership.
+- Plan v3 separates model-pending work from present-but-unaccounted sources.
+  Every current source is included, explicitly excluded, ignored system
+  metadata, or pending; pending sources block approval.
+- Approval receipts bind the current non-system input inventory. Added,
+  removed, renamed, or same-path replaced sources invalidate execution.
+- Native PDF and safe sandbox-converted Office text is read first. Host
+  vision/OCR is reserved for no-text, protected, XFA-low-signal, or ambiguous
+  pages; evidence basis is recorded locally.
+- Working/intake documents and editable Office originals superseded by an
+  included final PDF can be explicitly excluded without deleting originals.
+- Official release requires both macOS arm64 and Windows x64. macOS remains
+  signed and Apple-notarized; Windows is intentionally unsigned but must come
+  from the same source commit, pass native Windows acceptance, and match the
+  published SHA-256 manifest.
+
 # AnyDoc 0.2.2
 
 - Product Signals funnel: inspect, plan validate/approve, verify, render-page,
