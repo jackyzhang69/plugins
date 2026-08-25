@@ -26,11 +26,11 @@ never uses a terminal. You absorb every problem.
 4. You run every CLI argv in `setup_plan.agent.host_agent_args` / `host_agent_steps`. If something fails, re-read `doctor --json` and follow the new `setup_plan.agent`. Do not invent a retry loop.
 5. If `offer_tell_jacky` is true: draft Tell Jacky yourself (diagnosis attaches), show the draft, send only after `--user-confirmed`. Never ask the human to invent technical fields.
 6. If `do_not_retry_prepare` is true: do not run `prepare-access` again.
-7. Never install, uninstall, downgrade, or upgrade WeChat/Weixin unless the human independently offers. The recommended path is that you handle it.
+7. Never install, uninstall, downgrade, or upgrade WeChat/Weixin yourself. If `setup_plan.recommended_installer` is present, tell the human the requirement and that download URL. They operate. Do not touch chat history.
 
 ## Talk to the human
 
-Report only major stages (need the chat app open → one password/Open Anyway click if asked → ready). Say “还没准备好本机档案 / 已经可以用了”. Never mention keys, databases, helper names, version numbers, or paths. Follow `anychat-capabilities` § **Talk to the human**.
+Report only major stages (need the chat app / need a supported WeChat / one password/Open Anyway click if asked → ready). Say “还没准备好本机档案 / 已经可以用了”. Repeat `say_to_user` when it includes a recommended version and download URL — that is the next human action, not internals. Never mention keys, databases, helper names, or storage paths. Follow `anychat-capabilities` § **Talk to the human**.
 
 ## Steps
 
@@ -39,28 +39,30 @@ Report only major stages (need the chat app open → one password/Open Anyway cl
 3. Route exactly by `setup_plan.state`:
 
    - `ready` — run `anychat setup --yes`, then the self-check. Say the archive is ready.
-   - `prepare_supported` — run `anychat prepare-access`, then `anychat setup --yes`. The human may see one password or Administrator window; you never collect the password.
+   - `prepare_supported` — keep WeChat open and signed in. Run `prepare-access`, then `setup --yes`, then `friends list --limit 5 --json`. Names on that list mean it is readable. The human may see one password or Administrator window; you never collect the password. If doctor later says `do_not_retry_prepare`, stop. Permission: at most one extra `prepare-access` after they click. Never invent a loop.
+   - `chat_app_missing` — say `setup_plan.agent.say_to_user`. Give them `setup_plan.recommended_installer.url`. They install WeChat themselves. Do not download or install it for them. Wait, then re-run `doctor --json`.
    - `chat_app_not_running` — say `setup_plan.agent.say_to_user`. Wait until they open WeChat. Re-run `doctor --json`. Do not ask for a version number.
    - `running_build_mismatch` — say `setup_plan.agent.say_to_user`. They quit the extra WeChat from the menu bar/tray (closing the window is not enough). Re-run `doctor --json`. Do not run `prepare-access`.
    - `version_confirmation_required` — do **not** run `prepare-access`. Ask them to leave only the WeChat they chat with open. Re-run `doctor --json`. The CLI auto-selects a unique running build. Only if the state is still `version_confirmation_required` after that, run one `setup_plan.version_confirmation_choices` entry's exact `host_agent_args` (`anychat setup --confirm-wechat-build <exact-build>`). Never ask them to read a build string off the screen.
-   - `version_choice_required` — do **not** run `prepare-access`. Follow the recommended `keep_current_and_report` choice: tell them you are handling it, draft Tell Jacky, confirm once. Do not ask them to change WeChat. The two advanced WeChat-version choices exist only if they independently offer to change WeChat. Never install, uninstall, downgrade, or upgrade WeChat/Weixin silently.
-   - `client_upgrade_required` — do not send them to download a specific version. Draft Tell Jacky and confirm once.
+   - `version_choice_required` — do **not** run `prepare-access`. Follow `install_recommended_version`: tell them this WeChat cannot be opened for the local archive, give `recommended_installer.url`, and ask them to replace **only the app**. Chat history must stay. You do not install or uninstall. Re-run `doctor --json` after they open the new WeChat.
+   - `client_upgrade_required` — same as `version_choice_required`: they install the recommended version from `recommended_installer.url`. Do not install it yourself.
 
 4. Direct preparation sequence (`prepare_supported` only):
 
 ```bash
 "$ANYCHAT_BIN" prepare-access
 "$ANYCHAT_BIN" setup --yes
+"$ANYCHAT_BIN" friends list --limit 5 --json
 ```
 
-   These commands are yours. Never show them to the human.
+   These commands are yours. Never show them to the human. Friends list is the readable check.
 
 5. If setup / prepare-access fails with a product code (`E_SETUP_*`, `E_LOCAL_*`, `E_CHAT_*`, `E_WECHAT_*`, or `E_WINDOWS_*`):
    - Re-run `doctor --json` and follow the new `setup_plan.agent`.
    - Tell the human only `say_to_user`.
-   - For `E_WECHAT_VERSION_CHOICE_REQUIRED` / `version_choice_required`, do not offer a retry loop.
-   - For `E_LOCAL_ACCESS_METHOD_UNAVAILABLE`, timeout, or budget: diagnosis is already saved; offer Tell Jacky once.
-   - For `E_MACOS_PERMISSION_REQUIRED` / `E_WINDOWS_PERMISSION_REQUIRED`: one GUI click from `human_os_actions`, then you retry **once**. If it fails again, Tell Jacky. Do not send them hunting through settings.
+   - For `E_WECHAT_VERSION_CHOICE_REQUIRED` / `version_choice_required` / `chat_app_missing` / `client_upgrade_required`: do not retry prepare. Give the installer URL and wait for the human.
+   - For `E_LOCAL_ACCESS_METHOD_UNAVAILABLE`, timeout, or budget: diagnosis is already saved; stop; offer Tell Jacky once. Do not tell them to keep the current WeChat as if that were a fix.
+   - For `E_MACOS_PERMISSION_REQUIRED` / `E_WINDOWS_PERMISSION_REQUIRED`: one GUI click from `human_os_actions`, then retry **once** only if `do_not_retry_prepare` is false. If doctor already used `prepare_attempts_max`, stop and offer Tell Jacky. Do not send them hunting through settings.
 
 6. On success, self-check:
 
@@ -88,4 +90,4 @@ Report only major stages (need the chat app open → one password/Open Anyway cl
 - Run destructive deletes.
 - Upload chat content during setup.
 - Explain internal access implementation details.
-- Retry `prepare-access` in a loop.
+- Retry `prepare-access` beyond `setup_plan.agent` (`do_not_retry_prepare` or `prepare_attempts_max`).

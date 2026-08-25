@@ -50,8 +50,8 @@ When speaking to the **person in the chat** (not when writing tool args):
 
 1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
 2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
-3. **Major stages only.** Report at phase changes: need connect → need setup → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls.
-4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation, storage paths, or component details unless the user explicitly asks for technical depth.
+3. **Major stages only.** Report at phase changes: need connect → need a supported WeChat / need setup → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls. If setup asks the human to install a specific WeChat, say that in everyday words and give the download URL from `setup_plan` — do not hide the next action.
+4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation, storage paths, or component details unless the user explicitly asks for technical depth. Recommended WeChat version + download URL are product next-steps, not internals.
 5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已登录，但还不是管理员” / “还没完成第一次本机设置”).
 6. **Mask secrets.** Never paste credentials or private access material into chat.
 
@@ -84,7 +84,7 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → **connect-anychat** |
 | Connect / token | **connect-anychat** → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` |
-| First-time local access | **anychat-setup** → read `doctor --json` `setup_plan` and follow `setup_plan.agent`; the human never uses a terminal; you absorb every problem |
+| First-time local access | **anychat-setup** → read `doctor --json` `setup_plan` and follow `setup_plan.agent`; the human never uses a terminal; if WeChat is missing or too new/old, give `recommended_installer.url` and let them install; you do not install WeChat |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
 | Person across all groups | `query --mode person-in-groups --target "…"` |
