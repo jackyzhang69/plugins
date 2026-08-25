@@ -1,3 +1,9 @@
+# AnyDoc 0.3.2
+
+- Resolves the canonical `~/.local/bin/anydoc` shim to the real installed
+  executable before locating packaged Pdfium. `anydoc doctor --json` and PDF
+  reading now work identically through PATH and through the package binary.
+
 # AnyDoc 0.3.1
 
 - Fixes the installed macOS runtime check for the signed Pdfium library. The

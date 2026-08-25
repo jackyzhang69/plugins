@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Codex App plugins by Jacky Zhang. Includes FormBro (Canadian immigration form automation), EasyBooks (bookkeeping for self-employed Canadians), and future tools.",
-    "version": "1.8.14"
+    "version": "1.8.15"
   },
   "name": "jacky-plugins",
   "owner": {
@@ -66,7 +66,7 @@
       "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for private models and Tell Jacky. macOS Apple Silicon and Windows x64.",
       "name": "anydoc",
       "source": "./plugins/anydoc",
-      "version": "0.3.1"
+      "version": "0.3.2"
     }
   ]
 }
