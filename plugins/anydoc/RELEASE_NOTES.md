@@ -1,3 +1,12 @@
+# AnyDoc 0.3.1
+
+- Fixes the installed macOS runtime check for the signed Pdfium library. The
+  release manifest binds the exact post-signing SHA-256, and Apple's hardened
+  runtime remains responsible for same-Team dynamic-library validation.
+- Release staging now runs the signed CLI and requires Pdfium to bind before a
+  package can be published. Windows remains intentionally unsigned and keeps
+  the upstream pinned hash, same-commit, x64 PE, and native acceptance gates.
+
 # AnyDoc 0.3.0
 
 - Assembly Model v2 represents both one combined multi-person file and one

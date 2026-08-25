@@ -1,6 +1,6 @@
 {
   "name": "anydoc",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.",
   "author": {
     "name": "Jacky Zhang"
