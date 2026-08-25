@@ -18,11 +18,11 @@
     "binaryOverrideEnvVar": "EASYBOOKS_BIN"
   },
   "configHome": {
-    "darwin": "${HOME}/.easybooks",
-    "linux": "${HOME}/.easybooks",
-    "win32": "${USERPROFILE}/.easybooks"
+    "darwin": "${HOME}/.jackyzhang.app/easybooks",
+    "linux": "${HOME}/.jackyzhang.app/easybooks",
+    "win32": "${USERPROFILE}/.jackyzhang.app/easybooks"
   },
   "configFile": "config.json",
   "defaultBaseUrl": "https://easybooks.jackyzhang.app",
-  "source_sha": "658301eca4d3259e8421787c8c4e8d41511f4727"
+  "source_sha": "807dafdd6c50ea5aeac3cf5d05c55485fb755532"
 }
