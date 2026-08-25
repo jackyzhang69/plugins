@@ -8,14 +8,8 @@ Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
 
 ## Skills
 
-| Skill | Role |
-|-------|------|
-| `connect-anychat` | Portal token once |
-| `anychat-capabilities` | Intent → CLI router (every session) |
-| `anychat-setup` | First-run local archive access |
-| `anychat-query` | Friend / group / search queries |
-| `anychat-media` | Attachment list / download |
-| `tell-jacky` | Feedback (confirm first) |
+One discovery file: `skills/anychat/SKILL.md`. Playbooks live under
+`skills/anychat/references/` (connect, setup, query, media, export, tell-jacky).
 
 ## Platforms and stable sources
 
@@ -37,6 +31,6 @@ Tell Jacky: `anychat feedback create … --user-confirmed` (Portal + local mirro
 
 ## Talk to the human
 
-Host agents must follow **anychat-capabilities → Talk to the human** (and
+Host agents must follow **anychat → Talk to the human** (and
 platform-vault `delivery/plugin-policy.md`): plain product language, major
 stages only—do not lead the chat with paths, `--help`, or raw JSON.

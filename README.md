@@ -36,7 +36,7 @@ codex plugin install formbro-cli@jacky-plugins
 The plugin source is a single directory (`plugins/formbro-cli/`) containing:
 
 - `.codex-plugin/plugin.json` — the Codex App manifest.
-- `skills/<name>/SKILL.md` — four skills: `connect-formbro`, `formbro-read`, `formbro-write`, `formbro-webform`.
+- `skills/<product>/SKILL.md` — one discovery file per plugin; playbooks live in `references/`.
 - `bin/<platform>/formbro[.exe]` — the bundled FormBro CLI for `darwin-arm64`, `darwin-x64`, `win32-x64`. Each binary has a matching `.sha256` sidecar.
 - `runtime-manifest.json` — declares per-platform binary paths and config locations so the plugin's skills can resolve the right binary at runtime.
 - `README.md` — plugin-level docs (token, install, what each skill does).

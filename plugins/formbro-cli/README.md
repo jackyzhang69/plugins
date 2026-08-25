@@ -6,12 +6,7 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 
 | Skill | Purpose |
 |---|---|
-| [`connect-formbro`](./skills/connect-formbro/SKILL.md) | One-time setup. Capture FormBro API token → persist via CLI. **Run first.** |
-| [`formbro-capabilities`](./skills/formbro-capabilities/SKILL.md) | Agent consumption contract: mandatory CLI boundary, intent → command router, external-file import decision tree, full command surface, PR/TR/LMIA support matrix, parameter cheat-sheets, status truth model. **Read on every FormBro session.** |
-| [`formbro-read`](./skills/formbro-read/SKILL.md) | Search / list / inspect applicants, applications, employers, programs, audit log. |
-| [`formbro-write`](./skills/formbro-write/SKILL.md) | Create / patch / delete persons, applications, employers; import new cases from external files via JSON contract; patch existing entities; validation; Excel + advanced PDF export. |
-| [`formbro-fill`](./skills/formbro-fill/SKILL.md) | **PDF entry point for agents** — fill IRCC IMM PDFs (IMM0008 / IMM5257 / IMM5645 / IMM5709 / etc.). Auto-detects TR vs PR; rejects LMIA. The backend renders the PDFs and the CLI writes collision-safe local outputs. |
-| [`formbro-webform`](./skills/formbro-webform/SKILL.md) | **LOCAL MODE** Playwright IRCC / Service Canada portal fills — runs on the user's machine. Agent prepares; user submits. |
+| [`formbro`](./skills/formbro/SKILL.md) | The only discovery file. Connect, read, write, fill, webform, and tell-jacky playbooks live under `skills/formbro/references/`. |
 
 ## Agent contract
 
@@ -20,7 +15,7 @@ Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Ru
 - New cases from files use `formbro import contract` -> local JSON generation -> `formbro import apply-json --dry-run` -> `formbro import apply-json`.
 - Existing entities from files/text use `formbro extract contract` / local JSON generation / `validate` / `extract apply-json` or the relevant `patch` command.
 - The CLI does not directly accept local file paths for agent-native import. There is no `--file` import command; file parsing is the agent's job.
-- Runtime truth is the bundled binary's `--help` plus `formbro-capabilities`. Do not use stale examples such as `webform start-by-name` or legacy `--program` flags.
+- Runtime truth is the bundled binary's `commands --json` plus the `formbro` router. Do not use stale examples such as `webform start-by-name` or legacy `--program` flags.
 
 ## The only thing the user inputs
 

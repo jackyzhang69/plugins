@@ -5,11 +5,11 @@ skills, a platform-matched native `anypdf` client, its SHA-256 sidecar, and
 documentation. It contains no PDF template, private mapping, admin tool, or
 server credential.
 
-Load `anypdf-capabilities` first. When the user asks what AnyPDF can do,
-answer from the live CLI (`forms catalog`, `doctor`), not a remembered list.
+Load the `anypdf` router skill first. When the user asks what AnyPDF can do,
+answer from the live CLI (`commands --json`, `forms catalog`, `doctor`), not a remembered list.
 
 The client uses `https://anypdf.jackyzhang.app` by default. Use the
-`connect-anypdf` skill once to verify a credential supplied on stdin and save
+`anypdf` router (references/connect.md) once to verify a credential supplied on stdin and save
 only the mode-0600 canonical user slot at
 `~/.jackyzhang.app/token/user.json`. The backend URL may be overridden with
 `ANYPDF_BACKEND_URL` for development or self-hosting. Product requests use
@@ -19,7 +19,7 @@ only for loopback development URLs; all other backends must use HTTPS.
 
 ## Registered PDF fill
 
-Use `anypdf-fill` to resolve a registered form, fetch its schema, validate the
+Use the fill playbook (`references/fill.md`) to resolve a registered form, fetch its schema, validate the
 user's data, submit one idempotent request, and retrieve the retained result.
 The server owns templates, mappings, revision locking, and PDF execution.
 
@@ -31,7 +31,7 @@ read this way — look at the original yourself.
 
 ## New PDF request
 
-Use `anypdf-form-intake` only when the user provides an issuing-authority official blank PDF template
+Use the intake playbook (`references/intake.md`) only when the user provides an issuing-authority official blank PDF template
 to register or request support. Never send a filled
 form, identity document, or another private document. Send exactly one raw PDF
 POST; the server computes SHA-256 and applies the 50 MiB/PDF input checks. The

@@ -9,11 +9,8 @@ Apple Silicon and Windows x64 after both platforms pass native acceptance.
 
 ## Skills
 
-| Skill | Role |
-|-------|------|
-| `anydoc-assemble` | Inspect → plan → human approve → assemble → verify |
-| `connect-anydoc` | Optional Portal token once (shared `user.json`) |
-| `tell-jacky` | Feedback (confirm first) |
+One discovery file: `skills/anydoc/SKILL.md`. Playbooks live under
+`skills/anydoc/references/` (connect, assemble, tell-jacky).
 
 Inspect and an explicitly approved manual plan stay offline. Saved private models use the shared Portal login; backend failure never silently becomes a manual plan.
 
