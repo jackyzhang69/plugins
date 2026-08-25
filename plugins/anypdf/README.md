@@ -19,7 +19,7 @@ only for loopback development URLs; all other backends must use HTTPS.
 
 ## Registered PDF fill
 
-Use the fill playbook (`references/fill.md`) to resolve a registered form, fetch its schema, validate the
+Use the fill playbook to resolve a registered form, fetch its schema, validate the
 user's data, submit one idempotent request, and retrieve the retained result.
 The server owns templates, mappings, revision locking, and PDF execution.
 
