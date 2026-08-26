@@ -1,15 +1,22 @@
 {
-  "version": "1.0.2",
+  "version": "1.1.0",
+  "source_sha": "0a91d8fda41990f4e6198659a704a4efbd2ed640",
+  "configHome": {
+    "darwin": "${HOME}/.jackyzhang.app/anyimmi",
+    "linux": "${HOME}/.jackyzhang.app/anyimmi",
+    "win32": "${USERPROFILE}/.jackyzhang.app/anyimmi"
+  },
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anyimmi",
-      "sha256": "2611d7eb128b5dd3c832b6f34c2302d1273fb4e41ae4edf86ec837c71769e1f8",
-      "size_bytes": 3168224,
-      "checksum": "bin/darwin-arm64/anyimmi.sha256"
+      "sha256": "93855182a7e997ddf406aefab33cae2b4bcc414b8d82ea9c66598992948131e2",
+      "size": 3317216
+    },
+    "win32-x64": {
+      "entrypoint": "bin/win32-x64/anyimmi.exe",
+      "sha256": "6eeb2388fabfc0ca0a81c8a6549732ec493cf360d22e5bf4808f3416f117811c",
+      "size": 4053504
     }
   },
-  "source_sha": "a9123f1d4bc8891a3f21d5166458e0034879abc3",
-  "configHome": {
-    "darwin": "${HOME}/.jackyzhang.app/anyimmi"
-  }
+  "release_tag": "anyimmi-v1.1.0"
 }

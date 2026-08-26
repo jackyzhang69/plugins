@@ -8,10 +8,12 @@
 ## 🌟 Core Features
 
 - ⚖️ **Precedent Caselaws**: Canadian Federal Court precedent retrieval with exact legal ratio excerpts and neutral citations.
-- 📚 **Official IRCC Policy & Q&A**: Direct access to Program Delivery Instructions (PDI) and Help Centre guidance.
+- 📚 **IRCC Help Centre Q&A**: Direct access to official Help Centre guidance (`policy`).
+- 📖 **Program Delivery Instructions**: Search IRCC operational manuals (`manual`). An empty result is not evidence of absence, and coverage may be indeterminate — that is not a finding of no risk.
+- 🗺️ **Live coverage**: Ask what is covered *now* (`coverage`). Never a bundled catalog.
 - 💡 **Practitioner Field Insights**: Synthesized operational intelligence, IRCC portal notes, and practical case handling consensus.
 - 🧮 **Statutory Calculators**: Instant CLB benchmark conversion for IELTS, CELPIP, PTE, TEF, and TCF exams.
-- 🤖 **Agent-First Architecture**: Standardized `immi-tools` interface for Codex, Claude Code, and Gemini.
+- 🤖 **Agent-First Architecture**: Standardized `anyimmi` interface for Codex, Claude Code, and Gemini.
 
 ---
 
@@ -41,15 +43,23 @@ anyimmi caselaw "study permit dual intent section 22(2)" --top 3
 anyimmi caselaw "procedural fairness extrinsic evidence" --top 3
 ```
 
-#### 📚 Search Official IRCC Policy & Guidelines
+#### 📚 Search Official IRCC Help Centre Q&As
 ```bash
 anyimmi policy "maintained status travel outside canada" --top 3
 anyimmi policy "学签 续签" --lang zh --top 3
 ```
 
+#### 📖 Search IRCC Program Delivery Instructions
+```bash
+anyimmi manual "study permit dual intent" --mode hybrid --top 5
+anyimmi coverage
+```
+
 #### 🤖 Agent Tool Router (JSON Interface)
 ```bash
 anyimmi query --action caselaw --input "refusal financial sufficiency" --top 2
+anyimmi query --action manual --input "study permit dual intent" --top 5
+anyimmi query --action coverage
 ```
 
 ---
@@ -61,24 +71,30 @@ anyimmi query --action caselaw --input "refusal financial sufficiency" --top 2
 ├── Cargo.toml                 # Rust package configuration
 ├── AGENTS.md                  # Project rules & non-negotiable principles
 ├── README.md                  # Documentation & usage guide
+├── runtime-manifest.json      # Packaged runtime metadata
 ├── bin/
 │   └── anyimmi                # Standalone native Rust binary executable
 ├── src/
 │   ├── main.rs                # Entry point & CLI argument parsing (Clap)
+│   ├── lib.rs                 # Library target (shared modules + tests)
 │   ├── auth.rs                # Platform credential management & token masking
 │   ├── sanitize.rs            # Fail-closed two-phase PII & forum scrubbing engine
 │   ├── projection.rs          # Typed output structs (Anti-Leakage Projections)
 │   ├── client.rs              # High-performance ureq HTTP client
-│   └── commands/              # Subcommand handlers (caselaw, policy, notes, clb)
-├── tests/
-│   └── security_boundary_test.rs # Security & negative assertion tests
+│   ├── config.rs              # Host, token paths, and local table version
+│   ├── error.rs               # Typed CLI errors
+│   ├── signals.rs             # Product Signals emitters
+│   └── commands/              # Subcommand handlers
+├── tests/                     # Security, projection, and version-agreement tests
 ├── skills/
-│   ├── immi-tools/            # Flagship AI agent skill
-│   ├── immi-caselaw/          # Precedent retrieval skill
-│   ├── immi-policy/           # IRCC policy search skill
-│   ├── immi-fieldnotes/       # Practitioner notes skill
-│   └── immi-clb/              # CLB conversion skill
+│   └── anyimmi/               # Product router skill and playbooks
 ├── scripts/
-│   └── verify-install         # Automated smoke test suite
-└── manifest.json              # Plugin distribution manifest
+│   ├── verify-install         # Automated smoke test suite
+│   ├── verify-package         # Source/pack shape checks
+│   ├── verify-release-assets  # Release binary presence checks
+│   └── assert-skill-surface.py
+├── .claude-plugin/
+│   └── plugin.json            # Claude host plugin metadata
+└── .codex-plugin/
+    └── plugin.json            # Codex host plugin metadata
 ```
