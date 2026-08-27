@@ -130,7 +130,7 @@ The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by
 **Resolution order (use the first that resolves to an existing executable):**
 
 1. **`$FORMBRO_BIN`** — explicit override. Honor if set.
-2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches a bundled OS/arch. Current public marketplace bundles ship `darwin-arm64` and `win32-x64`.
+2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches a bundled OS/arch. Current public marketplace bundles ship `darwin-arm64` and `win32-x64`.
 3. **Claude Code plugin dir** — `$CLAUDE_PLUGIN_ROOT/bin/<platform>/formbro` (Claude Code sets `CLAUDE_PLUGIN_ROOT` when invoking a plugin's skill).
 4. **`which formbro`** — if the user has installed it on PATH manually.
 
@@ -162,7 +162,7 @@ _cand_paths=(
 )
 # Codex cache may have several version dirs; agent picks the *highest* one.
 # We use python sort (universally available) — POSIX `sort -V` is not portable.
-_codex_root="$HOME/.codex/plugins/cache/jacky-plugins/formbro-cli"
+_codex_root="$HOME/.codex/plugins/cache/jacky-plugins/formbro"
 if [ -n "$PLAT" ] && [ -d "$_codex_root" ]; then
   _latest_codex=$(python3 - "$_codex_root" <<'PY' 2>/dev/null
 import os, sys
@@ -197,7 +197,7 @@ export FORMBRO_BIN
 $plat = "win32-x64"
 $cands = @($env:FORMBRO_BIN_OVERRIDE)
 if ($env:CLAUDE_PLUGIN_ROOT) { $cands += "$env:CLAUDE_PLUGIN_ROOT\bin\$plat\formbro.exe" }
-$codexRoot = "$env:USERPROFILE\.codex\plugins\cache\jacky-plugins\formbro-cli"
+$codexRoot = "$env:USERPROFILE\.codex\plugins\cache\jacky-plugins\formbro"
 if (Test-Path $codexRoot) {
   $latest = Get-ChildItem $codexRoot -Directory | Where-Object { $_.Name -match '^\d+(\.\d+){1,3}$' } | Sort-Object { [version]$_.Name } | Select-Object -Last 1
   if ($latest) { $cands += "$($latest.FullName)\bin\$plat\formbro.exe" }

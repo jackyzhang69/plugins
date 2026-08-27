@@ -1,4 +1,4 @@
-# formbro-cli — Codex App plugin
+# formbro — Codex App plugin
 
 Canadian immigration form automation. Wraps the [FormBro](https://formbro.ca) Rust CLI in Codex/Claude skills.
 

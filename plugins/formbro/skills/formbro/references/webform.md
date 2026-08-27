@@ -146,13 +146,27 @@ LMIA webform fills still go through `webform start` with `--program-key hws|lws|
 <formbro> webform start      --app-id <id> --program-key <key> \
                              [--case-id <id>] \
                              --confirmed \
-                             [--headless false]
+                             [--headless false] \
+                             [--print-pages true]                 # default true; see Page Record
 <formbro> webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> \
                                  [--minimum-stars 2|4] \
                                  [--max-invites 3] \
                                  --confirmed \
                                  [--headless false]
 ```
+
+### Page Record (`--print-pages`, default TRUE)
+
+Every `webform start` captures each portal page as a PDF at the moment it is
+left (fully filled), merges them in fill order into one record PDF, and deletes
+the intermediate per-page files. The success JSON carries `record: { path,
+pages, partial }`; on a failed fill the same object rides on the error payload
+(`error.data.record`) covering whatever was captured (`partial: true`).
+
+- Records land in `~/.formbro/records/<PROGRAM>-<key>-<app_id>-<timestamp>.pdf`.
+- Retention: 30 days, pruned when the worker starts and before each fill.
+- Pass `--print-pages false` to disable (e.g. disk-constrained machines).
+- Capture failures NEVER abort the fill — the record degrades, the fill proceeds.
 
 `--rcic-id` / `case.rcic_id` value source: `formbro rcic list` returns the account's RCIC profiles; use the listed `id`. RCIC profiles are account-level (web: Settings → RCIC) — `persons create` cannot make them, and backend validation rejects anything that is not the profile id (no CICC number, portal UUID, user id, or email).
 

@@ -13,15 +13,15 @@
       "category": "productivity",
       "description": "Canadian immigration form automation: read/write applications, persons, employers; fill IRCC IMM PDFs; drive local webform fills via the bundled FormBro CLI.",
       "homepage": "https://formbro.ca/agent-integration",
-      "name": "formbro-cli",
-      "source": "./plugins/formbro-cli",
-      "version": "1.8.9"
+      "name": "formbro",
+      "source": "./plugins/formbro",
+      "version": "1.9.0"
     },
     {
       "author": {
         "name": "Jacky Zhang"
       },
-      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
       "version": "0.5.19"

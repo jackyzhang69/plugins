@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 
-PLUGIN_ID = "formbro-cli@jacky-plugins"
+PLUGIN_ID = "formbro@jacky-plugins"
 
 
 def read_json(path: Path) -> dict:
@@ -82,7 +82,7 @@ def main() -> int:
     elif not entry or entry.get("version") != args.expected_version:
         failures.append("codex_plugin_list_version_mismatch")
 
-    if args.loaded_skill_path and f"/formbro-cli/{args.expected_version}/skills/" not in args.loaded_skill_path.replace("\\", "/"):
+    if args.loaded_skill_path and f"/formbro/{args.expected_version}/skills/" not in args.loaded_skill_path.replace("\\", "/"):
         failures.append("loaded_skill_path_version_mismatch")
 
     platform_name, binary_name = current_platform()
@@ -110,7 +110,7 @@ def main() -> int:
     result = {
         "ok": not failures,
         "failures": sorted(set(failures)),
-        "next_actions": [] if not failures else ["Reinstall formbro-cli from jacky-plugins and rerun this verifier."],
+        "next_actions": [] if not failures else ["Reinstall formbro from jacky-plugins and rerun this verifier."],
         "plugin_root": str(root),
         "residue": residue,
         "warnings": sorted(set(warnings)),
