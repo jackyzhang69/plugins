@@ -1,6 +1,6 @@
-# anychat-cli (public plugin)
+# anychat (public plugin)
 
-Published under `jackyzhang69/plugins` → `plugins/anychat-cli/`.
+Published under `jackyzhang69/plugins` → `plugins/anychat/`.
 
 **Ships:** skills, install metadata, and prebuilt product components.
 

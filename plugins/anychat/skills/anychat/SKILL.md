@@ -145,7 +145,7 @@ Prefer the packaged binary next to this skill
 
 1. `$ANYCHAT_BIN` if set, executable, and matching native platform
 2. Active plugin runtime (highest priority for agent plugins):
-   - Claude plugin root / cache: `…/anychat-cli/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`
+   - Claude plugin root / cache: `…/anychat/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`
    - Canonical current: `~/.jackyzhang.app/plugins/anychat/current/bin/<platform>/anychat`
 3. Canonical standalone installation:
    - macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` (must sit next to `anychat-access`; verify not an older version than plugin manifest)

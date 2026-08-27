@@ -86,8 +86,8 @@ for rel in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json"):
     except Exception as exc:
         errors.append(f"could not parse {rel}: {exc}")
         continue
-    if descriptor.get("name") != "anychat-cli":
-        errors.append(f"{rel}.name is {descriptor.get('name')!r}, expected 'anychat-cli'")
+    if descriptor.get("name") != "anychat":
+        errors.append(f"{rel}.name is {descriptor.get('name')!r}, expected 'anychat'")
     if descriptor.get("version") != pkg_version:
         errors.append(
             f"{rel}.version is {descriptor.get('version')!r}, expected Cargo version {pkg_version!r}"
