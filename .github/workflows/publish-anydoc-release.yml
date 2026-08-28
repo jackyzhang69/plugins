@@ -1,0 +1,82 @@
+name: publish-anydoc-release
+
+on:
+  push:
+    tags:
+      - "anydoc-v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing anydoc-v* marketplace tag to retry
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-anydoc-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: [self-hosted, macOS, ARM64, plugins-release-69]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+      - name: Verify official AnyDoc package
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          bash plugins/anydoc/scripts/verify-package
+          python3 - "$RELEASE_TAG" plugins/anydoc/runtime-manifest.json <<'PY'
+          import json, os, pathlib, re, sys
+          tag, path = sys.argv[1:]
+          if not re.fullmatch(r"anydoc-v\d+\.\d+\.\d+(?:[-+][A-Za-z0-9.-]+)?", tag):
+              raise SystemExit("invalid AnyDoc release tag")
+          manifest = json.loads(pathlib.Path(path).read_text())
+          release = manifest["binary"]["release"]
+          if release.get("tag") != tag:
+              raise SystemExit("marketplace tag does not match the AnyDoc manifest")
+          if release.get("notarization") != "accepted":
+              raise SystemExit("AnyDoc macOS payload is not notarized")
+          expected = {
+              "darwin-arm64": "signed_same_team_hardened_runtime",
+              "win32-x64": "signed_azure_trusted_signing",
+          }
+          for platform, signing in expected.items():
+              row = manifest["binary"]["platforms"][platform]
+              if row.get("signing") != signing or row.get("pdfium", {}).get("signing") != signing:
+                  raise SystemExit(f"AnyDoc {platform} signing claim is incomplete")
+          version = manifest["binary"]["version"]
+          with open(pathlib.Path(os.environ["GITHUB_OUTPUT"]), "a", encoding="utf-8") as output:
+              output.write(f"version={version}\n")
+          PY
+        id: package
+      - name: Stage public release asset names
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          cp plugins/anydoc/bin/darwin-arm64/anydoc release-assets/anydoc-darwin-arm64
+          cp plugins/anydoc/bin/darwin-arm64/libpdfium.dylib release-assets/libpdfium-darwin-arm64.dylib
+          cp plugins/anydoc/bin/win32-x64/anydoc.exe release-assets/anydoc-win32-x64.exe
+          cp plugins/anydoc/bin/win32-x64/pdfium.dll release-assets/pdfium-win32-x64.dll
+      - name: Create marketplace GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+          VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" \
+              --verify-tag \
+              --title "AnyDoc $VERSION" \
+              --notes-file plugins/anydoc/RELEASE_NOTES.md \
+              release-assets/*
+          fi
+          ANYDOC_PLUGIN_ROOT="$PWD/plugins/anydoc" \
+            ANYDOC_RELEASE_REPO="${GITHUB_REPOSITORY}" \
+            bash plugins/anydoc/scripts/verify-release-assets
