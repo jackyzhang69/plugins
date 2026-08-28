@@ -7,33 +7,33 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "42fc857d23d3bf0969d84eb81ea97c7939769b3440d1a487bb63682e5573b15a",
+        "sha256": "92f49ee6dfe8dd2e3313d534951df0584f5f5e427724080485c5ad346818568e",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "1bc45b15466b34cef96641ce25c77a876e70010c6b114f909dda2f5325fc5bd7",
-          "signing": "unsigned"
+          "sha256": "0540ce58c3cc602bb1365474cafe828a0202e44bb6a67d6c9100431a0b762e73",
+          "signing": "signed_same_team_hardened_runtime"
         },
-        "signing": "unsigned"
+        "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "9802faa94009bdc849d73282c8b12c664b8c773ff956c4f2869cebc8a65e6569",
+        "sha256": "5aa352ac02a6a0dcd84767b020f8ec4451aaa28e68e8ec37b3599eb69412cd9e",
         "pdfium": {
           "path": "bin/win32-x64/pdfium.dll",
-          "sha256": "79d4676b656cfb1abcea88f9ade3b4b0826c5200382db5f4ec72a636c598c118",
-          "signing": "unsigned"
+          "sha256": "58c6653299c9e46e4d0a3f98342ff67f415940b7379b72a7b228508956a6e85b",
+          "signing": "signed_azure_trusted_signing"
         },
-        "signing": "unsigned"
+        "signing": "signed_azure_trusted_signing"
       }
     },
     "release": {
       "status": "published",
       "marketplace": "claimed",
-      "notarization": "not_done",
+      "notarization": "accepted",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
       "tag": "anydoc-v0.3.3",
-      "source_commit": "52d4b169877f6de28f3b527c3bbb88846ff5c320"
+      "source_commit": "aa418ffc99278eff70363353b881ddcf6ad08ee2"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -69,5 +69,5 @@
     "packaged": true,
     "note": "Pinned Pdfium libraries are packaged per platform and verified by sha256."
   },
-  "source_sha": "52d4b169877f6de28f3b527c3bbb88846ff5c320"
+  "source_sha": "aa418ffc99278eff70363353b881ddcf6ad08ee2"
 }

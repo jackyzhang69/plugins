@@ -207,7 +207,7 @@ for plat, entry in platforms.items():
                 expected_native_libraries.add(native_rel)
         allowed_signing = {
             "darwin-arm64": {"unsigned", "signed_same_team_hardened_runtime"},
-            "win32-x64": {"unsigned"},
+            "win32-x64": {"unsigned", "signed_azure_trusted_signing"},
         }.get(plat, set())
         if signing not in allowed_signing:
             errors.append(f"{plat}: invalid signing status {signing!r}")
@@ -226,13 +226,13 @@ if pdfium_packaged:
     }
     official_release = signing_by_platform == {
         "darwin-arm64": "signed_same_team_hardened_runtime",
-        "win32-x64": "unsigned",
+        "win32-x64": "signed_azure_trusted_signing",
     }
     fully_unsigned = set(signing_by_platform) == set(ALLOWED) and set(
         signing_by_platform.values()
     ) == {"unsigned"}
     if not (official_release or fully_unsigned):
-        errors.append("package must be fully unsigned development or notarized macOS plus unsigned Windows release")
+        errors.append("package must be fully unsigned development or fully signed official release")
     if official_release and notarization != "accepted":
         errors.append("official release requires macOS notarization=accepted")
     if fully_unsigned and notarization != "not_done":

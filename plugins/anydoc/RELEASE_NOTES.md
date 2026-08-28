@@ -1,3 +1,12 @@
+# AnyDoc 0.3.3
+
+- Uses one AnyDoc router skill with live `commands --json` discovery.
+- Windows `anydoc.exe` and `pdfium.dll` are Authenticode-signed through an
+  AnyDoc-only GitHub OIDC identity and Azure Trusted Signing. macOS remains
+  hardened-runtime signed and Apple-notarized.
+- Release hashes are recomputed after both platforms are signed, so the public
+  manifest and sidecars describe the exact bytes users download.
+
 # AnyDoc 0.3.2
 
 - Resolves the canonical `~/.local/bin/anydoc` shim to the real installed

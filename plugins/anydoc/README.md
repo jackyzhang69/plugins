@@ -24,9 +24,10 @@ Inspect and an explicitly approved manual plan stay offline. Saved private model
 Unsupported platforms fail closed. Checksums are required.
 
 Signing and Pdfium delivery are stated in `runtime-manifest.json`, not inferred
-from filenames. AnyDoc 0.3.0 requires macOS same-Team hardened-runtime signing
-plus Apple notarization. Its Windows executable and `pdfium.dll` are deliberately
-unsigned, same-source-commit artifacts protected by SHA-256 and Windows-native
+from filenames. Official releases require macOS same-Team hardened-runtime
+signing plus Apple notarization, and Azure Trusted Signing Authenticode
+signatures with timestamps on the Windows executable and `pdfium.dll`. Both
+platforms remain bound to one source commit, SHA-256 manifest, and native
 acceptance.
 
 ## Honesty
