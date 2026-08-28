@@ -74,9 +74,9 @@ jobs:
             gh release create "$RELEASE_TAG" \
               --verify-tag \
               --title "AnyDoc $VERSION" \
-              --notes-file plugins/anydoc/RELEASE_NOTES.md \
-              release-assets/*
+              --notes-file plugins/anydoc/RELEASE_NOTES.md
           fi
+          gh release upload "$RELEASE_TAG" --clobber release-assets/*
           ANYDOC_PLUGIN_ROOT="$PWD/plugins/anydoc" \
             ANYDOC_RELEASE_REPO="${GITHUB_REPOSITORY}" \
             bash plugins/anydoc/scripts/verify-release-assets
