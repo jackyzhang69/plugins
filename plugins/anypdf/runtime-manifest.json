@@ -3,19 +3,19 @@
     "darwin-arm64": {
       "checksum": "bin/darwin-arm64/anypdf.sha256",
       "entrypoint": "bin/darwin-arm64/anypdf",
-      "package_manifest_sha256": "c2d8daa271ca9f98b08dd2594ba7005f42fcf9b16ff921ec50d87e1f0a086509",
-      "sha256": "044459b17b95a793e38c2327996182ea750e7f619944fdf11319c5fd5c2270fe",
+      "package_manifest_sha256": "69299ed7f8bf9a054bb002cdf6421b21ee7d0e274616a819fe86745c210b11a0",
+      "sha256": "ad135dd05b2998f4424ebd3545a0ba17e83e0b62cbf73d89fdb7bd1e71c68074",
       "size_bytes": 11308016
     },
     "win32-x64": {
       "checksum": "bin/win32-x64/anypdf.exe.sha256",
       "entrypoint": "bin/win32-x64/anypdf.exe",
-      "package_manifest_sha256": "f1804cbe9224a5e79a8570c87423f203990e92c07058b9ac90584486a4d7792a",
-      "sha256": "904ba2aa5b412f6aab03e0095aa37d2dd40e72fb7f7b2b9b871ade383894e418",
+      "package_manifest_sha256": "2c81995c88d777aa290a0441582990970e84a5893f10e36696527fec2d0cc816",
+      "sha256": "55e4048005a58a8ac3ebebfc26257631778ce9c280f0867acf9b9ea64391014f",
       "size_bytes": 10994456
     }
   },
   "schema_version": "3",
-  "source_sha": "9174556aadc950029dc053785428b8b3bb09ca11",
-  "version": "0.7.6"
+  "source_sha": "28930be99ed40a7d63f6d9ee22e06cf027f3a592",
+  "version": "0.7.7"
 }
