@@ -6,8 +6,9 @@ description: >-
   search iMessage / Telegram / WeChat, cross-platform chat history, contacts,
   identity, export messages with X, export my chat with X, save group
   transcript, download images from group Y, download images from chat with X,
-  list voice messages, attachments in group Y, export that PDF, follow this
-  person / group for new messages, save a topic, check a topic, connect /
+  list voice messages, attachments in group Y, export that PDF,   follow this
+  person / group for new messages, save a topic, check a topic, write this
+  down, what did we decide, remember this point, connect /
   log in / save my portal token, anychat setup, doctor, tell Jacky, report
   this bug / file a bug report, feature request, note this as a tip.
   One discovery file: playbooks in references/. Ask the live CLI
@@ -22,6 +23,7 @@ when_to_use: |-
   "download images from chat with X", "download all images from",
   "list voice messages", "attachments in group Y", "export that PDF",
   "follow this person", "save a topic", "check a topic", "any new messages from",
+  "write this down", "what did we decide", "remember this point",
   "connect to anychat / set up anychat", "log in to anychat / save my portal token",
   "anychat setup", "doctor", "tell Jacky", "tell Jacky about this",
   "report this bug / file a bug report", "feature request for AnyChat",
@@ -139,7 +141,8 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |
 | Local sources | `sources detect` / `sources list` / `sources status` / `sources connect` / `sources sync` / `sources remove` |
 | Identity graph | `identity list` / `identity suggest` / `identity link` (draft first, without `--confirm`) / `identity confirm` / `identity unlink` / `identity reset --yes`. Lives with the account. Offline `--person` is no longer available — tell the user to connect first. Auto-suggest is macOS-only; Windows links manually — say which applies |
-| Follow a topic | Propose `{人或群} {事}` (about 20 Chinese characters / 40 Latin). Ask 「就叫这个？」. Then `topic save --name "…" --person "…" [--keyword "…"]` or `--conversation source:id`. Never keyword-only. `topic list` / `topic show --topic-id` / `topic check --topic-id` / `topic rm --topic-id --yes`. v1 cannot rename. Need login + at least one ready source. |
+| Follow a topic | Propose `{人或群} {事}` (about 20 Chinese characters / 40 Latin). Ask 「就叫这个？」. Then `topic save --name "…" --person "…" [--keyword "…"]` or `--conversation source:id`. Never keyword-only. `topic list` / `topic show --topic-id` / `topic check --topic-id` / `topic rm --topic-id --yes`. v1 cannot rename. Need login + at least one ready source. Deleting a topic also deletes its notes. |
+| Write down a point | Offer 记下 only when the human asks after a check that had 新增. Draft ≤5 sentences yourself. Never auto-distill. Confirm, then `notes save --topic-id "…" --name "…" --claim "…" --yes` or `notes save --draft '{anychat-notes-v1}' --yes`. `notes list` / `notes show --note-id` / `notes touch --note-id` / `notes rm --note-id --yes`. No local notes file. No excerpts. If this computer has no archive: claims + 「原文不在这台电脑上」. Never claim a one-click jump to one old row. Offline / not logged in: tell them to connect first. |
 | Public command list | `commands --json` |
 
 Detail: [query](references/query.md), [media](references/media.md), [export](references/export.md).

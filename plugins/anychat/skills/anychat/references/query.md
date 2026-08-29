@@ -150,6 +150,25 @@ cover a time window.
 
 `topic show` / `check` never print chat bodies. New-message counts only.
 Needs login and at least one ready local source. Offline `--person` is gone.
+Deleting a topic also deletes notes for that topic.
+
+## Write down a point (`anychat notes`)
+
+Host drafts. Binary does not call models. Offer 记下 only when the human
+asks after a check that had 新增. At most 5 new claims. Confirm first.
+
+```bash
+"$ANYCHAT_BIN" notes save --topic-id "<uuid>" --name "<群或人 事>" --claim "<sentence>" --yes
+"$ANYCHAT_BIN" notes save --draft '{"contract":"anychat-notes-v1",...}' --yes
+"$ANYCHAT_BIN" notes list [--json]
+"$ANYCHAT_BIN" notes show --note-id "<uuid>" [--json]
+"$ANYCHAT_BIN" notes touch --note-id "<uuid>"
+"$ANYCHAT_BIN" notes rm --note-id "<uuid>" --yes
+```
+
+No chat text, no excerpts, no get-by-raw-id. If this device has no
+archive: show the claims and 「原文不在这台电脑上」. To re-read, search
+the pinned conversation around `at`. Need login. Offline fails closed.
 
 ## Disambiguate name & Discovery (WeChat)
 

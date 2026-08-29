@@ -32,3 +32,6 @@ where they added no match value.
 - report this bug / file a bug report
 - feature request for AnyChat
 - note this as a tip
+- write this down
+- what did we decide
+- remember this point

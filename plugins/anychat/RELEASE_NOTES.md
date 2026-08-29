@@ -1,3 +1,11 @@
+# AnyChat 0.1.32
+
+## User-visible changes
+
+- Write down what was decided. Confirmed sentences live with the account; chat text stays on this computer. Another computer with the same login can read the sentences.
+- `notes save / list / show / touch / rm`. Save only after you confirm. At most 5 new sentences per write. An old sentence cannot be silently edited. Deleting a topic also deletes its notes.
+- If this computer has no chat archive, AnyChat still shows the sentences and says the original messages are not here.
+
 # AnyChat 0.1.31
 
 ## User-visible changes
