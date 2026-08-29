@@ -15,7 +15,7 @@ where they added no match value.
 - group Y
 - what did X say in groups
 - search all chats for keyword
-- search iMessage / Telegram / WeChat
+- search social media chats
 - cross-platform chat history
 - contacts
 - identity

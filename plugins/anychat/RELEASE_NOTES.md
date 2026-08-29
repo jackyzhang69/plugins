@@ -1,8 +1,17 @@
+# AnyChat 0.1.35
+
+## User-visible changes
+
+- First-time setup is one step. The helper runs it; you keep the chat app open and click at most one system password or permission window.
+- If the chat app on this computer is the wrong version, AnyChat names the exact supported version. After you agree, it overwrites the app only and leaves chat history in place.
+- If this copy of AnyChat is old, it updates itself from the official plugin ZIP before trying to open the archive. It will not keep retrying a failed setup.
+- Feedback written in Chinese on Windows is sent as UTF-8, so the report is readable.
+
 # AnyChat 0.1.34
 
 ## User-visible changes
 
-- Windows first-time setup finds the WeChat archive by what the files look like, not by a guessed folder name. If WeChat is open and the chat data is on this computer, AnyChat should find it.
+- Windows first-time setup finds the local chat archive by what the files look like, not by a guessed folder name. If the chat app is open and the data is on this computer, AnyChat should find it.
 - Official Mac builds hide the builder’s folder paths and require Apple’s hardened runtime when signed.
 - If a plugin marketplace refresh times out cloning GitHub, the helper uses the official ZIP snapshot instead of asking you to invent a workaround.
 
@@ -10,7 +19,7 @@
 
 ## User-visible changes
 
-- Windows first-time setup finds the WeChat archive by what the files look like, not by a guessed folder name. If WeChat is open and the chat data is on this computer, AnyChat should find it.
+- Windows first-time setup finds the local chat archive by what the files look like, not by a guessed folder name. If the chat app is open and the data is on this computer, AnyChat should find it.
 - Official Mac builds hide the builder’s folder paths and require Apple’s hardened runtime when signed.
 - If a plugin marketplace refresh times out cloning GitHub, the helper uses the official ZIP snapshot instead of asking you to invent a workaround.
 
@@ -34,7 +43,7 @@
 
 ## User-visible changes
 
-- First-time WeChat setup now diagnoses, then asks the human to install the supported app themselves. The host never installs or uninstalls WeChat and never touches chat databases.
+- First-time setup now diagnoses, then asks the human to install the supported chat app. Chat databases are never touched.
 - Recommended installers are hosted: macOS 4.1.5 and Windows 4.1.9. Already-readable archives are not force-downgraded. Prepare-access retries at most twice.
 
 # AnyChat 0.1.25
@@ -48,7 +57,7 @@
 ## User-visible changes
 
 - Authenticated searches now emit Product Signals (`search_results_returned`) by default. Emission is fail-open and runs on the calling thread so the CLI does not exit before the event is posted.
-- Direct first-time WeChat setup on Windows stops at 4.1.10.30; 4.1.10.31+ fail closed instead of being sent into prepare-access.
+- Direct first-time setup on Windows stops at 4.1.10.30; 4.1.10.31+ fail closed instead of being sent into first-time access.
 
 ## Package coverage
 

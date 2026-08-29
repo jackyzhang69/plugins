@@ -3,7 +3,7 @@ name: anychat
 description: >-
   READ THIS FIRST for AnyChat. Local chat archive helper: search my chats,
   chat with X, what did X say in groups, search all chats for keyword,
-  search iMessage / Telegram / WeChat, cross-platform chat history, contacts,
+  search social media chats, cross-platform chat history, contacts,
   identity, export messages with X, export my chat with X, save group
   transcript, download images from group Y, download images from chat with X,
   list voice messages, attachments in group Y, export that PDF,   follow this
@@ -17,7 +17,7 @@ when_to_use: |-
   Load on plugin start; reload whenever a user asks anything anychat-related.
   Trigger phrases: "search my chats", "chat with X", "group Y",
   "what did X say in groups", "search all chats for keyword",
-  "search iMessage / Telegram / WeChat", "cross-platform chat history",
+  "search social media chats", "cross-platform chat history",
   "contacts", "identity", "export messages with X", "export my chat with X",
   "save group transcript", "download images from group Y",
   "download images from chat with X", "download all images from",
@@ -51,11 +51,7 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
 
-If the host marketplace refresh clones GitHub and that clone times out or returns early EOF: do **not** send the human to invent a workaround. Download the official ZIP snapshot yourself and continue:
-
-`https://github.com/jackyzhang69/plugins/archive/refs/heads/main.zip`
-
-Never `git clone` that repository as the update path.
+First-time local access uses `"$ANYCHAT_BIN" provision --json` only. Do not walk a setup state machine. If a marketplace GitHub clone times out, `provision` uses the official ZIP; never `git clone` the plugin repository.
 
 ## Advisory inbox check (Tell Jacky replies)
 
@@ -85,8 +81,8 @@ When speaking to the **person in the chat** (not when writing tool args):
 
 1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
 2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
-3. **Major stages only.** Report at phase changes: need connect → need a supported WeChat / need setup → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls. If setup asks the human to install a specific WeChat, say that in everyday words and give the download URL from `setup_plan` — do not hide the next action.
-4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation, storage paths, or component details unless the user explicitly asks for technical depth. Recommended WeChat version + download URL are product next-steps, not internals.
+3. **Major stages only.** Report at phase changes: need connect → need a supported chat app / need setup → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls. If setup names a supported version and download URL, repeat that wording — do not hide the next action, and do not name a specific social network yourself.
+4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation, storage paths, or component details unless the user explicitly asks for technical depth. Never name a specific social network in your own words; repeat `say_to_user`.
 5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已登录，但还不是管理员” / “还没完成第一次本机设置”).
 6. **Mask secrets.** Never paste credentials or private access material into chat.
 
@@ -95,7 +91,7 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 ## 0. Non-negotiable rules
 
 1. **All archive ops go through the bundled `anychat` CLI.** Do not invent local storage paths, access material, or reimplement product internals.
-2. **Strict scopes** — legacy WeChat scoped queries use exactly one `--mode`; source-qualified/fan-out queries use `--source` or `--all-sources` and never mix legacy scope flags.
+2. **Strict scopes** — scoped queries use exactly one `--mode`; source-qualified/fan-out queries use `--source` or `--all-sources` and never mix legacy scope flags.
 3. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).
 4. **No secrets in feedback** — no credentials, private access material, message bodies, friend names/wxids, or attachment bytes unless the user explicitly approves a redacted draft.
 5. Prefer `--format json` when chaining agent steps **internally**; follow **Talk to the human** when reporting results.
@@ -105,14 +101,14 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 Answer in product language, short bullets:
 
 - **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
-- **Setup** local archive access on this Mac or Windows PC (`setup` + doctor).
+- **Setup** local archive access on this Mac or Windows PC (`provision`).
 - **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
 - **Follow a topic** (a person or a group + what you care about). New messages stay on this computer; the topic itself lives with the account so another computer can follow the same thing.
 - **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
 - **Export** transcripts, **download** supported attachments, and create a local hash-verifiable evidence bundle.
 - **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
 
-Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and the verified Telegram local-cache profile. Windows x64 currently retains verified WeChat support; other Windows connectors stay unavailable until their own native tests pass. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
+Stable sources: verified local social-app archives on macOS Apple Silicon and Windows x64. Other apps stay unavailable until their own native tests pass. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
 
 ## Agent quick router
 
@@ -121,7 +117,7 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → [connect](references/connect.md) |
 | Connect / token | [connect](references/connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` · `status` · `whoami` · `logout` |
-| First-time local access | [setup](references/setup.md) → read `doctor --json` `setup_plan` and follow `setup_plan.agent`; run `doctor` / `prepare-access` / `setup` with host permissions (not a restricted session); the human never uses a terminal; if WeChat is missing or too new/old, give `recommended_installer.url` and let them install; you do not install WeChat. Commands: `prepare-access`, `setup` |
+| First-time local access | [setup](references/setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_human`, wait, then run `continue_args`. Never old first-run verbs. If a supported version is required, `continue_args` may include `--install-app-consent`. |
 | **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](references/query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |

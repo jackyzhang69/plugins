@@ -46,8 +46,8 @@ already applies that test, so prefer it over inventing your own prompt.
 ## Multi-Source Fan-out & Single-Source Routing
 
 AnyChat supports unified querying across local chat sources:
-- **`--all-sources`**: Search across all registered and ready platforms (WeChat, Telegram, iMessage) with timestamp ordering.
-- **`--source <source-id>`**: Scope the query strictly to one registered platform (`wechat`, `telegram`, `imessage`).
+- **`--all-sources`**: Search across all registered and ready local social-app archives with timestamp ordering.
+- **`--source <source-id>`**: Scope the query strictly to one registered platform. Use the source id from `sources list --json` / `commands --json`.
 
 ### 1. Cross-Platform Unified Search & Query
 
@@ -68,7 +68,7 @@ AnyChat supports unified querying across local chat sources:
 # Telegram: Local Postbox cache query
 "$ANYCHAT_BIN" query --source telegram --days 30 --limit 50 --format json
 
-# WeChat: Legacy scoped query modes
+# Scoped query modes
 "$ANYCHAT_BIN" query --mode friend --target "<name-or-id>" --days 30 --limit 50 --format text
 "$ANYCHAT_BIN" query --mode group --target "<group>" --days 30 --limit 50
 "$ANYCHAT_BIN" query --mode person-in-groups --target "<person>" --days 30 --limit 50
@@ -99,7 +99,7 @@ first. Keyword-only search still works offline.
 "$ANYCHAT_BIN" identity suggest [--json]
 
 # Preview the change — writes nothing
-"$ANYCHAT_BIN" identity link --person-label "<Name>" --source <imessage|wechat|telegram> --raw-id "<id>"
+"$ANYCHAT_BIN" identity link --person-label "<Name>" --source <source-id> --raw-id "<id>"
 
 # Apply a new link
 "$ANYCHAT_BIN" identity link --person-label "<Name>" --source <source> --raw-id "<id>" --confirm
@@ -134,13 +134,13 @@ Rules for the agent:
 
 A topic is `{人 or 群} + {事}`. The host proposes a name (about 20 Chinese
 characters / 40 Latin), asks 「就叫这个？」, then saves with `--name`.
-v1 cannot rename. Keyword-only is rejected — WeChat global search cannot
+v1 cannot rename. Keyword-only is rejected — a global keyword search cannot
 cover a time window.
 
 ```bash
 # Propose, then save after the human agrees
 "$ANYCHAT_BIN" topic save --name "<人 事>" --person "<name>" [--keyword "<word>"]
-"$ANYCHAT_BIN" topic save --name "<群 事>" --conversation wechat:<id>
+"$ANYCHAT_BIN" topic save --name "<群 事>" --conversation <source>:<id>
 
 "$ANYCHAT_BIN" topic list [--json]
 "$ANYCHAT_BIN" topic show --topic-id "<uuid>" [--json]
@@ -170,7 +170,7 @@ No chat text, no excerpts, no get-by-raw-id. If this device has no
 archive: show the claims and 「原文不在这台电脑上」. To re-read, search
 the pinned conversation around `at`. Need login. Offline fails closed.
 
-## Disambiguate name & Discovery (WeChat)
+## Disambiguate name & Discovery
 
 ```bash
 "$ANYCHAT_BIN" resolve --query "<name>" --json

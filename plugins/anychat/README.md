@@ -15,10 +15,10 @@ One discovery file: `skills/anychat/SKILL.md`. Playbooks live under
 
 | Platform | Stable source scope |
 |----------|---------------------|
-| macOS Apple Silicon | Explicitly verified WeChat profiles + iMessage + Telegram Postbox profile |
-| Windows x64 | Explicitly verified WeChat/Weixin profiles only; Telegram, Signal, and WhatsApp remain behind later native gates |
+| macOS Apple Silicon | Verified local social-app archives on this computer |
+| Windows x64 | Verified local social-app archives on this computer; other apps stay behind later native gates |
 
-Unknown chat-app builds fail closed. `setup_plan.agent` is the only first-time-setup protocol for host agents: say `say_to_user` to the human, run `host_agent_args` yourself, and never send the human to a terminal. A unique running WeChat/Weixin build is selected automatically. Invented or stale confirmed builds are rejected. Direct first-time preparation is limited to 4.1.0–4.1.10 (Windows: through 4.1.10.30). Missing or newer clients get `setup_plan.recommended_installer` (macOS 4.1.5 / Windows 4.1.9 on the public S3 slot); the human installs, the agent does not. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
+Unknown chat-app builds fail closed. First-time setup is `"$ANYCHAT_BIN" provision --json`: speak `say_to_user`, wait on `needs_human`, then run `continue_args`. Invented or stale confirmed builds are rejected. Missing or newer clients get a pinned supported installer; after the human agrees, the CLI overwrites the app only. Archive readability, first-time acquisition, schema, and media remain separately verified per exact profile.
 
 See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the current release changes and package coverage.
 
