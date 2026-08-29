@@ -1,3 +1,11 @@
+# AnyChat 0.1.31
+
+## User-visible changes
+
+- Follow a named topic (a person or a group, plus what you care about). New messages are found on this computer; the topic and who-is-who live with the account so another computer can follow the same thing. Chat text is not uploaded.
+- `topic save / list / show / check / rm`. A topic cannot be keyword-only. v1 cannot rename. Checking for new messages needs you to be signed in.
+- People you already linked move to the account the first time this version talks to it. After that, searching by person also needs a connection.
+
 # AnyChat 0.1.26
 
 ## User-visible changes

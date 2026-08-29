@@ -6,7 +6,8 @@ description: >-
   search iMessage / Telegram / WeChat, cross-platform chat history, contacts,
   identity, export messages with X, export my chat with X, save group
   transcript, download images from group Y, download images from chat with X,
-  list voice messages, attachments in group Y, export that PDF, connect /
+  list voice messages, attachments in group Y, export that PDF, follow this
+  person / group for new messages, save a topic, check a topic, connect /
   log in / save my portal token, anychat setup, doctor, tell Jacky, report
   this bug / file a bug report, feature request, note this as a tip.
   One discovery file: playbooks in references/. Ask the live CLI
@@ -20,6 +21,7 @@ when_to_use: |-
   "save group transcript", "download images from group Y",
   "download images from chat with X", "download all images from",
   "list voice messages", "attachments in group Y", "export that PDF",
+  "follow this person", "save a topic", "check a topic", "any new messages from",
   "connect to anychat / set up anychat", "log in to anychat / save my portal token",
   "anychat setup", "doctor", "tell Jacky", "tell Jacky about this",
   "report this bug / file a bug report", "feature request for AnyChat",
@@ -97,6 +99,7 @@ Answer in product language, short bullets:
 - **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
 - **Setup** local archive access on this Mac or Windows PC (`setup` + doctor).
 - **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
+- **Follow a topic** (a person or a group + what you care about). New messages stay on this computer; the topic itself lives with the account so another computer can follow the same thing.
 - **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
 - **Export** transcripts, **download** supported attachments, and create a local hash-verifiable evidence bundle.
 - **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
@@ -135,7 +138,8 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) · `feedback status` · `feedback list` |
 | Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |
 | Local sources | `sources detect` / `sources list` / `sources status` / `sources connect` / `sources sync` / `sources remove` |
-| Identity graph | `identity list` / `identity suggest` / `identity link` (draft first, without `--confirm`) / `identity confirm` / `identity unlink` / `identity reset --yes`. Auto-suggest is macOS-only; Windows links manually — say which applies |
+| Identity graph | `identity list` / `identity suggest` / `identity link` (draft first, without `--confirm`) / `identity confirm` / `identity unlink` / `identity reset --yes`. Lives with the account. Offline `--person` is no longer available — tell the user to connect first. Auto-suggest is macOS-only; Windows links manually — say which applies |
+| Follow a topic | Propose `{人或群} {事}` (about 20 Chinese characters / 40 Latin). Ask 「就叫这个？」. Then `topic save --name "…" --person "…" [--keyword "…"]` or `--conversation source:id`. Never keyword-only. `topic list` / `topic show --topic-id` / `topic check --topic-id` / `topic rm --topic-id --yes`. v1 cannot rename. Need login + at least one ready source. |
 | Public command list | `commands --json` |
 
 Detail: [query](references/query.md), [media](references/media.md), [export](references/export.md).

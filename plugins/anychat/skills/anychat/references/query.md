@@ -87,7 +87,9 @@ When querying iMessage on a machine with multiple Apple IDs / accounts:
 ## Local Identity Graph (`anychat identity`)
 
 Links one person's accounts across platforms so a later search can name them
-once. Everything stays on this machine.
+once. The graph lives with the account. Chat bodies stay on this computer.
+`--person` and `topic` fail closed when offline: tell the user to connect
+first. Keyword-only search still works offline.
 
 ```bash
 # Who is linked, which platforms, and who has never been searched for
@@ -127,6 +129,27 @@ Rules for the agent:
   different first step, not as something broken or missing.
 - Searches carry an opaque token per linked account, never the email, phone
   number, or wxid itself.
+
+## Follow a topic (`anychat topic`)
+
+A topic is `{人 or 群} + {事}`. The host proposes a name (about 20 Chinese
+characters / 40 Latin), asks 「就叫这个？」, then saves with `--name`.
+v1 cannot rename. Keyword-only is rejected — WeChat global search cannot
+cover a time window.
+
+```bash
+# Propose, then save after the human agrees
+"$ANYCHAT_BIN" topic save --name "<人 事>" --person "<name>" [--keyword "<word>"]
+"$ANYCHAT_BIN" topic save --name "<群 事>" --conversation wechat:<id>
+
+"$ANYCHAT_BIN" topic list [--json]
+"$ANYCHAT_BIN" topic show --topic-id "<uuid>" [--json]
+"$ANYCHAT_BIN" topic check --topic-id "<uuid>"
+"$ANYCHAT_BIN" topic rm --topic-id "<uuid>" --yes
+```
+
+`topic show` / `check` never print chat bodies. New-message counts only.
+Needs login and at least one ready local source. Offline `--person` is gone.
 
 ## Disambiguate name & Discovery (WeChat)
 
