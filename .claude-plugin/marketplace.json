@@ -21,7 +21,7 @@
       "author": {
         "name": "Jacky Zhang"
       },
-      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks-cli",
       "source": "./plugins/easybooks-cli",
       "version": "0.5.19"
@@ -54,7 +54,7 @@
       "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for private models and Tell Jacky. macOS Apple Silicon and Windows x64.",
       "name": "anydoc",
       "source": "./plugins/anydoc",
-      "version": "0.3.3"
+      "version": "0.3.4"
     },
     {
       "author": {

@@ -1,3 +1,17 @@
+# AnyDoc 0.3.4
+
+- Assembly now requires a named authority: a confirmed private model, or the
+  user's own document list. A Public Guide can only supply conventions for
+  deliverables the user already listed; it is never the authority. Folder and
+  file names are not enough. Teach Me starts only when the model is truly
+  absent.
+- Client intake questionnaires stay out of every assembled output by default.
+  One file is included only when the user names that file, and then AnyDoc
+  says it is collection material, not a submission document.
+- AnyDoc no longer invents a file-size cap. Planned page-size and orientation
+  changes are shown before approval. If compression still exceeds a cited cap,
+  the pack is delivered with a warning instead of failing the whole job.
+
 # AnyDoc 0.3.3
 
 - Uses one AnyDoc router skill with live `commands --json` discovery.

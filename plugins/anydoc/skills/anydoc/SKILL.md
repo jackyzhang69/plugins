@@ -88,10 +88,57 @@ When speaking to the person in the chat (not when writing tool args):
 7. **Do not ask the AnyDoc binary to OCR.** Use its native text first; read only
    unresolved scans visually in this primary session. Do not invent a subject,
    caption, category, exclusion reason, or condition result.
+8. **No packing list without a named authority.** A confirmed private model, the
+   user's own document list, or a Public Guide's conventions for deliverables
+   they already listed. Never a plan derived from filenames or folder layout.
 
-## Choose the assembly authority first
+## No plan without a named authority (hard gate)
 
-Before inspecting or organizing a model-bound case, identify one exact `case_type` and check the user's accountd-hosted private model:
+Never write an assembly plan, a draft packing list, or a "starter" set of
+actions until you hold one named authority the human can see. Exactly one of
+these three is enough, and there is no fourth:
+
+1. **A confirmed private model** — `models resolve` returned `model_found` for
+   one exact `case_type`. The plan's `authority.kind` is `private_model`.
+2. **A Document List the user supplied for this case** — their explicit list of
+   the deliverables they want. The plan's `authority.kind` becomes
+   `manual_plan` once they state or approve that list as the basis.
+3. **A Public Guide**, read with
+   `"$ANYDOC_BIN" guides show --id <guide-id> --json`. A Guide carries assembly
+   conventions only: naming style, output layout, size budget, photo grid,
+   Office and HEIC handling. It reports `classifier: false` and names no
+   required evidence, so it can decide *how* outputs are named and built, never
+   *which* deliverables exist. Alone it authorizes only work the user already
+   listed; for the deliverable list itself, pair it with 1 or 2.
+
+If you hold none of the three, stop. Say plainly that you have no basis for a
+packing list yet and ask for their document list. Do not guess one, do not
+produce a provisional plan, and do not start work "so they can correct it."
+
+A Public Guide is never an `authority.kind`. Show any conflict between a Guide
+and the private model and pause for the human's decision. A Guide never
+replaces a document list and never becomes hidden authority. Tell the human
+which guide id you followed.
+
+### Filenames and folders are not authority
+
+A folder listing is not a document list. None of the following ever justifies an
+action, a deliverable, an exclusion, a page order, an owner, or any statement
+about completeness:
+
+- a file's name, its extension, or words inside the name;
+- folder names, subfolder structure, or nesting depth;
+- alphabetical, numeric-prefix, or modified-time order;
+- a previous `anydoc-output/vNNN` snapshot, or a folder copied back from one;
+- a file being the only one of its apparent kind in the folder.
+
+Treat all of it as a hint to show the human, never as a decision. Content
+evidence decides subject and meaning; the named authority decides the
+deliverable list.
+
+### Check the private model first
+
+For a model-bound case, identify one exact `case_type` and check the user's accountd-hosted private model:
 
 ```bash
 "$ANYDOC_BIN" models resolve --case-type <exact-case-type> --json
@@ -101,17 +148,34 @@ Treat the returned state literally:
 
 | State | Required host action |
 |---|---|
-| `model_found` | Show its name and revision. Use that exact model, and bind its `model_id`, `revision`, and `model_hash` into the plan. Only here may you say the work follows the user's saved habit. |
+| `model_found` | Show its name and revision. Use that exact model, and bind its `model_id`, `revision`, and `model_hash` into the plan. Only here may you say the work follows the user's saved habit. Do not Teach Me, and do not replace the model because this folder looks different. |
 | `model_absent` | Start **Teach Me** below. This is the only state that permits Teach Me. |
 | `model_unavailable` | Stop the model flow. Say the saved model cannot be checked now. Do not call it absent, do not Teach Me, and do not silently switch to a manual plan. |
 | `model_invalid` | Stop. Say the saved model response failed validation. Do not use it or Teach Me. |
 | exact case type is ambiguous | This is the host state `model_ambiguous`: show the concrete choices and ask the human. Do not guess and do not Teach Me. |
 
-A Public Guide is visible reference material only. Show any conflict between it and the private model and pause for the human's decision. A Guide never replaces a document list and never becomes hidden authority.
-
 The only offline alternative is a complete `manual_plan` explicitly supplied or approved by the user as the authority. Backend failure never authorizes this fallback, and the host must label it `manual_plan`, not “saved habit.”
 
 ## Teach Me (only after `model_absent`)
+
+Preconditions. All of them, every time:
+
+- You actually ran `models resolve` in this session and it returned the literal
+  state `model_absent`. Never open Teach Me without that call.
+- A non-zero exit, a timeout, a network or auth error, unparsable output, or any
+  server error is **not** `model_absent`. Treat it as `model_unavailable` and
+  stop the model flow.
+- No other state starts Teach Me: not `model_found`, not `model_ambiguous`, not
+  `model_invalid`, not `model_unavailable`. Not to "improve" a model that
+  already resolved, not because the folder disagrees with it, and not because
+  the user said "just learn it" — a model that exists changes only through an
+  explicit `models replace` request.
+- The teachable source is a document list the user provides, and nothing else. A
+  finished package, an `anydoc-output` snapshot, a folder listing, or a Public
+  Guide is not a teachable source.
+
+Then convert the list, show it, get confirmation, and save the abstract model —
+in that order:
 
 1. Ask for one representative **document list** from the same case type. Do not infer a reusable model from the current messy folder, a finished package, or a Public Guide alone.
 2. Locally extract only the reusable structure: ordered final deliverables, what content each deliverable contains, which role needs it, and the named condition for when it applies.
@@ -155,15 +219,33 @@ Its `authority.kind` is exactly one of:
   records both `subject_person_id` and the host's
   `observed_subject_person_id`.
 
+There is no third `authority.kind`. A Public Guide contributes conventions to
+either kind and is never itself the authority.
+
 Plan v3 also has required `excluded_sources[]`. Actions are the included set;
 anything else currently in the folder is pending unless it appears in this
 explicit exclusion list or is reported as deterministic OS metadata. Reasons
 are only `information_collection`, `superseded_editable_source`, `duplicate`,
 or `user_excluded`:
 
-- Information-collection worksheets, questionnaires, checklists, internal
-  notes, and working drafts are excluded from the submission assembly by
-  default when the content evidence supports that judgment.
+- **Client intake questionnaires never reach an assembly output, in any
+  format.** Reason `information_collection`, no `related_source`. The class is
+  intake and information-collection material: intake forms, client information
+  sheets, data-collection worksheets, checklists, internal notes, and working
+  drafts. Format is irrelevant — PDF, a filled-in PDF form, DOC/DOCX, XLSX,
+  PPTX, RTF, ODT, a photo or scan of a completed paper questionnaire, an
+  exported email or chat, anything else. Form fields, a signature, an
+  official-looking layout, or an official-looking filename never promote intake
+  material into a deliverable. Excluded means excluded from every output: never
+  an action target, never a page inside a merged or combined PDF, never a
+  photo-sheet item, never renamed into a deliverable filename. Set `evidence` to
+  what you actually used — `native_text` for readable PDF/Office (the binary
+  refuses that claim when there is no usable native text, and always refuses it
+  for an image), `host_vision_ocr` for a scan or photo you read in this session,
+  `user_confirmed` when the user identified the file. Unreadable stays pending;
+  it never becomes permission to exclude. Only an explicit per-file request from
+  the user includes one, and you then say in plain language that it is
+  collection material, not a submission document.
 - An editable Office source for an already-final PDF is excluded by default
   only when it points to that included final PDF and the evidence basis is
   recorded. A flattened or wet signature is valid evidence; a digital-signature
@@ -212,11 +294,11 @@ skips both AnyDoc roots and flags copied-back prior outputs.
 | `select_pdf_pages` / `split_pdf` / `merge_pdf` / `reorder_pages` / `rotate_pages` | Unencrypted, unsigned, non-form PDFs only |
 | `image_to_pdf` | JPEG, PNG, WebP, TIFF. JPEG is not recompressed. HEIC is refused |
 | `office_to_pdf` | DOC, DOCX, RTF, XLSX, PPTX, ODT when the Office converter is present. Macros and remote links are refused. Encrypted Office is copy-only. No text-reflow fallback. |
-| `compress_to_explicit_budget` | Unencrypted, unsigned, non-form PDFs only. Requires `max_bytes`. Rewrites embedded rasters (downsample + JPEG). Already under the budget is copied as-is. If the budget cannot be reached, the tool fails and does not shrink silently or split the file. |
+| `compress_to_explicit_budget` | Unencrypted, unsigned, non-form PDFs only. Requires `max_bytes`. Rewrites embedded rasters (downsample + JPEG). Already under the budget is copied as-is. If the smallest file is still over the budget, the tool delivers it with a `still_over_cap_after_compress` warning and does not split the file. |
 | `normalize_page_size` | Unencrypted, unsigned, non-form PDFs only. Requires `width_pt` and `height_pt`, or `paper` (`letter` = 612×792, `a4` = 595.28×841.89). Fits each page into that box, keeps aspect ratio, letterbox, no crop, no auto-rotate. |
 | `render_photo_document` | Photo sheet. `layout` is 1, 2, or 4 cells; extra photos wrap to the next page with the same grid. `fit` is `fit` only (keep aspect ratio, letterbox, no crop). Order and captions as written. Caption overflow is a preview warning; it does not change the approved cell count. JPEG/PNG/WebP/TIFF. HEIC is refused. PDFs are not photo items. Same approve hash as any other action. A standalone `photo-plan.json` with this op at the top level is also accepted. |
 
-`constraints.max_file_bytes`: if a result would be over the cap, the tool fails. This version can compress only when the plan includes `compress_to_explicit_budget` with an explicit byte budget; if it cannot reach that budget, it fails and does not shrink silently.
+`constraints.max_file_bytes` is required, and AnyDoc never supplies a number of its own. Cite the byte cap the portal or guide states, or write `null` to record that no cap is cited; a plan without the key is refused as `missing_max_file_bytes`. With a cited cap, a result over it fails. With `null`, no output size limit is checked and every preview says so. This version can compress only when the plan includes `compress_to_explicit_budget` with an explicit byte budget, and compression cannot be guaranteed to reach a cap: when the best effort is still over the budget or the cited cap, AnyDoc delivers the smallest file it produced, exits 0, and returns a `still_over_cap_after_compress` warning — tell the user the file is still over the cap and that they choose whether to split it, drop content, or accept the portal's size risk. Do not report that as "cannot shrink" or as a failed assemble.
 
 ## Honesty table (say this to the human)
 
@@ -225,7 +307,9 @@ skips both AnyDoc roots and flags copied-back prior outputs.
 | Word / Excel / PowerPoint | This version can convert Office to PDF when the converter is installed. Files with macros or remote links are refused. Encrypted Office is copied as-is. If the converter is missing, export PDF yourself. |
 | HEIC photo | This version cannot convert HEIC. Export JPEG or PNG first. |
 | Encrypted official PDF | It will be copied as-is. It will not be split. |
-| File over a portal size | This version compresses only when the packing list names an explicit byte budget. If it still cannot reach that size, it fails. It will not split the file for you. |
+| Client intake questionnaire (any format) | This is how their information was collected, so it stays out of the package — PDF, Word, Excel, or a photo of the paper form makes no difference. Tell me explicitly if you want it in anyway. |
+| No document list yet | I have no basis for a packing list. Give me your document list for this case type, or let me check your saved model. I will not guess one from the file names. |
+| File over a portal size | This version compresses only when the packing list names an explicit byte budget. Reaching that size is not guaranteed: if the smallest file it can make is still over, it hands you that file and warns you, and you decide whether to split it, drop content, or accept the portal's risk. It will not split the file for you. |
 | Scan / photo, no text | You must inspect it with the active host's authorized vision/OCR in this primary session. The AnyDoc binary does not read the picture, and customer content cannot go to another agent/model. |
 | Relationship photos | The packing list names the order, captions, and 1/2/4 grid. The tool fits each photo in its cell and does not crop or invent captions. If a caption is too long, that is a warning — the grid stays as approved. |
 | Verify ok | The pack matches the approved list. That is not permission to file anything. |
@@ -233,6 +317,9 @@ skips both AnyDoc roots and flags copied-back prior outputs.
 ## Self-intro
 
 - Inspect a messy folder of PDFs, photos, and Office files.
+- It plans nothing until there is a saved model, a document list from the user,
+  or a guide's conventions for deliverables they already named. File and folder
+  names are never the list.
 - You and the user choose names, order, and what to keep.
 - After you approve the list, AnyDoc builds a new folder of copies and assembled PDFs.
 - Explicit manual plans are offline-capable. Saved private models are accountd-hosted and require `references/connect.md` to resolve. Not a lawyer. Not a form filler.
