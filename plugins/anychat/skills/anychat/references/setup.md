@@ -37,6 +37,12 @@ Report only major stages (need the chat app / need a supported WeChat / one pass
    - `version_confirmation_required` — do **not** run `prepare-access`. Ask them to leave only the WeChat they chat with open. Re-run `doctor --json`. The CLI auto-selects a unique running build. Only if the state is still `version_confirmation_required` after that, run one `setup_plan.version_confirmation_choices` entry's exact `host_agent_args` (`anychat setup --confirm-wechat-build <exact-build>`). Never ask them to read a build string off the screen.
    - `version_choice_required` — do **not** run `prepare-access`. Follow `install_recommended_version`: tell them this WeChat cannot be opened for the local archive, give `recommended_installer.url`, and ask them to replace **only the app**. Chat history must stay. You do not install or uninstall. Re-run `doctor --json` after they open the new WeChat.
    - `client_upgrade_required` — same as `version_choice_required`: they install the recommended version from `recommended_installer.url`. Do not install it yourself.
+   - `archive_unreadable` — do **not** report ready. Confirm the account, run one `prepare-access`, then re-read `doctor --json`. If still `archive_unreadable`, draft Tell Jacky.
+   - `process_view_restricted` — you are not looking at the desktop session. Re-run `doctor --json` / `prepare-access` with host permissions (Full Disk Access on a Mac if asked). Never name a restricted environment to the human. Never say the app is missing. Never give an installer URL for this state.
+   - `app_running_version_unknown` — WeChat is open but its file version could not be read. Keep that WeChat open. Re-run `doctor --json`. Do not ask for a version or a path. If unchanged, draft Tell Jacky.
+   - `archive_not_found` — the app exists; the signed chat archive was not found. Ask them to open and sign in. Do not ask for a folder path. If unchanged, draft Tell Jacky.
+   - `wechat_signature_dirty` — the live WeChat was re-signed by the user or another tool. Do **not** resign on top. They reinstall **only the app** from `recommended_installer.url` if present. Chat history stays. Then re-run `doctor --json`.
+   - `wechat_restore_available` — an official backup exists. Run `prepare-access --restore-wechat` after they quit WeChat. Do not stack another resign. Then re-run `doctor --json`.
 
 4. Direct preparation sequence (`prepare_supported` only):
 

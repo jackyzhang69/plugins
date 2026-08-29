@@ -14,6 +14,35 @@ Resolve `$ANYCHAT_BIN` via the product router §B.
 
 If not setup → [setup](setup.md). If not logged in → **connect**.
 
+## Someone the user already linked — try this first
+
+When the user names a **person** ("chat with Minko", "what did Minko say"),
+check the identity graph **before** asking them which platform or which account:
+
+```bash
+"$ANYCHAT_BIN" identity list --json
+```
+
+If that name is already linked, one command answers across every platform they
+confirmed. Do not make them link again, and do not ask which app to search:
+
+```bash
+"$ANYCHAT_BIN" search --person "<name>" --all-sources --days 90 --format json
+```
+
+- `--person` accepts the name the user linked. `--keyword` is optional here;
+  add it to narrow within that person's messages.
+- Only the platforms with a confirmed account for that person are searched.
+  Others appear in `skipped_sources` with a reason — report that honestly
+  rather than implying the person had nothing to say there.
+- Results carry each message's platform and original conversation. When you
+  report back, say the person's name and which platforms answered.
+
+If the name is **not** linked yet, fall back to the per-platform commands
+below. Offer to link only when it would actually help — the same person turning
+up in two places, or one name with several possible accounts. `identity suggest`
+already applies that test, so prefer it over inventing your own prompt.
+
 ## Multi-Source Fan-out & Single-Source Routing
 
 AnyChat supports unified querying across local chat sources:
@@ -57,24 +86,47 @@ When querying iMessage on a machine with multiple Apple IDs / accounts:
 
 ## Local Identity Graph (`anychat identity`)
 
-Map and manage unified person identities across platforms:
+Links one person's accounts across platforms so a later search can name them
+once. Everything stays on this machine.
 
 ```bash
-# List all mapped local persons and their aliases
+# Who is linked, which platforms, and who has never been searched for
 "$ANYCHAT_BIN" identity list [--json]
 
-# Discover alias suggestions from macOS Contacts
+# Only what needs a human decision (macOS: reads local Contacts)
 "$ANYCHAT_BIN" identity suggest [--json]
 
-# Link an alias to a person
+# Preview the change — writes nothing
 "$ANYCHAT_BIN" identity link --person-label "<Name>" --source <imessage|wechat|telegram> --raw-id "<id>"
 
-# Explicitly confirm a suggestion
+# Apply a new link
+"$ANYCHAT_BIN" identity link --person-label "<Name>" --source <source> --raw-id "<id>" --confirm
+
+# Confirm an alias `identity list` already shows as not confirmed
 "$ANYCHAT_BIN" identity confirm --source <source> --raw-id "<id>"
 
-# Unlink an alias
+# Stop including an account (effective on the next search; nothing to rebuild)
 "$ANYCHAT_BIN" identity unlink --source <source> --raw-id "<id>"
+
+# Remove everything
+"$ANYCHAT_BIN" identity reset --yes
 ```
+
+Rules for the agent:
+
+- **Always show the draft before confirming.** Run `link` without `--confirm`,
+  show the user what would change in plain language, and only then re-run with
+  `--confirm`. `suggest` and a `link` preview write nothing, so they cannot be
+  finished with `identity confirm`. Use `identity confirm` only when
+  `identity list` already shows the account as not confirmed. Never link silently.
+- **Report in product language.** After a confirm, say the person's name and
+  the platforms now covered. Never read raw ids or internal person ids aloud.
+- **macOS and Windows differ, and you must say which one applies.** Automatic
+  suggestions read the Mac's Contacts and do not exist on Windows. On Windows
+  linking is manual, and works identically once linked — describe it as a
+  different first step, not as something broken or missing.
+- Searches carry an opaque token per linked account, never the email, phone
+  number, or wxid itself.
 
 ## Disambiguate name & Discovery (WeChat)
 

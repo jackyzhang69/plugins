@@ -97,6 +97,7 @@ Answer in product language, short bullets:
 - **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
 - **Setup** local archive access on this Mac or Windows PC (`setup` + doctor).
 - **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
+- **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
 - **Export** transcripts, **download** supported attachments, and create a local hash-verifiable evidence bundle.
 - **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
 
@@ -109,7 +110,8 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → [connect](references/connect.md) |
 | Connect / token | [connect](references/connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` · `status` · `whoami` · `logout` |
-| First-time local access | [setup](references/setup.md) → read `doctor --json` `setup_plan` and follow `setup_plan.agent`; the human never uses a terminal; if WeChat is missing or too new/old, give `recommended_installer.url` and let them install; you do not install WeChat. Commands: `prepare-access`, `setup` |
+| First-time local access | [setup](references/setup.md) → read `doctor --json` `setup_plan` and follow `setup_plan.agent`; run `doctor` / `prepare-access` / `setup` with host permissions (not a restricted session); the human never uses a terminal; if WeChat is missing or too new/old, give `recommended_installer.url` and let them install; you do not install WeChat. Commands: `prepare-access`, `setup` |
+| **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](references/query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
 | Person across all groups | `query --mode person-in-groups --target "…"` |
@@ -133,7 +135,7 @@ Stable sources on macOS Apple Silicon: verified WeChat profiles, iMessage, and t
 | Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) · `feedback status` · `feedback list` |
 | Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |
 | Local sources | `sources detect` / `sources list` / `sources status` / `sources connect` / `sources sync` / `sources remove` |
-| Identity graph | `identity list` / `identity suggest` / `identity link` / `identity confirm` / `identity unlink` / `identity reset` |
+| Identity graph | `identity list` / `identity suggest` / `identity link` (draft first, without `--confirm`) / `identity confirm` / `identity unlink` / `identity reset --yes`. Auto-suggest is macOS-only; Windows links manually — say which applies |
 | Public command list | `commands --json` |
 
 Detail: [query](references/query.md), [media](references/media.md), [export](references/export.md).
