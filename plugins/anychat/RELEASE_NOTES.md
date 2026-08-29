@@ -1,3 +1,19 @@
+# AnyChat 0.1.34
+
+## User-visible changes
+
+- Windows first-time setup finds the WeChat archive by what the files look like, not by a guessed folder name. If WeChat is open and the chat data is on this computer, AnyChat should find it.
+- Official Mac builds hide the builder’s folder paths and require Apple’s hardened runtime when signed.
+- If a plugin marketplace refresh times out cloning GitHub, the helper uses the official ZIP snapshot instead of asking you to invent a workaround.
+
+# AnyChat 0.1.33
+
+## User-visible changes
+
+- Windows first-time setup finds the WeChat archive by what the files look like, not by a guessed folder name. If WeChat is open and the chat data is on this computer, AnyChat should find it.
+- Official Mac builds hide the builder’s folder paths and require Apple’s hardened runtime when signed.
+- If a plugin marketplace refresh times out cloning GitHub, the helper uses the official ZIP snapshot instead of asking you to invent a workaround.
+
 # AnyChat 0.1.32
 
 ## User-visible changes

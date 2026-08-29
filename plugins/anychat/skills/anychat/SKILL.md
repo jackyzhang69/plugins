@@ -49,7 +49,13 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 
 ## Advisory marketplace check
 
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+
+If the host marketplace refresh clones GitHub and that clone times out or returns early EOF: do **not** send the human to invent a workaround. Download the official ZIP snapshot yourself and continue:
+
+`https://github.com/jackyzhang69/plugins/archive/refs/heads/main.zip`
+
+Never `git clone` that repository as the update path.
 
 ## Advisory inbox check (Tell Jacky replies)
 

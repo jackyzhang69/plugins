@@ -13,7 +13,7 @@ Auth: CLI exchanges the owner portal token for an `aud=anychat` JWT before POST;
 
 ## Advisory marketplace check
 
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating from the marketplace, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. If the host marketplace GitHub clone times out, download `https://github.com/jackyzhang69/plugins/archive/refs/heads/main.zip` yourself. Never `git clone` that repository as the update path.
 
 ## Advisory inbox check (Tell Jacky replies)
 
