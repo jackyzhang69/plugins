@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64) binary="$ROOT/bin/darwin-arm64/anyweb" ;;
+  MINGW*:*|MSYS*:*|CYGWIN*:*) binary="$ROOT/bin/win32-x64/anyweb.exe" ;;
+  *) echo "verify-install: unsupported host" >&2; exit 1 ;;
+esac
+test -f "$binary"; test ! -L "$binary"
+test_home="${JACKYZHANG_APP_HOME:-$(mktemp -d "${TMPDIR:-/tmp}/anyweb-install.XXXXXX")}"; export JACKYZHANG_APP_HOME="$test_home"
+raw="$("$binary" doctor --json)"
+python3 - "$raw" <<'PY'
+import json, sys
+value=json.loads(sys.argv[1])
+assert value["ok"] is True and value["product"] == "anyweb"
+print("verify-install: ok product=anyweb")
+PY

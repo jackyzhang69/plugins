@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "source_sha": "ee1930e87493b48569a6b28f21506aca2aff2aeb",
+  "product": "anyweb",
+  "binary": {
+    "name": "anyweb",
+    "version": "0.1.0",
+    "platforms": {
+      "darwin-arm64": {
+        "entrypoint": "bin/darwin-arm64/anyweb",
+        "sha256": "6ee61edd813e854c824c74afea6527d82ac97eab89807bdfa16618f877d3e8da",
+        "size": 2329328,
+        "signing": "signed_same_team_hardened_runtime"
+      },
+      "win32-x64": {
+        "entrypoint": "bin/win32-x64/anyweb.exe",
+        "sha256": "1ff02ad912d56ef68334b9ec4d122f34448ba06fc5896a1614e297aeb5d1eb11",
+        "size": 2849056,
+        "signing": "signed_azure_trusted_signing"
+      }
+    },
+    "resolutionOrder": [
+      "${platform}-${arch}"
+    ],
+    "fallbackBehavior": "fail",
+    "verifyChecksum": true,
+    "release": {
+      "status": "published",
+      "marketplace": "claimed",
+      "host": "github-releases",
+      "repo": "jackyzhang69/anybase",
+      "tag": "anyweb-plugin-v0.1.0",
+      "source_commit": "ee1930e87493b48569a6b28f21506aca2aff2aeb",
+      "notarization": "accepted"
+    }
+  },
+  "platforms": {
+    "darwin-arm64": {
+      "path": "bin/darwin-arm64/anyweb",
+      "sha256": "6ee61edd813e854c824c74afea6527d82ac97eab89807bdfa16618f877d3e8da",
+      "size": 2329328
+    },
+    "win32-x64": {
+      "path": "bin/win32-x64/anyweb.exe",
+      "sha256": "1ff02ad912d56ef68334b9ec4d122f34448ba06fc5896a1614e297aeb5d1eb11",
+      "size": 2849056
+    }
+  },
+  "allowedPlatforms": [
+    "darwin-arm64",
+    "win32-x64"
+  ],
+  "packageHome": "~/.jackyzhang.app/plugins/anyweb/current",
+  "configHome": "~/.jackyzhang.app/anyweb/",
+  "tokenHome": "~/.jackyzhang.app/token",
+  "tokenFile": "user.json",
+  "defaultBaseUrl": "https://account.jackyzhang.app"
+}

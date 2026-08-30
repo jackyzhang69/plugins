@@ -1,0 +1,23 @@
+{
+  "name": "anyweb",
+  "version": "0.1.0",
+  "description": "Check AnyWeb repair claims, connect once with the shared Portal credential, and Tell Jacky.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyWeb",
+    "shortDescription": "Check asynchronous AnyWeb repair outcomes.",
+    "longDescription": "Use the anyweb router to connect, retrieve source-free repair claims, and Tell Jacky. This release does not claim general-purpose website execution.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "Check whether my AnyWeb repair is ready.",
+      "Tell Jacky about an AnyWeb problem."
+    ]
+  }
+}

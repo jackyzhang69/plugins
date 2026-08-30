@@ -67,6 +67,16 @@
       "name": "anypdf",
       "source": "./plugins/anypdf",
       "version": "0.7.9"
+    },
+    {
+      "name": "anyweb",
+      "version": "0.1.0",
+      "source": "./plugins/anyweb",
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Check AnyWeb repair claims, connect once with the shared Portal credential, and Tell Jacky."
     }
   ]
 }

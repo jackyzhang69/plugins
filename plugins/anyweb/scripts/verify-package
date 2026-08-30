@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+count="$(find "$ROOT/skills" -type f -name SKILL.md | wc -l | tr -d ' ')"
+test "$count" = 1 || { echo "verify-package: expected one SKILL.md, found $count" >&2; exit 1; }
+test -f "$ROOT/skills/anyweb/SKILL.md"
+test -f "$ROOT/.claude-plugin/plugin.json"
+test -f "$ROOT/.codex-plugin/plugin.json"
+test -f "$ROOT/runtime-manifest.json"
+if find "$ROOT" -type l | grep -q .; then echo "verify-package: symlinks are forbidden" >&2; exit 1; fi
+if find "$ROOT" -type f \( -name '*.env' -o -name '.env*' -o -name 'user.json' -o -name 'admin.json' \) | grep -q .; then echo "verify-package: credential-like file present" >&2; exit 1; fi
+if find "$ROOT" -type f | grep -E '/(fixtures|selectors|site-graphs|private|admin)/' >/dev/null; then echo "verify-package: private runtime material present" >&2; exit 1; fi
+if rg -n --hidden --glob '!bin/**' --glob '!verify-package' '(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|jz_[A-Za-z0-9_-]{8,}|showTabPrevBtn|cic\.gc\.ca|canada\.ca)' "$ROOT" >/dev/null; then echo "verify-package: private or secret-like content present" >&2; exit 1; fi
+echo "verify-package: ok"

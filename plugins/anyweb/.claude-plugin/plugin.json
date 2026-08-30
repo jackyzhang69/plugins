@@ -1,0 +1,8 @@
+{
+  "name": "anyweb",
+  "version": "0.1.0",
+  "description": "Check AnyWeb repair claims, connect once with the shared Portal credential, and Tell Jacky.",
+  "author": {
+    "name": "Jacky Zhang"
+  }
+}
