@@ -1,3 +1,12 @@
+# AnyChat 0.1.36
+
+## User-visible changes
+
+- On Windows, installing the supported chat app and opening the local archive now ask for Administrator approval when the computer requires it. Click Allow if a window appears.
+- If this computer already has the supported chat-app version, AnyChat does not overwrite it again.
+- First-time setup names the real problem (missing local archive, or Administrator approval) instead of saying the helper could not see the same files.
+- Your helper now has one activate path. It will not ask you to tell Jacky unless setup is actually stuck. You at most install, open, or quit the chat app, and click the computer's password or Allow window.
+
 # AnyChat 0.1.35
 
 ## User-visible changes

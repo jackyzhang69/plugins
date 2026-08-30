@@ -50,7 +50,7 @@ On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --ch
 
 ## Talk to the human
 
-Keep chat plain: “需要先登录一次免费账号” / “登录成功，下一步准备本机档案”. Do not paste `whoami --json` or full CLI help into the reply (use them only as tools). Follow the product router § **Talk to the human**.
+Keep chat plain: “需要先登录一次免费账号” / “登录成功，下一步开通本机档案”. Do not paste `whoami --json` or full CLI help into the reply (use them only as tools). Follow the product router § **Talk to the human**.
 
 ## Already connected
 
@@ -70,7 +70,7 @@ Still run `anychat doctor` when setup may be incomplete.
 2. Resolve the `anychat` binary (see the product router §B).
 3. Follow **Token delivery** above. Product flag: `--accept-personal-use`. Never print a TTY login command. Never use `--token`.
 4. Mask any token in logs as `****` / prefix only.
-5. Then: `anychat doctor` → if `setup_needed`, read [setup](setup.md).
+5. Then run `"$ANYCHAT_BIN" provision --json` and follow [setup](setup.md). Do not walk `doctor` as a first-run state machine.
 6. Stay on the product router for session routing.
 
 ## Token rules
