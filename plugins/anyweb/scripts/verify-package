@@ -1,15 +1,83 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-count="$(find "$ROOT/skills" -type f -name SKILL.md | wc -l | tr -d ' ')"
-test "$count" = 1 || { echo "verify-package: expected one SKILL.md, found $count" >&2; exit 1; }
-test -f "$ROOT/skills/anyweb/SKILL.md"
-test -f "$ROOT/.claude-plugin/plugin.json"
-test -f "$ROOT/.codex-plugin/plugin.json"
-test -f "$ROOT/runtime-manifest.json"
-if find "$ROOT" -type l | grep -q .; then echo "verify-package: symlinks are forbidden" >&2; exit 1; fi
-if find "$ROOT" -type f \( -name '*.env' -o -name '.env*' -o -name 'user.json' -o -name 'admin.json' \) | grep -q .; then echo "verify-package: credential-like file present" >&2; exit 1; fi
-if find "$ROOT" -type f | grep -E '/(fixtures|selectors|site-graphs|private|admin)/' >/dev/null; then echo "verify-package: private runtime material present" >&2; exit 1; fi
-if rg -n --hidden --glob '!bin/**' --glob '!verify-package' '(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|jz_[A-Za-z0-9_-]{8,}|showTabPrevBtn|cic\.gc\.ca|canada\.ca)' "$ROOT" >/dev/null; then echo "verify-package: private or secret-like content present" >&2; exit 1; fi
-if rg -n --hidden --glob '!bin/**' --glob '!verify-package' '(question_fingerprint|portal_security_answers|pending_security_challenges|vault_schema_migrations|login_recipe_ref|successor_graph_content_hash)' "$ROOT" >/dev/null; then echo "verify-package: reconstructable private implementation detail present" >&2; exit 1; fi
+python3 - "$ROOT" <<'PY'
+import pathlib
+import re
+import sys
+
+root = pathlib.Path(sys.argv[1])
+required = (
+    "skills/anyweb/SKILL.md",
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "runtime-manifest.json",
+)
+patterns = (
+    (
+        "private or secret-like content",
+        re.compile(
+            rb"(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|jz_[A-Za-z0-9_-]{8,}|showTabPrevBtn|cic\.gc\.ca|canada\.ca)"
+        ),
+    ),
+    (
+        "reconstructable private implementation detail",
+        re.compile(
+            rb"(question_fingerprint|portal_security_answers|pending_security_challenges|vault_schema_migrations|login_recipe_ref|successor_graph_content_hash)"
+        ),
+    ),
+)
+
+try:
+    paths = list(root.rglob("*"))
+    skills = [
+        path
+        for path in paths
+        if path.is_file() and path.name == "SKILL.md" and "skills" in path.parts
+    ]
+    if len(skills) != 1:
+        raise ValueError(f"expected one SKILL.md, found {len(skills)}")
+    for relative in required:
+        if not (root / relative).is_file():
+            raise ValueError(f"missing required file: {relative}")
+
+    for path in paths:
+        relative = path.relative_to(root)
+        relative_text = relative.as_posix()
+        if path.is_symlink():
+            raise ValueError(f"symlinks are forbidden: {relative_text}")
+        if not path.is_file():
+            continue
+        name = path.name
+        if (
+            name.endswith(".env")
+            or name.startswith(".env")
+            or name in {"user.json", "admin.json"}
+        ):
+            raise ValueError(f"credential-like file present: {relative_text}")
+        if {"fixtures", "selectors", "site-graphs", "private", "admin"}.intersection(
+            relative.parts
+        ):
+            raise ValueError(f"private runtime material present: {relative_text}")
+        if relative.parts and relative.parts[0] == "bin":
+            continue
+        if relative_text == "scripts/verify-package":
+            continue
+        content = path.read_bytes()
+        for label, pattern in patterns:
+            if pattern.search(content):
+                print(
+                    f"verify-package: {label} present: {relative_text}",
+                    file=sys.stderr,
+                )
+                raise SystemExit(1)
+except SystemExit:
+    raise
+except ValueError as error:
+    print(f"verify-package: {error}", file=sys.stderr)
+    raise SystemExit(1)
+except Exception:
+    print("verify-package: scanner failed", file=sys.stderr)
+    raise SystemExit(2)
+PY
 echo "verify-package: ok"

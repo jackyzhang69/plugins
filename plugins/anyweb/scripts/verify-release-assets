@@ -1,21 +1,57 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-for platform in darwin-arm64 win32-x64; do
-  name=anyweb; test "$platform" = win32-x64 && name=anyweb.exe
-  binary="$ROOT/bin/$platform/$name"
-  digest="$binary.sha256"
-  test -f "$binary" || { echo "verify-release-assets: missing $binary" >&2; exit 1; }
-  test -f "$digest" || { echo "verify-release-assets: missing $digest" >&2; exit 1; }
-  expected="$(awk '{print $1}' "$digest")"
-  actual="$(shasum -a 256 "$binary" | awk '{print $1}')"
-  test "$expected" = "$actual" || { echo "verify-release-assets: checksum mismatch $platform" >&2; exit 1; }
-done
-python3 - "$ROOT/runtime-manifest.json" <<'PY'
-import json, pathlib, sys
-value=json.loads(pathlib.Path(sys.argv[1]).read_text())
-assert value["product"] == "anyweb"
-assert value["binary"]["version"] == "0.2.0"
-assert set(value["binary"]["platforms"]) == {"darwin-arm64", "win32-x64"}
+python3 - "$ROOT" <<'PY'
+import hashlib
+import json
+import pathlib
+import re
+import sys
+
+root = pathlib.Path(sys.argv[1])
+specs = {
+    "darwin-arm64": "bin/darwin-arm64/anyweb",
+    "win32-x64": "bin/win32-x64/anyweb.exe",
+}
+try:
+    actuals = {}
+    for platform, relative in specs.items():
+        binary = root / relative
+        digest = root / f"{relative}.sha256"
+        if not binary.is_file() or not digest.is_file():
+            raise ValueError(f"missing release asset for {platform}")
+        expected = digest.read_text(encoding="ascii").strip()
+        if re.fullmatch(r"[0-9A-Fa-f]{64}", expected) is None:
+            raise ValueError(f"invalid checksum for {platform}")
+        actual = hashlib.sha256(binary.read_bytes()).hexdigest()
+        if expected.lower() != actual:
+            raise ValueError(f"checksum mismatch for {platform}")
+        actuals[platform] = actual
+
+    value = json.loads((root / "runtime-manifest.json").read_text(encoding="utf-8"))
+    if value.get("product") != "anyweb" or value.get("version") != "0.2.1":
+        raise ValueError("manifest product or version mismatch")
+    binary = value.get("binary", {})
+    platforms = binary.get("platforms", {})
+    public_platforms = value.get("platforms", {})
+    if (
+        binary.get("version") != "0.2.1"
+        or set(platforms) != set(specs)
+        or set(public_platforms) != set(specs)
+        or set(value.get("allowedPlatforms", [])) != set(specs)
+    ):
+        raise ValueError("manifest binary identity mismatch")
+    for platform, relative in specs.items():
+        if (
+            platforms[platform].get("entrypoint") != relative
+            or platforms[platform].get("sha256") != actuals[platform]
+            or public_platforms[platform].get("path") != relative
+            or public_platforms[platform].get("sha256") != actuals[platform]
+        ):
+            raise ValueError(f"manifest asset mismatch for {platform}")
+except Exception as error:
+    print(f"verify-release-assets: {error}", file=sys.stderr)
+    raise SystemExit(1)
+
 print("verify-release-assets: ok")
 PY

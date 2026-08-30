@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "version": "0.2.0",
-  "source_sha": "0cad3fffee720faf4d4ba4cb8261f01cbd533566",
+  "version": "0.2.1",
+  "source_sha": "3db570350522e5e596d896a8731a932ca018dd2a",
   "product": "anyweb",
   "binary": {
     "name": "anyweb",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anyweb",
-        "sha256": "feae67bc0f87273ff9e7ee73f6060e81a5a27f057108f275de49284161b35a5a",
+        "sha256": "ef35c17d82ff617915cc9bee758f00c7f5efc3d3930704c31a6397ed9215628c",
         "size": 2493808,
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anyweb.exe",
-        "sha256": "05b0c4af3b316f38ee5c21e0d8769ea4172ca94f8cc339b90ee1623121b2541d",
+        "sha256": "e091a1cf47653563a5a97681ca0ed28041f2a606cc1a147115030cde04e0d58e",
         "size": 3097888,
         "signing": "signed_azure_trusted_signing"
       }
@@ -30,20 +30,20 @@
       "marketplace": "claimed",
       "host": "github-releases",
       "repo": "jackyzhang69/anybase",
-      "tag": "anyweb-plugin-v0.2.0",
-      "source_commit": "0cad3fffee720faf4d4ba4cb8261f01cbd533566",
+      "tag": "anyweb-plugin-v0.2.1",
+      "source_commit": "3db570350522e5e596d896a8731a932ca018dd2a",
       "notarization": "accepted"
     }
   },
   "platforms": {
     "darwin-arm64": {
       "path": "bin/darwin-arm64/anyweb",
-      "sha256": "feae67bc0f87273ff9e7ee73f6060e81a5a27f057108f275de49284161b35a5a",
+      "sha256": "ef35c17d82ff617915cc9bee758f00c7f5efc3d3930704c31a6397ed9215628c",
       "size": 2493808
     },
     "win32-x64": {
       "path": "bin/win32-x64/anyweb.exe",
-      "sha256": "05b0c4af3b316f38ee5c21e0d8769ea4172ca94f8cc339b90ee1623121b2541d",
+      "sha256": "e091a1cf47653563a5a97681ca0ed28041f2a606cc1a147115030cde04e0d58e",
       "size": 3097888
     }
   },

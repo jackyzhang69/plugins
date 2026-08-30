@@ -12,6 +12,6 @@ raw="$("$binary" doctor --json)"
 python3 - "$raw" <<'PY'
 import json, sys
 value=json.loads(sys.argv[1])
-assert value["ok"] is True and value["product"] == "anyweb"
-print("verify-install: ok product=anyweb")
+assert value["ok"] is True and value["product"] == "anyweb" and value["version"] == "0.2.1"
+print("verify-install: ok product=anyweb version=0.2.1")
 PY

@@ -1,6 +1,6 @@
 {
   "name": "anyweb",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Check AnyWeb repair claims and optionally manage hosted website continuity without exposing saved credentials or security answers.",
   "author": {
     "name": "Jacky Zhang"
