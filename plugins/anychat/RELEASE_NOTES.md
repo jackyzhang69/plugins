@@ -1,3 +1,11 @@
+# AnyChat 0.1.37
+
+## User-visible changes
+
+- First-time setup no longer stops after two failed attempts. AnyChat never retries in an automatic loop, but it will try again whenever the human completes the requested computer action or explicitly asks.
+- Windows Administrator approval now preserves OneDrive locations and sends only the real chat-app main process to the local access step, fixing a failure where approval succeeded but no local archive was found. If approval succeeds but process access still fails, AnyChat reports that separately instead of asking the user to approve the same window again.
+- Bug reports now include safe OS/version/build, app-version, permission-outcome, and count diagnostics by default. Old diagnosis files are not attached to new reports; passwords, paths, process IDs, and chat content still stay out.
+
 # AnyChat 0.1.36
 
 ## User-visible changes

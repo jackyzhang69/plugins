@@ -33,8 +33,8 @@ That JSON is the only first-run contract. `doctor --json` may show a short diagn
 2. Speak only `say_to_user` to the human. If `recommended_version` or `recommended_installer_url` is present, that wording is already in `say_to_user` — repeat it; do not hide the version or invent another download.
 3. If `status` is `needs_human`: wait until they finish `human_action`, then run the exact `continue_args`. Do not invent flags.
 4. If `status` is `ready`: 本机档案已经可以用了. Optionally confirm with a short friends list.
-5. If `status` is `blocked` and `offer_tell_jacky` is true: then and only then draft Tell Jacky, show the draft, send after `--user-confirmed`. Do not retry the same failure.
-6. Never download or run an installer yourself. Never ask for a version number, a path, or a log. Never loop. The CLI owns the attempt budget: a new human action (open, quit, install, select) starts a new chapter; the same machine failure after they already did that chapter counts once; two of the same failure stops.
+5. If `status` is `blocked` and `offer_tell_jacky` is true: then and only then draft Tell Jacky, show the draft, and send after `--user-confirmed`. Do not automatically rerun the identical invocation.
+6. Never download or run an installer yourself. Never ask for a path or a log. Never loop automatically. There is no fixed attempt limit: after the human completes a requested GUI action, changes the environment, or explicitly asks you to try again, run the exact `continue_args` again. A repeat count alone is never proof of a dead loop.
 
 `--install-app-consent` means they agreed to 覆盖安装. The CLI downloads and overwrites the app only. If this computer already has the supported version, the CLI skips that overwrite and continues 开通.
 
@@ -55,13 +55,15 @@ That JSON is the only first-run contract. `doctor --json` may show a short diagn
 | `approve_admin` | 电脑弹出了管理员确认。请点允许或输入这台电脑的密码。 |
 | `agree_resign` | 开通需要给这台电脑上的聊天软件重新签名一次。你同意的话，电脑会弹出密码窗口。 |
 | `select_account` | 这台电脑上有多个聊天账号。请告诉我用哪一个平时聊天的。 |
-| `retry` | Repeat `say_to_user`. They already did the click; you run `continue_args` again. |
+| `retry` | Repeat `say_to_user`. The prior attempt and any prior window are over; run `continue_args` only after they explicitly ask to continue. |
 
 No other human work. You do not ask them to type a command, pick a folder, read a version, or “tell Jacky” while a `human_action` is still open.
 
 ## 管理员确认
 
-On Mac: one password window or Open Anyway. On Windows: one Administrator / Allow window. You never collect the password. After they click, run `continue_args` yourself.
+On Mac: a password window or Open Anyway. On Windows: an Administrator / Allow window. You never collect the password. After they click, run `continue_args` yourself. If a later human-requested attempt needs the system window again, it may appear again; do not stop because of an earlier attempt count.
+
+If Windows reports `E_WINDOWS_PERMISSION_CANCELLED`, the prior window is already closed. Say that it was cancelled and wait; only a human-requested retry may reopen it. If it reports `E_WINDOWS_ACCESS_DENIED_AFTER_APPROVAL`, the approval succeeded and the later access failed—do not blame the click or ask them to approve the closed window again.
 
 ## Tell Jacky gate
 
@@ -82,6 +84,6 @@ Report only major stages: need login → need 聊天软件 open → one 管理�
 ## Never
 
 - Ask the human to open Terminal or type a command.
-- Ask the human for a version number, a path, or a log.
+- Ask the human for a path or a log. During setup, detect versions yourself; when drafting a confirmed bug report, follow Tell Jacky's required safe environment checklist if automatic diagnosis is missing.
 - Walk a first-run state machine or invent extra CLI verbs.
 - `git clone` the plugin marketplace.

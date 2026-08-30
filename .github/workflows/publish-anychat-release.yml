@@ -1,0 +1,149 @@
+name: publish-anychat-release
+
+# This file is copied verbatim into the public jackyzhang69/plugins repository
+# by the source release transaction. It only reacts to a release tag prepared
+# by the trusted source workflow, or to an explicit recovery dispatch.
+on:
+  push:
+    tags:
+      - "anychat-v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing anychat-vX.Y.Z marketplace tag to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: plugins-anychat-release-${{ github.event.inputs.release_tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish-signed-assets:
+    runs-on: [self-hosted, macOS, ARM64, plugins-release-69]
+    steps:
+      - name: Select release tag
+        id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ github.event.inputs.release_tag }}
+          PUSH_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = workflow_dispatch ]; then
+            tag="$INPUT_TAG"
+          else
+            tag="$PUSH_TAG"
+          fi
+          [[ "$tag" =~ ^anychat-v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.release.outputs.tag }}
+          fetch-depth: 0
+      - name: Verify the exact public release candidate
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          plugin="plugins/anychat"
+          test -d "$plugin"
+          ANYCHAT_PLUGIN_ROOT="$PWD/$plugin" bash "$plugin/scripts/verify-package"
+          python3 - "$plugin/runtime-manifest.json" "$RELEASE_TAG" "$GITHUB_REPOSITORY" <<'PY'
+          import json, re, sys
+          m = json.load(open(sys.argv[1]))
+          release = m.get("binary", {}).get("release", {})
+          if release.get("host") != "github-releases":
+              raise SystemExit("AnyChat manifest does not select GitHub Releases")
+          if release.get("tag") != sys.argv[2]:
+              raise SystemExit("AnyChat manifest tag differs from requested release tag")
+          if release.get("repo") != sys.argv[3]:
+              raise SystemExit("AnyChat manifest does not bind this public repository")
+          if not re.fullmatch(r"[0-9a-f]{40}", str(m.get("source_sha", ""))):
+              raise SystemExit("AnyChat manifest source_sha is not an exact source commit")
+          PY
+      - name: Publish exactly four signed assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          plugin="plugins/anychat"
+          assets=(
+            "$plugin/bin/darwin-arm64/anychat"
+            "$plugin/bin/darwin-arm64/anychat-access"
+            "$plugin/bin/win32-x64/anychat.exe"
+            "$plugin/bin/win32-x64/anychat-access.exe"
+          )
+          state="draft"
+          release_json="$(mktemp)"
+          download_dir="$(mktemp -d)"
+          trap 'rm -rf "$release_json" "$download_dir"' EXIT
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName,assets > "$release_json"
+            state="$(python3 - "$release_json" "$RELEASE_TAG" <<'PY'
+          import json, sys
+          release = json.load(open(sys.argv[1]))
+          expected = {"anychat", "anychat-access", "anychat.exe", "anychat-access.exe"}
+          assets = release.get("assets", [])
+          actual = {a.get("name") for a in assets}
+          if len(actual) != len(assets) or not actual <= expected:
+              raise SystemExit(f"existing release has unexpected or duplicate assets: {sorted(actual)}")
+          if release.get("tagName") != sys.argv[2] or release.get("isPrerelease"):
+              raise SystemExit("existing release tag or prerelease state is invalid")
+          for asset in assets:
+              if asset.get("state") != "uploaded" or not isinstance(asset.get("size"), int) or asset["size"] <= 0:
+                  raise SystemExit(f"existing release asset is incomplete: {asset.get('name')}")
+          if release.get("isDraft"):
+              print("draft")
+          elif actual == expected:
+              print("published")
+          else:
+              raise SystemExit(f"published release assets are not exact: {sorted(actual)}")
+          PY
+            )"
+          else
+            gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --verify-tag \
+              --draft --title "AnyChat ${RELEASE_TAG#anychat-v}" \
+              --notes-file "$plugin/RELEASE_NOTES.md"
+          fi
+          if [ "$state" = draft ]; then
+            missing=()
+            for asset in "${assets[@]}"; do
+              name="$(basename "$asset")"
+              if [ -s "$release_json" ] && python3 - "$release_json" "$name" <<'PY'
+          import json, sys
+          raise SystemExit(0 if sys.argv[2] in {a.get("name") for a in json.load(open(sys.argv[1])).get("assets", [])} else 1)
+          PY
+              then
+                gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern "$name" --dir "$download_dir"
+                actual="$(shasum -a 256 "$download_dir/$name" | awk '{print $1}')"
+                expected="$(shasum -a 256 "$asset" | awk '{print $1}')"
+                test "$actual" = "$expected" || { echo "draft asset hash mismatch: $name" >&2; exit 1; }
+              else
+                missing+=("$asset")
+              fi
+            done
+            if [ "${#missing[@]}" -gt 0 ]; then
+              gh release upload "$RELEASE_TAG" "${missing[@]}" --repo "$GITHUB_REPOSITORY"
+            fi
+            gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --draft=false
+          fi
+      - name: Download and hash-verify published assets
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 90); do
+            if ANYCHAT_PLUGIN_ROOT="$PWD/plugins/anychat" \
+              bash plugins/anychat/scripts/verify-release-assets; then
+              exit 0
+            fi
+            echo "published assets not ready; retry $attempt/90"
+            sleep 10
+          done
+          echo "published AnyChat assets did not verify within 15 minutes: $RELEASE_TAG" >&2
+          exit 1

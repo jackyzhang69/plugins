@@ -27,8 +27,25 @@ test "$skill_count" = "1" || { echo "verify-package: expected exactly 1 SKILL.md
 # Voice STT contract must remain present in the shipped skill text.
 grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat/references/media.md"   || { echo "verify-package: voice STT contract missing from skills/anychat/references/media.md" >&2; exit 1; }
 
-PKG_VERSION="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps 2>/dev/null \
-  | python3 -c 'import sys,json; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"] == "anychat"))')"
+PKG_VERSION="$(python3 - "$ROOT/.claude-plugin/plugin.json" <<'PY'
+import json, sys
+value = json.load(open(sys.argv[1])).get("version")
+if not isinstance(value, str) or not value:
+    raise SystemExit("verify-package: .claude-plugin/plugin.json has no version")
+print(value)
+PY
+)"
+# The public marketplace release workflow receives a plugin subtree, not this
+# source checkout. When Cargo.toml is present, retain the stronger source-tree
+# cross-check; otherwise the shipped descriptor is the package authority.
+if [ -f "$REPO/Cargo.toml" ]; then
+  CARGO_VERSION="$(cd "$REPO" && cargo metadata --format-version 1 --no-deps 2>/dev/null \
+    | python3 -c 'import sys,json; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"] == "anychat"))')"
+  test "$PKG_VERSION" = "$CARGO_VERSION" || {
+    echo "verify-package: descriptor version $PKG_VERSION != Cargo version $CARGO_VERSION" >&2
+    exit 1
+  }
+fi
 EXPECTED_TAG="anychat-v${PKG_VERSION}"
 
 # All checks run in one Python process so partial writes are impossible and the
@@ -171,9 +188,12 @@ import subprocess
 main_darwin = root / m.get("binary", {}).get("platforms", {}).get("darwin-arm64", {}).get("entrypoint", "")
 if main_darwin.is_file():
     try:
+        # A signed macOS binary can remain launch-suspended while the OS
+        # verifies/notarization services settle. Keep this bounded but above
+        # the observed two-minute delay so a valid release is not rejected.
         out = subprocess.run(
             [str(main_darwin), "--version"],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True, text=True, timeout=180,
         )
         if out.returncode != 0 or pkg_version not in out.stdout:
             errors.append(
