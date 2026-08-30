@@ -15,7 +15,7 @@ python3 - "$ROOT/runtime-manifest.json" <<'PY'
 import json, pathlib, sys
 value=json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert value["product"] == "anyweb"
-assert value["binary"]["version"] == "0.1.0"
+assert value["binary"]["version"] == "0.2.0"
 assert set(value["binary"]["platforms"]) == {"darwin-arm64", "win32-x64"}
 print("verify-release-assets: ok")
 PY

@@ -11,4 +11,5 @@ if find "$ROOT" -type l | grep -q .; then echo "verify-package: symlinks are for
 if find "$ROOT" -type f \( -name '*.env' -o -name '.env*' -o -name 'user.json' -o -name 'admin.json' \) | grep -q .; then echo "verify-package: credential-like file present" >&2; exit 1; fi
 if find "$ROOT" -type f | grep -E '/(fixtures|selectors|site-graphs|private|admin)/' >/dev/null; then echo "verify-package: private runtime material present" >&2; exit 1; fi
 if rg -n --hidden --glob '!bin/**' --glob '!verify-package' '(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|jz_[A-Za-z0-9_-]{8,}|showTabPrevBtn|cic\.gc\.ca|canada\.ca)' "$ROOT" >/dev/null; then echo "verify-package: private or secret-like content present" >&2; exit 1; fi
+if rg -n --hidden --glob '!bin/**' --glob '!verify-package' '(question_fingerprint|portal_security_answers|pending_security_challenges|vault_schema_migrations|login_recipe_ref|successor_graph_content_hash)' "$ROOT" >/dev/null; then echo "verify-package: reconstructable private implementation detail present" >&2; exit 1; fi
 echo "verify-package: ok"

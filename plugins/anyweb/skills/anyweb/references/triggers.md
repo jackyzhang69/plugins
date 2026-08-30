@@ -10,3 +10,6 @@ The AnyWeb router must continue to match these distinct intents:
 - report an AnyWeb bug
 - request an AnyWeb feature
 - send an AnyWeb knowledge tip
+- set up hosted website login
+- forget my hosted website login
+- answer this saved security question

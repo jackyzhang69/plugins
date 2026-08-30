@@ -1,7 +1,7 @@
 {
   "name": "anyweb",
-  "version": "0.1.0",
-  "description": "Check AnyWeb repair claims, connect once with the shared Portal credential, and Tell Jacky.",
+  "version": "0.2.0",
+  "description": "Check AnyWeb repair claims and optionally manage hosted website continuity without exposing saved credentials or security answers.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
@@ -9,14 +9,15 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "AnyWeb",
-    "shortDescription": "Check asynchronous AnyWeb repair outcomes.",
-    "longDescription": "Use the anyweb router to connect, retrieve source-free repair claims, and Tell Jacky. This release does not claim general-purpose website execution.",
+    "shortDescription": "Check repairs and manage optional hosted continuity.",
+    "longDescription": "Use the anyweb router to connect, retrieve source-free repair claims, manage explicitly approved hosted website continuity, and Tell Jacky. This release does not claim general-purpose website execution.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
-    "capabilities": ["Read"],
+    "capabilities": ["Read", "Write"],
     "websiteURL": "https://jackyzhang.app",
     "defaultPrompt": [
       "Check whether my AnyWeb repair is ready.",
+      "Set up optional hosted continuity for my website account.",
       "Tell Jacky about an AnyWeb problem."
     ]
   }
