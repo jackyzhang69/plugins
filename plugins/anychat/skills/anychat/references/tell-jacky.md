@@ -63,7 +63,7 @@ showing the user the exact type/title/description/context/images first.
 | `description` | yes | concrete; for bugs prefer verbatim product error + support_code |
 | `url` | no | optional page URL |
 | `context-json` | no | Safe scalar diagnostics are allowed: OS/version/build/arch, AnyChat and chat-app versions, permission action/outcome, support code, component, operation, and reproduction count. Chat content, contacts, paths, nested values, and unrelated fields are rejected. |
-| access diagnosis | auto | After a current-version `prepare-access` attempt, CLI attaches a **redacted** diagnosis from the last 24 hours: exact OS facts, CLI/helper/chat-app versions, permission outcome, counts, support code, and wall time. Opt out with `--no-access-diagnosis`. |
+| access diagnosis | auto | After a current-version `provision` attempt, CLI attaches a **redacted** diagnosis from the last 24 hours: exact OS facts, CLI/helper/chat-app versions, permission outcome, counts, support code, and wall time. Opt out with `--no-access-diagnosis`. |
 | `image` | no | local screenshot path(s); confirm each |
 
 CLI always stamps `context.source = anychat-cli`, exact OS version/build/arch when available, and the AnyChat client version.

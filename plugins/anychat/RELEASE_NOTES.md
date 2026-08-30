@@ -1,3 +1,13 @@
+# AnyChat 0.1.40
+
+## User-visible changes
+
+- Your AI helper now owns first-time setup. AnyChat tells it exactly what is missing; the helper finds the chat app and archive, checks the computer, and supplies the result locally. You only handle unavoidable password, permission, or consent windows.
+- Setup no longer gives up after a fixed number of attempts. It records unchanged progress for the host agent and stops only at a proven dead end; it never erases a pending human permission, sign-in, or consent step.
+- All chat-app versions from 4.1.10 onward are accepted without an upper ceiling. The verified macOS 4.1.5 build 31960 remains supported, and AnyChat never sends a newer installation to an older installer.
+- Diagnostic reports keep safe OS, build, architecture, app-version, permission-result, and count information so the developer can investigate. Passwords, secrets, local paths, process IDs, and chat content still stay out.
+- Official releases now use one machine-owned lightweight-tag command. It refuses version drift, occupied tags, non-main commits, missing native Windows acceptance, and annotated tags before publication starts.
+
 # AnyChat 0.1.37
 
 ## User-visible changes

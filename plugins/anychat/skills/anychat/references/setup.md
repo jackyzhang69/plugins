@@ -30,13 +30,27 @@ That JSON is the only first-run contract. `doctor --json` may show a short diagn
 ## You do (agent-owned)
 
 1. Run `provision --json`.
-2. Speak only `say_to_user` to the human. If `recommended_version` or `recommended_installer_url` is present, that wording is already in `say_to_user` — repeat it; do not hide the version or invent another download.
-3. If `status` is `needs_human`: wait until they finish `human_action`, then run the exact `continue_args`. Do not invent flags.
-4. If `status` is `ready`: 本机档案已经可以用了. Optionally confirm with a short friends list.
-5. If `status` is `blocked` and `offer_tell_jacky` is true: then and only then draft Tell Jacky, show the draft, and send after `--user-confirmed`. Do not automatically rerun the identical invocation.
-6. Never download or run an installer yourself. Never ask for a path or a log. Never loop automatically. There is no fixed attempt limit: after the human completes a requested GUI action, changes the environment, or explicitly asks you to try again, run the exact `continue_args` again. A repeat count alone is never proof of a dead loop.
+2. Speak only `say_to_user` to the human. Machine requirements belong in `needs`; do not invent a version, path, or download.
+3. If `status` is `needs_agent`, satisfy each typed item in `needs`. Search the host using the listed `obtain` methods and your available computer/filesystem capabilities. Then send one `anychat.provision.supply.v1` JSON document to the exact `continue_args` (which includes `--supply-stdin`) over stdin; never place a path on argv or ask the human to locate or transcribe one.
+4. If `status` is `needs_human`: wait until they finish `human_action`, then run the exact `continue_args`. Do not invent flags.
+5. If `status` is `ready`: 本机档案已经可以用了. Optionally confirm with a short friends list.
+6. If `status` is `blocked` and `offer_tell_jacky` is true: then and only then draft Tell Jacky, show the draft, and send after `--user-confirmed`. Do not automatically rerun the identical invocation.
+7. Never invent a location or accept a candidate yourself: AnyChat validates every supplied fact locally. If AnyChat offers an official install/repair continuation, get the required consent and drive that continuation yourself; do not hand installation work to the human. Never loop automatically. There is no fixed attempt limit. Compare `progress_fingerprint` and `no_progress`; a repeat count alone is never proof of a dead loop, and `dead_end` is the only terminal no-way-forward signal.
 
-`--install-app-consent` means they agreed to 覆盖安装. The CLI downloads and overwrites the app only. If this computer already has the supported version, the CLI skips that overwrite and continues 开通.
+Supply shape (agent-to-CLI only):
+
+```json
+{
+  "schema": "anychat.provision.supply.v1",
+  "for_progress": "<progress_fingerprint>",
+  "supply": {
+    "archive_root": ["<absolute candidate directory>"],
+    "chat_app_path": "<absolute application bundle or executable>"
+  }
+}
+```
+
+Send only keys requested by `needs`. `archive_root` may contain multiple candidates. Rejected candidates return only key/index/result code—never a path. A stale `for_progress` is rejected so facts from an older machine state cannot silently mutate the current setup.
 
 `--resign-consent` means they agreed to one local re-sign. The computer will ask for 管理员确认. After it finishes they reopen 聊天软件 and sign in.
 
@@ -48,7 +62,6 @@ That JSON is the only first-run contract. `doctor --json` may show a short diagn
 
 | `human_action` | What you tell them (must match `say_to_user`) |
 |----------------|-----------------------------------------------|
-| `agree_install_app` | 必须换成我们支持的版本才能开通。同意后我来覆盖安装（只换应用，聊天记录不动）。 |
 | `open_chat_app` | 请打开聊天软件并登录你平时用的账号。打开后告诉我一声。 |
 | `quit_chat_app` | 请先完全退出聊天软件。关闭窗口不够，要从菜单或托盘选择退出。 |
 | `quit_extra_chat_app` | 请只留一个聊天软件开着——就是你平时用的那个——把另一个完全退出。 |
@@ -57,7 +70,7 @@ That JSON is the only first-run contract. `doctor --json` may show a short diagn
 | `select_account` | 这台电脑上有多个聊天账号。请告诉我用哪一个平时聊天的。 |
 | `retry` | Repeat `say_to_user`. The prior attempt and any prior window are over; run `continue_args` only after they explicitly ask to continue. |
 
-No other human work. You do not ask them to type a command, pick a folder, read a version, or “tell Jacky” while a `human_action` is still open.
+No other human work. Folder and application discovery belongs to the host agent, including unusual locations. You do not ask the human to type a command, find a path or log, or read a version.
 
 ## 管理员确认
 
@@ -79,11 +92,11 @@ Do not offer it on `needs_human`. Do not offer it because you are unsure. Do not
 
 ## Talk to the human
 
-Report only major stages: need login → need 聊天软件 open → one 管理员确认 if asked → 本机档案已经可以用了. Never mention keys, databases, helper names, or storage paths.
+Report only major stages: need login → locate missing local item if requested → need 聊天软件 open → 管理员确认 if requested → 本机档案已经可以用了. Never mention keys, databases, or helper names. Do not repeat a supplied path back to the human.
 
 ## Never
 
 - Ask the human to open Terminal or type a command.
-- Ask the human for a path or a log. During setup, detect versions yourself; when drafting a confirmed bug report, follow Tell Jacky's required safe environment checklist if automatic diagnosis is missing.
+- Ask the human for a path or raw log. A typed path need is work for the host agent, not the human.
 - Walk a first-run state machine or invent extra CLI verbs.
 - `git clone` the plugin marketplace.

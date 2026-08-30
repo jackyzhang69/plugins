@@ -51,7 +51,7 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
 
-开通本机档案 uses `"$ANYCHAT_BIN" provision --json` only. Follow [setup](references/setup.md). Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. If a marketplace GitHub clone times out, `provision` uses the official ZIP; never `git clone` the plugin repository.
+开通本机档案 uses `"$ANYCHAT_BIN" provision --json` only. Follow [setup](references/setup.md). `needs_agent` means find or request the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. If a marketplace GitHub clone times out, `provision` uses the official ZIP; never `git clone` the plugin repository.
 
 ## Advisory inbox check (Tell Jacky replies)
 
@@ -82,7 +82,7 @@ When speaking to the **person in the chat** (not when writing tool args):
 1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
 2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
 3. **Major stages only.** Report at phase changes: need connect → 开通本机档案 → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls. If 开通 names a supported version and download URL, repeat that wording — do not hide the next action, and do not name a specific social network yourself.
-4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation, storage paths, or component details unless the user explicitly asks for technical depth. Never name a specific social network in your own words; repeat `say_to_user`.
+4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation or component details. A location requested by `needs_agent` is host-agent work: discover and supply it without asking the human for a path. Never name a specific social network in your own words; repeat `say_to_user`.
 5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已登录，但还不是管理员” / “还没完成第一次本机设置”).
 6. **Mask secrets.** Never paste credentials or private access material into chat.
 
@@ -101,7 +101,7 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 Answer in product language, short bullets:
 
 - **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
-- **开通本机档案** on this Mac or Windows PC (`provision`). The human at most installs, opens, or quits 聊天软件, and clicks 管理员确认. You do the rest.
+- **开通本机档案** on this Mac or Windows PC (`provision`). The agent finds local facts and drives any official install/repair step AnyChat requests; AnyChat validates supplied facts locally. The human only gives consent, opens/quits when unavoidable, or completes 管理员确认.
 - **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
 - **Follow a topic** (a person or a group + what you care about). New messages stay on this computer; the topic itself lives with the account so another computer can follow the same thing.
 - **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
@@ -117,7 +117,7 @@ Stable sources: verified local social-app archives on macOS Apple Silicon and Wi
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → [connect](references/connect.md) |
 | Connect / token | [connect](references/connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` · `status` · `whoami` · `logout` |
-| 开通本机档案 | [setup](references/setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_human`, wait, then run `continue_args`. Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`. If a supported version is required, `continue_args` may include `--install-app-consent`. |
+| 开通本机档案 | [setup](references/setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`. |
 | **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](references/query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |
