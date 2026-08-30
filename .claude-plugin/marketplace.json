@@ -34,7 +34,7 @@
       "description": "Query and export your own local chat archive (friends, groups, attachments, voice WAV) via the bundled AnyChat CLI. Free Portal token; content stays on your machine.",
       "name": "anychat",
       "source": "./plugins/anychat",
-      "version": "0.1.40"
+      "version": "0.1.41"
     },
     {
       "author": {

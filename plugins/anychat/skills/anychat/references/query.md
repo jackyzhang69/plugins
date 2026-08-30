@@ -2,17 +2,13 @@
 
 ## Advisory marketplace check
 
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. If the host marketplace GitHub clone times out, download `https://github.com/jackyzhang69/plugins/archive/refs/heads/main.zip` yourself. Never `git clone` that repository as the update path.
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. Updates remain an explicit host-plugin-manager action.
 
 Resolve `$ANYCHAT_BIN` via the product router §B.
 
-## Before query
+## Run the user's request first
 
-```bash
-"$ANYCHAT_BIN" doctor --json
-```
-
-If not setup → [setup](setup.md). If not logged in → **connect**.
+Run the intended query command first. If AnyChat returns a typed readiness envelope, keep its opaque `resume_token` private, follow only the returned `continue_args`, and satisfy [setup](setup.md). When AnyChat reports ready, pipe that token to the returned continuation over stdin; AnyChat resumes the sealed original query itself. Never reconstruct the query, put the token on argv, or ask the human to repeat the request. Do not announce setup when it succeeds only to unblock the requested result.
 
 ## Someone the user already linked — try this first
 
@@ -65,7 +61,7 @@ AnyChat supports unified querying across local chat sources:
 # iMessage: Single source query (specify --account when multiple accounts exist)
 "$ANYCHAT_BIN" query --source imessage --account "<account-token>" --days 90 --limit 50 --format json
 
-# Telegram: Local Postbox cache query
+# Telegram: local archive query
 "$ANYCHAT_BIN" query --source telegram --days 30 --limit 50 --format json
 
 # Scoped query modes

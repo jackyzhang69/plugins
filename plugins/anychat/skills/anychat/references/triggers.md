@@ -1,9 +1,4 @@
-# Router trigger phrases
-
-CI (`assert-skill-surface.py`) requires each bullet to appear in `SKILL.md`
-(frontmatter + first 80 lines). Extracted from the former sibling skill
-frontmatter `description` / `when_to_use`, with product-name-only tokens dropped
-where they added no match value.
+# Requests AnyChat understands
 
 - search my chats
 - export messages with X

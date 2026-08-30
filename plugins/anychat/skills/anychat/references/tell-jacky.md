@@ -1,118 +1,53 @@
 # Tell Jacky (AnyChat)
 
-**plugin_id:** `anychat`
+## Product contract
 
-## Multi-plugin sessions
+- Feedback is optional and always draft → human review → explicit confirmation
+  → send through the bundled AnyChat CLI.
+- Never call a service endpoint directly or describe AnyChat's private feedback
+  transport, authentication, storage, or operator workflow.
+- Never send chat text, contact or group identity, credentials, local paths,
+  process identifiers, attachment bytes, or private implementation details.
 
-- Mid AnyChat flow → this skill.
-- No product cue → **ask which product** before drafting.
-- Draft always names **AnyChat**.
+## Draft and confirmation
 
-Auth: CLI exchanges the owner portal token for an `aud=anychat` JWT before POST; do not call HTTP yourself.
+Prepare a short draft with:
 
+1. type: `feature-request`, `bug-report`, or `knowledge-tip`;
+2. title and description in the human's own language;
+3. safe environment facts that help reproduce a bug: operating system and
+   version/build, architecture, AnyChat version, chat-app version when known,
+   permission action and result, one product support code, and reproduction
+   count;
+4. each optional screenshot the human wants to include.
 
-## Advisory marketplace check
+Show the complete draft and safe context before sending. Wait for explicit
+approval, then use `feedback create --user-confirmed`. For Chinese text on
+Windows, use the CLI's UTF-8 draft-file input rather than placing the text on
+argv. AnyChat validates and scrubs the submitted context.
 
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. If the host marketplace GitHub clone times out, download `https://github.com/jackyzhang69/plugins/archive/refs/heads/main.zip` yourself. Never `git clone` that repository as the update path.
+Do not ask the human for facts the host agent can inspect. In particular, never
+ask for a path, raw log, process id, terminal output, password, chat content, or
+contact name. If a safe environment fact is missing, the host agent obtains it
+or leaves it unknown.
 
-## Advisory inbox check (Tell Jacky replies)
+## Replies
 
-On the first authenticated AnyChat action in each host-agent session, run a
-best-effort check for unread replies Jacky sent you, before doing the requested
-core action:
+Once per authenticated host-agent session, `feedback inbox --json` may check for
+unread replies. Show each reply in plain language; only after the human has seen
+it, mark that reply read with the exact CLI continuation. Inbox failure never
+blocks the user's core AnyChat request.
 
-```bash
-"$ANYCHAT_BIN" feedback inbox --json
-```
+## Result and failure
 
-- If there are unread replies, **show each one to the human** in plain language
-  (event type + message). Only **after** a reply is successfully displayed, mark
-  it read:
-  ```bash
-  "$ANYCHAT_BIN" feedback read --update-id <id>
-  ```
-- The server never marks anything read on the inbox GET — you mark each reply
-  read individually, and only after the human has seen it. Repeating `read` is
-  idempotent.
-- **Best-effort, non-blocking:** if `feedback inbox` errors or the network is
-  down, treat it as a warning and continue with the requested core command. Never
-  fail the user's request because the inbox check failed.
-- **Never inject** inbox/reply data into another command's JSON stdout. Inbox and
-  read are their own explicit commands; this check is a separate agent step, not a
-  hidden mutation of another command's output.
-- Run this once per session load, not before every command.
+- After a confirmed send, report the feedback id and whether delivery succeeded.
+- A local record is not proof of delivery. If delivery failed or is unknown,
+  say so plainly and do not promise a fix date.
+- If login expired, reconnect through [connect](connect.md). For other failures,
+  give only the product-level reason and actionable next step.
 
-Submits feedback to the **Portal / accountd** product-feedback store (same owner
-token as login), via the bundled `anychat` CLI. Resolve the binary once via
-the product router §B.
+## Proactive offer
 
-## Talk to the human
-
-Show the draft in plain language; after submit say “已发给 Jacky，编号 …” without pasting full CLI JSON unless they ask. Follow the product router § **Talk to the human**.
-
-**Cardinal rule:** every submission goes through `anychat feedback create` with
-`--user-confirmed`. Never call Portal endpoints directly. Never send without
-showing the user the exact type/title/description/context/images first.
-
-## Data structure
-
-| Field | Required | Notes |
-|---|---|---|
-| `type` | yes | `feature-request` · `bug-report` · `knowledge-tip` |
-| `title` | yes | ≤200 chars |
-| `description` | yes | concrete; for bugs prefer verbatim product error + support_code |
-| `url` | no | optional page URL |
-| `context-json` | no | Safe scalar diagnostics are allowed: OS/version/build/arch, AnyChat and chat-app versions, permission action/outcome, support code, component, operation, and reproduction count. Chat content, contacts, paths, nested values, and unrelated fields are rejected. |
-| access diagnosis | auto | After a current-version `provision` attempt, CLI attaches a **redacted** diagnosis from the last 24 hours: exact OS facts, CLI/helper/chat-app versions, permission outcome, counts, support code, and wall time. Opt out with `--no-access-diagnosis`. |
-| `image` | no | local screenshot path(s); confirm each |
-
-CLI always stamps `context.source = anychat-cli`, exact OS version/build/arch when available, and the AnyChat client version.
-When diagnosis is present, show the user that a redacted environment package will be attached — no keys, paths, or chat text.
-
-For a bug report, the draft must include or attach: exact OS version/build/arch; AnyChat, access-helper, and chat-app versions when known; the exact support code/error; whether the password/UAC window appeared and whether the human approved it; and the reproduction count. Ask the human for any missing safe fact before confirmation. Never ask for their password, filesystem path, raw log, chat content, contact name, or PID.
-
-## Router
-
-| User says… | After draft confirm, run |
-|---|---|
-| bug / CLI error | Write a UTF-8 JSON draft `{title,description}` then `feedback create --type bug-report --draft-json <file> --user-confirmed`. Never put Chinese title/description on argv (Windows garbles them). |
-| access setup fail | Prefer a short description; a current-version diagnosis from the last 24 hours is auto-attached unless `--no-access-diagnosis`. If it is unavailable, collect the required safe environment facts above before showing the draft. |
-| feature | `feedback create --type feature-request --title "…" --description "…" --user-confirmed` |
-| tip | `feedback create --type knowledge-tip --title "…" --description "…" --user-confirmed` |
-| + screenshot | add `--image <path>` per confirmed file |
-
-## Mandatory draft confirmation
-
-Before create, show:
-
-1. exact `type`, `title`, `description`  
-2. exact `context` / `url`  
-3. image paths if any  
-
-Wait for explicit go-ahead. No exceptions.
-
-## PII / secrecy
-
-- **Do not** include chat message bodies, friend/group display names, wxids, tokens, keys, or attachment bytes.
-- Bug reports: include the safe environment/version/permission/reproduction facts above; exclude secrets, paths, raw logs, and chat identity/content.
-- Scan screenshots before attaching.
-
-## After submit
-
-- CLI prints JSON + `id` and `delivery` (`portal` or `local_only` if offline).
-- Report the `id` to the user. Do not promise fix dates.
-- `feedback status --id …` / `feedback list` inspect own items; `feedback status`
-  also shows Jacky's additive reply history when present.
-- `feedback inbox` shows unread replies; mark each read with
-  `feedback read --update-id <id>` after showing it (see Advisory inbox check).
-
-## Failure handling
-
-- **401/403**: re-login (`references/connect.md`); token missing/expired.
-- **`E_FEEDBACK_OFFLINE`**: saved locally; will not reach Jacky until Portal is reachable — tell the user honestly.
-- Other errors: surface CLI text verbatim.
-
-## Proactive offer (opt-in only)
-
-On repeated `E_SETUP_*` / setup failures after user frustration: ask once  
-“要不要告诉 Jacky？” — never auto-send.
+Offer “要不要告诉 Jacky？” only when AnyChat reports `blocked` with
+`offer_tell_jacky=true`. Never auto-send and never offer it while an agent or
+human continuation still exists.

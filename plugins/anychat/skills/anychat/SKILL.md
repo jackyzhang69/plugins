@@ -51,7 +51,7 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
 
-开通本机档案 uses `"$ANYCHAT_BIN" provision --json` only. Follow [setup](references/setup.md). `needs_agent` means find or request the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. If a marketplace GitHub clone times out, `provision` uses the official ZIP; never `git clone` the plugin repository.
+An explicit 开通本机档案 request uses `"$ANYCHAT_BIN" provision --json`. An ordinary query or media request is always invoked first; if it returns a typed readiness envelope, follow its exact protected continuation until AnyChat resumes that sealed request. Keep paths and opaque resume tokens on stdin, never argv. Follow [setup](references/setup.md). `needs_agent` means satisfy the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. Provision never updates AnyChat itself; product updates remain an explicit host-plugin-manager action.
 
 ## Advisory inbox check (Tell Jacky replies)
 
@@ -81,9 +81,9 @@ When speaking to the **person in the chat** (not when writing tool args):
 
 1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
 2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
-3. **Major stages only.** Report at phase changes: need connect → 开通本机档案 → ready to search → results ready → need confirm before Tell Jacky. Skip narrating routine tool calls. If 开通 names a supported version and download URL, repeat that wording — do not hide the next action, and do not name a specific social network yourself.
-4. **Product language.** “Local chat archive on this computer.” Never expose internal access implementation or component details. A location requested by `needs_agent` is host-agent work: discover and supply it without asking the human for a path. Never name a specific social network in your own words; repeat `say_to_user`.
-5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已登录，但还不是管理员” / “还没完成第一次本机设置”).
+3. **Major stages only.** Report only when the human must decide or act, when the requested result is ready, or when there is no remaining route. Setup, discovery, app lifecycle, and validation are silent agent work. If AnyChat requests consent for its exact platform package, explain the replacement in plain language without exposing implementation details.
+4. **Product language and technical confidentiality.** “Local chat archive on this computer.” State capability, requirement, consent, validation, and outcome only. Do not repeat machine-facing details to the human. A location requested by `needs_agent` is host-agent work: discover and supply it without asking the human for a path. Never name a specific social network in your own words; repeat `say_to_user` only when the JSON requires human action.
+5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已连接，我继续处理” / “本机档案还需要准备”).
 6. **Mask secrets.** Never paste credentials or private access material into chat.
 
 Host UIs may still show tool cards; **your written reply** must still follow this section.
@@ -101,7 +101,7 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 Answer in product language, short bullets:
 
 - **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
-- **开通本机档案** on this Mac or Windows PC (`provision`). The agent finds local facts and drives any official install/repair step AnyChat requests; AnyChat validates supplied facts locally. The human only gives consent, opens/quits when unavoidable, or completes 管理员确认.
+- **Open the local archive** on this Mac or Windows PC. The agent finds local facts, manages the chat app, and installs only the exact platform package AnyChat supplies after consent; AnyChat validates the result locally. The human only approves a material change, enters an operating-system password, or completes sign-in.
 - **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
 - **Follow a topic** (a person or a group + what you care about). New messages stay on this computer; the topic itself lives with the account so another computer can follow the same thing.
 - **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
@@ -159,7 +159,7 @@ Prefer the packaged binary next to this skill
    - Claude plugin root / cache: `…/anychat/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`
    - Canonical current: `~/.jackyzhang.app/plugins/anychat/current/bin/<platform>/anychat`
 3. Canonical standalone installation:
-   - macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` (must sit next to `anychat-access`; verify not an older version than plugin manifest)
+   - macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` (verify it is not older than the active plugin)
 4. `command -v anychat` / `where anychat` (last resort fallback)
 
 Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
@@ -180,7 +180,7 @@ Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 | Work | Where |
 |------|--------|
 | Unlock / query / export / media copy | **Local CLI** (user machine) |
-| Login entitlement / Tell Jacky submit | **Portal** `account.jackyzhang.app` (accountd) |
+| Login entitlement / Tell Jacky submit | **Portal** `account.jackyzhang.app` |
 | Chat message bodies | **Never uploaded** |
 
 ## After success (stickiness, light touch)
@@ -191,4 +191,4 @@ Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 
 ## Product language
 
-Describe as a **local chat archive** helper. Do not discuss internal access implementation with the user. See **Talk to the human** above.
+Describe as a **local chat archive**. Discuss only product capabilities, requirements, consent, and results. See **Talk to the human** above.

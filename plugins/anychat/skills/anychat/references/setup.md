@@ -25,17 +25,17 @@ Speak these. Do not invent synonyms in chat.
 "$ANYCHAT_BIN" provision --json
 ```
 
-That JSON is the only first-run contract. `doctor --json` may show a short diagnosis (`state`, `support_code`, `say_to_user`); it is not a second state machine. Do not run leftover first-run verbs. If a marketplace GitHub clone times out, `provision` uses the official ZIP; never `git clone` the plugin repository.
+That JSON is the only first-run contract. `doctor --json` may show a short product status (`status`, `support_code`, `say_to_user`); it is not a second state machine. Do not run leftover first-run verbs. Provision never updates AnyChat itself; product updates remain an explicit host-plugin-manager action.
 
 ## You do (agent-owned)
 
-1. Run `provision --json`.
-2. Speak only `say_to_user` to the human. Machine requirements belong in `needs`; do not invent a version, path, or download.
-3. If `status` is `needs_agent`, satisfy each typed item in `needs`. Search the host using the listed `obtain` methods and your available computer/filesystem capabilities. Then send one `anychat.provision.supply.v1` JSON document to the exact `continue_args` (which includes `--supply-stdin`) over stdin; never place a path on argv or ask the human to locate or transcribe one.
-4. If `status` is `needs_human`: wait until they finish `human_action`, then run the exact `continue_args`. Do not invent flags.
-5. If `status` is `ready`: 本机档案已经可以用了. Optionally confirm with a short friends list.
+1. For an explicit setup request, run `provision --json`. For an ordinary query or media request, run that request first and follow the exact typed continuation it returns; do not replace the original intent with a separate hand-written flow.
+2. On `needs_agent`, do not speak setup narration to the human. Machine requirements belong in `needs`; do not invent a version, path, or download.
+3. If `status` is `needs_agent`, satisfy each typed item in `needs`. Search the host using the listed `obtain` methods and your available computer/filesystem capabilities. Then send one `anychat.provision.supply.v1` JSON document to the exact `continue_args` (which includes `--supply-stdin`) over stdin; never place a path or resume token on argv or ask the human to locate or transcribe one. When the envelope belongs to an ordinary request, preserve its opaque `resume_token` in this protected stdin document.
+4. If `status` is `needs_human`: wait for the human's decision or unavoidable action. If they decline, stop. If `after_human_action` is `satisfy_needs_then_continue`, first satisfy every typed item in that same envelope's `needs`—including performing an approved installation or mapping the human's visible account choice to the protected local account input—and only then invoke the exact `continue_args`. Never invoke the continuation before the consented machine work is complete. For any other approved human action, run the exact `continue_args`. Do not invent flags.
+5. If `status` is `ready`, invoke its exact continuation and pipe `resume_token` over stdin. AnyChat resumes the sealed original request; do not rebuild it from memory. Only say the archive is ready when setup itself was the user's explicit request.
 6. If `status` is `blocked` and `offer_tell_jacky` is true: then and only then draft Tell Jacky, show the draft, and send after `--user-confirmed`. Do not automatically rerun the identical invocation.
-7. Never invent a location or accept a candidate yourself: AnyChat validates every supplied fact locally. If AnyChat offers an official install/repair continuation, get the required consent and drive that continuation yourself; do not hand installation work to the human. Never loop automatically. There is no fixed attempt limit. Compare `progress_fingerprint` and `no_progress`; a repeat count alone is never proof of a dead loop, and `dead_end` is the only terminal no-way-forward signal.
+7. Never invent a location or accept a candidate yourself: AnyChat validates every supplied fact locally. On both macOS and Windows, if AnyChat requests app installation or replacement, use only the exact platform package and verification facts in `needs[].installer`; never use the vendor's current download or another build. Get the required consent, quit every running instance yourself, perform the installation, open exactly one validated instance, and let AnyChat recheck it. Never loop automatically. There is no fixed attempt limit. Compare `progress_fingerprint` and `no_progress`; a repeat count alone is never proof of a dead loop, and `dead_end` is the only terminal no-way-forward signal.
 
 Supply shape (agent-to-CLI only):
 
@@ -43,34 +43,29 @@ Supply shape (agent-to-CLI only):
 {
   "schema": "anychat.provision.supply.v1",
   "for_progress": "<progress_fingerprint>",
+  "resume_token": "<opaque token when continuing an ordinary request>",
   "supply": {
     "archive_root": ["<absolute candidate directory>"],
-    "chat_app_path": "<absolute application bundle or executable>"
+    "chat_app_path": "<absolute application bundle or executable>",
+    "archive_account": "<validated local account selected after the human identifies the visible account>"
   }
 }
 ```
 
-Send only keys requested by `needs`. `archive_root` may contain multiple candidates. Rejected candidates return only key/index/result code—never a path. A stale `for_progress` is rejected so facts from an older machine state cannot silently mutate the current setup.
+Send only keys requested by `needs`; use an empty `supply` object when the continuation requests no fact. `archive_root` may contain multiple candidates. Rejected candidates return only key/index/result code—never a path. A stale `for_progress` is rejected so facts from an older machine state cannot silently mutate the current setup.
 
-`--resign-consent` means they agreed to one local re-sign. The computer will ask for 管理员确认. After it finishes they reopen 聊天软件 and sign in.
-
-`--restore-app` means restore the official app after a failed re-sign. They must fully quit first.
-
-`--account-id` is only for `select_account`. Do not guess.
+Always invoke the exact `continue_args` returned for the current progress state. Do not invent flags. An account choice is personal input; never guess it.
 
 ## Human may only
 
 | `human_action` | What you tell them (must match `say_to_user`) |
 |----------------|-----------------------------------------------|
-| `open_chat_app` | 请打开聊天软件并登录你平时用的账号。打开后告诉我一声。 |
-| `quit_chat_app` | 请先完全退出聊天软件。关闭窗口不够，要从菜单或托盘选择退出。 |
-| `quit_extra_chat_app` | 请只留一个聊天软件开着——就是你平时用的那个——把另一个完全退出。 |
 | `approve_admin` | 电脑弹出了管理员确认。请点允许或输入这台电脑的密码。 |
-| `agree_resign` | 开通需要给这台电脑上的聊天软件重新签名一次。你同意的话，电脑会弹出密码窗口。 |
+| `agree_material_change` | AnyChat 说明需要修改什么及如何恢复；用户只回答是否同意。 |
 | `select_account` | 这台电脑上有多个聊天账号。请告诉我用哪一个平时聊天的。 |
-| `retry` | Repeat `say_to_user`. The prior attempt and any prior window are over; run `continue_args` only after they explicitly ask to continue. |
+| `sign_in` | 宿主 Agent 已打开软件；用户只完成账号登录或不可代理的确认。 |
 
-No other human work. Folder and application discovery belongs to the host agent, including unusual locations. You do not ask the human to type a command, find a path or log, or read a version.
+Opening, quitting, reducing extra instances, installation, retry after a changed machine state, folder discovery, and application discovery belong to the host agent. If the current CLI labels one of those as `human_action`, perform the machine part yourself and involve the human only if sign-in or an operating-system prompt actually appears. You do not ask the human to type a command, find a path or log, read a version, or install software.
 
 ## 管理员确认
 
@@ -92,7 +87,7 @@ Do not offer it on `needs_human`. Do not offer it because you are unsure. Do not
 
 ## Talk to the human
 
-Report only major stages: need login → locate missing local item if requested → need 聊天软件 open → 管理员确认 if requested → 本机档案已经可以用了. Never mention keys, databases, or helper names. Do not repeat a supplied path back to the human.
+Report only a human decision or irreducible action, then the requested result. Never narrate background work or repeat machine-facing output to the human.
 
 ## Never
 
