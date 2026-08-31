@@ -13,23 +13,28 @@
 
 Prepare a short draft with:
 
-1. type: `feature-request`, `bug-report`, or `knowledge-tip`;
+1. type: `feature-request` or `bug-report`;
 2. title and description in the human's own language;
-3. safe environment facts that help reproduce a bug: operating system and
-   version/build, architecture, AnyChat version, chat-app version when known,
-   permission action and result, one product support code, and reproduction
-   count;
+3. the automatically collected safe environment facts that help reproduce a
+   bug: exact operating-system version/build and architecture, AnyChat and
+   relevant app/runtime builds, host/restricted execution views, permission
+   action and result, stage verdicts and support codes, and content-free counts;
 4. each optional screenshot the human wants to include.
 
-Show the complete draft and safe context before sending. Wait for explicit
-approval, then use `feedback create --user-confirmed`. For Chinese text on
+Run `feedback preview` first. Show the human the complete draft and summarize
+the safe machine context in plain language; make the exact preview available
+without dumping raw JSON into the normal reply. Wait for explicit approval,
+then use `feedback create --user-confirmed --confirmation-binding <binding>`
+with the same draft and the opaque one-time binding from that exact preview.
+Never reuse a binding or rebuild the draft from memory. For non-ASCII text on
 Windows, use the CLI's UTF-8 draft-file input rather than placing the text on
-argv. AnyChat validates and scrubs the submitted context.
+argv. AnyChat independently gathers, validates, and scrubs the context.
 
 Do not ask the human for facts the host agent can inspect. In particular, never
 ask for a path, raw log, process id, terminal output, password, chat content, or
-contact name. If a safe environment fact is missing, the host agent obtains it
-or leaves it unknown.
+contact name. If a safe environment fact is missing, the host agent inspects it
+and supplies a typed claim when requested; AnyChat validates the claim or leaves
+the fact unknown.
 
 ## Replies
 

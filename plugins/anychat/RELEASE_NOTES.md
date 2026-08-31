@@ -1,8 +1,9 @@
-# AnyChat 0.1.41
+# AnyChat 0.1.43
 
 ## User-visible changes
 
-- On both macOS and Windows, first-time archive access now uses only the exact chat-app package supplied by AnyChat. Your AI agent asks before replacing the app, verifies the package, performs the work, and leaves chat history alone.
-- Your AI agent owns computer work such as finding the app or archive, opening and closing apps, and installing the required package. You only approve material changes, enter an operating-system password, choose an account, or sign in when necessary.
-- Setup no longer ends because of a retry count. It continues when the computer state changes and resumes the original request after the archive is ready.
-- Local plain, classic-XOR, and V1 images can now be converted to normal files; when the preferred copy is unusable, AnyChat also checks its contained lower-quality copy. Unknown and V2 containers still return an actionable unsupported result instead of pretending the image was recovered.
+- Opening a local archive now verifies every discovered message shard, so a contacts-only partial setup cannot be reported as ready.
+- Windows image downloads, including batches, can pause for protected local access and resume the exact request without duplicating verified files.
+- Setup always converges on the two verified AnyChat-provided platform packages when the installed chat app is not already an exact match.
+- Setup no longer stops after an arbitrary number of attempts; it stops only on a proven terminal condition or explicit human refusal.
+- Tell Jacky previews include broader safe machine diagnostics while continuing to exclude chat content, identities, paths, and access material; sending requires the exact one-time preview binding.

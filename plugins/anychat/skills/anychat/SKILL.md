@@ -138,7 +138,7 @@ Stable sources: verified local social-app archives on macOS Apple Silicon and Wi
 | List attachments | `media list --mode friend --target "…" --type image\|voice\|file\|all` — [media](references/media.md) |
 | Download one / all | `media download --id … -o dir` / `media download-all …` |
 | Voice → playable | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
-| Tell Jacky | [tell-jacky](references/tell-jacky.md) (confirm draft first) → `feedback create --user-confirmed` |
+| Tell Jacky | [tell-jacky](references/tell-jacky.md) → `feedback preview`, confirm exact draft, then `feedback create --user-confirmed --confirmation-binding <binding>` |
 | Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) · `feedback status` · `feedback list` |
 | Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |
 | Local sources | `sources detect` / `sources list` / `sources status` / `sources connect` / `sources sync` / `sources remove` |

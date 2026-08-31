@@ -59,7 +59,16 @@ AnyChat resumes the exact original media request without another human turn.
 1. `media download` / `download-all` writes a normal JPEG, PNG, GIF, or WebP.
 2. If a local image cannot be opened safely, AnyChat returns
    `E_IMAGE_NOT_PREVIEWABLE` instead of claiming success.
-3. The agent must not upload an unreadable local file as a workaround.
+3. On Windows, `E_IMAGE_V2_ACCESS_REQUIRED` is not a user troubleshooting task.
+   The command returns a typed protected continuation: follow it, let the human
+   do only the Administrator confirmation, and let AnyChat resume the exact
+   original download. Never ask for an archive path, key, terminal command, or
+   a second copy of the media id.
+   For `download-all`, files completed before the protected pause stay in the
+   requested output directory. AnyChat verifies and skips those exact files on
+   resume; it neither deletes them nor creates duplicate suffixed copies. A
+   changed or partial file is never trusted and is safely written again.
+4. The agent must not upload an unreadable local file as a workaround.
 
 ## Notes
 
