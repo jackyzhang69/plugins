@@ -1,7 +1,7 @@
 {
   "name": "anyweb",
-  "version": "0.2.1",
-  "description": "Check AnyWeb repair claims and optionally manage hosted website continuity without exposing saved credentials or security answers.",
+  "version": "0.2.7",
+  "description": "Run bounded local website tasks, check repair claims, and optionally manage hosted continuity without exposing saved secrets.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
@@ -9,14 +9,15 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "AnyWeb",
-    "shortDescription": "Check repairs and manage optional hosted continuity.",
-    "longDescription": "Use the anyweb router to connect, retrieve source-free repair claims, manage explicitly approved hosted website continuity, and Tell Jacky. This release does not claim general-purpose website execution.",
+    "shortDescription": "Run bounded local tasks and check repairs.",
+    "longDescription": "Use the anyweb plugin to run supported website tasks in visible local Chrome, retrieve repair outcomes, manage explicitly approved hosted continuity, and Tell Jacky. It is not a general-purpose automation tool.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://jackyzhang.app",
     "defaultPrompt": [
       "Check whether my AnyWeb repair is ready.",
+      "Continue a supported website draft on this computer.",
       "Set up optional hosted continuity for my website account.",
       "Tell Jacky about an AnyWeb problem."
     ]
