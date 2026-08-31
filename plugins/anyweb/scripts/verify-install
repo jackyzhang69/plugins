@@ -28,7 +28,7 @@ value=json.loads(sys.argv[3])
 runtime=json.loads(sys.argv[4])
 assert repair["ok"] is True and repair["repair_install"] is True
 assert install["ok"] is True and install["runtime_ready"] is True
-assert value["ok"] is True and value["product"] == "anyweb" and value["version"] == "0.2.8"
+assert value["ok"] is True and value["product"] == "anyweb" and value["version"] == "0.2.10"
 assert runtime["ok"] is True and runtime["runtime_ready"] is True
-print("verify-install: ok product=anyweb version=0.2.8")
+print("verify-install: ok product=anyweb version=0.2.10")
 PY
