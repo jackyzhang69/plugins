@@ -1,6 +1,6 @@
 {
   "name": "anyweb",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Run bounded local website tasks, check repair claims, and optionally manage hosted continuity without exposing saved secrets.",
   "author": {
     "name": "Jacky Zhang"

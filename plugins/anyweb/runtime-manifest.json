@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "version": "0.2.7",
-  "source_sha": "512844319e2f496696e9b4ad32b1109d0a208e1c",
+  "version": "0.2.8",
+  "source_sha": "1422d83d46787ddcee580c544ab163eb64eef1dc",
   "product": "anyweb",
   "binary": {
     "name": "anyweb",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anyweb",
-        "sha256": "8836abcd1091d29308d7e5b7bfc16ce54d56faa4fa7a4889508a0c0b570e6a7b",
+        "sha256": "2f3e006f857ecdb726d5cad90ad87fcec7b822deeeeb8f73e901b84309db07c7",
         "size": 2659808,
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anyweb.exe",
-        "sha256": "c2546348ddce46732d7479655bf53501e0603993043cb8ac17f49947df1dd70b",
+        "sha256": "e73d9a5edd8aa4ac8d914a1205071549b6e937ab3e81568bd1fb9d1e9cae52e1",
         "size": 3454760,
         "signing": "signed_azure_trusted_signing"
       }
@@ -30,26 +30,26 @@
       "marketplace": "claimed",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anyweb-v0.2.7",
-      "source_commit": "512844319e2f496696e9b4ad32b1109d0a208e1c",
+      "tag": "anyweb-v0.2.8",
+      "source_commit": "1422d83d46787ddcee580c544ab163eb64eef1dc",
       "notarization": "accepted"
     }
   },
   "runtime": {
     "name": "anyweb-runtime",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "runtime/darwin-arm64/anyweb-runtime",
         "asset": "anyweb-runtime",
-        "sha256": "4c03d78d255e044a4e65bb2dad3e694170d5a84522f3a9788d225f81f2a37049",
+        "sha256": "8cc41320a94bd651ee9b78cb5618c79afc49eb30766659af0c309a7b1d6c69de",
         "size": 72009424,
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "runtime/win32-x64/anyweb-runtime.exe",
         "asset": "anyweb-runtime.exe",
-        "sha256": "7bd3b0565444a8de708c99593ee2af8fb5e368b3a21607c3dca3df7f4bbf3059",
+        "sha256": "2546d705608cd2c859d7ed7c86c1fb426ba8916d1c71b8bb52feeca5be9b2519",
         "size": 107235112,
         "signing": "signed_azure_trusted_signing"
       }
@@ -64,12 +64,12 @@
   "platforms": {
     "darwin-arm64": {
       "path": "bin/darwin-arm64/anyweb",
-      "sha256": "8836abcd1091d29308d7e5b7bfc16ce54d56faa4fa7a4889508a0c0b570e6a7b",
+      "sha256": "2f3e006f857ecdb726d5cad90ad87fcec7b822deeeeb8f73e901b84309db07c7",
       "size": 2659808
     },
     "win32-x64": {
       "path": "bin/win32-x64/anyweb.exe",
-      "sha256": "c2546348ddce46732d7479655bf53501e0603993043cb8ac17f49947df1dd70b",
+      "sha256": "e73d9a5edd8aa4ac8d914a1205071549b6e937ab3e81568bd1fb9d1e9cae52e1",
       "size": 3454760
     }
   },
