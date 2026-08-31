@@ -1,252 +1,150 @@
 #!/usr/bin/env bash
-# Atomic, backup-first installer for the native AnyChat main/helper pair.
-# No backup is ever deleted automatically. Purge requires an explicit backup ID.
+# Install one complete verified plugin tree and expose only `current`.
 set -euo pipefail
 
 usage() {
-  cat >&2 <<'EOF'
-usage:
-  install-transaction install <source-main> <source-helper> <dest-dir> <backup-root>
-  install-transaction list <backup-root>
-  install-transaction rollback <backup-id> <dest-dir> <backup-root>
-  install-transaction purge <backup-id> <backup-root>
-  install-transaction gc <backup-root> [keep-count]
-EOF
+  echo "usage: install-transaction install-tree <source-tree> <package-root> <bin-dir>" >&2
   exit 2
 }
 
 die() { echo "install-transaction: $*" >&2; exit 1; }
-sha256() { shasum -a 256 "$1" | awk '{print $1}'; }
-version_of() { "$1" --version | awk '{print $NF}'; }
-is_version_less() {
-  python3 - "$1" "$2" <<'PY'
-import re, sys
-def parts(value): return tuple(map(int, re.findall(r"[0-9]+", value)))
-a, b = parts(sys.argv[1]), parts(sys.argv[2])
-n = max(len(a), len(b)); a += (0,) * (n-len(a)); b += (0,) * (n-len(b))
-raise SystemExit(0 if a < b else 1)
-PY
-}
-safe_id() { [[ "$1" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]]; }
+path_exists() { [[ -e "$1" || -L "$1" ]]; }
 
-reject_symlink() {
-  local path="$1"
-  [[ ! -L "$path" ]] || die "refusing symlink path: $path"
-  python3 - "$path" <<'PY' || die "refusing path with a symlink ancestor: $path"
+reject_symlink_ancestors() {
+  python3 - "$1" <<'PY' || die "refusing path with a symlink ancestor: $1"
 import os, pathlib, sys
 p = pathlib.Path(os.path.abspath(os.path.expanduser(sys.argv[1])))
 for candidate in (p, *p.parents):
     if candidate.exists() and candidate.is_symlink():
-        # macOS exposes root-owned /var, /tmp, and /etc aliases. They are OS
-        # topology, not user-controlled output ancestors.
         if str(candidate) in {"/var", "/tmp", "/etc"} and candidate.lstat().st_uid == 0:
             continue
         raise SystemExit(1)
 PY
 }
 
-prepare_roots() {
-  local dest="$1" backups="$2"
-  reject_symlink "$dest"
-  reject_symlink "$backups"
-  mkdir -p "$dest" "$backups"
-  chmod 700 "$backups"
-  reject_symlink "$dest/anychat"
-  reject_symlink "$dest/anychat-access"
+package_version() {
+  python3 - "$1/.claude-plugin/plugin.json" <<'PY'
+import json, re, sys
+value = json.load(open(sys.argv[1])).get("version")
+if not isinstance(value, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-.][0-9A-Za-z]+)*", value):
+    raise SystemExit(1)
+print(value)
+PY
 }
 
-lock_root() {
-  local backups="$1"
-  LOCK_DIR="$backups/.install-lock"
-  if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-    # Check if existing lock is stale (> 60s)
-    local lock_age=0
-    if [[ -d "$LOCK_DIR" ]]; then
-      local mtime
-      mtime=$(stat -f %m "$LOCK_DIR" 2>/dev/null || stat -c %Y "$LOCK_DIR" 2>/dev/null || echo 0)
-      local now
-      now=$(date +%s)
-      lock_age=$(( now - mtime ))
-      if [[ "$lock_age" -gt 60 ]]; then
-        rmdir "$LOCK_DIR" 2>/dev/null || rm -rf "$LOCK_DIR" 2>/dev/null || true
-        mkdir "$LOCK_DIR" 2>/dev/null || die "another install/rollback is active (stale lock cleanup failed)"
-      else
-        die "another install/rollback is active (lock age: ${lock_age}s)"
-      fi
-    else
-      die "another install/rollback is active"
+native_platform() {
+  case "$(uname -s)-$(uname -m)" in
+    Darwin-arm64) echo darwin-arm64 ;;
+    *) die "unsupported local development host" ;;
+  esac
+}
+
+verify_tree() {
+  local tree="$1" expected="$2" platform="$3"
+  [[ -f "$tree/.claude-plugin/plugin.json" && ! -L "$tree/.claude-plugin/plugin.json" ]] \
+    || die "staged Claude descriptor is missing or unsafe"
+  [[ -f "$tree/.codex-plugin/plugin.json" && ! -L "$tree/.codex-plugin/plugin.json" ]] \
+    || die "staged Codex descriptor is missing or unsafe"
+  [[ -f "$tree/skills/anychat/SKILL.md" && ! -L "$tree/skills/anychat/SKILL.md" ]] \
+    || die "staged AnyChat skill is missing or unsafe"
+  local main="$tree/bin/$platform/anychat"
+  local helper="$tree/bin/$platform/anychat-access"
+  [[ -f "$main" && ! -L "$main" && -x "$main" ]] || die "staged main binary is invalid"
+  [[ -f "$helper" && ! -L "$helper" && -x "$helper" ]] || die "staged helper binary is invalid"
+  [[ "$(package_version "$tree")" == "$expected" ]] || die "staged package version changed"
+  [[ "$("$main" --version)" == "anychat $expected" ]] || die "staged binary version does not match package"
+  "$main" --help >/dev/null 2>&1 || die "staged main binary probe failed"
+}
+
+remove_path() {
+  local path="$1"
+  path_exists "$path" || return 0
+  rm -rf -- "$path"
+}
+
+prune_version_museum() {
+  local package_root="$1" entry name
+  shopt -s nullglob
+  for entry in "$package_root"/*; do
+    name="$(basename "$entry")"
+    if [[ "$name" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+)*$ ]]; then
+      remove_path "$entry"
     fi
-  fi
-  trap 'rm -rf -- "${TMP_MAIN:-}" "${TMP_HELP:-}" "${PENDING:-}" 2>/dev/null || true; rmdir "${LOCK_DIR:-}" 2>/dev/null || true' EXIT
+  done
+  shopt -u nullglob
 }
 
-verify_pair() {
-  local main="$1" helper="$2"
-  [[ -f "$main" && ! -L "$main" && -x "$main" ]] || die "invalid main binary: $main"
-  [[ -f "$helper" && ! -L "$helper" && -x "$helper" ]] || die "invalid helper binary: $helper"
-  "$main" --version >/dev/null 2>&1 || die "main binary version probe failed"
+bind_entrypoint() {
+  local target="$1" link="$2" temp
+  if [[ -d "$link" && ! -L "$link" ]]; then
+    die "refusing directory at host entrypoint: $link"
+  fi
+  temp="$link.installing.$$"
+  remove_path "$temp"
+  ln -s "$target" "$temp"
+  mv -f "$temp" "$link"
 }
 
-backup_current() {
-  local dest="$1" backups="$2"
-  local main="$dest/anychat" helper="$dest/anychat-access"
-  if [[ ! -e "$main" && ! -e "$helper" ]]; then
-    BACKUP_ID=""
-    return
-  fi
-  [[ -f "$main" && ! -L "$main" && -f "$helper" && ! -L "$helper" ]] \
-    || die "installed main/helper pair is incomplete or unsafe"
-  BACKUP_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
-  safe_id "$BACKUP_ID" || die "internal backup id error"
-  local candidate="$backups/$BACKUP_ID"
-  mkdir "$candidate" || die "backup id collision"
-  PENDING="$candidate"
-  chmod 700 "$PENDING"
-  cp -p "$main" "$PENDING/anychat"
-  cp -p "$helper" "$PENDING/anychat-access"
-  chmod 700 "$PENDING/anychat" "$PENDING/anychat-access"
-  {
-    echo 'schema_version=1'
-    echo "main_sha256=$(sha256 "$PENDING/anychat")"
-    echo "helper_sha256=$(sha256 "$PENDING/anychat-access")"
-  } >"$PENDING/manifest"
-  chmod 600 "$PENDING/manifest"
-  PENDING=""
-}
+install_tree() {
+  local source_tree="$1" package_root="$2" bin_dir="$3"
+  [[ -d "$source_tree" && ! -L "$source_tree" ]] || die "source tree is missing or unsafe"
+  reject_symlink_ancestors "$package_root"
+  reject_symlink_ancestors "$bin_dir"
+  mkdir -p "$package_root" "$bin_dir"
 
-install_pair() {
-  local src_main="$1" src_helper="$2" dest="$3" backups="$4"
-  prepare_roots "$dest" "$backups"
-  verify_pair "$src_main" "$src_helper"
-  if [[ "${LOCK_HELD:-0}" != 1 ]]; then
-    lock_root "$backups"
-    LOCK_HELD=1
+  local lock="$package_root/.install-lock"
+  if ! mkdir "$lock" 2>/dev/null; then
+    die "another install is active; a crashed install requires host-agent inspection"
   fi
-  if [[ -x "$dest/anychat" && "${ALLOW_DOWNGRADE:-0}" != 1 ]]; then
-    current_version="$(version_of "$dest/anychat")"
-    candidate_version="$(version_of "$src_main")"
-    if is_version_less "$candidate_version" "$current_version"; then
-      die "refusing implicit downgrade $current_version -> $candidate_version; use rollback with a named backup"
+
+  local staging="$package_root/.staging.$$"
+  local previous="$package_root/.previous.$$"
+  local switched=0
+  cleanup() {
+    local status=$?
+    remove_path "$staging"
+    if [[ "$status" -ne 0 && "$switched" == 1 ]]; then
+      remove_path "$package_root/current"
+      if path_exists "$previous"; then mv "$previous" "$package_root/current"; fi
     fi
-  fi
-  backup_current "$dest" "$backups"
+    remove_path "$previous"
+    rmdir "$lock" 2>/dev/null || true
+    exit "$status"
+  }
+  trap cleanup EXIT
 
-  TMP_MAIN="$(mktemp "$dest/.anychat.install.XXXXXX")"
-  TMP_HELP="$(mktemp "$dest/.anychat-access.install.XXXXXX")"
-  cp "$src_main" "$TMP_MAIN"
-  cp "$src_helper" "$TMP_HELP"
-  chmod 755 "$TMP_MAIN" "$TMP_HELP"
-  [[ -z "${EXPECTED_MAIN_SHA:-}" || "$(sha256 "$TMP_MAIN")" == "$EXPECTED_MAIN_SHA" ]]     || die "staged main does not match the authenticated backup"
-  [[ -z "${EXPECTED_HELP_SHA:-}" || "$(sha256 "$TMP_HELP")" == "$EXPECTED_HELP_SHA" ]]     || die "staged helper does not match the authenticated backup"
-  "$TMP_MAIN" --version >/dev/null 2>&1 || die "staged main binary version probe failed"
+  local version platform
+  version="$(package_version "$source_tree")" || die "source package version is invalid"
+  platform="$(native_platform)"
+  mkdir "$staging"
+  cp -R "$source_tree/." "$staging/"
+  verify_tree "$staging" "$version" "$platform"
 
-  local had_old=0
-  [[ -n "$BACKUP_ID" ]] && had_old=1
-  if ! mv -f "$TMP_MAIN" "$dest/anychat"; then
-    die "failed to publish main binary"
+  if path_exists "$package_root/current"; then
+    mv "$package_root/current" "$previous"
   fi
-  TMP_MAIN=""
-  if ! mv -f "$TMP_HELP" "$dest/anychat-access"; then
-    if [[ "$had_old" == 1 ]]; then
-      cp "$backups/$BACKUP_ID/anychat" "$dest/anychat"
-      cp "$backups/$BACKUP_ID/anychat-access" "$dest/anychat-access"
-      chmod 755 "$dest/anychat" "$dest/anychat-access"
-    else
-      rm -f "$dest/anychat"
-    fi
-    die "failed to publish helper; previous pair restored"
-  fi
-  TMP_HELP=""
-  verify_pair "$dest/anychat" "$dest/anychat-access"
-  if [[ -n "$BACKUP_ID" ]]; then
-    echo "installed; previous pair preserved as backup $BACKUP_ID"
-  else
-    echo "installed; no previous pair existed"
-  fi
-  if [[ "${ANYCHAT_AUTO_GC:-1}" != 0 ]]; then
-    gc_backups "$backups" "${ANYCHAT_MAX_BACKUPS:-3}"
-  fi
-}
+  mv "$staging" "$package_root/current"
+  switched=1
+  verify_tree "$package_root/current" "$version" "$platform"
 
-gc_backups() {
-  local backups="$1" keep="${2:-3}"
-  [[ -d "$backups" ]] || return 0
-  reject_symlink "$backups"
-  local all_backups=()
-  while IFS= read -r id; do
-    [[ -n "$id" ]] && all_backups+=("$id")
-  done < <(find "$backups" -mindepth 1 -maxdepth 1 -type d -name '????????T??????Z-*' -print | sed 's#.*/##' | sort)
+  bind_entrypoint "$package_root/current/bin/$platform/anychat" "$bin_dir/anychat"
+  bind_entrypoint "$package_root/current/bin/$platform/anychat-access" "$bin_dir/anychat-access"
+  [[ "$("$bin_dir/anychat" --version)" == "anychat $version" ]] \
+    || die "host entrypoint did not bind to the current package"
 
-  local count="${#all_backups[@]}"
-  if [[ "$count" -gt "$keep" ]]; then
-    local to_remove=$(( count - keep ))
-    for (( i=0; i<to_remove; i++ )); do
-      local purge_id="${all_backups[i]}"
-      if [[ -d "$backups/$purge_id" ]]; then
-        rm -rf -- "$backups/$purge_id"
-        echo "gc: purged old backup $purge_id (retaining latest $keep)"
-      fi
-    done
-  fi
-}
-
-read_manifest_value() {
-  local manifest="$1" key="$2"
-  sed -n "s/^${key}=//p" "$manifest"
-}
-
-verify_backup() {
-  local dir="$1"
-  [[ -d "$dir" && ! -L "$dir" ]] || die "backup does not exist"
-  [[ -f "$dir/manifest" && ! -L "$dir/manifest" ]] || die "backup manifest missing"
-  [[ "$(read_manifest_value "$dir/manifest" schema_version)" == 1 ]] || die "unsupported backup manifest"
-  [[ "$(read_manifest_value "$dir/manifest" main_sha256)" == "$(sha256 "$dir/anychat")" ]] \
-    || die "backup main checksum mismatch"
-  [[ "$(read_manifest_value "$dir/manifest" helper_sha256)" == "$(sha256 "$dir/anychat-access")" ]] \
-    || die "backup helper checksum mismatch"
-  verify_pair "$dir/anychat" "$dir/anychat-access"
+  remove_path "$previous"
+  prune_version_museum "$package_root"
+  switched=0
+  rmdir "$lock"
+  trap - EXIT
+  echo "installed current AnyChat package $version"
 }
 
 cmd="${1:-}"; shift || true
 case "$cmd" in
-  install)
-    [[ $# == 4 ]] || usage
-    install_pair "$1" "$2" "$3" "$4"
-    ;;
-  list)
-    [[ $# == 1 ]] || usage
-    backups="$1"; reject_symlink "$backups"; mkdir -p "$backups"; chmod 700 "$backups"
-    find "$backups" -mindepth 1 -maxdepth 1 -type d -name '????????T??????Z-*' -print \
-      | sed 's#.*/##' | sort
-    ;;
-  rollback)
+  install-tree)
     [[ $# == 3 ]] || usage
-    id="$1"; dest="$2"; backups="$3"
-    safe_id "$id" || die "invalid backup id"
-    prepare_roots "$dest" "$backups"
-    lock_root "$backups"; LOCK_HELD=1
-    verify_backup "$backups/$id"
-    EXPECTED_MAIN_SHA="$(read_manifest_value "$backups/$id/manifest" main_sha256)"
-    EXPECTED_HELP_SHA="$(read_manifest_value "$backups/$id/manifest" helper_sha256)"
-    ALLOW_DOWNGRADE=1
-    install_pair "$backups/$id/anychat" "$backups/$id/anychat-access" "$dest" "$backups"
-    ;;
-  purge)
-    [[ $# == 2 ]] || usage
-    id="$1"; backups="$2"
-    safe_id "$id" || die "invalid backup id"
-    reject_symlink "$backups"
-    lock_root "$backups"; LOCK_HELD=1
-    verify_backup "$backups/$id"
-    rm -rf -- "$backups/$id"
-    echo "purged backup $id"
-    ;;
-  gc)
-    [[ $# == 1 || $# == 2 ]] || usage
-    backups="$1"; keep="${2:-3}"
-    reject_symlink "$backups"
-    lock_root "$backups"; LOCK_HELD=1
-    gc_backups "$backups" "$keep"
+    install_tree "$1" "$2" "$3"
     ;;
   *) usage ;;
 esac

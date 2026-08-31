@@ -25,7 +25,7 @@ Speak these. Do not invent synonyms in chat.
 "$ANYCHAT_BIN" provision --json
 ```
 
-That JSON is the only first-run contract. `doctor --json` may show a short product status (`status`, `support_code`, `say_to_user`); it is not a second state machine. Do not run leftover first-run verbs. Provision never updates AnyChat itself; product updates remain an explicit host-plugin-manager action.
+That JSON is the only first-run contract. `doctor --json` may show a short product status (`status`, `support_code`, `say_to_user`); it is not a second state machine. Do not run leftover first-run verbs. Provision never updates AnyChat itself; an explicit update request uses `update --json` and the verified official release package, never a Git marketplace refresh.
 
 ## You do (agent-owned)
 
@@ -63,9 +63,9 @@ Always invoke the exact `continue_args` returned for the current progress state.
 | `approve_admin` | 电脑弹出了管理员确认。请点允许或输入这台电脑的密码。 |
 | `agree_material_change` | AnyChat 说明需要修改什么及如何恢复；用户只回答是否同意。 |
 | `select_account` | 这台电脑上有多个聊天账号。请告诉我用哪一个平时聊天的。 |
-| `sign_in` | 宿主 Agent 已打开软件；用户只完成账号登录或不可代理的确认。 |
+| `retry_permission` | 上一次管理员确认已取消。用户只回答是否重新打开一次确认窗口。 |
 
-Opening, quitting, reducing extra instances, installation, retry after a changed machine state, folder discovery, and application discovery belong to the host agent. If the current CLI labels one of those as `human_action`, perform the machine part yourself and involve the human only if sign-in or an operating-system prompt actually appears. You do not ask the human to type a command, find a path or log, read a version, or install software.
+This table is the complete set of values the CLI may emit as `human_action`. Opening, quitting, reducing extra instances, installation, retry after a changed machine state, folder discovery, and application discovery belong to the host agent. `retry_permission` authorizes only reopening a previously cancelled operating-system prompt; the host agent performs the retry. If the host agent opens the chat app and its own UI asks for account sign-in, the human completes only that sign-in. You do not ask the human to type a command, find a path or log, read a version, install software, or open or quit an application.
 
 ## 管理员确认
 

@@ -51,7 +51,9 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 
 On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
 
-An explicit 开通本机档案 request uses `"$ANYCHAT_BIN" provision --json`. An ordinary query or media request is always invoked first; if it returns a typed readiness envelope, follow its exact protected continuation until AnyChat resumes that sealed request. Keep paths and opaque resume tokens on stdin, never argv. Follow [setup](references/setup.md). `needs_agent` means satisfy the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. Provision never updates AnyChat itself; product updates remain an explicit host-plugin-manager action.
+When the human explicitly asks to update AnyChat, run `"$ANYCHAT_BIN" update --json`. This downloads and validates the immutable official release package, without Git or a marketplace refresh. On `updated`, switch `ANYCHAT_BIN` to the returned `active_bin`, read the returned `active_skill` completely, and verify the version before continuing. Never run `git clone`, `git pull`, or a host marketplace refresh for an AnyChat-only update.
+
+An explicit 开通本机档案 request uses `"$ANYCHAT_BIN" provision --json`. An ordinary query or media request is always invoked first; if it returns a typed readiness envelope, follow its exact protected continuation until AnyChat resumes that sealed request. Keep paths and opaque resume tokens on stdin, never argv. Follow [setup](references/setup.md). `needs_agent` means satisfy the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. Provision never updates AnyChat itself; only an explicit human update request authorizes the host agent to invoke `update --json`.
 
 ## Advisory inbox check (Tell Jacky replies)
 
@@ -116,7 +118,7 @@ Stable sources: verified local social-app archives on macOS Apple Silicon and Wi
 |-------------|-----------------|
 | "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → [connect](references/connect.md) |
 | Connect / token | [connect](references/connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
-| Health / which platform | `doctor [--json]` · upgrade: `doctor --check-upgrade` · `status` · `whoami` · `logout` |
+| Health / which platform | `doctor [--json]` · check: `doctor --check-upgrade` · explicit update: `update --json` · `status` · `whoami` · `logout` |
 | 开通本机档案 | [setup](references/setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`. |
 | **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](references/query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
@@ -154,8 +156,8 @@ Detail: [query](references/query.md), [media](references/media.md), [export](ref
 Prefer the packaged binary next to this skill
 (`…/plugins/anychat/current/bin/<platform>/anychat`), not a leftover PATH winner.
 
-1. `$ANYCHAT_BIN` if set, executable, and matching native platform
-2. Active plugin runtime (highest priority for agent plugins):
+1. `$ANYCHAT_BIN` if set, executable, matching native platform, and not older than the canonical current package
+2. Compare the active plugin runtime with the canonical current package and use the newer valid binary (active runtime wins a version tie):
    - Claude plugin root / cache: `…/anychat/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`
    - Canonical current: `~/.jackyzhang.app/plugins/anychat/current/bin/<platform>/anychat`
 3. Canonical standalone installation:

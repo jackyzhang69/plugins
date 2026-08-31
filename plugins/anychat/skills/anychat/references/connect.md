@@ -14,8 +14,11 @@
 
 1. Run `"$ANYCHAT_BIN" whoami --json`. If connected and entitled, silently
    continue the original request.
-2. Otherwise ask for either a readable local file containing the Portal token
-   (preferred) or a pasted token. Do not ask the human to run anything.
+2. Otherwise first reuse a governed shared credential already available to the
+   host agent. If none is available, ask only for either a readable local file
+   containing the Portal token (preferred) or a pasted token. Do not ask the
+   human to run anything, search for a path, or repeat a credential the host
+   can already access.
 3. Read the value through the agent tool channel and pipe it to:
 
 ```bash
@@ -35,8 +38,10 @@ because the safer delivery method was not used.
 
 On first AnyChat use in a host-agent session, `doctor --check-upgrade --json`
 may provide an advisory update. Recommend it briefly, do not block the request,
-and never auto-update. Updating AnyChat remains an explicit host-plugin-manager
-action.
+and never auto-update. When the human explicitly asks to update, run
+`"$ANYCHAT_BIN" update --json`, switch to its validated `active_bin`, and verify
+the version after reading its returned `active_skill` completely. Do not refresh
+or clone a Git marketplace for an AnyChat-only update.
 
 ## Talk to the human
 

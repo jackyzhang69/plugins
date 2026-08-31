@@ -2,7 +2,7 @@
 
 ## Advisory marketplace check
 
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. Updates remain an explicit host-plugin-manager action.
+On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. An explicit update uses `"$ANYCHAT_BIN" update --json`; never refresh a Git marketplace for AnyChat alone.
 
 Resolve `$ANYCHAT_BIN` via the product router §B.
 
