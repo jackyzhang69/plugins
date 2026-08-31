@@ -13,6 +13,10 @@ specs = {
     "darwin-arm64": "bin/darwin-arm64/anyweb",
     "win32-x64": "bin/win32-x64/anyweb.exe",
 }
+runtime_specs = {
+    "darwin-arm64": ("runtime/darwin-arm64/anyweb-runtime", "anyweb-runtime"),
+    "win32-x64": ("runtime/win32-x64/anyweb-runtime.exe", "anyweb-runtime.exe"),
+}
 try:
     actuals = {}
     for platform, relative in specs.items():
@@ -29,13 +33,18 @@ try:
         actuals[platform] = actual
 
     value = json.loads((root / "runtime-manifest.json").read_text(encoding="utf-8"))
-    if value.get("product") != "anyweb" or value.get("version") != "0.2.1":
+    if (
+        value.get("schema_version") != 1
+        or value.get("product") != "anyweb"
+        or value.get("version") != "0.2.6"
+        or value.get("allowedPlatforms") != ["darwin-arm64", "win32-x64"]
+    ):
         raise ValueError("manifest product or version mismatch")
     binary = value.get("binary", {})
     platforms = binary.get("platforms", {})
     public_platforms = value.get("platforms", {})
     if (
-        binary.get("version") != "0.2.1"
+        binary.get("version") != "0.2.6"
         or set(platforms) != set(specs)
         or set(public_platforms) != set(specs)
         or set(value.get("allowedPlatforms", [])) != set(specs)
@@ -49,6 +58,46 @@ try:
             or public_platforms[platform].get("sha256") != actuals[platform]
         ):
             raise ValueError(f"manifest asset mismatch for {platform}")
+    runtime = value.get("runtime", {})
+    runtime_platforms = runtime.get("platforms", {})
+    release = binary.get("release", {})
+    if (
+        runtime.get("version") != "0.2.6"
+        or runtime.get("verifyChecksum") is not True
+        or set(runtime_platforms) != set(runtime_specs)
+        or runtime.get("resolutionOrder") != ["package", "release-cache"]
+        or runtime.get("fallbackBehavior") != "install-required"
+        or release.get("host") != "github-releases"
+        or release.get("repo") != "jackyzhang69/plugins"
+        or release.get("tag") != "anyweb-v0.2.6"
+        or release.get("source_commit") != value.get("source_sha")
+    ):
+        raise ValueError("manifest runtime identity mismatch")
+    for platform, (relative, release_asset) in runtime_specs.items():
+        descriptor = runtime_platforms[platform]
+        if (
+            descriptor.get("entrypoint") != relative
+            or descriptor.get("asset") != release_asset
+            or not isinstance(descriptor.get("size"), int)
+            or descriptor.get("size", 0) <= 0
+            or re.fullmatch(r"[0-9A-Fa-f]{64}", str(descriptor.get("sha256", ""))) is None
+        ):
+            raise ValueError(f"manifest runtime descriptor mismatch for {platform}")
+        asset = root / relative
+        digest = root / f"{relative}.sha256"
+        if not asset.exists() and not digest.exists():
+            continue
+        if not asset.is_file() or not digest.is_file():
+            raise ValueError(f"partial runtime asset for {platform}")
+        actual = hashlib.sha256(asset.read_bytes()).hexdigest()
+        expected = digest.read_text(encoding="ascii").strip().lower()
+        if expected != actual:
+            raise ValueError(f"runtime checksum mismatch for {platform}")
+        if (
+            descriptor.get("sha256") != actual
+            or descriptor.get("size") != asset.stat().st_size
+        ):
+            raise ValueError(f"manifest runtime asset mismatch for {platform}")
 except Exception as error:
     print(f"verify-release-assets: {error}", file=sys.stderr)
     raise SystemExit(1)

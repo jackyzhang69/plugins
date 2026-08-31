@@ -59,7 +59,7 @@ try:
             relative.parts
         ):
             raise ValueError(f"private runtime material present: {relative_text}")
-        if relative.parts and relative.parts[0] == "bin":
+        if relative.parts and relative.parts[0] in {"bin", "runtime"}:
             continue
         if relative_text == "scripts/verify-package":
             continue

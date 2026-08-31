@@ -8,10 +8,27 @@ case "$(uname -s):$(uname -m)" in
 esac
 test -f "$binary"; test ! -L "$binary"
 test_home="${JACKYZHANG_APP_HOME:-$(mktemp -d "${TMPDIR:-/tmp}/anyweb-install.XXXXXX")}"; export JACKYZHANG_APP_HOME="$test_home"
-raw="$("$binary" doctor --json)"
-python3 - "$raw" <<'PY'
+repair_raw="$("$binary" doctor --repair-install --json)"
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64) installed="$test_home/plugins/anyweb/current/bin/darwin-arm64/anyweb" ;;
+  MINGW*:*|MSYS*:*|CYGWIN*:*) installed="$test_home/plugins/anyweb/current/bin/win32-x64/anyweb.exe" ;;
+esac
+test -f "$installed"; test ! -L "$installed"
+if ! install_raw="$("$installed" runtime install --json)"; then
+  echo "verify-install: runtime install failed: $install_raw" >&2
+  exit 1
+fi
+raw="$("$installed" doctor --json)"
+runtime_raw="$("$installed" runtime doctor --json)"
+python3 - "$repair_raw" "$install_raw" "$raw" "$runtime_raw" <<'PY'
 import json, sys
-value=json.loads(sys.argv[1])
-assert value["ok"] is True and value["product"] == "anyweb" and value["version"] == "0.2.1"
-print("verify-install: ok product=anyweb version=0.2.1")
+repair=json.loads(sys.argv[1])
+install=json.loads(sys.argv[2])
+value=json.loads(sys.argv[3])
+runtime=json.loads(sys.argv[4])
+assert repair["ok"] is True and repair["repair_install"] is True
+assert install["ok"] is True and install["runtime_ready"] is True
+assert value["ok"] is True and value["product"] == "anyweb" and value["version"] == "0.2.6"
+assert runtime["ok"] is True and runtime["runtime_ready"] is True
+print("verify-install: ok product=anyweb version=0.2.6")
 PY
