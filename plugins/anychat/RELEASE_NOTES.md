@@ -1,9 +1,10 @@
-# AnyChat 0.1.44
+# AnyChat 0.1.45
 
 ## User-visible changes
 
-- Opening a local archive now verifies every discovered message shard, so a contacts-only partial setup cannot be reported as ready.
-- Windows image downloads, including batches, can pause for protected local access and resume the exact request without duplicating verified files.
-- Setup always converges on the two verified AnyChat-provided platform packages when the installed chat app is not already an exact match.
-- Setup no longer stops after an arbitrary number of attempts; it stops only on a proven terminal condition or explicit human refusal.
-- Tell Jacky previews include broader safe machine diagnostics while continuing to exclude chat content, identities, paths, and access material; sending requires the exact one-time preview binding.
+- Setup keeps computer discovery, app installation, app lifecycle, and local-path handling with the host agent; the human only confirms a material change, signs in, or completes an operating-system password prompt.
+- Every setup starts from the exact AnyChat-provided platform build unless that exact validated build is already installed. The stopped app is rechecked before first launch so a background replacement cannot become the setup baseline.
+- Mac administrator approval now uses the visible system password window. Cancelling pauses safely, while temporary local-access failures remain retryable without another conversion consent or an arbitrary attempt limit.
+- Mac archive access now hands encrypted database page samples to the privileged helper without asking that helper to cross the operating system's protected app-data boundary.
+- Image downloads produce directly previewable JPEG or PNG files. Validated account-bound image access is reused across CLI invocations, so later downloads do not repeat the expensive first derivation.
+- Tell Jacky diagnostics retain operating-system, app-build, permission, scan-progress, and failure evidence while continuing to exclude chat content, identities, local paths, and access material.
