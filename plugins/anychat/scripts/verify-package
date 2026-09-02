@@ -110,6 +110,29 @@ for rel in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json"):
             f"{rel}.version is {descriptor.get('version')!r}, expected Cargo version {pkg_version!r}"
         )
 
+# 4b. The DeepSeek Harness bundle manifest ships in the same tree and must
+# name the same release: its version is what `dsh plugin` records.
+dsh_manifest = root / "package.json"
+try:
+    if dsh_manifest.is_symlink() or not dsh_manifest.is_file():
+        raise ValueError("descriptor is missing or a symlink")
+    dsh = json.loads(dsh_manifest.read_text())
+except Exception as exc:
+    errors.append(f"could not parse package.json: {exc}")
+else:
+    if dsh.get("name") != "dsh-anychat":
+        errors.append(f"package.json.name is {dsh.get('name')!r}, expected 'dsh-anychat'")
+    if dsh.get("version") != pkg_version:
+        errors.append(
+            f"package.json.version is {dsh.get('version')!r}, expected Cargo version {pkg_version!r}"
+        )
+    if (dsh.get("dsh") or {}).get("bundle", {}).get("patch") != "./cordis.patch.yml":
+        errors.append("package.json.dsh.bundle.patch must be './cordis.patch.yml'")
+    for rel in ("cordis.patch.yml", "index.js"):
+        member = root / rel
+        if member.is_symlink() or not member.is_file():
+            errors.append(f"dsh bundle member missing or unsafe: {rel}")
+
 # 5. Release tag must encode the package version.
 tag = m.get("binary", {}).get("release", {}).get("tag", "")
 if tag != expected_tag:

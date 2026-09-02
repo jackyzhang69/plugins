@@ -159,6 +159,7 @@ Prefer the packaged binary next to this skill
 1. `$ANYCHAT_BIN` if set, executable, matching native platform, and not older than the canonical current package
 2. Compare the active plugin runtime with the canonical current package and use the newer valid binary (active runtime wins a version tie):
    - Claude plugin root / cache: `…/anychat/<latest-ver>/bin/<platform>/anychat` or `$CLAUDE_PLUGIN_ROOT/bin/<platform>/anychat[.exe]`
+   - DeepSeek Harness bundle: this skill's base directory is `<bundle>/skills/anychat`; the binary is `<bundle>/bin/<platform>/anychat[.exe]` (two directories up from the skill base)
    - Canonical current: `~/.jackyzhang.app/plugins/anychat/current/bin/<platform>/anychat`
 3. Canonical standalone installation:
    - macOS: `$HOME/.local/bin/anychat` · Windows: `%USERPROFILE%\.local\bin\anychat.exe` (verify it is not older than the active plugin)

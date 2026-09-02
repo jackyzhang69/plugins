@@ -1,7 +1,6 @@
-# AnyChat 0.1.46
+# AnyChat 0.1.47
 
 ## User-visible changes
 
-- History queries now read one consistent local archive state even while the chat app is writing new data.
-- A changing source is retried only while it is actually moving; stable integrity failures stop safely without publishing an unusable cache.
-- Tell Jacky diagnostics can distinguish a moving archive from a stable integrity failure without including chat content, identities, local paths, or access material.
+- AnyChat now runs inside DeepSeek Harness (`dsh`). The same package installs as a dsh bundle: `dsh plugin --profile web add "github:jackyzhang69/plugins#anychat-v0.1.47&path:plugins/anychat"`, then restart `dsh web`.
+- Every agent host (Claude Code, Codex, DeepSeek Harness) reads the same skill contract and runs the same signed binaries; chat content still never leaves your computer.

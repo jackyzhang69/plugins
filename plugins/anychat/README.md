@@ -10,6 +10,16 @@ Chat content stays on that computer.
 | macOS Apple Silicon | Verified local social-app archives on this computer |
 | Windows x64 | Verified local social-app archives on this computer |
 
+## Supported AI agent hosts
+
+| Host | Install |
+|------|---------|
+| Claude Code | Marketplace `jackyzhang69/plugins`, plugin `anychat` |
+| Codex | Marketplace `jackyzhang69/plugins`, plugin `anychat` |
+| DeepSeek Harness (`dsh`) | `dsh plugin --profile web add "github:jackyzhang69/plugins#anychat-vX.Y.Z&path:plugins/anychat"` (requires `pnpm` on PATH; restart `dsh web` afterwards) |
+
+The same skill contract and the same signed binaries ship to every host.
+
 Unknown chat-app builds fail closed. Missing, older, newer, or wrong-build clients get only the exact AnyChat-provided package for their platform; after the human agrees, the host agent verifies and installs it, and AnyChat independently validates the result. The human never finds paths, manages applications, runs commands, or installs software.
 
 Your AI agent handles setup and computer work. You only approve a material
