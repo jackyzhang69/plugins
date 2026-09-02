@@ -17,6 +17,8 @@ when_to_use: |-
   "set up hosted website login", "forget my hosted website login",
   "answer this saved security question",
   "continue this supported website draft on my computer",
+  "create or continue my Express Entry profile",
+  "fill my EE profile up to the final review step",
   "check or resume my AnyWeb task",
   "report an AnyWeb bug", "request an AnyWeb feature",
   "send an AnyWeb knowledge tip".
@@ -39,6 +41,7 @@ Public commands are `doctor`, `login`, `logout`, `whoami`, `repair claims`,
 `hosted-security-answer set`, `hosted-security-answer status`,
 `hosted-security-answer forget`,
 `task start`, `task status`, `task resume`, `task cancel`, `task result`,
+`task forget-answers`,
 `runtime doctor`, `runtime install`,
 `feedback create`, `feedback list`, `feedback status`, `feedback inbox`,
 `feedback read`, and `commands`.
@@ -68,3 +71,5 @@ sign, pay, upload, send, withdraw, delete, or make a final declaration.
 Use plain language. Report the state and what it means, not raw JSON or flags.
 Never claim that AnyWeb can execute arbitrary website work in this release.
 Never claim an application was submitted, complete, or ready to file.
+For the supported Express Entry task, say clearly that AnyWeb stops before the
+final Continue/submission boundary and never submits the profile.

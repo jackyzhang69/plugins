@@ -68,7 +68,7 @@
     },
     {
       "name": "anyweb",
-      "version": "0.2.10",
+      "version": "0.2.12",
       "source": "./plugins/anyweb",
       "author": {
         "name": "Jacky Zhang"

@@ -36,7 +36,7 @@ try:
     if (
         value.get("schema_version") != 1
         or value.get("product") != "anyweb"
-        or value.get("version") != "0.2.10"
+        or value.get("version") != "0.2.12"
         or value.get("allowedPlatforms") != ["darwin-arm64", "win32-x64"]
     ):
         raise ValueError("manifest product or version mismatch")
@@ -44,7 +44,7 @@ try:
     platforms = binary.get("platforms", {})
     public_platforms = value.get("platforms", {})
     if (
-        binary.get("version") != "0.2.10"
+        binary.get("version") != "0.2.12"
         or set(platforms) != set(specs)
         or set(public_platforms) != set(specs)
         or set(value.get("allowedPlatforms", [])) != set(specs)
@@ -62,14 +62,14 @@ try:
     runtime_platforms = runtime.get("platforms", {})
     release = binary.get("release", {})
     if (
-        runtime.get("version") != "0.2.10"
+        runtime.get("version") != "0.2.12"
         or runtime.get("verifyChecksum") is not True
         or set(runtime_platforms) != set(runtime_specs)
         or runtime.get("resolutionOrder") != ["package", "release-cache"]
         or runtime.get("fallbackBehavior") != "install-required"
         or release.get("host") != "github-releases"
         or release.get("repo") != "jackyzhang69/plugins"
-        or release.get("tag") != "anyweb-v0.2.10"
+        or release.get("tag") != "anyweb-v0.2.12"
         or release.get("source_commit") != value.get("source_sha")
     ):
         raise ValueError("manifest runtime identity mismatch")
