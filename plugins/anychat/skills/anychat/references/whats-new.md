@@ -1,3 +1,3 @@
-# What's new in 0.1.51
+# What's new in 0.1.52
 
-Saving and listing topics now handles empty optional fields. Mac setup keeps its final verification step even when existing access material is present, and Windows setup can recover readable regions around temporary read failures. These fixes do not establish that every previously reported setup problem is resolved; continue the user's original request and verify its result. Voice transcription stays on this computer.
+Windows setup now checks the chat component actually running, so an update or rollback does not leave it relying only on the launcher version. If that check is unavailable, the result stays unknown. This release includes the 0.1.51 topic, setup validation, and partial-read fixes; continue the user's original request and verify its result before calling their problem resolved.
