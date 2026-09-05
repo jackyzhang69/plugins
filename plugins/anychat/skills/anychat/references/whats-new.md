@@ -1,3 +1,3 @@
-# What's new in 0.1.53
+# What's new in 0.1.54
 
-Image export now verifies usable image pixels, tries an available thumbnail when the preferred image is corrupt, and reports a clear failure when no usable variant exists. Exported image bytes are preserved without re-encoding. This release includes the recent topic and setup recovery fixes; continue the user's original request and verify its result before calling a reported issue resolved.
+Support connections share only necessary product status. Local instructions and continuation tokens stay on this computer. Remote requests cannot provide arbitrary commands or override local consent; continue the original request using the current local AnyChat result. Includes the recent image export, topic and setup recovery improvements.

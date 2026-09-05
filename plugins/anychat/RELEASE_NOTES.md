@@ -1,8 +1,8 @@
-# AnyChat 0.1.53
+# AnyChat 0.1.54
 
 ## User-visible changes
 
-- Verify that exported JPEG, PNG, GIF and WebP images can actually be decoded; file signatures alone no longer count as a usable image.
-- Continue to an available thumbnail when the preferred local image is corrupt, and report failure without creating an unusable export when every candidate is corrupt.
-- Preserve the decoded original image bytes, including supported wrapped image formats.
-- Includes the 0.1.51 and 0.1.52 topic, setup recovery, partial-read and Windows running-version fixes.
+- Share only necessary product status during a support connection; local instructions and continuation tokens stay on your computer.
+- Limit remote requests to supported status checks; continuing work uses the current local AnyChat result and existing consent.
+- Treat support text as information, not permission to run commands or send unrelated data.
+- Includes the recent image export, topic and setup recovery improvements.
