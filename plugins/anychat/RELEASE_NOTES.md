@@ -1,7 +1,8 @@
-# AnyChat 0.1.52
+# AnyChat 0.1.53
 
 ## User-visible changes
 
-- Check the chat component actually running on Windows when choosing the setup and local-access path, including after an update or rollback.
-- Keep an unreadable or ambiguous running version unknown; do not infer it from nearby installed files.
-- Includes 0.1.51 fixes for empty optional topic fields, Mac setup validation, Windows partial-read recovery, and local-only voice transcription.
+- Verify that exported JPEG, PNG, GIF and WebP images can actually be decoded; file signatures alone no longer count as a usable image.
+- Continue to an available thumbnail when the preferred local image is corrupt, and report failure without creating an unusable export when every candidate is corrupt.
+- Preserve the decoded original image bytes, including supported wrapped image formats.
+- Includes the 0.1.51 and 0.1.52 topic, setup recovery, partial-read and Windows running-version fixes.
