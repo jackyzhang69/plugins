@@ -1,3 +1,3 @@
-# What's new in 0.1.50
+# What's new in 0.1.51
 
-You can now connect your assistant with Jacky's assistant for a live look at a stuck setup on this computer. You still only talk to your own assistant; you confirm once, then they work together. Search, export, media, topics, and notes work as before, and your chat archive still stays on this computer.
+Saving and listing topics now handles empty optional fields. Mac setup keeps its final verification step even when existing access material is present, and Windows setup can recover readable regions around temporary read failures. These fixes do not establish that every previously reported setup problem is resolved; continue the user's original request and verify its result. Voice transcription stays on this computer.

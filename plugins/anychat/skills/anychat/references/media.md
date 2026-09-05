@@ -43,7 +43,7 @@ AnyChat resumes the exact original media request without another human turn.
 ## Voice (playable + text extraction)
 
 1. **Playable audio:** `media download` / `download-all` for `type=voice` writes a standard **WAV**.
-2. **Text / transcript:** AnyChat does **not** provide AI/STT. After download, the **user agent** runs their own speech-to-text on the WAV path (local Whisper, cloud STT, etc.).
+2. **Text / transcript:** AnyChat does **not** provide AI/STT. After download, the **user agent** runs local speech-to-text on the WAV path (for example, a locally installed Whisper). Chat audio and transcripts stay on this computer; do not upload them to cloud transcription services. If no local transcription tool is available, help install one or provide the playable audio.
 3. List JSON includes `playable_format` (`wav` when present), `id`, and top-level `agent_stt` contract text.
 4. Missing local voice blobs report `status=missing` (no silent success).
 
