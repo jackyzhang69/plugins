@@ -1,6 +1,6 @@
-# AnyChat 0.1.48
+# AnyChat 0.1.50
 
 ## User-visible changes
 
-- On Windows, opening the local archive now checks every running copy of the chat app from the same install. First-time setup is less likely to fail when that app has several processes open.
-- Chat content still never leaves your computer.
+- Your assistant can connect with Jacky's assistant for a live diagnosis when you agree.
+- You still only talk to your own assistant. Chat content still never leaves your computer.

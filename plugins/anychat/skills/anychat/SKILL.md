@@ -6,11 +6,12 @@ description: >-
   search social media chats, cross-platform chat history, contacts,
   identity, export messages with X, export my chat with X, save group
   transcript, download images from group Y, download images from chat with X,
-  list voice messages, attachments in group Y, export that PDF,   follow this
-  person / group for new messages, save a topic, check a topic, write this
-  down, what did we decide, remember this point, connect /
-  log in / save my portal token, anychat setup, doctor, tell Jacky, report
-  this bug / file a bug report, feature request, note this as a tip.
+  download all images from, list voice messages, attachments in group Y,
+  export that PDF, follow this person / group for new messages, save a topic,
+  check a topic, write this down, what did we decide, remember this point,
+  connect / log in / save my portal token, anychat setup, tell Jacky, report
+  this bug / file a bug report, feature request, note this as a tip,
+  connect with Jacky, join code from Jacky.
   One discovery file: playbooks in references/. Ask the live CLI
   (`anychat commands --json`), never from memory of an older release.
 when_to_use: |-
@@ -25,70 +26,78 @@ when_to_use: |-
   "follow this person", "save a topic", "check a topic", "any new messages from",
   "write this down", "what did we decide", "remember this point",
   "connect to anychat / set up anychat", "log in to anychat / save my portal token",
-  "anychat setup", "doctor", "tell Jacky", "tell Jacky about this",
+  "anychat setup", "tell Jacky", "tell Jacky about this",
   "report this bug / file a bug report", "feature request for AnyChat",
-  "note this as a tip".
+  "note this as a tip", "connect with Jacky", "join code from Jacky".
   Bare "@anychat" / "what can anychat do" / "how do I use anychat":
-  if not logged in, follow references/connect.md; otherwise answer from this contract.
+  if not logged in, follow references/connect.md; otherwise answer from live CLI.
 ---
 
 # AnyChat plugin — agent consumption contract
 
-## Live CLI surface (fail-closed)
+Load this on plugin start and whenever the user asks anything AnyChat-related.
 
-Ask the live CLI, never from memory of an older release:
+AnyChat is a **local chat archive** helper: the user searches and exports **their own**
+chat history on this computer. Content stays on the machine. Only Portal login and
+optional redacted Tell Jacky feedback leave the device.
+
+## Talk to the human
+
+On the first session after install, read [get-started](references/get-started.md)
+before the first user-visible reply. Brief the human in plain language — what
+AnyChat does and what to try first — not a command list. After a version bump,
+read [whats-new](references/whats-new.md), tell the human what changed in one
+breath, then resume their original intent without asking them to repeat the
+request. Never ask the human to run doctor as homework.
+
+Use everyday words. Say what you are doing and what they need next — not binary
+paths, `--help`, raw JSON, or internal field names. JSON stays between tools.
+Never paste credentials. Describe as a **local chat archive on this computer**.
+
+## When the user asks "what can you do?"
+
+Do not answer from a frozen command list. Run the live client and translate
+`commands --json` into short product bullets (search, export, follow topics,
+link identities, Tell Jacky). If not logged in, run [connect](references/connect.md)
+first.
+
+```bash
+"$ANYCHAT_BIN" commands --json
+```
+
+## Agent router — intents
+
+| User intent | Host does | Human may be asked |
+|---|---|---|
+| "what can anychat do / how do I use it" | Live `"$ANYCHAT_BIN" commands --json`; translate to product language | Connect once if not logged in ([connect](references/connect.md)) |
+| search my chats / chat with X / group Y / what did X say in groups / search all chats for keyword / cross-platform chat history | [query](references/query.md): resolve ambiguous names first; prefer linked-identity search across sources | Disambiguate person vs group; confirm scope when ambiguous |
+| export messages / save group transcript / export that PDF | [export](references/export.md) | Output location preference when needed |
+| download images / list voice messages / attachments | [media](references/media.md) | Which conversation when ambiguous |
+| follow this person / save a topic / check a topic / any new messages from | Topic save/check flow per [command-router](references/command-router.md) | Confirm proposed topic name `{人或群} {事}` |
+| write this down / what did we decide / remember this point | Notes save after explicit ask | Confirm drafted claim before save |
+| connect / anychat setup / log in / save my portal token | [connect](references/connect.md) or [setup](references/setup.md) for 开通本机档案 | Token file path, OS password, or sign-in when the product requests |
+| tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm exact draft before send |
+| connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyChat status |
+
+Playbooks: [connect](references/connect.md), [setup](references/setup.md),
+[query](references/query.md), [media](references/media.md),
+[export](references/export.md), [tell-jacky](references/tell-jacky.md),
+[pair-session](references/pair-session.md).
+
+Command router and CLI paths (not for first-session orientation):
+[references/command-router.md](references/command-router.md).
+
+## Live CLI discovery (fail-closed)
 
 ```bash
 "$ANYCHAT_BIN" commands --json
 ```
 
 Volatile catalogs (friend/group lists, live messages) are **not** in that dump.
-Playbooks: [connect](references/connect.md), [setup](references/setup.md),
-[query](references/query.md), [media](references/media.md),
-[export](references/export.md), [tell-jacky](references/tell-jacky.md).
 
-## Advisory marketplace check
-
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command.
-
-When the human explicitly asks to update AnyChat, run `"$ANYCHAT_BIN" update --json`. This downloads and validates the immutable official release package, without Git or a marketplace refresh. On `updated`, switch `ANYCHAT_BIN` to the returned `active_bin`, read the returned `active_skill` completely, and verify the version before continuing. Never run `git clone`, `git pull`, or a host marketplace refresh for an AnyChat-only update.
-
-An explicit 开通本机档案 request uses `"$ANYCHAT_BIN" provision --json`. An ordinary query or media request is always invoked first; if it returns a typed readiness envelope, follow its exact protected continuation until AnyChat resumes that sealed request. Keep paths and opaque resume tokens on stdin, never argv. Follow [setup](references/setup.md). `needs_agent` means satisfy the typed local fact, then supply it over stdin for AnyChat to validate. Do not walk a setup state machine and do not offer Tell Jacky unless that JSON says `blocked` and `offer_tell_jacky` is true. Provision never updates AnyChat itself; only an explicit human update request authorizes the host agent to invoke `update --json`.
-
-## Advisory inbox check (Tell Jacky replies)
-
-On the first authenticated AnyChat action in each host-agent session, run this as a separate best-effort step before the requested core action:
-
-```bash
-"$ANYCHAT_BIN" feedback inbox --json
-```
-
-- Show each unread reply to the human in plain language before marking it read.
-- After a reply was successfully displayed, run `"$ANYCHAT_BIN" feedback read --update-id <id>` for that reply. Never mark it read first.
-- If the inbox request or mark-read fails, warn briefly and continue the requested core action; notification failure never changes the core command's exit result.
-- Never inject inbox data into another command's JSON stdout. Inbox/read remain separate commands.
-- Run the check once per authenticated host-agent session, not before every command.
-
-**Read this once on plugin load and reload it whenever a user asks anything AnyChat-related.**
-
-AnyChat is a **local chat archive** helper: the user searches/exports **their own**
-chat history that already lives on this computer. Content stays on the machine.
-Only Portal login + optional redacted “Tell Jacky” feedback leave the device.
-
-## Talk to the human (mandatory — load with this skill)
-
-Governed by platform-vault `delivery/plugin-policy.md` § *Host-agent conversation with the human*.
-
-When speaking to the **person in the chat** (not when writing tool args):
-
-1. **Plain language.** Everyday words. Do not lead with binary paths, `--help` dumps, raw JSON, or internal field names.
-2. **What / next, not how.** Say what you are doing for them and what they need to do next—not a play-by-play of every CLI flag.
-3. **Major stages only.** Report only when the human must decide or act, when the requested result is ready, or when there is no remaining route. Setup, discovery, app lifecycle, and validation are silent agent work. If AnyChat requests consent for its exact platform package, explain the replacement in plain language without exposing implementation details.
-4. **Product language and technical confidentiality.** “Local chat archive on this computer.” State capability, requirement, consent, validation, and outcome only. Do not repeat machine-facing details to the human. A location requested by `needs_agent` is host-agent work: discover and supply it without asking the human for a path. Never name a specific social network in your own words; repeat `say_to_user` only when the JSON requires human action.
-5. **JSON is for you, not the default chat answer.** Prefer `--format json` / `doctor --json` / `whoami --json` **between tools**; translate outcomes into one or two short human sentences (e.g. “已连接，我继续处理” / “本机档案还需要准备”).
-6. **Mask secrets.** Never paste credentials or private access material into chat.
-
-Host UIs may still show tool cards; **your written reply** must still follow this section.
+Session-start advisory checks (upgrade hint, feedback inbox) are host-only —
+see [command-router](references/command-router.md). Never block the user's
+request on advisory failure.
 
 ## 0. Non-negotiable rules
 
@@ -97,59 +106,6 @@ Host UIs may still show tool cards; **your written reply** must still follow thi
 3. **Ambiguous names** — run `resolve` first; show typed candidates (person vs group).
 4. **No secrets in feedback** — no credentials, private access material, message bodies, friend names/wxids, or attachment bytes unless the user explicitly approves a redacted draft.
 5. Prefer `--format json` when chaining agent steps **internally**; follow **Talk to the human** when reporting results. During 开通本机档案, speak only `say_to_user`.
-
-## Self-intro (when user asks “what can you do?”)
-
-Answer in product language, short bullets:
-
-- **Connect** once with a free Portal token ([connect](references/connect.md) / `login`).
-- **Open the local archive** on this Mac or Windows PC. The agent finds local facts, manages the chat app, and installs only the exact platform package AnyChat supplies after consent; AnyChat validates the result locally. The human only approves a material change, enters an operating-system password, or completes sign-in.
-- **Search** friends, groups, person-across-groups, global keywords, or all supported local sources together.
-- **Follow a topic** (a person or a group + what you care about). New messages stay on this computer; the topic itself lives with the account so another computer can follow the same thing.
-- **Remember people.** Link someone's accounts once; after that, searching their name covers every platform they are on, without naming accounts again.
-- **Export** transcripts, **download** supported attachments, and create a local hash-verifiable evidence bundle.
-- **Tell Jacky** feature / bug / tip (always draft → user confirm → `feedback create`).
-
-Stable sources: verified local social-app archives on macOS Apple Silicon and Windows x64. Other apps stay unavailable until their own native tests pass. Automatic first-time access varies by OS and chat-app build. Not a bot; does not send messages.
-
-## Agent quick router
-
-| User intent | Command / playbook |
-|-------------|-----------------|
-| "what can anychat do / how do I use it" | Answer from this skill (self-intro); if not logged in → [connect](references/connect.md) |
-| Connect / token | [connect](references/connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
-| Health / which platform | `doctor [--json]` · check: `doctor --check-upgrade` · explicit update: `update --json` · `status` · `whoami` · `logout` |
-| 开通本机档案 | [setup](references/setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`. |
-| **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](references/query.md) |
-| Chat with friend only | `query --mode friend --target "…" --days 30` |
-| One group | `query --mode group --target "…" --days 30` |
-| Person across all groups | `query --mode person-in-groups --target "…"` |
-| Person in one group | `query --mode person-in-group --target "…" --group "…"` |
-| Multi people in one group | `query --mode multi-in-group --target "A" --person "B" --group "…"` |
-| My messages in groups | `query --mode me-in-groups` / `me-in-group --group "…"` |
-| Global keyword | `search --keyword "…" --days 90` |
-| Search all stable local sources | `search --keyword "…" --all-sources --format json` |
-| Create / verify local evidence | `evidence create --all-sources --output <new-dir>` / `evidence verify --bundle <dir>` |
-| Keyword + context | `query … --keyword "…" --context 2` |
-| List friends / groups | `friends list` / `groups list [--limit N]` |
-| Group member roster | `groups members --query "…" --json` |
-| Disambiguate name | `resolve --query "…" --json` |
-| Contact card | `contacts card --query "…"` |
-| Recent sessions | `sessions` |
-| Export transcript | `export --mode … --target … -o ./anychat-export/messages.json` — [export](references/export.md) |
-| List attachments | `media list --mode friend --target "…" --type image\|voice\|file\|all` — [media](references/media.md) |
-| Download one / all | `media download --id … -o dir` / `media download-all …` |
-| Voice → playable | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
-| Tell Jacky | [tell-jacky](references/tell-jacky.md) → `feedback preview`, confirm exact draft, then `feedback create --user-confirmed --confirmation-binding <binding>` |
-| Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) · `feedback status` · `feedback list` |
-| Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |
-| Local sources | `sources detect` / `sources list` / `sources status` / `sources connect` / `sources sync` / `sources remove` |
-| Identity graph | `identity list` / `identity suggest` / `identity link` (draft first, without `--confirm`) / `identity confirm` / `identity unlink` / `identity reset --yes`. Lives with the account. Offline `--person` is no longer available — tell the user to connect first. Auto-suggest is macOS-only; Windows links manually — say which applies |
-| Follow a topic | Propose `{人或群} {事}` (about 20 Chinese characters / 40 Latin). Ask 「就叫这个？」. Then `topic save --name "…" --person "…" [--keyword "…"]` or `--conversation source:id`. Never keyword-only. `topic list` / `topic show --topic-id` / `topic check --topic-id` / `topic rm --topic-id --yes`. v1 cannot rename. Need login + at least one ready source. Deleting a topic also deletes its notes. |
-| Write down a point | Offer 记下 only when the human asks after a check that had 新增. Draft ≤5 sentences yourself. Never auto-distill. Confirm, then `notes save --topic-id "…" --name "…" --claim "…" --yes` or `notes save --draft '{anychat-notes-v1}' --yes`. `notes list` / `notes show --note-id` / `notes touch --note-id` / `notes rm --note-id --yes`. No local notes file. No excerpts. If this computer has no archive: claims + 「原文不在这台电脑上」. Never claim a one-click jump to one old row. Offline / not logged in: tell them to connect first. |
-| Public command list | `commands --json` |
-
-Detail: [query](references/query.md), [media](references/media.md), [export](references/export.md).
 
 ## §B. Resolve binary
 
@@ -167,23 +123,12 @@ Prefer the packaged binary next to this skill
 
 Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 
-## Mode cheat-sheet
-
-| Mode | Meaning |
-|------|---------|
-| `friend` | 1:1 only |
-| `group` | one group, all senders |
-| `person-in-groups` | one person, groups only |
-| `person-in-group` | one person + one group |
-| `me-in-groups` / `me-in-group` | self in groups |
-| `multi-in-group` | multiple people in one group |
-
 ## Execution boundaries
 
 | Work | Where |
 |------|--------|
 | Unlock / query / export / media copy | **Local CLI** (user machine) |
-| Login entitlement / Tell Jacky submit | **Portal** `account.jackyzhang.app` |
+| Login entitlement / Tell Jacky submit / live connection with Jacky's assistant | **Portal** `account.jackyzhang.app` |
 | Chat message bodies | **Never uploaded** |
 
 ## After success (stickiness, light touch)

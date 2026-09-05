@@ -45,7 +45,8 @@ blocks the user's core AnyChat request.
 
 ## Result and failure
 
-- After a confirmed send, report the feedback id and whether delivery succeeded.
+- After a confirmed send, report the feedback id and whether Jacky received it
+  or it was saved only on this computer.
 - A local record is not proof of delivery. If delivery failed or is unknown,
   say so plainly and do not promise a fix date.
 - If login expired, reconnect through [connect](connect.md). For other failures,
