@@ -56,7 +56,7 @@ Wait for an explicit go-ahead.
 
 ## After submit
 
-- CLI prints JSON with `id` and `delivery` (`portal` or `local_only` if offline / audience not deployed).
+- CLI prints JSON with `id` and `delivery` (`accountd` or `local_mirror` if offline / audience not deployed).
 - Report the `id`. Do not promise fix dates.
 - `feedback list` / `feedback status --id …` inspect own items.
 - `feedback inbox` shows unread replies; mark each read with `feedback read --update-id <id>` after showing it.
@@ -74,5 +74,5 @@ If unread replies exist, show them, then `feedback read --update-id …`. If inb
 ## Failure handling
 
 - **not_logged_in**: `references/connect.md`.
-- **unknown_audience** / **accountd_unreachable** / `delivery=local_only`: saved on this machine; not yet in Jacky's inbox — say so honestly.
+- **unknown_audience** / **accountd_unreachable** / `delivery=local_mirror`: saved on this machine; not yet in Jacky's inbox — say so honestly.
 - Other errors: surface the CLI `code` and `error`.

@@ -1,3 +1,9 @@
+# AnyDoc 0.3.5
+
+- Host agents can open a time-boxed pair session with Jacky's assistant using
+  a join code. The CLI sends inspect/assemble status only; customer files,
+  paths, and continuation tokens stay on this computer.
+
 # AnyDoc 0.3.4
 
 - Assembly now requires a named authority: a confirmed private model, or the

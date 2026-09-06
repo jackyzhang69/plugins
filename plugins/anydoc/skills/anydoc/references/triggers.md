@@ -13,3 +13,6 @@ CI (`assert-skill-surface.py`) requires each bullet to appear in `SKILL.md`
 - report this AnyDoc bug / file a bug report
 - feature request for AnyDoc
 - note this as a tip
+- connect with Jacky
+- pair session
+- join code from Jacky
