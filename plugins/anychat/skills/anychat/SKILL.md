@@ -38,8 +38,8 @@ when_to_use: |-
 Load this on plugin start and whenever the user asks anything AnyChat-related.
 
 AnyChat is a **local chat archive** helper: the user searches and exports **their own**
-chat history on this computer. Content stays on the machine. Only Portal login and
-optional redacted Tell Jacky feedback leave the device.
+chat history on this computer. Content stays on the machine. Portal login, explicitly connected content-free support status, and
+optional redacted Tell Jacky feedback may leave the device.
 
 ## Talk to the human
 

@@ -1,8 +1,8 @@
-# AnyChat 0.1.57
+# AnyChat 0.1.58
 
 ## User-visible changes
 
-- Windows setup resumes unfinished local checks instead of skipping them.
-- Interrupted checks remain eligible to finish instead of being skipped on continuation.
-- Incomplete setup checks are reported as unfinished, while keeping the existing time and resource limits.
-- Includes the assisted troubleshooting and update improvements from 0.1.56.
+- Connect your existing assistant to support with a pairing code after you agree.
+- Assistants can wait for replies, exchange short support messages, and continue after a temporary connection interruption.
+- Repeated sends keep the same message identity. Closed and expired connections return a clear result.
+- Your assistant continues to choose and perform local work using its own tools and your permissions. The connection does not keep a stopped assistant session running.
