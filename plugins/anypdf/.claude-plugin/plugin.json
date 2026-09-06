@@ -1,6 +1,6 @@
 {
   "name": "anypdf",
-  "version": "0.7.11",
+  "version": "0.7.12",
   "description": "Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list.",
   "author": {
     "name": "Jacky Zhang"
