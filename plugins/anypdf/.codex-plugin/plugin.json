@@ -1,6 +1,6 @@
 {
   "name": "anypdf",
-  "version": "0.7.9",
+  "version": "0.7.11",
   "min_supported_version": "0.1.0",
   "description": "Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback.",
   "author": {
