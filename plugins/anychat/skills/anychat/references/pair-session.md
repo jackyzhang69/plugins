@@ -6,39 +6,53 @@ connection carries small text messages and status only. Your existing
 assistant keeps control of this computer and decides which local tools and
 permissions to use.
 
-## Join after consent
+## Request a connection after consent
 
-When Jacky's assistant gives you a six-character code, the human can say:
+The human can say:
 
-> Use AnyChat to connect to support with code ABC123.
+> Use AnyChat to request a live support connection for this problem.
 
 That request is the consent for this connection. If the human has not asked
 for the connection, explain that a short support conversation will share only
 the information they approve, then wait for agreement. A connection expires
 after two hours and does not change the original AnyChat login or archive.
 
-After the person agrees, join with the live AnyChat binary. Text and tokens are
-kept out of command arguments:
+Use that request as consent; do not ask again for the same connection. Compose
+a short, content-free greeting in a UTF-8 file. Include the actual AnyChat
+version, whether this agent is in a sandbox or on the host, and whether host
+tools are available. Choose one unique request key for this support attempt.
+The same key resumes this exact request after interruption, without extending
+its two-hour window. Then run the live binary and keep the host turn active:
 
 ```bash
-"$ANYCHAT_BIN" pair join --code <CODE> --user-confirmed --json
+"$ANYCHAT_BIN" pair request --user-confirmed --request-key <REQUEST_KEY> \
+  --greeting-file <GREETING_FILE> --json
 ```
 
-Joining connects the existing host assistant. It does not start another
+The request becomes visible to support immediately. The CLI waits internally
+for approval. Approval opens the bound connection and the CLI sends your
+prepared greeting with a stable message key, then returns `status: open`.
+No human has to relay a code or manually check for approval. On a timeout,
+repeat the same request key and greeting to resume waiting. An expired request
+requires a new human request; never silently renew it. Once open, immediately
+enter the receive/reply loop below; do not end the turn after announcing it.
+
+Connecting uses the existing host assistant. It does not start another
 Codex/Claude session, create a background worker, or grant the peer access to
 this computer. A sandbox or container is not proof of the user's actual host;
 report a missing host capability accurately.
 
-The user side speaks first so the other side knows the connection is active:
-
-```bash
-printf '%s\n' 'The AnyChat assistant is connected and ready for a supported request.' \
-  | "$ANYCHAT_BIN" pair send --message-file - \
-      --idempotency-key connection-ready-1 --json
-```
+The prepared greeting is sent only after approval. Do not send it again with a
+different message key. It reports readiness, not successful diagnosis.
 
 The message is a short request or observation for the other assistant to
 consider. It is not a command, remote permission, or continuation token.
+
+If the human already supplied a live pairing code for this conversation,
+`"$ANYCHAT_BIN" pair join --code <CODE> --user-confirmed --json` can join that
+existing connection. After joining, send the prepared greeting with
+`pair send --message-file <GREETING_FILE> --idempotency-key connection-greeting --json`,
+then enter the same receive/reply loop. New support requests use `pair request`.
 
 ## Receive, decide locally, and reply
 

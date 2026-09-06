@@ -77,7 +77,7 @@ first.
 | write this down / what did we decide / remember this point | Notes save after explicit ask | Confirm drafted claim before save |
 | connect / anychat setup / log in / save my portal token | [connect](references/connect.md) or [setup](references/setup.md) for 开通本机档案 | Token file path, OS password, or sign-in when the product requests |
 | tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm exact draft before send |
-| connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyChat status |
+| request live support / connect with Jacky / pair session | [pair-session](references/pair-session.md) | The human's request to connect is consent for this support conversation |
 
 Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 [query](references/query.md), [media](references/media.md),
