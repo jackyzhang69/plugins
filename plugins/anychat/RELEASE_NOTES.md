@@ -1,8 +1,8 @@
-# AnyChat 0.1.56
+# AnyChat 0.1.57
 
 ## User-visible changes
 
-- Keep assisted troubleshooting active after joining, with clearer checks and results and fewer repeated prompts.
-- Distinguish receiving a message from completing a check, and keep unresolved problems visible.
-- Reuse recent setup diagnostics after updates, with your confirmation, to avoid unnecessary repeat attempts.
-- Includes the recent connection stability and local archive improvements.
+- Windows setup resumes unfinished local checks instead of skipping them.
+- Interrupted checks remain eligible to finish instead of being skipped on continuation.
+- Incomplete setup checks are reported as unfinished, while keeping the existing time and resource limits.
+- Includes the assisted troubleshooting and update improvements from 0.1.56.

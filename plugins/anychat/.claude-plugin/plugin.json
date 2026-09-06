@@ -1,6 +1,6 @@
 {
   "name": "anychat",
-  "version": "0.1.56",
+  "version": "0.1.57",
   "description": "Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm.",
   "author": {
     "name": "Jacky Zhang"
