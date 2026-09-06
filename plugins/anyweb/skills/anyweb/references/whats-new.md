@@ -1,0 +1,3 @@
+# AnyWeb — what changed in this version
+
+This package can open a time-boxed connection with Jacky's assistant so they can look at this machine's AnyWeb repair, task, or continuity status while you keep talking to your usual assistant. It still does not send website passwords, security answers, or page HTML. Website tasks and repair-claim checks still run in visible Chrome on your computer and still stop before irreversible submission. A repair that is available is not permission to submit. Feedback is only treated as delivered when the product confirms it reached the service, not when it exists only on your machine. Supported site scope for this line is unchanged.

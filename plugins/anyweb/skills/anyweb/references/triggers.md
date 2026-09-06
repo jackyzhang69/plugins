@@ -13,3 +13,6 @@ The AnyWeb router must continue to match these distinct intents:
 - set up hosted website login
 - forget my hosted website login
 - answer this saved security question
+- connect with Jacky
+- pair session
+- join code from Jacky
