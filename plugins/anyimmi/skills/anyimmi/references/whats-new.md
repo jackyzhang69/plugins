@@ -1,3 +1,3 @@
-# What's new in 1.1.5
+# What's new in 1.1.6
 
-The Windows program is now signed the same way the Mac program already is, so Windows installs are trusted. When you are not signed in, the host follows a typed next step instead of handing you setup homework. After install or update, the host reads a short start or change note, tells you what to try first, and continues your original request. The first screen is intents, not a command list; the host asks the live program what it can do. Case law, policy, notes, and CLB conversion are unchanged.
+You can now connect with Jacky's assistant for a live look at this machine's AnyImmi status. The host still talks to you as usual. Only product status is sent — never retrieved case law, policy answers, manuals, or field notes. Case law, policy, notes, and CLB conversion are unchanged.

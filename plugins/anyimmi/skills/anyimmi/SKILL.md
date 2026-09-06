@@ -4,12 +4,14 @@ description: >-
   READ THIS FIRST for AnyImmi. Canadian immigration intelligence: case law
   (FC, FCA, SCC, IRB), IRCC Program Delivery Instructions, Help Centre Q&As, practitioner
   field notes, CLB conversion (IELTS, CELPIP, PTE, TEF, TCF). Connect / login,
-  tell Jacky. Live coverage. One discovery file. Ask `anyimmi commands --json`,
+  tell Jacky, connect with Jacky / pair session / join code from Jacky.
+  Live coverage. One discovery file. Ask `anyimmi commands --json`,
   never from memory of an older release.
 when_to_use: |-
   Load on plugin start. Federal Court, case law, IRCC policy, Help Centre,
   Program Delivery Instructions, coverage, field notes, CLB, IELTS General,
-  CELPIP-G, PTE Core, TEF Canada, TCF Canada, connect / log in, tell Jacky.
+  CELPIP-G, PTE Core, TEF Canada, TCF Canada, connect / log in, tell Jacky,
+  connect with Jacky, pair session, join code from Jacky.
   Fill IMM5257 is not this product.
 ---
 
@@ -61,11 +63,13 @@ what is held now — never from memory or a bundled catalog.
 | Practitioner field notes / practical workflow | [notes](references/notes.md): operational intelligence | Topic refinement when the query is too broad |
 | CLB / IELTS General / CELPIP-G / PTE Core / TEF Canada / TCF Canada | [clb](references/clb.md): deterministic CLB conversion | Exact subscores when not provided |
 | Tell Jacky / feedback | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
+| connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyImmi status |
 
 Playbooks: [connect](references/connect.md), [caselaw](references/caselaw.md),
 [policy](references/policy.md), [manual](references/manual.md),
 [notes](references/notes.md), [clb](references/clb.md),
-[tell-jacky](references/tell-jacky.md).
+[tell-jacky](references/tell-jacky.md),
+[pair-session](references/pair-session.md).
 
 Capability detail (not for first-session orientation):
 [references/capabilities.md](references/capabilities.md).

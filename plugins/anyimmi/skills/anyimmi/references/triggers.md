@@ -14,3 +14,6 @@
 - TEF Canada
 - TCF Canada
 - tell Jacky
+- connect with Jacky
+- pair session
+- join code from Jacky

@@ -44,7 +44,7 @@
       "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy, practitioner field notes, and CLB conversion via the bundled AnyImmi CLI.",
       "name": "anyimmi",
       "source": "./plugins/anyimmi",
-      "version": "1.1.5"
+      "version": "1.1.6"
     },
     {
       "author": {
