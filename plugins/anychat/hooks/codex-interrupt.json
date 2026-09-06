@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "Interrupt": [{"hooks": [{"type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/pair-host-hook\"", "timeout": 3}]}]
+  }
+}

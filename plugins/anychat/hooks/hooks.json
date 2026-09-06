@@ -1,0 +1,8 @@
+{
+  "description": "Keep an explicitly active support conversation in the current assistant; respect pauses and interruption.",
+  "hooks": {
+    "PostToolUse": [{"hooks": [{"type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/pair-host-hook\"", "timeout": 5}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/pair-host-hook\"", "timeout": 15}]}],
+    "SessionEnd": [{"hooks": [{"type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/pair-host-hook\"", "timeout": 3}]}]
+  }
+}

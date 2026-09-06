@@ -56,6 +56,62 @@ then enter the same receive/reply loop. New support requests use `pair request`.
 
 ## Receive, decide locally, and reply
 
+## Continuous conversation and progress
+
+Keep this existing host agent in the conversation until a concrete human
+decision is needed, the human cancels, the consent expires, or the human
+accepts the outcome and ends support. Sending a message is not the end of a
+turn. Use `pair next --json` to receive the next question, progress update or
+answer. It waits inside Rust and returns the peer's message to this agent.
+
+Messages have `--phase question|progress|answer|needs_human|offline` (default:
+`answer`) and optional `--reply-to <MESSAGE_ID>`. During lengthy analysis,
+computer use, or a long-running tool, send meaningful `progress` updates at
+major findings, changes of approach, or a real blocker. Use the host's
+background-tool handle or concurrent tool calls when available; the CLI
+cannot invent progress or interrupt a synchronous host tool. Do not promise
+periodic updates that the current host cannot deliver.
+
+An incoming `progress` update must reach this agent. Read it, adjust the plan
+if useful, acknowledge that update, then wait again. It is not a final answer
+and does not complete or acknowledge the question it refers to. Do not reply
+just to say "received"; that creates an endless acknowledgement conversation.
+Keep track of unanswered questions by message id. If both agents ask a
+question, each handles the other's question without requiring strict turns.
+
+After handling a message, a reply, its acknowledgement and the next wait can
+be issued together:
+
+```bash
+"$ANYCHAT_BIN" pair next --message-file <REPLY_FILE> \
+  --idempotency-key <STABLE_REPLY_KEY> --phase answer \
+  --reply-to <MESSAGE_ID> --ack-message-id <MESSAGE_ID> --json
+```
+
+The reply is stored before acknowledgement. If interrupted between these
+steps, retry the same reply key and message id. This is not a transaction over
+local work: inspect existing local evidence before repeating any operation.
+`needs_human` or `offline` sends the supplied explanation and pauses instead
+of waiting. A `needs_human` message must state the actual missing decision or
+permission. Avoid asking the human to relay messages or repeatedly say go on.
+
+The plugin's lifecycle hooks keep an active conversation attached to this
+same host session when the agent tries to finish prematurely. They do not
+start another agent. Codex requires the installed hook definitions to be
+trusted through its native hook review; an installed plugin alone is not
+proof hooks are active. Check this once when establishing support. If hooks
+are unavailable, report that automatic continuation is unavailable and keep
+the foreground `next` call active; do not claim background receiving.
+
+`open` means the mailbox is valid. `peer_presence: unknown` is deliberate:
+neither elapsed agent thinking time nor a transport process proves attention.
+Progress is a dated report, not a heartbeat. A graceful host exit sends a
+best-effort `offline` notice; crashes or forced cancellation can prevent that
+notice, so the last report never proves the peer is still online. Interrupts
+and pauses must not be turned into an automatic restart.
+
+## Receive one message
+
 Wait for one incoming message. The connection renews bounded network waits
 inside the command, so an idle host assistant does not need to poll every few
 seconds. The default waits through the connection's two-hour lease; a shorter

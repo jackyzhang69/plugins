@@ -1,5 +1,5 @@
-# What's new in 0.1.60
+# What's new in 0.1.61
 
-First-time login and replacing your Portal token now validate the token you submit. A rejected login leaves your previous credential unchanged, and authentication retries continue to use your submitted token.
+Live support now distinguishes progress, answers, and requests for your decision. With the support hooks enabled and trusted in your assistant, the conversation can keep receiving in that same assistant without asking you to repeat “continue.”
 
-You can still ask your assistant to request live support and connect when support approves.
+You can pause or stop support. An open mailbox does not claim that the other assistant is currently receiving. Your local work remains under your assistant's control.
