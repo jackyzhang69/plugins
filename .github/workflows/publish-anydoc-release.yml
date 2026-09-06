@@ -70,13 +70,17 @@ jobs:
           VERSION: ${{ steps.package.outputs.version }}
         run: |
           set -euo pipefail
-          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release create "$RELEASE_TAG" \
-              --verify-tag \
-              --title "AnyDoc $VERSION" \
-              --notes-file plugins/anydoc/RELEASE_NOTES.md
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            ANYDOC_PLUGIN_ROOT="$PWD/plugins/anydoc" \
+              ANYDOC_RELEASE_REPO="${GITHUB_REPOSITORY}" \
+              bash plugins/anydoc/scripts/verify-release-assets
+            exit 0
           fi
-          gh release upload "$RELEASE_TAG" --clobber release-assets/*
+          gh release create "$RELEASE_TAG" \
+            --verify-tag \
+            --title "AnyDoc $VERSION" \
+            --notes-file plugins/anydoc/RELEASE_NOTES.md \
+            release-assets/*
           ANYDOC_PLUGIN_ROOT="$PWD/plugins/anydoc" \
             ANYDOC_RELEASE_REPO="${GITHUB_REPOSITORY}" \
             bash plugins/anydoc/scripts/verify-release-assets

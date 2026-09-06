@@ -1,3 +1,7 @@
+# AnyDoc 0.3.6
+
+- Public macOS and Windows download files for this version.
+
 # AnyDoc 0.3.5
 
 - Host agents can open a time-boxed pair session with Jacky's assistant using
