@@ -1,3 +1,3 @@
-# What's new in 0.1.64
+# What's new in 0.1.65
 
-If opening a Windows local archive still fails after a full search, AnyChat now keeps a detailed redacted record of what the search did. Your assistant should ask whether to tell Jacky, and send that record only after you confirm. Successful machines still stop as soon as the first working key is verified.
+If the chat app is running but AnyChat cannot confirm the signed-in main process, setup no longer treats that as “the app is closed.” Your assistant should not ask you to open or quit it again. You can confirm a diagnostic report for Jacky. The local archive is not ready until setup actually succeeds.
