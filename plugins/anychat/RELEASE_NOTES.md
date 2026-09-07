@@ -1,9 +1,6 @@
-# AnyChat 0.1.62
+# AnyChat 0.1.63
 
 ## User-visible changes
 
-- Support conversations preserve tasks, progress and results across a lost connection. Receiving a message does not silently mark it handled.
-- Your assistant can exchange follow-up questions and progress with support while staying in the same conversation, with its support hooks enabled and trusted.
-- Interrupting support stops the old receiver from reporting itself online. Explicitly resuming continues the approved session and recovers pending messages.
-- Closing or expiring a support session ends unfinished tasks while retaining completed results.
-- The client checks the communication protocol before sending work and reports incompatible support endpoints instead of proceeding.
+- Opening a Windows local archive now stops as soon as the first verified key is found, then fills in the remaining databases from that key. Typical setups finish sooner.
+- If that first pass finds nothing, Windows does one extra search pass. Machines that already succeeded are not slowed down.
