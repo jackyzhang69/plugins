@@ -1,6 +1,6 @@
-# AnyChat 0.1.65
+# AnyChat 0.1.66
 
 ## User-visible changes
 
-- If the chat app is running but AnyChat cannot confirm the signed-in main process, setup no longer says the app is closed. Your assistant should not ask you to open or quit it again.
-- That case can be sent to Jacky after you confirm the draft. It does not mean the local archive is ready.
+- First-time setup on Windows now also looks for the chat app’s own database configuration objects in memory, not only leftover key text. This can unlock a signed-in archive that previously finished scanning with no key.
+- If that still fails, setup stays blocked and can send diagnostics to Jacky. It will not ask you to open extra chat windows or quit the app.
