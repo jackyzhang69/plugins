@@ -1,3 +1,3 @@
-# What's new in 0.1.63
+# What's new in 0.1.64
 
-Opening a Windows local archive now stops as soon as the first working key is verified, then uses that key for the remaining databases. Typical setups finish sooner. If nothing is found, Windows gets one extra search pass; successful machines are not slowed down.
+If opening a Windows local archive still fails after a full search, AnyChat now keeps a detailed redacted record of what the search did. Your assistant should ask whether to tell Jacky, and send that record only after you confirm. Successful machines still stop as soon as the first working key is verified.

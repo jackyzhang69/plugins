@@ -2,21 +2,21 @@
   "version": 4,
   "binary": {
     "name": "anychat",
-    "version": "0.1.63",
+    "version": "0.1.64",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "1c02ef0e70e6561cf418f5df3d720e8c945ab590c902add605360b769519d628"
+        "sha256": "05003da43ee08de54df476efffebd4f25f0a1aa7cf2ccd8be44160c5b2154847"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
-        "sha256": "abd94773c9db5963374fbd25df5e2016d7310b3df88680d15f09be0fba236386"
+        "sha256": "a4163fe5484c2b7316258b20557685c7e02293652b075f956c4779f16e50a52a"
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anychat-v0.1.63"
+      "tag": "anychat-v0.1.64"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -26,15 +26,15 @@
   },
   "helper": {
     "name": "anychat-access",
-    "version": "0.1.63",
+    "version": "0.1.64",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat-access",
-        "sha256": "25492462f61235fd6c8f5fa0eaed8c5805fe044d3098c00d5d77be0490c802a1"
+        "sha256": "bd4b545b8a1c78b9a38c7f41baf1e0b7c3171d9c483020c0ed1e6b11a75c7334"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat-access.exe",
-        "sha256": "376a05c11e456382f7d18e783c44fac63911a8fbd469ae1e0b27ad9f41c33897"
+        "sha256": "0d243af339e830117c68129ee358d4835be4abf649c18816e3ab1a4b6758f003"
       }
     },
     "verifyChecksum": true
@@ -43,7 +43,7 @@
     "darwin-arm64",
     "win32-x64"
   ],
-  "source_sha": "4141b013e29d4457ae00234bbf5c9fc7ddfe073c",
+  "source_sha": "0e7d914c9848f02d6bd8daf9579a268d5cb31b55",
   "cacheDir": {
     "darwin": "${HOME}/.cache/anychat-cli",
     "linux": "${HOME}/.cache/anychat-cli",
