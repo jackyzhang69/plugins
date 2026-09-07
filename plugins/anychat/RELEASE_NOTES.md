@@ -1,8 +1,9 @@
-# AnyChat 0.1.61
+# AnyChat 0.1.62
 
 ## User-visible changes
 
-- Live support can deliver progress updates while the other assistant works, and keep receiving within your current assistant when its support hooks are enabled and trusted.
-- Questions, progress, answers, and requests for your decision are distinguished. Progress does not mean the issue is resolved.
-- Support respects pauses and cancellation. An open mailbox is no longer presented as proof that someone is actively receiving.
-- Reply retries preserve the same message; a short receive now checks for unread messages before reporting a timeout.
+- Support conversations preserve tasks, progress and results across a lost connection. Receiving a message does not silently mark it handled.
+- Your assistant can exchange follow-up questions and progress with support while staying in the same conversation, with its support hooks enabled and trusted.
+- Interrupting support stops the old receiver from reporting itself online. Explicitly resuming continues the approved session and recovers pending messages.
+- Closing or expiring a support session ends unfinished tasks while retaining completed results.
+- The client checks the communication protocol before sending work and reports incompatible support endpoints instead of proceeding.

@@ -1,5 +1,5 @@
-# What's new in 0.1.61
+# What's new in 0.1.62
 
-Live support now distinguishes progress, answers, and requests for your decision. With the support hooks enabled and trusted in your assistant, the conversation can keep receiving in that same assistant without asking you to repeat “continue.”
+Support now keeps track of tasks, progress and results so a lost connection does not silently consume a pending message. With support hooks enabled and trusted, your current assistant can continue exchanging progress and follow-up questions.
 
-You can pause or stop support. An open mailbox does not claim that the other assistant is currently receiving. Your local work remains under your assistant's control.
+Interrupting support stops its old receiver. When you explicitly resume, your assistant can recover pending messages in the same approved session. Closing support ends unfinished tasks and preserves completed results. Your assistant continues to control all local actions.
