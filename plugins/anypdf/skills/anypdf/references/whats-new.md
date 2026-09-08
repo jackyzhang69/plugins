@@ -1,6 +1,6 @@
-# AnyPDF — what changed in 0.7.12
+# AnyPDF — what changed in 0.7.13
 
-This update improves compatibility when AnyPDF reads official PDFs that have normal access restrictions. When a file still needs a supported desktop reader to open, AnyPDF reports that clearly instead of making the result look complete.
+This update improves official forms that reveal or hide sections as answers change. The saved PDF now keeps those visible sections aligned with the user's selected answers and verifies the resulting values more precisely.
 
 AnyPDF continues the task you were already doing through the same router. Connection and Tell-Jacky use the shared Jacky sign-in flow, and feedback counts as delivered only after the service confirms receipt.
 
