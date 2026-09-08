@@ -1,6 +1,6 @@
-# AnyChat 0.1.66
+# AnyChat 0.1.67
 
 ## User-visible changes
 
-- First-time setup on Windows now also looks for the chat app’s own database configuration objects in memory, not only leftover key text. This can unlock a signed-in archive that previously finished scanning with no key.
-- If that still fails, setup stays blocked and can send diagnostics to Jacky. It will not ask you to open extra chat windows or quit the app.
+- On Windows, first-time setup no longer stops after unlocking a non-chat database. It keeps looking until a chat message database key is verified, then opens the local archive.
+- Diagnostic reports still never include chat text. A successful archive check can now be sent to Jacky.
