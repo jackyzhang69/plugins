@@ -30,3 +30,15 @@
 - write this down
 - what did we decide
 - remember this point
+- follow this person
+- save a topic
+- check a topic
+- connect with Jacky
+- join code from Jacky
+- request live support
+- iMessage
+- Telegram
+- other local chats
+- evidence pack
+- proof of what was said
+- same person across apps

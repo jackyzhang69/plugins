@@ -11,7 +11,9 @@ description: >-
   check a topic, write this down, what did we decide, remember this point,
   connect / log in / save my portal token, anychat setup, tell Jacky, report
   this bug / file a bug report, feature request, note this as a tip,
-  connect with Jacky, join code from Jacky.
+  connect with Jacky, join code from Jacky, request live support,
+  same person across apps, iMessage, Telegram, other local chats,
+  evidence pack, proof of what was said.
   One discovery file: playbooks in references/. Ask the live CLI
   (`anychat commands --json`), never from memory of an older release.
 when_to_use: |-
@@ -19,7 +21,8 @@ when_to_use: |-
   Trigger phrases: "search my chats", "chat with X", "group Y",
   "what did X say in groups", "search all chats for keyword",
   "search social media chats", "cross-platform chat history",
-  "contacts", "identity", "export messages with X", "export my chat with X",
+  "contacts", "identity", "same person across apps",
+  "export messages with X", "export my chat with X",
   "save group transcript", "download images from group Y",
   "download images from chat with X", "download all images from",
   "list voice messages", "attachments in group Y", "export that PDF",
@@ -28,7 +31,9 @@ when_to_use: |-
   "connect to anychat / set up anychat", "log in to anychat / save my portal token",
   "anychat setup", "tell Jacky", "tell Jacky about this",
   "report this bug / file a bug report", "feature request for AnyChat",
-  "note this as a tip", "connect with Jacky", "join code from Jacky".
+  "note this as a tip", "connect with Jacky", "join code from Jacky",
+  "request live support", "iMessage", "Telegram", "other local chats",
+  "evidence pack", "proof of what was said".
   Bare "@anychat" / "what can anychat do" / "how do I use anychat":
   if not logged in, follow references/connect.md; otherwise answer from live CLI.
 ---
@@ -58,7 +63,8 @@ Never paste credentials. Describe as a **local chat archive on this computer**.
 
 Do not answer from a frozen command list. Run the live client and translate
 `commands --json` into short product bullets (search, export, follow topics,
-link identities, Tell Jacky). If not logged in, run [connect](references/connect.md)
+link identities, iMessage and Telegram, evidence packs, live support with
+Jacky, Tell Jacky). If not logged in, run [connect](references/connect.md)
 first.
 
 ```bash
@@ -78,6 +84,9 @@ first.
 | connect / anychat setup / log in / save my portal token | [connect](references/connect.md) or [setup](references/setup.md) for 开通本机档案 | Token file path, OS password, or sign-in when the product requests |
 | tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm exact draft before send |
 | request live support / connect with Jacky / pair session | [pair-session](references/pair-session.md) | The human's request to connect is consent for this support conversation |
+| identity / same person across apps | [command-router](references/command-router.md) identity list/suggest/link | Confirm the link |
+| iMessage / Telegram / other local chats | [command-router](references/command-router.md) sources detect/status/connect | Which app when ambiguous |
+| evidence pack / proof of what was said | [command-router](references/command-router.md) evidence create/verify | Output location when needed |
 
 Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 [query](references/query.md), [media](references/media.md),

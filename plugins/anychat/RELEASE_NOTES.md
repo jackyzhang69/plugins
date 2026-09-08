@@ -1,6 +1,7 @@
-# AnyChat 0.1.67
+# AnyChat 0.1.69
 
 ## User-visible changes
 
-- On Windows, first-time setup no longer stops after unlocking a non-chat database. It keeps looking until a chat message database key is verified, then opens the local archive.
-- Diagnostic reports still never include chat text. A successful archive check can now be sent to Jacky.
+- On Windows, first-time setup also looks in the same-named user folder on other fixed drives. It still does not scan whole disks.
+- If the chat app recorded a custom archive location, that full path is kept even when it contains spaces.
+- Your assistant should offer live support with Jacky, linking the same person across apps, iMessage and Telegram, and an evidence pack, not only search and export.
