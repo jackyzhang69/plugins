@@ -1,0 +1,41 @@
+{
+  "name": "anycase",
+  "version": "1.1.6",
+  "min_supported_version": "1.0.0",
+  "description": "Canadian Immigration Intelligence & Practical Tools: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "homepage": "https://jackyzhang.app",
+  "license": "Proprietary",
+  "keywords": [
+    "immigration",
+    "canada",
+    "ircc",
+    "caselaw",
+    "precedents",
+    "clb",
+    "anycase",
+    "immicore"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyCase",
+    "shortDescription": "Canadian Immigration Intelligence & Practical Tools Plugin.",
+    "longDescription": "Use the anycase router skill for deterministic access to Canadian Federal Court precedent legal ratios, synthesized practitioner field insights, IRCC Program Delivery Instructions, Help Centre Q&As, and statutory language calculators. Zero backend AI cost; host agent drives all case reasoning and synthesis.",
+    "developerName": "Jacky Zhang",
+    "category": "Legal & Productivity",
+    "capabilities": [
+      "Read",
+      "Calculate"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "Search Canadian Federal Court precedents for <legal issue> with anycase.",
+      "Check IRCC official policy guidance for <topic>.",
+      "Search practitioner field notes for <operational issue>.",
+      "Calculate CLB level for <IELTS/CELPIP scores>."
+    ]
+  }
+}
