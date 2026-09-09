@@ -7,20 +7,20 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "3dd7280fd6efcd1a7e09936b00b3193ffa78068feae54a9e234cae5565de9740",
+        "sha256": "b40a5092fdeb2075d8eed5be89636d3285b648deb6278529e9e9089cdbf65d36",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "1b5998744212e4d9d782f45ec2cdceb676e0c3912b1fa41c35e565d84c3c93a2",
+          "sha256": "a19dac32086b5de1e8e64584bea14dac594739d5c4f128716038a73a6eb90075",
           "signing": "signed_same_team_hardened_runtime"
         },
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "e0d484901312cbd13ff14e891ee1d8641d54119ba8c61ce1ef390be6e013d143",
+        "sha256": "6c198e353fc0dabb0669171e014706ed1896c2fa72559bb62f2ec77455344e2c",
         "pdfium": {
           "path": "bin/win32-x64/pdfium.dll",
-          "sha256": "7fea062361e05f416bf91bc9d204bcaebc29c2ad4e9fc91194bf5cc5c83d66ec",
+          "sha256": "94c102ceb8f9112e60e90bd0fca6e4081956c0a4bf13ddc39d95988eaa72bf36",
           "signing": "signed_azure_trusted_signing"
         },
         "signing": "signed_azure_trusted_signing"
