@@ -25,7 +25,9 @@ skill_count="$(find "$ROOT/skills" -name SKILL.md | wc -l | tr -d ' ')"
 test "$skill_count" = "1" || { echo "verify-package: expected exactly 1 SKILL.md, found $skill_count" >&2; exit 1; }
 
 # Voice STT contract must remain present in the shipped skill text.
-grep -q 'does \*\*not\*\* provide AI/STT\|does not provide AI'   "$ROOT/skills/anychat/references/media.md"   || { echo "verify-package: voice STT contract missing from skills/anychat/references/media.md" >&2; exit 1; }
+grep -q 'does \*\*not\*\* transcribe\|does not run speech-to-text\|does \*\*not\*\* provide AI/STT' \
+  "$ROOT/skills/anychat/references/media.md" \
+  || { echo "verify-package: voice STT contract missing from skills/anychat/references/media.md" >&2; exit 1; }
 
 PKG_VERSION="$(python3 - "$ROOT/.claude-plugin/plugin.json" <<'PY'
 import json, sys

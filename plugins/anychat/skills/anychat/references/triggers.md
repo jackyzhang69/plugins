@@ -17,6 +17,9 @@
 - download images from chat with X
 - export that PDF
 - list voice messages
+- download voice messages
+- transcribe this voice
+- turn voice into Chinese text
 - attachments in group Y
 - export my chat with X
 - save group transcript

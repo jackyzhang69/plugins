@@ -40,10 +40,14 @@ AnyChat resumes the exact original media request without another human turn.
 - `present` — at least one local media blob exists; download still verifies that an image can be converted into a normal raster
 - `missing` — message exists, local file not found (report honestly; do not invent)
 
-## Voice (playable + text extraction)
+## Voice (download yes, speech-to-text no)
+
+This is intentional product design, not a missing feature. If the human says
+the voice can download but cannot be turned into Chinese, agree and transcribe
+it here.
 
 1. **Playable audio:** `media download` / `download-all` for `type=voice` writes a standard **WAV**.
-2. **Text / transcript:** AnyChat does **not** provide AI/STT. After download, the **user agent** runs local speech-to-text on the WAV path (for example, a locally installed Whisper). Chat audio and transcripts stay on this computer; do not upload them to cloud transcription services. If no local transcription tool is available, help install one or provide the playable audio.
+2. **Chinese / any text:** AnyChat does **not** transcribe. After download, **this host agent** runs local speech-to-text on the WAV path (for example, a locally installed Whisper). Never tell the human that AnyChat cannot convert voice to Chinese as if that were a bug. Chat audio and transcripts stay on this computer; do not upload them to cloud transcription services. If no local transcription tool is available, help install one or provide the playable audio.
 3. List JSON includes `playable_format` (`wav` when present), `id`, and top-level `agent_stt` contract text.
 4. Missing local voice blobs report `status=missing` (no silent success).
 

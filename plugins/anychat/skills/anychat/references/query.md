@@ -186,7 +186,7 @@ the pinned conversation around `at`. Need login. Offline fails closed.
 ## Attachments & Voice
 
 If user wants images/files/voice → [media](media.md).  
-Voice download is **playable WAV**; **transcript/text is agent STT** (anychat has no AI).
+Voice download is **playable WAV**; **Chinese / any transcript is this host agent's STT** (AnyChat has no speech-to-text; that is intentional).
 
 ```bash
 "$ANYCHAT_BIN" media download --id "<id>" -o ./anychat-export --json

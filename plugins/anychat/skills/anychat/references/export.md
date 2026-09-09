@@ -25,7 +25,7 @@ Resolve `$ANYCHAT_BIN` via the product router §B. Requires connect + setup.
   --type image --days 30 -o ./anychat-export/images
 ```
 
-Voice: download yields **playable WAV**; **agent STT only** (no anychat AI).
+Voice: download yields **playable WAV**; **this host agent transcribes** (AnyChat has no speech-to-text; that is intentional).
 
 ## Rules
 

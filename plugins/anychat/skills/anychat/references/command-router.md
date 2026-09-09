@@ -31,7 +31,7 @@ as the first user-visible answer.
 | Export transcript | `export --mode … --target … -o ./anychat-export/messages.json` — [export](export.md) |
 | List attachments | `media list --mode friend --target "…" --type image\|voice\|file\|all` — [media](media.md) |
 | Download one / all | `media download --id … -o dir` / `media download-all …` |
-| Voice → playable | Download voice → **WAV**; **agent runs STT** (anychat has no AI/STT) |
+| Voice → playable / 转中文 | Download voice → **WAV**; **this host agent transcribes** (AnyChat has no STT; that is intentional) |
 | Tell Jacky | [tell-jacky](tell-jacky.md) → `feedback preview`, confirm exact draft, then `feedback create --user-confirmed --confirmation-binding <binding>` |
 | Jacky replied / unread replies | `feedback inbox [--json]` → show each reply → `feedback read --update-id <id>` (once per session, best-effort) · `feedback status` · `feedback list` |
 | Saved nicknames | `alias set` / `alias list` / `alias rm` · `recents` |

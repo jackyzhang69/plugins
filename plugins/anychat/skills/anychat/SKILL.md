@@ -6,7 +6,8 @@ description: >-
   search social media chats, cross-platform chat history, contacts,
   identity, export messages with X, export my chat with X, save group
   transcript, download images from group Y, download images from chat with X,
-  download all images from, list voice messages, attachments in group Y,
+  download all images from, list voice messages, download voice messages,
+  transcribe this voice, turn voice into Chinese text, attachments in group Y,
   export that PDF, follow this person / group for new messages, save a topic,
   check a topic, write this down, what did we decide, remember this point,
   connect / log in / save my portal token, anychat setup, tell Jacky, report
@@ -25,7 +26,9 @@ when_to_use: |-
   "export messages with X", "export my chat with X",
   "save group transcript", "download images from group Y",
   "download images from chat with X", "download all images from",
-  "list voice messages", "attachments in group Y", "export that PDF",
+  "list voice messages", "download voice messages",
+  "transcribe this voice", "turn voice into Chinese text",
+  "attachments in group Y", "export that PDF",
   "follow this person", "save a topic", "check a topic", "any new messages from",
   "write this down", "what did we decide", "remember this point",
   "connect to anychat / set up anychat", "log in to anychat / save my portal token",
@@ -59,12 +62,19 @@ Use everyday words. Say what you are doing and what they need next — not binar
 paths, `--help`, raw JSON, or internal field names. JSON stays between tools.
 Never paste credentials. Describe as a **local chat archive on this computer**.
 
+Voice can be listed and downloaded as playable audio. AnyChat does not turn
+voice into Chinese or any other text; that is intentional. When the human wants
+a transcript, this host agent downloads the WAV and transcribes it locally. Do
+not treat missing speech-to-text as a product gap.
+
 ## When the user asks "what can you do?"
 
 Do not answer from a frozen command list. Run the live client and translate
 `commands --json` into short product bullets (search, export, follow topics,
-link identities, iMessage and Telegram, evidence packs, live support with
-Jacky, Tell Jacky). If not logged in, run [connect](references/connect.md)
+link identities, download voice, iMessage and Telegram, evidence packs, live
+support with Jacky, Tell Jacky). If they ask to transcribe this voice or turn
+voice into Chinese text, download the audio and transcribe it here; do not wait
+for AnyChat to convert speech. If not logged in, run [connect](references/connect.md)
 first.
 
 ```bash
@@ -78,7 +88,7 @@ first.
 | "what can anychat do / how do I use it" | Live `"$ANYCHAT_BIN" commands --json`; translate to product language | Connect once if not logged in ([connect](references/connect.md)) |
 | search my chats / chat with X / group Y / what did X say in groups / search all chats for keyword / cross-platform chat history | [query](references/query.md): resolve ambiguous names first; prefer linked-identity search across sources | Disambiguate person vs group; confirm scope when ambiguous |
 | export messages / save group transcript / export that PDF | [export](references/export.md) | Output location preference when needed |
-| download images / list voice messages / attachments | [media](references/media.md) | Which conversation when ambiguous |
+| download images / list voice messages / download voice messages / transcribe this voice | [media](references/media.md); host agent transcribes the WAV | Which conversation when ambiguous |
 | follow this person / save a topic / check a topic / any new messages from | Topic save/check flow per [command-router](references/command-router.md) | Confirm proposed topic name `{人或群} {事}` |
 | write this down / what did we decide / remember this point | Notes save after explicit ask | Confirm drafted claim before save |
 | connect / anychat setup / log in / save my portal token | [connect](references/connect.md) or [setup](references/setup.md) for 开通本机档案 | Token file path, OS password, or sign-in when the product requests |

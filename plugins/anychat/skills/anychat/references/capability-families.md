@@ -19,7 +19,7 @@ playbook: export.md
 commands: export
 
 ## media
-phrases: download images from group Y; list voice messages
+phrases: download images from group Y; list voice messages; download voice messages; transcribe this voice
 playbook: media.md
 commands: media
 
