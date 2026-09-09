@@ -38,8 +38,8 @@ requires a new human request; never silently renew it. Once open, immediately
 enter the receive/reply loop below; do not end the turn after announcing it.
 
 Connecting uses the existing host assistant. It does not start another
-Codex/Claude session, create a background worker, or grant the peer access to
-this computer. A sandbox or container is not proof of the user's actual host;
+Codex/Claude session, create a background worker, ask the human to start a
+monitor, or grant the peer access to this computer. A sandbox or container is not proof of the user's actual host;
 report a missing host capability accurately.
 
 The prepared greeting is sent only after approval. Do not send it again with a
@@ -117,12 +117,17 @@ of waiting. A `needs_human` message must state the actual missing decision or
 permission. Avoid asking the human to relay messages or repeatedly say go on.
 
 The plugin's lifecycle hooks keep an active conversation attached to this
-same host session when the agent tries to finish prematurely. They do not
-start another agent. Codex requires the installed hook definitions to be
-trusted through its native hook review; an installed plugin alone is not
-proof hooks are active. Check this once when establishing support. If hooks
-are unavailable, report that automatic continuation is unavailable and keep
-the foreground `next` call active; do not claim background receiving.
+same host session until this agent is actually receiving, the connection
+has closed, or a real pause (`needs_human` / `offline`) is sent. They do
+not start another agent and they do not poll every few seconds. A single
+reminder is not enough: if the connection is still open and this agent is
+not receiving, continue with `pair next`. Codex requires the installed hook
+definitions to be trusted through its native hook review; an installed
+plugin alone is not proof hooks are active. Check this once when
+establishing support. If hooks are unavailable, report that automatic
+continuation is unavailable and keep the foreground `next` call active; do
+not claim background receiving. On Claude, one blocking `pair next` may run
+in the background only if this host wakes when that command finishes.
 
 `open` means the mailbox is valid. `peer_presence: unknown` is deliberate:
 neither elapsed agent thinking time nor a transport process proves attention.
@@ -135,8 +140,9 @@ and pauses must not be turned into an automatic restart.
 
 Wait for one incoming message. The connection renews bounded network waits
 inside the command, so an idle host assistant does not need to poll every few
-seconds. The default waits through the connection's two-hour lease; a shorter
-deadline can be chosen when the current host turn has a known limit:
+seconds and must not create a 10-second monitor. The default waits through the
+connection's two-hour lease; a shorter deadline can be chosen when the current
+host turn has a known limit:
 
 ```bash
 "$ANYCHAT_BIN" pair receive --json

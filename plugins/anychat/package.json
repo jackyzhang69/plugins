@@ -1,6 +1,6 @@
 {
   "name": "dsh-anychat",
-  "version": "0.1.71",
+  "version": "0.1.73",
   "description": "AnyChat for DeepSeek Harness: search and export your own local chat archive via the bundled AnyChat CLI. Chat content stays on your machine.",
   "license": "MIT",
   "author": {
