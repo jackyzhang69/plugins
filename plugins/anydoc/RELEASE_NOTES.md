@@ -1,3 +1,11 @@
+# AnyDoc 0.3.7
+
+- Fixes Windows health checks after official repair-install. Azure Trusted
+  Signing changes `pdfium.dll` bytes, so doctor now accepts the post-sign
+  SHA-256 from the published `win32-x64` release manifest instead of reporting
+  `pdfium_checksum_mismatch` / `pdfium_unavailable` when the file already
+  matches that manifest.
+
 # AnyDoc 0.3.6
 
 - Public macOS and Windows download files for this version.
