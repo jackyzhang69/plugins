@@ -8,7 +8,7 @@ Resolve `$ANYCHAT_BIN` via the product router §B.
 
 ## Run the user's request first
 
-Run the intended query command first. If AnyChat returns a typed readiness envelope, keep its opaque `resume_token` private, follow only the returned `continue_args`, and satisfy [setup](setup.md). When AnyChat reports ready, pipe that token to the returned continuation over stdin; AnyChat resumes the sealed original query itself. Never reconstruct the query, put the token on argv, or ask the human to repeat the request. Do not announce setup when it succeeds only to unblock the requested result.
+Run the intended query command first. If AnyChat returns a typed readiness envelope, keep its opaque `resume_token` private, follow only the returned `continue_args`, and satisfy [setup](setup.md). When provision reports `ready` for that ordinary request, run `"$ANYCHAT_BIN" resume --token-stdin` and pipe the saved token on stdin. A `ready` envelope has no `continue_args` and no `resume_token`; do not wait for a continuation that will not appear. AnyChat then executes the sealed original query itself. Never reconstruct the query, put the token on argv, or ask the human to repeat the request. Do not announce setup when it succeeds only to unblock the requested result. An explicit “开通本机档案” with no pending request ends at `ready`.
 
 ## Honest empty results
 
