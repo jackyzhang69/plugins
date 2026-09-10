@@ -1,3 +1,3 @@
-# What's new in 0.1.76
+# What's new in 0.1.77
 
-If some local chats are already readable, AnyChat now searches those parts instead of asking to set up the archive again. Coverage is still marked incomplete when other parts are unread. After setup reports ready for an ordinary request, the original search continues; setup success is not the end of the user’s request.
+On Windows, opening a picture no longer re-runs archive setup. If image access still cannot finish, chat history on this computer is unchanged. After you confirm the computer prompt, AnyChat continues the same download and writes a real picture; it says so if only a thumbnail was available.

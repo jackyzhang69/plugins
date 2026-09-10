@@ -61,13 +61,19 @@ it here.
 ## Images
 
 1. `media download` / `download-all` writes a normal JPEG, PNG, GIF, or WebP.
+   List `present` means a local file exists; download still has to produce a
+   previewable picture. If JSON `variant` is `thumbnail`, say so; never treat a
+   thumbnail as the original, and never rename an unread `.dat` into a picture.
 2. If a local image cannot be opened safely, AnyChat returns
    `E_IMAGE_NOT_PREVIEWABLE` instead of claiming success.
 3. On Windows, `E_IMAGE_V2_ACCESS_REQUIRED` is not a user troubleshooting task.
    The command returns a typed protected continuation: follow it, let the human
-   do only the Administrator confirmation, and let AnyChat resume the exact
-   original download. Never ask for an archive path, key, terminal command, or
-   a second copy of the media id.
+   do only the Administrator confirmation, and when provision reports `ready`,
+   run `"$ANYCHAT_BIN" resume --token-stdin` with the saved token. A `ready`
+   envelope has no `continue_args`. Never ask for an archive path, key,
+   terminal command, a second copy of the media id, or 开通本机档案.
+   If image access is `blocked` with `E_IMAGE_V2_ACCESS_UNAVAILABLE`, chat
+   history on this computer is unchanged; do not start archive setup again.
    For `download-all`, files completed before the protected pause stay in the
    requested output directory. AnyChat verifies and skips those exact files on
    resume; it neither deletes them nor creates duplicate suffixed copies. A

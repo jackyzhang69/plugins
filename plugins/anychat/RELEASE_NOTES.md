@@ -1,6 +1,6 @@
-# AnyChat 0.1.76
+# AnyChat 0.1.77
 
 ## User-visible changes
 
-- If some chats on this computer are already readable, search, sessions, and contacts run on those parts instead of asking to set up the archive again. The result still says when coverage is incomplete.
-- After setup reports ready for an ordinary request, the assistant resumes that same request. It does not treat setup success as the end of the original search.
+- Windows image download now prepares image access separately from chat-body setup. If a picture still cannot be opened, chat history on this computer stays as it is; AnyChat does not ask to set up the archive again.
+- After image permission is confirmed, the original download continues. A saved picture is a real JPEG, PNG, GIF, or WebP. If only a thumbnail could be opened, that is reported.
