@@ -231,7 +231,7 @@ Once `$FORMBRO_BIN` is set, **every command in this doc and every other formbro 
 | "preflight / can webform fill this?" | `formbro webform preflight` — portal-adapter dry run only; does NOT re-check data-model validity, run `validate` too before calling a case fill-ready (Rule 6) | references/webform.md |
 | "check if my machine can run webform fills" | `formbro webform runtime-check` | references/webform.md |
 | "fill the IMM0008 / IMM5257 / IMM5710 PDF" / "give me the filled PDF for case X" | `formbro fill --app-id <id> --forms IMM…,IMM… -o ./out/` | [fill](references/fill.md) (single agent surface; auto-detects TR vs PR; rejects LMIA) |
-| "export this applicant / application as Excel" | `formbro export entity --entity-type <T> --entity-id <id> --output …` | references/write.md |
+| "export this applicant / application as Excel / JSON / blank template" | Discover `--form-id` with `formbro programs schema <key> --role <role>`. JSON: `applicants get` / `applications get` / `employers get` then write the file. Excel with data: that JSON into `formbro export data --form-id <FORM> --data '<json>' --output …`. Blank Excel: `formbro export template --form-id <FORM> --output …`. Do not pass schema form ids to `export entity`. | references/write.md |
 | "audit / who did what when" | `formbro audit my` | references/read.md |
 | "tell Jacky about a bug / feature request / knowledge tip" | `formbro feedback create --type <type> --title "<t>" --description "<d>" [--url <url>] [--context-json '<json>'] [--image <path>]` — draft-confirm before sending | [tell-jacky](references/tell-jacky.md) |
 
@@ -245,7 +245,7 @@ Use this whenever the user gives files: Excel / CSV / Word / DOCX / PDF / screen
 | Create related people after main import (spouse/dependant/family) | If covered by the import contract, include them there. If not, `persons create` -> `persons patch` -> `applications attach` / `replace-person` -> `validate person` | Use CLI mutations only. |
 | Update an existing applicant/application/employer from a file | `extract contract` -> local parse -> `validate data` or dry validation -> `extract apply-json` / `patch` | Use `expected-version` when you just read the entity. |
 | Fill IMM PDFs from saved FormBro data | `formbro fill --app-id <id> --forms ... -o <dir>` | Do not parse user PDFs for this; the source data is the saved case. |
-| Export saved FormBro entity to Excel | `export entity` | This is output generation, not import. |
+| Export saved FormBro entity to Excel / JSON / blank template | `programs schema` then `applicants/applications/employers get` + `export data` / `export template` | Output generation, not import. Do not pass schema form ids to `export entity`. |
 | Upload supporting documents / ask what files are needed | `uploads slots` | Current agent surface lists slots; it does not upload arbitrary local files unless a future CLI command adds that. |
 | Read a user's Word/PDF/scan to create JSON | Use local document/OCR/spreadsheet tools to extract text/tables, then feed the result into the import/extract JSON contract | Do not claim the CLI itself reads DOCX/PDF/images in the agent-native import path. |
 
@@ -287,15 +287,12 @@ Treat `main.rs` + `<formbro> --help` as the runtime truth when docs and code dri
 
 If unsure of the exact key for a case, run `formbro programs list` first, **never** make up a key like `pr-general-application` or `tr-sp`.
 
-## 3. Entity-type cheat-sheet (`validate by-id`, `export entity`)
+## 3. Entity types — ask the live CLI
 
-`entity_type` is `<category-lc>-<program-key>-<role>`:
+Do not memorize or invent form ids / entity-type slugs. Run `formbro programs schema <program-key> --role <role>` (and `programs list` / `--help`) at call time.
 
-- TR examples: `tr-sp-in-applicant`, `tr-wp-out-applicant`, `tr-visa-in-applicant`, `tr-sp-in-application`
-- PR examples: `pr-general-applicant`, `pr-express-entry-applicant`, `pr-general-application`, `pr-spouse-sponsorship-sponsor`
-- LMIA examples: `lmia-hws-employer`, `lmia-lws-employer`, `lmia-ee-employer`, `lmia-hws-application`
-
-Roles vary per program (applicant / spouse / sponsor / employer / dependant / application). When in doubt, run `formbro programs schema <program-key> --role <role>` to see what the registry expects.
+- `validate by-id --entity-type` uses the form id returned by `programs schema`.
+- Excel / JSON / blank export does **not** use `export entity` with that form id. Live `export entity` rejects schema form ids. Follow [write.md](references/write.md): get JSON, then `export data --form-id` / `export template --form-id`.
 
 ## 4. PR / TR / LMIA boundary matrix (which command supports what)
 
@@ -313,7 +310,7 @@ Roles vary per program (applicant / spouse / sponsor / employer / dependant / ap
 | `webform preflight / runtime-check / status` | ✅ | ✅ | ✅ | See §6 about status truth |
 | **`fill`** (PDF, agent path) | ✅ | ✅ | ❌ | Auto-detects TR vs PR. LMIA explicitly rejected with hint to use `webform start`. See `references/fill.md` skill. |
 | `export pdf` (legacy transport) | ✅ | partial | — | TR-route-only in cli; **don't expose to agent** — use `fill`. Kept for raw-data preview / sync batch. |
-| `export entity` (Excel) | ✅ | ✅ | ✅ | Per-entity Excel export |
+| `export data` / `export template` (Excel) | ✅ | ✅ | ✅ | `--form-id` from live `programs schema`. Agent Excel path. |
 
 If you call a command in the wrong column, the CLI returns a structured 4xx error with the right alternative — surface that error verbatim to the user, do not retry blindly.
 
@@ -383,7 +380,7 @@ The FormBro CLI is **stateless per invocation** — each `formbro <subcommand>` 
 | `applications patch` on the **same** entity, sequentially with `validate by-id` | **SERIAL** | data dependency |
 | `webform start` (local browser + worker daemon) | **SERIAL — ALWAYS** | the worker daemon is a singleton process per user; two concurrent `start` calls fight for the same Unix socket / Chromium instance |
 | `webform daemon start/stop/restart/prune-chromium` | **SERIAL** | manage singleton; concurrent calls race |
-| `login` (writes `~/.formbro/config.json`) | **SERIAL** | shared writeable config file |
+| `login` (writes `~/.jackyzhang.app/token/user.json`) | **SERIAL** | shared durable token slot |
 
 Rule of thumb: **anything involving the local browser or the local worker daemon is serial. Everything else is parallel.**
 
@@ -392,5 +389,5 @@ If the docs are unclear for a new command, default to PARALLEL for read-only / n
 ## 8. Token & secret rules
 
 - **Never log the token value.** Mask any `jz_*` value as `jz_***` in any output.
-- The user's token lives only in `~/.formbro/config.json` (or `%USERPROFILE%\.formbro\config.json`). Captured once by [connect](references/connect.md).
+- The user's token lives only in `~/.jackyzhang.app/token/user.json`. Captured once by [connect](references/connect.md).
 - Do not write the token anywhere else, do not include it in example commands, do not echo it back.

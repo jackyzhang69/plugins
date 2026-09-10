@@ -118,7 +118,9 @@ Do **not** send a whole array in `--data` just to update one field. Arrays are a
 | "import / create applicant + application from user file(s)" | `<formbro> import contract --program-key <key>` then local agent reads files directly, generates `{ "applicant": {...}, "application": {...} }`, runs `<formbro> import apply-json --program-key <key> --json '<json>' --dry-run`, then reruns without `--dry-run` if valid |
 | "extract/patch data into an existing entity" | `<formbro> extract contract --program-key <key> --entity-type <T>` then local agent generates JSON and calls `<formbro> extract apply-json --target-entity-id <id> --target-entity-type <applicant|application|employer> --json '<json>' [--program-key <key>]` |
 | "fill the IMM0008 / IMM5257 PDF for this case" | **Use `references/fill.md` skill** — call `<formbro> fill --app-id <id> --forms IMM0008,IMM5406 -o ./out/`. Do NOT call `export pdf` for agent purposes; `export pdf` is TR-route-only in cli and doesn't auto-detect category. |
-| "export this applicant / application as Excel" | `<formbro> export entity --entity-type <T> --entity-id <id> --output app.xlsx` |
+| "export this applicant / application as Excel with data" | Discover `--form-id` with `<formbro> programs schema <key> --role <role>`. Get JSON (`applicants get` / `applications get` / `employers get`), then `<formbro> export data --form-id <FORM> --data '<json>' --output app.xlsx` |
+| "export a blank Excel" | `<formbro> export template --form-id <FORM> --output template.xlsx` with `<FORM>` from live `programs schema` |
+| "export this applicant / application as JSON" | `<formbro> applicants get <id>` / `applications get <id>` / `employers get <id>` and write the JSON to the output file |
 | "what files can I attach to this case" | `<formbro> uploads slots --entity-type <T> --entity-id <id>` |
 | "add a note to <case>" | `<formbro> notes add --entity-id <id> --entity-type <T> --note "<text>"` |
 
@@ -129,16 +131,12 @@ TR: `sp-out`, `sp-in`, `wp-out`, `wp-in`, `visa-out`, `visa-in`, `visitor-record
 PR: `general`, `express-entry`, `caregiver`, `spouse-sponsorship`, `parent-sponsorship`, `renewal`
 LMIA: `hws`, `lws`, `ee`
 
-### `entity-type` values (used by `validate by-id`, `export entity`, `extract apply-json`)
-Format is `<category-lc>-<program-key>-<role>`:
+### `entity-type` / `--form-id` — ask the live CLI
 
-- `tr-sp-in-applicant`, `tr-sp-in-application`, `tr-sp-in-spouse`, `tr-sp-in-dependant`
-- `tr-wp-out-applicant`, `tr-visa-in-applicant`, `tr-visitor-record-applicant`
-- `pr-general-applicant`, `pr-general-application`, `pr-general-spouse`, `pr-general-dependant`
-- `pr-express-entry-applicant`, `pr-spouse-sponsorship-sponsor`, `pr-caregiver-applicant`
-- `lmia-hws-employer`, `lmia-hws-application`, `lmia-lws-employer`, `lmia-ee-employer`
+Do not invent slugs and do not reuse a remembered form list.
 
-If the exact entity-type is uncertain, run `<formbro> programs schema <program-key> --role <role>` to discover it from the registry. Do not invent slugs.
+- `validate by-id` and `extract *`: `--entity-type` is the form id from `<formbro> programs schema <program-key> --role <role>`.
+- Excel / JSON export: do **not** pass that form id to `export entity` (live CLI returns `400 Unknown entity type`). Take `--form-id` from the same live `programs schema` output and use `export data` / `export template` as below.
 
 ### `forms` (for PDF generation — see `references/fill.md` for the agent path)
 TR: `IMM5257`, `IMM5645`, `IMM5708`, `IMM5709`, `IMM5710`, `IMM1294`, `IMM1295` (subset varies by program)
@@ -189,10 +187,16 @@ Patches accept `--expected-version <n>`. Use this whenever you have just read th
 <formbro> validate person     --person-id <id> --program-key <key> [--role applicant]
 <formbro> validate operation  --operation <op> --entity-type <T> [--entity-id <id> | --entity-data '<json>']
 
-# Export
-<formbro> export entity   --entity-type <T> --entity-id <id> --output <path> [--language en|fr] [--program-key <key>] [--blank]
-<formbro> export data     --form-id <FORM> --data '<json>' --output <path> [--program-key <key>] [--language en|fr]
-<formbro> export template --form-id <FORM> --output <path> [--language en|fr]
+# Export (every level: applicant, application, employer, …)
+# 1. <FORM> = form id from live `programs schema <program-key> --role <role>`
+# 2. JSON: write the matching get payload
+<formbro> applicants get <id>
+<formbro> applications get <id>
+<formbro> employers get <id>
+# 3. Excel with data: feed that JSON to export data
+<formbro> export data --form-id <FORM> --data '<json>' --output <path> [--program-key <key>] [--language en|zh]
+# 4. Blank Excel: no saved entity required
+<formbro> export template --form-id <FORM> --output <path> [--language en|zh]
 <formbro> export pdf      --program-key <key> --app-id <id> --forms <FORM,FORM,...> [--output <path>]
 <formbro> export pdf-check  --program-key <key> --app-id <id> --forms <FORM,FORM,...>
 <formbro> export extension  --program-key <key> --app-id <id>

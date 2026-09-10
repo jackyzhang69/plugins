@@ -15,7 +15,7 @@
       "homepage": "https://formbro.ca/agent-integration",
       "name": "formbro",
       "source": "./plugins/formbro",
-      "version": "1.9.0"
+      "version": "1.9.1"
     },
     {
       "author": {
