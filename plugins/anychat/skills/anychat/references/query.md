@@ -10,6 +10,17 @@ Resolve `$ANYCHAT_BIN` via the product router §B.
 
 Run the intended query command first. If AnyChat returns a typed readiness envelope, keep its opaque `resume_token` private, follow only the returned `continue_args`, and satisfy [setup](setup.md). When AnyChat reports ready, pipe that token to the returned continuation over stdin; AnyChat resumes the sealed original query itself. Never reconstruct the query, put the token on argv, or ask the human to repeat the request. Do not announce setup when it succeeds only to unblock the requested result.
 
+## Honest empty results
+
+An empty `items` / `messages` array is not proof the chat never existed when coverage is incomplete.
+
+- Legacy CLI JSON: `coverage.empty_is_not_absence` is true, or `coverage.complete` is false with `count` 0.
+- Source query JSON: `coverage.limitation_codes` includes `wechat_empty_not_proven_absent`, or `coverage.completeness` is `partial` with an empty page.
+
+Tell the human: in the parts that can be read, there was no match; some local history is still unread, so this is not proof there was never a chat. Never say “没有聊天记录” or “this person has no messages” in that case.
+
+If `coverage.wal_unapplied` is true or `limitation_codes` includes `wechat_wal_not_applied`, say the newest committed messages could not be included this time. Do not present the page as complete history. If `limitation_codes` includes `wechat_coverage_unverified`, the page is not complete — coverage could not be checked.
+
 ## Someone the user already linked — try this first
 
 When the user names a **person** ("chat with Minko", "what did Minko say"),
