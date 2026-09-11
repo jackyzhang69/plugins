@@ -1,3 +1,16 @@
 # AnyWeb — first session orientation
 
-AnyWeb runs bounded website tasks and checks repair claims on sites this release supports. It works in visible Chrome on your own computer and stops before irreversible submission boundaries. It is not a general web automation tool for arbitrary sites. On a first session, try a supported repair or test task that is already approved for this release. The agent may ask you for facts the website needs, such as answers you already know. If several facts are missing at once, it should ask for all of them together. It may ask you to confirm before it continues through a sensitive step. After a run, it may ask you to verify that the outcome matches what you expected. You can save a website login for reuse on this computer; saved secrets never appear in chat. You authorize any irreversible action; AnyWeb reports state rather than claiming submission.
+AnyWeb fills one supported Express Entry profile on this computer, in visible
+Chrome, and stops before the last Continue or submit. Give it the applicant's
+information files first. The assistant compiles those files into one complete
+pack and AnyWeb runs that pack. It does not invent answers, it does not quiz
+you field by field while the website is open, and it does not file the
+application.
+
+On a first session, start that fill from the files. Email codes and similar
+checks still pause for you. You can save a website login for reuse on this
+computer; saved secrets never appear in chat. You authorize any irreversible
+action. AnyWeb reports state rather than claiming submission.
+
+Repair-claim checks and a Jacky pair session exist if you need them. They are
+not the starting product.

@@ -1,7 +1,7 @@
 {
   "name": "anyweb",
-  "version": "0.2.15",
-  "description": "Run bounded local website tasks, check repair claims, and optionally save a website login for reuse on this computer without exposing saved secrets.",
+  "version": "0.2.17",
+  "description": "Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
@@ -9,14 +9,14 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "AnyWeb",
-    "shortDescription": "Fill a supported Express Entry profile locally and check repairs.",
-    "longDescription": "Use the anyweb plugin to fill a supported Express Entry profile in visible local Chrome up to the pre-submit review, retrieve repair outcomes, save an explicitly approved website login for reuse on this computer, and Tell Jacky. It is not a general-purpose automation tool.",
+    "shortDescription": "Fill a supported Express Entry profile locally, then stop before submit.",
+    "longDescription": "Use the anyweb plugin to fill a supported Express Entry profile in visible local Chrome up to the pre-submit review, save an explicitly approved website login for reuse on this computer, and Tell Jacky. Repair-claim checks remain available. It is not a general-purpose automation tool.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://jackyzhang.app",
     "defaultPrompt": [
-      "Fill my Express Entry profile up to the final review step on this computer.",
+      "Fill my Express Entry profile from these applicant files up to the final review step on this computer.",
       "Continue a supported website draft on this computer.",
       "Save my website login for reuse on this computer.",
       "Tell Jacky about an AnyWeb problem."

@@ -1,7 +1,7 @@
 {
   "name": "anyweb",
-  "version": "0.2.15",
-  "description": "Run bounded local website tasks, check repair claims, and optionally save a website login for reuse on this computer without exposing saved secrets.",
+  "version": "0.2.17",
+  "description": "Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.",
   "author": {
     "name": "Jacky Zhang"
   }

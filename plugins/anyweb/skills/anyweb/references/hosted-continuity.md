@@ -16,13 +16,16 @@ For the first save, explain that AnyWeb will keep an encrypted copy for reuse
 on this computer. After explicit approval run:
 
 ```bash
-"$ANYWEB_BIN" hosted-account set --site <site> --role <role> --credentials-stdin --hosted-custody-confirmed --json < <USER_CONTROLLED_FILE>
+"$ANYWEB_BIN" hosted-account set --site ircc-ee-profile --role default --credentials-stdin --hosted-custody-confirmed --json < <USER_CONTROLLED_FILE>
 ```
 
+For the ordinary user filling their own Express Entry profile, the site is
+`ircc-ee-profile` and the role is `default`. Do not invent another role.
 The credentials file must contain only `username` and `password`. Do not keep
 or delete the user's file; its lifecycle remains the user's decision. Use
-`hosted-account status` for masked state and `hosted-account forget
---user-confirmed` only after separate explicit deletion approval.
+`hosted-account status --site ircc-ee-profile --role default --json` for
+masked state and `hosted-account forget --site ircc-ee-profile --role default
+--user-confirmed --json` only after separate explicit deletion approval.
 
 When an active website session returns a current visible static security
 question plus an opaque challenge reference, show only that visible question
