@@ -1,6 +1,6 @@
-# AnyPDF — what changed in 0.7.13
+# AnyPDF — what changed in 0.7.14
 
-This update improves official forms that reveal or hide sections as answers change. The saved PDF now keeps those visible sections aligned with the user's selected answers and verifies the resulting values more precisely.
+This patch makes sign-in more reliable when a Windows computer and the account service differ slightly in their clocks. A valid session can continue instead of appearing disconnected during that small timing difference.
 
 AnyPDF continues the task you were already doing through the same router. Connection and Tell-Jacky use the shared Jacky sign-in flow, and feedback counts as delivered only after the service confirms receipt.
 
