@@ -1,6 +1,6 @@
 {
   "name": "anydoc",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "min_supported_version": "0.1.0",
   "description": "Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky.",
   "author": {
@@ -33,6 +33,7 @@
       "What can AnyDoc do?",
       "Inspect this folder and propose a packing list.",
       "Assemble the approved document pack.",
+      "Change the saved packing rules.",
       "Tell Jacky about an AnyDoc bug or feature idea."
     ]
   }

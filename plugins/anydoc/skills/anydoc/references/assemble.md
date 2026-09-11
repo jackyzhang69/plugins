@@ -127,11 +127,15 @@ Preconditions. All of them, every time:
 - No other state starts Teach Me: not `model_found`, not `model_ambiguous`, not
   `model_invalid`, not `model_unavailable`. Not to "improve" a model that
   already resolved, not because the folder disagrees with it, and not because
-  the user said "just learn it" — a model that exists changes only through an
-  explicit `models replace` request.
+  the user said "just learn it" — a model that exists changes only through
+  [models](models.md).
 - The teachable source is a document list the user provides, and nothing else. A
   finished package, an `anydoc-output` snapshot, a folder listing, or a Public
   Guide is not a teachable source.
+
+Never ask the human to open, edit, or paste JSON. Never tell the human to run a command.
+Drafts stay in host scratch and are deleted after save, a refusal, or a stop. Later
+changes to a saved model use [models](models.md).
 
 Then convert the list, show it, get confirmation, and save the abstract model —
 in that order:
@@ -139,9 +143,9 @@ in that order:
 1. Ask for one representative **document list** from the same case type. Do not infer a reusable model from the current messy folder, a finished package, or a Public Guide alone.
 2. Locally extract only the reusable structure: ordered final deliverables, what content each deliverable contains, which role needs it, and the named condition for when it applies.
 3. Remove RCIC receipt/check marks, provided/missing status, customer names, file paths, current-case facts, role bindings, condition results, and execution actions. These never go to accountd.
-4. Build a strict `anydoc-assembly-model-v2` draft and run `models validate --model <draft.json> --json` offline. Explicitly choose `single|per_person`, the exact filename template, `shared|per_person` content ownership, and `case|subject` condition scope.
+4. In host scratch, build a strict `anydoc-assembly-model-v2` draft and run `"$ANYDOC_BIN" models validate --model <scratch-draft.json> --json` offline. Explicitly choose `single|per_person`, the exact filename template, `shared|per_person` content ownership, and `case|subject` condition scope. Never hand that file to the human.
 5. Show the **entire** model to the human in plain language: every ordered output filename pattern, included content, role, and named condition. Ask for explicit confirmation; partial summaries are not confirmation.
-6. Only after that yes, run `models save --model <draft.json> --user-confirmed --json`. Report the returned `model_id`, `revision`, and `model_hash`. Use `models replace` with `--expected-revision` for later full replacements; use `models forget` only after a separate explicit confirmation.
+6. Only after that yes, run `"$ANYDOC_BIN" models save --model <scratch-draft.json> --user-confirmed --json`. Report the returned `model_id`, `revision`, and `model_hash` in one sentence, then delete scratch. Later full replacements and forget follow [models](models.md).
 
 The saved asset is an abstract model, never a case record. Do not upload the document list itself or any client document.
 

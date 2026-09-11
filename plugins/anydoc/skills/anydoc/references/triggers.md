@@ -8,6 +8,8 @@ CI (`assert-skill-surface.py`) requires each bullet to appear in `SKILL.md`
 - inspect this client directory
 - rename and merge these PDFs
 - build the IRCC document folder
+- change the saved packing rules
+- update the assembly model
 - connect to anydoc / log in to anydoc / save my portal token
 - tell Jacky about this
 - report this AnyDoc bug / file a bug report

@@ -1,3 +1,9 @@
+# AnyDoc 0.3.8
+
+- Saved packing rules can be changed in the host chat. The human states the
+  rule and confirms a plain-language readback. They do not edit JSON or run
+  commands.
+
 # AnyDoc 0.3.7
 
 - Fixes Windows health checks after official repair-install. Azure Trusted

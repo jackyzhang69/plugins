@@ -3,15 +3,16 @@ name: anydoc
 description: >-
   READ THIS FIRST for AnyDoc. Pack this folder, assemble the upload package,
   inspect this client directory, rename and merge these PDFs, build the IRCC
-  document folder. Connect / log in / save my portal token for saved models
-  and tell Jacky. connect with Jacky / pair session / join code from Jacky.
-  Offline inspect and manual plans. One discovery file; playbooks in
-  references/. Ask the live CLI (`anydoc commands --json`), never from
-  memory of an older release.
+  document folder. Change the saved packing rules / update the assembly model.
+  Connect / log in / save my portal token for saved models and tell Jacky.
+  connect with Jacky / pair session / join code from Jacky. Offline inspect
+  and manual plans. One discovery file; playbooks in references/. Ask the
+  live CLI (`anydoc commands --json`), never from memory of an older release.
 when_to_use: |-
   Load on plugin start. Trigger phrases: "pack this folder",
   "assemble the upload package", "inspect this client directory",
   "rename and merge these PDFs", "build the IRCC document folder",
+  "change the saved packing rules", "update the assembly model",
   "connect to anydoc / log in to anydoc / save my portal token",
   "tell Jacky about this", "report this AnyDoc bug / file a bug report",
   "feature request for AnyDoc", "note this as a tip",
@@ -21,7 +22,8 @@ when_to_use: |-
 # AnyDoc — host agent contract
 
 Load this on plugin start and whenever the user asks to inspect, plan, assemble,
-or verify a client document folder, connect, or Tell Jacky.
+or verify a client document folder, change the saved packing rules, connect, or
+Tell Jacky.
 
 AnyDoc organizes the final forms and supporting documents that the user intends
 to submit to IRCC or another receiving institution. Its native reader inspects
@@ -61,12 +63,14 @@ Do not answer from a frozen command list. Run the live client and translate
 |---|---|---|
 | "what can AnyDoc do" | Live `"$ANYDOC_BIN" commands --json`; translate inspect/plan/assemble capabilities | Connect when resolving or saving a private model ([connect](references/connect.md)) |
 | pack this folder / assemble the upload package / inspect this client directory / rename and merge these PDFs / build the IRCC document folder | [assemble](references/assemble.md): inspect → plan → approve → assemble → verify | Document list or confirmed private model; explicit yes on the packing list; facts for ambiguous subjects |
+| change the saved packing rules / update the assembly model | [models](references/models.md): host edits scratch, validates, replaces after a yes | Confirm the new rules in plain language |
 | connect to anydoc / log in / save my portal token | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |
 | tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
 | connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyDoc inspect and assemble status |
 
 Playbooks: [connect](references/connect.md), [assemble](references/assemble.md),
-[tell-jacky](references/tell-jacky.md), [pair-session](references/pair-session.md).
+[models](references/models.md), [tell-jacky](references/tell-jacky.md),
+[pair-session](references/pair-session.md).
 
 ## Live CLI discovery (fail-closed)
 
@@ -100,6 +104,7 @@ Runtime data is `~/.jackyzhang.app/anydoc/`. Credentials are
 7. **Client intake questionnaires never reach an assembly output, in any
   format.** Form fields, a signature, an official-looking layout, or an official-looking filename never promote intake
   material into a deliverable. Excluded means excluded from every output: never a page inside a merged or combined PDF. Honesty table: Client intake questionnaire (any format).
+8. **Saved packing rules change in this chat.** The human states the rule and confirms the readback. Never ask them to open, edit, or paste JSON, and never tell them to run a command. Follow [models](references/models.md).
 
 Full assemble workflow, Teach Me, plan actions, and honesty table:
 [assemble](references/assemble.md).
