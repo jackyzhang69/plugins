@@ -2,6 +2,10 @@
 
 The AnyWeb router must continue to match these distinct intents:
 
+- create or continue my Express Entry profile
+- fill my EE profile up to the final review step
+- continue this supported website draft on my computer
+- check or resume my AnyWeb task
 - check my AnyWeb repair
 - is the website repair ready
 - connect or log in to AnyWeb
@@ -10,8 +14,8 @@ The AnyWeb router must continue to match these distinct intents:
 - report an AnyWeb bug
 - request an AnyWeb feature
 - send an AnyWeb knowledge tip
-- set up hosted website login
-- forget my hosted website login
+- save my website login
+- forget my website login
 - answer this saved security question
 - connect with Jacky
 - pair session

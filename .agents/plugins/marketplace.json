@@ -64,7 +64,7 @@
       "description": "Check AnyWeb repair claims, connect once with the shared Portal credential, and Tell Jacky.",
       "name": "anyweb",
       "source": "./plugins/anyweb",
-      "version": "0.2.13"
+      "version": "0.2.15"
     },
     {
       "author": {

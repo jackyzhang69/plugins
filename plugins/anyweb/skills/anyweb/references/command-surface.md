@@ -14,3 +14,7 @@ Public commands: `doctor`, `login`, `logout`, `whoami`, `repair claims`,
 `feedback read`,
 `pair join`, `pair status`, `pair snapshot`, `pair inbox`, `pair read`,
 `pair result`, `pair close`, and `commands`.
+
+The `hosted-account` and `hosted-security-answer` commands save or forget a
+login for reuse on this computer. They do not move website work off this
+machine.

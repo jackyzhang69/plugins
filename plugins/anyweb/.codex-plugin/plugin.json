@@ -1,7 +1,7 @@
 {
   "name": "anyweb",
-  "version": "0.2.13",
-  "description": "Run bounded local website tasks, check repair claims, and optionally manage hosted continuity without exposing saved secrets.",
+  "version": "0.2.15",
+  "description": "Run bounded local website tasks, check repair claims, and optionally save a website login for reuse on this computer without exposing saved secrets.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
@@ -9,16 +9,16 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "AnyWeb",
-    "shortDescription": "Run bounded local tasks and check repairs.",
-    "longDescription": "Use the anyweb plugin to run supported website tasks in visible local Chrome, retrieve repair outcomes, manage explicitly approved hosted continuity, and Tell Jacky. It is not a general-purpose automation tool.",
+    "shortDescription": "Fill a supported Express Entry profile locally and check repairs.",
+    "longDescription": "Use the anyweb plugin to fill a supported Express Entry profile in visible local Chrome up to the pre-submit review, retrieve repair outcomes, save an explicitly approved website login for reuse on this computer, and Tell Jacky. It is not a general-purpose automation tool.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://jackyzhang.app",
     "defaultPrompt": [
-      "Check whether my AnyWeb repair is ready.",
+      "Fill my Express Entry profile up to the final review step on this computer.",
       "Continue a supported website draft on this computer.",
-      "Set up optional hosted continuity for my website account.",
+      "Save my website login for reuse on this computer.",
       "Tell Jacky about an AnyWeb problem."
     ]
   }

@@ -1,8 +1,10 @@
-# Hosted continuity
+# Saved website login
 
-Hosted continuity is optional. Do not copy a local website credential to the
-service unless the human explicitly chooses hosted custody for that site and
-role. A generic local setup request is not hosted consent.
+Website login and filling stay on this computer. Saving a login only stores an
+encrypted copy so a later local task can reuse it. Do not copy a website
+username, password, or security answer unless the human explicitly chooses to
+save that login for this site and role. A generic local setup request is not
+consent to save a login.
 
 Never ask the human to paste a website username, password, or security answer
 into chat. Never read, create, edit, summarize, log, or inspect the secret
@@ -10,8 +12,8 @@ input. The human must place the exact input in a user-controlled local file;
 after they identify that file, redirect it to the CLI without reading it. The
 CLI accepts secrets only from redirected stdin and returns no stored value.
 
-For the first hosted setup, explain that AnyWeb will retain an encrypted copy
-for hosted re-login. After explicit approval run:
+For the first save, explain that AnyWeb will keep an encrypted copy for reuse
+on this computer. After explicit approval run:
 
 ```bash
 "$ANYWEB_BIN" hosted-account set --site <site> --role <role> --credentials-stdin --hosted-custody-confirmed --json < <USER_CONTROLLED_FILE>

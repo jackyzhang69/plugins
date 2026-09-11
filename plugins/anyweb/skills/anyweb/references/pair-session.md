@@ -2,11 +2,11 @@
 
 A time-boxed connection with Jacky's assistant. You stay the only voice the
 human hears. Send the current product status for a repair, local task, or
-hosted continuity check; follow the next already-allowed AnyWeb action that
+saved-login check; follow the next already-allowed AnyWeb action that
 comes back.
 
 Not Tell Jacky. Do not send website passwords, security answers, page HTML,
-tokens, or paths. Never claim a hosted repair is ready to submit.
+tokens, or paths. Never claim a repair is ready to submit.
 
 ## Confirm first
 

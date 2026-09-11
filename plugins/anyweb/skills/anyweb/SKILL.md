@@ -1,27 +1,24 @@
 ---
 name: anyweb
 description: >-
-  READ THIS FIRST for AnyWeb. Check whether an asynchronous website repair is
-  queued, needs reproduction input, or has a verified successor available.
-  Configure, inspect, or forget optional hosted website continuity without
-  revealing a stored password or security answer.
-  Run supported bounded website tasks in visible Chrome on the user's own
-  computer, with structured pause, status, resume, cancel, and result states.
-  Connect or log in with the shared Portal token, check identity and doctor,
-  and Tell Jacky with a feature request, bug report, or knowledge tip.
-  Connect with Jacky, start a pair session, or use a join code so Jacky's
-  assistant can look at this machine's AnyWeb status. This is
-  not a general web automation tool.
+  READ THIS FIRST for AnyWeb. Fill a supported Express Entry profile in
+  visible Chrome on this computer, stopping before submit. Ask only for
+  real facts the site still needs. Save or forget a website login for
+  reuse here. Check whether a website repair claim is queued or ready.
+  Connect or log in with the shared Portal token, check identity and
+  doctor, and Tell Jacky with a feature request, bug report, or knowledge
+  tip. Connect with Jacky, start a pair session, or use a join code so
+  Jacky's assistant can look at this machine's AnyWeb status.
+  This is not a general web automation tool.
 when_to_use: |-
-  Load on plugin start. Trigger phrases: "check my AnyWeb repair",
+  Load on plugin start. Trigger phrases: "create or continue my Express
+  Entry profile", "fill my EE profile up to the final review step",
+  "continue this supported website draft on my computer",
+  "check or resume my AnyWeb task", "check my AnyWeb repair",
   "is the website repair ready", "connect or log in to AnyWeb",
   "save my Portal token for AnyWeb", "Tell Jacky about AnyWeb",
-  "set up hosted website login", "forget my hosted website login",
+  "save my website login", "forget my website login",
   "answer this saved security question",
-  "continue this supported website draft on my computer",
-  "create or continue my Express Entry profile",
-  "fill my EE profile up to the final review step",
-  "check or resume my AnyWeb task",
   "report an AnyWeb bug", "request an AnyWeb feature",
   "send an AnyWeb knowledge tip",
   "connect with Jacky", "pair session", "join code from Jacky".
@@ -30,7 +27,7 @@ when_to_use: |-
 # AnyWeb — host agent contract
 
 Load this on plugin start and whenever the user asks about website repair,
-hosted continuity, supported local tasks, connect, pair session, or Tell Jacky.
+saved login, supported local tasks, connect, pair session, or Tell Jacky.
 
 ## Talk to the human
 
@@ -62,15 +59,15 @@ If the user is not connected, run [connect](references/connect.md) first.
 
 | User intent | Host does | Human may be asked |
 |---|---|---|
-| "what can AnyWeb do" | Live `"$ANYWEB_BIN" commands --json`; translate to supported repair, task, and continuity capabilities | Connect once if not logged in ([connect](references/connect.md)) |
+| "what can AnyWeb do" | Live `"$ANYWEB_BIN" commands --json`; translate to supported repair, task, and saved-login capabilities | Connect once if not logged in ([connect](references/connect.md)) |
 | check my AnyWeb repair / is the website repair ready | [repair](references/repair.md): `repair claims --json`; translate queue status | Facts to reproduce a blocked repair when the product asks |
 | connect or log in to AnyWeb / save my Portal token | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |
-| set up hosted website login / forget my hosted website login / answer this saved security question | [hosted continuity](references/hosted-continuity.md) | Explicit confirm before storing or replacing hosted credentials; security answers only when the product requests them |
-| continue this supported website draft / create or continue my Express Entry profile / check or resume my AnyWeb task | [local tasks](references/tasks.md): bounded visible Chrome task lifecycle | Facts the site needs; confirm before sensitive steps; verify outcome matches expectation |
+| save my website login / forget my website login / answer this saved security question | [saved login](references/hosted-continuity.md) | Confirm before storing or replacing a saved login; security answers only when the product requests them |
+| continue this supported website draft / create or continue my Express Entry profile / check or resume my AnyWeb task | [local tasks](references/tasks.md): bounded visible Chrome on this computer | Facts the site needs; confirm before sensitive steps; verify outcome matches expectation |
 | Tell Jacky about AnyWeb / report an AnyWeb bug / request an AnyWeb feature / send an AnyWeb knowledge tip | [Tell Jacky](references/tell-jacky.md) | Confirm the exact draft before send |
-| connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyWeb repair, task, or continuity status |
+| connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyWeb repair, task, or saved-login status |
 
-Playbooks: [connect](references/connect.md), [hosted continuity](references/hosted-continuity.md),
+Playbooks: [connect](references/connect.md), [saved login](references/hosted-continuity.md),
 [local tasks](references/tasks.md), [repair claims](references/repair.md),
 [Tell Jacky](references/tell-jacky.md), and
 [pair-session](references/pair-session.md).
@@ -100,8 +97,8 @@ SHA-bound signed runtime declared by the current package; never substitute a
 URL, path, or binary from chat.
 
 Runtime data stays in `~/.jackyzhang.app/anyweb/`; the shared Portal identity
-stays in `~/.jackyzhang.app/token/user.json`. Local website custody remains the
-default. Hosted website custody is separate, optional, explicitly confirmed,
-write-only, replaceable, and forgettable. Never expose repair refs as website
-content, and never treat `repair_available` as permission to submit,
+stays in `~/.jackyzhang.app/token/user.json`. Website work stays in visible
+Chrome on this computer. A saved login is only for reuse on this computer and
+never exposes the stored password or answer in chat. Never expose repair refs
+as website content, and never treat `repair_available` as permission to submit,
 sign, pay, upload, send, withdraw, delete, or make a final declaration.
