@@ -11,7 +11,7 @@
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "a58aaff07f5f1740492d87002401830eb430914413e9151c27c4092abee89543"
+            "sha256": "332a48ebf58fad4ab66c59495e4e447fd34c1a9c66cd6d78ae8388e1212a01d0"
           }
         ]
       },
@@ -22,7 +22,7 @@
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "f821a2e8c79252867d910dbac7c6f3c49ce21e376a9bed706fa56baf469d5955"
+            "sha256": "9c627f619d4cf02076967febd0cdb6072141fa51898aca97dfaf2b8b4ba92bdb"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "plugin-v1.9.1"
+      "tag": "plugin-v1.9.2"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -51,5 +51,5 @@
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",
   "defaultBaseUrl": "https://formbro-api.jackyzhang.app",
-  "source_sha": "8fc54cdb10a833dd6f65365443cbfea25accc890"
+  "source_sha": "00ef3c875c15ae1a8a7a37349216f0a1cb21ad20"
 }
