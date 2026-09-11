@@ -11,7 +11,7 @@ as the first user-visible answer.
 | "what can anychat do / how do I use it" | Live `commands --json` translated; if not logged in → [connect](connect.md) |
 | Connect / token | [connect](connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
 | Health / which platform | `doctor [--json]` · check: `doctor --check-upgrade` · explicit update: `update --json` · `status` · `whoami` · `logout` |
-| 开通本机档案 | [setup](setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`. |
+| 开通本机档案 | [setup](setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. After install guidance, continue only when package / installed / running versions agree. Remaining message parts after partial readiness: `provision --json --complete-remaining` (doctor `complete_remaining.continue_args`). Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`, except a failed remaining-parts scan may offer it as optional diagnostics while the archive stays usable. |
 | **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
 | One group | `query --mode group --target "…" --days 30` |

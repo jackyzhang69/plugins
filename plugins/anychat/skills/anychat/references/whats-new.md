@@ -1,3 +1,5 @@
-# What's new in 0.1.77
+# What's new in 0.1.78
 
-On Windows, opening a picture no longer re-runs archive setup. If image access still cannot finish, chat history on this computer is unchanged. After you confirm the computer prompt, AnyChat continues the same download and writes a real picture; it says so if only a thumbnail was available.
+If some chat history is already usable, you can ask to finish the remaining parts. If that extra scan cannot finish, the usable history stays as it is.
+
+After AnyChat asks to replace the chat app, it checks that the installer, the installed app, and the running app match. If you only opened the installer image, finish the replacement, reopen the app, and AnyChat will check again.
