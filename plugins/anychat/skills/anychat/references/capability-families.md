@@ -11,7 +11,7 @@ commands: login, logout, whoami, doctor, update, status, provision
 ## search
 phrases: search my chats; chat with X; cross-platform chat history
 playbook: query.md
-commands: query, search, friends, groups, contacts, resolve, sessions, alias, recents
+commands: query, search, friends, groups, contacts, resolve, sessions, alias, recents, resume
 
 ## export
 phrases: export messages with X; save group transcript; export that PDF

@@ -1,5 +1,6 @@
-# AnyChat 0.1.79
+# AnyChat 0.1.80
 
 ## User-visible changes
 
-- On a Mac, opening the local archive no longer stops with an internal error when AnyChat needs your permission. You get a short next step instead, such as agreeing to a one-time chat-app change and entering your computer password.
+- If some chat history was already readable, an extra remaining-parts scan that cannot finish no longer wipes that history or sends you back to first-time setup.
+- Setup messages now say when access material was extracted but not verified, instead of blaming the wrong account or an expired credential on a single-account computer.

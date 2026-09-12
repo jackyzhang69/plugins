@@ -147,7 +147,7 @@ Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 | Work | Where |
 |------|--------|
 | Unlock / query / export / media copy | **Local CLI** (user machine) |
-| Login entitlement / Tell Jacky submit / live connection with Jacky's assistant | **Portal** `account.jackyzhang.app` |
+| Login entitlement / Tell Jacky submit / live connection with Jacky's assistant | Portal API host `account.jackyzhang.app` — machine HTTPS only. Never open this host in a browser as a login page. |
 | Chat message bodies | **Never uploaded** |
 
 ## After success (stickiness, light touch)
