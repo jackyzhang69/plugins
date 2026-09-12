@@ -1,3 +1,3 @@
-# What's new in 0.1.80
+# What's new in 0.1.81
 
-An extra scan for remaining chat history no longer wipes the parts that were already readable. If that scan cannot finish, the archive stays usable.
+The plugin loads in Claude Code again. If a verified installer would not start, double-click that same package — it is not damaged. A later setup failure no longer wipes chat history that was already readable.
