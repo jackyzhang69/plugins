@@ -1,6 +1,6 @@
-# AnyPDF — what changed in 0.7.15
+# AnyPDF — what changed in 0.7.16
 
-This update restores filling for the live official IMM forms using your accepted facts.
+This update keeps filled official IMM forms structurally complete and hides IMM 1344 co-signer pages when you said there is no co-signer.
 
 AnyPDF continues the task you were already doing through the same router. Connection and Tell-Jacky use the shared Jacky sign-in flow, and feedback counts as delivered only after the service confirms receipt.
 
