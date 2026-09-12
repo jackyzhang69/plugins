@@ -63,6 +63,8 @@ $ANYPDF forms catalog --json
      otherwise do not ask for extra information.
    - Say that AnyPDF does not guess missing facts and does not submit an
      application or other filing to an issuing authority on the user's behalf.
+     A filled IRCC PDF that still needs Acrobat Validate is not ready to upload.
+     A file that looks blank in Preview is not empty if Adobe Acrobat shows the values.
 
 4. Translate the result into everyday product language. Keep CLI names, JSON,
    paths, credentials, raw errors, support/debug fields, and implementation

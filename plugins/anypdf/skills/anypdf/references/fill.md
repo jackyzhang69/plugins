@@ -158,6 +158,20 @@ tools unless the user asks for technical detail. Never show credentials.
    The client bounds the download, verifies `%PDF-` and any server checksum,
    and writes atomically. It refuses symlinks and existing output paths.
 
+   A successful fill is not an IRCC upload. When the fill receipt
+   `barcode_status` is `user_action_required`, tell the user they must open
+   the downloaded PDF in Adobe Acrobat, click Validate, save that file, and
+   only then upload the saved copy. Do not say the form is already
+   validated, submission-ready, or accepted by a government portal. Do not
+   generate barcodes. `not_applicable` means this form has no extra
+   Acrobat barcode step.
+
+   If Preview, a browser, or another non-Adobe viewer shows blank fields,
+   that does not mean the fill failed. Official IRCC PDFs often keep values
+   in form fields that only Adobe Acrobat draws. Tell the user to open the
+   same downloaded file in Adobe Acrobat. Do not say the PDF is empty.
+   Do not offer flatten as a current product option.
+
 ## Remembering how this user wants forms filled
 
 Memory is a visible, reusable set of instructions about **how** to fill forms.
