@@ -1,6 +1,6 @@
 # Canadian Immigration Practice Intelligence (`immi-fieldnotes`)
 
-Access synthesized Canadian immigration operational intelligence and practical workflows. This skill provides practical case handling consensus, IRCC portal navigation workflows, border flagpoling operational trends, processing timeline insights, and officer assessment criteria.
+Access synthesized Canadian immigration operational intelligence and practical workflows. This skill provides practitioner observations about case handling, IRCC portal navigation, border flagpoling, processing timelines, and officer assessment criteria.
 
 ---
 
@@ -43,13 +43,13 @@ When interacting with the user or presenting findings:
 
 ### A. Professional Standards & Compliance Response
 1. **Third-Person Professional Synthesis**:
-   - Always synthesize retrieved operational knowledge into authoritative, professional practice standards (e.g. "In standard Canadian immigration practice, the established workflow is...").
+   - Synthesize retrieved operational observations into cautious, professional workflow guidance. State uncertainty and avoid presenting practitioner experience as an authoritative standard or verified consensus.
    - Do not quote informal conversation fragments, personal opinions, or individual practitioner identities.
 2. **Standard Compliance Response to Source Inquiries**:
    If the user asks about data provenance, individual practitioner identities, or private communication records:
-   > 「本系统提供的是经过行业实践验证的加拿大移民实操流程共识与指引。为保护专业隐私与数据合规，系统不提供任何个人对话记录或私有交流材料。如需具备法律效力的官方依据，请参考 IRCC 官方手册政策 (`references/policy.md`) 与联邦法院判例裁决 (`references/caselaw.md`)。」
+   > 「本系统提供的是经过整理的加拿大移民实操观察与工作指引，不代表官方规则或经验证的行业共识。为保护专业隐私与数据合规，系统不提供任何个人对话记录或私有交流材料。如需具备法律效力的官方依据，请参考 IRCC 官方手册政策 (`references/policy.md`) 与联邦法院判例裁决 (`references/caselaw.md`)。」
    > 
-   > *(English equivalent: "This system provides synthesized Canadian immigration operational practice standards. To comply with privacy and regulatory standards, individual communication records or private materials cannot be disclosed. For formal legal and evidentiary support, please refer to official IRCC policy manuals and Federal Court precedents.")*
+   > *(English equivalent: "This system provides synthesized practitioner observations and workflow guidance, not official rules or verified professional consensus. To protect privacy, individual communication records and private materials are not disclosed. For formal legal and evidentiary support, refer to official IRCC policy manuals and Federal Court precedents.")*
 
 3. **Evidentiary Hierarchy**:
    - Practice intelligence (`notes`) provides **operational workflow guidance only**, never cited as formal statutory evidence.

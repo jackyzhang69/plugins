@@ -1,8 +1,30 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BIN="${DIR}/bin/anycase"
+case "$(uname -s)" in
+  Darwin) BIN="${DIR}/bin/darwin-arm64/anycase" ;;
+  MINGW*|MSYS*|CYGWIN*) BIN="${DIR}/bin/win32-x64/anycase.exe" ;;
+  *) echo "verify-install: unsupported host; AnyCase supports macOS arm64 and Windows x64" >&2; exit 1 ;;
+esac
+test -x "$BIN" || { echo "verify-install: executable not found for this host" >&2; exit 1; }
+
+require_text() {
+  local output="$1" pattern="$2" label="$3"
+  if ! grep -Eq "$pattern" <<<"$output"; then
+    echo "  -> ${label} FAILED" >&2
+    exit 1
+  fi
+  echo "  -> ${label} PASSED"
+}
+
+reject_text() {
+  local output="$1" pattern="$2" label="$3"
+  if grep -Eiq "$pattern" <<<"$output"; then
+    echo "  -> Security boundary FAILED (${label})" >&2
+    exit 1
+  fi
+}
 
 echo "========================================="
 echo "AnyCase Plugin Verification & Smoke Test"
@@ -13,31 +35,32 @@ echo "[1/7] Checking Native Rust Binary..."
 
 echo "[2/7] Verifying doctor diagnostics..."
 DOC_OUT=$("${BIN}" doctor --json)
-echo "${DOC_OUT}" | grep -q '"plugin_id"' && echo "  -> Doctor diagnostics PASSED" || (echo "  -> Doctor diagnostics FAILED"; exit 1)
+require_text "$DOC_OUT" '"plugin_id"' "Doctor diagnostics"
 
 echo "[3/7] Verifying whoami identity check..."
 WHO_OUT=$("${BIN}" whoami --json)
-echo "${WHO_OUT}" | grep -q '"status"' && echo "  -> Whoami check PASSED" || (echo "  -> Whoami check FAILED"; exit 1)
+require_text "$WHO_OUT" '"status"' "Whoami check"
 
 echo "[4/7] Verifying CLB calculation..."
 CLB_OUT=$("${BIN}" clb --test ielts -l 8 -r 7 -w 7 -s 7 --json)
-echo "${CLB_OUT}" | grep -q '"overall"' && echo "  -> CLB calculation PASSED" || (echo "  -> CLB calculation FAILED"; exit 1)
+require_text "$CLB_OUT" '"overall"' "CLB calculation"
 
 echo "[5/7] Verifying Precedent Caselaw retrieval (Global --json flag position)..."
 CASE_OUT=$("${BIN}" --json caselaw "study permit" --top 1)
-echo "${CASE_OUT}" | grep -q '"citation"' && echo "  -> Caselaw retrieval PASSED" || (echo "  -> Caselaw retrieval FAILED"; exit 1)
-# Negative assertion: ensure internal fields are absent
-echo "${CASE_OUT}" | grep -q '"_index"' && (echo "  -> Security boundary FAILED (_index leaked!)"; exit 1) || true
+require_text "$CASE_OUT" '"reference"' "Caselaw retrieval"
+# Scan the raw command JSON. Parsing into a narrower projection first would hide
+# precisely the extra backend fields this installed-surface check must catch.
+reject_text "$CASE_OUT" '"(_index|_score|internal_es_doc_id|source_id)"[[:space:]]*:' "caselaw internal field leaked"
 
 echo "[6/7] Verifying IRCC Policy & Help Centre search..."
 POL_OUT=$("${BIN}" policy "study permit" --top 1 --json)
-echo "${POL_OUT}" | grep -q '"title"' && echo "  -> Policy search PASSED" || (echo "  -> Policy search FAILED"; exit 1)
+require_text "$POL_OUT" '"title"' "Policy search"
 
 echo "[7/7] Verifying Practitioner Field Notes retrieval..."
 NOTES_OUT=$("${BIN}" notes "flagpole" --top 1 --json)
-echo "${NOTES_OUT}" | grep -q '"topic"' && echo "  -> Field notes retrieval PASSED" || (echo "  -> Field notes retrieval FAILED"; exit 1)
-# Negative assertion: ensure raw email thread_id is absent
-echo "${NOTES_OUT}" | grep -q '"thread_id"' && (echo "  -> Security boundary FAILED (thread_id leaked!)"; exit 1) || true
+require_text "$NOTES_OUT" '"topic"' "Field notes retrieval"
+reject_text "$NOTES_OUT" '"(_index|_score|author|body|email|emails_content|from|headers|license|message|message_id|participants|participants_names|phone|raw|sender|sender_name|signature|source_id|thread_id|to)"[[:space:]]*:' "field-notes internal field leaked"
+reject_text "$NOTES_OUT" 'https?://|@|[[:alnum:]_.%+-]+[[:space:]]*(\[at\]|\(at\))[[:space:]]*[[:alnum:]-]+|([[:alnum:]]([[:alnum:]-]{0,61}[[:alnum:]])?\.)+(xn--[[:alnum:]-]{2,59}|[[:alpha:]]{2,63})|(^|[^[:digit:]])1?[[:digit:]]{10}([^[:digit:]]|$)|\+[[:digit:]]{1,3}([[:space:].()-]*[[:digit:]]){7,14}|(^|[^[:alnum:]_])R[[:digit:]]{5,7}([^[:alnum:]_]|$)|(^|[^[:alnum:]_])(RCIC|CICC|LSO|immeforum|listserv|email-kg|immicore)([^[:alnum:]_]|$)' "field-notes contact or source marker leaked"
 
 echo "========================================="
 echo "✅ All 7 AnyCase Governance & Smoke Tests PASSED!"
