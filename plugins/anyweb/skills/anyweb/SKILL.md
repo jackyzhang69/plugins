@@ -4,7 +4,7 @@ description: >-
   READ THIS FIRST for AnyWeb. Fill a supported Express Entry profile in
   visible Chrome on this computer, stopping before submit. Take the user's
   information files first, compile one complete fact pack, then run. Do not
-  quiz field by field while the website is open. Save or forget a website
+  quiz field by field. Save or forget a website
   login for reuse here. Connect or log in with the shared Portal token, check
   identity and doctor, and Tell Jacky with a feature request or bug
   report. Connect with Jacky, start a pair session, or use a join code
@@ -46,10 +46,11 @@ homework. Run the intended ordinary command first; when stdout is
 the product reports `ready`, then resume the sealed request. If `status` is
 `blocked`, say the `say_to_user` sentence. Do not paste JSON into chat.
 
-Ask for the applicant's information files first. Compile those files into one
-complete fact pack, then let AnyWeb run. Do not interview the human one website
-field at a time. A person is needed only for a first-time website login, a
-live email/Authenticator/CAPTCHA check, or an irreversible confirm.
+Ask for the applicant's information files first. Compile one complete
+`local_inputs` object from those files, then let the executor run. If the
+first start still lists `needs`, those items are the remaining facts; do not look for a private site graph. Do not interview the human one website field
+at a time. Stop only for a fact the files cannot supply, a live email code, a
+verification-app or CAPTCHA challenge, or an irreversible confirm.
 
 ## When the user asks "what can you do?"
 
@@ -69,7 +70,7 @@ checks and pair session are secondary. If the user is not connected, run
 | User intent | Host does | Human may be asked |
 |---|---|---|
 | "what can AnyWeb do" | Live `"$ANYWEB_BIN" commands --json`; translate to the supported Express Entry fill first | Connect once if not logged in ([connect](references/connect.md)) |
-| continue this supported website draft / create or continue my Express Entry profile / fill from these applicant files / here are the information files / check or resume my AnyWeb task | [local tasks](references/tasks.md): files → one fact pack → run in visible Chrome on this computer | Information files first; a first-time login, live code, or irreversible confirm only when the product stops for a person |
+| continue this supported website draft / create or continue my Express Entry profile / fill from these applicant files / here are the information files / check or resume my AnyWeb task | [local tasks](references/tasks.md): files → one fact pack → run in visible Chrome on this computer | Information files first; email codes or missing answers to this assistant; verification-app or CAPTCHA in the window; irreversible confirm only when the product stops for a person |
 | save my website login / forget my website login / answer this saved security question | [saved login](references/hosted-continuity.md) | Confirm before storing or replacing a saved login; security answers only when the product requests them |
 | check my AnyWeb repair / is the website repair ready | [repair](references/repair.md): `repair claims --json`; translate queue status | Facts to reproduce a blocked repair when the product asks |
 | connect or log in to AnyWeb / save my Portal token | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |

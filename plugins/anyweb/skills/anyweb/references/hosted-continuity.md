@@ -27,13 +27,15 @@ or delete the user's file; its lifecycle remains the user's decision. Use
 masked state and `hosted-account forget --site ircc-ee-profile --role default
 --user-confirmed --json` only after separate explicit deletion approval.
 
-When an active website session returns a current visible static security
-question plus an opaque challenge reference, show only that visible question
-to the human. They place an input containing only `answer` in their own local
-file, then the agent redirects it to `hosted-security-answer set
---challenge-ref <ref> --answer-stdin --json`. Never invent a question, send
-question text with the answer, or use this path for a one-time code, MFA,
-CAPTCHA, recovery code, or unknown challenge.
+When an active fill needs a website password, email code, or static security
+answer, the host notice lists it as a `fact_ref`. Send that value through
+`task resume --input-stdin`. Do not ask the human to type it in the website,
+and do not use `hosted-account set` as the way to continue that live fill. Use `hosted-security-answer set
+--challenge-ref <ref> --answer-stdin` only when the current notice includes
+that opaque challenge reference for saving after the site already accepted the
+answer. Never invent a question, send question text with the answer, or use
+this path for a one-time code, MFA, CAPTCHA, recovery code, or unknown
+challenge.
 
 A new answer is not reusable until the current website proves it worked. If it
 fails or the page changed, stop and ask the human; never retry automatically.
