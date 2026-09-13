@@ -1,7 +1,7 @@
-# AnyPDF — what changed in 0.7.16
+# AnyPDF — what changed in 0.7.17
 
-This update keeps filled official IMM forms structurally complete and hides IMM 1344 co-signer pages when you said there is no co-signer.
+This update keeps IMM 5709 residential details fillable when the home address is not the mailing address, and it keeps already-filled 5709 values when you continue from that PDF.
 
-AnyPDF continues the task you were already doing through the same router. Connection and Tell-Jacky use the shared Jacky sign-in flow, and feedback counts as delivered only after the service confirms receipt.
+If Preview or a browser still shows blank pages, open the interactive PDF in Adobe Acrobat, click Validate, save, then upload that saved copy. A separate static viewing copy is not part of this release.
 
-The live catalog remains the source of truth for available forms. Fill and intake still use the user's accepted facts and report verified results; AnyPDF does not guess missing facts or submit an application for the user. A filled IRCC PDF that still needs Acrobat Validate is not ready to upload; open it in Adobe Acrobat, click Validate, save, then upload that saved copy. If Preview looks blank, open the same file in Acrobat. Mac and Windows provide the same skill experience.
+AnyPDF continues the task you were already doing through the same router. Connection and Tell-Jacky use the shared Jacky sign-in flow. The live catalog remains the source of truth for available forms.

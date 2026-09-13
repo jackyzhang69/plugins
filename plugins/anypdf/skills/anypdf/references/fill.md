@@ -134,6 +134,11 @@ tools unless the user asks for technical detail. Never show credentials.
      --idempotency-key <stable-key>
    ```
 
+   Default fill stays the interactive PDF. Add `--flatten` only when the user
+   wants a second static copy so Preview or a browser can see the pages. Never
+   treat `--flatten` as IRCC upload, submission-ready, or a replacement for the
+   interactive filled PDF.
+
    Saved memory is not consent, a warning acknowledgement, or submit
    authorization. Obtain those confirmations in the current run even when a
    memory says otherwise.
@@ -170,7 +175,18 @@ tools unless the user asks for technical detail. Never show credentials.
    that does not mean the fill failed. Official IRCC PDFs often keep values
    in form fields that only Adobe Acrobat draws. Tell the user to open the
    same downloaded file in Adobe Acrobat. Do not say the PDF is empty.
-   Do not offer flatten as a current product option.
+   If they still need those pages visible outside Adobe, and they asked for
+   that viewing copy, submit with `--flatten` and also download the extra
+   static file:
+
+   ```bash
+   $ANYPDF fill download --job-id <job_id> --flatten \
+     --output /absolute/form-static-view.pdf
+   ```
+
+   That extra file is only so non-Adobe apps can see the pages. It is not
+   an IRCC upload, not submission-ready, and not a replacement for the
+   interactive filled PDF. Keep the ordinary download as the job result.
 
 ## Remembering how this user wants forms filled
 
