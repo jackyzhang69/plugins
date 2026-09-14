@@ -95,7 +95,7 @@ first.
 | tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm exact draft before send |
 | request live support / connect with Jacky / pair session | [pair-session](references/pair-session.md) | The human's request to connect is consent for this support conversation |
 | identity / same person across apps | [command-router](references/command-router.md) identity list/suggest/link | Confirm the link |
-| iMessage / Telegram / other local chats | [command-router](references/command-router.md) sources detect/status/connect | Which app when ambiguous |
+| iMessage / Telegram / WhatsApp (macOS experimental; Windows unsupported stub) / other local chats | [command-router](references/command-router.md) sources detect/status/connect | Which app when ambiguous |
 | evidence pack / proof of what was said | [command-router](references/command-router.md) evidence create/verify | Output location when needed |
 
 Playbooks: [connect](references/connect.md), [setup](references/setup.md),

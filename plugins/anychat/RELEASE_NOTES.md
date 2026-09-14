@@ -1,7 +1,4 @@
-# AnyChat 0.1.81
+# AnyChat 0.1.85
 
-## User-visible changes
-
-- Claude Code can load the plugin again. The extra hooks declaration that blocked 0.1.80 is gone.
-- If the verified chat-app installer downloaded correctly but would not start, AnyChat now tells you to double-click that same package. It does not call a hash-matched package damaged, and it does not repeat the same wait with no progress.
-- A previously readable archive is no longer wiped when a later setup step fails. If setup cannot finish, it still leaves a way to continue instead of a dead end, and it does not ask you to pick an account when only one archive is on the computer.
+- Windows provision: show the UAC elevation prompt instead of failing silent (exit -1) when admin rights are required; harden elevate path encoding for non-ASCII install paths.
+- Archive: skip the SQLite reserved lock-byte page during MAC checks, isolate soft-fail shards, and reject reserved-page WAL before truncate so page-262145 style shard failures no longer dead-end usable archives.
