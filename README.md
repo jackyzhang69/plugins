@@ -7,7 +7,7 @@ Official plugins for Codex and Claude Code by [Jacky Zhang](https://github.com/j
 | Plugin | Version | Platforms | Description |
 |---|---|---|---|
 | [`formbro`](./plugins/formbro) | 1.9.2 | macOS (`arm64`), Windows (`x64`) | Canadian immigration form automation: import cases via JSON contracts, validate against IRCC schemas, generate filled IMM PDFs, and drive local browser webform fills (stops safely before submit). |
-| [`easybooks`](./plugins/easybooks) | 0.5.21 | macOS (`arm64`), Windows (`x64`) | Bookkeeping for self-employed Canadians: ingest receipts/invoices from files or connected Gmail, record income/expenses idempotently, create/send invoices, and manage clients & categories. |
+| [`easybooks`](./plugins/easybooks) | 0.5.23 | macOS (`arm64`), Windows (`x64`) | Bookkeeping for self-employed Canadians: ingest receipts/invoices from files or connected Gmail, record income/expenses idempotently, create/send invoices, and manage clients & categories. |
 | [`anychat`](./plugins/anychat) | 0.1.81 | macOS (`arm64`), Windows (`x64`) | Personal local chat archive assistant: search messages, export group transcripts, attachments, and voice WAVs. Chat records stay 100% local on your machine. |
 | [`anycase`](./plugins/anycase) | 1.1.6 | macOS (`arm64`), Windows (`x64`) | Canadian immigration legal & practical intelligence: Federal Court precedent ratios, IRCC policy manuals & Q&As, practitioner field notes, and statutory CLB language test calculators. |
 | [`anydoc`](./plugins/anydoc) | 0.3.8 | macOS (`arm64`), Windows (`x64`) | Local document folder inspector & upload pack assembler: inspect messy client folders, generate approved assembly plans, and assemble immigration document sets offline. |
