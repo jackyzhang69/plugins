@@ -1,4 +1,5 @@
-# AnyChat 0.1.85
+# AnyChat 0.1.86
 
-- Windows provision: show the UAC elevation prompt instead of failing silent (exit -1) when admin rights are required; harden elevate path encoding for non-ASCII install paths.
-- Archive: skip the SQLite reserved lock-byte page during MAC checks, isolate soft-fail shards, and reject reserved-page WAL before truncate so page-262145 style shard failures no longer dead-end usable archives.
+- Setup / query: stop treating historical WeChat setup_complete as product-wide permission; live per-source readiness gates execution. Setup repair reconciles dirty 0.1.85-style host state from archive evidence (do not hand-edit config.json).
+- WeChat matrix / coverage: honest Unknown vs unmatched vs matched Partial wording, selected-folder vs history-source completeness, and bounded global scan-batch continuation (incl. zero-hit) so Partial/coverage reporting matches what was actually scanned.
+- Continues 0.1.85: Windows UAC elevation prompt (no silent -1) and SQLite lock-byte / soft-fail shard isolation.

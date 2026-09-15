@@ -12,12 +12,15 @@ Run the intended query command first. If AnyChat returns a typed readiness envel
 
 ## Honest empty results
 
-An empty `items` / `messages` array is not proof the chat never existed when coverage is incomplete.
+An empty `items` / `messages` array is not proof the chat never existed when coverage is incomplete. Different Partial reasons need different explanations:
 
-- Legacy CLI JSON: `coverage.empty_is_not_absence` is true, or `coverage.complete` is false with `count` 0.
-- Source query JSON: `coverage.limitation_codes` includes `wechat_empty_not_proven_absent`, or `coverage.completeness` is `partial` with an empty page.
+- **Absence not proven (general):** legacy `coverage.empty_is_not_absence` only means this empty page does **not** prove there was never a match. Choose the explanation from the more specific facts below — do **not** treat this flag alone as evidence of unread shards.
+- **Unread shards / incomplete message parts** (`wechat_empty_not_proven_absent`, `wechat_incomplete_message_history`, readable < on-disk, or WAL not applied): in the parts that can be read, there was no match; some local history is still unread, so this is not proof there was never a chat.
+- **Global scan window** (`wechat_global_scan`, or legacy `coverage.global_scan.truncated` / a limitations string about the current scan batch): a truncated batch searched only that newest-first window (batch 0 = newest ~500 rows per conversation; later batches are offset windows, not "newest 500"). When `truncated=false` / the scan limitation is absent, the local scan for that conversation is exhausted — do not keep warning about an open window. Legacy global search always uses batch 0 (`legacy_outlet_resumable=false`); offer continuation / a directed session query when available. When the page is empty solely because the scan window truncated (`global_scan.truncated=true` with complete shard coverage), use this scan-window explanation — not the unread-shards explanation — even if `empty_is_not_absence` is true.
+- **Build / matrix evidence** (source degraded for partial-support or unverified compatibility): the page may still be queryable; say compatibility evidence is incomplete, not that shards are unread.
+- **Selected-folder completeness**: doctor `archive_coverage.discovered_archive_complete` / `history_source_completeness=unknown` means opened discovered parts in the selected folder only — other folders or devices may still hold older history.
 
-Tell the human: in the parts that can be read, there was no match; some local history is still unread, so this is not proof there was never a chat. Never say “没有聊天记录” or “this person has no messages” in that case.
+Never say “没有聊天记录” or “this person has no messages” when any of the incomplete-coverage codes above apply.
 
 If `coverage.wal_unapplied` is true or `limitation_codes` includes `wechat_wal_not_applied`, say the newest committed messages could not be included this time. Do not present the page as complete history. If `limitation_codes` includes `wechat_coverage_unverified`, the page is not complete — coverage could not be checked.
 
