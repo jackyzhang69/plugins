@@ -1,0 +1,58 @@
+# One-way mirror: GitHub (source of truth) → 云效 Codeup.
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   CODEUP_MIRROR_URL  full HTTPS git URL of the Codeup repo, e.g. https://codeup.aliyun.com/<org>/<repo>.git
+#   CODEUP_USERNAME    Codeup HTTP username (often your Aliyun account id / username)
+#   CODEUP_PASSWORD    Codeup HTTP password or personal access token
+# Create/import the Codeup repo first (web import from https://github.com/jackyzhang69/plugins).
+name: Mirror to Codeup
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # backup in case a push webhook is missed (UTC)
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeup-mirror
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check secrets
+        env:
+          CODEUP_MIRROR_URL: ${{ secrets.CODEUP_MIRROR_URL }}
+          CODEUP_USERNAME: ${{ secrets.CODEUP_USERNAME }}
+          CODEUP_PASSWORD: ${{ secrets.CODEUP_PASSWORD }}
+        run: |
+          missing=
+          [ -n "$CODEUP_MIRROR_URL" ] || missing="$missing CODEUP_MIRROR_URL"
+          [ -n "$CODEUP_USERNAME" ] || missing="$missing CODEUP_USERNAME"
+          [ -n "$CODEUP_PASSWORD" ] || missing="$missing CODEUP_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "Missing required secrets:$missing" >&2
+            echo "Add them under Settings → Secrets and variables → Actions, after the Codeup repo exists." >&2
+            exit 1
+          fi
+
+      - name: Mirror push to Codeup
+        env:
+          CODEUP_MIRROR_URL: ${{ secrets.CODEUP_MIRROR_URL }}
+          CODEUP_USERNAME: ${{ secrets.CODEUP_USERNAME }}
+          CODEUP_PASSWORD: ${{ secrets.CODEUP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          git clone --mirror "https://github.com/${{ github.repository }}.git" mirror.git
+          cd mirror.git
+          # URL-encode password for basic auth in remote URL
+          enc_user=$(python3 -c 'import urllib.parse,os; print(urllib.parse.quote(os.environ["CODEUP_USERNAME"], safe=""))')
+          enc_pass=$(python3 -c 'import urllib.parse,os; print(urllib.parse.quote(os.environ["CODEUP_PASSWORD"], safe=""))')
+          base="${CODEUP_MIRROR_URL#https://}"
+          git remote add codeup "https://${enc_user}:${enc_pass}@${base}"
+          git push --mirror codeup
