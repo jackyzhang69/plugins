@@ -6,7 +6,7 @@ A missing login/configuration, rejected authorization or unavailable service is 
 
 When a token is needed, prefer a file containing it and pipe the file to `anyknow login --token-stdin`. A chat paste is allowed after warning that a file is safer; pipe it without echoing it back. Never place a token in argv, logs, screenshots, JSON output, or skill text, and never send the human to a terminal.
 
-The CLI validates through accountd before writing the canonical shared `token/user.json`. It does not create a product token file.
+The CLI checks the shared Jacky Zhang login before writing the canonical shared `token/user.json`. It does not create a separate AnyKnow token file.
 
 Use `anyknow commands --json` to discover the packaged commands and `anyknow whoami` to verify the connected account (the subject is masked). Use `anyknow logout` only when the user asks to disconnect: it removes the shared user login used by the other plugins too.
 

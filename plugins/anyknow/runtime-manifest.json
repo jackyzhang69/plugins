@@ -1,6 +1,6 @@
 {
-  "version": "0.1.9",
-  "source_sha": "d53cf90139ce5d675fa8e3868adcd94c957d81de",
+  "version": "0.1.10",
+  "source_sha": "7cf5a6f17825e0066d000249c5d0a3824321b62f",
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anyknow",
     "win32": "${USERPROFILE}/.jackyzhang.app/anyknow"
@@ -8,13 +8,13 @@
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anyknow",
-      "sha256": "6675fd3123a1c92d9c58bc2b1f1828755c11a0b6a428fdfc172a07377cfb25af",
-      "size": 3866192
+      "sha256": "39945a280564688be0d4a48e263d760f111a4ace6bfa3bd0f2e5886b3d077cac",
+      "size": 3882624
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anyknow.exe",
-      "sha256": "17b5eaf8f97473999ec26141a8933851dd12b62863eeb4bad07f46d9446945cc",
-      "size": 4794664
+      "sha256": "c3748fc1da143aa8afcd478a4eeb42bbbcc65aee8759a30ac56c1488e37a32a1",
+      "size": 4807976
     }
   }
 }

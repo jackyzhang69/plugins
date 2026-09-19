@@ -10,11 +10,7 @@ it actually answers this question.
 Write from the user question only. Do not look at search results first. Do not
 reuse JSON from a previous question. Do not show this object to the user.
 
-Inside `questions`, copy `answers_question`, `"type": "noul"`,
-`instructions.question`, and `instructions.focus` **exactly**. Do not translate
-them. Do not add keys.
-
-Fill only these six fields, in the user's language:
+Fill only these six fields, in the user's language. Do not add keys.
 
 - `true.what` — what a useful hit must actually say for **this** question
 - `true.not_for` — a near-miss that looks useful but does **not** answer it
@@ -32,24 +28,15 @@ that kind false; a contrast or outcome belongs in the user's words.
   "query": "the user's search text",
   "limit": 5,
   "questions": {
-    "answers_question": {
-      "type": "noul",
-      "instructions": {
-        "question": "Should this passage be returned as an answer to the user question?",
-        "focus": "True only if the passage supplies what the user asked. Same topic without that content, or content the user said not to use, must be false."
-      },
-      "criteria": {
-        "true": {
-          "what": "",
-          "not_for": "",
-          "examples": [""]
-        },
-        "false": {
-          "what": "",
-          "not_for": "",
-          "examples": [""]
-        }
-      }
+    "true": {
+      "what": "",
+      "not_for": "",
+      "examples": [""]
+    },
+    "false": {
+      "what": "",
+      "not_for": "",
+      "examples": [""]
     }
   }
 }
