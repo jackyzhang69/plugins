@@ -33,7 +33,9 @@ breath, then resume their original intent without asking them to repeat the
 request. Never ask the human to run doctor as homework. Run the intended
 ordinary command first; when stdout is `jz.plugin.envelope.v1`, follow its
 exact `status` and `continue_args` until the product reports `ready`, then
-resume the sealed request.
+resume the sealed request. If `status` is `blocked`, say `say_to_user` to the
+human — they have used their lookups — and stop. Do not retry the search, and
+do not offer Tell Jacky for the limit.
 
 Speak clearly for consultants and applicants. Report legal conclusions and how
 they apply — not raw CLI steps, JSON fields, or backend volumes. Deliver
