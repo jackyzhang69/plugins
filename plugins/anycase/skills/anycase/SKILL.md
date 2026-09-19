@@ -58,15 +58,15 @@ what is held now — never from memory or a bundled catalog.
 | User intent | Host does | Human may be asked |
 |---|---|---|
 | "what can AnyCase do" / live coverage | Live `"$ANYCASE_BIN" commands --json`; `coverage` when scope matters | Connect once if not logged in ([connect](references/connect.md)) |
-| Federal Court / case law / precedent for an issue | [caselaw](references/caselaw.md): hybrid retrieval; synthesize legal ratio with citations | Clarify facts, court scope, or date range when ambiguous |
-| IRCC policy / Help Centre Q&A | [policy](references/policy.md): official Help Centre guidance | Language preference when both EN/ZH matter |
-| Program Delivery Instructions / operational manual | [manual](references/manual.md): IRCC operational manual search | Policy code only when the user supplied it |
-| Practitioner field notes / practical workflow | [notes](references/notes.md): operational intelligence | Topic refinement when the query is too broad |
+| Federal Court / case law / precedent for an issue | Write [questions](references/questions.md) for this question, then [caselaw](references/caselaw.md) | Clarify facts, court scope, or date range when ambiguous |
+| IRCC policy / Help Centre Q&A | Write [questions](references/questions.md), then [policy](references/policy.md) | Language preference when both EN/ZH matter |
+| Program Delivery Instructions / operational manual | Write [questions](references/questions.md), then [manual](references/manual.md) | Policy code only when the user supplied it |
+| Practitioner field notes / practical workflow | Write [questions](references/questions.md), then [notes](references/notes.md) | Topic refinement when the query is too broad |
 | CLB / IELTS General / CELPIP-G / PTE Core / TEF Canada / TCF Canada | [clb](references/clb.md): deterministic CLB conversion | Exact subscores when not provided |
 | Tell Jacky / feedback | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
 | connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyCase status |
 
-Playbooks: [connect](references/connect.md), [caselaw](references/caselaw.md),
+Playbooks: [connect](references/connect.md), [questions](references/questions.md), [caselaw](references/caselaw.md),
 [policy](references/policy.md), [manual](references/manual.md),
 [notes](references/notes.md), [clb](references/clb.md),
 [tell-jacky](references/tell-jacky.md),
