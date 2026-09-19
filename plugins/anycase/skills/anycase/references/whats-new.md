@@ -1,3 +1,3 @@
-# What's new in 1.1.6
+# What's new in 1.1.10
 
-You can now connect with Jacky's assistant for a live look at this machine's AnyCase status. The host still talks to you as usual. Only product status is sent — never retrieved case law, policy answers, manuals, or field notes. Case law, policy, notes, and CLB conversion are unchanged.
+You can now search private knowledge you have already confirmed, alongside case law, official policy, and practitioner field notes. Those private hits are your own saved notes. They are not court text and not IRCC text. Case law, policy, manuals, field notes, and CLB conversion are unchanged.

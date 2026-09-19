@@ -7,6 +7,9 @@
 - Program Delivery Instructions
 - coverage
 - field notes
+- private knowledge
+- my notes
+- personal notes
 - CLB
 - IELTS General
 - CELPIP-G

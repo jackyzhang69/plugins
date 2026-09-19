@@ -52,5 +52,6 @@ shape covers practitioner notes, recipes, and court passages.
 }
 ```
 
-Pass `--questions <path>` on `caselaw`, `policy`, `manual`, or `notes` when the
-live `commands --json` lists that flag. If it does not, search without it.
+Pass `--questions <path>` on `caselaw`, `policy`, `manual`, `notes`, or
+`knowledge` when the live `commands --json` lists that flag. If it does not,
+search without it.

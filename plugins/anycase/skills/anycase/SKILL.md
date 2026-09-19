@@ -3,13 +3,14 @@ name: anycase
 description: >-
   READ THIS FIRST for AnyCase. Canadian immigration intelligence: case law
   (FC, FCA, SCC, IRB), IRCC Program Delivery Instructions, Help Centre Q&As, practitioner
-  field notes, CLB conversion (IELTS, CELPIP, PTE, TEF, TCF). Connect / login,
+  field notes, private confirmed knowledge, CLB conversion (IELTS, CELPIP, PTE, TEF, TCF). Connect / login,
   tell Jacky, connect with Jacky / pair session / join code from Jacky.
   Live coverage. One discovery file. Ask `anycase commands --json`,
   never from memory of an older release.
 when_to_use: |-
   Load on plugin start. Federal Court, case law, IRCC policy, Help Centre,
-  Program Delivery Instructions, coverage, field notes, CLB, IELTS General,
+  Program Delivery Instructions, coverage, field notes, private knowledge,
+  my notes, personal notes, CLB, IELTS General,
   CELPIP-G, PTE Core, TEF Canada, TCF Canada, connect / log in, tell Jacky,
   connect with Jacky, pair session, join code from Jacky.
   Fill IMM5257 is not this product.
@@ -18,7 +19,8 @@ when_to_use: |-
 # AnyCase — Canadian immigration intelligence
 
 Load this on plugin start and whenever the user asks about Canadian
-immigration law, IRCC policy, operational manuals, practitioner notes, CLB
+immigration law, IRCC policy, operational manuals, practitioner notes, private
+confirmed knowledge, CLB
 conversion, live coverage, connect, or Tell Jacky.
 
 ## Talk to the human
@@ -62,13 +64,14 @@ what is held now — never from memory or a bundled catalog.
 | IRCC policy / Help Centre Q&A | Write [questions](references/questions.md), then [policy](references/policy.md) | Language preference when both EN/ZH matter |
 | Program Delivery Instructions / operational manual | Write [questions](references/questions.md), then [manual](references/manual.md) | Policy code only when the user supplied it |
 | Practitioner field notes / practical workflow | Write [questions](references/questions.md), then [notes](references/notes.md) | Topic refinement when the query is too broad |
+| Private / personal confirmed knowledge, "my notes", what I saved | Write [questions](references/questions.md), then [knowledge](references/knowledge.md) | Whether they mean their own notes or industry field notes |
 | CLB / IELTS General / CELPIP-G / PTE Core / TEF Canada / TCF Canada | [clb](references/clb.md): deterministic CLB conversion | Exact subscores when not provided |
 | Tell Jacky / feedback | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
 | connect with Jacky / pair session / join code from Jacky | [pair-session](references/pair-session.md) | Confirm once that Jacky's assistant may look at this machine's AnyCase status |
 
 Playbooks: [connect](references/connect.md), [questions](references/questions.md), [caselaw](references/caselaw.md),
 [policy](references/policy.md), [manual](references/manual.md),
-[notes](references/notes.md), [clb](references/clb.md),
+[notes](references/notes.md), [knowledge](references/knowledge.md), [clb](references/clb.md),
 [tell-jacky](references/tell-jacky.md),
 [pair-session](references/pair-session.md).
 
