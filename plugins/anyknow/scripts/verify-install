@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Verify an already installed package tree without changing it.
+set -euo pipefail
+ROOT="${1:-${HOME}/.jackyzhang.app/plugins/anyknow/current}"
+"$(cd "$(dirname "$0")" && pwd)/verify-package" "$ROOT"
+echo "verify-install: package integrity and native command manifest are valid"

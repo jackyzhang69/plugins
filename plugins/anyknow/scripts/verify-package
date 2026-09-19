@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# Read-only verification for one staged AnyKnow package.
+set -euo pipefail
+ROOT="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
+
+python3 - "$ROOT" <<'PY'
+import hashlib
+import json
+import pathlib
+import platform
+import re
+import struct
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1]).resolve()
+expected_files = {
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "runtime-manifest.json",
+    "skills/anyknow/SKILL.md",
+    "skills/anyknow/references/connect.md",
+    "skills/anyknow/references/get-started.md",
+    "skills/anyknow/references/intake.md",
+    "skills/anyknow/references/pair-session.md",
+    "skills/anyknow/references/prepare-commit.md",
+    "skills/anyknow/references/questions.md",
+    "skills/anyknow/references/read.md",
+    "skills/anyknow/references/tell-jacky.md",
+    "skills/anyknow/references/triggers.md",
+    "scripts/verify-package",
+    "scripts/verify-install",
+    "scripts/verify-release-assets",
+    "bin/darwin-arm64/anyknow",
+    "bin/darwin-arm64/anyknow.sha256",
+    "bin/win32-x64/anyknow.exe",
+    "bin/win32-x64/anyknow.exe.sha256",
+}
+errors = []
+actual_files = set()
+for path in root.rglob("*"):
+    relative = path.relative_to(root).as_posix()
+    if path.is_symlink():
+        errors.append(f"symlink is forbidden: {relative}")
+    elif path.is_file():
+        actual_files.add(relative)
+    elif not path.is_dir():
+        errors.append(f"special file is forbidden: {relative}")
+if actual_files != expected_files:
+    errors.append(f"package allowlist mismatch: extra={sorted(actual_files - expected_files)!r} missing={sorted(expected_files - actual_files)!r}")
+
+try:
+    manifest = json.loads((root / "runtime-manifest.json").read_text(encoding="utf-8"))
+except Exception as exc:
+    manifest = {}
+    errors.append(f"invalid runtime-manifest.json: {exc}")
+version = manifest.get("version")
+if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version):
+    errors.append("runtime manifest version must be semver")
+if not re.fullmatch(r"[0-9a-f]{40}", str(manifest.get("source_sha", ""))):
+    errors.append("runtime manifest source_sha must be one exact git commit")
+if manifest.get("configHome") != {
+    "darwin": "${HOME}/.jackyzhang.app/anyknow",
+    "win32": "${USERPROFILE}/.jackyzhang.app/anyknow",
+}:
+    errors.append("runtime manifest configHome mismatch")
+
+expected_platforms = {
+    "darwin-arm64": "bin/darwin-arm64/anyknow",
+    "win32-x64": "bin/win32-x64/anyknow.exe",
+}
+platforms = manifest.get("platforms", {})
+if set(platforms) != set(expected_platforms):
+    errors.append("runtime manifest must contain exactly darwin-arm64 and win32-x64")
+for name, relative in expected_platforms.items():
+    entry = platforms.get(name, {})
+    path = root / relative
+    if entry.get("entrypoint") != relative:
+        errors.append(f"{name} entrypoint mismatch")
+        continue
+    if path.is_file():
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if entry.get("sha256") != digest:
+            errors.append(f"{name} checksum mismatch")
+        if entry.get("size") != path.stat().st_size:
+            errors.append(f"{name} size mismatch")
+        sidecar = path.with_name(path.name + ".sha256")
+        if not sidecar.is_file() or sidecar.read_text(encoding="ascii").strip() != digest:
+            errors.append(f"{name} sidecar mismatch")
+
+for relative in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
+    try:
+        descriptor = json.loads((root / relative).read_text(encoding="utf-8"))
+    except Exception as exc:
+        errors.append(f"invalid {relative}: {exc}")
+        continue
+    if descriptor.get("name") != "anyknow" or descriptor.get("version") != version:
+        errors.append(f"{relative} identity/version mismatch")
+
+windows = root / expected_platforms["win32-x64"]
+if windows.is_file():
+    data = windows.read_bytes()
+    if len(data) < 0x40 or data[:2] != b"MZ":
+        errors.append("win32-x64 artifact is not PE")
+    else:
+        pe = struct.unpack_from("<I", data, 0x3C)[0]
+        if data[pe:pe + 4] != b"PE\0\0" or struct.unpack_from("<H", data, pe + 4)[0] != 0x8664:
+            errors.append("win32-x64 artifact is not x64 PE")
+        elif struct.unpack_from("<I", data, pe + 8)[0] != 0:
+            errors.append("win32-x64 PE timestamp must be deterministic")
+
+darwin = root / expected_platforms["darwin-arm64"]
+if darwin.is_file():
+    data = darwin.read_bytes()
+    if len(data) < 8 or struct.unpack_from("<I", data)[0] != 0xFEEDFACF:
+        errors.append("darwin-arm64 artifact is not 64-bit Mach-O")
+    elif struct.unpack_from("<I", data, 4)[0] != 0x0100000C:
+        errors.append("darwin-arm64 artifact is not arm64")
+
+native = None
+if platform.system() == "Darwin" and platform.machine() == "arm64":
+    native = darwin
+elif platform.system() == "Windows" and platform.machine().lower() in {"amd64", "x86_64"}:
+    native = windows
+if native is not None and native.is_file():
+    reported = subprocess.run([str(native), "--version"], capture_output=True, text=True)
+    if reported.returncode or reported.stdout.strip() != f"anyknow {version}":
+        errors.append(f"native version mismatch: {reported.stdout.strip()!r}")
+    commands = subprocess.run([str(native), "commands", "--json"], capture_output=True, text=True)
+    try:
+        command_manifest = json.loads(commands.stdout)
+    except Exception as exc:
+        errors.append(f"native commands --json is invalid: {exc}")
+    else:
+        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v1":
+            errors.append("native command manifest schema mismatch")
+        if command_manifest.get("bin") != "anyknow" or command_manifest.get("version") != version:
+            errors.append("native command manifest identity/version mismatch")
+
+if errors:
+    for error in errors:
+        print(f"verify-package: {error}", file=sys.stderr)
+    raise SystemExit(1)
+print(f"verify-package: ok anyknow {version}")
+PY

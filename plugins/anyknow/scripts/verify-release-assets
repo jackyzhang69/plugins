@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Verify downloaded release binaries against a staged runtime manifest.
+set -euo pipefail
+PACKAGE="${1:?usage: verify-release-assets <package-root> <asset-directory>}"
+ASSETS="${2:?usage: verify-release-assets <package-root> <asset-directory>}"
+python3 - "$PACKAGE" "$ASSETS" <<'PY'
+import hashlib, json, pathlib, sys
+package, assets = map(pathlib.Path, sys.argv[1:])
+manifest = json.loads((package / "runtime-manifest.json").read_text(encoding="utf-8"))
+names = {"darwin-arm64": "anyknow-darwin-arm64", "win32-x64": "anyknow-win32-x64.exe"}
+for platform, name in names.items():
+    path = assets / name
+    if not path.is_file():
+        raise SystemExit(f"verify-release-assets: missing {name}")
+    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    if actual != manifest["platforms"][platform]["sha256"]:
+        raise SystemExit(f"verify-release-assets: checksum mismatch for {name}")
+print("verify-release-assets: ok")
+PY

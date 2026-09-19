@@ -1,0 +1,36 @@
+{
+  "name": "anyknow",
+  "version": "0.1.9",
+  "description": "Private personal knowledge with confirmed changes, search, browsing, and portable export.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "homepage": "https://jackyzhang.app",
+  "license": "Proprietary",
+  "keywords": [
+    "knowledge",
+    "notes",
+    "private",
+    "search"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyKnow",
+    "shortDescription": "Private knowledge with exact confirmation.",
+    "longDescription": "Prepare and confirm private knowledge changes, then search, browse, export, send feedback, or open a support pair session through the anyknow skill.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Export"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "Save this as private knowledge with AnyKnow.",
+      "Search my private knowledge for this topic.",
+      "Export my AnyKnow knowledge to a local file."
+    ]
+  }
+}

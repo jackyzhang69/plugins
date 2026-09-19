@@ -75,6 +75,16 @@
       "name": "anypdf",
       "source": "./plugins/anypdf",
       "version": "0.7.19"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Private personal knowledge with confirmed changes, search, browsing, and portable export.",
+      "name": "anyknow",
+      "source": "./plugins/anyknow",
+      "version": "0.1.9"
     }
   ]
 }
