@@ -139,6 +139,12 @@ tools unless the user asks for technical detail. Never show credentials.
    treat `--flatten` as IRCC upload, submission-ready, or a replacement for the
    interactive filled PDF.
 
+   Unsigned IMM5476 stays that interactive fill. After the user supplies
+   signatures, AnyPDF itself returns a static page-image PDF as the signed
+   result. Do not run pdftoppm, img2pdf, or any other local rasterizer, and do
+   not use `--flatten` to manufacture that signed copy. The static signed file
+   is still not an IRCC upload or government-portal submission.
+
    Saved memory is not consent, a warning acknowledgement, or submit
    authorization. Obtain those confirmations in the current run even when a
    memory says otherwise.
@@ -187,6 +193,8 @@ tools unless the user asks for technical detail. Never show credentials.
    That extra file is only so non-Adobe apps can see the pages. It is not
    an IRCC upload, not submission-ready, and not a replacement for the
    interactive filled PDF. Keep the ordinary download as the job result.
+   This `--flatten` viewing copy is for unsigned fills. A signed IMM5476
+   download is already the static copy AnyPDF made; do not rasterize it.
 
 ## Remembering how this user wants forms filled
 
