@@ -4,8 +4,9 @@ Before every search, add `questions` to the search `--input` JSON. Write it for
 **this user question**. Use your own reading of what they asked. We only give
 the shape and the job. You fill six fields.
 
-Job: each retrieved note will be checked against this JSON. Keep a note only if
-it actually answers this question.
+Job: search returns candidates. Request criteria are applied to the complete
+note when that check ran. Keep a note only if it actually answers this
+question about the same object. A mention of a method is not the method.
 
 Write from the user question only. Do not look at search results first. Do not
 reuse JSON from a previous question. Do not show this object to the user.
