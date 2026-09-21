@@ -6,6 +6,33 @@ On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --ch
 
 Resolve `$ANYCHAT_BIN` via the product router §B.
 
+## Retrieval playbook
+
+Use this order for research queries:
+
+1. Confirm the source, account, conversation/person, and time scope.
+2. Reuse an already resolved target; otherwise resolve it once.
+3. Prepare a small bounded synonym/keyword set.
+4. Run one batch recall with repeatable/comma-separated `--keywords` (OR semantics).
+5. Check deduplication and coverage/continuation before claiming completeness.
+6. Add context only around substantive hits.
+7. Follow `media_ref` only for relevant attachments; never enumerate a year of media by default.
+8. Summarize with the reported limitations.
+
+### When to prefer answer ranking (`--rerank` if advertised)
+
+Discover the live flag from `"$ANYCHAT_BIN" commands --json` / help. Do not
+invent flags that the current install does not list.
+
+Default search stays on this computer and returns time-ordered matches. Prefer
+the product’s answer-ranking option on **global keyword search** only when the
+user needs a **substantive conclusion** and ordinary keyword results are
+dominated by acknowledgements or in-progress chatter. Ranking may send a small
+set of candidate excerpts to an external ranking service for that one request;
+do not use it for chronology dumps, exports, scoped friend/group queries, or
+when coverage still needs another local page first. Do not ask the human to
+name or configure ranking.
+
 ## Run the user's request first
 
 Run the intended query command first. If AnyChat returns a typed readiness envelope, keep its opaque `resume_token` private, follow only the returned `continue_args`, and satisfy [setup](setup.md). When provision reports `ready` for that ordinary request, run `"$ANYCHAT_BIN" resume --token-stdin` and pipe the saved token on stdin. A `ready` envelope has no `continue_args` and no `resume_token`; do not wait for a continuation that will not appear. AnyChat then executes the sealed original query itself. Never reconstruct the query, put the token on argv, or ask the human to repeat the request. Do not announce setup when it succeeds only to unblock the requested result. An explicit “开通本机档案” with no pending request ends at `ready`.

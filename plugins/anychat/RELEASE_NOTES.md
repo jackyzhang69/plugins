@@ -1,4 +1,6 @@
-# AnyChat 0.1.88
+# AnyChat 0.1.89
 
-- Group search across many chats now reads several groups at once, about 5.5 times faster on a large local archive.
-- Docs: Cloud Agent skills path points at in-repo AGENTS.md + plugin/skills (no mac ~/.agents sync).
+Snappier local chat search: reused contact/group lookups, one-pass multi-word themes, and context expansion that keeps original matches.
+
+Optional answer ranking for substantive conclusions among noisy results; ordinary search stays on this computer.
+
