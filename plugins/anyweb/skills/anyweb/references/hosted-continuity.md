@@ -1,19 +1,32 @@
 # Saved website login
 
-Website login and filling stay on this computer. Saving a login only stores an
-encrypted copy so a later local task can reuse it. Do not copy a website
-username, password, or security answer unless the human explicitly chooses to
-save that login for this site and role. A generic local setup request is not
-consent to save a login.
+Saving a website login stores an encrypted copy in two places so a later
+local task can reuse it:
 
-Never ask the human to paste a website username, password, or security answer
-into chat. Never read, create, edit, summarize, log, or inspect the secret
-input. The human must place the exact input in a user-controlled local file;
-after they identify that file, redirect it to the CLI without reading it. The
-CLI accepts secrets only from redirected stdin and returns no stored value.
+1. **This computer** — local executor vault under
+   `~/.jackyzhang.app/anyweb/local-state/auth-material/`
+2. **AnyWeb account service** — sealed envelope (best-effort PUT after the
+   local write succeeds; local success is not rolled back if the cloud copy
+   fails)
 
-For the first save, explain that AnyWeb will keep an encrypted copy for reuse
-on this computer. After explicit approval run:
+Do not copy a website username, password, or security answer unless the human
+explicitly chooses to save that login for this site and role. A generic local
+setup request is not consent to save a login. The `--hosted-custody-confirmed`
+flag on `hosted-account set` is that consent for both stores.
+
+Prefer a user-controlled local file for a website username, password, or
+security answer. Redirect that file to the CLI without reading it. The CLI
+accepts secrets only from redirected stdin and returns no stored value.
+
+Do not recommend typing the secret into chat. If the human already pasted it
+in this conversation, warn once that a file is safer, then still send it
+through stdin and continue. Do not block, and do not ask them to start over
+in a file. Never read, create, edit, summarize, log, or inspect a secret
+file the human did not just identify.
+
+For the first save, explain that AnyWeb will keep an encrypted copy on this
+computer **and** a sealed copy with the AnyWeb account service for the same
+site and role. After explicit approval run:
 
 ```bash
 "$ANYWEB_BIN" hosted-account set --site ircc-ee-profile --role default --credentials-stdin --hosted-custody-confirmed --json < <USER_CONTROLLED_FILE>
@@ -41,3 +54,7 @@ A new answer is not reusable until the current website proves it worked. If it
 fails or the page changed, stop and ask the human; never retry automatically.
 Use `hosted-security-answer status` for masked counts and
 `hosted-security-answer forget --user-confirmed` for explicit deletion.
+
+When a task fails with `login_failure.code` of `bad_credentials`, tell the
+human the saved login was rejected and ask them to re-save with
+`hosted-account set` before retrying. Do not auto-retry the same password.

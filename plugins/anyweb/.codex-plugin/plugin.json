@@ -1,6 +1,6 @@
 {
   "name": "anyweb",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.",
   "author": {
     "name": "Jacky Zhang",

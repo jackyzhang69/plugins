@@ -1,0 +1,2509 @@
+{
+  "site": "ircc-ee-profile",
+  "task": "fill-to-pre-submit",
+  "input_key": "local_inputs",
+  "fields": [
+    {
+      "fact_ref": "input:a0ef47b70bfb5588968feef347661c662a7158788407e1fe9825b243f164abae",
+      "label": "Express Entry Work history value labelled Country/territory (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f41c5db3f4d787799d924f4efdefabcb0f3460a32db62ffffc67d4c7466e15a4",
+      "label": "Express Entry Education history value labelled Country of study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:29d74410b67c12c23358b2e31f40ddf1297cf9be2b3a2663aad2c6ae84ab8981",
+      "label": "Express Entry Work history value labelled This is my current job.",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:49eb876f93ab7402ccbe19daad8c2c22c3aa0b9a574cdf91449bcd4061dfc9a7",
+      "label": "Express Entry Work history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:7f758ab9afb2c225ca568cf1a71e851fd28f259f2728a1c6420c15568a21ea7f",
+      "label": "Express Entry Work history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7dc9923ebea11e05a979e1247710adf9290f38e6e55d9573948bb8b7d9ca2d54",
+      "label": "Express Entry Work history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:7db0889809284c80a71ecb1228089d747299fd492c88c87399af2fbf779b4d3c",
+      "label": "Express Entry Work history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b77131f5fbb74a64c6b1ddf120b5b910fbbc5ad8ac3d1ba7ab76b4c7cb00bac0",
+      "label": "Express Entry Education history value labelled Level of education (Canadian equivalent) shown on Education Credential Assessment (ECA) report Your ECA report will tell you if your foreign education is equal to a completed Canadian degree, diploma or certificate. You must have the results of an ECA report to answer the question. If you are not sure what your result was, visit our website to understand what your ECA report results mean. (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5eb065166ca775573a946d11c9ebdb6c6d762f01119e8a9750034c1bf9001ecf",
+      "label": "Express Entry Education history value labelled Organization that issued the Educational Credential Assessment (ECA) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0460a3f3e4770c4c0f810e47d550724317f889b98ea39af5168d8814ecc97876",
+      "label": "Express Entry Education history value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "day_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:97ddda8fae5f899ff04e33513cd6ab8cb78eda145a8b4bd5c6b63e3337569fef",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:bbdfe8bfbda4773ae3abbce5ccfbf18a381ef2adeecadaee359be953c1d96357",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0868d8c0cb646b4c83e5222a5ce64e928d9b031185b713f0b2a8ccd261c658dd",
+      "label": "Express Entry Education history value labelled Level of education (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:d4508fc4dadb580616f2cc223f02ca2a342ea92c954a9de0b059ddfa3f1693a2",
+      "label": "Express Entry Education history value labelled Did {applicant} study in Canada for at least 8 months in order to earn this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:4c2ba47e30058cde6c88d227c8152a835b6b24c54fdcb65bb22215d883779548",
+      "label": "Express Entry Education history value labelled Did {applicant} study full-time for at least 8 months to earn this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cc903ca57f2d0d05b734cc04426a38d34a3ceeb3957712d6e5002a650d2b03ea",
+      "label": "Express Entry Education history value labelled Standing at the end of study period (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:4922a35a01886e06efa2ff4bf6d14a80c1544ad37fce9566dc0b2a858e4e06a4",
+      "label": "Express Entry Education history value labelled Full-time/part-time study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5660efc82063aa28034948c5d4921d6b799eb4e02b8e8fb0b5a535a244655d1f",
+      "label": "Express Entry Education history value labelled Was more than half the study program English or French as a second language courses? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fd1b533ee670c9ddbd7f5dffe3604ec436034e42b811ad4af52024bdee5c5828",
+      "label": "Express Entry Names value labelled Last name(s).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:023e4fa5f512396cf1309b7de32230f43b9efd653f640e610e264e2ec172d56b",
+      "label": "Express Entry Education history value labelled Field of study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:46e758bfea3081abe067fcc5d421ff62d1bb4c718b0b34c574775e517e81ca76",
+      "label": "Express Entry Names value labelled First name(s).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ac6569379d62443cfa5b7850b8a88e5c6359a70e05c3f6e038e2d949d402ab9a",
+      "label": "Express Entry Education history value labelled Was {applicant} awarded a Canadian degree, diploma or certificate for this period of study? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e5aa935dd9ea65da971b741c1eba0abc493d91097b3d5b6441746cc4247a1b58",
+      "label": "Express Entry Education history value labelled Has {applicant} had an Educational Credential Assessment (ECA) within the past five years for this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:dcf39e32b1ddaf8f86f952e84b877d194b90a9c5a7898204b2fb89ff498e13d8",
+      "label": "Express Entry Education history value labelled Has {applicant} finished high school or any higher education (including university, college or vocational training)? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5dbae2ecc62c92f7e80cd2cad253fce6a3ea07393eb3a280848117694c20aef8",
+      "label": "Express Entry Work history value labelled Does {applicant} have any work history? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f96975386d44f8c842d6c8e9cf170fc64e047c1a254d96c4af799ecf5a3912c9",
+      "label": "Express Entry Immigration history and citizenships value labelled Is {applicant} a Canadian Citizen or Permanent Resident of Canada?.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:aae716703fdce8837a9a8c020a407e4b33461126c7016029535d2a02a29bd51c",
+      "label": "Express Entry Work history value labelled Self-employed work.",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:051cd478163c6d860fb99e6148a0e13db9251b0e356936dc7eca6f9377d9c4e8",
+      "label": "Express Entry Education history value labelled This is my current study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f294faad73076be389ef6387741016f1fe868a030c759f8c5e0a38864b4d314e",
+      "label": "Express Entry Official languages value labelled Listening (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:20fd23629cd4ef882e6f5e12d3706c89aa871e22f75aca93847be1549f9edd32",
+      "label": "Express Entry Official languages value labelled Reading (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:401a469d5ead826f2c41faccfd879ed42b9fda1f82e4ed9651b54855d6d9cf0b",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:39275007824fbdbac0f5b862b8ea7d1418124936ceb8b7a92ee847a31b222ebd",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:58989af0659204c0850a2dce355f2ee328e1796d771e6846760d976e3f4d4604",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5afcc776a4b5e5cf07c8c426f7dbfdfe2a0f2b8f9a595773ae88d08d2aa28955",
+      "label": "Express Entry Official languages value labelled Speaking (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:786974c6dd5f2bb3084436fcea07d739ae80d8c2f99befea604aaef0ade57ba8",
+      "label": "Express Entry Official languages value labelled Language test result form or certificate number (see help button for Language test taken) (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:96c76246b4dda386557488ddc521c0011d279e9e481c6a81ce34a3df756fb1c4",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c2b4f0b11cb1008fb8cb1c5f635ca2b92efe82be6787e77656529f8fac1ea9b0",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:59db021a5f1d263ab205ea6f134f7efe2affc4b2618729868e37ce3f58701ed4",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:81457ec4d64d1a4989d490c5d470cfa3962b21bd8a05b14b7388ca387eac730a",
+      "label": "Express Entry Official languages value labelled Language test taken (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:d8a54e485864ed044483c3e3cccae77421a0aa86b03dbfad18cc31ee0c202ecd",
+      "label": "Express Entry Official languages value labelled Language test version (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:17841d2c2230d82334fd400849862d0c67cd6e6e20ff69363721e50f9f9d90e6",
+      "label": "Express Entry Official languages value labelled Writing (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a35f32860e56cbd3aa2ea1d9cf719a1fdc4ea57c1525ca9349a245ecfcc23433",
+      "label": "Express Entry Official languages value labelled Listening (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:afee88e2b5db39f7e7c80ea5d847a5c3798a18b21edfc709c99a0882a25bce9d",
+      "label": "Express Entry Official languages value labelled Reading (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bc6a9e02efc1c07fc8fc9f1948ef31697172e105688f578f8be4b7b0e1d06806",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7e0ed345c31f33c9c07162accb451d5926a0e7b58a7993c68553e3d2e0802a17",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e42f492c053f386d296869b025161d05414065d0f44712b792e1dd1ebe309e82",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f2d3e0514b46c0b29551f37071f348ed62c0326f33c6e4e9e3215b7b62d0c75e",
+      "label": "Express Entry Official languages value labelled Speaking (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:35f2eae0058012231d6f5c7ce13783d6726dc821f05f5fc2c4347489a91733a3",
+      "label": "Express Entry Official languages value labelled Language test result form or certificate number (see help button for Language test taken) (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0c185725260eb04b8c080e51fab714cf1b8500a7cfad3ad62977089b3c9dcbb0",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:8c9889a87f7e4a8a9d1c516976b7ba1dcd1f0abb34c5028fddef0628ceddf557",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ebf0e5687eb6b7c650c035e92f3b8c9c0aa79e6a317093a6deb62df66092519a",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c8c0063c79a8fb3bd7dea94c879dd7d0f1eae59822474d773433f60885a6c101",
+      "label": "Express Entry Official languages value labelled Language test PIN (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3733008a2b3d34e5ac2e3bab827c3f4bff7169bc6af405807fc4d44f22495d4c",
+      "label": "Express Entry Official languages value labelled Language test taken (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f50d0f14b023e6459747977202b746f4394ba153f8e277a8dfe85ecc177ff685",
+      "label": "Express Entry Official languages value labelled Writing (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:57541044e06c39ad25d11ae3d90666920e98d458f34ffcf2965d53f08959e8a2",
+      "label": "Express Entry Official languages value labelled Which language is {applicant} most at ease using? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c98b7935b5ca24e914ec1fdc7198ac5358ccdfa5b332edb41f85311f65d4938d",
+      "label": "Express Entry Official languages value labelled Which language, English or French, does {applicant} choose as their primary language to be assessed for points and against program requirements? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:70eaca6e0f228cf059acf12028fdd2c06a8dc1e9028225b83300b9ca99ab6f0a",
+      "label": "Express Entry Official languages value labelled Can {applicant} communicate in English and/or French? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3b30f23d274b8f7601c0dc9aa59850d6e18fa787a1c83292c277973f22cd04fb",
+      "label": "Express Entry Official languages value labelled Has {applicant} taken an approved language test to assess their English skills? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:20329efc4e5c36d42cd44518f1362ed6586c3bae840fefa9b213b7599f3b38a4",
+      "label": "Express Entry Official languages value labelled Has {applicant} taken an approved language test to assess their French skills? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5cb789a113bd543d41ec43c4915a2e29c6d65784c9707d41b8bcf25143b6f531",
+      "label": "Express Entry Education history value labelled Did {applicant} complete at least 50% of the study or training program's courses through in-person learning? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0060fbd20bc9569c4c1013b7a99f104baebc1bb9037799d726955ce19eadf90f",
+      "label": "Express Entry Names value labelled Will this person accompany {applicant} to Canada?.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9d8b6ceb4a6a9c4580f240792fc98ac9af1c31d0493c9da503e1750e337ded09",
+      "label": "Express Entry Work history value labelled Five-digit NOC code (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cf73697f7126885637160c4927a068cfae2d1380f3d0a3e8492ae6244505c10d",
+      "label": "Express Entry Personal description value labelled City/town of birth (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:99818b740f2afe882a6da5bd0cc3929c81212e5256c52ec618b530db0b56d880",
+      "label": "Express Entry Personal description value labelled Country of birth (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:2be587cf5c785bcff7bfe55b0927ae811ff0df70d5852aa72c0b2452d7ca6d7e",
+      "label": "Express Entry Personal description value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9ba27fdcec10806944248e7832af79c4fb334fc3c8e5e30f59515a19e7f41c32",
+      "label": "Express Entry Personal description value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3b7b43d8b5845df8679f1d19a64e886283b5634163dc4bd06ebfc4af21da6c4e",
+      "label": "Express Entry Personal description value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fce930d80ccc0a188dab0a144af07786ac7433a807debf11bd9c82bcce184442",
+      "label": "Express Entry Personal description value labelled Gender.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a0e9d1c5b60d2b36b244ab5eb50d875daab8069eba88d242c7c75435ebc20749",
+      "label": "Whether the credential was completed at a recognized public or qualifying private institution.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:eae96723cc8390d45a0be177b4727283b8c71032d4925f8c03cdc7eefe4d8969",
+      "label": "Express Entry Relatives in Canada value labelled Does {applicant} have a relative who is a citizen or permanent resident of Canada? (The relative must be 18 or older and living in Canada.) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:77f33a39a1d6438ace4201f86b76274f0e2f1c1e97fa34cd9dab0ea3d77a73ce",
+      "label": "Express Entry Relatives in Canada value labelled Province or Territory where {applicant} 's relative resides:.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:abf218281a4cebaed0c7f679d76dcb1f8f970ba4cd71cf056f603831dd06d1e1",
+      "label": "Express Entry Relatives in Canada value labelled This person is {applicant} 's: (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a90eae0c6384e758b59cc87bfea38dadcf508f1a75fc20f971e2926755360433",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:1978df0aa2771eb61c8714b3d4d3f473715ab48625a6c371e2049a29575cf918",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cf73e8789add0bfb2913a8f242bb71eb032544bf641364c07f95f10a69958e65",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:2ae0d86cc43d1c566eaaa5f1e63d64933171df73bfd1765d7b403dfb1c25998b",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:4b579bde1a044f2e0584c25da53bb3c35b81ac7e59faa5cf75a5a89d25d708ec",
+      "label": "Express Entry Education history value labelled Did {applicant} study in Canada based on an award that required them to go back to their home country to apply their knowledge and skills? This includes some awards from Global Affairs Canada. (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:d9019a214e6f4e224553081f1a2f460a9e8e51c949f5ffc7d8fe0e848bbaf7d0",
+      "label": "Express Entry Canadian certificate of qualification value labelled Occupation associated with the certificate of qualifications (Five digit NOC) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:aec1d80cb804e21ccd2d76ff17ff63088a701681a06e93de56ed68a1f8e2610a",
+      "label": "Express Entry Canadian certificate of qualification value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:72c66dcdbe76edb7fab992b0c4100436eb2899009ec981d29989c52cff93f4f8",
+      "label": "Express Entry Canadian certificate of qualification value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7a7df33b768c9ec3a6470fe84e3c266591fbad59e0f06734dd9cf2511e25e94b",
+      "label": "Express Entry Canadian certificate of qualification value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:045e9a378ce2d92b23ca7839959963a6d1006e4a4eca30fbf9ce3eee76fddfcb",
+      "label": "Express Entry Canadian certificate of qualification value labelled Does {applicant} have a certificate of qualification from a Canadian province or territory? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0416798b5efc52ae9e96511dd644dc18516a3fcd0aaf0ae366cb0b247f02eee8",
+      "label": "Express Entry Canadian certificate of qualification value labelled Province or territory of issuance (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6ec2a53dca9a26ee0c43a5c910b09dc39fae6e5df7909d165376f1ce663c5437",
+      "label": "Express Entry Education history value labelled Complete/full academic years (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5f8290dffd47b2cb5be97e6a893451ac386481b308f4eb1614b2f2ae6dd7b777",
+      "label": "Express Entry Work history value labelled Country/territory (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:538b55992f3a6fb2d5cff8e1b253f9a82af407a74b22d1b473bd45aa3561fb8b",
+      "label": "Express Entry ID documents - summary value labelled Country / territory of issue (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9d64a4818ae46d47359bd0194c9c93ca16243a6362375cc68e0b56a7d3b1db44",
+      "label": "Express Entry Education history value labelled Country of study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:dcd1489e3d350af7915a299728d2c6bfc39eb1a501b243484a83f50b2d41f081",
+      "label": "Express Entry Work history value labelled This is my current job.",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:7b05bca10036f082da1ba87a551a567e4d8234f95a928a8cf98e750beaf20e3f",
+      "label": "Express Entry Work history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:4607bf4d0d4a89e0ff4d66ad20a1f23094d4e4e4c9a0b38252401e902d6468d6",
+      "label": "Express Entry Work history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5d8467669a6e3d164a75ff70b229549e4b14def340b6adf3af9fcebc847dfcf0",
+      "label": "Express Entry Work history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:60a2a271e8064e6ddfe62374837a55a3c988e7adea5dc4f827f210e9db703041",
+      "label": "Express Entry Work history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:568be5a5190374b24c1b28673279d5eb8039ec3e4d61755e6182d7dcd8aac8df",
+      "label": "Express Entry ID documents - summary value labelled Document Number (exactly as shown on the document) (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:886ef1e0de65cdd6246d29ef2b7374fe15401163805a53c0ea4a3b83ca73ed24",
+      "label": "Express Entry ID documents - summary value labelled Document/ID type (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:8f8cd4deb7e8ead55cfa7489382762f3e3c036481814c454954a49af850ee5d0",
+      "label": "Express Entry Education history value labelled Level of education (Canadian equivalent) shown on Education Credential Assessment (ECA) report Your ECA report will tell you if your foreign education is equal to a completed Canadian degree, diploma or certificate. You must have the results of an ECA report to answer the question. If you are not sure what your result was, visit our website to understand what your ECA report results mean. (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:949706f7ce019af809a31e50e77dcac7101e746a9d77b8d7bb4af96facf39655",
+      "label": "Express Entry Education history value labelled Organization that issued the Educational Credential Assessment (ECA) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:842a1b4a69c57fd7b52483259ad5c196352183c46731c12e527a7201138a4a28",
+      "label": "Express Entry Education history value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "day_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:d9cb80f8ace49d8ccb4b3c003a944c7441666f5782ae284277ef3f7547947c98",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:212fe4413be5eed720f9d9cda7fb2547398a9ae2c928381b4544e8cffacde08c",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:29a67bedd80b41fb6d4a32fd1342fc2e7f9f7cf1677ceb0af0b8e87b5bc29fc0",
+      "label": "Education history repeated business records",
+      "value_type": "text",
+      "value_shape": "row_collection"
+    },
+    {
+      "fact_ref": "input:a8120318117f4777e55dd555b4b83265a4d9ed75b99bb39ade4d115fdfcf196c",
+      "label": "Education history row value complete_years_of_study",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:49e4496287a166e1786b3e8188fc56a7e98e71c847137624edd43b22302322f2",
+      "label": "Education history row value country_of_study",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e8bf6a48f09b2802f0824d6c2a830b6aa03c669d0817b434b0be33860c34ef32",
+      "label": "Education history row value eca_certificate_number",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:642056c075737034487b23b9cc35e280c0258078d40b34cf8cf6d50fa500c09b",
+      "label": "Education history row value eca_level_of_education",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:38c8ee89e5a8a42d31872ba299af1f34191aa2198f48e216670830dcb05eaa89",
+      "label": "Education history row value eca_organization",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3da33d7ee12cb885b090538c74193bae996b6acd887f159a34c2ea520a525f99",
+      "label": "Education history row value eca_report_issue_date_day",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "day_not_selected",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+      ]
+    },
+    {
+      "fact_ref": "input:03a10f51098bb9d85fdf18c9cfa1158398ac806f8fb4f44a29da733edba8135a",
+      "label": "Education history row value eca_report_issue_date_month",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:605e5e89d7212969b1fe1b17ce395855a2e82da308901c9695d86c3d16ac13cc",
+      "label": "Education history row value eca_report_issue_date_year",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:86ef9f93df4ca80d004e49a20d62cc9cc601cc2211ed7c9bdd75890ff035a192",
+      "label": "Education history row value education_level",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b6909d0e5bef7cdb758961043e95790f1e083e3a3f886e5a8decce3c38473ea6",
+      "label": "Education history row value eight_months_canadian_study",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1854601fe1be5e5cd8413c7eb55a0360bea0f7401ef35b788b7ab1869e87cd6d",
+      "label": "Education history row value eight_months_full_ti_a3a2a402d3",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9709198d72f09711e57d3076206efbf2d16cb1b881f58550401969d79f804aaf",
+      "label": "Education history row value end_result",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e607bf9183905ad2149f875f4879857b3d45594a492e59ef9d92e79afbfb31a2",
+      "label": "Education history row value enrollment_status",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:96d03bbdc4117939b622bda4f6142f047d8c0be9e70b345df08f40db68b2f0eb",
+      "label": "Education history row value esl_fsl_studies",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:4bb973cea2ef01e3dbc5fecdfbcb5d68441d83a2ed71c0967b84e98e1dce0c69",
+      "label": "Education history row value field_of_study",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:44569a16756ec194c0e5775eb089bc4e47185d7dd56352960103b3a28f656ed0",
+      "label": "Education history row value has_canadian_degree",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5de887d534ff073b67021e330cd353ebea0b43020c60a81fec7aa2158af89347",
+      "label": "Education history row value has_eca_equivalency",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:2095ee97fcb295302fafa3bc123c6614cc515ed6cd7e31805905291052cf7745",
+      "label": "Education history row value is_study_ongoing",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c8ac46d7864b0b4e8b567cd9e68142fe7dce39121f7f4aa354cb48a9c98e5851",
+      "label": "Education history row value majority_in_person_c_17ba6226c0",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a6a49249904563f150017bd7e7b209f07be58caff923ce939e65d23b62f6ba1e",
+      "label": "Education history row value non_canadian_city_of_study",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a6afac3cfca162bbf56753e729f596038dfaafef14fb6fac70d73dc0360818df",
+      "label": "Education history row value public_recognized_institution",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6b669646304ef7f7c44ed43f79ec2eb69b118334fe647497fc87b2981e2e8d62",
+      "label": "Education history row value school_name",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:287c33730b56d8a85a7d8b5a35ff111db2b2c833e27322258459d0dfc0734be5",
+      "label": "Education history row value study_from_date_month",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:28a13e16d852e9ec8f7ee6126ee6566265b47137c3c9635e149c52717108584a",
+      "label": "Education history row value study_from_date_year",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c8fdca467489ecd467257fdc5487431de7932d9f6ec26361154450dcc0ed003d",
+      "label": "Education history row value study_to_date_month",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e4ee63f6f7a9bbf3dd9c2089b9bb28b518349bf17757be2e8d7d6919a2520c4b",
+      "label": "Education history row value study_to_date_year",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:4779e1aaf64767edd312df3c27be60b6954ad4b3549100ae526edbd7394d64e1",
+      "label": "Education history row value study_under_award",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3b6192a4b392d2f4d704da5c24dd5fd341c6daf6c2d8668758f1cc9609a5719c",
+      "label": "Express Entry Education history value labelled Level of education (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:dea32d080f4f53b8ce373d7e8b9c0336b8a67488fecd58a9e5eb8702605dc31d",
+      "label": "Express Entry Education history value labelled Did {applicant} study in Canada for at least 8 months in order to earn this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c0fcffd50ae0d0d08eb766a5ad68aa1febb3ec2364db94ec496b50342f4fcb19",
+      "label": "Express Entry Education history value labelled Did {applicant} study full-time for at least 8 months to earn this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:355447ae8d2e9899f773bbab360e8d955a324b93e015284150a7f1c5f342ac48",
+      "label": "Express Entry Email address value labelled Email address (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:813c17aa98f4e385e0621e70c14f835b11b5a70c0dc04b0994f77e91b6eb0829",
+      "label": "Express Entry Work history value labelled Employer/company name (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:94092f59b99028b6091b9564b673eb7d5fdf7962f6a7202819c4f8dec16b9e2c",
+      "label": "Express Entry Education history value labelled Standing at the end of study period (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a65c0f4528b6f2bb3337c6678bc90931942236f6aa602d37f4b0807fce08166f",
+      "label": "Express Entry Education history value labelled Full-time/part-time study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cd16c148006fe5316d02000d57b91b2727bd75fdf18d0e832bdb884bbfbf1466",
+      "label": "Express Entry Education history value labelled Was more than half the study program English or French as a second language courses? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fbdc0795433b62ea6ad529e87b835046ddecad318e190f73ab6e88c25415c224",
+      "label": "Express Entry ID documents - summary value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "day_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:9521c21bad8d18be240819e88232833716fc6d0e61dc9ab16de0774d36a610a6",
+      "label": "Express Entry ID documents - summary value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:e82c8bc9fc22f72fe030106b63a3012817f7c2b5f8cc8479265017d280db911e",
+      "label": "Express Entry ID documents - summary value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ccd3d45bcbed7074b90a183f97e461a2321ea6c283cbdb9b95dc5b66ef201ad4",
+      "label": "Express Entry Names value labelled Last name(s).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:aea14a923fde2bbac10141cccfc10b719d03a2c12c512e0f3191d0c2b8c01a7e",
+      "label": "Express Entry Family value labelled How many family members does {applicant} have? (This includes {applicant} , a spouse or partner, dependent children, and their dependent children.) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fc3681e2e91400a01598883566354787947743b5bd2fe034bbb8aa8ebcb18c51",
+      "label": "Express Entry Family value labelled How much money (in Canadian dollars) will {applicant} bring to Canada to support themselves and their family? (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1a4af1f0815abc9a326f6263f63a3406b374aed707f4d732c5bd7dbfbfab6825",
+      "label": "Express Entry Education history value labelled Field of study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b8cce3ba688766f29dd842f014d8036e6bbe455c96dd6f314299a5d3af8426dd",
+      "label": "Express Entry Names value labelled First name(s).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:647fd78ad84dd025e524469c31d8bbcb112d8b5347a6092ab73e0fd44d0a5d08",
+      "label": "Express Entry Education history value labelled Was {applicant} awarded a Canadian degree, diploma or certificate for this period of study? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:51fd8c2eb1e5ae78f67524223dba3a361d8c260c79b455238880be7521d472fb",
+      "label": "Express Entry Education history value labelled Has {applicant} had an Educational Credential Assessment (ECA) within the past five years for this degree, diploma or certificate? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f6d7c78841fda727644084bb5d0458212851116882a440cbb6fe5461ab8087e7",
+      "label": "Express Entry Education history value labelled Has {applicant} finished high school or any higher education (including university, college or vocational training)? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f1cebc177a1efadc5ae2ad2c0f24b1ded0244ad14277a8d8a1e4d9ea1a3ed5e9",
+      "label": "Express Entry Representative question. Its full observed wording remains in the source receipt.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:035575ea5fafbe239746abc861a555ad87653fa3a1dcb5a53f9e548b06578a21",
+      "label": "Express Entry Work history value labelled Does {applicant} have any work history? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:701f7a9d05bd5e0c98d5b72348c521f34e76fd3a06ab248f6f482eddfd0d0130",
+      "label": "Express Entry Work history value labelled Hours per week (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:79723a07434ed415573a69db51da574f093f34d9fae5e3fd522bd60c335186af",
+      "label": "Express Entry Immigration history and citizenships value labelled immigrationDetails.countriesOfCit.countryOfCitizenship_1.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ad1c0ce9fbdfa607a6d31e6689cc7dedbcfe1acef967ffb82c1df53ae1bdc49c",
+      "label": "Express Entry Immigration history and citizenships value labelled Country of residence (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1104fdb9202717acb3ffbc58fa5d2f6576840eee789cf176431bccb958c95a7e",
+      "label": "Express Entry Immigration history and citizenships value labelled Has {applicant} applied to Immigration, Refugees and Citizenship Canada before? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ed82ee6b30ca6b02cac1ffbb4f7c535c518db11f1b2a57a331cb0bd4eedf9c10",
+      "label": "Express Entry Immigration history and citizenships value labelled Has {applicant} applied for Express Entry before? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c4d770f30af3bd509e6593d59a5112e6f9c5fbc4e641b5a0abec0e7826df14bd",
+      "label": "Express Entry Immigration history and citizenships value labelled What is the postal code of your primary residence in this province or territory? (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0cbc55cc5b8dec4994f65097acd12e2f717797de426ce21bccc2e1e28ae3031a",
+      "label": "Express Entry Immigration history and citizenships value labelled What is the province or territory of your primary place of residence? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f1a107c9b10df88fe4c37f2a8a09899b9c7c5869ca4a6df8a4cb1d4f12efd15c",
+      "label": "Express Entry Provinces and territories of interest value labelled Alberta.",
+      "value_type": "boolean",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9f05f84a790b8ac5b0dc538cadd1d349e135691094a53d3bc67644e2f7913ff6",
+      "label": "Express Entry Provinces and territories of interest value labelled Ontario (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:83f148514effc2ddd8c74d9aa6bb0098a55f9243e4cc37c1a5bfcc478596ebf7",
+      "label": "Express Entry Work history value labelled Self-employed work.",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:013ead425a0eff174fec15f7d6e3aa0b807bd28a17bf764dd7dca3d9e8a6dd18",
+      "label": "Express Entry Education history value labelled This is my current study (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:df5b24b26341a07a9fa4bebadb5a1ef2175f8a40ac4ce2c0b8550a4c251666da",
+      "label": "Express Entry ID documents - summary value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "day_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:fba4dc86fcd82e13989dabccd2b15faff11757915bb40d9312d8b78841bd0942",
+      "label": "Express Entry ID documents - summary value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:122ec8464f79437fb70e10fd226a6a8d66f563bbe8c2c08e8be33c1387f0abd4",
+      "label": "Express Entry ID documents - summary value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:827130c0275565147edd4923d2a17ceff2efea4512de3ee109dc32fa2e1975ec",
+      "label": "Whether full-time work for the current offer employer reached one year.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:945e54c021b94b6614efdd05d654f073f47138a7754f99253ab394ee547838bd",
+      "label": "LMIA basis recorded for the current employer-specific work permit.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:daad2b661b83b1bb011d6a24178681d99f5d9844d7854d94d0c06ae32de1a224",
+      "label": "Whether the candidate has a valid permit for the current job.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:078e4d332be2f59bf1be7d00c5591870d03bd479154335a67a7b2ffe389f5a76",
+      "label": "Whether the candidate currently works in Canada for the offer path.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cc2c40167c8b4c9eca77d2b99289ca316243b2e835d63bea4cd6929d86d600b7",
+      "label": "Contact address for the employer or company making the offer.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:8c0b7a25a938b1d768f80c92feb15cb6ed5ae01336501603ba4803a2d55f9afd",
+      "label": "Number of employers making the reported qualifying job offer.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c66291fa37c59d73f5efb309800426360bae2277189b272b6e661712efc288da",
+      "label": "Whether the offer employer is ineligible with the Government of Canada.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:89b9009425fb287b8a4374cf1b772cc67cae73d5da420cec2ef69f608b375710",
+      "label": "Whether the offer employer is a diplomatic mission in Canada.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:34b2c98aa19d86a7e9e09ed8aaaaaac05e4b6fdf281a133aa8e40c9899a1ef46",
+      "label": "Name of the employer or company making the offer.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5018a57797c9050708ded2aef9e67257deb389082a6f483831d89f8128ee228d",
+      "label": "City or town of employment for the job offer.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:08319c956a019c8d125e5f584bfd357b52f667a77054a8e8d03893612681a1a0",
+      "label": "Postal code of the observed employment location.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:871d2564b16d333124fd4a56847a1fadf435d4498f5de4fcfe473f00bd6c5113",
+      "label": "Province or territory of employment for the job offer.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:97e14dc405fb997ec2ce94313e5eda241adcfb8e8e217712eef0a09a33365eeb",
+      "label": "Street address of employment for the job offer.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a5c030bdacac5d64cbbe79a8d667f76084a5f2fe75e10aad8b387d9634e6d737",
+      "label": "Whether the offer is full-time, continuous, and at least one year.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:08e8ac85d9799a7c00fa43c09183c314e11d91412ff515faa81663b5a295f44b",
+      "label": "Whether the candidate reports a qualifying job offer in Canada.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:2e3cc4d921cd13b315b3c83b4eaf294ae8c24682d6fc543b788469e27dd0eae5",
+      "label": "Day component of the observed LMIA expiry date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1f0ad4197d32639a4bba652378233aabcfcb090fb5bb47b3768d794ee385bd6b",
+      "label": "Month component of the observed LMIA expiry date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9c3f4d1018e863484e3d6d894bf75977515a18afbe5e6b78b9ca2d8e2140813c",
+      "label": "Year component of the observed LMIA expiry date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:58d88197fc0d5be12ed67b432a124bca6ef18d19944bf7b91f22cefa07358a0c",
+      "label": "Day component of the observed LMIA issue date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:07e53edd10458dc9378ab32ab7de9db93d78e3bd808735d785beaed638aab524",
+      "label": "Month component of the observed LMIA issue date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:759691abd0c5669437a2416513ee8aeacdf36aa8c3d8a61b7221e4bfe7033c42",
+      "label": "Year component of the observed LMIA issue date selector.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cd321b0c62fbecee550e10b295ac4001ad4c423c8cd5fa8ea1361739ba4bc475",
+      "label": "Labour Market Impact Assessment number for the offer.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7ff691c567879a04013d48ba3f2a87727c724731de5a4f140641d299a7fd7fad",
+      "label": "Whether a Labour Market Impact Assessment was issued for the offer.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3c92b288bdc834267bffc9707f3aa3c6c28249f263e81350f2f6fff9fa0ebe99",
+      "label": "Job title associated with the selected NOC occupation.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1befdf7ea9a66b76fa884fb5ef1c20965379cc824da2c4bb01ea8cf09800b9d4",
+      "label": "Whether the reported job offer is non-seasonal work.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:70576c5cce37907d4527f97de6426ad94ad1d651acf1137303bfa521e920fc47",
+      "label": "Whether the offer is from the employer named on the current work permit.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bf3a5f1d42d48ad4582e0f43537881446a1c2d94c106bcd5a142bb590d45c95c",
+      "label": "NOC code selected for the job offer.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:d29eefe595a0acee07e33d3ef87694c0c3cf8bf4e7f679edc264cf4a95811766",
+      "label": "NOC code of the candidate current work permit.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fd01d2a9088dd2960eedb60d4efcf5ca5f78328dfa7eb0d8d9aaf38f03e49270",
+      "label": "Express Entry Work history value labelled Job title (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c3e3611c250d4f525dfbd311edb0b14656b165d5d5f5ae7a5678f1af384f55c7",
+      "label": "Express Entry Official languages value labelled Listening (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:614f72bbf13821329030ffd9dc24b9946ef00bb8d2cb9d3aff910aef4b3c5d30",
+      "label": "Express Entry Official languages value labelled Reading (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:32b822bbdef54e0151366cf8bd59ab42e0cbf7837582edad060c195e9bafee9e",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1e4d72d8df2bfa902a712711a3a10965608edaae29afa63dd90fef7d131cc9c3",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c6e888a91d385cf00167f3dad7b76856b31ce1841d856f6ac1cf6ba053b15b5f",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fa286c44b35f85f3305dc50f0e11c50ce8bdd2f1f971f61838fc0d44b037a857",
+      "label": "Express Entry Official languages value labelled Speaking (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a573d869d869142ff4f52882dc4f53ab8703d24549b4fa19ca947e4b288ff082",
+      "label": "Express Entry Official languages value labelled Language test result form or certificate number (see help button for Language test taken) (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e4ec8a9f355cb57b39cca86a3b765bbf6ed9680ea75a2847ee09075c58775508",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3eea921120fb6a76004ea3fcf71095e6845a42a2efaa9876ea388125930a32d7",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3d88b17eb5720ed31ac97d75e37923066d4f48056d3850195b184c2237e89c6d",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7b1f22e5d041ea70017f45e58ed4fb104cbaf7aeb7800b5694fd66a470d64bb2",
+      "label": "Express Entry Official languages value labelled Language test taken (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:81f5705b391f07780413d169c95d739e13878ec64b7233174a51f19763623ba4",
+      "label": "Express Entry Official languages value labelled Language test version (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:98c966c0d41ced77eb2ff581f7ccdbe8c8695ebd6b70aef9beafc396027aeed5",
+      "label": "Express Entry Official languages value labelled Language test version (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:59024550762119831eee24b27feaf4d7b2cc78abf8403c3583c34bc1d5f5ad3f",
+      "label": "Express Entry Official languages value labelled Language test version (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:98def0ce1a54dfcfefa13937673f9145a5df1dfff5c668a377716b4298396c29",
+      "label": "Express Entry Official languages value labelled Writing (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bbf1067c4e31e9dee1a462510e5108c32f077ee8d19008e36cc1ad7eb3ca9ea0",
+      "label": "Express Entry Official languages value labelled Listening (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:995893788500d3c6cf0267e3c1d64c22d24fe589a00efc67f3f447812a8c5b4e",
+      "label": "Express Entry Official languages value labelled Reading (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:327e0a42973004eb234a1ab46856a4febd17ecd44affe2643a7ea4274af786b2",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3547c88650b58e481f1c057897a04b27409d4d6a951d12f52432f36211cada85",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1b326361c3ab858a29b8a8992fd95fb8bfb9a505ccc684dd8c4a69a9314762cc",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f14569c15cd45ddbb85eb863c37e0cecb9a817e1267c09658496f49d2d20a162",
+      "label": "Express Entry Official languages value labelled Speaking (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:03648a86be2e6a562ff01ac5e87e80994e476f73b77ca6574f51e3db92deaffc",
+      "label": "Express Entry Official languages value labelled Language test result form or certificate number (see help button for Language test taken) (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:648e85a2e3d1bb989e259d315e44f6ce7a1103a4fe36f3429c0d32c135d6ba06",
+      "label": "Express Entry Official languages value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9aa9ce7a99b5c75f8bfe0536c1ea1b94977063c3d48971c024b227332d8724d5",
+      "label": "Express Entry Official languages value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:836ac247d102573df03276b017dcebbaa785ee1dc67d309c9b6b93fb088ddfc3",
+      "label": "Express Entry Official languages value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a7af053e78be7b0bc6acdd95b852e17b2271463890b84fcafc939f629aa18e79",
+      "label": "Express Entry Official languages value labelled Language test taken (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1ee82b7c316316fb83396a598d265d7bc8574ea26445001f011777c3fcfd393b",
+      "label": "Express Entry Official languages value labelled Writing (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6090a5354a60e5c5331c308633f3d561a157dd16840e2a682ca76a1dee82eff6",
+      "label": "Express Entry Official languages value labelled Which language is {applicant} most at ease using? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e3be71ab98c4fcf8d4a5a74967c856bd2b7ae9ad6a08ef1b3fdda95e7fbcd798",
+      "label": "Express Entry Official languages value labelled Which language, English or French, does {applicant} choose as their primary language to be assessed for points and against program requirements? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1034300b889a6f875af6d0eea8bb08a691d3282bcc97a7d5fee85c7a5b001318",
+      "label": "Express Entry Official languages value labelled Can {applicant} communicate in English and/or French? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f77f1c1d0256db056ded44bf82099ff1953120336ecdcb0c6bb91f5992795c1a",
+      "label": "Express Entry Official languages value labelled Has {applicant} taken an approved language test to assess their English skills? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:0e93df93f3870455f63cb3fd901179d735d81643e8c547e49831ef56a5d3d783",
+      "label": "Express Entry Official languages value labelled Has {applicant} taken an approved language test to assess their French skills? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6fc02f1e8b809e8da41724670bfacb9019348d80e7bac6d8863c612b957cc0f2",
+      "label": "Express Entry Education history value labelled Did {applicant} complete at least 50% of the study or training program's courses through in-person learning? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:035ff72ff04a5b4d1d368ce0d25ab4f8af5cbf361aab3e56c041647e0677e2c1",
+      "label": "Express Entry Marital status value labelled Marital status.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:ea4a25045d7299e8678366f6d6cad91e71387b137ff38648614840ae21a28dfd",
+      "label": "Express Entry Marital status value labelled Will this person accompany {applicant} to Canada?.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b8341affd68654a9db45842201bf0ea82946965903832b17e3af5609941b7ad9",
+      "label": "Express Entry Nomination and selection value labelled Has {applicant} received a nomination certificate from a province or territory? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a781b9b005ac0609659254e3a5845a9a4604d3991bbb05b3408937709a71f5da",
+      "label": "Express Entry Nomination and selection value labelled Province (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6b3c3257d4c6f1277a1cff48cb01e055a3939822e7a4e8419db6ee2e981ad343",
+      "label": "Express Entry Work history value labelled City/town (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3551abc816753e95a1bb231dd1f3477e2b7e7a5256c4f3681270db436525102f",
+      "label": "Express Entry Education history value labelled City/town of study (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:dba5f9cc7e9691e7abdd9a6a0d0c66204cfe2ed3db82bf96a5cf8d0c3c082e11",
+      "label": "Express Entry Work history value labelled Five-digit NOC code (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1a57138badf7a665eda4fbdbd362caa44e74a75ff5316da08cd17d9f12105251",
+      "label": "Express Entry Occupation value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:497b462269348a44b2c77704350e3c2ad1bcb7fda331366982d71eaf2d0cf981",
+      "label": "Express Entry Occupation value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cbe005b4af7b6c350b556eb5db18174a4bc51550f280a8fc3705b0b75f511ba3",
+      "label": "Express Entry Occupation value labelled Primary occupation (Five-digit NOC Code) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bc0e4738e978eafd1faa5f671c95c1b009222026e82b556aec395049e36cce64",
+      "label": "Express Entry Personal description value labelled City/town of birth (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c52bfa58e4613c6cec2d39bf034002d24223c10f66b6160e4b83fd95cb04831f",
+      "label": "Express Entry Personal description value labelled Country of birth (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5a903bfd172564128d22cb4aed944bd087fae42df6fbb0f54511a51a1cacabb0",
+      "label": "Express Entry Personal description value labelled \"Day\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:39f0c50082bcc76daf3158bb2f9125af7eb365bf3fcbcf8abb99b7e3d4f2980d",
+      "label": "Express Entry Personal description value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:33bbd5d6b6596ed5f9c1c44f8290b1b1213cee0359cfc4ed2961deebc5fc59c8",
+      "label": "Express Entry Personal description value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:48327d458d1bc6ef7e60bfa98182f80328176d0943cf7b4420c5faaa3dc71dbd",
+      "label": "Express Entry Personal description value labelled Gender.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:8fdfc0d949b3252070a0014f38aab2896cc89e36946367624d8ba5467a617185",
+      "label": "Express Entry ID documents - summary value labelled Do you have another government issued ID?.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5df0e4e7a4947ef5fa49a9d81fd9d8839a35c8211c305a994e4eec96d8f9b5be",
+      "label": "Express Entry ID documents - summary value labelled Does {applicant} have a passport or National ID document? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b8a1612bd83621e95f372d5b8522a37e01b5108a9fdfeb74a050cd6c7d099a8f",
+      "label": "Express Entry ID documents - summary value labelled personalIdentification.idDocuments.countryOfIssue_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:09ff29995482f03be8329b659770a258d596de385826b1ef65421188bc6212b4",
+      "label": "Express Entry ID documents - summary value labelled personalIdentification.idDocuments.documentNumber_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1d38503af1b792607447e4cb94436e3cf1142983f4190bfc4337ae59aea20ba5",
+      "label": "Express Entry ID documents - summary value labelled personalIdentification.idDocuments.documentType_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1c1f0cc3fc20a6ab994e0b0f3931672bfa5174616d11b9ad0365c4d70d6731f6",
+      "label": "Express Entry ID documents - summary value labelled personalIdentification.idDocuments.expiryDate_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:f052c5843c7e17165dcb852484fe5c79ba4f6498b0a969f2dc69fb8ba799ae18",
+      "label": "Express Entry ID documents - summary value labelled personalIdentification.idDocuments.issueDate_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1ac22f05ce7d90d770a2d4e94209c1cbabcfe24f971b8c359e8b6d1bd0d2af44",
+      "label": "Whether the credential was completed at a recognized public or qualifying private institution.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:cb8157515e70a164e6b7065b0b67bee71fc099ca8e6676a1b7e70b50cee22fa6",
+      "label": "Express Entry Relatives in Canada value labelled Does {applicant} have a relative who is a citizen or permanent resident of Canada? (The relative must be 18 or older and living in Canada.) (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:7c750f4dbe2cff49a0f436f6e9319a3cbfc503cde13a0b0c63bf4cb6463200f4",
+      "label": "Express Entry Relatives in Canada value labelled Province or Territory where {applicant} 's relative resides:.",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:9d0380d986f95766a03e09e950d7186be2cd4ec356c4900e873e94deac91757c",
+      "label": "Express Entry Relatives in Canada value labelled This person is {applicant} 's: (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bcc891e95a252e69fc0160b48abc4181420e06cd9104b862d6e4dabe5bbe8dd4",
+      "label": "Express Entry Research value labelled Do you agree to answer these questions ? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:44123071f2165d66c305953d1d864b14b2ba546425638e0a381ec21065a8f8c8",
+      "label": "Express Entry Research value labelled Have you looked for a job in Canada in your primary occupation? What best describes the last action you took? (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1e47bfce829a15f72de53aa5e08f1f799ea8b0165c73e3635630592ea0725b07",
+      "label": "Express Entry Education history value labelled Name of school/institution (required).",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:2d4984da7c27f82ef90e4730eaebb65fa83848292bf1462c7c398cb60f199d84",
+      "label": "Express Entry Language of correspondence value labelled Language of correspondence (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a494942c587ab9e83bdd8ba8f9d70567a0b1d9ef36cadf4eec48009827b732a4",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:44434fe7bd72e8cf73a0ddd8394b504ca4cb2cc4b890db1ac117cec1661f7184",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:13a0f5d551ec21b886c8484072c0207beb5a4ae56dbd4f65e5c6f0143cbb11fd",
+      "label": "Express Entry Education history value labelled studyRecords.countryOfStudy_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:26228a711f1dfe90dc0e93d8d191ec43281e1cb8be24ac273d86548c515bae1d",
+      "label": "Express Entry Education history value labelled studyRecords.educationLevel_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:05dcbd19cad73cd96b11bc791c2ef82695225445fa8bc7c4e10e76f0ef18fcf2",
+      "label": "Express Entry Education history value labelled studyRecords.fieldOfStudy_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:63de3da5b0259b6d05fe15857f7107dacc919e1c46dc281f7162fe21a9942f04",
+      "label": "Express Entry Education history value labelled studyRecords.schoolName_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:512bf0b1904eda121233f15b4d9cb48a9172d4e7d9436b6ef1141632c5a5cc97",
+      "label": "Express Entry Education history value labelled studyRecords.studyFromDate_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:282f5ef8d99c38ae72dfdfb49eeaddb6eccd831749b406c267c109fd5ef36c6a",
+      "label": "Express Entry Education history value labelled studyRecords.studyToDate_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:43aacbeb91f8812e163ae19190646879c59323220fce763760f91e7509ce5f24",
+      "label": "Express Entry Education history value labelled \"Month\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "month_not_selected"
+      ]
+    },
+    {
+      "fact_ref": "input:816fbd93c73f2c4353b4e23af30d109705c83b7496c565627571359eaba8924e",
+      "label": "Express Entry Education history value labelled \"Year\".",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:252ba9b7516abbd8e1232abcbf626b421e67adac773098a986e53ddff4491f03",
+      "label": "Express Entry Education history value labelled Did {applicant} study in Canada based on an award that required them to go back to their home country to apply their knowledge and skills? This includes some awards from Global Affairs Canada. (required).",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:e28414b5a603bda9bb864297740b4c9fa1ed51e54fa5912f89f7a9ed115b1ed2",
+      "label": "Work history repeated business records",
+      "value_type": "text",
+      "value_shape": "row_collection"
+    },
+    {
+      "fact_ref": "input:e7700067425e1b42b9e7f4d5d87a6baf84b3ace8666c83762dfdf6deefa4de9b",
+      "label": "Express Entry Work history value labelled workHistoryDetails.country_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:b073926af7e6a70f9cae5b4abc0734cb484977f5c496a221709bd84f6fd58bdb",
+      "label": "Express Entry Work history value labelled workHistoryDetails.dateJobStartedOn_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:08689d104bc9e1a71be2f6c758546e6c5184497d2c8309ae10dd2f5344c813ff",
+      "label": "Express Entry Work history value labelled workHistoryDetails.dateJobTerminatedOn_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:af659eeadeb272400caec429955522fc589a0d4a9ff82f7a1d763d3acdf7d028",
+      "label": "Express Entry Work history value labelled workHistoryDetails.employerName_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:360b27d3f061e0bae01b6a1cdce3283aab1f0cae1b3d0db9ff31b68f660adfe6",
+      "label": "Express Entry Work history value labelled workHistoryDetails.jobTitle_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:74c9bf231ef03bc368e54dd3db33b2e349da340ed64cb3b8b32672f9416ad2e0",
+      "label": "Express Entry Work history value labelled workHistoryDetails.occupationCode_1.",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:141682ae2b0c6734e6b96d0a1d4261558775a71fca0cdc7d156bdc7e052afdfc",
+      "label": "Work history row value city",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:de7ea510681e58a7793512d98d01d9b426548a954d514f06a484d2b847fad905",
+      "label": "Work history row value country",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:fab1ff366b63f8d4e369138da606d1490b61258d6fb3b351ed6087c21a32dcbf",
+      "label": "Work history row value currently_ongoing",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:ee563e9d00086655c83f1aef00ac25d72e43322458bf93b8965ac0c2b1f95818",
+      "label": "Work history row value date_job_started_on_month",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:84c9ff9604a7edfbcb6f39b66892e5e29a614a808eb341bd946a09955973b38e",
+      "label": "Work history row value date_job_started_on_year",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3d11057de60d8d6f3441b9ba1b233558e3f19c99bcc5f3ae25639cdedd951729",
+      "label": "Work history row value date_job_terminated_on_month",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:830b2759e17cc402c808a2e206a2a6febe958188fd6e29b08fd316dd2f5070d8",
+      "label": "Work history row value date_job_terminated_on_year",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:3210bf9d16952890a19dc7d6b3bf600476bc0a1aeb0bf1aa396106b4111f35f3",
+      "label": "Work history row value employer_name",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:313252e838f01e9a45cdd2708602c790f8f8410febb0e8fe13fdc2c82a149860",
+      "label": "Work history row value hours_per_week",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a23432dd1e5ae928b28a9c89da7da17396b9b7730009fa3ad21970e967dd8c8d",
+      "label": "Work history row value is_self_employed",
+      "value_type": "boolean",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "on"
+      ]
+    },
+    {
+      "fact_ref": "input:0183fe3d90174ab89257fcbf931b6f4bb11747dbe1de5cac647d0c4ec3b25056",
+      "label": "Work history row value job_title",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:5137827b19ca667e23b2230c73d407420f465affe06550cceb8129d0ca865e5b",
+      "label": "Work history row value non_canadian_city_name",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bb6b250e6758c1c7e47ddfda6877fcaa8e84d747f5f19154131ec9e9d4d7159c",
+      "label": "Work history row value occupation_code",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:523fbfce465e6ab8ed331967ec808b9fc3c96e1b417c2419e09bb45501a7c4fc",
+      "label": "Work history row value postal_code",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:d925f926ac77709faf705339329aafbf463b1b551411a007c6a04647df8a1b30",
+      "label": "Work history row value province",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:60b23a890e3e5b08c816e3ef1c093135ebe0d25fb77b860066dba692d71ae9ba",
+      "label": "Work history row value street_address",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:290a5e5e2457c601dce1ccd139fbc1bbfdf1962076ee4c997b1524df2b741421",
+      "label": "Work history row value work_permit",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:329bf9988057322216819ed423bd015ee0d000c8f0bf0013608fccedbf143c90",
+      "label": "Work history row value working_condition_le_bc3d5a3093",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:1221372ba14166e5052b49280c66bb41b52f7860d9181735a7ebb4faca57bd51",
+      "label": "Work history row value working_condition_st_f6d5541fe3",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:131bafb8c9052a56e7c88fde22acf93fe78a69b0a622f4f86feb090e251eb079",
+      "label": "During this period, which TEER of the National Occupation Classification (NOC) is most of the experience in? If you do not have any Canadian work experience during this period, please choose \"None of the above\".",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "TEER Category 0",
+        "TEER Category 1",
+        "TEER Category 2",
+        "TEER Category 3",
+        "None of the above"
+      ]
+    },
+    {
+      "fact_ref": "input:4082b1226bd5a5c508e7cb9ea3dcf81b94b752acf8bff787954fd980b0d1a2fe",
+      "label": "In the last three years, how many years of skilled work experience do you have in Canada? It must have been full-time (or an equal amount in part time).",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "None",
+        "Less than one year",
+        "One year or more"
+      ]
+    },
+    {
+      "fact_ref": "input:1e4f8e1b2e0e632bb818b1cb4f41b4a5d674b9e998c91d0636afe88d834cb431",
+      "label": "Enter the test score for Listening.",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "9",
+        "8.5",
+        "8",
+        "7.5",
+        "7",
+        "6.5",
+        "6",
+        "5.5",
+        "5",
+        "4.5",
+        "4",
+        "3.5",
+        "3",
+        "Less than 3"
+      ]
+    },
+    {
+      "fact_ref": "input:d3f1c4c61edc565bf41feb30dd9c617a581258658776be5f5123ab6d9542123e",
+      "label": "Enter the test score for Reading.",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "9",
+        "8.5",
+        "8",
+        "7.5",
+        "7",
+        "6.5",
+        "6",
+        "5.5",
+        "5",
+        "4.5",
+        "4",
+        "3.5",
+        "3",
+        "Less than 3"
+      ]
+    },
+    {
+      "fact_ref": "input:9a16d910af5f2956d9d98a772131507fd457ed981e4c602adb1f07fc47219761",
+      "label": "Enter the test score for Speaking.",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "9",
+        "8.5",
+        "8",
+        "7.5",
+        "7",
+        "6.5",
+        "6",
+        "5.5",
+        "5",
+        "4.5",
+        "4",
+        "3.5",
+        "3",
+        "Less than 3"
+      ]
+    },
+    {
+      "fact_ref": "input:b70f3a93e491c3ee0de388eaf06f093a7346297d3618eca60035f3fc1c865de2",
+      "label": "Enter the test score for Writing.",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "9",
+        "8.5",
+        "8",
+        "7.5",
+        "7",
+        "6.5",
+        "6",
+        "5.5",
+        "5",
+        "4.5",
+        "4",
+        "3.5",
+        "3",
+        "Less than 3"
+      ]
+    },
+    {
+      "fact_ref": "input:d32fb58f3ffbfc135d1d150b76359fc9d38d37af90ff1d67a1c99b16737aa4fa",
+      "label": "Canada's official languages are English and French. You need to submit language test results for all programs under Express Entry, even if English or French is your first language. Which language test did you take for your first official language?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "None",
+        "IELTS",
+        "CELPIP",
+        "TEF",
+        "TCF",
+        "PEARSON"
+      ]
+    },
+    {
+      "fact_ref": "input:053f73be9c01dcb7fb51ea87f97872a08a5940372e154c061db03a41503ee7ec",
+      "label": "Day of first-language test date",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Select day",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+      ]
+    },
+    {
+      "fact_ref": "input:63f73f7bf1216cdec1b2a4cea960512dc5af5c80c354a5297085f97173a65530",
+      "label": "Month of first-language test date",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Select month",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    },
+    {
+      "fact_ref": "input:aba530388171aa974620d6bafeae1bf46ceb5299fda717cccb7c0ce657b472b6",
+      "label": "What date did you take this test?",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:6bda6db499ff3cb909b735ed47e2238c4bd250d6b2afb9c0649c269b2b6f0580",
+      "label": "Which province or territory do you plan to live in? If you don't know yet, choose the province or territory you are most interested in.",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "Alberta",
+        "British Columbia",
+        "Manitoba",
+        "New Brunswick",
+        "Newfoundland and Labrador",
+        "Northwest Territories",
+        "Nova Scotia",
+        "Nunavut",
+        "Ontario",
+        "Prince Edward Island",
+        "Quebec",
+        "Saskatchewan",
+        "Yukon"
+      ]
+    },
+    {
+      "fact_ref": "input:82698424c3a06b99aa4c2b62e279edf01c1b664f5a32e9a4a5236cf15cde61c6",
+      "label": "Day of birth",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:573f0db1aa1f66b37b8ce5ca8116d153678ad8d1d28cc830b8e68a4831836c9b",
+      "label": "Month of birth",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Select month",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "Unknown"
+      ]
+    },
+    {
+      "fact_ref": "input:9120b393c8c6185df6be1a12fe7f887ce1c3a96e461b2a457291f6289d6808fe",
+      "label": "What is your date of birth?",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:dd36a14f10c57555389f75b92dd62672969d25887602469eedce679239ba940f",
+      "label": "What is your first name(s)?",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:70a61202fe2560246293a4e90a97421dfc719dab3139ffb5cf434588fcae9ed1",
+      "label": "What is your gender?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "Female",
+        "Male",
+        "Unknown",
+        "Another gender"
+      ]
+    },
+    {
+      "fact_ref": "input:b2873b9590e1a45f0c481a6319e0ba0ebac37d008baaeb7eeda37318606e7dde",
+      "label": "Tell us your name(s) exactly as shown in your passport, travel document or national identity document. What is your last name (family name)?",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:c14485f64c5f41ba8e5f617dc8ed3092eba4f0af12d4dd4106447659c39243fd",
+      "label": "What is your marital status?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "Married",
+        "Legally Separated",
+        "Divorced",
+        "Annulled Marriage",
+        "Widowed",
+        "Common-Law",
+        "Never Married/Single"
+      ]
+    },
+    {
+      "fact_ref": "input:8b49f40e1338aeb6676ddf73f08ca663673dbb4eb143268dee02862818a390ab",
+      "label": "Do you have other language results? Which language test did you take for your second official language?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "None",
+        "IELTS",
+        "CELPIP",
+        "TEF",
+        "TCF",
+        "PEARSON"
+      ]
+    },
+    {
+      "fact_ref": "input:39347f8226fc82013790397c39558ac415e677a809dada748169c949055c1bee",
+      "label": "Will this person accompany you to Canada?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "fact_ref": "input:965d1609eba4ca7143f91b2f67a9033314417cf8009346e00f9e62537eb1f042",
+      "label": "Day of spouse birth",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:a7808f5c2694079db7c7a1f00a6a5feadd5cf916b8aa5468857a253b06c8c525",
+      "label": "Month of spouse birth",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Select month",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "Unknown"
+      ]
+    },
+    {
+      "fact_ref": "input:8511ff6cf6ac948e73b7bdba7c9543cec7e51680cfd68f0758f3389e51a2f4b1",
+      "label": "What is your spouse/common-law partner's date of birth?",
+      "value_type": "single_select",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:8d725826178e0edd8f08f84ed5c5a9fe047d772bc57a20825ba0a1ac554cbbd5",
+      "label": "What are your spouse/common-law partner's first names (given names)?",
+      "value_type": "text",
+      "value_shape": "scalar"
+    },
+    {
+      "fact_ref": "input:bffe7be2d0e497c120ed0d96769ef1f03edc2e5d6e77281f59463924d6d1a42f",
+      "label": "What is your spouse/common-law partner's gender?",
+      "value_type": "single_select",
+      "value_shape": "scalar",
+      "accepted_values": [
+        "Please make a selection",
+        "Female",
+        "Male",
+        "Unknown",
+        "Another gender"
+      ]
+    },
+    {
+      "fact_ref": "input:8508bd4b0bd3244c0690bee3a036e265a8c008850e53ecbc619dd7b22e6b24a8",
+      "label": "What is your spouse/common-law partner's last name (family name)?",
+      "value_type": "text",
+      "value_shape": "scalar"
+    }
+  ]
+}

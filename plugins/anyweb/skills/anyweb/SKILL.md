@@ -11,8 +11,9 @@ description: >-
   so Jacky's assistant can look at this machine's AnyWeb status.
   This is not a general web automation tool.
 when_to_use: |-
-  Load on plugin start. Trigger phrases: "create or continue my Express
-  Entry profile", "fill my EE profile up to the final review step",
+  Load on plugin start. Trigger phrases:
+  "create or continue my Express Entry profile",
+  "fill my EE profile up to the final review step",
   "fill from these applicant files", "here are the information files",
   "continue this supported website draft on my computer",
   "check or resume my AnyWeb task", "check my AnyWeb repair",
@@ -46,11 +47,23 @@ homework. Run the intended ordinary command first; when stdout is
 the product reports `ready`, then resume the sealed request. If `status` is
 `blocked`, say the `say_to_user` sentence. Do not paste JSON into chat.
 
-Ask for the applicant's information files first. Compile one complete
-`local_inputs` object from those files, then let the executor run. If the
-first start still lists `needs`, those items are the remaining facts; do not look for a private site graph. Do not interview the human one website field
-at a time. Stop only for a fact the files cannot supply, a live email code, a
-verification-app or CAPTCHA challenge, or an irreversible confirm.
+Ask for the applicant's information files first. Read
+[references/ee-fill-schema.json](references/ee-fill-schema.json), compile one
+complete `local_inputs` object keyed by that schema's `fact_ref` values, then
+start the task so the product can preflight **before Chrome opens**. Prefer one
+batch of known facts from the files; ask once for what the files cannot supply.
+If the result says the JSON does not match the schema (`obtain=host_self_correct`),
+fix the JSON yourself from the files and resume — do not stop silent, and do not
+ask the human to redo work the files already contain. If facts or the published
+schema revision change, compile and preflight again; do not reuse an old ready
+state. If `needs` are missing facts, ask once; do not look for a private site graph,
+and do not start crawling or repairing the website from a fill grant.
+Do not interview the human one website field at a time. Stop only for a fact the files cannot supply, a live email code, a
+verification-app or CAPTCHA challenge, or an irreversible confirm. If an email
+code does not take, keep the same Chrome session: the executor resends on that
+page and you ask for the new code. Do not start another login. The human
+does not type into the website; the executor logs in, answers saved security
+questions, and fills.
 
 ## When the user asks "what can you do?"
 
@@ -70,7 +83,7 @@ checks and pair session are secondary. If the user is not connected, run
 | User intent | Host does | Human may be asked |
 |---|---|---|
 | "what can AnyWeb do" | Live `"$ANYWEB_BIN" commands --json`; translate to the supported Express Entry fill first | Connect once if not logged in ([connect](references/connect.md)) |
-| continue this supported website draft / create or continue my Express Entry profile / fill from these applicant files / here are the information files / check or resume my AnyWeb task | [local tasks](references/tasks.md): files → one fact pack → run in visible Chrome on this computer | Information files first; email codes or missing answers to this assistant; verification-app or CAPTCHA in the window; irreversible confirm only when the product stops for a person |
+| continue this supported website draft / create or continue my Express Entry profile / fill from these applicant files / here are the information files / check or resume my AnyWeb task | [local tasks](references/tasks.md): schema → one fact pack → preflight → Chrome only after it passes | Information files first; missing facts or email codes to this assistant; website password preferably as a local file (chat paste is warned, not blocked); verification-app or CAPTCHA in the window; irreversible confirm only when the product stops for a person |
 | save my website login / forget my website login / answer this saved security question | [saved login](references/hosted-continuity.md) | Confirm before storing or replacing a saved login; security answers only when the product requests them |
 | check my AnyWeb repair / is the website repair ready | [repair](references/repair.md): `repair claims --json`; translate queue status | Facts to reproduce a blocked repair when the product asks |
 | connect or log in to AnyWeb / save my Portal token | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |

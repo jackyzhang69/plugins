@@ -20,3 +20,5 @@ login for reuse on this computer. They do not move website work off this
 machine. An active fill that still needs a password, email code, or security
 answer continues with `task resume`, not with those save commands. For the
 ordinary Express Entry user, use site `ircc-ee-profile` and role `default`.
+Compile `local_inputs` from this package's
+`skills/anyweb/references/ee-fill-schema.json` before `task start`.
