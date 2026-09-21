@@ -1,4 +1,4 @@
-# AnyChat 0.1.87
+# AnyChat 0.1.88
 
-- macOS Screen Recording: keep the Allow advisory after stale setup-marker repair overwrite; expand best-effort Screen Recording reset to nested WeChat screenshot helpers; version the catch-up marker so older records run once.
-- Continues 0.1.86: setup gate uses live source readiness; matrix/coverage honesty for Unknown / unmatched / Partial.
+- Group search across many chats now reads several groups at once, about 5.5 times faster on a large local archive.
+- Docs: Cloud Agent skills path points at in-repo AGENTS.md + plugin/skills (no mac ~/.agents sync).
