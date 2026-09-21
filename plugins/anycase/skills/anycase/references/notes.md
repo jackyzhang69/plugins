@@ -17,6 +17,9 @@ Activate this skill when:
 ## 2. CLI Invocation Reference
 
 Write the this-question questions file first: [questions](questions.md). Then search.
+Only the public projected insights are judged, never raw correspondence.
+If the result says request criteria were not applied, say so. Do not treat a
+related topic as the asked method.
 
 ```bash
 # Search practitioner field insights by topic keyword

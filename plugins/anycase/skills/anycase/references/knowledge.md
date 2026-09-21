@@ -27,7 +27,7 @@ anycase knowledge "GIC funds folder" --top 5
 
 The command reports a search status. All of it must reach the user in plain sentences.
 
-1. `matched` means candidates were returned, not that the fact is verified. Read the body before using it.
+1. `matched` means candidates were returned, not that the fact is verified. Read the body before using it. A mention of a method is not the method.
 2. `no_match` means this search found no supporting private knowledge. That is not "the account is empty".
 3. `incomplete` cannot prove that no private knowledge exists. Say the search was incomplete. Do not say there is nothing saved.
 4. Keep private knowledge separate from court, IRCC, and practitioner-field-note citations. Label it as the user's confirmed notes.

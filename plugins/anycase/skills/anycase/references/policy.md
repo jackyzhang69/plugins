@@ -14,6 +14,10 @@ anycase manual "<query>" --mode hybrid --top <count> --questions <path>
 anycase coverage
 ```
 
+Count a hit only when the returned answer itself supports what was asked.
+A neighbouring program or a quoted exception is not a match unless the user
+asked for that. If request criteria were not applied, say so.
+
 ## Example
 
 ```bash

@@ -4,8 +4,14 @@ Before every search — case law, Help Centre, manuals, practitioner notes, or
 private notes — write JSON for **this user question**. Use your own reading of
 what they asked. We only give the shape and the job. You fill six fields.
 
-Job: each retrieved passage will be checked against this JSON. Keep a passage
-only if it actually answers this question.
+Job: search returns candidates. Request criteria in this JSON are applied to
+the complete source of each candidate when that check ran. A highlight or
+quoted analogy is not enough. Keep a candidate only if the source itself
+supplies what this question asked about **the same object**.
+
+If the user asked for a citation or an analogy, that kind of text can be an
+answer. If they asked for the source's own holding, method, or outcome, a
+quotation of someone else is false.
 
 Write from the user question only. Do not look at search results first. Do not
 reuse a previous file. Do not show this JSON to the user. Output the JSON
@@ -51,6 +57,12 @@ shape covers practitioner notes, recipes, and court passages.
   }
 }
 ```
+
+Do not treat a returned candidate as a confirmed match unless the returned
+text supports every material asked condition about that same object. Do not
+pad a requested count with near-misses. If the search says candidates were
+not checked against the request criteria, say so, and still do not infer
+missing facts from an excerpt.
 
 Pass `--questions <path>` on `caselaw`, `policy`, `manual`, `notes`, or
 `knowledge` when the live `commands --json` lists that flag. If it does not,

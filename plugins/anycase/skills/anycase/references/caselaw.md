@@ -54,9 +54,18 @@ sentences. Do not hide them, and do not translate them into reassurance.
    If the subject is outside the envelope, hits here cannot speak to it.
 3. **Execution.** If a capability did not run (for example semantic
    search), say which one did not run. A degraded search is not a
-   complete search.
+   complete search. If request criteria were not applied, or only some
+   candidates were checked, say that. A topical hit is not a confirmed
+   answer.
 4. **Currency.** If the snapshot is unavailable, say **currency unknown**.
    Never omit that line.
+
+Count a hit as matching the user question only when the returned source
+text supports every material asked condition about **that same case**.
+Quoted reasoning, analogous cases, or the applicant's argument are not
+the court's holding unless the user asked for those. Do not invent visa
+class or outcome from a family-ties snippet. If fewer confirmed matches
+exist than the user asked for, report the shortfall.
 
 If you cannot tell "we searched and found nothing" from "we do not cover
 this subject", stop. Do not fill the gap with invented analysis.
