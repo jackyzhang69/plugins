@@ -1,6 +1,6 @@
 {
   "name": "anymail",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "min_supported_version": "0.1.0",
   "description": "Agent-native Gmail and Microsoft mail through official OAuth, search, drafts, and one-time confirm-send.",
   "author": {
