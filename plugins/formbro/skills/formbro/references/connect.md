@@ -1,7 +1,7 @@
 ## Shared platform token (host agent — mandatory)
 
 - Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only; `credential_kind=user`, `slot=user`).
-- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, AnyDoc, and AnyCase all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
+- **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, AnyDoc, and AnyImmi all use this same file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say this product needs a different Portal token.
 - **Consumption differs by product; the durable token does not.**
   - **Exchange mode** (`anychat`, `anypdf`, `anyweb`, EasyBooks/`eb`): CLI calls `POST /v1/token/exchange` with `aud=<product>` and uses a short-lived memory-only JWT on product routes. Raw `jz_` is not a product bearer.
   - **Introspect mode** (`formbro`): CLI/API sends raw `jz_`; FormBro backend calls accountd `POST /v1/api-tokens/introspect`. `aud=formbro` exchange is invalid (`unknown_audience`).
