@@ -1,45 +1,19 @@
-# anydoc (public plugin)
+<!-- generated-by: render_public_plugin_docs.py ; do not edit -->
+# anydoc
 
-Published under `jackyzhang69/plugins` → `plugins/anydoc/`.
+Version `0.3.9`.
 
-**Ships:** skills, install metadata, and prebuilt AnyDoc CLI packages for macOS
-Apple Silicon and Windows x64 after both platforms pass native acceptance.
+Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.
 
-**Never ships:** customer documents, tokens, or private development materials. Pdfium ships only when `runtime-manifest.json` declares `pdfium.packaged=true`; the package verifier then requires the exact pinned library and checksum for each platform.
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
 
-## Skills
+Load [`skills/anydoc/SKILL.md`](skills/anydoc/SKILL.md) first. Connect and product verbs are defined there and under `skills/anydoc/references/`.
 
-One discovery file: `skills/anydoc/SKILL.md`. Playbooks live under
-`skills/anydoc/references/` (connect, assemble, tell-jacky).
+This package is an **Agent Skills** tree plus a native CLI. Any agent that can attach a skill folder or this full plugin directory can use it — marketplace `plugin install` is optional convenience, not a requirement.
 
-Inspect and an explicitly approved manual plan stay offline. Saved private models use the shared Portal login; backend failure never silently becomes a manual plan.
+- Full tree (preferred): this directory, including `bin/` and `runtime-manifest.json`, then `bin/<platform>/<cli> doctor --repair-install`.
+- Skill-only attach: only after `~/.jackyzhang.app/plugins/anydoc/current` already holds the matching CLI.
 
-## Platforms
+What changed in this version: [`skills/anydoc/references/whats-new.md`](skills/anydoc/references/whats-new.md).
 
-| Platform | Binary |
-|----------|--------|
-| macOS Apple Silicon | `bin/darwin-arm64/anydoc` |
-| Windows x64 | `bin/win32-x64/anydoc.exe` |
-
-Unsupported platforms fail closed. Checksums are required.
-
-Signing and Pdfium delivery are stated in `runtime-manifest.json`, not inferred
-from filenames. Official releases require macOS same-Team hardened-runtime
-signing plus Apple notarization, and Azure Trusted Signing Authenticode
-signatures with timestamps on the Windows executable and `pdfium.dll`. Both
-platforms remain bound to one source commit, SHA-256 manifest, and native
-acceptance.
-
-## Honesty
-
-- AnyDoc inspects facts and executes an approved packing list.
-- Model-bound packing first resolves one exact accountd-hosted private model; only authoritative absence starts Teach Me.
-- It does not classify documents, OCR, fill official forms, or say a pack is ready to file.
-- Encrypted / form / signed PDFs are copy-or-rename only.
-- HEIC must be exported to JPEG or PNG first.
-
-Connect (secure): `printf %s "$TOKEN" | anydoc login --token-stdin`.  
-Tell Jacky: `anydoc feedback create … --user-confirmed`.
-
-Stage the macOS package (repo-level): `scripts/stage-package`.
-Verify staged package: `plugin/scripts/verify-package`.
+<!-- end generated-by: render_public_plugin_docs.py -->

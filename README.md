@@ -1,63 +1,75 @@
+<!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # jacky-plugins
 
-Official plugins for Codex and Claude Code by [Jacky Zhang](https://github.com/jackyzhang69).
+Official Jacky plugins for agents that speak **Agent Skills** (and for hosts with a plugin marketplace).
+
+One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI lives beside it under `bin/`. Marketplace install commands are convenience; any agent that can attach a `SKILL.md` folder or the full plugin tree can use the same package.
 
 ## Available Plugins
 
 | Plugin | Version | Platforms | Description |
 |---|---|---|---|
 | [`formbro`](./plugins/formbro) | 1.9.4 | macOS (`arm64`), Windows (`x64`) | Canadian immigration form automation: import cases via JSON contracts, validate against IRCC schemas, generate filled IMM PDFs, and drive local browser webform fills (stops safely before submit). |
-| [`easybooks`](./plugins/easybooks) | 0.5.23 | macOS (`arm64`), Windows (`x64`) | Bookkeeping for self-employed Canadians: ingest receipts/invoices from files or connected Gmail, record income/expenses idempotently, create/send invoices, and manage clients & categories. |
-| [`anychat`](./plugins/anychat) | 0.1.81 | macOS (`arm64`), Windows (`x64`) | Personal local chat archive assistant: search messages, export group transcripts, attachments, and voice WAVs. Chat records stay 100% local on your machine. |
-| [`anycase`](./plugins/anycase) | 1.1.6 | macOS (`arm64`), Windows (`x64`) | Canadian immigration legal & practical intelligence: Federal Court precedent ratios, IRCC policy manuals & Q&As, practitioner field notes, and statutory CLB language test calculators. |
-| [`anydoc`](./plugins/anydoc) | 0.3.9 | macOS (`arm64`), Windows (`x64`) | Local document folder inspector & upload pack assembler: inspect messy client folders, generate approved assembly plans, and assemble immigration document sets offline. |
-| [`anyweb`](./plugins/anyweb) | 0.2.20 | macOS (`arm64`), Windows (`x64`) | Headed browser form automation: fills supported Express Entry profiles in visible Chrome on your machine, stopping safely before final submission. Optional saved website login management. |
-| [`anypdf`](./plugins/anypdf) | 0.7.15 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling: schema-validated intake, deterministic filling of registered PDF templates, and user feedback submission via the bundled AnyPDF CLI. |
+| [`easybooks`](./plugins/easybooks) | 0.5.23 | macOS (`arm64`), Windows (`x64`) | Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories. |
+| [`anychat`](./plugins/anychat) | 0.1.92 | macOS (`arm64`), Windows (`x64`) | Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm. |
+| [`anycase`](./plugins/anycase) | 1.1.14 | macOS (`arm64`), Windows (`x64`) | Canadian Immigration Intelligence via the anycase router: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators. |
+| [`anydoc`](./plugins/anydoc) | 0.3.9 | macOS (`arm64`), Windows (`x64`) | Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64. |
+| [`anyweb`](./plugins/anyweb) | 0.2.20 | macOS (`arm64`), Windows (`x64`) | Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here. |
+| [`anyknow`](./plugins/anyknow) | 0.1.12 | macOS (`arm64`), Windows (`x64`) | Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing. |
+| [`anypdf`](./plugins/anypdf) | 0.7.21 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
+| [`anymail`](./plugins/anymail) | 0.1.1 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
 
 ## Installation
 
-### 1. Codex CLI / Codex App
+### Hosts with a plugin marketplace
+
+#### Claude Code
 
 ```bash
-# 1. Add this marketplace (one-time)
-codex plugin marketplace add jackyzhang69/plugins
-
-# 2. Install any plugin
-codex plugin install formbro@jacky-plugins
-```
-
-*(Note: `codex plugin add <plugin>@jacky-plugins` is also supported depending on your Codex CLI version).*
-
-### 2. Claude Code
-
-```bash
-# 1. Add this marketplace (one-time)
 claude plugin marketplace add jackyzhang69/plugins
-
-# 2. Install any plugin
 claude plugin install formbro@jacky-plugins
 ```
 
-*(Note: You can also pass the full Git URL `https://github.com/jackyzhang69/plugins` if preferred).*
+Replace `formbro` with the plugin id from the table (`anypdf`, `anyweb`, …).
 
-## Package Architecture
+#### Codex CLI / Codex App
 
-Each plugin is self-contained under `plugins/<plugin_id>/`:
+```bash
+codex plugin marketplace add jackyzhang69/plugins
+codex plugin install formbro@jacky-plugins
+```
 
-- `.claude-plugin/plugin.json` & `.codex-plugin/plugin.json` — manifests defining plugin identity and entry skills for host agents.
-- `skills/<plugin_id>/SKILL.md` — the single router and discovery skill for the agent; specialized playbooks reside in `references/`.
-- `bin/<platform>/<binary>[.exe]` — prebuilt native CLI binaries for `darwin-arm64` and `win32-x64`, accompanied by `.sha256` checksum sidecars.
-- `runtime-manifest.json` — runtime platform-to-binary mapping and package verification rules.
-- `README.md` — plugin-specific contract, playbooks, and configuration guidelines.
+Replace `formbro` with the plugin id from the table (`anypdf`, `anyweb`, …).
 
-## Hard Rules & Design Principles
+### Any Agent Skills–compatible agent
 
-- **Unified Platform Credential**: All official plugins share a single durable Portal token (`jz_…`), generated once at [jackyzhang.app/account/tokens](https://jackyzhang.app/account/tokens).
-- **Connect Once**: Authentication is saved to `~/.jackyzhang.app/token/user.json` (mode `0600`; `%USERPROFILE%\.jackyzhang.app\token\user.json` on Windows). Once connected via any official plugin (`<plugin> login --token-stdin`), all other official plugins automatically recognize the session without prompting again.
-- **Zero Credential Leaks**: Credentials must never enter shell commands (argv), environment variables, agent chat, or log files. They are piped via stdin and loaded strictly into memory.
-- **Local Native Execution**: Plugins execute via bundled native binaries. The agent orchestrates and reads local files, while the CLI handles business logic, deterministic validations, and secure network calls.
-- **Local Data Privacy**: Documents, chat databases, and client files stay on the local machine. Network access is restricted to official product backends for validation or synchronized services.
+Cherry Studio, Cursor, Gemini CLI, and other Agent Skills hosts do **not** need a Jacky-specific `plugin install` command. Attach the package the host already understands:
+
+- Clone or open https://github.com/jackyzhang69/plugins and attach plugins/<plugin_id>/ (full tree: skills + bin + runtime-manifest).
+- Or load only skills/<plugin_id>/ after the matching CLI already exists at ~/.jackyzhang.app/plugins/<plugin_id>/current.
+- From the package root, run bin/<platform>/<plugin_id> doctor --repair-install once, then use the canonical CLI path for every later command.
+
+After attach, load `skills/<plugin_id>/SKILL.md`. Product commands use the repaired CLI under `~/.jackyzhang.app/plugins/<plugin_id>/current`, never whatever binary happens to be first on `PATH`.
+
+## Package shape
+
+Each plugin under `plugins/<plugin_id>/` contains:
+
+- `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` — host marketplace metadata when that host uses a catalog
+- `skills/<plugin_id>/SKILL.md` — the single Agent Skills router; playbooks live in `references/`
+- `bin/<platform>/` — native CLI for `darwin-arm64` and `win32-x64`, with `.sha256` sidecars
+- `runtime-manifest.json` — platform map and package verification
+- `README.md` — thin package card (generated; details live in the skill)
+
+## Hard rules (user-facing)
+
+- **One Portal sign-in.** Create a durable user token at [jackyzhang.app/account/tokens](https://jackyzhang.app/account/tokens). The host agent connects for you; the token is piped on stdin (`login --token-stdin`), never placed on the command line.
+- **Shared credential slot.** Successful connect writes mode-`0600` `~/.jackyzhang.app/token/user.json` (Windows: `%USERPROFILE%\.jackyzhang.app\token\user.json`). Other official plugins reuse that slot.
+- **Local native CLI.** Skills drive the bundled binary. Documents and site sessions that the product keeps local stay on this machine except for the official product backends the skill names.
+- **No secrets in chat artifacts.** Do not paste tokens into skill text, logs, screenshots, or argv.
 
 ## License
 
 MIT (see [LICENSE](./LICENSE)).
+
+<!-- end generated-by: render_public_plugin_docs.py -->

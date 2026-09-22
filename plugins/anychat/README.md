@@ -1,34 +1,19 @@
-# AnyChat
+<!-- generated-by: render_public_plugin_docs.py ; do not edit -->
+# anychat
 
-Search, export, and inspect chat history already stored on your own computer.
-Chat content stays on that computer.
+Version `0.1.92`.
 
-## Supported computers
+Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm.
 
-| Platform | Local archive support |
-|----------|---------------------|
-| macOS Apple Silicon | Verified local social-app archives on this computer |
-| Windows x64 | Verified local social-app archives on this computer |
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
 
-## Supported AI agent hosts
+Load [`skills/anychat/SKILL.md`](skills/anychat/SKILL.md) first. Connect and product verbs are defined there and under `skills/anychat/references/`.
 
-| Host | Install |
-|------|---------|
-| Claude Code | Marketplace `jackyzhang69/plugins`, plugin `anychat` |
-| Codex | Marketplace `jackyzhang69/plugins`, plugin `anychat` |
-| DeepSeek Harness (`dsh`) | `dsh plugin --profile web add "github:jackyzhang69/plugins#anychat-vX.Y.Z&path:plugins/anychat"` (requires `pnpm` on PATH; restart `dsh web` afterwards) |
+This package is an **Agent Skills** tree plus a native CLI. Any agent that can attach a skill folder or this full plugin directory can use it — marketplace `plugin install` is optional convenience, not a requirement.
 
-The same skill contract and the same signed binaries ship to every host.
+- Full tree (preferred): this directory, including `bin/` and `runtime-manifest.json`, then `bin/<platform>/<cli> doctor --repair-install`.
+- Skill-only attach: only after `~/.jackyzhang.app/plugins/anychat/current` already holds the matching CLI.
 
-Unknown chat-app builds fail closed. Missing, older, newer, or wrong-build clients get only the exact AnyChat-provided package for their platform; after the human agrees, the host agent verifies and installs it, and AnyChat independently validates the result. The human never finds paths, manages applications, runs commands, or installs software.
+What changed in this version: [`skills/anychat/references/whats-new.md`](skills/anychat/references/whats-new.md).
 
-Your AI agent handles setup and computer work. You only approve a material
-change, enter an operating-system password, choose an account, or sign in when
-those actions cannot be delegated.
-
-AnyChat validates the app version, archive readiness, permissions, and requested
-result before reporting success. Safe operating-system and app-version facts may
-be included in a user-approved problem report; chat content and credentials are
-not included.
-
-See [`RELEASE_NOTES.md`](./RELEASE_NOTES.md) for the current release changes.
+<!-- end generated-by: render_public_plugin_docs.py -->
