@@ -1,4 +1,10 @@
-# New PDF request
+# Direct form request (one-shot intake)
+
+This is one of two valid public ways to ask for a missing form. Use it when the
+user provides an issuing-authority official blank PDF (direct form request).
+If they only describe a form and have no blank PDF, use
+[tell-jacky](tell-jacky.md) instead — do not invent or download a blank to force
+intake.
 
 ## Talk to the human
 

@@ -1,5 +1,5 @@
-# AnyPDF — what changed in 0.7.19
+# AnyPDF — what changed in 0.7.21
 
-IMM0104 multi-row employment / education / travel rows above the certified depth are no longer ignored or left unfillable: Option A array caps grow Rec families via clone_section so filled pages stay aligned with the answers you gave. IMM5257 EmpRec ProvState follows the same successor reseal.
+Missing forms can be requested two ways: Tell Jacky in plain language when you have no official blank PDF, or send one issuing-authority official blank PDF as a direct form request. Fill stays on the live catalog; wrong uploads are still deleted only through Tell Jacky with the exact returned source hash.
 
 Open interactive PDFs in Adobe Acrobat. Connection and Tell-Jacky use the shared Jacky sign-in flow. The live catalog remains the source of truth for available forms.

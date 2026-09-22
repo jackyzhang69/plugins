@@ -29,7 +29,19 @@ the original file. Extracted text may be used by the host agent; fill JSON
 still follows the existing fill path. Photos, screenshots, and scans are not
 read this way — look at the original yourself.
 
-## New PDF request
+## Ask for a missing form (two valid paths)
+
+Users may request a missing form either way. Do not collapse one into the other.
+
+1. **Tell Jacky (text):** the user asks to support a form by name/description
+   and has no issuing-authority official blank PDF. Use `tell-jacky`. Never put
+   PDF bytes in the report.
+2. **Direct form request (intake):** the user provides an issuing-authority
+   official blank PDF template. Use the intake playbook
+   (`references/intake.md`). Prefer intake over Tell Jacky when that blank is
+   present.
+
+## Direct form request (intake)
 
 Use the intake playbook (`references/intake.md`) only when the user provides an issuing-authority official blank PDF template
 to register or request support. Never send a filled
@@ -56,9 +68,11 @@ exact returned `source_sha256`。不要在删除请求中附带原文件或其�
 
 ## Tell Jacky
 
-Use `tell-jacky` to draft a small product feedback report, show it to the user,
-and submit it only after explicit confirmation. Diagnostics are opt-in and must
-contain stable facts only; never include tokens, secrets, raw logs, or PDF bytes.
+Use `tell-jacky` to ask Jacky to support a missing form when no blank PDF is
+available, or to draft a small product feedback report (feature / bug / tip).
+Show the draft to the user and submit it only after explicit confirmation.
+Diagnostics are opt-in and must contain stable facts only; never include
+tokens, secrets, raw logs, or PDF bytes.
 
 The client is non-interactive. Every command except `read` is JSON-first;
 `read` prints Markdown. See each skill for the exact workflow and command

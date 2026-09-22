@@ -1,15 +1,15 @@
 ---
 name: anypdf
 description: >-
-  READ THIS FIRST for AnyPDF. Fill a registered PDF form, submit a PDF
-  template as a new form request, connect / login --token-stdin, tell Jacky.
-  Answer from the live CLI, never from memory of an older release or a frozen form list.
-  One discovery file; playbooks in references/. Ask
-  `anypdf commands --json`.
+  READ THIS FIRST for AnyPDF. Fill a registered PDF form, request a missing
+  form two ways (Tell Jacky text, or direct form request with an official blank
+  PDF), connect / login --token-stdin. Answer from the live CLI, never from
+  memory of an older release or a frozen form list. One discovery file;
+  playbooks in references/. Ask `anypdf commands --json`.
 when_to_use: |-
   Load on plugin start. "what can AnyPDF do", "which forms", "fill a registered form",
-  "fill a registered PDF", "submit a PDF template", "connect / log in",
-  "tell Jacky".
+  "fill a registered PDF", "submit a PDF template", "form request", "add this form",
+  "connect / log in", "tell Jacky".
 ---
 
 # AnyPDF — what this plugin can do
@@ -79,8 +79,26 @@ $ANYPDF forms catalog --json
 | "what can AnyPDF do / which forms" | Live `$ANYPDF forms catalog --json` + `$ANYPDF doctor --json`; translate to product language | Connect once if not logged in ([connect](references/connect.md)) |
 | Connect / login | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |
 | Fill a registered PDF | [fill](references/fill.md): resolve form, gather facts, submit fill job | Facts for fields; confirm before irreversible steps |
-| New official blank form | [intake](references/intake.md): one PDF upload | Confirm the exact blank PDF is the issuing-authority official form |
+| Ask to add a missing form (text only / Tell Jacky) | [tell-jacky](references/tell-jacky.md): confirmed product feedback; no PDF bytes | Confirm the exact draft before send |
+| Direct form request (official blank PDF present) | [intake](references/intake.md): one PDF upload | Confirm the exact blank PDF is the issuing-authority official form |
 | Feature / bug / tip for Jacky | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
+
+### New-form ask routing (two valid user paths)
+
+Users may request a missing form either way. Do not collapse one into the other.
+
+1. **Tell Jacky (text):** the user asks to support a form by name/description and
+   has no issuing-authority official blank PDF. Route to
+   [tell-jacky](references/tell-jacky.md). Never invent or download a blank to
+   force intake.
+2. **Direct form request (intake):** the user provides (or points at) an
+   issuing-authority official blank PDF. Route to
+   [intake](references/intake.md). Prefer intake over Tell Jacky when that blank
+   is present; Tell Jacky must not carry PDF bytes.
+3. After intake `known_exact`, continue [fill](references/fill.md). After
+   `new_source`, record `source_sha256` and stop promising fillability. Wrong
+   upload deletion still uses Tell Jacky with the exact returned
+   `source_sha256`.
 
 Playbooks: [connect](references/connect.md), [fill](references/fill.md),
 [intake](references/intake.md), [tell-jacky](references/tell-jacky.md).
