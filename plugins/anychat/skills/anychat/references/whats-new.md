@@ -1,3 +1,7 @@
+# What's new in 0.1.92
+
+**Windows sign-in keeps the supported chat app:** after the supported version is installed, AnyChat pauses automatic replacement before the first open, so signing in does not swap in an unsupported newer build.
+
 # What's new in 0.1.91
 
 **Clearer Windows setup waits:** opening the local archive returns a short in-progress next step within about 15 seconds instead of sitting silent; the same scan keeps running.

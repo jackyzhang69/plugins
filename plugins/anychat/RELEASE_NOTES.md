@@ -1,3 +1,3 @@
-# AnyChat 0.1.91
+# AnyChat 0.1.92
 
-Windows archive setup returns an in-progress next step within about 15 seconds instead of hanging with no output, and the same scan continues in the background. Image download prefers a larger non-preview file when one exists, asks for image access when the original is still locked, and marks preview-only results as thumbnail_only instead of treating them as a full original.
+On Windows, after the supported chat app is installed, AnyChat pauses its automatic replacement before the first open. Signing in no longer swaps that app for an unsupported newer build and then blocks local archive setup.
