@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# verify-package: staged AnyMail tree has one router skill and host metadata.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+test -f "$ROOT/skills/anymail/SKILL.md"
+test -f "$ROOT/.claude-plugin/plugin.json"
+test -f "$ROOT/.codex-plugin/plugin.json"
+test -f "$ROOT/README.md"
+count="$(find "$ROOT/skills" -name SKILL.md | wc -l | tr -d ' ')"
+test "$count" = "1" || {
+  echo "verify-package: expected 1 SKILL.md, found $count" >&2
+  exit 1
+}
+refs_skill="$(find "$ROOT/skills/anymail/references" -name SKILL.md 2>/dev/null | wc -l | tr -d ' ')"
+test "$refs_skill" = "0" || {
+  echo "verify-package: references must not contain SKILL.md" >&2
+  exit 1
+}
+echo "verify-package: ok"

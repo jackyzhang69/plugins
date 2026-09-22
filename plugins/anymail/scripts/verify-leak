@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# verify-leak: fail-closed public package allowlist + denylist scan.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+allowed_exact=(
+  README.md
+  runtime-manifest.json
+  .claude-plugin/plugin.json
+  .codex-plugin/plugin.json
+  skills/anymail/SKILL.md
+  skills/anymail/references/command-surface.md
+  skills/anymail/references/draft-send.md
+  skills/anymail/references/get-started.md
+  skills/anymail/references/open-account.md
+  skills/anymail/references/app-password.md
+  skills/anymail/references/search.md
+  skills/anymail/references/tell-jacky.md
+  skills/anymail/references/triggers.md
+  scripts/verify-package
+  scripts/verify-install
+  scripts/verify-release-assets
+  scripts/verify-leak
+  bin/darwin-arm64/anymail
+  bin/darwin-arm64/anymail.sha256
+  bin/win32-x64/anymail.exe
+  bin/win32-x64/anymail.exe.sha256
+)
+
+cd "$ROOT"
+found=()
+while IFS= read -r path; do
+  found+=("$path")
+done < <(find . -type f ! -name '.DS_Store' | sed 's|^\./||' | sort)
+
+unexpected=()
+for path in "${found[@]}"; do
+  ok=0
+  for allowed in "${allowed_exact[@]}"; do
+    if [[ "$path" == "$allowed" ]]; then
+      ok=1
+      break
+    fi
+  done
+  if [[ "$ok" -eq 0 ]]; then
+    unexpected+=("$path")
+  fi
+done
+if ((${#unexpected[@]} > 0)); then
+  echo "verify-leak: unexpected packaged paths:" >&2
+  printf '  %s\n' "${unexpected[@]}" >&2
+  exit 1
+fi
+
+missing=()
+for path in "${allowed_exact[@]}"; do
+  if [[ ! -e "$path" ]]; then
+    missing+=("$path")
+  fi
+done
+if ((${#missing[@]} > 0)); then
+  echo "verify-leak: missing required packaged paths:" >&2
+  printf '  %s\n' "${missing[@]}" >&2
+  exit 1
+fi
+
+deny_patterns=(
+  'local-envs'
+  'ANYMAIL_GOOGLE_OAUTH_CLIENT_SECRET'
+  'client_secret='
+  'refresh_token='
+  'access_token='
+  'BEGIN PRIVATE KEY'
+  'platform-vault/secrets'
+)
+
+scan_targets=(
+  README.md
+  runtime-manifest.json
+  .claude-plugin/plugin.json
+  .codex-plugin/plugin.json
+  skills
+  scripts
+)
+
+for pattern in "${deny_patterns[@]}"; do
+  # Exclude this script: it intentionally names denylist tokens.
+  if grep -R -E -n --binary-files=without-match --exclude='verify-leak' -e "$pattern" "${scan_targets[@]}" >/tmp/anymail-leak-hits.txt 2>/dev/null; then
+    echo "verify-leak: denylist hit for $pattern" >&2
+    cat /tmp/anymail-leak-hits.txt >&2
+    exit 1
+  fi
+done
+
+for bin in bin/darwin-arm64/anymail bin/win32-x64/anymail.exe; do
+  if command -v strings >/dev/null 2>&1; then
+    if strings "$bin" | grep -E -e 'local-envs' -e 'BEGIN PRIVATE KEY' -e 'platform-vault/secrets' >/tmp/anymail-bin-leak.txt; then
+      echo "verify-leak: binary string denylist hit in $bin" >&2
+      cat /tmp/anymail-bin-leak.txt >&2
+      exit 1
+    fi
+  fi
+done
+
+echo "verify-leak: ok"

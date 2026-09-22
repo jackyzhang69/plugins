@@ -1,0 +1,85 @@
+# Public CLI command paths (coverage reference)
+
+Not for first-session orientation. Host agents discover the live surface via
+`anymail commands` (includes `capabilities[]`) and translate it for the human.
+
+Every public path below must stay listed as a contiguous token sequence so
+Direction B skill-surface checks can verify coverage against `commands --json`.
+
+- `version`
+- `commands`
+- `doctor`
+- `login`
+- `logout`
+- `whoami`
+- `feedback create`
+- `feedback list`
+- `feedback status`
+- `feedback inbox`
+- `feedback read`
+- `account list`
+- `account discover`
+- `account open`
+- `account open-google`
+- `account open-microsoft`
+- `account upgrade-google-send`
+- `account upgrade-google-modify`
+- `account upgrade-google-settings-basic`
+- `account upgrade-microsoft-send`
+- `account upgrade-microsoft-readwrite`
+- `account reauthorize-google`
+- `account revoke-google`
+- `account revoke-microsoft`
+- `account remove`
+- `account status`
+- `mail mailboxes`
+- `mail search`
+- `mail search-intent`
+- `mail fetch`
+- `mail attachment`
+- `mail flag`
+- `mail move`
+- `mail copy`
+- `mail draft create`
+- `mail draft reply`
+- `mail draft forward`
+- `mail draft push-cloud`
+- `mail draft cloud-list`
+- `mail draft cloud-delete`
+- `mail draft read`
+- `mail draft update`
+- `mail draft attach`
+- `mail draft detach`
+- `mail draft delete`
+- `mail draft prepare`
+- `mail draft confirm-send`
+- `mail draft dispatch-confirmed`
+- `mail draft status`
+- `mail trash`
+- `mail archive`
+- `mail junk`
+- `mail batch-trash`
+- `mail restore`
+- `mail permanently-delete`
+- `mail export`
+- `mail import`
+- `mail labels`
+- `mail label-create`
+- `mail label-get`
+- `mail label-update`
+- `mail label-delete`
+- `mail label-modify`
+- `mail filters`
+- `mail filter-get`
+- `mail filter-create`
+- `mail filter-delete`
+- `mail vacation-get`
+- `mail vacation-set`
+- `mail folder-create`
+- `mail folder-rename`
+- `mail folder-move`
+- `mail folder-delete`
+- `mail signature-get`
+- `mail signature-set`
+- `mail signature-clear`
+

@@ -1,0 +1,38 @@
+{
+  "name": "anymail",
+  "version": "0.1.0",
+  "min_supported_version": "0.1.0",
+  "description": "Agent-native Gmail and Microsoft mail through official OAuth, search, drafts, and one-time confirm-send.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "repository": "https://github.com/jackyzhang69/anymail-cli",
+  "license": "Proprietary",
+  "keywords": [
+    "email",
+    "gmail",
+    "microsoft",
+    "anymail",
+    "agent"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyMail",
+    "shortDescription": "Read and send Gmail/Outlook mail through the AnyMail CLI.",
+    "longDescription": "Use the bundled AnyMail CLI (anymail router skill) to open Gmail or Microsoft accounts through official browser OAuth, search and read mail, manage local drafts, and confirm send once. Answer from the live CLI. macOS Apple Silicon and Windows x64.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "What can AnyMail do?",
+      "Open my Outlook account.",
+      "Search my Gmail for invoices.",
+      "Draft and send this message after I confirm."
+    ]
+  }
+}
