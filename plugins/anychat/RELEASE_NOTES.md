@@ -1,6 +1,5 @@
-# AnyChat 0.1.89
+# AnyChat 0.1.90
 
-Snappier local chat search: reused contact/group lookups, one-pass multi-word themes, and context expansion that keeps original matches.
+Faster ordinary archive commands: readiness no longer re-verifies an already-completed chat-app conversion on every run, so resolve, groups, query, and search start much sooner on a warm machine.
 
-Optional answer ranking for substantive conclusions among noisy results; ordinary search stays on this computer.
-
+Cache freshness still rejects changed main or WAL files quickly, and full content checks remain the authority when metadata looks unchanged.
