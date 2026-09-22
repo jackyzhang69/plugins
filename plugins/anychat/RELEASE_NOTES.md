@@ -1,5 +1,3 @@
-# AnyChat 0.1.90
+# AnyChat 0.1.91
 
-Faster ordinary archive commands: readiness no longer re-verifies an already-completed chat-app conversion on every run, so resolve, groups, query, and search start much sooner on a warm machine.
-
-Cache freshness still rejects changed main or WAL files quickly, and full content checks remain the authority when metadata looks unchanged.
+Windows archive setup returns an in-progress next step within about 15 seconds instead of hanging with no output, and the same scan continues in the background. Image download prefers a larger non-preview file when one exists, asks for image access when the original is still locked, and marks preview-only results as thumbnail_only instead of treating them as a full original.

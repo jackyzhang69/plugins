@@ -62,8 +62,12 @@ it here.
 
 1. `media download` / `download-all` writes a normal JPEG, PNG, GIF, or WebP.
    List `present` means a local file exists; download still has to produce a
-   previewable picture. If JSON `variant` is `thumbnail`, say so; never treat a
-   thumbnail as the original, and never rename an unread `.dat` into a picture.
+   previewable picture. If JSON `thumbnail_only` is true, the saved picture is
+   only the small preview: say so and do not present it as the original. A
+   larger local picture that still needs Windows image access returns
+   `E_IMAGE_V2_ACCESS_REQUIRED` instead of saving that preview. If JSON
+   `variant` is `thumbnail`, say so; never treat a thumbnail as the original,
+   and never rename an unread `.dat` into a picture.
 2. If a local image cannot be opened safely, AnyChat returns
    `E_IMAGE_NOT_PREVIEWABLE` instead of claiming success.
 3. On Windows, `E_IMAGE_V2_ACCESS_REQUIRED` is not a user troubleshooting task.
