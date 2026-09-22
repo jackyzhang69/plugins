@@ -1,3 +1,11 @@
+# AnyDoc 0.3.9
+
+- PDF compression defaults to clarity priority. Before a file is compressed,
+  the worst-case longest-edge and JPEG-quality floor is shown. AnyDoc will not
+  go below that floor to hit a size target. A file that is still too big at
+  the floor is delivered, and that result is not an ordinary ready-to-submit
+  success.
+
 # AnyDoc 0.3.8
 
 - Saved packing rules can be changed in the host chat. The human states the
