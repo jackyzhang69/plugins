@@ -87,6 +87,16 @@
       "name": "anypdf",
       "source": "./plugins/anypdf",
       "version": "0.7.21"
+    },
+    {
+      "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Agent-native email for Gmail and Microsoft mailboxes via the bundled AnyMail CLI. Official OAuth, search/read/attachments, local drafts with exact preview and one-time confirm-send. Free Portal token; content stays on your machine. macOS Apple Silicon and Windows x64.",
+      "name": "anymail",
+      "source": "./plugins/anymail",
+      "version": "0.1.0"
     }
   ]
 }
