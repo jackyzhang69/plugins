@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anychat
 
-Version `0.1.93`.
+Version `0.1.94`.
 
 Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm.
 

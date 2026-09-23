@@ -38,7 +38,7 @@ AnyChat resumes the exact original media request without another human turn.
 ## Status
 
 - `present` — at least one local media blob exists; download still verifies that an image can be converted into a normal raster
-- `missing` — message exists, local file not found (report honestly; do not invent)
+- `missing` — the message is in the archive, but this attachment is not a non-empty file on this computer. A later download looks again for that exact file, including one cached after the first try. If it was never cached on this machine, retry cannot recover it. A different file is never saved in its place.
 
 ## Voice (download yes, speech-to-text no)
 
@@ -65,7 +65,9 @@ it here.
    previewable picture. If JSON `thumbnail_only` is true, the saved picture is
    only the small preview: say so and do not present it as the original. A
    larger local picture that still needs Windows image access returns
-   `E_IMAGE_V2_ACCESS_REQUIRED` instead of saving that preview. If JSON
+   `E_IMAGE_V2_ACCESS_REQUIRED` instead of saving that preview. A lower-quality
+   sibling, such as a medium preview, is also not saved as the original while
+   a sharper local file still needs that access. If JSON
    `variant` is `thumbnail`, say so; never treat a thumbnail as the original,
    and never rename an unread `.dat` into a picture.
 2. If a local image cannot be opened safely, AnyChat returns
