@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # verify-package: source/pack shape for AnyScore.
+#
+# Marketplace packages ship this script without crates/. Version agreement is
+# required across runtime-manifest and host plugin.json files. Cargo.toml is a
+# source-tree cross-check only.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 test -f "$ROOT/skills/anyscore/SKILL.md"
@@ -12,18 +16,34 @@ import json, re, sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
-cargo = (root / "crates" / "anyscore-cli" / "Cargo.toml").read_text(encoding="utf-8")
-match = re.search(r'(?m)^version\s*=\s*"([^"]+)"', cargo)
-if not match:
-    sys.exit("verify-package: crates/anyscore-cli/Cargo.toml has no package version")
-crate = match.group(1)
-for rel in (
+surfaces = (
     "runtime-manifest.json",
     ".claude-plugin/plugin.json",
     ".codex-plugin/plugin.json",
-):
-    got = json.loads((root / rel).read_text(encoding="utf-8")).get("version")
-    if got != crate:
-        sys.exit(f"verify-package: {rel} version {got!r} != crate {crate!r}")
+)
+versions = {}
+for rel in surfaces:
+    path = root / rel
+    if not path.is_file():
+        sys.exit(f"verify-package: missing {rel}")
+    got = json.loads(path.read_text(encoding="utf-8")).get("version")
+    if not isinstance(got, str) or not got:
+        sys.exit(f"verify-package: {rel} has no version")
+    versions[rel] = got
+
+expected = next(iter(versions.values()))
+for rel, got in versions.items():
+    if got != expected:
+        sys.exit(f"verify-package: {rel} version {got!r} != {expected!r}")
+
+cargo_path = root / "crates" / "anyscore-cli" / "Cargo.toml"
+if cargo_path.is_file():
+    cargo = cargo_path.read_text(encoding="utf-8")
+    match = re.search(r'(?m)^version\s*=\s*"([^"]+)"', cargo)
+    if not match:
+        sys.exit("verify-package: crates/anyscore-cli/Cargo.toml has no package version")
+    crate = match.group(1)
+    if crate != expected:
+        sys.exit(f"verify-package: crate version {crate!r} != package {expected!r}")
 PY
 echo "verify-package: ok"

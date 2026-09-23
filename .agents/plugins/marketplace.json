@@ -94,7 +94,7 @@
       "description": "Canadian immigration points-grid scoring via the bundled AnyScore CLI. Deterministic policy YAML; optional server /map. macOS Apple Silicon and Windows x64.",
       "name": "anyscore",
       "source": "./plugins/anyscore",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     {
       "author": {

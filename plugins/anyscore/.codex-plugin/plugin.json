@@ -1,8 +1,8 @@
 {
   "name": "anyscore",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "min_supported_version": "0.2.0",
-  "description": "Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only — never eligibility.",
+  "description": "Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only \u2014 never eligibility.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
