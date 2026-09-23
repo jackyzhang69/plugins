@@ -35,6 +35,15 @@ Direction B skill-surface checks can verify coverage against `commands --json`.
 - `mail mailboxes`
 - `mail search`
 - `mail search-intent`
+- `mail thread-intent`
+- `mail thread-search`
+- `mail thread-get`
+- `mail history-intent`
+- `mail history-list`
+- `mail profile-get`
+- `mail handling-list`
+- `mail handling-remember`
+- `mail handling-forget`
 - `mail fetch`
 - `mail attachment`
 - `mail flag`

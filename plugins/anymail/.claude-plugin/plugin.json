@@ -1,6 +1,6 @@
 {
   "name": "anymail",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets.",
   "author": {
     "name": "Jacky Zhang"

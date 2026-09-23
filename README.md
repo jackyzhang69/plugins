@@ -17,7 +17,7 @@ One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI l
 | [`anyweb`](./plugins/anyweb) | 0.2.20 | macOS (`arm64`), Windows (`x64`) | Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here. |
 | [`anyknow`](./plugins/anyknow) | 0.1.12 | macOS (`arm64`), Windows (`x64`) | Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing. |
 | [`anypdf`](./plugins/anypdf) | 0.7.21 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
-| [`anymail`](./plugins/anymail) | 0.1.1 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
+| [`anymail`](./plugins/anymail) | 0.1.4 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
 
 ## Installation
 

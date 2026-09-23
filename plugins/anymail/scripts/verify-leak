@@ -15,6 +15,9 @@ allowed_exact=(
   skills/anymail/references/open-account.md
   skills/anymail/references/app-password.md
   skills/anymail/references/search.md
+  skills/anymail/references/thread.md
+  skills/anymail/references/history.md
+  skills/anymail/references/handling.md
   skills/anymail/references/tell-jacky.md
   skills/anymail/references/triggers.md
   scripts/verify-package
