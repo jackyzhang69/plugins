@@ -74,7 +74,7 @@
       "description": "Private personal knowledge with confirmed changes, search, browsing, and portable export.",
       "name": "anyknow",
       "source": "./plugins/anyknow",
-      "version": "0.1.12"
+      "version": "0.1.13"
     },
     {
       "author": {

@@ -17,6 +17,7 @@ root = pathlib.Path(sys.argv[1]).resolve()
 expected_files = {
     ".claude-plugin/plugin.json",
     ".codex-plugin/plugin.json",
+    "README.md",
     "runtime-manifest.json",
     "skills/anyknow/SKILL.md",
     "skills/anyknow/references/connect.md",
