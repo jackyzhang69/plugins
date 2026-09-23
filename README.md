@@ -16,9 +16,9 @@ One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI l
 | [`anydoc`](./plugins/anydoc) | 0.3.10 | macOS (`arm64`), Windows (`x64`) | Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64. |
 | [`anyweb`](./plugins/anyweb) | 0.2.20 | macOS (`arm64`), Windows (`x64`) | Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here. |
 | [`anyknow`](./plugins/anyknow) | 0.1.12 | macOS (`arm64`), Windows (`x64`) | Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing. |
-| [`anypdf`](./plugins/anypdf) | 0.7.21 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
 | [`anymail`](./plugins/anymail) | 0.1.4 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
 | [`anyscore`](./plugins/anyscore) | 0.2.0 | macOS (`arm64`), Windows (`x64`) | Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only — never eligibility. |
+| [`anypdf`](./plugins/anypdf) | 0.7.22 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
 
 ## Installation
 

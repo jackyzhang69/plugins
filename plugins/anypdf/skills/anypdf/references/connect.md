@@ -1,14 +1,33 @@
 # Connect AnyPDF
 
+## Backend and transport (product contract)
+
+The client uses `https://anypdf.jackyzhang.app` by default. Override with
+`ANYPDF_BACKEND_URL` only for development or self-hosting. Product requests use
+an in-memory short-lived exact-audience JWT; neither the durable Portal token
+nor that JWT belongs in plugin files, prompts, reports, logs, or command
+arguments. HTTP is accepted only for loopback development URLs; all other
+backends must use HTTPS. Ordinary product verbs are JSON-first except `read`,
+which prints Markdown.
+
 ## Resolve the client (agent only)
 
 Do not call whichever `anypdf` is first on PATH.
 
 Platform: macOS arm64 `darwin-arm64`; Windows x64 `win32-x64` (`anypdf.exe`).
 
-This skill is loaded from a public plugin package. The package root is the directory that contains `runtime-manifest.json` two parents above this file (`skills/references/connect.md/SKILL.md`).
+This skill is an **Agent Skills** router. It may arrive via a host marketplace
+plugin install, or because the human/agent attached the skill folder or the
+full `plugins/anypdf/` tree (Cherry Studio, Cursor, and other Agent Skills
+hosts included). Marketplace install commands are optional convenience.
 
-1. After a marketplace install or update, repair from **this** package's binary (the new tree), not from PATH and not from `current`:
+**Preferred:** the package root is the directory that contains
+`runtime-manifest.json` two parents above this file
+(`…/plugins/anypdf/skills/anypdf/references/connect.md` → package root
+`…/plugins/anypdf`).
+
+1. When that package root exists (full tree), repair from **this** package's
+   binary (the new tree), not from PATH and not from `current`:
 
    ```bash
    PACKAGE_BIN="<package-root>/bin/<platform>/anypdf"
@@ -23,7 +42,17 @@ This skill is loaded from a public plugin package. The package root is the direc
 
    Windows: `%USERPROFILE%\.jackyzhang.app\plugins\anypdf\current\bin\win32-x64\anypdf.exe`
 
-Every later agent command in this skill is `$ANYPDF …`. If `doctor` reports a different version than the marketplace plugin, repair again from `$PACKAGE_BIN` before filling.
+**Skill-only attach:** if the host loaded only `skills/anypdf/` and there is no
+package-root `bin/`, require that the canonical CLI path above already exists
+and matches the skill's intended version (`$ANYPDF doctor --json`). Do not
+invent a download URL or fall back to PATH. If the canonical CLI is missing,
+ask the host to attach the full `plugins/anypdf/` tree from
+`jackyzhang69/plugins` (or use a marketplace recipe that installs that tree),
+then repair-install.
+
+Every later agent command in this skill is `$ANYPDF …`. If `doctor` reports a
+different version than the attached package, repair again from `$PACKAGE_BIN`
+before filling.
 
 ## One shared user credential
 
@@ -71,7 +100,11 @@ After connection, confirm with masked output from:
 
 Say only whether AnyPDF connected and what the person can do next. If connection is needed, ask for a token **file** (preferred) or a paste — never a terminal command. Do not expose token contents, internal HTTP, or raw JSON. A successful `whoami` reports only the user id, product role, scopes, form access, and expiry.
 
-After a marketplace install or update, run `"$PACKAGE_BIN" doctor --repair-install`, then `$ANYPDF doctor`. The live copy is `~/.jackyzhang.app/plugins/anypdf/current`. If `doctor` reports a different version than the marketplace plugin, repair again from `$PACKAGE_BIN` before filling.
+After a marketplace install, skill-folder attach, or package-tree update, run
+`"$PACKAGE_BIN" doctor --repair-install` when the package root exists, then
+`$ANYPDF doctor`. The live copy is `~/.jackyzhang.app/plugins/anypdf/current`.
+If `doctor` reports a different version than the attached package, repair again
+from `$PACKAGE_BIN` before filling.
 
 ## Recovery before escalation
 
