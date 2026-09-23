@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BIN="${DIR}/bin/anyscore"
+if [ ! -x "$BIN" ]; then
+  BIN="${DIR}/bin/darwin-arm64/anyscore"
+fi
+
+echo "========================================="
+echo "AnyScore Plugin Verification & Smoke Test"
+echo "========================================="
+
+echo "[1/5] Checking Native Rust Binary..."
+"${BIN}" --version
+
+echo "[2/5] Verifying doctor diagnostics..."
+DOC_OUT=$("${BIN}" doctor --json)
+echo "${DOC_OUT}" | grep -q '"plugin_id"' && echo "  -> Doctor diagnostics PASSED" || { echo "  -> Doctor diagnostics FAILED"; exit 1; }
+
+echo "[3/5] Verifying whoami identity check..."
+WHO_OUT=$("${BIN}" whoami --json)
+echo "${WHO_OUT}" | grep -q '"status"' && echo "  -> Whoami check PASSED" || { echo "  -> Whoami check FAILED"; exit 1; }
+
+echo "[4/5] Verifying commands --json..."
+CMD_OUT=$("${BIN}" commands --json)
+echo "${CMD_OUT}" | grep -q '"plugin-cli-commands-v1"' && echo "  -> commands --json PASSED" || { echo "  -> commands --json FAILED"; exit 1; }
+echo "${CMD_OUT}" | grep -q '"eligible"' && { echo "  -> Security boundary FAILED (eligible leaked!)"; exit 1; } || true
+
+echo "[5/5] Verifying help surface..."
+"${BIN}" --help >/dev/null
+
+echo "========================================="
+echo "All AnyScore governance smoke tests PASSED"
+echo "========================================="

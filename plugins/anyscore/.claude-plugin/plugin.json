@@ -1,0 +1,37 @@
+{
+  "name": "anyscore",
+  "version": "0.2.0",
+  "description": "Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only — never eligibility.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "homepage": "https://jackyzhang.app",
+  "license": "Proprietary",
+  "keywords": [
+    "immigration",
+    "canada",
+    "express-entry",
+    "crs",
+    "pnp",
+    "points",
+    "anyscore"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyScore",
+    "shortDescription": "Canadian immigration points-grid engine.",
+    "longDescription": "Deterministic scoring of official Canadian immigration points grids. The engine converts declared policy-grid factors into a source-cited grid_assessment. It does not infer CLB, age, experience, or education, and it never outputs eligible or qualified. Zero backend AI cost; the host agent derives factors from evidence.",
+    "developerName": "Jacky Zhang",
+    "category": "Legal & Productivity",
+    "capabilities": [
+      "Calculate"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "List the live Canadian immigration points grids.",
+      "Evaluate this profile against Express Entry CRS.",
+      "What-if: if language scores change, how do the grid points change?"
+    ]
+  }
+}
