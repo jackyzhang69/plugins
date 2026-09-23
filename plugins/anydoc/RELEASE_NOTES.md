@@ -1,3 +1,7 @@
+# AnyDoc 0.3.10
+
+- Accepts freshly exchanged account tokens even when the computer clock is wrong.
+
 # AnyDoc 0.3.9
 
 - PDF compression defaults to clarity priority. Before a file is compressed,

@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anydoc
 
-Version `0.3.9`.
+Version `0.3.10`.
 
 Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.
 
