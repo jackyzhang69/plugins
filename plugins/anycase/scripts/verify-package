@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
-# verify-package: source/pack shape for AnyCase.
+# verify-package: READ-ONLY shape + version-agreement gate for AnyCase.
+#
+# The marketplace clone is a published plugin subtree (runtime-manifest.json,
+# host plugin.json files, skills). It does not ship Cargo.toml. When Cargo.toml
+# is present, retain the stronger source-tree cross-check; otherwise the shipped
+# descriptors are the package authority and must agree with each other.
+#
+# Confirm a published tree: copy the package (no Cargo.toml) and run this
+# script. It exits 0 when runtime-manifest.json, .claude-plugin/plugin.json,
+# and .codex-plugin/plugin.json share one version.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 test -f "$ROOT/skills/anycase/SKILL.md"
@@ -12,18 +21,34 @@ import json, re, sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
-cargo = (root / "Cargo.toml").read_text(encoding="utf-8")
-match = re.search(r'(?m)^version\s*=\s*"([^"]+)"', cargo)
-if not match:
-    sys.exit("verify-package: Cargo.toml has no package version")
-crate = match.group(1)
-for rel in (
+rels = (
     "runtime-manifest.json",
     ".claude-plugin/plugin.json",
     ".codex-plugin/plugin.json",
-):
-    got = json.loads((root / rel).read_text(encoding="utf-8")).get("version")
-    if got != crate:
-        sys.exit(f"verify-package: {rel} version {got!r} != crate {crate!r}")
+)
+versions = {}
+for rel in rels:
+    path = root / rel
+    if not path.is_file():
+        sys.exit(f"verify-package: missing {rel}")
+    got = json.loads(path.read_text(encoding="utf-8")).get("version")
+    if not isinstance(got, str) or not got:
+        sys.exit(f"verify-package: {rel} has no version")
+    versions[rel] = got
+
+ref = versions[".claude-plugin/plugin.json"]
+bad = [f"{rel}={got!r}" for rel, got in versions.items() if got != ref]
+if bad:
+    sys.exit(f"verify-package: version disagreement against {ref!r}: {', '.join(bad)}")
+
+cargo_path = root / "Cargo.toml"
+if cargo_path.is_file():
+    cargo = cargo_path.read_text(encoding="utf-8")
+    match = re.search(r'(?m)^version\s*=\s*"([^"]+)"', cargo)
+    if not match:
+        sys.exit("verify-package: Cargo.toml has no package version")
+    crate = match.group(1)
+    if crate != ref:
+        sys.exit(f"verify-package: crate {crate!r} != package {ref!r}")
 PY
 echo "verify-package: ok"
