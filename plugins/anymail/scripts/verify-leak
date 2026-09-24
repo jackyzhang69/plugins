@@ -18,6 +18,7 @@ allowed_exact=(
   skills/anymail/references/thread.md
   skills/anymail/references/history.md
   skills/anymail/references/handling.md
+  skills/anymail/references/remember-me.md
   skills/anymail/references/tell-jacky.md
   skills/anymail/references/triggers.md
   scripts/verify-package

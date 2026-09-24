@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anymail
 
-Version `0.1.4`.
+Version `0.1.5`.
 
 Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets.
 

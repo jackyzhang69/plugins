@@ -44,6 +44,9 @@ Direction B skill-surface checks can verify coverage against `commands --json`.
 - `mail handling-list`
 - `mail handling-remember`
 - `mail handling-forget`
+- `mail memory-list`
+- `mail memory-remember`
+- `mail memory-forget`
 - `mail fetch`
 - `mail attachment`
 - `mail flag`
