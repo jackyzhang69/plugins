@@ -1,0 +1,228 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_SKILLS_IMMIGRATION"
+stream_id: "ENTRY_LEVEL_SEMI_SKILLED"
+status: "LEGACY_CLOSED"
+effective_until: "2024-12-31"
+effective_date: "2022-11-16"
+source_edition: "BC PNP Skills Immigration Program Guide & ELSS Policy Schedule"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
+decision_scope: "Pre-screen of the nine rules defined below; PASS is not a nomination or complete program-eligibility decision."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+  pinned_statutory_minimum_wage:
+    currency: CAD
+    hourly_amount: 18.25
+    effective_from: "2026-06-01"
+
+rules:
+  - id: elss_stream_lifecycle
+    category: stream_policy
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+    pass_if: "assessment_date <= '2024-12-31'"
+    fail_if: "false"
+    missing_or_unverified: "NEEDS_REVIEW: ELSS stream was closed to new registrations. Assessment date is either after the estimated closure window (post 2024-12-31) or the exact closure date cannot be confirmed from current VKS evidence units — officer adjudication required."
+    interpretation: "The Entry Level and Semi-Skilled stream was phased out and is absent from the 2026 BC PNP SI Program Guide. The estimated closure date is December 31, 2024. Any registration after this date should be routed to NEEDS_REVIEW for officer review."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p5:updates_to_this_edition"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "Updates to This Edition"
+      page: "5"
+      verbatim_excerpt: "ELSS stream closed to new registrations"
+
+  - id: elss_eligible_occupation
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.noc_2021_code
+      - job_offer.noc_teer
+      - job_offer.elss_eligible_industry_sector
+      - job_offer.in_northeast_development_region
+    pass_if: "(job_offer.noc_teer in [4,5] || job_offer.noc_2021_code == '73300') && (job_offer.elss_eligible_industry_sector == true || job_offer.in_northeast_development_region == true)"
+    fail_if: "(!(job_offer.noc_teer in [4,5]) && job_offer.noc_2021_code != '73300') || (job_offer.elss_eligible_industry_sector == false && job_offer.in_northeast_development_region == false)"
+    missing_or_unverified: "NEEDS_REVIEW: ELSS occupation classification, industry sector, or regional eligibility cannot be verified."
+    interpretation: "Position must be classified under TEER 4 or 5 in an approved industry sector (Tourism/Hospitality, Food Processing, Long-Haul Trucking) or located in the Northeast Development Region."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p23:independent_contractor_or_subcontractor_positions"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "ELSS Sector Guide"
+      page: "23"
+      verbatim_excerpt: "Entry Level and Semi-Skilled occupations in tourism/hospitality, food processing, or long-haul trucking"
+
+  - id: elss_nine_months_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.consecutive_work_months_with_employer
+      - candidate.same_employer_in_bc
+    pass_if: "candidate.consecutive_work_months_with_employer >= 9.0 && candidate.same_employer_in_bc == true"
+    fail_if: "candidate.consecutive_work_months_with_employer < 9.0 || candidate.same_employer_in_bc == false"
+    missing_or_unverified: "NEEDS_REVIEW: Nine consecutive months of full-time employment with the sponsoring B.C. employer cannot be established."
+    interpretation: "Candidate must have completed at least nine consecutive months of full-time employment with the sponsoring employer in B.C. prior to submitting an application."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p19:3_8_work_experience"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.8, ELSS Criteria"
+      page: "19"
+      verbatim_excerpt: "employed full-time with the supporting B.C. employer for at least nine consecutive months"
+
+  - id: elss_job_offer_indeterminate
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.indeterminate
+      - job_offer.weekly_regular_hours
+      - job_offer.year_round
+    pass_if: "job_offer.indeterminate == true && job_offer.weekly_regular_hours >= 30.0 && job_offer.year_round == true"
+    fail_if: "job_offer.indeterminate == false || job_offer.weekly_regular_hours < 30.0 || job_offer.year_round == false"
+    missing_or_unverified: "NEEDS_REVIEW: Indeterminate tenure, year-round status, or full-time hours cannot be confirmed."
+    interpretation: "Job offer must be indeterminate, non-seasonal, and provide at least 30 hours per week."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.5"
+      page: "17"
+      verbatim_excerpt: "indeterminate and full-time"
+
+  - id: elss_wage_prevailing
+    category: compensation
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.regular_base_hourly_cad
+      - job_offer.market_range_verified
+    precondition: "current_statutory_minimum_verified(assessment_date) == true"
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date)"
+    missing_or_unverified: "NEEDS_REVIEW: Wage is below statutory floor or market range verification is incomplete."
+    interpretation: "Wage must satisfy provincial statutory minimum wage ($18.25/hr) and match prevailing rates for entry-level occupations."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.9"
+      page: "20"
+      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+
+  - id: elss_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.language_test.test_type
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
+    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
+    missing_or_unverified: "NEEDS_REVIEW: Language proficiency results missing or score below mandatory CLB 4 threshold."
+    interpretation: "Mandatory CLB 4 threshold across all 4 competencies is strictly enforced for all ELSS positions."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.4"
+      page: "15"
+      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+
+  - id: elss_employer_operational_history
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - employer.bc_operating_months
+      - employer.operation_evidence_complete
+    pass_if: "employer.bc_operating_months >= 12.0 && employer.operation_evidence_complete == true"
+    fail_if: "employer.bc_operating_months < 12.0"
+    missing_or_unverified: "NEEDS_REVIEW: Operational history in British Columbia cannot be verified."
+    interpretation: "Employer must have been actively operating in B.C. for at least one full year."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.7"
+      page: "33"
+      verbatim_excerpt: "operating in British Columbia for at least one year"
+
+  - id: elss_employer_local_staff
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - employer.in_metro_vancouver_regional_district
+      - employer.eligible_bc_payroll_fte
+      - employer.staff_evidence_complete
+    pass_if: "(employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte >= 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte >= 3.0)"
+    fail_if: "(employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte < 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte < 3.0)"
+    missing_or_unverified: "NEEDS_REVIEW: Domestic indeterminate payroll employee counts cannot be established."
+    interpretation: "Employer must maintain at least 5 eligible indeterminate B.C. payroll employees in Metro Vancouver, or at least 3 outside."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_8_minimum_number_of_full_time_employees_in_briti"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.8"
+      page: "33"
+      verbatim_excerpt: "minimum number of full-time employees in British Columbia"
+
+  - id: elss_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.ownership_max_combined_ratio
+      - candidate.ownership_window_complete
+      - candidate.applicant_or_family_control
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10 && candidate.applicant_or_family_control == false"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10 || candidate.applicant_or_family_control == true"
+    missing_or_unverified: "NEEDS_REVIEW: Ownership, family interest, or control facts cannot be established."
+    interpretation: "Combined ownership interest of applicant and family must be under 10%."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p22:3_12_eligible_employment_situations"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.12"
+      page: "22"
+      verbatim_excerpt: "10 per cent"
+
+  - id: elss_job_offer_genuineness
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "elss_job_offer_genuineness"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Bona fides evidence is incomplete, absent, or probability falls in the uncertain band (0.30 <= P < 0.70)."
+    interpretation: "Evaluates bona fide employment relationship and commercial need in semi-skilled sectors using TypeSafe Jev System One."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p36:6_11_genuine_need_for_the_position"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.11"
+      page: "36"
+      verbatim_excerpt: "genuine need for the position"

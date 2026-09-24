@@ -1,0 +1,18 @@
+{
+  "vertical_id": "bcpnp",
+  "last_synced_at": "2026-09-24T20:31:33.897200+00:00",
+  "evidence_units_sha256": "b88a026894236b6891751c439d105dc51ded30f440ece5f4403f63907d4d8461",
+  "sources_sha256": "e8c5a84e1aec01e6604dceeeb9c9f2b2e05b09bff9d2366f2e89a920d8844586",
+  "rules_sha256": "312238f60f76695e8661d6dd703c35dc625c2cc693aa7be6cb64cd857e4b6502",
+  "synced_rulesets": [
+    "bcpnp_ei_base.yaml",
+    "bcpnp_ei_regional.yaml",
+    "bcpnp_ei_strategic.yaml",
+    "bcpnp_si_elss.yaml",
+    "bcpnp_si_health_authority.yaml",
+    "bcpnp_si_international_graduate.yaml",
+    "bcpnp_si_rural_remote_health.yaml",
+    "bcpnp_si_skilled_worker.yaml"
+  ],
+  "test_status": "ALL_GOLDEN_PARITY_PASSED"
+}

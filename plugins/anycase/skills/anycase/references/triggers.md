@@ -20,3 +20,6 @@
 - connect with Jacky
 - pair session
 - join code from Jacky
+- Provincial Nominee Program
+- PNP
+- BCPNP

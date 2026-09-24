@@ -1,0 +1,191 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_SKILLS_IMMIGRATION"
+stream_id: "HEALTH_AUTHORITY"
+effective_date: "2026-06-10"
+source_edition: "BC PNP Skills Immigration Program Guide, Section 4.2"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
+decision_scope: "Pre-screen of the eight rules defined below; PASS is not a nomination or complete program-eligibility decision."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+  pinned_statutory_minimum_wage:
+    currency: CAD
+    hourly_amount: 18.25
+    effective_from: "2026-06-01"
+
+rules:
+  - id: ha_sponsoring_authority
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - employer.health_authority_name
+      - employer.has_health_authority_support
+    pass_if: "employer.has_health_authority_support == true && employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care']"
+    fail_if: "employer.has_health_authority_support == false || !(employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care'])"
+    missing_or_unverified: "NEEDS_REVIEW: Sponsoring public health authority or official support letter cannot be verified."
+    interpretation: "Candidate must be employed by or have the official support of one of B.C.'s 8 designated public health authorities."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p25:4_2_health_authority_stream"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.2(b)"
+      page: "25"
+      verbatim_excerpt: "Your health authority must agree to support your BC PNP application before you apply."
+
+  - id: ha_occupation_eligibility
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.noc_2021_code
+      - job_offer.noc_teer
+      - job_offer.is_health_occupation
+    pass_if: "job_offer.noc_teer in [0,1,2,3] && (job_offer.is_health_occupation == true || job_offer.noc_2021_code in ['41300', '41301', '42201'])"
+    fail_if: "!(job_offer.noc_teer in [0,1,2,3]) || (job_offer.is_health_occupation == false && !(job_offer.noc_2021_code in ['41300', '41301', '42201']))"
+    missing_or_unverified: "NEEDS_REVIEW: Job offer NOC code or health occupation qualification evidence is missing or disputed."
+    interpretation: "Eligible occupations must be in TEER 0-3 and belong to health professions (NOC category 3) or recognized allied social/therapy codes (41300, 41301, 42201)."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p25:4_2_health_authority_stream"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.2(c)"
+      page: "25-26"
+      verbatim_excerpt: "An occupation identified by the NOC as a health occupation (any NOC that starts with a 3), Social workers (NOC 41300), Therapists in counselling (NOC 41301), Social and community service workers (NOC 42201)"
+
+  - id: ha_professional_licensing
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.licensing_registration_status
+    pass_if: "candidate.licensing_registration_status in ['licensed', 'eligible_to_be_licensed', 'not_regulated']"
+    fail_if: "candidate.licensing_registration_status == 'ineligible'"
+    missing_or_unverified: "NEEDS_REVIEW: Professional licensing or registration status with provincial regulatory body is unverified."
+    interpretation: "Regulated healthcare professionals must hold or be officially eligible for provincial licensure/registration in British Columbia."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p26:social_workers_noc_41300"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.2(d), 4.2(e)"
+      page: "26"
+      verbatim_excerpt: "be licensed or be eligible to be licensed to work as a physician, nurse practitioner, or midwife in B.C."
+
+  - id: ha_hours_fulltime
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.weekly_regular_hours
+      - job_offer.year_round
+      - job_offer.single_position
+    pass_if: "(job_offer.is_physician_nurse_practitioner_midwife == true || job_offer.indeterminate == true) && job_offer.weekly_regular_hours >= 30.0 && job_offer.year_round == true && job_offer.single_position == true"
+    fail_if: "(job_offer.is_physician_nurse_practitioner_midwife != true && job_offer.indeterminate == false) || job_offer.weekly_regular_hours < 30.0 || job_offer.year_round == false || job_offer.single_position == false"
+    missing_or_unverified: "NEEDS_REVIEW: Full-time hours, year-round status, or indeterminate job offer structure cannot be verified."
+    interpretation: "Job offer must be full-time (at least 30 hours per week) year-round; direct health authority employees must have an indeterminate offer, while eligible physicians, nurse practitioners, and midwives supported by a health authority may hold eligible contracted terms."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.5"
+      page: "17"
+      verbatim_excerpt: "at least 30 hours per week, year-round"
+
+  - id: ha_wage_prevailing
+    category: compensation
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.regular_base_hourly_cad
+      - job_offer.market_range_verified
+    precondition: "current_statutory_minimum_verified(assessment_date) == true"
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date)"
+    missing_or_unverified: "NEEDS_REVIEW: Wage falls below prevailing rate or statutory minimum wage cannot be verified for assessment_date."
+    interpretation: "Compensation must satisfy statutory minimums ($18.25/hr) and meet provincial healthcare collective agreement/market ranges."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.9"
+      page: "20"
+      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+
+  - id: ha_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.noc_teer
+    conditional_required_fields:
+      when: "job_offer.noc_teer in [2,3]"
+      fields:
+        - candidate.language_test.test_type
+        - candidate.language_test.valid_at_application
+        - candidate.language_test.listening_clb
+        - candidate.language_test.reading_clb
+        - candidate.language_test.writing_clb
+        - candidate.language_test.speaking_clb
+    pass_if: "!(job_offer.noc_teer in [2,3]) || (accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4)"
+    fail_if: "job_offer.noc_teer in [2,3] && (candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4)"
+    missing_or_unverified: "NEEDS_REVIEW: Language test results missing or validity cannot be confirmed for TEER 2/3 healthcare occupation."
+    interpretation: "Mandatory CLB 4 threshold applies to healthcare workers in TEER 2 or 3 positions."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.4"
+      page: "15"
+      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+
+  - id: ha_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.ownership_max_combined_ratio
+      - candidate.ownership_window_complete
+      - candidate.applicant_or_family_control
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10 && candidate.applicant_or_family_control == false"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10 || candidate.applicant_or_family_control == true"
+    missing_or_unverified: "NEEDS_REVIEW: Equity ownership or commercial control facts cannot be verified."
+    interpretation: "Candidate or immediate family must not hold 10% or more ownership in the employing entity."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p22:3_12_eligible_employment_situations"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.12"
+      page: "22"
+      verbatim_excerpt: "10 per cent"
+
+  - id: ha_job_offer_genuineness
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "ha_job_offer_genuineness"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Bona fides evidence is incomplete, absent, or probability falls in the uncertain band (0.30 <= P < 0.70)."
+    interpretation: "Evaluates genuine clinical or administrative staffing need within public health infrastructure using TypeSafe Jev System One."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p36:6_11_genuine_need_for_the_position"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.11"
+      page: "36"
+      verbatim_excerpt: "genuine need for the position"

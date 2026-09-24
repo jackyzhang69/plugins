@@ -24,6 +24,12 @@ Searches IRCC operational manuals. Empty results are not evidence of absence.
 Coverage may be indeterminate: an empty hit list is not a finding of no risk.
 Playbook: [manual](manual.md).
 
+## Provincial Nominee Program policies and guides (`pnp`)
+
+Queries official Provincial Nominee Program (PNP) guides, category requirements,
+and points grids (BCPNP, OINP, AAIP, etc.). Maintains clean jurisdictional
+separation from federal IRCC instructions. Playbook: [pnp](pnp.md).
+
 ## Live coverage (`coverage`)
 
 Fetches what is covered *now*. Never answer coverage from a bundled file.
@@ -51,11 +57,12 @@ TCF Canada) to official Canadian Language Benchmarks (CLB). Playbook:
 anycase caselaw "<query>" --mode hybrid --top 3
 anycase policy "<query>" --lang en --top 5
 anycase manual "<query>" --mode hybrid --top 5
+anycase pnp "<query>" --province bc --mode hybrid --top 5
 anycase coverage
 anycase notes "<query>" --top 3
 anycase knowledge "<query>" --top 5
 anycase clb --test ielts -l <listening> -r <reading> -w <writing> -s <speaking>
-anycase query --action [caselaw|policy|notes|knowledge|clb|manual|coverage] --input "<query_or_json>"
+anycase query --action [caselaw|policy|notes|knowledge|clb|manual|pnp|coverage] --input "<query_or_json>"
 ```
 
 ## Legal synthesis rules

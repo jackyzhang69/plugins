@@ -1,0 +1,198 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_ENTREPRENEUR_IMMIGRATION"
+stream_id: "ENTREPRENEUR_REGIONAL"
+effective_date: "2024-05-27"
+source_edition: "BC PNP Entrepreneur Immigration Program Guide - Regional Stream"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-ei-regional-pilot-program-guide-pdf"
+decision_scope: "Pre-screen of the nine rules defined below; PASS is not an invitation to register or final nomination."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, business, community, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: ei_reg_community_referral
+    category: community
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - community.has_community_referral
+      - community.is_enrolled_participating_community
+      - community.community_population
+      - community.exploratory_visit_completed
+    pass_if: "community.has_community_referral == true && community.is_enrolled_participating_community == true && community.community_population < 75000 && community.exploratory_visit_completed == true"
+    fail_if: "community.has_community_referral == false || community.is_enrolled_participating_community == false || community.community_population >= 75000 || community.exploratory_visit_completed == false"
+    missing_or_unverified: "NEEDS_REVIEW: Community Referral, enrolled participating community status, exploratory visit record, or population criteria cannot be verified."
+    interpretation: "Candidate must complete an exploratory visit and receive an official Community Referral from an enrolled participating municipality with a population under 75,000."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.1"
+      page: "7; 11"
+      verbatim_excerpt: "obtain a referral from an enrolled community with a population of fewer than 75,000"
+
+  - id: ei_reg_personal_net_worth
+    category: financial
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.personal_net_worth_cad
+      - business.net_worth_verified
+    pass_if: "business.personal_net_worth_cad >= 300000.0 && business.net_worth_verified == true"
+    fail_if: "business.personal_net_worth_cad < 300000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Personal net worth or statutory third-party verification report cannot be confirmed."
+    interpretation: "Candidate must have at least $300,000 CAD in legally obtained, unencumbered personal net worth."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.2"
+      page: "7; 12"
+      verbatim_excerpt: "have a personal net worth of at least $300,000"
+
+  - id: ei_reg_eligible_investment
+    category: financial
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.eligible_investment_cad
+    pass_if: "business.eligible_investment_cad >= 100000.0"
+    fail_if: "business.eligible_investment_cad < 100000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Proposed eligible investment in the participating community is unverified."
+    interpretation: "Candidate must make an eligible commercial investment of at least $100,000 CAD from personal funds into the community business."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p21:2_4_ei_regional_minimum_investment_requirements"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.3"
+      page: "7; 13"
+      verbatim_excerpt: "make an eligible personal investment of at least $100,000"
+
+  - id: ei_reg_equity_ownership
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.equity_ownership_ratio
+    pass_if: "business.equity_ownership_ratio >= 0.51"
+    fail_if: "business.equity_ownership_ratio < 0.51"
+    missing_or_unverified: "NEEDS_REVIEW: Controlling equity ownership percentage cannot be confirmed."
+    interpretation: "Candidate must hold at least 51% (majority controlling ownership) of the newly established regional enterprise."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.4"
+      page: "7; 14"
+      verbatim_excerpt: "hold at least 51 per cent equity ownership in the business"
+
+  - id: ei_reg_job_creation
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.new_canadian_jobs_fte
+    pass_if: "business.new_canadian_jobs_fte >= 1.0"
+    fail_if: "business.new_canadian_jobs_fte < 1.0"
+    missing_or_unverified: "NEEDS_REVIEW: Full-time job creation projections or documentation cannot be established."
+    interpretation: "Candidate must create at least one new full-time equivalent job for a Canadian citizen or permanent resident in the community."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.5"
+      page: "7; 15"
+      verbatim_excerpt: "create at least one new full-time equivalent job for a Canadian citizen or permanent resident"
+
+  - id: ei_reg_business_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.business_owner_months
+      - candidate.senior_manager_months
+    pass_if: "candidate.business_owner_months >= 36.0 || candidate.senior_manager_months >= 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
+    fail_if: "candidate.business_owner_months < 36.0 && candidate.senior_manager_months < 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
+    missing_or_unverified: "NEEDS_REVIEW: Qualifying managerial or business ownership experience cannot be established."
+    interpretation: "Within the last 5 years, candidate must have at least 3 years as business owner, 4 years as senior manager, or 1 year owner + 2 years senior manager."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.6"
+      page: "7; 16"
+      verbatim_excerpt: "3+ years of experience as a business owner-manager, or 4+ years of experience as a senior manager"
+
+  - id: ei_reg_new_business_only
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.is_new_business
+      - business.is_acquisition
+    pass_if: "business.is_new_business == true && business.is_acquisition == false"
+    fail_if: "business.is_new_business == false || business.is_acquisition == true"
+    missing_or_unverified: "NEEDS_REVIEW: Business structure classification (new vs acquisition) cannot be confirmed."
+    interpretation: "Under the Regional Stream, only the establishment of a brand-new business is permitted. Business acquisitions are explicitly disqualified."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "1.2, 2.7"
+      page: "7; 17"
+      verbatim_excerpt: "establish a new business; business acquisitions are not eligible"
+
+  - id: ei_reg_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.language_test.test_type
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
+    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
+    missing_or_unverified: "NEEDS_REVIEW: Mandatory language proficiency test (CLB 4) is unverified or expired."
+    interpretation: "Candidate must demonstrate CLB 4 across all four competencies on a designated test."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p8:1"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "2.8"
+      page: "18"
+      verbatim_excerpt: "Canadian Language Benchmark (CLB) 4 or higher in each of the four competencies"
+
+  - id: ei_reg_community_alignment
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "ei_reg_community_alignment"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Community economic priority alignment evidence is incomplete or probability is uncertain."
+    interpretation: "Evaluates genuine strategic alignment between the proposed enterprise and the host community's published economic development plan."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p20:by_the_ministry_of_agriculture_for_more_informati"
+      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      section: "2.9"
+      page: "20"
+      verbatim_excerpt: "establish a business that aligns with the community's economic development priorities"

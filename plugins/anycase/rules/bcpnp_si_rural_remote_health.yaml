@@ -1,0 +1,224 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_SKILLS_IMMIGRATION"
+stream_id: "RURAL_REMOTE_HEALTH"
+status: "TEMPORARY_INITIATIVE"
+effective_date: "2026-06-15"
+effective_until: "2026-10-07"
+source_edition: "BC PNP Skills Immigration Program Guide, Section 4.3"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
+decision_scope: "Pre-screen of the nine rules defined below; PASS is not a nomination or complete program-eligibility decision."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+  pinned_statutory_minimum_wage:
+    currency: CAD
+    hourly_amount: 18.25
+    effective_from: "2026-06-01"
+
+rules:
+  - id: rrh_initiative_window
+    category: stream_policy
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+    pass_if: "assessment_date >= '2026-06-15' && assessment_date <= '2026-10-07'"
+    fail_if: "assessment_date < '2026-06-15' || assessment_date > '2026-10-07'"
+    missing_or_unverified: "NEEDS_REVIEW: assessment_date is required to verify initiative eligibility window."
+    interpretation: "The Temporary Rural/Remote Health Support Initiative accepts registrations exclusively from June 15, 2026 to October 7, 2026."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p27:4_3_temporary_rural_remote_health_support_initiati"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3 Temporary Rural/Remote Health Support Initiative"
+      page: "27"
+      verbatim_excerpt: "Registration for this initiative will open June 15, 2026"
+
+  - id: rrh_health_authority_employer
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - employer.health_authority_name
+      - employer.has_health_authority_support
+      - employer.direct_employee
+    pass_if: "employer.has_health_authority_support == true && employer.direct_employee == true && employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care']"
+    fail_if: "employer.has_health_authority_support == false || employer.direct_employee == false || !(employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care'])"
+    missing_or_unverified: "NEEDS_REVIEW: Health authority support or direct employment status cannot be verified."
+    interpretation: "Candidate must be a direct employee of one of the 8 designated B.C. public health authorities. Employees of service contractors are explicitly ineligible."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p27:4_3_temporary_rural_remote_health_support_initiati"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3(b), 4.3(c)"
+      page: "27"
+      verbatim_excerpt: "You must be a direct employee of one of the health authorities listed. Employees of contractors providing services to one of B.C.'s health authorities are not eligible."
+
+  - id: rrh_eligible_occupation
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.noc_2021_code
+    pass_if: "job_offer.noc_2021_code in ['64410', '65310', '65312']"
+    fail_if: "!(job_offer.noc_2021_code in ['64410', '65310', '65312'])"
+    missing_or_unverified: "NEEDS_REVIEW: Job offer NOC code is missing or disputed."
+    interpretation: "Under the Rural/Remote Health Support Initiative, only NOC 64410 (Security guards), 65310 (Light duty cleaners), and 65312 (Janitors, caretakers and heavy-duty cleaners) are eligible."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p27:4_3_temporary_rural_remote_health_support_initiati"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3(c)"
+      page: "27"
+      verbatim_excerpt: "Only the following occupations are eligible under this initiative: 64410 Security guards, 65310 Light duty cleaners, 65312 Janitors, caretakers and heavy-duty cleaners"
+
+  - id: rrh_rural_remote_location
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.in_rural_remote_location
+    pass_if: "job_offer.in_rural_remote_location == true"
+    fail_if: "job_offer.in_rural_remote_location == false"
+    missing_or_unverified: "NEEDS_REVIEW: Geographic eligibility of work location cannot be confirmed."
+    interpretation: "Work location must be in a designated rural or remote region. Work locations in Metro Vancouver, Central Okanagan, or non-island Capital Regional District are strictly disqualified."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p28:4_3_d_your_current_work_location_must_be_in_a_ru"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3(d)"
+      page: "28"
+      verbatim_excerpt: "Your current work location must be in a rural/remote part of the province with the same health authority"
+
+  - id: rrh_qualifying_work_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.consecutive_rural_health_months
+      - candidate.same_health_authority_history
+    pass_if: "candidate.consecutive_rural_health_months >= 9.0 && candidate.same_health_authority_history == true"
+    fail_if: "candidate.consecutive_rural_health_months < 9.0 || candidate.same_health_authority_history == false"
+    missing_or_unverified: "NEEDS_REVIEW: 9 consecutive months of qualifying rural employment cannot be confirmed."
+    interpretation: "Candidate must have completed at least 9 consecutive months of full-time employment with the same health authority employer in an eligible rural/remote location."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p28:4_3_d_your_current_work_location_must_be_in_a_ru"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3(e)"
+      page: "28"
+      verbatim_excerpt: "working full-time, year-round, for at least nine (9) consecutive months, in an eligible occupation with the same health authority employer"
+
+  - id: rrh_job_offer_hours_duration
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.indeterminate
+      - job_offer.weekly_regular_hours
+      - job_offer.year_round
+    pass_if: "job_offer.indeterminate == true && job_offer.weekly_regular_hours >= 30.0 && job_offer.year_round == true"
+    fail_if: "job_offer.indeterminate == false || job_offer.weekly_regular_hours < 30.0 || job_offer.year_round == false"
+    missing_or_unverified: "NEEDS_REVIEW: Indeterminate tenure, year-round status, or full-time hours cannot be confirmed."
+    interpretation: "Must be a regular, indeterminate, full-time position offering at least 30 hours per week."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p27:4_3_temporary_rural_remote_health_support_initiati"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.3(c)"
+      page: "27"
+      verbatim_excerpt: "regular, indeterminate, full-time job in an eligible occupation"
+
+  - id: rrh_wage_prevailing
+    category: compensation
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.regular_base_hourly_cad
+      - job_offer.market_range_verified
+    precondition: "current_statutory_minimum_verified(assessment_date) == true"
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date)"
+    missing_or_unverified: "NEEDS_REVIEW: Wage is below statutory floor or market range verification is pending."
+    interpretation: "Hourly wage must equal or exceed provincial statutory minimum ($18.25/hr) and comply with collective agreement wage grids."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.9"
+      page: "20"
+      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+
+  - id: rrh_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.language_test.test_type
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
+    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
+    missing_or_unverified: "NEEDS_REVIEW: Mandatory language proficiency test (CLB 4) is unverified or expired."
+    interpretation: "All applicants under TEER 4 and 5 occupations must demonstrate language proficiency of at least CLB 4 across all 4 competencies."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.4"
+      page: "15"
+      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+
+  - id: rrh_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.ownership_max_combined_ratio
+      - candidate.ownership_window_complete
+      - candidate.applicant_or_family_control
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10 && candidate.applicant_or_family_control == false"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10 || candidate.applicant_or_family_control == true"
+    missing_or_unverified: "NEEDS_REVIEW: Ownership or control conditions cannot be established."
+    interpretation: "Standard BCPNP 10% equity restriction applies."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p22:3_12_eligible_employment_situations"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.12"
+      page: "22"
+      verbatim_excerpt: "10 per cent"
+
+  - id: rrh_job_offer_genuineness
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "rrh_job_offer_genuineness"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Operational staffing evidence is incomplete or probability falls in borderline band (0.30 <= P < 0.70)."
+    interpretation: "Evaluates genuine ongoing operational support needs in rural hospital/clinic facilities."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p36:6_11_genuine_need_for_the_position"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.11"
+      page: "36"
+      verbatim_excerpt: "genuine need for the position"

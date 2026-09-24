@@ -1,3 +1,7 @@
+# What's new in 1.1.16
+
+`anycase pnp` searches official Provincial Nominee Program policies and guides with isolated provincial scope.
+
 # What's new in 1.1.15
 
 Published marketplace packages verify cleanly without shipping a source Cargo manifest.
@@ -9,7 +13,3 @@ Search results now say when they were not checked against what you asked, and sl
 # What's new in 1.1.13
 
 If a lookup is refused because the account hit its limit, tell the human in plain language and stop; do not retry and do not offer to tell Jacky.
-
-# What's new in 1.1.11
-
-Case law, Help Centre, manuals, and practitioner field notes now have a lookup limit: 5 searches on a free account, or 20 searches a day with a FormBro subscription. Coverage checks and CLB conversion are unchanged.

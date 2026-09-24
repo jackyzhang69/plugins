@@ -1,0 +1,136 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_ENTREPRENEUR_IMMIGRATION"
+stream_id: "STRATEGIC_PROJECTS"
+effective_date: "2024-05-27"
+source_edition: "BC PNP Entrepreneur Immigration Program Guide - Strategic Projects"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-ei-program-guide-pdf"
+decision_scope: "Pre-screen of the six rules defined below; PASS is not an official project approval or nomination."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, corporation, key_staff, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: ei_strat_corporate_eligibility
+    category: corporate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - corporation.operating_years_outside_canada
+      - corporation.has_audited_financials
+    pass_if: "corporation.operating_years_outside_canada >= 3.0 && corporation.has_audited_financials == true"
+    fail_if: "corporation.operating_years_outside_canada < 3.0 || corporation.has_audited_financials == false"
+    missing_or_unverified: "NEEDS_REVIEW: Foreign parent corporate operating track record or audited financial statements cannot be confirmed."
+    interpretation: "The foreign corporation must be well-established and successful, with at least 3 years of demonstrated operations outside Canada."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:corporate_eligibility"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, Strategic Projects"
+      page: "5; 25"
+      verbatim_excerpt: "for foreign corporations that intend to establish a subsidiary or branch office in B.C. that strategically aligns with their core business"
+
+  - id: ei_strat_eligible_investment
+    category: financial
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - corporation.eligible_investment_cad
+    pass_if: "corporation.eligible_investment_cad >= 500000.0"
+    fail_if: "corporation.eligible_investment_cad < 500000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Proposed eligible capital investment into the B.C. subsidiary is unverified."
+    interpretation: "The foreign corporation must invest at least $500,000 CAD into establishing or expanding the B.C. business."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:eligible_investment"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "Strategic Projects Criteria"
+      page: "26"
+      verbatim_excerpt: "make an eligible capital investment of at least $500,000"
+
+  - id: ei_strat_job_creation_ratio
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - corporation.new_canadian_jobs_fte
+      - corporation.nominated_key_staff_count
+    pass_if: "corporation.new_canadian_jobs_fte >= corporation.nominated_key_staff_count * 3.0"
+    fail_if: "corporation.new_canadian_jobs_fte < corporation.nominated_key_staff_count * 3.0"
+    missing_or_unverified: "NEEDS_REVIEW: Job creation projections or staff nomination counts cannot be verified."
+    interpretation: "The business must create at least 3 new full-time equivalent jobs for Canadian citizens or permanent residents for each proposed foreign key staff member."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:job_creation_ratio"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "Strategic Projects Criteria"
+      page: "27"
+      verbatim_excerpt: "create at least three new full-time equivalent jobs for Canadian citizens or permanent residents for each foreign key staff member"
+
+  - id: ei_strat_key_staff_limit
+    category: corporate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - corporation.nominated_key_staff_count
+    pass_if: "corporation.nominated_key_staff_count >= 1.0 && corporation.nominated_key_staff_count <= 5.0"
+    fail_if: "corporation.nominated_key_staff_count < 1.0 || corporation.nominated_key_staff_count > 5.0"
+    missing_or_unverified: "NEEDS_REVIEW: Proposed number of key staff candidates is unverified."
+    interpretation: "A maximum of five key staff members may be nominated per Strategic Project application."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:key_staff_limit"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "Strategic Projects Criteria"
+      page: "27"
+      verbatim_excerpt: "propose up to five key foreign staff members"
+
+  - id: ei_strat_key_staff_qualifications
+    category: staff
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - key_staff.is_senior_executive_or_specialized
+      - key_staff.essential_to_bc_operations
+    pass_if: "key_staff.is_senior_executive_or_specialized == true && key_staff.essential_to_bc_operations == true"
+    fail_if: "key_staff.is_senior_executive_or_specialized == false || key_staff.essential_to_bc_operations == false"
+    missing_or_unverified: "NEEDS_REVIEW: Key staff qualifications, corporate role, or specialized expertise cannot be established."
+    interpretation: "Proposed key staff must be senior executive or specialized knowledge personnel who are essential to the establishment and operation of the B.C. business."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:key_staff_qualifications"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "Strategic Projects Criteria"
+      page: "28"
+      verbatim_excerpt: "essential senior executive or specialized knowledge personnel"
+
+  - id: ei_strat_business_viability
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "ei_strat_business_viability"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Economic benefit evidence or strategic alignment documentation is incomplete."
+    interpretation: "Evaluates significant economic benefit to British Columbia and strategic alignment with provincial industrial priorities using TypeSafe Jev System One."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_strategic:business_viability"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "Strategic Projects Criteria"
+      page: "29"
+      verbatim_excerpt: "provide significant economic benefit to B.C."

@@ -1,0 +1,360 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_SKILLS_IMMIGRATION"
+stream_id: "SKILLED_WORKER"
+effective_date: "2026-06-10"
+source_edition: "BC PNP Skills Immigration Program Guide, effective June 10, 2026"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
+decision_scope: "Pre-screen of the ten rules defined below; PASS is not a nomination, invitation, or complete program-eligibility decision."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+  types:
+    assessment_date: "ISO-8601 date; application assessment date"
+    candidate:
+      ownership_max_combined_ratio: "decimal in [0,1]; maximum combined direct or indirect stake of applicant and relevant family during the five years before application and throughout the application process"
+      ownership_window_complete: boolean
+      applicant_or_family_control: boolean
+      related_successor_acquisition: boolean
+      qualifying_skilled_fte_months_last_10_years: "non-negative decimal; verified TEER 0-3 full-time-equivalent experience in the ten years before application"
+      experience_evidence_complete: boolean
+      language_test:
+        test_type: "CELPIP-General | IELTS-General-Training | PTE-Core | TEF-Canada | TCF-Canada"
+        valid_at_application: boolean
+        listening_clb: "integer or null"
+        reading_clb: "integer or null"
+        writing_clb: "integer or null"
+        speaking_clb: "integer or null"
+      language_points_claimed: boolean
+      eebc_selected: boolean
+      language_results_requested_by_bcpnp: boolean
+    job_offer:
+      noc_2021_code: "five-digit string"
+      noc_teer: "integer 0-5, verified against NOC 2021"
+      title: string
+      city: string
+      weekly_regular_hours: "non-negative decimal"
+      year_round: boolean
+      single_position: boolean
+      indeterminate: boolean
+      term_days: "integer or null; required for a limited-term offer"
+      days_remaining_at_application: "integer or null; required for a limited-term offer"
+      appendix_a_occupation_conditions_met: "boolean or null; required for a limited-term offer"
+      regular_base_hourly_cad: "non-negative decimal; excludes bonuses, tips, overtime, allowances and similar payments"
+      market_range_low_cad: "non-negative decimal"
+      market_range_high_cad: "non-negative decimal"
+      market_range_verified: boolean
+      peer_wage_comparable: boolean
+      employer_pay_structure_consistent: boolean
+    employer:
+      bc_operating_months: "non-negative decimal; actual B.C. operation, not merely time since incorporation"
+      operation_evidence_complete: boolean
+      in_metro_vancouver_regional_district: boolean
+      eligible_bc_payroll_fte: "non-negative decimal; indeterminate employees working in B.C. and on employer payroll; excludes contractors and employees working outside B.C."
+      staff_evidence_complete: boolean
+      business_need_summary: string
+    noul:
+      proposition_id: "si_job_offer_genuineness"
+      probability_true: "decimal in [0,1] or null"
+      evidence_complete: boolean
+      evidence_refs: "non-empty array of stable evidence identifiers when evidence_complete is true"
+      model_version: "non-empty string"
+
+  validation:
+    missing_or_null_required_value: "NEEDS_REVIEW with MISSING_MATERIAL and the missing field path"
+    invalid_type_or_out_of_range: "NEEDS_REVIEW with INVALID_INPUT and the field path"
+    inconsistent_verified_inputs: "NEEDS_REVIEW with CONFLICTING_EVIDENCE"
+    unknown_evidence_status: "NEEDS_REVIEW with UNVERIFIED_EVIDENCE"
+    no_short_circuit: true
+    notes:
+      - "A known disqualifying fact remains FAIL even when another rule needs review."
+      - "A conditional field is required only when its rule branch applies. The inapplicable branch must return an explicit reason, not a silent pass."
+      - "The Noul probability is the probability that its stated proposition is true; it is not a probability of nomination."
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+  test_assertion_semantics:
+    wildcard: "In a golden test, expected.rule_statuses['*'] sets the expected status of every rule; named rule entries override it."
+  date_semantics:
+    application_date: "assessment_date"
+    equity_lookback: "Five calendar years preceding application, plus the application process."
+    experience_lookback: "Ten calendar years preceding application."
+    statutory_wage: "Use the legal minimum applicable on assessment_date; the pinned 2026-06-01 value below must be revalidated for later effective changes."
+  pinned_statutory_minimum_wage:
+    currency: CAD
+    hourly_amount: 18.25
+    effective_from: "2026-06-01"
+    source_url: "https://news.gov.bc.ca/releases/2026LBR0021-000581"
+  ineligible_noc_codes_from_2026_06_14:
+    - "12100"
+    - "12101"
+    - "12200"
+    - "13100"
+    - "13110"
+    - "13111"
+    - "13112"
+    - "62010"
+    - "62020"
+    - "63101"
+    - "41302"
+    - "42204"
+  appendix_a_limited_term_noc_codes:
+    - "41200"
+    - "41220"
+    - "41221"
+    - "10030"
+    - "20012"
+    - "21100"
+    - "21210"
+    - "21211"
+    - "21220"
+    - "21221"
+    - "21222"
+    - "21223"
+    - "21230"
+    - "21231"
+    - "21232"
+    - "21233"
+    - "21234"
+    - "21300"
+    - "21301"
+    - "21310"
+    - "21311"
+    - "21320"
+    - "21399"
+    - "22110"
+    - "22220"
+    - "22221"
+    - "22222"
+    - "22310"
+    - "22312"
+    - "50011"
+    - "51111"
+    - "51112"
+    - "51120"
+    - "52119"
+    - "52112"
+    - "52113"
+    - "52120"
+    - "53111"
+
+rules:
+  - id: si_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.ownership_max_combined_ratio
+      - candidate.ownership_window_complete
+      - candidate.applicant_or_family_control
+      - candidate.related_successor_acquisition
+    precondition: "candidate.ownership_window_complete == true"
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10 && candidate.applicant_or_family_control == false && candidate.related_successor_acquisition == false"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10 || candidate.applicant_or_family_control == true || candidate.related_successor_acquisition == true"
+    missing_or_unverified: "NEEDS_REVIEW: ownership history, relevant family interests, control, or successor-organization facts cannot be established."
+    interpretation: "Exactly 0.10 fails. Relevant immediate and extended family is broader than spouse and dependent children. Control or a related successor acquisition must not be ignored merely because a recorded percentage is below 10%."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p22:3_12_eligible_employment_situations"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.12; 6.12(e)"
+      page: "22; 38"
+      verbatim_excerpt: "10 per cent"
+
+  - id: si_noc_teer
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.noc_2021_code
+      - job_offer.noc_teer
+    pass_if: "job_offer.noc_teer in [0,1,2,3] && noc_code_matches_verified_noc_2021_teer(job_offer.noc_2021_code, job_offer.noc_teer) && !(assessment_date > '2026-06-13' && job_offer.noc_2021_code in ineligible_noc_codes_from_2026_06_14)"
+    fail_if: "!(job_offer.noc_teer in [0,1,2,3]) || (assessment_date > '2026-06-13' && job_offer.noc_2021_code in ineligible_noc_codes_from_2026_06_14)"
+    missing_or_unverified: "NEEDS_REVIEW: NOC code, TEER mapping, or occupational classification evidence is absent or disputed."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p24:4_1_skilled_worker_stream"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.1(b); 3.11"
+      page: "24; 22"
+      verbatim_excerpt: "NOC TEER 0"
+
+  - id: si_qualifying_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.qualifying_skilled_fte_months_last_10_years
+      - candidate.experience_evidence_complete
+    precondition: "candidate.experience_evidence_complete == true"
+    pass_if: "candidate.qualifying_skilled_fte_months_last_10_years >= 24"
+    fail_if: "candidate.qualifying_skilled_fte_months_last_10_years < 24"
+    missing_or_unverified: "NEEDS_REVIEW: employment dates, hours, pay, TEER, or applicable doctoral/co-op exception evidence is incomplete."
+    interpretation: "The 24-month stream minimum may be in any qualifying TEER 0-3 occupation. Direct relation to the offered job is a separate registration-scoring concept, not this stream minimum. Apply section 3.8 exceptions before calculating verified FTE months."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p24:4_1_skilled_worker_stream"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "4.1(c); 3.8"
+      page: "24; 19-20"
+      verbatim_excerpt: "two years"
+
+  - id: si_hours_fulltime
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.weekly_regular_hours
+      - job_offer.year_round
+      - job_offer.single_position
+    pass_if: "job_offer.weekly_regular_hours >= 30 && job_offer.year_round == true && job_offer.single_position == true"
+    fail_if: "job_offer.weekly_regular_hours < 30 || job_offer.year_round == false || job_offer.single_position == false"
+    missing_or_unverified: "NEEDS_REVIEW: regular weekly hours, year-round schedule, or single-position terms are missing."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:3_5_job_offer"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.5(b)"
+      page: "17"
+      verbatim_excerpt: "30 hours"
+
+  - id: si_offer_duration
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.indeterminate
+      - job_offer.noc_2021_code
+    pass_if: "job_offer.indeterminate == true || (job_offer.indeterminate == false && job_offer.noc_2021_code in appendix_a_limited_term_noc_codes && job_offer.single_position == true && job_offer.term_days >= 365 && job_offer.days_remaining_at_application >= 120 && job_offer.appendix_a_occupation_conditions_met == true)"
+    fail_if: "job_offer.indeterminate == false && (!(job_offer.noc_2021_code in appendix_a_limited_term_noc_codes) || job_offer.single_position != true || job_offer.term_days < 365 || job_offer.days_remaining_at_application < 120 || job_offer.appendix_a_occupation_conditions_met != true)"
+    missing_or_unverified: "NEEDS_REVIEW: duration terms or an applicable Appendix A condition cannot be verified."
+    interpretation: "For an indeterminate offer, limited-term fields are inapplicable. For a limited-term offer, every Appendix A condition is required; occupation-specific conditions must be checked separately."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:3_5_job_offer"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.5(c); Appendix A"
+      page: "17-18; 61-62"
+      verbatim_excerpt: "indeterminate"
+
+  - id: si_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.noc_teer
+      - candidate.language_points_claimed
+      - candidate.eebc_selected
+      - candidate.language_results_requested_by_bcpnp
+    conditional_required_fields:
+      when: "job_offer.noc_teer in [2,3]"
+      fields:
+        - candidate.language_test.test_type
+        - candidate.language_test.valid_at_application
+        - candidate.language_test.listening_clb
+        - candidate.language_test.reading_clb
+        - candidate.language_test.writing_clb
+        - candidate.language_test.speaking_clb
+    pass_if: "(job_offer.noc_teer in [2,3] && accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4) || (job_offer.noc_teer in [0,1] && candidate.language_points_claimed == false && candidate.eebc_selected == false && candidate.language_results_requested_by_bcpnp == false)"
+    fail_if: "job_offer.noc_teer in [2,3] && ((candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || candidate.language_test.valid_at_application == false || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4)"
+    missing_or_unverified: "NEEDS_REVIEW: a required test, validity, or competency result is missing; or a TEER 0/1 points, EEBC, or BC PNP request branch requires separate assessment."
+    interpretation: "The TEER 0/1 branch passes only the mandatory general-eligibility floor with explicit reason NO_MANDATORY_FLOOR; it makes no finding about claimed language points, EEBC, or a later BC PNP request."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p16:benchmark_clb_level_4_in_each_of_the_four_compe"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.4"
+      page: "15-17"
+      verbatim_excerpt: "level 4"
+
+  - id: si_wage_prevailing
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - job_offer.regular_base_hourly_cad
+      - job_offer.market_range_low_cad
+      - job_offer.market_range_high_cad
+      - job_offer.market_range_verified
+      - job_offer.peer_wage_comparable
+      - job_offer.employer_pay_structure_consistent
+    precondition: "job_offer.market_range_verified == true && current_statutory_minimum_verified(assessment_date)"
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_low_cad <= job_offer.regular_base_hourly_cad && job_offer.regular_base_hourly_cad <= job_offer.market_range_high_cad && job_offer.peer_wage_comparable == true && job_offer.employer_pay_structure_consistent == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date) || job_offer.regular_base_hourly_cad < job_offer.market_range_low_cad || job_offer.regular_base_hourly_cad > job_offer.market_range_high_cad || job_offer.peer_wage_comparable != true || job_offer.employer_pay_structure_consistent != true"
+    missing_or_unverified: "NEEDS_REVIEW: current legal minimum, NOC/location wage range, peer comparison, compensation structure, or base-wage evidence is missing or stale."
+    interpretation: "Market ranges in golden tests are synthetic fixtures, not assertions of actual WorkBC or Job Bank figures. Production evaluation must obtain dated, cited NOC/location ranges and recheck the statutory minimum."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "3.9"
+      page: "20"
+      verbatim_excerpt: "wage range"
+    statutory_anchor:
+      source_file: "BC government minimum-wage announcement, May 26, 2026"
+      section: "Summary"
+      page: "web page"
+      source_url: "https://news.gov.bc.ca/releases/2026LBR0021-000581"
+      verbatim_excerpt: "$18.25 per hour"
+
+  - id: si_employer_operational_history
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.bc_operating_months
+      - employer.operation_evidence_complete
+    precondition: "employer.operation_evidence_complete == true"
+    pass_if: "employer.bc_operating_months >= 12"
+    fail_if: "employer.bc_operating_months < 12"
+    missing_or_unverified: "NEEDS_REVIEW: date of actual B.C. operations or supporting operational evidence is incomplete."
+    interpretation: "Incorporation date alone does not prove the duration of B.C. operations."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.7"
+      page: "33"
+      verbatim_excerpt: "one year"
+
+  - id: si_employer_local_staff
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.in_metro_vancouver_regional_district
+      - employer.eligible_bc_payroll_fte
+      - employer.staff_evidence_complete
+    precondition: "employer.staff_evidence_complete == true"
+    pass_if: "(employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte >= 5) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte >= 3)"
+    fail_if: "(employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte < 5) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte < 3)"
+    missing_or_unverified: "NEEDS_REVIEW: work location, payroll roster, hours, permanence, or FTE calculation is incomplete."
+    interpretation: "Count eligible employees working from within B.C. and on employer payroll; exclude independent contractors and employees working outside B.C. The cited section does not impose the citizenship/permanent-residence condition stated in the task summary."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_8_minimum_number_of_full_time_employees_in_briti"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.8"
+      page: "33-34"
+      verbatim_excerpt: "at least five"
+
+  - id: si_job_offer_genuineness
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    proposition: "The evidence establishes a genuine, ongoing operational need for this position within the employer's existing line of business, including a credible need for the offered full-time role."
+    noul_contract:
+      proposition_id: "si_job_offer_genuineness"
+      probability_meaning: "P(proposition is true | cited evidence)"
+      pass: "probability_true >= 0.70"
+      fail: "probability_true < 0.30"
+      needs_review: "0.30 <= probability_true < 0.70"
+      evidence_gate: "If evidence_complete is not true, evidence_refs is empty, probability is null/invalid, or material evidence conflicts, return NEEDS_REVIEW regardless of probability."
+      output_required: [proposition_id, probability_true, evidence_complete, evidence_refs, model_version]
+      human_review_note: "The Noul result is a screening signal. It does not replace the BC PNP's assessment."
+    missing_or_unverified: "NEEDS_REVIEW: missing or conflicting employer operational evidence, unsupported proposition, or incomplete Noul output."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p36:6_11_genuine_need_for_the_position"
+      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      section: "6.11"
+      page: "36-37"
+      verbatim_excerpt: "genuine need"

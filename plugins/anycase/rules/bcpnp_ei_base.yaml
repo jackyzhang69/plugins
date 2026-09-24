@@ -1,0 +1,178 @@
+schema_version: "1.0.0"
+program_id: "BC_PNP_ENTREPRENEUR_IMMIGRATION"
+stream_id: "ENTREPRENEUR_BASE"
+effective_date: "2024-05-27"
+source_edition: "BC PNP Entrepreneur Immigration Program Guide - Base Stream"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-ei-program-guide-pdf"
+decision_scope: "Pre-screen of the eight rules defined below; PASS is not an invitation to register or final nomination."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, business, noul]
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: ei_base_personal_net_worth
+    category: financial
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.personal_net_worth_cad
+      - business.net_worth_verified
+    pass_if: "business.personal_net_worth_cad >= 600000.0 && business.net_worth_verified == true"
+    fail_if: "business.personal_net_worth_cad < 600000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Personal net worth or statutory third-party verification report cannot be confirmed."
+    interpretation: "Candidate must possess at least $600,000 CAD in legally obtained, unencumbered personal net worth, certified by a designated supplier."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, 2.1"
+      page: "7; 11"
+      verbatim_excerpt: "have a personal net worth of at least $600,000"
+
+  - id: ei_base_eligible_investment
+    category: financial
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.eligible_investment_cad
+    pass_if: "business.eligible_investment_cad >= 200000.0"
+    fail_if: "business.eligible_investment_cad < 200000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Proposed eligible business investment amount is missing or disputed."
+    interpretation: "Candidate must make an eligible commercial investment of at least $200,000 CAD from personal funds into the B.C. business."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p21:1"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, 2.2"
+      page: "7; 12"
+      verbatim_excerpt: "make an eligible personal investment of at least $200,000"
+
+  - id: ei_base_equity_ownership
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.equity_ownership_ratio
+      - business.eligible_investment_cad
+    pass_if: "business.equity_ownership_ratio >= 0.3333 || business.eligible_investment_cad >= 1000000.0"
+    fail_if: "business.equity_ownership_ratio < 0.3333 && business.eligible_investment_cad < 1000000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Business equity stake or investment scale cannot be confirmed."
+    interpretation: "Candidate must own at least one-third (33.3%) of the business, unless making an investment of at least $1,000,000 CAD."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, 2.3"
+      page: "7; 14"
+      verbatim_excerpt: "hold at least one-third (33 1/3 per cent) equity ownership in the business, or invest at least $1,000,000"
+
+  - id: ei_base_job_creation
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.new_canadian_jobs_fte
+    pass_if: "business.new_canadian_jobs_fte >= 1.0"
+    fail_if: "business.new_canadian_jobs_fte < 1.0"
+    missing_or_unverified: "NEEDS_REVIEW: Projected or verified job creation counts are unconfirmed."
+    interpretation: "The business must create at least one new full-time equivalent job for a Canadian citizen or permanent resident."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, 2.4"
+      page: "7; 15"
+      verbatim_excerpt: "create at least one new full-time equivalent job for a Canadian citizen or permanent resident"
+
+  - id: ei_base_business_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.business_owner_months
+      - candidate.senior_manager_months
+    pass_if: "candidate.business_owner_months >= 36.0 || candidate.senior_manager_months >= 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
+    fail_if: "candidate.business_owner_months < 36.0 && candidate.senior_manager_months < 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
+    missing_or_unverified: "NEEDS_REVIEW: Qualifying entrepreneurial or senior management track record cannot be established."
+    interpretation: "Within the last 10 years, candidate must have at least 3 years as business owner-manager, or 4 years as senior manager, or 1 year owner + 2 years senior manager."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "1.2, 2.5"
+      page: "7; 16"
+      verbatim_excerpt: "more than 3 years of experience as an active business owner-manager, or more than 4 years of experience as a senior manager"
+
+  - id: ei_base_language_floor
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - candidate.language_test.test_type
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
+    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
+    missing_or_unverified: "NEEDS_REVIEW: Language test results missing or CLB score below mandatory CLB 4 threshold."
+    interpretation: "Candidate must demonstrate proficiency equivalent to CLB 4 or higher in English or French across all four skills."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p12:if_you_claimed_language_points_in_your_registratio"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "2.1 (C)"
+      page: "12"
+      verbatim_excerpt: "basic English or French language proficiency equivalent to Canadian Language Benchmark (CLB) 4"
+
+  - id: ei_base_active_management
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+      - business.active_management_in_bc
+      - business.reside_within_commute
+    pass_if: "business.active_management_in_bc == true && business.reside_within_commute == true"
+    fail_if: "business.active_management_in_bc == false || business.reside_within_commute == false"
+    missing_or_unverified: "NEEDS_REVIEW: Day-to-day active operational management or local residency commitment cannot be verified."
+    interpretation: "Candidate must actively manage the business on a day-to-day basis within B.C. and reside within 100km of the commercial premises."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p19:businesses_involved_in_producing_distributing_o"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "2.7"
+      page: "19"
+      verbatim_excerpt: "provide active and ongoing day-to-day management of the business from within B.C."
+
+  - id: ei_base_business_viability
+    category: integrity
+    severity: CRITICAL_REDLINE
+    eval_type: jev_semantic
+    required_fields:
+      - assessment_date
+      - noul.proposition_id
+      - noul.model_version
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    noul_contract:
+      proposition_id: "ei_base_business_viability"
+      fail: "probability_true < 0.30"
+      pass: "probability_true >= 0.70"
+    missing_or_unverified: "NEEDS_REVIEW: Business plan feasibility, market analysis, or commercial viability evidence is incomplete."
+    interpretation: "Evaluates commercial viability, economic feasibility, and arm's length legitimacy of the business concept using TypeSafe Jev System One."
+    evidence_anchor:
+      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p72:5_2_b_commercial_viability"
+      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      section: "2.8"
+      page: "20"
+      verbatim_excerpt: "demonstrate that the business has a reasonable potential for commercial viability"

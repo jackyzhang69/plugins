@@ -1,0 +1,2066 @@
+{
+  "00010": {
+    "teer": 0,
+    "title": "Legislators"
+  },
+  "00011": {
+    "teer": 0,
+    "title": "Senior government managers and officials"
+  },
+  "00012": {
+    "teer": 0,
+    "title": "Senior managers - financial, communications and other business services"
+  },
+  "00013": {
+    "teer": 0,
+    "title": "Senior managers - health, education, social and community services and membership organizations"
+  },
+  "00014": {
+    "teer": 0,
+    "title": "Senior managers - trade, broadcasting and other services"
+  },
+  "00015": {
+    "teer": 0,
+    "title": "Senior managers - construction, transportation, production and utilities"
+  },
+  "10010": {
+    "teer": 0,
+    "title": "Financial managers"
+  },
+  "10011": {
+    "teer": 0,
+    "title": "Human resources managers"
+  },
+  "10012": {
+    "teer": 0,
+    "title": "Purchasing managers"
+  },
+  "10019": {
+    "teer": 0,
+    "title": "Other administrative services managers"
+  },
+  "10020": {
+    "teer": 0,
+    "title": "Insurance, real estate and financial brokerage managers"
+  },
+  "10021": {
+    "teer": 0,
+    "title": "Banking, credit and other investment managers"
+  },
+  "10022": {
+    "teer": 0,
+    "title": "Advertising, marketing and public relations managers"
+  },
+  "10029": {
+    "teer": 0,
+    "title": "Other business services managers"
+  },
+  "10030": {
+    "teer": 0,
+    "title": "Telecommunication carriers managers"
+  },
+  "11100": {
+    "teer": 1,
+    "title": "Financial auditors and accountants"
+  },
+  "11101": {
+    "teer": 1,
+    "title": "Financial and investment analysts"
+  },
+  "11102": {
+    "teer": 1,
+    "title": "Financial advisors"
+  },
+  "11103": {
+    "teer": 1,
+    "title": "Securities agents, investment dealers and brokers"
+  },
+  "11109": {
+    "teer": 1,
+    "title": "Other financial officers"
+  },
+  "11200": {
+    "teer": 1,
+    "title": "Human resources professionals"
+  },
+  "11201": {
+    "teer": 1,
+    "title": "Professional occupations in business management consulting"
+  },
+  "11202": {
+    "teer": 1,
+    "title": "Professional occupations in advertising, marketing and public relations"
+  },
+  "12010": {
+    "teer": 2,
+    "title": "Supervisors, general office and administrative support workers"
+  },
+  "12011": {
+    "teer": 2,
+    "title": "Supervisors, finance and insurance office workers"
+  },
+  "12012": {
+    "teer": 2,
+    "title": "Supervisors, library, correspondence and related information workers"
+  },
+  "12013": {
+    "teer": 2,
+    "title": "Supervisors, supply chain, tracking and scheduling coordination occupations"
+  },
+  "12100": {
+    "teer": 2,
+    "title": "Executive assistants"
+  },
+  "12101": {
+    "teer": 2,
+    "title": "Human resources and recruitment officers"
+  },
+  "12102": {
+    "teer": 2,
+    "title": "Procurement and purchasing agents and officers"
+  },
+  "12103": {
+    "teer": 2,
+    "title": "Conference and event planners"
+  },
+  "12104": {
+    "teer": 2,
+    "title": "Employment insurance and revenue officers"
+  },
+  "12110": {
+    "teer": 2,
+    "title": "Court reporters, medical transcriptionists and related occupations"
+  },
+  "12111": {
+    "teer": 2,
+    "title": "Health information management occupations"
+  },
+  "12112": {
+    "teer": 2,
+    "title": "Records management technicians"
+  },
+  "12113": {
+    "teer": 2,
+    "title": "Statistical officers and related research support occupations"
+  },
+  "12200": {
+    "teer": 2,
+    "title": "Accounting technicians and bookkeepers"
+  },
+  "12201": {
+    "teer": 2,
+    "title": "Insurance adjusters and claims examiners"
+  },
+  "12202": {
+    "teer": 2,
+    "title": "Insurance underwriters"
+  },
+  "12203": {
+    "teer": 2,
+    "title": "Assessors, business valuators and appraisers"
+  },
+  "13100": {
+    "teer": 3,
+    "title": "Administrative officers"
+  },
+  "13101": {
+    "teer": 3,
+    "title": "Property administrators"
+  },
+  "13102": {
+    "teer": 3,
+    "title": "Payroll administrators"
+  },
+  "13110": {
+    "teer": 3,
+    "title": "Administrative assistants"
+  },
+  "13111": {
+    "teer": 3,
+    "title": "Legal administrative assistants"
+  },
+  "13112": {
+    "teer": 3,
+    "title": "Medical administrative assistants"
+  },
+  "13200": {
+    "teer": 3,
+    "title": "Customs, ship and other brokers"
+  },
+  "13201": {
+    "teer": 3,
+    "title": "Production and transportation logistics coordinators"
+  },
+  "14100": {
+    "teer": 4,
+    "title": "General office support workers"
+  },
+  "14101": {
+    "teer": 4,
+    "title": "Receptionists"
+  },
+  "14102": {
+    "teer": 4,
+    "title": "Personnel clerks"
+  },
+  "14103": {
+    "teer": 4,
+    "title": "Court clerks and related court services occupations"
+  },
+  "14110": {
+    "teer": 4,
+    "title": "Survey interviewers and statistical clerks"
+  },
+  "14111": {
+    "teer": 4,
+    "title": "Data entry clerks"
+  },
+  "14112": {
+    "teer": 4,
+    "title": "Desktop publishing operators and related occupations"
+  },
+  "14200": {
+    "teer": 4,
+    "title": "Accounting and related clerks"
+  },
+  "14201": {
+    "teer": 4,
+    "title": "Banking, insurance and other financial clerks"
+  },
+  "14202": {
+    "teer": 4,
+    "title": "Collection clerks"
+  },
+  "14300": {
+    "teer": 4,
+    "title": "Library assistants and clerks"
+  },
+  "14301": {
+    "teer": 4,
+    "title": "Correspondence, publication and regulatory clerks"
+  },
+  "14400": {
+    "teer": 4,
+    "title": "Shippers and receivers"
+  },
+  "14401": {
+    "teer": 4,
+    "title": "Storekeepers and partspersons"
+  },
+  "14402": {
+    "teer": 4,
+    "title": "Production logistics workers"
+  },
+  "14403": {
+    "teer": 4,
+    "title": "Purchasing and inventory control workers"
+  },
+  "14404": {
+    "teer": 4,
+    "title": "Dispatchers"
+  },
+  "14405": {
+    "teer": 4,
+    "title": "Transportation route and crew schedulers"
+  },
+  "20010": {
+    "teer": 0,
+    "title": "Engineering managers"
+  },
+  "20011": {
+    "teer": 0,
+    "title": "Architecture and science managers"
+  },
+  "20012": {
+    "teer": 0,
+    "title": "Computer and information systems managers"
+  },
+  "21100": {
+    "teer": 1,
+    "title": "Physicists and astronomers"
+  },
+  "21101": {
+    "teer": 1,
+    "title": "Chemists"
+  },
+  "21102": {
+    "teer": 1,
+    "title": "Geoscientists and oceanographers"
+  },
+  "21103": {
+    "teer": 1,
+    "title": "Meteorologists and climatologists"
+  },
+  "21109": {
+    "teer": 1,
+    "title": "Other professional occupations in physical sciences"
+  },
+  "21110": {
+    "teer": 1,
+    "title": "Biologists and related scientists"
+  },
+  "21111": {
+    "teer": 1,
+    "title": "Forestry professionals"
+  },
+  "21112": {
+    "teer": 1,
+    "title": "Agricultural representatives, consultants and specialists"
+  },
+  "21120": {
+    "teer": 1,
+    "title": "Public and environmental health and safety professionals"
+  },
+  "21200": {
+    "teer": 1,
+    "title": "Architects"
+  },
+  "21201": {
+    "teer": 1,
+    "title": "Landscape architects"
+  },
+  "21202": {
+    "teer": 1,
+    "title": "Urban and land use planners"
+  },
+  "21203": {
+    "teer": 1,
+    "title": "Land surveyors"
+  },
+  "21210": {
+    "teer": 1,
+    "title": "Mathematicians, statisticians and actuaries"
+  },
+  "21211": {
+    "teer": 1,
+    "title": "Data scientists"
+  },
+  "21220": {
+    "teer": 1,
+    "title": "Cybersecurity specialists"
+  },
+  "21221": {
+    "teer": 1,
+    "title": "Business systems specialists"
+  },
+  "21222": {
+    "teer": 1,
+    "title": "Information systems specialists"
+  },
+  "21223": {
+    "teer": 1,
+    "title": "Database analysts and data administrators"
+  },
+  "21230": {
+    "teer": 1,
+    "title": "Computer systems developers and programmers"
+  },
+  "21231": {
+    "teer": 1,
+    "title": "Software engineers and designers"
+  },
+  "21232": {
+    "teer": 1,
+    "title": "Software developers and programmers"
+  },
+  "21233": {
+    "teer": 1,
+    "title": "Web designers"
+  },
+  "21234": {
+    "teer": 1,
+    "title": "Web developers and programmers"
+  },
+  "21300": {
+    "teer": 1,
+    "title": "Civil engineers"
+  },
+  "21301": {
+    "teer": 1,
+    "title": "Mechanical engineers"
+  },
+  "21310": {
+    "teer": 1,
+    "title": "Electrical and electronics engineers"
+  },
+  "21311": {
+    "teer": 1,
+    "title": "Computer engineers (except software engineers and designers)"
+  },
+  "21320": {
+    "teer": 1,
+    "title": "Chemical engineers"
+  },
+  "21321": {
+    "teer": 1,
+    "title": "Industrial and manufacturing engineers"
+  },
+  "21322": {
+    "teer": 1,
+    "title": "Metallurgical and materials engineers"
+  },
+  "21330": {
+    "teer": 1,
+    "title": "Mining engineers"
+  },
+  "21331": {
+    "teer": 1,
+    "title": "Geological engineers"
+  },
+  "21332": {
+    "teer": 1,
+    "title": "Petroleum engineers"
+  },
+  "21390": {
+    "teer": 1,
+    "title": "Aerospace engineers"
+  },
+  "21399": {
+    "teer": 1,
+    "title": "Other professional engineers"
+  },
+  "22100": {
+    "teer": 2,
+    "title": "Chemical technologists and technicians"
+  },
+  "22101": {
+    "teer": 2,
+    "title": "Geological and mineral technologists and technicians"
+  },
+  "22110": {
+    "teer": 2,
+    "title": "Biological technologists and technicians"
+  },
+  "22111": {
+    "teer": 2,
+    "title": "Agricultural and fish products inspectors"
+  },
+  "22112": {
+    "teer": 2,
+    "title": "Forestry technologists and technicians"
+  },
+  "22113": {
+    "teer": 2,
+    "title": "Conservation and fishery officers"
+  },
+  "22114": {
+    "teer": 2,
+    "title": "Landscape and horticulture technicians and specialists"
+  },
+  "22210": {
+    "teer": 2,
+    "title": "Architectural technologists and technicians"
+  },
+  "22211": {
+    "teer": 2,
+    "title": "Industrial designers"
+  },
+  "22212": {
+    "teer": 2,
+    "title": "Drafting technologists and technicians"
+  },
+  "22213": {
+    "teer": 2,
+    "title": "Land survey technologists and technicians"
+  },
+  "22214": {
+    "teer": 2,
+    "title": "Technical occupations in geomatics and meteorology"
+  },
+  "22220": {
+    "teer": 2,
+    "title": "Computer network and web technicians"
+  },
+  "22221": {
+    "teer": 2,
+    "title": "User support technicians"
+  },
+  "22222": {
+    "teer": 2,
+    "title": "Information systems testing technicians"
+  },
+  "22230": {
+    "teer": 2,
+    "title": "Non-destructive testers and inspectors"
+  },
+  "22231": {
+    "teer": 2,
+    "title": "Engineering inspectors and regulatory officers"
+  },
+  "22232": {
+    "teer": 2,
+    "title": "Occupational health and safety specialists"
+  },
+  "22233": {
+    "teer": 2,
+    "title": "Construction inspectors"
+  },
+  "22300": {
+    "teer": 2,
+    "title": "Civil engineering technologists and technicians"
+  },
+  "22301": {
+    "teer": 2,
+    "title": "Mechanical engineering technologists and technicians"
+  },
+  "22302": {
+    "teer": 2,
+    "title": "Industrial engineering and manufacturing technologists and technicians"
+  },
+  "22303": {
+    "teer": 2,
+    "title": "Construction estimators"
+  },
+  "22310": {
+    "teer": 2,
+    "title": "Electrical and electronics engineering technologists and technicians"
+  },
+  "22311": {
+    "teer": 2,
+    "title": "Electronic service technicians (household and business equipment)"
+  },
+  "22312": {
+    "teer": 2,
+    "title": "Industrial instrument technicians and mechanics"
+  },
+  "22313": {
+    "teer": 2,
+    "title": "Aircraft instrument, electrical and avionics mechanics, technicians and inspectors"
+  },
+  "30010": {
+    "teer": 0,
+    "title": "Managers in health care"
+  },
+  "31100": {
+    "teer": 1,
+    "title": "Specialists in clinical and laboratory medicine"
+  },
+  "31101": {
+    "teer": 1,
+    "title": "Specialists in surgery"
+  },
+  "31102": {
+    "teer": 1,
+    "title": "General practitioners and family physicians"
+  },
+  "31103": {
+    "teer": 1,
+    "title": "Veterinarians"
+  },
+  "31110": {
+    "teer": 1,
+    "title": "Dentists"
+  },
+  "31111": {
+    "teer": 1,
+    "title": "Optometrists"
+  },
+  "31112": {
+    "teer": 1,
+    "title": "Audiologists and speech-language pathologists"
+  },
+  "31120": {
+    "teer": 1,
+    "title": "Pharmacists"
+  },
+  "31121": {
+    "teer": 1,
+    "title": "Dietitians and nutritionists"
+  },
+  "31200": {
+    "teer": 1,
+    "title": "Psychologists"
+  },
+  "31201": {
+    "teer": 1,
+    "title": "Chiropractors"
+  },
+  "31202": {
+    "teer": 1,
+    "title": "Physiotherapists"
+  },
+  "31203": {
+    "teer": 1,
+    "title": "Occupational therapists"
+  },
+  "31204": {
+    "teer": 1,
+    "title": "Kinesiologists and other professional occupations in therapy and assessment"
+  },
+  "31209": {
+    "teer": 1,
+    "title": "Other professional occupations in health diagnosing and treating"
+  },
+  "31300": {
+    "teer": 1,
+    "title": "Nursing coordinators and supervisors"
+  },
+  "31301": {
+    "teer": 1,
+    "title": "Registered nurses and registered psychiatric nurses"
+  },
+  "31302": {
+    "teer": 1,
+    "title": "Nurse practitioners"
+  },
+  "31303": {
+    "teer": 1,
+    "title": "Physician assistants, midwives and allied health professionals"
+  },
+  "32100": {
+    "teer": 2,
+    "title": "Opticians"
+  },
+  "32101": {
+    "teer": 2,
+    "title": "Licensed practical nurses"
+  },
+  "32102": {
+    "teer": 2,
+    "title": "Paramedical occupations"
+  },
+  "32103": {
+    "teer": 2,
+    "title": "Respiratory therapists, clinical perfusionists and cardiopulmonary technologists"
+  },
+  "32104": {
+    "teer": 2,
+    "title": "Animal health technologists and veterinary technicians"
+  },
+  "32109": {
+    "teer": 2,
+    "title": "Other technical occupations in therapy and assessment"
+  },
+  "32110": {
+    "teer": 2,
+    "title": "Denturists"
+  },
+  "32111": {
+    "teer": 2,
+    "title": "Dental hygienists and dental therapists"
+  },
+  "32112": {
+    "teer": 2,
+    "title": "Dental technologists and technicians"
+  },
+  "32120": {
+    "teer": 2,
+    "title": "Medical laboratory technologists"
+  },
+  "32121": {
+    "teer": 2,
+    "title": "Medical radiation technologists"
+  },
+  "32122": {
+    "teer": 2,
+    "title": "Medical sonographers"
+  },
+  "32123": {
+    "teer": 2,
+    "title": "Cardiology technologists and electrophysiological diagnostic technologists"
+  },
+  "32124": {
+    "teer": 2,
+    "title": "Pharmacy technicians"
+  },
+  "32129": {
+    "teer": 2,
+    "title": "Other medical technologists and technicians"
+  },
+  "32200": {
+    "teer": 2,
+    "title": "Traditional Chinese medicine practitioners and acupuncturists"
+  },
+  "32201": {
+    "teer": 2,
+    "title": "Massage therapists"
+  },
+  "32209": {
+    "teer": 2,
+    "title": "Other practitioners of natural healing"
+  },
+  "33100": {
+    "teer": 3,
+    "title": "Dental assistants and dental laboratory assistants"
+  },
+  "33101": {
+    "teer": 3,
+    "title": "Medical laboratory assistants and related technical occupations"
+  },
+  "33102": {
+    "teer": 3,
+    "title": "Nurse aides, orderlies and patient service associates"
+  },
+  "33103": {
+    "teer": 3,
+    "title": "Pharmacy technical assistants and pharmacy assistants"
+  },
+  "33109": {
+    "teer": 3,
+    "title": "Other assisting occupations in support of health services"
+  },
+  "40010": {
+    "teer": 0,
+    "title": "Government managers - health and social policy development and program administration"
+  },
+  "40011": {
+    "teer": 0,
+    "title": "Government managers - economic analysis, policy development and program administration"
+  },
+  "40012": {
+    "teer": 0,
+    "title": "Government managers - education policy development and program administration"
+  },
+  "40019": {
+    "teer": 0,
+    "title": "Other managers in public administration"
+  },
+  "40020": {
+    "teer": 0,
+    "title": "Administrators - post-secondary education and vocational training"
+  },
+  "40021": {
+    "teer": 0,
+    "title": "School principals and administrators of elementary and secondary education"
+  },
+  "40030": {
+    "teer": 0,
+    "title": "Managers in social, community and correctional services"
+  },
+  "40040": {
+    "teer": 0,
+    "title": "Commissioned police officers and related occupations in public protection services"
+  },
+  "40041": {
+    "teer": 0,
+    "title": "Fire chiefs and senior firefighting officers"
+  },
+  "40042": {
+    "teer": 0,
+    "title": "Commissioned officers of the Canadian Armed Forces"
+  },
+  "41100": {
+    "teer": 1,
+    "title": "Judges"
+  },
+  "41101": {
+    "teer": 1,
+    "title": "Lawyers and Quebec notaries"
+  },
+  "41200": {
+    "teer": 1,
+    "title": "University professors and lecturers"
+  },
+  "41201": {
+    "teer": 1,
+    "title": "Post-secondary teaching and research assistants"
+  },
+  "41210": {
+    "teer": 1,
+    "title": "College and other vocational instructors"
+  },
+  "41220": {
+    "teer": 1,
+    "title": "Secondary school teachers"
+  },
+  "41221": {
+    "teer": 1,
+    "title": "Elementary school and kindergarten teachers"
+  },
+  "41300": {
+    "teer": 1,
+    "title": "Social workers"
+  },
+  "41301": {
+    "teer": 1,
+    "title": "Therapists in counselling and related specialized therapies"
+  },
+  "41302": {
+    "teer": 1,
+    "title": "Religious leaders"
+  },
+  "41310": {
+    "teer": 1,
+    "title": "Police investigators and other investigative occupations"
+  },
+  "41311": {
+    "teer": 1,
+    "title": "Probation and parole officers"
+  },
+  "41320": {
+    "teer": 1,
+    "title": "Educational counsellors"
+  },
+  "41321": {
+    "teer": 1,
+    "title": "Career development practitioners and career counsellors (except education)"
+  },
+  "41400": {
+    "teer": 1,
+    "title": "Natural and applied science policy researchers, consultants and program officers"
+  },
+  "41401": {
+    "teer": 1,
+    "title": "Economists and economic policy researchers and analysts"
+  },
+  "41402": {
+    "teer": 1,
+    "title": "Business development officers and market researchers and analysts"
+  },
+  "41403": {
+    "teer": 1,
+    "title": "Social policy researchers, consultants and program officers"
+  },
+  "41404": {
+    "teer": 1,
+    "title": "Health policy researchers, consultants and program officers"
+  },
+  "41405": {
+    "teer": 1,
+    "title": "Education policy researchers, consultants and program officers"
+  },
+  "41406": {
+    "teer": 1,
+    "title": "Recreation, sports and fitness policy researchers, consultants and program officers"
+  },
+  "41407": {
+    "teer": 1,
+    "title": "Program officers unique to government"
+  },
+  "41409": {
+    "teer": 1,
+    "title": "Other professional occupations in social science"
+  },
+  "42100": {
+    "teer": 2,
+    "title": "Police officers (except commissioned)"
+  },
+  "42101": {
+    "teer": 2,
+    "title": "Firefighters"
+  },
+  "42102": {
+    "teer": 2,
+    "title": "Specialized members of the Canadian Armed Forces"
+  },
+  "42200": {
+    "teer": 2,
+    "title": "Paralegals and related occupations"
+  },
+  "42201": {
+    "teer": 2,
+    "title": "Social and community service workers"
+  },
+  "42202": {
+    "teer": 2,
+    "title": "Early childhood educators and assistants"
+  },
+  "42203": {
+    "teer": 2,
+    "title": "Instructors of persons with disabilities"
+  },
+  "42204": {
+    "teer": 2,
+    "title": "Religion workers"
+  },
+  "43100": {
+    "teer": 3,
+    "title": "Elementary and secondary school teacher assistants"
+  },
+  "43109": {
+    "teer": 3,
+    "title": "Other instructors"
+  },
+  "43200": {
+    "teer": 3,
+    "title": "Sheriffs and bailiffs"
+  },
+  "43201": {
+    "teer": 3,
+    "title": "Correctional service officers"
+  },
+  "43202": {
+    "teer": 3,
+    "title": "By-law enforcement and other regulatory officers"
+  },
+  "43203": {
+    "teer": 3,
+    "title": "Border services, customs, and immigration officers"
+  },
+  "43204": {
+    "teer": 3,
+    "title": "Operations members of the Canadian Armed Forces"
+  },
+  "44100": {
+    "teer": 4,
+    "title": "Home child care providers"
+  },
+  "44101": {
+    "teer": 4,
+    "title": "Home support workers, caregivers and related occupations"
+  },
+  "44200": {
+    "teer": 4,
+    "title": "Primary combat members of the Canadian Armed Forces"
+  },
+  "45100": {
+    "teer": 5,
+    "title": "Student monitors, crossing guards and related occupations"
+  },
+  "50010": {
+    "teer": 0,
+    "title": "Library, archive, museum and art gallery managers"
+  },
+  "50011": {
+    "teer": 0,
+    "title": "Managers - publishing, motion pictures, broadcasting and performing arts"
+  },
+  "50012": {
+    "teer": 0,
+    "title": "Recreation, sports and fitness program and service directors"
+  },
+  "51100": {
+    "teer": 1,
+    "title": "Librarians"
+  },
+  "51101": {
+    "teer": 1,
+    "title": "Conservators and curators"
+  },
+  "51102": {
+    "teer": 1,
+    "title": "Archivists"
+  },
+  "51110": {
+    "teer": 1,
+    "title": "Editors"
+  },
+  "51111": {
+    "teer": 1,
+    "title": "Authors and writers (except technical)"
+  },
+  "51112": {
+    "teer": 1,
+    "title": "Technical writers"
+  },
+  "51113": {
+    "teer": 1,
+    "title": "Journalists"
+  },
+  "51114": {
+    "teer": 1,
+    "title": "Translators, terminologists and interpreters"
+  },
+  "51120": {
+    "teer": 1,
+    "title": "Producers, directors, choreographers and related occupations"
+  },
+  "51121": {
+    "teer": 1,
+    "title": "Conductors, composers and arrangers"
+  },
+  "51122": {
+    "teer": 1,
+    "title": "Musicians and singers"
+  },
+  "52100": {
+    "teer": 2,
+    "title": "Library and public archive technicians"
+  },
+  "52110": {
+    "teer": 2,
+    "title": "Film and video camera operators"
+  },
+  "52111": {
+    "teer": 2,
+    "title": "Graphic arts technicians"
+  },
+  "52112": {
+    "teer": 2,
+    "title": "Broadcast technicians"
+  },
+  "52113": {
+    "teer": 2,
+    "title": "Audio and video recording technicians"
+  },
+  "52114": {
+    "teer": 2,
+    "title": "Announcers and other broadcasters"
+  },
+  "52119": {
+    "teer": 2,
+    "title": "Other technical and coordinating occupations in motion pictures, broadcasting and the performing arts"
+  },
+  "52120": {
+    "teer": 2,
+    "title": "Graphic designers and illustrators"
+  },
+  "52121": {
+    "teer": 2,
+    "title": "Interior designers and interior decorators"
+  },
+  "53100": {
+    "teer": 3,
+    "title": "Registrars, restorers, interpreters and other occupations related to museum and art galleries"
+  },
+  "53110": {
+    "teer": 3,
+    "title": "Photographers"
+  },
+  "53111": {
+    "teer": 3,
+    "title": "Motion pictures, broadcasting, photography and performing arts assistants and operators"
+  },
+  "53120": {
+    "teer": 3,
+    "title": "Dancers"
+  },
+  "53121": {
+    "teer": 3,
+    "title": "Actors, comedians and circus performers"
+  },
+  "53122": {
+    "teer": 3,
+    "title": "Painters, sculptors and other visual artists"
+  },
+  "53123": {
+    "teer": 3,
+    "title": "Theatre, fashion, exhibit and other creative designers"
+  },
+  "53124": {
+    "teer": 3,
+    "title": "Artisans and craftspersons"
+  },
+  "53125": {
+    "teer": 3,
+    "title": "Patternmakers - textile, leather and fur products"
+  },
+  "53200": {
+    "teer": 3,
+    "title": "Athletes"
+  },
+  "53201": {
+    "teer": 3,
+    "title": "Coaches"
+  },
+  "53202": {
+    "teer": 3,
+    "title": "Sports officials and referees"
+  },
+  "54100": {
+    "teer": 4,
+    "title": "Program leaders and instructors in recreation, sport and fitness"
+  },
+  "55109": {
+    "teer": 5,
+    "title": "Other performers"
+  },
+  "60010": {
+    "teer": 0,
+    "title": "Corporate sales managers"
+  },
+  "60020": {
+    "teer": 0,
+    "title": "Retail and wholesale trade managers"
+  },
+  "60030": {
+    "teer": 0,
+    "title": "Restaurant and food service managers"
+  },
+  "60031": {
+    "teer": 0,
+    "title": "Accommodation service managers"
+  },
+  "60040": {
+    "teer": 0,
+    "title": "Managers in customer and personal services"
+  },
+  "62010": {
+    "teer": 2,
+    "title": "Retail sales supervisors"
+  },
+  "62020": {
+    "teer": 2,
+    "title": "Food service supervisors"
+  },
+  "62021": {
+    "teer": 2,
+    "title": "Executive housekeepers"
+  },
+  "62022": {
+    "teer": 2,
+    "title": "Accommodation, travel, tourism and related services supervisors"
+  },
+  "62023": {
+    "teer": 2,
+    "title": "Customer and information services supervisors"
+  },
+  "62024": {
+    "teer": 2,
+    "title": "Cleaning supervisors"
+  },
+  "62029": {
+    "teer": 2,
+    "title": "Other services supervisors"
+  },
+  "62100": {
+    "teer": 2,
+    "title": "Technical sales specialists - wholesale trade"
+  },
+  "62101": {
+    "teer": 2,
+    "title": "Retail and wholesale buyers"
+  },
+  "62200": {
+    "teer": 2,
+    "title": "Chefs"
+  },
+  "62201": {
+    "teer": 2,
+    "title": "Funeral directors and embalmers"
+  },
+  "62202": {
+    "teer": 2,
+    "title": "Jewellers, jewellery and watch repairers and related occupations"
+  },
+  "63100": {
+    "teer": 3,
+    "title": "Insurance agents and brokers"
+  },
+  "63101": {
+    "teer": 3,
+    "title": "Real estate agents and salespersons"
+  },
+  "63102": {
+    "teer": 3,
+    "title": "Financial sales representatives"
+  },
+  "63200": {
+    "teer": 3,
+    "title": "Cooks"
+  },
+  "63201": {
+    "teer": 3,
+    "title": "Butchers - retail and wholesale"
+  },
+  "63202": {
+    "teer": 3,
+    "title": "Bakers"
+  },
+  "63210": {
+    "teer": 3,
+    "title": "Hairstylists and barbers"
+  },
+  "63211": {
+    "teer": 3,
+    "title": "Estheticians, electrologists and related occupations"
+  },
+  "63220": {
+    "teer": 3,
+    "title": "Shoe repairers and shoemakers"
+  },
+  "63221": {
+    "teer": 3,
+    "title": "Upholsterers"
+  },
+  "64100": {
+    "teer": 4,
+    "title": "Retail salespersons and visual merchandisers"
+  },
+  "64101": {
+    "teer": 4,
+    "title": "Sales and account representatives - wholesale trade (non-technical)"
+  },
+  "64200": {
+    "teer": 4,
+    "title": "Tailors, dressmakers, furriers and milliners"
+  },
+  "64201": {
+    "teer": 4,
+    "title": "Image, social and other personal consultants"
+  },
+  "64300": {
+    "teer": 4,
+    "title": "Maîtres d'hôtel and hosts/hostesses"
+  },
+  "64301": {
+    "teer": 4,
+    "title": "Bartenders"
+  },
+  "64310": {
+    "teer": 4,
+    "title": "Travel counsellors"
+  },
+  "64311": {
+    "teer": 4,
+    "title": "Pursers and flight attendants"
+  },
+  "64312": {
+    "teer": 4,
+    "title": "Airline ticket and service agents"
+  },
+  "64313": {
+    "teer": 4,
+    "title": "Ground and water transport ticket agents, cargo service representatives and related clerks"
+  },
+  "64314": {
+    "teer": 4,
+    "title": "Hotel front desk clerks"
+  },
+  "64320": {
+    "teer": 4,
+    "title": "Tour and travel guides"
+  },
+  "64321": {
+    "teer": 4,
+    "title": "Casino workers"
+  },
+  "64322": {
+    "teer": 4,
+    "title": "Outdoor sport and recreational guides"
+  },
+  "64400": {
+    "teer": 4,
+    "title": "Customer services representatives - financial institutions"
+  },
+  "64401": {
+    "teer": 4,
+    "title": "Postal services representatives"
+  },
+  "64409": {
+    "teer": 4,
+    "title": "Other customer and information services representatives"
+  },
+  "64410": {
+    "teer": 4,
+    "title": "Security guards and related security service occupations"
+  },
+  "65100": {
+    "teer": 5,
+    "title": "Cashiers"
+  },
+  "65101": {
+    "teer": 5,
+    "title": "Service station attendants"
+  },
+  "65102": {
+    "teer": 5,
+    "title": "Store shelf stockers, clerks and order fillers"
+  },
+  "65109": {
+    "teer": 5,
+    "title": "Other sales related occupations"
+  },
+  "65200": {
+    "teer": 5,
+    "title": "Food and beverage servers"
+  },
+  "65201": {
+    "teer": 5,
+    "title": "Food counter attendants, kitchen helpers and related support occupations"
+  },
+  "65202": {
+    "teer": 5,
+    "title": "Meat cutters and fishmongers - retail and wholesale"
+  },
+  "65210": {
+    "teer": 5,
+    "title": "Support occupations in accommodation, travel and facilities set-up services"
+  },
+  "65211": {
+    "teer": 5,
+    "title": "Operators and attendants in amusement, recreation and sport"
+  },
+  "65220": {
+    "teer": 5,
+    "title": "Pet groomers and animal care workers"
+  },
+  "65229": {
+    "teer": 5,
+    "title": "Other support occupations in personal services"
+  },
+  "65310": {
+    "teer": 5,
+    "title": "Light duty cleaners"
+  },
+  "65311": {
+    "teer": 5,
+    "title": "Specialized cleaners"
+  },
+  "65312": {
+    "teer": 5,
+    "title": "Janitors, caretakers and heavy-duty cleaners"
+  },
+  "65320": {
+    "teer": 5,
+    "title": "Dry cleaning, laundry and related occupations"
+  },
+  "65329": {
+    "teer": 5,
+    "title": "Other service support occupations"
+  },
+  "70010": {
+    "teer": 0,
+    "title": "Construction managers"
+  },
+  "70011": {
+    "teer": 0,
+    "title": "Home building and renovation managers"
+  },
+  "70012": {
+    "teer": 0,
+    "title": "Facility operation and maintenance managers"
+  },
+  "70020": {
+    "teer": 0,
+    "title": "Managers in transportation"
+  },
+  "70021": {
+    "teer": 0,
+    "title": "Postal and courier services managers"
+  },
+  "72010": {
+    "teer": 2,
+    "title": "Contractors and supervisors, machining, metal forming, shaping and erecting trades and related occupations"
+  },
+  "72011": {
+    "teer": 2,
+    "title": "Contractors and supervisors, electrical trades and telecommunications occupations"
+  },
+  "72012": {
+    "teer": 2,
+    "title": "Contractors and supervisors, pipefitting trades"
+  },
+  "72013": {
+    "teer": 2,
+    "title": "Contractors and supervisors, carpentry trades"
+  },
+  "72014": {
+    "teer": 2,
+    "title": "Contractors and supervisors, other construction trades, installers, repairers and servicers"
+  },
+  "72020": {
+    "teer": 2,
+    "title": "Contractors and supervisors, mechanic trades"
+  },
+  "72021": {
+    "teer": 2,
+    "title": "Contractors and supervisors, heavy equipment operator crews"
+  },
+  "72022": {
+    "teer": 2,
+    "title": "Supervisors, printing and related occupations"
+  },
+  "72023": {
+    "teer": 2,
+    "title": "Supervisors, railway transport operations"
+  },
+  "72024": {
+    "teer": 2,
+    "title": "Supervisors, motor transport and other ground transit operators"
+  },
+  "72025": {
+    "teer": 2,
+    "title": "Supervisors, mail and message distribution occupations"
+  },
+  "72100": {
+    "teer": 2,
+    "title": "Machinists and machining and tooling inspectors"
+  },
+  "72101": {
+    "teer": 2,
+    "title": "Tool and die makers"
+  },
+  "72102": {
+    "teer": 2,
+    "title": "Sheet metal workers"
+  },
+  "72103": {
+    "teer": 2,
+    "title": "Boilermakers"
+  },
+  "72104": {
+    "teer": 2,
+    "title": "Structural metal and platework fabricators and fitters"
+  },
+  "72105": {
+    "teer": 2,
+    "title": "Ironworkers"
+  },
+  "72106": {
+    "teer": 2,
+    "title": "Welders and related machine operators"
+  },
+  "72200": {
+    "teer": 2,
+    "title": "Electricians (except industrial and power system)"
+  },
+  "72201": {
+    "teer": 2,
+    "title": "Industrial electricians"
+  },
+  "72202": {
+    "teer": 2,
+    "title": "Power system electricians"
+  },
+  "72203": {
+    "teer": 2,
+    "title": "Electrical power line and cable workers"
+  },
+  "72204": {
+    "teer": 2,
+    "title": "Telecommunications line and cable installers and repairers"
+  },
+  "72205": {
+    "teer": 2,
+    "title": "Telecommunications equipment installation and cable television service technicians"
+  },
+  "72300": {
+    "teer": 2,
+    "title": "Plumbers"
+  },
+  "72301": {
+    "teer": 2,
+    "title": "Steamfitters, pipefitters and sprinkler system installers"
+  },
+  "72302": {
+    "teer": 2,
+    "title": "Gas fitters"
+  },
+  "72310": {
+    "teer": 2,
+    "title": "Carpenters"
+  },
+  "72311": {
+    "teer": 2,
+    "title": "Cabinetmakers"
+  },
+  "72320": {
+    "teer": 2,
+    "title": "Bricklayers"
+  },
+  "72321": {
+    "teer": 2,
+    "title": "Insulators"
+  },
+  "72400": {
+    "teer": 2,
+    "title": "Construction millwrights and industrial mechanics"
+  },
+  "72401": {
+    "teer": 2,
+    "title": "Heavy-duty equipment mechanics"
+  },
+  "72402": {
+    "teer": 2,
+    "title": "Heating, refrigeration and air conditioning mechanics"
+  },
+  "72403": {
+    "teer": 2,
+    "title": "Railway carmen/women"
+  },
+  "72404": {
+    "teer": 2,
+    "title": "Aircraft mechanics and aircraft inspectors"
+  },
+  "72405": {
+    "teer": 2,
+    "title": "Machine fitters"
+  },
+  "72406": {
+    "teer": 2,
+    "title": "Elevator constructors and mechanics"
+  },
+  "72410": {
+    "teer": 2,
+    "title": "Automotive service technicians, truck and bus mechanics and mechanical repairers"
+  },
+  "72411": {
+    "teer": 2,
+    "title": "Auto body collision, refinishing and glass technicians and damage repair estimators"
+  },
+  "72420": {
+    "teer": 2,
+    "title": "Oil and solid fuel heating mechanics"
+  },
+  "72421": {
+    "teer": 2,
+    "title": "Appliance servicers and repairers"
+  },
+  "72422": {
+    "teer": 2,
+    "title": "Electrical mechanics"
+  },
+  "72423": {
+    "teer": 2,
+    "title": "Motorcycle, all-terrain vehicle and other related mechanics"
+  },
+  "72429": {
+    "teer": 2,
+    "title": "Other small engine and small equipment repairers"
+  },
+  "72500": {
+    "teer": 2,
+    "title": "Crane operators"
+  },
+  "72501": {
+    "teer": 2,
+    "title": "Water well drillers"
+  },
+  "72600": {
+    "teer": 2,
+    "title": "Air pilots, flight engineers and flying instructors"
+  },
+  "72601": {
+    "teer": 2,
+    "title": "Air traffic controllers and related occupations"
+  },
+  "72602": {
+    "teer": 2,
+    "title": "Deck officers, water transport"
+  },
+  "72603": {
+    "teer": 2,
+    "title": "Engineer officers, water transport"
+  },
+  "72604": {
+    "teer": 2,
+    "title": "Railway traffic controllers and marine traffic regulators"
+  },
+  "72999": {
+    "teer": 2,
+    "title": "Other technical trades and related occupations"
+  },
+  "73100": {
+    "teer": 3,
+    "title": "Concrete finishers"
+  },
+  "73101": {
+    "teer": 3,
+    "title": "Tilesetters"
+  },
+  "73102": {
+    "teer": 3,
+    "title": "Plasterers, drywall installers and finishers and lathers"
+  },
+  "73110": {
+    "teer": 3,
+    "title": "Roofers and shinglers"
+  },
+  "73111": {
+    "teer": 3,
+    "title": "Glaziers"
+  },
+  "73112": {
+    "teer": 3,
+    "title": "Painters and decorators (except interior decorators)"
+  },
+  "73113": {
+    "teer": 3,
+    "title": "Floor covering installers"
+  },
+  "73200": {
+    "teer": 3,
+    "title": "Residential and commercial installers and servicers"
+  },
+  "73201": {
+    "teer": 3,
+    "title": "General building maintenance workers and building superintendents"
+  },
+  "73202": {
+    "teer": 3,
+    "title": "Pest controllers and fumigators"
+  },
+  "73209": {
+    "teer": 3,
+    "title": "Other repairers and servicers"
+  },
+  "73300": {
+    "teer": 3,
+    "title": "Transport truck drivers"
+  },
+  "73301": {
+    "teer": 3,
+    "title": "Bus drivers, subway operators and other transit operators"
+  },
+  "73310": {
+    "teer": 3,
+    "title": "Railway and yard locomotive engineers"
+  },
+  "73311": {
+    "teer": 3,
+    "title": "Railway conductors and brakemen/women"
+  },
+  "73400": {
+    "teer": 3,
+    "title": "Heavy equipment operators"
+  },
+  "73401": {
+    "teer": 3,
+    "title": "Printing press operators"
+  },
+  "73402": {
+    "teer": 3,
+    "title": "Drillers and blasters - surface mining, quarrying and construction"
+  },
+  "74100": {
+    "teer": 4,
+    "title": "Mail and parcel sorters and related occupations"
+  },
+  "74101": {
+    "teer": 4,
+    "title": "Letter carriers"
+  },
+  "74102": {
+    "teer": 4,
+    "title": "Couriers and messengers"
+  },
+  "74200": {
+    "teer": 4,
+    "title": "Railway yard and track maintenance workers"
+  },
+  "74201": {
+    "teer": 4,
+    "title": "Water transport deck and engine room crew"
+  },
+  "74202": {
+    "teer": 4,
+    "title": "Air transport ramp attendants"
+  },
+  "74203": {
+    "teer": 4,
+    "title": "Automotive and heavy truck and equipment parts installers and servicers"
+  },
+  "74204": {
+    "teer": 4,
+    "title": "Utility maintenance workers"
+  },
+  "74205": {
+    "teer": 4,
+    "title": "Public works maintenance equipment operators and related workers"
+  },
+  "75100": {
+    "teer": 5,
+    "title": "Longshore workers"
+  },
+  "75101": {
+    "teer": 5,
+    "title": "Material handlers"
+  },
+  "75110": {
+    "teer": 5,
+    "title": "Construction trades helpers and labourers"
+  },
+  "75119": {
+    "teer": 5,
+    "title": "Other trades helpers and labourers"
+  },
+  "75200": {
+    "teer": 5,
+    "title": "Taxi and limousine drivers and chauffeurs"
+  },
+  "75201": {
+    "teer": 5,
+    "title": "Delivery service drivers and door-to-door distributors"
+  },
+  "75210": {
+    "teer": 5,
+    "title": "Boat and cable ferry operators and related occupations"
+  },
+  "75211": {
+    "teer": 5,
+    "title": "Railway and motor transport labourers"
+  },
+  "75212": {
+    "teer": 5,
+    "title": "Public works and maintenance labourers"
+  },
+  "80010": {
+    "teer": 0,
+    "title": "Managers in natural resources production and fishing"
+  },
+  "80020": {
+    "teer": 0,
+    "title": "Managers in agriculture"
+  },
+  "80021": {
+    "teer": 0,
+    "title": "Managers in horticulture"
+  },
+  "80022": {
+    "teer": 0,
+    "title": "Managers in aquaculture"
+  },
+  "82010": {
+    "teer": 2,
+    "title": "Supervisors, logging and forestry"
+  },
+  "82020": {
+    "teer": 2,
+    "title": "Supervisors, mining and quarrying"
+  },
+  "82021": {
+    "teer": 2,
+    "title": "Contractors and supervisors, oil and gas drilling and services"
+  },
+  "82030": {
+    "teer": 2,
+    "title": "Agricultural service contractors and farm supervisors"
+  },
+  "82031": {
+    "teer": 2,
+    "title": "Contractors and supervisors, landscaping, grounds maintenance and horticulture services"
+  },
+  "83100": {
+    "teer": 3,
+    "title": "Underground production and development miners"
+  },
+  "83101": {
+    "teer": 3,
+    "title": "Oil and gas well drillers, servicers, testers and related workers"
+  },
+  "83110": {
+    "teer": 3,
+    "title": "Logging machinery operators"
+  },
+  "83120": {
+    "teer": 3,
+    "title": "Fishing masters and officers"
+  },
+  "83121": {
+    "teer": 3,
+    "title": "Fishermen/women"
+  },
+  "84100": {
+    "teer": 4,
+    "title": "Underground mine service and support workers"
+  },
+  "84101": {
+    "teer": 4,
+    "title": "Oil and gas well drilling and related workers and services operators"
+  },
+  "84110": {
+    "teer": 4,
+    "title": "Chain saw and skidder operators"
+  },
+  "84111": {
+    "teer": 4,
+    "title": "Silviculture and forestry workers"
+  },
+  "84120": {
+    "teer": 4,
+    "title": "Specialized livestock workers and farm machinery operators"
+  },
+  "84121": {
+    "teer": 4,
+    "title": "Fishing vessel deckhands"
+  },
+  "85100": {
+    "teer": 5,
+    "title": "Livestock labourers"
+  },
+  "85101": {
+    "teer": 5,
+    "title": "Harvesting labourers"
+  },
+  "85102": {
+    "teer": 5,
+    "title": "Aquaculture and marine harvest labourers"
+  },
+  "85103": {
+    "teer": 5,
+    "title": "Nursery and greenhouse labourers"
+  },
+  "85104": {
+    "teer": 5,
+    "title": "Trappers and hunters"
+  },
+  "85110": {
+    "teer": 5,
+    "title": "Mine labourers"
+  },
+  "85111": {
+    "teer": 5,
+    "title": "Oil and gas drilling, servicing and related labourers"
+  },
+  "85120": {
+    "teer": 5,
+    "title": "Logging and forestry labourers"
+  },
+  "85121": {
+    "teer": 5,
+    "title": "Landscaping and grounds maintenance labourers"
+  },
+  "90010": {
+    "teer": 0,
+    "title": "Manufacturing managers"
+  },
+  "90011": {
+    "teer": 0,
+    "title": "Utilities managers"
+  },
+  "92010": {
+    "teer": 2,
+    "title": "Supervisors, mineral and metal processing"
+  },
+  "92011": {
+    "teer": 2,
+    "title": "Supervisors, petroleum, gas and chemical processing and utilities"
+  },
+  "92012": {
+    "teer": 2,
+    "title": "Supervisors, food and beverage processing"
+  },
+  "92013": {
+    "teer": 2,
+    "title": "Supervisors, plastic and rubber products manufacturing"
+  },
+  "92014": {
+    "teer": 2,
+    "title": "Supervisors, forest products processing"
+  },
+  "92015": {
+    "teer": 2,
+    "title": "Supervisors, textile, fabric, fur and leather products processing and manufacturing"
+  },
+  "92020": {
+    "teer": 2,
+    "title": "Supervisors, motor vehicle assembling"
+  },
+  "92021": {
+    "teer": 2,
+    "title": "Supervisors, electronics and electrical products manufacturing"
+  },
+  "92022": {
+    "teer": 2,
+    "title": "Supervisors, furniture and fixtures manufacturing"
+  },
+  "92023": {
+    "teer": 2,
+    "title": "Supervisors, other mechanical and metal products manufacturing"
+  },
+  "92024": {
+    "teer": 2,
+    "title": "Supervisors, other products manufacturing and assembly"
+  },
+  "92100": {
+    "teer": 2,
+    "title": "Power engineers and power systems operators"
+  },
+  "92101": {
+    "teer": 2,
+    "title": "Water and waste treatment plant operators"
+  },
+  "93100": {
+    "teer": 3,
+    "title": "Central control and process operators, mineral and metal processing"
+  },
+  "93101": {
+    "teer": 3,
+    "title": "Central control and process operators, petroleum, gas and chemical processing"
+  },
+  "93102": {
+    "teer": 3,
+    "title": "Pulping, papermaking and coating control operators"
+  },
+  "93200": {
+    "teer": 3,
+    "title": "Aircraft assemblers and aircraft assembly inspectors"
+  },
+  "94100": {
+    "teer": 4,
+    "title": "Machine operators, mineral and metal processing"
+  },
+  "94101": {
+    "teer": 4,
+    "title": "Foundry workers"
+  },
+  "94102": {
+    "teer": 4,
+    "title": "Glass forming and finishing machine operators and glass cutters"
+  },
+  "94103": {
+    "teer": 4,
+    "title": "Concrete, clay and stone forming operators"
+  },
+  "94104": {
+    "teer": 4,
+    "title": "Inspectors and testers, mineral and metal processing"
+  },
+  "94105": {
+    "teer": 4,
+    "title": "Metalworking and forging machine operators"
+  },
+  "94106": {
+    "teer": 4,
+    "title": "Machining tool operators"
+  },
+  "94107": {
+    "teer": 4,
+    "title": "Machine operators of other metal products"
+  },
+  "94110": {
+    "teer": 4,
+    "title": "Chemical plant machine operators"
+  },
+  "94111": {
+    "teer": 4,
+    "title": "Plastics processing machine operators"
+  },
+  "94112": {
+    "teer": 4,
+    "title": "Rubber processing machine operators and related workers"
+  },
+  "94120": {
+    "teer": 4,
+    "title": "Sawmill machine operators"
+  },
+  "94121": {
+    "teer": 4,
+    "title": "Pulp mill, papermaking and finishing machine operators"
+  },
+  "94122": {
+    "teer": 4,
+    "title": "Paper converting machine operators"
+  },
+  "94123": {
+    "teer": 4,
+    "title": "Lumber graders and other wood processing inspectors and graders"
+  },
+  "94124": {
+    "teer": 4,
+    "title": "Woodworking machine operators"
+  },
+  "94129": {
+    "teer": 4,
+    "title": "Other wood processing machine operators"
+  },
+  "94130": {
+    "teer": 4,
+    "title": "Textile fibre and yarn, hide and pelt processing machine operators and workers"
+  },
+  "94131": {
+    "teer": 4,
+    "title": "Weavers, knitters and other fabric making occupations"
+  },
+  "94132": {
+    "teer": 4,
+    "title": "Industrial sewing machine operators"
+  },
+  "94133": {
+    "teer": 4,
+    "title": "Inspectors and graders, textile, fabric, fur and leather products manufacturing"
+  },
+  "94140": {
+    "teer": 4,
+    "title": "Process control and machine operators, food and beverage processing"
+  },
+  "94141": {
+    "teer": 4,
+    "title": "Industrial butchers and meat cutters, poultry preparers and related workers"
+  },
+  "94142": {
+    "teer": 4,
+    "title": "Fish and seafood plant workers"
+  },
+  "94143": {
+    "teer": 4,
+    "title": "Testers and graders, food and beverage processing"
+  },
+  "94150": {
+    "teer": 4,
+    "title": "Plateless printing equipment operators"
+  },
+  "94151": {
+    "teer": 4,
+    "title": "Camera, platemaking and other prepress occupations"
+  },
+  "94152": {
+    "teer": 4,
+    "title": "Binding and finishing machine operators"
+  },
+  "94153": {
+    "teer": 4,
+    "title": "Photographic and film processors"
+  },
+  "94200": {
+    "teer": 4,
+    "title": "Motor vehicle assemblers, inspectors and testers"
+  },
+  "94201": {
+    "teer": 4,
+    "title": "Electronics assemblers, fabricators, inspectors and testers"
+  },
+  "94202": {
+    "teer": 4,
+    "title": "Assemblers and inspectors, electrical appliance, apparatus and equipment manufacturing"
+  },
+  "94203": {
+    "teer": 4,
+    "title": "Assemblers, fabricators and inspectors, industrial electrical motors and transformers"
+  },
+  "94204": {
+    "teer": 4,
+    "title": "Mechanical assemblers and inspectors"
+  },
+  "94205": {
+    "teer": 4,
+    "title": "Machine operators and inspectors, electrical apparatus manufacturing"
+  },
+  "94210": {
+    "teer": 4,
+    "title": "Furniture and fixture assemblers, finishers, refinishers and inspectors"
+  },
+  "94211": {
+    "teer": 4,
+    "title": "Assemblers and inspectors of other wood products"
+  },
+  "94212": {
+    "teer": 4,
+    "title": "Plastic products assemblers, finishers and inspectors"
+  },
+  "94213": {
+    "teer": 4,
+    "title": "Industrial painters, coaters and metal finishing process operators"
+  },
+  "94219": {
+    "teer": 4,
+    "title": "Other products assemblers, finishers and inspectors"
+  },
+  "95100": {
+    "teer": 5,
+    "title": "Labourers in mineral and metal processing"
+  },
+  "95101": {
+    "teer": 5,
+    "title": "Labourers in metal fabrication"
+  },
+  "95102": {
+    "teer": 5,
+    "title": "Labourers in chemical products processing and utilities"
+  },
+  "95103": {
+    "teer": 5,
+    "title": "Labourers in wood, pulp and paper processing"
+  },
+  "95104": {
+    "teer": 5,
+    "title": "Labourers in rubber and plastic products manufacturing"
+  },
+  "95105": {
+    "teer": 5,
+    "title": "Labourers in textile processing and cutting"
+  },
+  "95106": {
+    "teer": 5,
+    "title": "Labourers in food and beverage processing"
+  },
+  "95107": {
+    "teer": 5,
+    "title": "Labourers in fish and seafood processing"
+  },
+  "95109": {
+    "teer": 5,
+    "title": "Other labourers in processing, manufacturing and utilities"
+  }
+}
