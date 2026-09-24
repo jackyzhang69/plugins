@@ -1,6 +1,8 @@
 # Prepare and commit
 
-Create a strict mutation JSON file or pipe it on stdin. Run `anyknow prepare --input <path-or-> --output <new-path>`. The command makes no network request and refuses existing files and symlinks.
+Create a strict mutation JSON file or pipe it on stdin. Run `anyknow prepare --input <path-or-> --output <new-path>`. The command makes no network request. Directory symlinks that resolve to real directories, and an input file symlink that resolves to a regular file, are allowed. The output path must be a new regular file: an existing file or a symlink save path fails with `save_path_symlink`.
+
+To save several related notes under one confirmation, write `schema=anyknow-batch-v1` with up to 20 items. Each item is a mutation and may include a unique `batch_key` so `relation_suggestions` can point at another item in the same set. Prepare still stays local; commit sends the batch to `POST /v1/operations:batch` using the displayed batch digest. The server checks every suggestion (batch key or existing asset) before anything is kept. Suggestions stay unconfirmed.
 
 Show the returned `preview` in full, including title, body, sources, topics, tags, action, target ID, expected version, and the private AnyKnow hosting scope. The local file does not assert confirmation. After the user confirms that exact preview, pass the displayed digest to `anyknow commit --input <prepared-path> --confirm-sha256 <digest>`; commit adds `confirmed=true` only after rechecking the binding. Any change to the operation ID or request bytes invalidates the digest and requires a new preview.
 
