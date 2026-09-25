@@ -1,0 +1,164 @@
+schema_version: "1.0.0"
+program_id: "NSNP_EXPRESS_ENTRY"
+stream_id: "NOVA_SCOTIA_EXPRESS_ENTRY"
+jurisdiction: "CA-NS"
+effective_date: "2026-02-18"
+source_edition: "Nova Scotia Nominee Program Application Guide: Nova Scotia Express Entry, effective February 2026"
+source_url: "https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova%20Scotia%20Express%20Entry-English.pdf"
+decision_scope: "Pre-screen of statutory eligibility rules for the Nova Scotia Express Entry streams."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, noul]
+  types:
+    assessment_date: "ISO-8601 date; application assessment date"
+    candidate:
+      has_active_federal_ee_profile: boolean
+      ee_profile_number: "string pattern ^E\\d{9}$"
+      ee_job_seeker_validation_code: "string"
+      age: "integer 21-55"
+      has_high_school_or_higher_with_eca: boolean
+      primary_noc_2021_code: "five-digit string"
+      primary_noc_teer: "integer 0-5"
+      ns_skilled_work_experience_months_last_3_years: "number >= 0.0"
+      experience_gained_with_legal_authorization: boolean
+      experience_was_student_or_self_employed: boolean
+      intention_to_reside_in_ns: boolean
+      language_test:
+        valid_at_application: boolean
+        listening_clb: "integer"
+        reading_clb: "integer"
+        writing_clb: "integer"
+        speaking_clb: "integer"
+    noul:
+      proposition_id: "ns_express_entry_experience_genuineness"
+      probability_true: "decimal in [0,1] or null"
+      evidence_complete: boolean
+      evidence_refs: "array of strings"
+      model_version: "string"
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: nsnp_ee_profile_status
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.has_active_federal_ee_profile
+      - candidate.ee_profile_number
+      - candidate.ee_job_seeker_validation_code
+    pass_if: "candidate.has_active_federal_ee_profile == true"
+    fail_if: "candidate.has_active_federal_ee_profile == false"
+    missing_or_unverified: "NEEDS_REVIEW: Express Entry profile number or Job Seeker Validation Code is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Federal Express Entry Profile"
+      page: 6
+      verbatim: "have an active profile in the IRCC Express Entry system"
+
+  - id: nsnp_ee_age_range
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.age
+    pass_if: "candidate.age >= 21 && candidate.age <= 55"
+    fail_if: "candidate.age < 21 || candidate.age > 55"
+    missing_or_unverified: "NEEDS_REVIEW: Candidate age cannot be verified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Applicant Eligibility"
+      page: 6
+      verbatim: "be 21 to 55 years old"
+
+  - id: nsnp_ee_teer_eligibility
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.primary_noc_teer
+    pass_if: "candidate.primary_noc_teer in [0, 1, 2, 3]"
+    fail_if: "candidate.primary_noc_teer in [4, 5]"
+    missing_or_unverified: "NEEDS_REVIEW: Primary NOC TEER classification is missing."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Eligible Occupations"
+      page: 6
+      verbatim: "work experience in Nova Scotia in a TEER 0, 1, 2, or 3 occupation; TEER 4 and 5 are strictly excluded"
+
+  - id: nsnp_ee_experience_duration_and_legality
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.ns_skilled_work_experience_months_last_3_years
+      - candidate.experience_gained_with_legal_authorization
+      - candidate.experience_was_student_or_self_employed
+    pass_if: "candidate.ns_skilled_work_experience_months_last_3_years >= 12.0 && candidate.experience_gained_with_legal_authorization == true && candidate.experience_was_student_or_self_employed == false"
+    fail_if: "candidate.ns_skilled_work_experience_months_last_3_years < 12.0 || candidate.experience_gained_with_legal_authorization == false || candidate.experience_was_student_or_self_employed == true"
+    missing_or_unverified: "NEEDS_REVIEW: Nova Scotia skilled work experience documentation or legal work authorization is incomplete."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Work Experience Requirements"
+      page: 7
+      verbatim: "at least one year (1,560 hours) of full-time (or equivalent part-time) skilled work experience in Nova Scotia in a TEER 0, 1, 2, or 3 occupation within the three years prior to application; gained with proper work authorization; self-employment and student work experience do not count"
+
+  - id: nsnp_ee_language_threshold
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.primary_noc_teer
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "candidate.language_test.valid_at_application == true && ((candidate.primary_noc_teer in [0, 1] && candidate.language_test.listening_clb >= 7 && candidate.language_test.reading_clb >= 7 && candidate.language_test.writing_clb >= 7 && candidate.language_test.speaking_clb >= 7) || (candidate.primary_noc_teer in [2, 3] && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5))"
+    fail_if: "candidate.language_test.valid_at_application == false || (candidate.primary_noc_teer in [0, 1] && (candidate.language_test.listening_clb < 7 || candidate.language_test.reading_clb < 7 || candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb < 7)) || (candidate.primary_noc_teer in [2, 3] && (candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5))"
+    missing_or_unverified: "NEEDS_REVIEW: Official language results are missing, expired, or below threshold."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Language Proficiency"
+      page: 8
+      verbatim: "CLB 7 for TEER 0 and 1 occupations or CLB 5 for TEER 2 and 3 occupations across all four language abilities"
+
+  - id: nsnp_ee_education_threshold
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.has_high_school_or_higher_with_eca
+    pass_if: "candidate.has_high_school_or_higher_with_eca == true"
+    fail_if: "candidate.has_high_school_or_higher_with_eca == false"
+    missing_or_unverified: "NEEDS_REVIEW: Educational credential assessment (ECA) or Canadian credential documentation is missing."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Education"
+      page: 8
+      verbatim: "have a Canadian high school credential or foreign equivalent with ECA report"
+
+  - id: nsnp_ee_noul_experience_genuineness
+    category: noul
+    severity: CRITICAL_REDLINE
+    eval_type: typesafe_noul
+    required_fields:
+      - noul.proposition_id
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    precondition: "noul.evidence_complete == true"
+    pass_if: "noul.probability_true >= 0.70"
+    fail_if: "noul.probability_true < 0.30"
+    missing_or_unverified: "NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf"
+      section: "Program Integrity & Authentic Employment"
+      page: 11
+      verbatim: "Nova Scotia skilled experience must be genuine, substantiated by T4 slips and CRA Notices of Assessment."

@@ -1,0 +1,151 @@
+schema_version: "1.0.0"
+program_id: "NSNP_ENTREPRENEUR"
+stream_id: "ENTREPRENEUR"
+jurisdiction: "CA-NS"
+effective_date: "2026-02-18"
+source_edition: "Nova Scotia Nominee Program Application Guide: Entrepreneur Stream, effective February 2026"
+source_url: "https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-ENT-English.pdf"
+decision_scope: "Pre-screen of statutory criteria for the Nova Scotia Entrepreneur Stream."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, business, noul]
+  types:
+    assessment_date: "ISO-8601 date; application assessment date"
+    candidate:
+      age: "integer >= 21"
+      verified_net_worth_cad: "number >= 0.0"
+      minimum_required_net_worth_cad: "number >= 600000.0"
+      business_ownership_years_last_10_years: "number >= 0.0"
+      business_equity_percentage: "number in [0.0, 100.0]"
+      senior_management_years_last_10_years: "number >= 0.0"
+      has_signed_business_performance_agreement: boolean
+      active_management_in_ns_months: "integer >= 0"
+      language_test:
+        valid_at_application: boolean
+        listening_clb: "integer"
+        reading_clb: "integer"
+        writing_clb: "integer"
+        speaking_clb: "integer"
+    business:
+      total_capital_investment_cad: "number >= 0.0"
+      minimum_required_investment_cad: "number >= 150000.0"
+      fte_jobs_created_for_canadians_or_prs: "integer >= 0"
+      is_eligible_commercial_business: boolean
+      location_is_nova_scotia: boolean
+    noul:
+      proposition_id: "ns_entrepreneur_economic_benefit_and_viability"
+      probability_true: "decimal in [0,1] or null"
+      evidence_complete: boolean
+      evidence_refs: "array of strings"
+      model_version: "string"
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: nsnp_ent_net_worth_threshold
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.verified_net_worth_cad
+    pass_if: "candidate.verified_net_worth_cad >= 600000.0"
+    fail_if: "candidate.verified_net_worth_cad < 600000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Third-party designated net worth verification report is missing."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Net Worth Requirements"
+      page: 8
+      verbatim: "minimum verifiable net worth of $600,000 CAD, accumulated through legal sources"
+
+  - id: nsnp_ent_investment_threshold
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - business.total_capital_investment_cad
+    pass_if: "business.total_capital_investment_cad >= 150000.0"
+    fail_if: "business.total_capital_investment_cad < 150000.0"
+    missing_or_unverified: "NEEDS_REVIEW: Verifiable personal capital investment proof is missing."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Investment Criteria"
+      page: 8
+      verbatim: "invest a minimum of $150,000 CAD of your own capital to establish or purchase a business in Nova Scotia"
+
+  - id: nsnp_ent_ownership_or_management
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.business_ownership_years_last_10_years
+      - candidate.business_equity_percentage
+      - candidate.senior_management_years_last_10_years
+    pass_if: "(candidate.business_ownership_years_last_10_years >= 3.0 && candidate.business_equity_percentage >= 33.3) || candidate.senior_management_years_last_10_years >= 5.0"
+    fail_if: "(candidate.business_ownership_years_last_10_years < 3.0 || candidate.business_equity_percentage < 33.3) && candidate.senior_management_years_last_10_years < 5.0"
+    missing_or_unverified: "NEEDS_REVIEW: Business ownership evidence or senior management track record cannot be established."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Experience Requirements"
+      page: 9
+      verbatim: "at least 3 years of business ownership experience (holding at least 33.3% equity) or more than 5 years of experience as a senior business manager in the last 10 years"
+
+  - id: nsnp_ent_language_proficiency
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "candidate.language_test.valid_at_application == true && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5"
+    fail_if: "candidate.language_test.valid_at_application == false || candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5"
+    missing_or_unverified: "NEEDS_REVIEW: Official language test report is missing or below CLB 5."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Language Requirements"
+      page: 9
+      verbatim: "achieve a minimum CLB 5 in English or French across all four abilities"
+
+  - id: nsnp_ent_active_operation_and_job_creation
+    category: business
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.active_management_in_ns_months
+      - business.fte_jobs_created_for_canadians_or_prs
+      - candidate.has_signed_business_performance_agreement
+    pass_if: "candidate.active_management_in_ns_months >= 12 && business.fte_jobs_created_for_canadians_or_prs >= 1 && candidate.has_signed_business_performance_agreement == true"
+    fail_if: "candidate.active_management_in_ns_months < 12 || business.fte_jobs_created_for_canadians_or_prs < 1 || candidate.has_signed_business_performance_agreement == false"
+    missing_or_unverified: "NEEDS_REVIEW: Audit proof of 12-month active operation or payroll records for 1 FTE job creation is unverified."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Business Performance Agreement"
+      page: 11
+      verbatim: "actively manage the day-to-day operations from within Nova Scotia for at least one year; and create at least one new full-time job for a Canadian or permanent resident"
+
+  - id: nsnp_ent_noul_viability
+    category: noul
+    severity: CRITICAL_REDLINE
+    eval_type: typesafe_noul
+    required_fields:
+      - noul.proposition_id
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    precondition: "noul.evidence_complete == true"
+    pass_if: "noul.probability_true >= 0.70"
+    fail_if: "noul.probability_true < 0.30"
+    missing_or_unverified: "NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete."
+    provenance:
+      source_file: "Guide-NSNP-ENT-English.pdf"
+      section: "Economic Benefit to Nova Scotia"
+      page: 12
+      verbatim: "Business must demonstrate significant economic benefit to Nova Scotia and maintain viable commercial operation."

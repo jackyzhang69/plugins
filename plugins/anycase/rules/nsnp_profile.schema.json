@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jackyzhang.app/schemas/nsnp-profile/1.0.0",
+  "title": "NSNP client fact profile",
+  "description": "Structural and input-completeness contract for NSNP pre-screening. A valid profile is not an eligibility decision; the stream rules evaluate the facts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assessment_date", "stream_id", "candidate", "noul"],
+  "properties": {
+    "assessment_date": {"type": "string", "format": "date"},
+    "stream_id": {"type": "string", "enum": ["SKILLED_WORKER", "NOVA_SCOTIA_GRADUATE", "EXPRESS_ENTRY", "ENTREPRENEUR"]},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["age", "language_test"],
+      "properties": {
+        "age": {"type": "integer", "minimum": 21},
+        "education_level": {"type": "string", "minLength": 1},
+        "has_high_school_or_higher": {"type": "boolean"},
+        "education_credential_verified": {"type": "boolean"},
+        "has_high_school_or_higher_with_eca": {"type": "boolean"},
+        "completed_ns_program_duration_years": {"type": "number", "minimum": 1.0},
+        "is_eligible_postgraduate_program": {"type": "boolean"},
+        "institution_is_ns_dli": {"type": "boolean"},
+        "graduated_within_past_36_months": {"type": "boolean"},
+        "credential_issued": {"type": "boolean"},
+        "has_valid_pgwp_or_maintained_status": {"type": "boolean"},
+        "ownership_max_combined_ratio": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "qualifying_work_experience_months": {"type": "integer", "minimum": 0},
+        "experience_with_ns_employer_months": {"type": "integer", "minimum": 0},
+        "ns_skilled_work_experience_months_last_3_years": {"type": "number", "minimum": 0.0},
+        "experience_gained_with_legal_authorization": {"type": "boolean"},
+        "experience_was_student_or_self_employed": {"type": "boolean"},
+        "has_active_federal_ee_profile": {"type": "boolean"},
+        "ee_profile_number": {"type": "string", "pattern": "^E[0-9]{9}$"},
+        "ee_job_seeker_validation_code": {"type": "string", "minLength": 1},
+        "primary_noc_2021_code": {"type": "string", "pattern": "^[0-9]{5}$"},
+        "primary_noc_teer": {"type": "integer", "minimum": 0, "maximum": 5},
+        "verified_net_worth_cad": {"type": "number", "minimum": 0.0},
+        "minimum_required_net_worth_cad": {"type": "number", "minimum": 0.0},
+        "business_ownership_years_last_10_years": {"type": "number", "minimum": 0.0},
+        "business_equity_percentage": {"type": "number", "minimum": 0.0, "maximum": 100.0},
+        "senior_management_years_last_10_years": {"type": "number", "minimum": 0.0},
+        "has_signed_business_performance_agreement": {"type": "boolean"},
+        "active_management_in_ns_months": {"type": "integer", "minimum": 0},
+        "legal_status_in_canada": {"type": "boolean"},
+        "unauthorized_work_history": {"type": "boolean"},
+        "settlement_funds_cad": {"type": "number", "minimum": 0.0},
+        "settlement_funds_required_cad": {"type": "number", "minimum": 0.0},
+        "funds_verified_or_currently_employed_ns": {"type": "boolean"},
+        "intention_to_reside_in_ns": {"type": "boolean"},
+        "language_test": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["test_type", "valid_at_application", "listening_clb", "reading_clb", "writing_clb", "speaking_clb"],
+          "properties": {
+            "test_type": {"type": "string", "enum": ["CELPIP-General", "IELTS-General-Training", "PTE-Core", "TEF-Canada", "TCF-Canada"]},
+            "valid_at_application": {"type": "boolean"},
+            "listening_clb": {"type": "integer", "minimum": 0, "maximum": 12},
+            "reading_clb": {"type": "integer", "minimum": 0, "maximum": 12},
+            "writing_clb": {"type": "integer", "minimum": 0, "maximum": 12},
+            "speaking_clb": {"type": "integer", "minimum": 0, "maximum": 12}
+          }
+        }
+      }
+    },
+    "job_offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["noc_2021_code", "noc_teer", "title", "city", "is_in_nova_scotia", "is_telework_outside_ns", "weekly_regular_hours", "indeterminate", "seasonal", "regular_base_hourly_cad", "prevailing_median_hourly_cad", "statutory_minimum_wage_cad"],
+      "properties": {
+        "noc_2021_code": {"type": "string", "pattern": "^[0-9]{5}$"},
+        "noc_teer": {"type": "integer", "minimum": 0, "maximum": 5},
+        "title": {"type": "string", "minLength": 1},
+        "city": {"type": "string", "minLength": 1},
+        "is_in_nova_scotia": {"type": "boolean"},
+        "is_telework_outside_ns": {"type": "boolean"},
+        "weekly_regular_hours": {"type": "number", "minimum": 0.0},
+        "indeterminate": {"type": "boolean"},
+        "seasonal": {"type": "boolean"},
+        "directly_related_to_field_of_study": {"type": "boolean"},
+        "regular_base_hourly_cad": {"type": "number", "minimum": 0.0},
+        "prevailing_median_hourly_cad": {"type": "number", "minimum": 0.0},
+        "statutory_minimum_wage_cad": {"type": "number", "minimum": 0.0}
+      }
+    },
+    "employer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["business_name", "ns_operating_months", "permanent_establishment_in_ns", "in_good_standing", "compliance_history_verified", "recruitment_efforts_conducted_or_exempt"],
+      "properties": {
+        "business_name": {"type": "string", "minLength": 1},
+        "ns_operating_months": {"type": "integer", "minimum": 0},
+        "permanent_establishment_in_ns": {"type": "boolean"},
+        "in_good_standing": {"type": "boolean"},
+        "compliance_history_verified": {"type": "boolean"},
+        "recruitment_efforts_conducted_or_exempt": {"type": "boolean"}
+      }
+    },
+    "business": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["business_name", "total_capital_investment_cad", "fte_jobs_created_for_canadians_or_prs", "is_eligible_commercial_business", "location_is_nova_scotia"],
+      "properties": {
+        "business_name": {"type": "string", "minLength": 1},
+        "total_capital_investment_cad": {"type": "number", "minimum": 0.0},
+        "minimum_required_investment_cad": {"type": "number", "minimum": 0.0},
+        "fte_jobs_created_for_canadians_or_prs": {"type": "integer", "minimum": 0},
+        "is_eligible_commercial_business": {"type": "boolean"},
+        "location_is_nova_scotia": {"type": "boolean"}
+      }
+    },
+    "noul": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposition_id", "probability_true", "evidence_complete", "evidence_refs", "model_version"],
+      "properties": {
+        "proposition_id": {"type": "string", "minLength": 1},
+        "probability_true": {"type": ["number", "null"], "minimum": 0.0, "maximum": 1.0},
+        "evidence_complete": {"type": "boolean"},
+        "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "model_version": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stream_id": {"const": "SKILLED_WORKER"}}, "required": ["stream_id"]},
+      "then": {
+        "required": ["job_offer", "employer"],
+        "properties": {
+          "candidate": {"required": ["qualifying_work_experience_months"], "properties": {"age": {"maximum": 55}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "NOVA_SCOTIA_GRADUATE"}}, "required": ["stream_id"]},
+      "then": {
+        "required": ["job_offer", "employer"],
+        "properties": {
+          "candidate": {"required": ["completed_ns_program_duration_years", "institution_is_ns_dli", "has_valid_pgwp_or_maintained_status"], "properties": {"age": {"maximum": 55}}},
+          "job_offer": {"required": ["directly_related_to_field_of_study"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "EXPRESS_ENTRY"}}, "required": ["stream_id"]},
+      "then": {
+        "properties": {
+          "candidate": {"required": ["has_active_federal_ee_profile", "ee_profile_number", "ns_skilled_work_experience_months_last_3_years", "primary_noc_teer"], "properties": {"age": {"maximum": 55}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "ENTREPRENEUR"}}, "required": ["stream_id"]},
+      "then": {
+        "required": ["business"],
+        "properties": {
+          "candidate": {"required": ["verified_net_worth_cad", "has_signed_business_performance_agreement"]},
+          "business": {"required": ["total_capital_investment_cad"]}
+        }
+      }
+    }
+  ]
+}

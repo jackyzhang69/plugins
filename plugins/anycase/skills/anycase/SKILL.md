@@ -3,7 +3,7 @@ name: anycase
 description: >-
   READ THIS FIRST for AnyCase. Canadian immigration intelligence: case law
   (FC, FCA, SCC, IRB), IRCC Program Delivery Instructions, Provincial Nominee Programs
-  (PNP, BCPNP), LMIA, Help Centre Q&As, practitioner field notes, private confirmed knowledge,
+  (PNP, BCPNP, NSNP), LMIA, Help Centre Q&As, practitioner field notes, private confirmed knowledge,
   CLB conversion (IELTS, CELPIP, PTE, TEF, TCF). Connect / login,
   tell Jacky, connect with Jacky / pair session / join code from Jacky.
   Live coverage. One discovery file. Ask `anycase commands --json`,
@@ -13,7 +13,7 @@ when_to_use: |-
   Program Delivery Instructions, coverage, field notes, private knowledge,
   my notes, personal notes, CLB, IELTS General,
   CELPIP-G, PTE Core, TEF Canada, TCF Canada, Provincial Nominee Program,
-  PNP, BCPNP, LMIA, connect / log in, tell Jacky,
+  PNP, BCPNP, NSNP, LMIA, connect / log in, tell Jacky,
   connect with Jacky, pair session, join code from Jacky.
   Fill IMM5257 is not this product.
 ---
@@ -22,7 +22,7 @@ when_to_use: |-
 
 Load this on plugin start and whenever the user asks about Canadian
 immigration law, IRCC policy, operational manuals, Provincial Nominee
-Programs (PNP, BCPNP), LMIA streams, practitioner notes, private confirmed knowledge, CLB
+Programs (PNP, BCPNP, NSNP), LMIA streams, practitioner notes, private confirmed knowledge, CLB
 conversion, live coverage, connect, or Tell Jacky.
 
 ## Talk to the human

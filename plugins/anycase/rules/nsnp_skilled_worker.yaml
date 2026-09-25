@@ -1,0 +1,239 @@
+schema_version: "1.0.0"
+program_id: "NSNP_SKILLED_WORKER"
+stream_id: "SKILLED_WORKER"
+jurisdiction: "CA-NS"
+effective_date: "2026-02-18"
+source_edition: "Nova Scotia Nominee Program Application Guide: Skilled Worker Stream, effective February 2026"
+source_url: "https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Skilled-Worker-English.pdf"
+decision_scope: "Pre-screen of the statutory rules defined below; PASS indicates program gate satisfaction, not nomination issuance."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+  types:
+    assessment_date: "ISO-8601 date; application assessment date"
+    candidate:
+      age: "integer; applicant age on assessment_date"
+      education_level: "string; High School, Post-Secondary Diploma, Bachelor, Master, PhD"
+      has_high_school_or_higher: boolean
+      education_credential_verified: boolean
+      ownership_max_combined_ratio: "decimal in [0,1]; maximum combined equity of applicant and family"
+      qualifying_work_experience_months: "non-negative integer; verified paid hours"
+      experience_with_ns_employer_months: "non-negative integer; paid work with sponsoring employer"
+      legal_status_in_canada: boolean
+      unauthorized_work_history: boolean
+      language_test:
+        test_type: "CELPIP-General | IELTS-General-Training | PTE-Core | TEF-Canada | TCF-Canada"
+        valid_at_application: boolean
+        listening_clb: "integer"
+        reading_clb: "integer"
+        writing_clb: "integer"
+        speaking_clb: "integer"
+      settlement_funds_cad: "non-negative decimal"
+      settlement_funds_required_cad: "non-negative decimal"
+      funds_verified_or_currently_employed_ns: boolean
+      intention_to_reside_in_ns: boolean
+    job_offer:
+      noc_2021_code: "five-digit string"
+      noc_teer: "integer 0-5, verified against NOC 2021"
+      title: string
+      city: string
+      is_in_nova_scotia: boolean
+      is_telework_outside_ns: boolean
+      weekly_regular_hours: "non-negative decimal"
+      indeterminate: boolean
+      seasonal: boolean
+      regular_base_hourly_cad: "non-negative decimal"
+      prevailing_median_hourly_cad: "non-negative decimal"
+      statutory_minimum_wage_cad: "non-negative decimal"
+    employer:
+      ns_operating_months: "non-negative integer; continuous active operation in NS"
+      permanent_establishment_in_ns: boolean
+      in_good_standing: boolean
+      compliance_history_verified: boolean
+      recruitment_efforts_conducted_or_exempt: boolean
+    noul:
+      proposition_id: "nsnp_job_offer_genuineness"
+      probability_true: "decimal in [0,1] or null"
+      evidence_complete: boolean
+      evidence_refs: "non-empty array of strings"
+      model_version: "string"
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: nsnp_sw_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.ownership_max_combined_ratio
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10"
+    missing_or_unverified: "NEEDS_REVIEW: Candidate and family equity share in employer business cannot be verified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Employer Eligibility"
+      page: 10
+      verbatim: "Applicants and their accompanying family members cannot have an ownership stake of 10% or greater in the business offering the employment."
+
+  - id: nsnp_sw_age_threshold
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.age
+    pass_if: "candidate.age >= 21 && candidate.age <= 55"
+    fail_if: "candidate.age < 21 || candidate.age > 55"
+    missing_or_unverified: "NEEDS_REVIEW: Candidate age cannot be verified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Applicant Eligibility"
+      page: 6
+      verbatim: "be between the ages of 21 and 55"
+
+  - id: nsnp_sw_education_threshold
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.has_high_school_or_higher
+      - candidate.education_credential_verified
+    pass_if: "candidate.has_high_school_or_higher == true && candidate.education_credential_verified == true"
+    fail_if: "candidate.has_high_school_or_higher == false"
+    missing_or_unverified: "NEEDS_REVIEW: Candidate high school credential or ECA verification is missing."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Applicant Eligibility"
+      page: 6
+      verbatim: "have a high school diploma or equivalent"
+
+  - id: nsnp_sw_work_experience
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.noc_teer
+      - candidate.qualifying_work_experience_months
+      - candidate.experience_with_ns_employer_months
+    pass_if: "(job_offer.noc_teer in [0, 1, 2, 3] && candidate.qualifying_work_experience_months >= 12) || (job_offer.noc_teer in [4, 5] && candidate.experience_with_ns_employer_months >= 6)"
+    fail_if: "(job_offer.noc_teer in [0, 1, 2, 3] && candidate.qualifying_work_experience_months < 12) || (job_offer.noc_teer in [4, 5] && candidate.experience_with_ns_employer_months < 6)"
+    missing_or_unverified: "NEEDS_REVIEW: Work experience documentation is incomplete or unverified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Work Experience Requirements"
+      page: 7
+      verbatim: "have at least 1 year (1,560 hours) of continuous full-time or equivalent paid work experience related to the job (for TEER 0, 1, 2, 3) or at least 6 months (780 hours) of continuous full-time paid work experience with the Nova Scotia employer supporting your application (for TEER 4 or 5)"
+
+  - id: nsnp_sw_language_proficiency
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.noc_teer
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "candidate.language_test.valid_at_application == true && ((job_offer.noc_teer in [0, 1, 2] && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5) || (job_offer.noc_teer in [3, 4, 5] && candidate.language_test.listening_clb >= 4 && candidate.language_test.reading_clb >= 4 && candidate.language_test.writing_clb >= 4 && candidate.language_test.speaking_clb >= 4))"
+    fail_if: "candidate.language_test.valid_at_application == false || (job_offer.noc_teer in [0, 1, 2] && (candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5)) || (job_offer.noc_teer in [3, 4, 5] && (candidate.language_test.listening_clb < 4 || candidate.language_test.reading_clb < 4 || candidate.language_test.writing_clb < 4 || candidate.language_test.speaking_clb < 4))"
+    missing_or_unverified: "NEEDS_REVIEW: Official language test report is missing, expired, or unverified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Language Requirements"
+      page: 8
+      verbatim: "prove language ability equal to CLB 5 for TEER 0, 1, or 2, or CLB 4 for TEER 3, 4, or 5"
+
+  - id: nsnp_sw_job_permanence_and_hours
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.indeterminate
+      - job_offer.seasonal
+      - job_offer.weekly_regular_hours
+      - job_offer.is_in_nova_scotia
+      - job_offer.is_telework_outside_ns
+    pass_if: "job_offer.indeterminate == true && job_offer.seasonal == false && job_offer.weekly_regular_hours >= 30.0 && job_offer.is_in_nova_scotia == true && job_offer.is_telework_outside_ns == false"
+    fail_if: "job_offer.indeterminate == false || job_offer.seasonal == true || job_offer.weekly_regular_hours < 30.0 || job_offer.is_in_nova_scotia == false || job_offer.is_telework_outside_ns == true"
+    missing_or_unverified: "NEEDS_REVIEW: Job offer permanence, hours, or work location cannot be verified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Job Offer Criteria"
+      page: 12
+      verbatim: "full-time, permanent position located in Nova Scotia; full-time means at least 30 hours per week year-round; indefinite term with no predetermined end date"
+
+  - id: nsnp_sw_compensation_floor
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.regular_base_hourly_cad
+      - job_offer.prevailing_median_hourly_cad
+      - job_offer.statutory_minimum_wage_cad
+    pass_if: "job_offer.regular_base_hourly_cad >= job_offer.statutory_minimum_wage_cad && job_offer.regular_base_hourly_cad >= job_offer.prevailing_median_hourly_cad"
+    fail_if: "job_offer.regular_base_hourly_cad < job_offer.statutory_minimum_wage_cad || job_offer.regular_base_hourly_cad < job_offer.prevailing_median_hourly_cad"
+    missing_or_unverified: "NEEDS_REVIEW: Wage rate or Job Bank prevailing wage rate is not established."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Compensation and Wages"
+      page: 13
+      verbatim: "offer wages and working conditions that meet or exceed regional industry norms (competitive wage as established by Job Bank median prevailing wage) and provincial employment standards"
+
+  - id: nsnp_sw_employer_standing
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.ns_operating_months
+      - employer.permanent_establishment_in_ns
+      - employer.in_good_standing
+      - employer.compliance_history_verified
+    pass_if: "employer.ns_operating_months >= 24 && employer.permanent_establishment_in_ns == true && employer.in_good_standing == true && employer.compliance_history_verified == true"
+    fail_if: "employer.ns_operating_months < 24 || employer.permanent_establishment_in_ns == false || employer.in_good_standing == false || employer.compliance_history_verified == false"
+    missing_or_unverified: "NEEDS_REVIEW: Employer business documentation, operational duration, or compliance standing is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Employer Eligibility"
+      page: 10
+      verbatim: "have been in continuous, active operation in Nova Scotia for at least two (2) full years immediately prior to the application; be in good standing with provincial and federal employment standards"
+
+  - id: nsnp_sw_settlement_funds
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.funds_verified_or_currently_employed_ns
+    pass_if: "candidate.funds_verified_or_currently_employed_ns == true"
+    fail_if: "candidate.funds_verified_or_currently_employed_ns == false"
+    missing_or_unverified: "NEEDS_REVIEW: Proof of liquid settlement funds or proof of current legal employment in NS is missing."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Financial Resources"
+      page: 9
+      verbatim: "demonstrate sufficient settlement funds to successfully establish in Nova Scotia"
+
+  - id: nsnp_sw_job_genuineness_noul
+    category: noul
+    severity: CRITICAL_REDLINE
+    eval_type: typesafe_noul
+    required_fields:
+      - noul.proposition_id
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    precondition: "noul.evidence_complete == true"
+    pass_if: "noul.probability_true >= 0.70"
+    fail_if: "noul.probability_true < 0.30"
+    missing_or_unverified: "NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete."
+    provenance:
+      source_file: "Guide-NSNP-Skilled-Worker-English.pdf"
+      section: "Program Integrity & Genuine Business Need"
+      page: 14
+      verbatim: "The job offer must represent a genuine, arm's length commercial need of the employer; positions created primarily for immigration purposes will be refused."

@@ -1,0 +1,212 @@
+schema_version: "1.0.0"
+program_id: "NSNP_NOVA_SCOTIA_GRADUATE"
+stream_id: "NOVA_SCOTIA_GRADUATE"
+jurisdiction: "CA-NS"
+effective_date: "2026-02-18"
+source_edition: "Nova Scotia Nominee Program Application Guide: Nova Scotia Graduate Stream, effective February 2026"
+source_url: "https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+decision_scope: "Pre-screen of statutory eligibility rules for the Nova Scotia Graduate stream."
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, job_offer, employer, noul]
+  types:
+    assessment_date: "ISO-8601 date; application assessment date"
+    candidate:
+      completed_ns_program_duration_years: "number >= 1.0"
+      is_eligible_postgraduate_program: boolean
+      institution_is_ns_dli: boolean
+      graduated_within_past_36_months: boolean
+      credential_issued: boolean
+      has_valid_pgwp_or_maintained_status: boolean
+      ownership_max_combined_ratio: "decimal in [0,1]"
+      intention_to_reside_in_ns: boolean
+      language_test:
+        valid_at_application: boolean
+        listening_clb: "integer"
+        reading_clb: "integer"
+        writing_clb: "integer"
+        speaking_clb: "integer"
+    job_offer:
+      noc_2021_code: "five-digit string"
+      noc_teer: "integer 0-5"
+      is_in_nova_scotia: boolean
+      is_telework_outside_ns: boolean
+      directly_related_to_field_of_study: boolean
+      indeterminate: boolean
+      weekly_regular_hours: "number >= 30.0"
+      regular_base_hourly_cad: "number"
+      prevailing_median_hourly_cad: "number"
+      statutory_minimum_wage_cad: "number"
+    employer:
+      ns_operating_months: "integer >= 24"
+      permanent_establishment_in_ns: boolean
+      in_good_standing: boolean
+    noul:
+      proposition_id: "ns_graduate_job_alignment_genuineness"
+      probability_true: "decimal in [0,1] or null"
+      evidence_complete: boolean
+      evidence_refs: "array of strings"
+      model_version: "string"
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  aggregate:
+    - "If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL."
+    - "Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW."
+    - "Otherwise, verdict = PASS."
+
+rules:
+  - id: nsnp_grad_dli_credential
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.institution_is_ns_dli
+      - candidate.completed_ns_program_duration_years
+      - candidate.graduated_within_past_36_months
+      - candidate.credential_issued
+    pass_if: "candidate.institution_is_ns_dli == true && candidate.credential_issued == true && candidate.graduated_within_past_36_months == true && (candidate.completed_ns_program_duration_years >= 2.0 || candidate.is_eligible_postgraduate_program == true)"
+    fail_if: "candidate.institution_is_ns_dli == false || candidate.credential_issued == false || candidate.graduated_within_past_36_months == false || (candidate.completed_ns_program_duration_years < 2.0 && candidate.is_eligible_postgraduate_program == false)"
+    missing_or_unverified: "NEEDS_REVIEW: Official Nova Scotia DLI transcript, completion letter, or credential date is missing."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Education Requirements"
+      page: 5
+      verbatim: "completed a full-time study program of at least two years duration (or at least one year for an eligible master's, post-graduate diploma, or certificate program) at a recognized Nova Scotia post-secondary educational institution within the last three years"
+
+  - id: nsnp_grad_pgwp_status
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.has_valid_pgwp_or_maintained_status
+    pass_if: "candidate.has_valid_pgwp_or_maintained_status == true"
+    fail_if: "candidate.has_valid_pgwp_or_maintained_status == false"
+    missing_or_unverified: "NEEDS_REVIEW: Post-Graduation Work Permit (PGWP) or maintained status authorization is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Legal Status in Canada"
+      page: 6
+      verbatim: "hold a valid Post-Graduation Work Permit (PGWP) or have maintained legal status authorizing employment"
+
+  - id: nsnp_grad_equity_cap
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - candidate.ownership_max_combined_ratio
+    pass_if: "candidate.ownership_max_combined_ratio < 0.10"
+    fail_if: "candidate.ownership_max_combined_ratio >= 0.10"
+    missing_or_unverified: "NEEDS_REVIEW: Applicant and family equity ratio cannot be established."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Business Ownership Restriction"
+      page: 7
+      verbatim: "Applicants cannot hold an equity stake of 10% or greater in the sponsoring business."
+
+  - id: nsnp_grad_job_offer_permanence
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.indeterminate
+      - job_offer.weekly_regular_hours
+      - job_offer.is_in_nova_scotia
+      - job_offer.is_telework_outside_ns
+    pass_if: "job_offer.indeterminate == true && job_offer.weekly_regular_hours >= 30.0 && job_offer.is_in_nova_scotia == true && job_offer.is_telework_outside_ns == false"
+    fail_if: "job_offer.indeterminate == false || job_offer.weekly_regular_hours < 30.0 || job_offer.is_in_nova_scotia == false || job_offer.is_telework_outside_ns == true"
+    missing_or_unverified: "NEEDS_REVIEW: Job offer permanence, hours, or Nova Scotia location is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Job Offer Criteria"
+      page: 7
+      verbatim: "full-time, permanent position located in Nova Scotia, at least 30 hours per week"
+
+  - id: nsnp_grad_study_alignment
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.directly_related_to_field_of_study
+    pass_if: "job_offer.directly_related_to_field_of_study == true"
+    fail_if: "job_offer.directly_related_to_field_of_study == false"
+    missing_or_unverified: "NEEDS_REVIEW: Job duties alignment with Nova Scotia educational program is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Job Offer - Education Link"
+      page: 8
+      verbatim: "The job offer must directly relate to the applicant's completed Nova Scotia field of study."
+
+  - id: nsnp_grad_language_proficiency
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.noc_teer
+      - candidate.language_test.valid_at_application
+      - candidate.language_test.listening_clb
+      - candidate.language_test.reading_clb
+      - candidate.language_test.writing_clb
+      - candidate.language_test.speaking_clb
+    pass_if: "candidate.language_test.valid_at_application == true && ((job_offer.noc_teer in [0, 1, 2] && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5) || (job_offer.noc_teer in [3, 4, 5] && candidate.language_test.listening_clb >= 4 && candidate.language_test.reading_clb >= 4 && candidate.language_test.writing_clb >= 4 && candidate.language_test.speaking_clb >= 4))"
+    fail_if: "candidate.language_test.valid_at_application == false || (job_offer.noc_teer in [0, 1, 2] && (candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5)) || (job_offer.noc_teer in [3, 4, 5] && (candidate.language_test.listening_clb < 4 || candidate.language_test.reading_clb < 4 || candidate.language_test.writing_clb < 4 || candidate.language_test.speaking_clb < 4))"
+    missing_or_unverified: "NEEDS_REVIEW: Official language results are missing, expired, or unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Language Proficiency"
+      page: 8
+      verbatim: "CLB 5 for TEER 0, 1, or 2, and CLB 4 for TEER 3, 4, or 5"
+
+  - id: nsnp_grad_wage_floor
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.regular_base_hourly_cad
+      - job_offer.prevailing_median_hourly_cad
+      - job_offer.statutory_minimum_wage_cad
+    pass_if: "job_offer.regular_base_hourly_cad >= job_offer.statutory_minimum_wage_cad && job_offer.regular_base_hourly_cad >= job_offer.prevailing_median_hourly_cad"
+    fail_if: "job_offer.regular_base_hourly_cad < job_offer.statutory_minimum_wage_cad || job_offer.regular_base_hourly_cad < job_offer.prevailing_median_hourly_cad"
+    missing_or_unverified: "NEEDS_REVIEW: Wage rates or prevailing regional wage is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Compensation and Wages"
+      page: 9
+      verbatim: "Wages must meet or exceed prevailing regional wage rates for the occupation."
+
+  - id: nsnp_grad_employer_eligibility
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.ns_operating_months
+      - employer.permanent_establishment_in_ns
+      - employer.in_good_standing
+    pass_if: "employer.ns_operating_months >= 24 && employer.permanent_establishment_in_ns == true && employer.in_good_standing == true"
+    fail_if: "employer.ns_operating_months < 24 || employer.permanent_establishment_in_ns == false || employer.in_good_standing == false"
+    missing_or_unverified: "NEEDS_REVIEW: Employer business documentation is unverified."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Employer Eligibility"
+      page: 10
+      verbatim: "continuous, active operation in Nova Scotia for at least two (2) full years immediately prior to application"
+
+  - id: nsnp_grad_noul_alignment_genuineness
+    category: noul
+    severity: CRITICAL_REDLINE
+    eval_type: typesafe_noul
+    required_fields:
+      - noul.proposition_id
+      - noul.probability_true
+      - noul.evidence_complete
+      - noul.evidence_refs
+    precondition: "noul.evidence_complete == true"
+    pass_if: "noul.probability_true >= 0.70"
+    fail_if: "noul.probability_true < 0.30"
+    missing_or_unverified: "NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete."
+    provenance:
+      source_file: "Guide-NSNP-Nova-Scotia-Graduate-English.pdf"
+      section: "Program Integrity & Coursework Alignment"
+      page: 12
+      verbatim: "Genuine alignment between academic coursework completed in Nova Scotia and substantive job offer duties."

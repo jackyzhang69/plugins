@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anycase
 
-Version `1.1.17`.
+Version `1.1.18`.
 
 Canadian Immigration Intelligence via the anycase router: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators.
 
