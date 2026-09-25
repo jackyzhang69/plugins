@@ -1,3 +1,3 @@
-# AnyPDF — what changed in 0.7.22
+# AnyPDF — what changed in 0.7.23
 
-- Accepts freshly exchanged account tokens even when the computer clock is wrong.
+The live catalog now includes RPD_02_01 (Basis of Claim). Ask the live CLI which forms you can fill; do not use a remembered list.

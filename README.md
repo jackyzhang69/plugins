@@ -18,7 +18,7 @@ One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI l
 | [`anyknow`](./plugins/anyknow) | 0.1.14 | macOS (`arm64`), Windows (`x64`) | Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing. |
 | [`anymail`](./plugins/anymail) | 0.1.5 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
 | [`anyscore`](./plugins/anyscore) | 0.2.1 | macOS (`arm64`), Windows (`x64`) | Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only — never eligibility. |
-| [`anypdf`](./plugins/anypdf) | 0.7.22 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
+| [`anypdf`](./plugins/anypdf) | 0.7.23 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
 
 ## Installation
 

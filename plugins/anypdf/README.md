@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anypdf
 
-Version `0.7.22`.
+Version `0.7.23`.
 
 Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list.
 
