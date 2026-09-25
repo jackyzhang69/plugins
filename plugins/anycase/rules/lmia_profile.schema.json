@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jackyzhang.app/schemas/lmia_profile.schema.json",
+  "title": "LMIA client fact profile",
+  "description": "Structural validation for LMIA pre-screen facts. Schema validity does not establish stream eligibility, source freshness, or an ESDC decision.",
+  "$comment": "CMA names are the 41 keys in rules/lmia_refusal_matrix.json (2026-07-10 to 2026-10-08). Refresh this enum when the authoritative matrix changes. Rates and wage thresholds are evaluated by the dated ruleset, not frozen into this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assessment_date", "stream_id", "employer", "job_offer", "noul"],
+  "properties": {
+    "assessment_date": {"type": "string", "format": "date"},
+    "stream_id": {
+      "type": "string",
+      "enum": ["HIGH_WAGE", "LOW_WAGE", "PR_SUPPORT", "GLOBAL_TALENT", "PRIMARY_AGRICULTURE", "CAREGIVER"]
+    },
+    "employer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["business_name", "cra_business_number", "is_sex_industry", "on_ircc_ineligibility_list", "in_default_of_amp", "lmia_revocation_past_2_years"],
+      "properties": {
+        "business_name": {"type": "string", "minLength": 1},
+        "cra_business_number": {"type": "string", "pattern": "^\\d{9}(RC\\d{4})?$"},
+        "is_sex_industry": {"type": "boolean"},
+        "on_ircc_ineligibility_list": {"type": "boolean"},
+        "in_default_of_amp": {"type": "boolean"},
+        "lmia_revocation_past_2_years": {"type": "boolean"},
+        "total_workforce_at_location": {"type": "integer", "minimum": 1},
+        "low_wage_tfw_count_at_location": {"type": "integer", "minimum": 0},
+        "provides_round_trip_transportation": {"type": "boolean"},
+        "ensures_affordable_housing": {"type": "boolean"},
+        "provides_private_health_insurance": {"type": "boolean"},
+        "has_transition_plan": {"type": "boolean"},
+        "transition_plan_exempt": {"type": "boolean"},
+        "transition_plan_exemption_reason": {"type": ["string", "null"]},
+        "supports_pr_only": {"type": "boolean"},
+        "gts_category": {"enum": ["A", "B", null]},
+        "designated_partner_referral": {"type": ["boolean", "null"]},
+        "has_lmbp_agreement": {"type": ["boolean", "null"]}
+      }
+    },
+    "job_offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["province", "noc_2021_code", "noc_teer", "title", "regular_hourly_wage_cad", "prevailing_wage_cad"],
+      "properties": {
+        "province": {"type": "string", "enum": ["AB", "BC", "MB", "NB", "NL", "NT", "NS", "NU", "ON", "PE", "QC", "SK", "YT"]},
+        "noc_2021_code": {"type": "string", "pattern": "^\\d{5}$"},
+        "noc_teer": {"type": "integer", "minimum": 0, "maximum": 5},
+        "title": {"type": "string", "minLength": 1},
+        "term_days": {"type": ["integer", "null"], "minimum": 1},
+        "indeterminate": {"type": "boolean"},
+        "year_round": {"type": "boolean"},
+        "weekly_regular_hours": {"type": "number", "minimum": 0},
+        "regular_hourly_wage_cad": {"type": "number", "minimum": 0},
+        "prevailing_wage_cad": {"type": "number", "minimum": 0},
+        "work_location": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["postal_code", "city"],
+          "properties": {
+            "postal_code": {"type": "string", "pattern": "^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$"},
+            "city": {"type": "string", "minLength": 1},
+            "is_in_cma": {"type": "boolean"},
+            "cma_name": {
+              "enum": [
+                "St. John's, NL", "Halifax, NS", "Moncton, NB", "Saint John, NB", "Fredericton, NB",
+                "Saguenay, QC", "Québec, QC", "Sherbrooke, QC", "Trois-Rivières, QC", "Drummondville, QC",
+                "Montréal, QC", "Ottawa-Gatineau, ON/QC", "Kingston, ON", "Belleville - Quinte West, ON",
+                "Peterborough, ON", "Oshawa, ON", "Toronto, ON", "Hamilton, ON", "St. Catharines-Niagara, ON",
+                "Kitchener-Cambridge-Waterloo, ON", "Brantford, ON", "Guelph, ON", "London, ON",
+                "Windsor, ON", "Barrie, ON", "Greater Sudbury, ON", "Thunder Bay, ON", "Winnipeg, MB",
+                "Regina, SK", "Saskatoon, SK", "Lethbridge, AB", "Calgary, AB", "Red Deer, AB",
+                "Edmonton, AB", "Kelowna, BC", "Kamloops, BC", "Chilliwack, BC",
+                "Abbotsford-Mission, BC", "Vancouver, BC", "Victoria, BC", "Nanaimo, BC", null
+              ]
+            },
+            "cma_unemployment_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+          }
+        },
+        "recruitment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["advertising_duration_days", "consecutive_weeks", "job_bank_used", "additional_methods_count", "targets_underrepresented_groups", "conducted_within_3_months", "recruitment_exempt"],
+          "properties": {
+            "advertising_duration_days": {"type": "integer", "minimum": 0},
+            "consecutive_weeks": {"type": "integer", "minimum": 0},
+            "job_bank_used": {"type": "boolean"},
+            "additional_methods_count": {"type": "integer", "minimum": 0},
+            "targets_underrepresented_groups": {"type": "boolean"},
+            "conducted_within_3_months": {"type": "boolean"},
+            "recruitment_exempt": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "sector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["naics_code", "is_primary_agriculture", "is_caregiver_eligible_noc", "is_short_duration_120_days"],
+      "properties": {
+        "naics_code": {"type": "string", "pattern": "^\\d{2,6}$"},
+        "is_primary_agriculture": {"type": "boolean"},
+        "is_caregiver_eligible_noc": {"type": "boolean"},
+        "is_short_duration_120_days": {"type": "boolean"}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family_name", "given_name", "citizenship_country", "current_status_in_canada"],
+      "properties": {
+        "family_name": {"type": "string", "minLength": 1},
+        "given_name": {"type": "string", "minLength": 1},
+        "citizenship_country": {"type": "string", "minLength": 1},
+        "current_status_in_canada": {"type": ["string", "null"]}
+      }
+    },
+    "noul": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposition_id", "probability_true", "evidence_complete", "evidence_refs", "model_version"],
+      "properties": {
+        "proposition_id": {"type": "string", "minLength": 1},
+        "probability_true": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "evidence_complete": {"type": "boolean"},
+        "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "model_version": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {"if": {"properties": {"evidence_complete": {"const": true}}, "required": ["evidence_complete"]}, "then": {"properties": {"evidence_refs": {"minItems": 1}}}}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stream_id": {"const": "LOW_WAGE"}}, "required": ["stream_id"]},
+      "then": {
+        "required": ["sector"],
+        "properties": {
+          "employer": {"required": ["total_workforce_at_location", "low_wage_tfw_count_at_location", "provides_round_trip_transportation", "ensures_affordable_housing", "provides_private_health_insurance"]},
+          "job_offer": {
+            "required": ["term_days", "work_location", "recruitment"],
+            "properties": {
+              "term_days": {"type": "integer", "maximum": 365},
+              "work_location": {"required": ["is_in_cma"]}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "HIGH_WAGE"}}, "required": ["stream_id"]},
+      "then": {"properties": {"employer": {"required": ["has_transition_plan", "transition_plan_exempt"]}, "job_offer": {"required": ["recruitment"]}}}
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "PR_SUPPORT"}}, "required": ["stream_id"]},
+      "then": {"properties": {"job_offer": {"required": ["indeterminate", "year_round", "weekly_regular_hours"], "properties": {"indeterminate": {"const": true}, "year_round": {"const": true}, "weekly_regular_hours": {"minimum": 30}}}}}
+    },
+    {
+      "if": {"properties": {"stream_id": {"const": "GLOBAL_TALENT"}}, "required": ["stream_id"]},
+      "then": {"properties": {"employer": {"required": ["gts_category", "has_lmbp_agreement"], "properties": {"gts_category": {"enum": ["A", "B"]}, "has_lmbp_agreement": {"type": "boolean"}}}}}
+    }
+  ]
+}

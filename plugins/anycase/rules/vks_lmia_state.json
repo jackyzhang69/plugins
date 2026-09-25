@@ -1,0 +1,15 @@
+{
+  "vertical_id": "lmia",
+  "last_synced_at": "2026-09-25T00:18:03.367083+00:00",
+  "evidence_units_sha256": "08383ba67077f6d44e216bbdd41e0d2a76a0c549d3a89cf35dfe330af21934bc",
+  "sources_sha256": "5fb9a9aa71a4ad7df73d8dbe575c1dcb415c1b1d56ba4ec58648b74b1748a68d",
+  "rules_sha256": "73d3e7cde6591de8626b266542686cf5839e3518ec5fb1660b515152c5814834",
+  "synced_rulesets": [
+    "lmia_global_talent.yaml",
+    "lmia_high_wage.yaml",
+    "lmia_low_wage.yaml",
+    "lmia_pr_support.yaml",
+    "lmia_refusal_matrix.json"
+  ],
+  "test_status": "ALL_GOLDEN_PARITY_PASSED"
+}

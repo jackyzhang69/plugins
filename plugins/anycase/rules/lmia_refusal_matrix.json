@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "effective_dates": {
+    "wage_thresholds": "2026-07-17",
+    "unemployment_rates": "2026-07-10 to 2026-10-08",
+    "next_quarterly_update": "2026-10-09"
+  },
+  "wage_thresholds_by_province_cad": {
+    "AB": 37.5,
+    "BC": 38.4,
+    "MB": 31.33,
+    "NB": 31.73,
+    "NL": 33.6,
+    "NT": 48.0,
+    "NS": 31.96,
+    "NU": 45.0,
+    "ON": 36.92,
+    "PE": 31.2,
+    "QC": 36.0,
+    "SK": 34.62,
+    "YT": 45.6
+  },
+  "cma_unemployment_rates_percent": {
+    "St. John's, NL": 7.3,
+    "Halifax, NS": 5.9,
+    "Moncton, NB": 8.1,
+    "Saint John, NB": 5.9,
+    "Fredericton, NB": 5.3,
+    "Saguenay, QC": 3.4,
+    "Québec, QC": 4.0,
+    "Sherbrooke, QC": 4.3,
+    "Trois-Rivières, QC": 5.3,
+    "Drummondville, QC": 5.7,
+    "Montréal, QC": 6.8,
+    "Ottawa-Gatineau, ON/QC": 6.7,
+    "Kingston, ON": 5.3,
+    "Belleville - Quinte West, ON": 6.7,
+    "Peterborough, ON": 7.0,
+    "Oshawa, ON": 8.5,
+    "Toronto, ON": 7.3,
+    "Hamilton, ON": 6.9,
+    "St. Catharines-Niagara, ON": 5.8,
+    "Kitchener-Cambridge-Waterloo, ON": 8.1,
+    "Brantford, ON": 6.2,
+    "Guelph, ON": 7.4,
+    "London, ON": 7.8,
+    "Windsor, ON": 7.9,
+    "Barrie, ON": 7.9,
+    "Greater Sudbury, ON": 6.2,
+    "Thunder Bay, ON": 4.9,
+    "Winnipeg, MB": 5.6,
+    "Regina, SK": 5.9,
+    "Saskatoon, SK": 6.5,
+    "Lethbridge, AB": 5.4,
+    "Calgary, AB": 7.0,
+    "Red Deer, AB": 7.2,
+    "Edmonton, AB": 7.2,
+    "Kelowna, BC": 7.5,
+    "Kamloops, BC": 7.0,
+    "Chilliwack, BC": 7.9,
+    "Abbotsford-Mission, BC": 8.0,
+    "Vancouver, BC": 6.7,
+    "Victoria, BC": 4.6,
+    "Nanaimo, BC": 6.5
+  },
+  "refusal_threshold_percent": 6.0,
+  "refused_cmas": [
+    "St. John's, NL",
+    "Moncton, NB",
+    "Montréal, QC",
+    "Ottawa-Gatineau, ON/QC",
+    "Belleville - Quinte West, ON",
+    "Peterborough, ON",
+    "Oshawa, ON",
+    "Toronto, ON",
+    "Hamilton, ON",
+    "Kitchener-Cambridge-Waterloo, ON",
+    "Brantford, ON",
+    "Guelph, ON",
+    "London, ON",
+    "Windsor, ON",
+    "Barrie, ON",
+    "Greater Sudbury, ON",
+    "Saskatoon, SK",
+    "Calgary, AB",
+    "Red Deer, AB",
+    "Edmonton, AB",
+    "Kelowna, BC",
+    "Kamloops, BC",
+    "Chilliwack, BC",
+    "Abbotsford-Mission, BC",
+    "Vancouver, BC",
+    "Nanaimo, BC"
+  ],
+  "exempt_cmas": [
+    "Halifax, NS",
+    "Saint John, NB",
+    "Fredericton, NB",
+    "Saguenay, QC",
+    "Québec, QC",
+    "Sherbrooke, QC",
+    "Trois-Rivières, QC",
+    "Drummondville, QC",
+    "Kingston, ON",
+    "St. Catharines-Niagara, ON",
+    "Thunder Bay, ON",
+    "Winnipeg, MB",
+    "Regina, SK",
+    "Lethbridge, AB",
+    "Victoria, BC"
+  ],
+  "cma_refusal_exempt_sectors": {
+    "primary_agriculture": true,
+    "naics_codes": [
+      {
+        "code": "23",
+        "sector": "Construction",
+        "cap_limit": 0.2
+      },
+      {
+        "code": "311",
+        "sector": "Food Manufacturing",
+        "cap_limit": 0.2
+      },
+      {
+        "code": "622",
+        "sector": "Hospitals",
+        "cap_limit": 0.2
+      },
+      {
+        "code": "623",
+        "sector": "Nursing and Residential Care Facilities",
+        "cap_limit": 0.2
+      }
+    ],
+    "caregiver_nocs": [
+      "31301",
+      "32101",
+      "44100",
+      "44101"
+    ],
+    "short_duration_120_days_or_less": true,
+    "permanent_residence_support_only": true
+  },
+  "workforce_proportion_caps": {
+    "default_low_wage_cap": 0.1,
+    "exceptional_sector_cap": 0.2,
+    "exceptional_sectors": [
+      "23",
+      "311",
+      "622",
+      "623",
+      "31301",
+      "32101",
+      "44100",
+      "44101"
+    ]
+  },
+  "advertising_rules": {
+    "minimum_duration_days": 28,
+    "minimum_consecutive_weeks": 4,
+    "mandatory_methods": [
+      "Job Bank"
+    ],
+    "additional_methods_required": 2,
+    "total_recruitment_methods_minimum": 3,
+    "underrepresented_groups_target_required": true,
+    "validity_window_months": 3
+  }
+}
