@@ -1,0 +1,226 @@
+schema_version: "1.0.0"
+catalog_id: federal_express_entry_crs
+program_id: FEDERAL_EXPRESS_ENTRY
+stream_id: CRS_POOL
+jurisdiction: CA-FED
+category: Express Entry
+display_name: Express Entry — pool gates and CRS ranking grid
+status: ACTIVE
+effective_date: "2026-09-25"
+source_edition: Current IRPA, Express Entry Ministerial Instructions and IRCC CRS criteria checked 2026-09-25
+source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html
+decision_scope: >-
+  Pool prescreen using independently established FSWP/CEC/FSTP eligibility.
+  CRS grid is a precise reference specification; the eligibility AST does not
+  calculate a CRS score or guarantee an invitation. Requested category checks
+  are stream-specific and require the round's current Ministerial Instructions.
+
+sources:
+  - id: irpa_12_2
+    title: Immigration and Refugee Protection Act — economic class
+    url: https://laws-lois.justice.gc.ca/eng/acts/I-2.5/section-12.html
+    citation: IRPA s. 12(2)
+    legal_authority: Federal statute
+  - id: irpa_10_3
+    title: Immigration and Refugee Protection Act — Express Entry instructions
+    url: https://laws-lois.justice.gc.ca/eng/acts/I-2.5/section-10.3.html
+    citation: IRPA s. 10.3 (not IRPR s. 10.3)
+    legal_authority: Federal statute authorizing Ministerial Instructions and categories
+  - id: ee_instructions
+    title: Ministerial Instructions respecting the Express Entry system — current
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-application-management-system/current.html
+    citation: Current Express Entry Ministerial Instructions under IRPA s. 10.3
+    legal_authority: Binding Ministerial Instructions; verify version at assessment date
+  - id: ircc_pool
+    title: Express Entry — Rounds of invitations
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html
+    citation: IRCC pool eligibility and invitation-round guidance
+    legal_authority: Official operational guidance
+  - id: ircc_crs
+    title: Express Entry — Comprehensive Ranking System criteria
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html
+    citation: IRCC current CRS points grid; job-offer points removed 2025-03-25
+    legal_authority: Official points schedule under Express Entry Ministerial Instructions
+  - id: ircc_language
+    title: Documents for Express Entry — Language test results
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
+    citation: IRCC approved tests and CLB/NCLC conversion; less than two years old
+    legal_authority: Official operational guidance
+  - id: ircc_eca
+    title: Educational credential assessment for Express Entry
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessment.html
+    citation: IRCC ECA equivalency schedule and designated organizations
+    legal_authority: Official operational guidance
+  - id: ircc_categories
+    title: Express Entry — Category-based selection
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations/category-based-selection.html
+    citation: IRCC 2026 category list and criteria; round-specific instructions prevail
+    legal_authority: Official category guidance under IRPA s. 10.3
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate]
+  types:
+    assessment_date: ISO-8601 date
+    candidate:
+      intended_province: lowercase Canadian province or territory name
+      program_eligibility:
+        fswp: boolean; independently checked using full FSWP rules
+        cec: boolean; independently checked under IRPR R87.1
+        fstp: boolean; independently checked under IRPR R87.2
+      language_test:
+        approved_designated_test: boolean
+        valid_within_two_years: boolean
+      category_request: none | french | stem | healthcare | trade | transport | agriculture
+      french_test:
+        listening_nclc: integer or null
+        reading_nclc: integer or null
+        writing_nclc: integer or null
+        speaking_nclc: integer or null
+      category_occupation:
+        current_listed_noc_verified: boolean or null
+        qualifying_months_last_3_years: number or null
+        single_listed_occupation: boolean or null
+
+pool_gates:
+  - crs_gate_pool_eligibility
+  - crs_gate_language_test
+  - crs_gate_intended_residence
+pool_gate_note: Provincial nomination adds CRS points but does not replace eligibility for one of FSWP, CEC or FSTP.
+
+category_filters:
+  scope: A requested category filters a particular invitation round; it is not a general pool gate.
+  active_2026: [french, healthcare, stem, trade, education, transport, physicians_canadian_experience, senior_managers_canadian_experience, researchers_canadian_experience, skilled_military_recruits]
+  french: {minimum_nclc_each_ability: 7, source_id: ircc_categories}
+  stem: {listed_noc_required: true, qualifying_months_last_3_years: 12, same_occupation_required: true, source_id: ircc_categories}
+  healthcare: {listed_noc_required: true, qualifying_months_last_3_years: 12, same_occupation_required: true, source_id: ircc_categories}
+  trade: {listed_noc_required: true, qualifying_months_last_3_years: 12, same_occupation_required: true, source_id: ircc_categories}
+  transport: {listed_noc_required: true, qualifying_months_last_3_years: 12, same_occupation_required: true, source_id: ircc_categories}
+  agriculture:
+    status: NOT_CURRENT_2026_CATEGORY
+    note: Historical agriculture/agri-food category must not be treated as currently selectable.
+    source_id: ircc_categories
+
+scoring_grid:
+  maximum: 1200
+  formula: min(600, core_human_capital + spouse_factors + skill_transferability) + min(600, additional_points)
+  family_context: With spouse only when accompanying and neither a Canadian citizen nor permanent resident.
+  core_human_capital:
+    maximum_without_spouse: 500
+    maximum_with_spouse: 460
+    age:
+      maximum_without_spouse: 110
+      maximum_with_spouse: 100
+      points_by_age_without_spouse: {"17_or_less": 0, "18": 99, "19": 105, "20-29": 110, "30": 105, "31": 99, "32": 94, "33": 88, "34": 83, "35": 77, "36": 72, "37": 66, "38": 61, "39": 55, "40": 50, "41": 39, "42": 28, "43": 17, "44": 6, "45_or_more": 0}
+      points_by_age_with_spouse: {"17_or_less": 0, "18": 90, "19": 95, "20-29": 100, "30": 95, "31": 90, "32": 85, "33": 80, "34": 75, "35": 70, "36": 65, "37": 60, "38": 55, "39": 50, "40": 45, "41": 35, "42": 25, "43": 15, "44": 5, "45_or_more": 0}
+    education:
+      maximum_without_spouse: 150
+      maximum_with_spouse: 140
+      levels: [less_than_secondary, secondary, one_year_postsecondary, two_year_postsecondary, bachelors_or_three_year, two_or_more_one_three_year, masters_or_eligible_professional, doctoral]
+      points_without_spouse: [0, 30, 90, 98, 120, 128, 135, 150]
+      points_with_spouse: [0, 28, 84, 91, 112, 119, 126, 140]
+    first_official_language:
+      four_abilities: [listening, reading, writing, speaking]
+      levels: [below_clb4, clb4_or_5, clb6, clb7, clb8, clb9, clb10_or_more]
+      per_ability_without_spouse: [0, 6, 9, 17, 23, 31, 34]
+      per_ability_with_spouse: [0, 6, 8, 16, 22, 29, 32]
+    second_official_language:
+      levels: [clb4_or_less, clb5_or_6, clb7_or_8, clb9_or_more]
+      per_ability_points: [0, 1, 3, 6]
+      cap_without_spouse: 24
+      cap_with_spouse: 22
+    canadian_work_experience:
+      years: [less_than_1, 1, 2, 3, 4, 5_or_more]
+      points_without_spouse: [0, 40, 53, 64, 72, 80]
+      points_with_spouse: [0, 35, 46, 56, 63, 70]
+  spouse_factors:
+    maximum: 40
+    education: {levels: [less_than_secondary, secondary, one_year, two_year, bachelors_or_three_year, two_or_more_one_three_year, masters_or_professional, doctoral], points: [0, 2, 6, 7, 8, 9, 10, 10], cap: 10}
+    first_official_language: {levels: [clb4_or_less, clb5_or_6, clb7_or_8, clb9_or_more], points_per_ability: [0, 1, 3, 5], cap: 20}
+    canadian_work_experience: {years: [less_than_1, 1, 2, 3, 4, 5_or_more], points: [0, 5, 7, 8, 9, 10], cap: 10}
+  skill_transferability:
+    maximum: 100
+    education_subtotal_maximum: 50
+    foreign_work_subtotal_maximum: 50
+    education_language:
+      levels: [secondary_or_less, one_postsecondary_credential, two_or_more_one_three_year_or_masters_or_doctoral]
+      points_clb7_all_one_below_9: [0, 13, 25]
+      points_clb9_all: [0, 25, 50]
+    education_canadian_work:
+      levels: [secondary_or_less, one_postsecondary_credential, two_or_more_one_three_year_or_masters_or_doctoral]
+      points_one_year_canadian_work: [0, 13, 25]
+      points_two_or_more_years_canadian_work: [0, 25, 50]
+    foreign_work_language:
+      years: [none, one_or_two, three_or_more]
+      points_clb7_all_one_below_9: [0, 13, 25]
+      points_clb9_all: [0, 25, 50]
+    foreign_work_canadian_work:
+      years: [none, one_or_two, three_or_more]
+      points_one_year_canadian_work: [0, 13, 25]
+      points_two_or_more_years_canadian_work: [0, 25, 50]
+    trade_certificate_language: {certificate_and_clb5_all_one_below_7: 25, certificate_and_clb7_all: 50}
+    subtotal_formula: min(100, min(50, education_language + education_canadian_work) + min(50, foreign_work_language + foreign_work_canadian_work) + trade_certificate_language)
+  additional_points:
+    maximum: 600
+    provincial_or_territorial_nomination: 600
+    sibling_in_canada: 15
+    french_nclc7_all_english_clb4_or_less_or_no_test: 25
+    french_nclc7_all_english_clb5_all: 50
+    canadian_postsecondary_one_or_two_years: 15
+    canadian_postsecondary_three_or_more_years: 30
+    arranged_employment: 0
+    note: All additional factors combined are capped at 600; no job-offer points since 2025-03-25.
+  source_id: ircc_crs
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  note: Category checks run only when that category is requested; absence of a request is PASS for the category filter, not a finding of category eligibility.
+
+rules:
+  - id: crs_gate_pool_eligibility
+    category: pool_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.program_eligibility.fswp, candidate.program_eligibility.cec, candidate.program_eligibility.fstp]
+    pass_if: "candidate.program_eligibility.fswp == true || candidate.program_eligibility.cec == true || candidate.program_eligibility.fstp == true"
+    fail_if: "candidate.program_eligibility.fswp == false && candidate.program_eligibility.cec == false && candidate.program_eligibility.fstp == false"
+    evidence_anchor: {source_id: ircc_pool, citation: IRPA s. 10.3; one of FSWP, CEC or FSTP required}
+  - id: crs_gate_language_test
+    category: pool_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.language_test.approved_designated_test, candidate.language_test.valid_within_two_years]
+    pass_if: "candidate.language_test.approved_designated_test == true && candidate.language_test.valid_within_two_years == true"
+    fail_if: "candidate.language_test.approved_designated_test == false || candidate.language_test.valid_within_two_years == false"
+    evidence_anchor: {source_id: ircc_language, citation: IRCC language-test validity for Express Entry}
+  - id: crs_gate_intended_residence
+    category: pool_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.intended_province]
+    pass_if: "candidate.intended_province != 'quebec'"
+    fail_if: "candidate.intended_province == 'quebec'"
+    evidence_anchor: {source_id: ircc_pool, citation: Federal economic class; intended residence outside Quebec}
+  - id: crs_category_french_nclc7
+    category: category_filter
+    severity: STREAM_SPECIFIC
+    eval_type: deterministic
+    required_fields: [candidate.category_request]
+    conditional_required_fields:
+      when: "candidate.category_request == 'french'"
+      fields: [candidate.french_test.listening_nclc, candidate.french_test.reading_nclc, candidate.french_test.writing_nclc, candidate.french_test.speaking_nclc]
+    pass_if: "candidate.category_request != 'french' || (candidate.french_test.listening_nclc >= 7 && candidate.french_test.reading_nclc >= 7 && candidate.french_test.writing_nclc >= 7 && candidate.french_test.speaking_nclc >= 7)"
+    fail_if: "candidate.category_request == 'french' && (candidate.french_test.listening_nclc < 7 || candidate.french_test.reading_nclc < 7 || candidate.french_test.writing_nclc < 7 || candidate.french_test.speaking_nclc < 7)"
+    evidence_anchor: {source_id: ircc_categories, citation: French-language proficiency category, NCLC 7 each ability}
+  - id: crs_category_occupation_2026
+    category: category_filter
+    severity: STREAM_SPECIFIC
+    eval_type: deterministic
+    required_fields: [candidate.category_request]
+    conditional_required_fields:
+      when: "candidate.category_request in ['stem', 'healthcare', 'trade', 'transport']"
+      fields: [candidate.category_occupation.current_listed_noc_verified, candidate.category_occupation.qualifying_months_last_3_years, candidate.category_occupation.single_listed_occupation]
+    pass_if: "!(candidate.category_request in ['stem', 'healthcare', 'trade', 'transport', 'agriculture']) || (candidate.category_request in ['stem', 'healthcare', 'trade', 'transport'] && candidate.category_occupation.current_listed_noc_verified == true && candidate.category_occupation.qualifying_months_last_3_years >= 12 && candidate.category_occupation.single_listed_occupation == true)"
+    fail_if: "candidate.category_request in ['stem', 'healthcare', 'trade', 'transport'] && (candidate.category_occupation.current_listed_noc_verified == false || candidate.category_occupation.qualifying_months_last_3_years < 12 || candidate.category_occupation.single_listed_occupation == false)"
+    missing_or_unverified: NEEDS_REVIEW — verify current round-specific NOC list and experience before treating occupational category as eligible.
+    evidence_anchor: {source_id: ircc_categories, citation: Current 2026 occupational category tables and round instructions}

@@ -156,15 +156,52 @@
       "44101"
     ]
   },
+  "cma_fsa_prefixes": {
+    "M": "Toronto, ON",
+    "V5": "Vancouver, BC",
+    "V6": "Vancouver, BC",
+    "V7": "Vancouver, BC",
+    "V8R": "Victoria, BC",
+    "V8S": "Victoria, BC",
+    "V8T": "Victoria, BC",
+    "V8V": "Victoria, BC",
+    "V8W": "Victoria, BC",
+    "V8X": "Victoria, BC",
+    "V8Y": "Victoria, BC",
+    "V8Z": "Victoria, BC",
+    "V9A": "Victoria, BC",
+    "V9B": "Victoria, BC",
+    "V9C": "Victoria, BC"
+  },
   "advertising_rules": {
-    "minimum_duration_days": 28,
-    "minimum_consecutive_weeks": 4,
-    "mandatory_methods": [
-      "Job Bank"
-    ],
-    "additional_methods_required": 2,
-    "total_recruitment_methods_minimum": 3,
-    "underrepresented_groups_target_required": true,
-    "validity_window_months": 3
+    "low_wage": {
+      "minimum_duration_days": 56,
+      "minimum_consecutive_weeks": 8,
+      "mandatory_methods": [
+        "Job Bank"
+      ],
+      "additional_methods_required": 2,
+      "total_recruitment_methods_minimum": 3,
+      "underrepresented_groups_target_required": true,
+      "validity_window_months": 3,
+      "source_url": "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html",
+      "source_section": "Job advertisement duration",
+      "verbatim_excerpt": "is for a minimum of 8 consecutive weeks within the 3 months prior to submitting an LMIA application",
+      "verified_on": "2026-09-25"
+    },
+    "high_wage": {
+      "minimum_duration_days": 28,
+      "minimum_consecutive_weeks": 4,
+      "mandatory_methods": [
+        "Job Bank"
+      ],
+      "additional_methods_required": 2,
+      "total_recruitment_methods_minimum": 3,
+      "underrepresented_groups_target_required": true,
+      "validity_window_months": 3,
+      "source_url": "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html",
+      "source_section": "Recruitment and advertising",
+      "verbatim_excerpt": "Employers must conduct at least 4 consecutive weeks of recruitment within the 3 months prior to submitting an application"
+    }
   }
 }

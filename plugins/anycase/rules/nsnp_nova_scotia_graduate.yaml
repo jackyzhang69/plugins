@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "nsnp_nova_scotia_graduate"
+category: "Nova Scotia Nominee Program"
+display_name: "Nova Scotia Nominee Program: International Graduate"
+status: "ACTIVE"
 program_id: "NSNP_NOVA_SCOTIA_GRADUATE"
 stream_id: "NOVA_SCOTIA_GRADUATE"
 jurisdiction: "CA-NS"

@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "bcpnp_si_international_graduate"
+jurisdiction: "CA-BC"
+category: "Skills Immigration"
+display_name: "BC PNP Skills Immigration: International Graduate (Legacy)"
 program_id: "BC_PNP_SKILLS_IMMIGRATION"
 stream_id: "INTERNATIONAL_GRADUATE"
 status: "LEGACY_CLOSED"

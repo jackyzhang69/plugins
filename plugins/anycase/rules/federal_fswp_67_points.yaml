@@ -1,0 +1,230 @@
+schema_version: "1.0.0"
+catalog_id: federal_fswp_67_points
+program_id: FEDERAL_SKILLED_WORKER
+stream_id: FSWP_67_POINTS
+jurisdiction: CA-FED
+category: Federal Skilled Worker
+display_name: Federal Skilled Worker Program — minimum requirements and 67-point selection
+status: ACTIVE
+effective_date: "2026-09-25"
+source_edition: IRPA and IRPR consolidated text; IRCC FSWP and proof-of-funds pages checked 2026-09-25
+source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html
+decision_scope: >-
+  Deterministic prescreen of six statutory gates. Selection points supplied in a
+  profile must be independently verified against scoring_grid; the current
+  eligibility AST does not calculate or attest the six factor scores.
+
+sources:
+  - id: irpa_12_2
+    title: Immigration and Refugee Protection Act
+    url: https://laws-lois.justice.gc.ca/eng/acts/I-2.5/section-12.html
+    citation: IRPA s. 12(2)
+    legal_authority: Federal statute — economic class
+  - id: irpr_75_83
+    title: Immigration and Refugee Protection Regulations — Federal Skilled Workers
+    url: https://laws-lois.justice.gc.ca/eng/regulations/SOR-2002-227/FullText.html
+    citation: IRPR ss. 75–83, especially R75(1), R75(2)(a)–(e), R76(1)(a)–(b), R78–R83
+    legal_authority: Federal regulation — minimum criteria, selection factors, funds and arranged employment
+  - id: ircc_fswp
+    title: Express Entry — Federal Skilled Worker Program
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html
+    citation: IRCC program delivery instructions — minimum requirements and selection factors
+    legal_authority: Official operational guidance; subordinate to IRPA and IRPR
+  - id: ircc_funds
+    title: Documents for Express Entry — Proof of funds
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html
+    citation: IRCC proof-of-funds table, updated 2025-07-07
+    legal_authority: Published half-LICO amounts and proof requirements under IRPR R76(1)(b)
+  - id: ircc_language
+    title: Documents for Express Entry — Language test results
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
+    citation: IRCC designated tests, CLB/NCLC conversion and two-year validity
+    legal_authority: Official operational guidance under IRPR R74 and R75(2)(d)
+  - id: ircc_eca
+    title: Educational credential assessment for Express Entry
+    url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessment.html
+    citation: IRCC ECA equivalency schedule and designated organizations
+    legal_authority: Official operational guidance under IRPR R75(2)(e) and R78
+
+schema:
+  input_type: object
+  required_top_level: [assessment_date, candidate, funds, score]
+  types:
+    assessment_date: ISO-8601 date
+    candidate:
+      intended_province: lowercase Canadian province or territory name
+      primary_occupation_teer: integer 0–5 verified against NOC 2021
+      primary_occupation_duties_met: boolean; lead statement and substantial main duties including essential duties
+      experience_paid: boolean
+      experience_continuous_months: number; uninterrupted calendar months in same primary NOC
+      experience_counted_hours: number; qualifying hours with no more than 30 hours per week credited
+      experience_last_10_years: boolean
+      language_test:
+        valid_within_two_years: boolean; approved designated test at application
+        listening_clb: integer
+        reading_clb: integer
+        writing_clb: integer
+        speaking_clb: integer
+      education:
+        canadian_secondary_or_higher: boolean
+        foreign_secondary_or_higher: boolean
+        eca_designated: boolean
+        eca_valid_within_five_years: boolean
+      family_size: integer >= 1, includes non-accompanying spouse and dependent children
+      authorized_to_work_in_canada: boolean
+      valid_arranged_employment: boolean; verified against IRPR R82
+    funds:
+      available_cad: number; transferable, available and unencumbered
+      evidence_verified: boolean
+    score:
+      language: integer 0–28
+      education: integer 0–25
+      experience: integer 0–15
+      age: integer 0–12
+      arranged_employment: integer 0–10
+      adaptability: integer 0–10
+      verified_against_grid: boolean
+
+minimums:
+  experience: {continuous_months: 12, counted_hours: 1560, lookback_years: 10, eligible_teer: [0, 1, 2, 3]}
+  first_official_language: {minimum_each_ability_clb_or_nclc: 7, test_max_age_years: 2}
+  education: {canadian_minimum: secondary, foreign_minimum: secondary_with_designated_eca, eca_max_age_years: 5}
+  intended_residence: outside_quebec
+  selection_pass_mark: 67
+  proof_of_funds:
+    table_date: "2025-07-07"
+    currency: CAD
+    half_lico_by_family_size: {1: 15263, 2: 19001, 3: 23360, 4: 28362, 5: 32168, 6: 36280, 7: 40392}
+    each_additional_member_above_7: 4112
+    exception: authorized_to_work_in_canada AND valid_arranged_employment
+    source_id: ircc_funds
+
+language_benchmark_conversion:
+  source_id: ircc_language
+  ability_order: [speaking, listening, reading, writing]
+  note: Minimum raw scores for the named CLB/NCLC level; TEF uses the previous-score-equivalency column required by IRCC.
+  celpip_general: {clb_5: [5, 5, 5, 5], clb_7: [7, 7, 7, 7]}
+  ielts_general_training: {clb_5: [5.0, 5.0, 4.0, 5.0], clb_7: [6.0, 6.0, 6.0, 6.0]}
+  pte_core: {clb_5: [51, 39, 42, 51], clb_7: [68, 60, 60, 69]}
+  tef_canada_previous_score_equivalency: {nclc_5: [226, 181, 151, 226], nclc_7: [310, 249, 207, 310]}
+  tcf_canada: {nclc_5: [6, 369, 375, 6], nclc_7: [10, 458, 453, 10]}
+
+eca_schedule:
+  source_id: ircc_eca
+  validity: less_than_five_years_at_profile_and_application
+  designated_general_organizations:
+    - Comparative Education Service, University of Toronto
+    - International Credential Assessment Service of Canada
+    - World Education Services
+    - International Qualifications Assessment Service
+    - International Credential Evaluation Service, British Columbia Institute of Technology
+  designated_professional_body_rule: Architects, doctors and pharmacists may require occupation-specific designated professional-body assessment.
+  equivalency_points_source: scoring_grid.education
+
+gates:
+  - fswp_gate_continuous_experience
+  - fswp_gate_language_clb7
+  - fswp_gate_education_credential
+  - fswp_gate_settlement_funds
+  - fswp_gate_intended_residence
+  - fswp_gate_selection_score
+
+scoring_grid:
+  maximum: 100
+  pass_mark: 67
+  formula: language + education + experience + age + arranged_employment + adaptability
+  language:
+    maximum: 28
+    first_official_language: {maximum: 24, per_ability_clb_7: 4, per_ability_clb_8: 5, per_ability_clb_9_or_more: 6}
+    second_official_language: {maximum: 4, minimum_clb_each_ability: 5, points_if_all_four_meet_minimum: 4}
+    source_id: ircc_fswp
+  education:
+    maximum: 25
+    points: {doctoral: 25, masters_or_eligible_professional: 23, two_or_more_one_three_year: 22, bachelors_or_three_year: 21, two_year_postsecondary: 19, one_year_postsecondary: 15, secondary: 5}
+    source_id: irpr_75_83
+  experience:
+    maximum: 15
+    years_to_points: {"1": 9, "2-3": 11, "4-5": 13, "6+": 15}
+    source_id: ircc_fswp
+  age:
+    maximum: 12
+    points: {under_18: 0, "18-35": 12, "36": 11, "37": 10, "38": 9, "39": 8, "40": 7, "41": 6, "42": 5, "43": 4, "44": 3, "45": 2, "46": 1, "47+": 0}
+    source_id: irpr_75_83
+  arranged_employment:
+    maximum: 10
+    qualifying_offer_points: 10
+    eligible_teer: [0, 1, 2, 3]
+    condition: IRPR R82 verified; CRS job-offer-point removal does not remove this FSWP factor
+    source_id: irpr_75_83
+  adaptability:
+    maximum: 10
+    additive_then_cap: 10
+    points: {spouse_language_clb5_all_four: 5, candidate_past_study: 5, spouse_past_study: 5, candidate_past_work: 10, spouse_past_work: 5, arranged_employment_bonus: 5, eligible_relative_in_canada: 5}
+    source_id: irpr_75_83
+
+evaluation:
+  rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
+  note: All six redlines are evaluated; missing material is NEEDS_REVIEW unless an explicit disqualifying fact is already known.
+
+rules:
+  - id: fswp_gate_continuous_experience
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.primary_occupation_teer, candidate.primary_occupation_duties_met, candidate.experience_paid, candidate.experience_continuous_months, candidate.experience_counted_hours, candidate.experience_last_10_years]
+    pass_if: "candidate.primary_occupation_teer in [0, 1, 2, 3] && candidate.primary_occupation_duties_met == true && candidate.experience_paid == true && candidate.experience_continuous_months >= 12 && candidate.experience_counted_hours >= 1560 && candidate.experience_last_10_years == true"
+    fail_if: "candidate.primary_occupation_teer in [4, 5] || candidate.primary_occupation_duties_met == false || candidate.experience_paid == false || candidate.experience_continuous_months < 12 || candidate.experience_counted_hours < 1560 || candidate.experience_last_10_years == false"
+    evidence_anchor: {source_id: irpr_75_83, citation: IRPR R75(2)(a)–(c)}
+  - id: fswp_gate_language_clb7
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.language_test.valid_within_two_years, candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb]
+    pass_if: "candidate.language_test.valid_within_two_years == true && candidate.language_test.listening_clb >= 7 && candidate.language_test.reading_clb >= 7 && candidate.language_test.writing_clb >= 7 && candidate.language_test.speaking_clb >= 7"
+    fail_if: "candidate.language_test.valid_within_two_years == false || candidate.language_test.listening_clb < 7 || candidate.language_test.reading_clb < 7 || candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb < 7"
+    evidence_anchor: {source_id: irpr_75_83, citation: IRPR R75(2)(d) and IRCC CLB 7 threshold}
+  - id: fswp_gate_education_credential
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.education.canadian_secondary_or_higher]
+    conditional_required_fields:
+      when: "candidate.education.canadian_secondary_or_higher == false"
+      fields: [candidate.education.foreign_secondary_or_higher, candidate.education.eca_designated, candidate.education.eca_valid_within_five_years]
+    pass_if: "candidate.education.canadian_secondary_or_higher == true || (candidate.education.foreign_secondary_or_higher == true && candidate.education.eca_designated == true && candidate.education.eca_valid_within_five_years == true)"
+    fail_if: "candidate.education.canadian_secondary_or_higher == false && (candidate.education.foreign_secondary_or_higher == false || candidate.education.eca_designated == false || candidate.education.eca_valid_within_five_years == false)"
+    evidence_anchor: {source_id: irpr_75_83, citation: IRPR R75(2)(e)}
+  - id: fswp_gate_settlement_funds
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.authorized_to_work_in_canada, candidate.valid_arranged_employment]
+    conditional_required_fields:
+      when: "!(candidate.authorized_to_work_in_canada == true && candidate.valid_arranged_employment == true)"
+      fields: [candidate.family_size, funds.available_cad, funds.evidence_verified]
+    pass_if: >-
+      (candidate.authorized_to_work_in_canada == true && candidate.valid_arranged_employment == true) ||
+      (funds.evidence_verified == true && ((candidate.family_size == 1 && funds.available_cad >= 15263) || (candidate.family_size == 2 && funds.available_cad >= 19001) || (candidate.family_size == 3 && funds.available_cad >= 23360) || (candidate.family_size == 4 && funds.available_cad >= 28362) || (candidate.family_size == 5 && funds.available_cad >= 32168) || (candidate.family_size == 6 && funds.available_cad >= 36280) || (candidate.family_size == 7 && funds.available_cad >= 40392) || (candidate.family_size > 7 && funds.available_cad >= 40392 + (candidate.family_size - 7) * 4112)))
+    fail_if: >-
+      !(candidate.authorized_to_work_in_canada == true && candidate.valid_arranged_employment == true) && funds.evidence_verified == true &&
+      ((candidate.family_size == 1 && funds.available_cad < 15263) || (candidate.family_size == 2 && funds.available_cad < 19001) || (candidate.family_size == 3 && funds.available_cad < 23360) || (candidate.family_size == 4 && funds.available_cad < 28362) || (candidate.family_size == 5 && funds.available_cad < 32168) || (candidate.family_size == 6 && funds.available_cad < 36280) || (candidate.family_size == 7 && funds.available_cad < 40392) || (candidate.family_size > 7 && funds.available_cad < 40392 + (candidate.family_size - 7) * 4112))
+    missing_or_unverified: NEEDS_REVIEW — funds evidence, exemption or family-size calculation is unverified.
+    evidence_anchor: {source_id: ircc_funds, citation: IRPR R76(1)(b); IRCC table 2025-07-07}
+  - id: fswp_gate_intended_residence
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [candidate.intended_province]
+    pass_if: "candidate.intended_province != 'quebec'"
+    fail_if: "candidate.intended_province == 'quebec'"
+    evidence_anchor: {source_id: irpr_75_83, citation: IRPR R75(1)}
+  - id: fswp_gate_selection_score
+    category: statutory_gate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields: [score.language, score.education, score.experience, score.age, score.arranged_employment, score.adaptability, score.verified_against_grid]
+    precondition: "score.verified_against_grid == true && score.language >= 0 && score.language <= 28 && score.education >= 0 && score.education <= 25 && score.experience >= 0 && score.experience <= 15 && score.age >= 0 && score.age <= 12 && score.arranged_employment >= 0 && score.arranged_employment <= 10 && score.adaptability >= 0 && score.adaptability <= 10"
+    pass_if: "score.language + score.education + score.experience + score.age + score.arranged_employment + score.adaptability >= 67"
+    fail_if: "score.verified_against_grid == true && score.language >= 0 && score.language <= 28 && score.education >= 0 && score.education <= 25 && score.experience >= 0 && score.experience <= 15 && score.age >= 0 && score.age <= 12 && score.arranged_employment >= 0 && score.arranged_employment <= 10 && score.adaptability >= 0 && score.adaptability <= 10 && score.language + score.education + score.experience + score.age + score.arranged_employment + score.adaptability < 67"
+    missing_or_unverified: NEEDS_REVIEW — factor scores have not been independently verified against the grid.
+    evidence_anchor: {source_id: irpr_75_83, citation: IRPR R76(1)(a), R76(2), R78–R83; IRCC published 67-point pass mark}

@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "bcpnp_si_rural_remote_health"
+jurisdiction: "CA-BC"
+category: "Skills Immigration"
+display_name: "BC PNP Skills Immigration: Rural & Remote Health Initiative"
 program_id: "BC_PNP_SKILLS_IMMIGRATION"
 stream_id: "RURAL_REMOTE_HEALTH"
 status: "TEMPORARY_INITIATIVE"

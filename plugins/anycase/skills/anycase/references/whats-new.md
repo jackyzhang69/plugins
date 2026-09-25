@@ -1,3 +1,11 @@
+# What's new in 1.1.20
+
+Low-wage LMIA pre-check now uses the official CMA unemployment table when the city is known, requires eight weeks of advertising, and will not silently score an LMIA file as BC PNP.
+
+# What's new in 1.1.19
+
+`anycase` introduces multi-program auto-discovery catalog with `programs list` and `programs describe <id>`, eliminating silent fallbacks and requiring a named program argument before evaluation.
+
 # What's new in 1.1.18
 
 `anycase check-eligibility` evaluates Nova Scotia Nominee Program (NSNP) streams with modernized 2026 application guides and declarative schemas.

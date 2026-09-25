@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "nsnp_entrepreneur"
+category: "Nova Scotia Nominee Program"
+display_name: "Nova Scotia Nominee Program: Entrepreneur Stream"
+status: "ACTIVE"
 program_id: "NSNP_ENTREPRENEUR"
 stream_id: "ENTREPRENEUR"
 jurisdiction: "CA-NS"

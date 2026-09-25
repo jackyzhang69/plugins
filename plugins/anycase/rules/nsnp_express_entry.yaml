@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "nsnp_express_entry"
+category: "Nova Scotia Nominee Program"
+display_name: "Nova Scotia Nominee Program: Nova Scotia Express Entry"
+status: "ACTIVE"
 program_id: "NSNP_EXPRESS_ENTRY"
 stream_id: "NOVA_SCOTIA_EXPRESS_ENTRY"
 jurisdiction: "CA-NS"

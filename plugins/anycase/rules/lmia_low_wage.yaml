@@ -1,4 +1,9 @@
 schema_version: "1.0.0"
+catalog_id: "lmia_low_wage"
+jurisdiction: "FED"
+category: "Temporary Foreign Worker Program"
+display_name: "TFWP LMIA: Low-Wage Stream"
+status: "ACTIVE"
 program_id: "TFWP_LMIA"
 stream_id: "LOW_WAGE"
 effective_date: "2026-07-17"
@@ -203,15 +208,16 @@ rules:
       - job_offer.recruitment.additional_methods_count
       - job_offer.recruitment.targets_underrepresented_groups
       - job_offer.recruitment.conducted_within_3_months
-    pass_if: "job_offer.recruitment.advertising_duration_days >= 28 && job_offer.recruitment.consecutive_weeks >= 4 && job_offer.recruitment.job_bank_used == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.targets_underrepresented_groups == true && job_offer.recruitment.conducted_within_3_months == true"
-    fail_if: "job_offer.recruitment.advertising_duration_days < 28 || job_offer.recruitment.consecutive_weeks < 4 || job_offer.recruitment.job_bank_used == false || job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.targets_underrepresented_groups == false || job_offer.recruitment.conducted_within_3_months == false"
+    pass_if: "job_offer.recruitment.advertising_duration_days >= 56 && job_offer.recruitment.consecutive_weeks >= 8 && job_offer.recruitment.job_bank_used == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.targets_underrepresented_groups == true && job_offer.recruitment.conducted_within_3_months == true"
+    fail_if: "job_offer.recruitment.advertising_duration_days < 56 || job_offer.recruitment.consecutive_weeks < 8 || job_offer.recruitment.job_bank_used == false || job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.targets_underrepresented_groups == false || job_offer.recruitment.conducted_within_3_months == false"
     missing_or_unverified: "NEEDS_REVIEW: Recruitment evidence, Job Bank posting records, or diversity outreach proof is missing."
-    interpretation: "Employers must advertise on Job Bank plus 2 additional recruitment methods for at least 4 consecutive weeks (28 days) within the 3 months prior to submission, including targeted outreach to underrepresented domestic groups."
+    interpretation: "Employers must advertise on Job Bank plus 2 additional recruitment methods for at least 8 consecutive weeks (56 days) within the 3 months prior to submission, including targeted outreach to underrepresented domestic groups. High-wage recruitment remains 4 consecutive weeks and must not be used for this stream."
     evidence_anchor:
       evidence_unit_id: "EU-LMIA-005"
       source_file: "low_wage_requirements.html"
-      section: "Recruitment and advertising"
-      verbatim_excerpt: "Employers must conduct at least 4 consecutive weeks of recruitment within the 3 months prior to submitting an application"
+      source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html"
+      section: "Job advertisement duration"
+      verbatim_excerpt: "is for a minimum of 8 consecutive weeks within the 3 months prior to submitting an LMIA application"
 
   - id: lmia_employer_obligations_transport_housing_health
     category: employer_obligations

@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "nsnp_skilled_worker"
+category: "Nova Scotia Nominee Program"
+display_name: "Nova Scotia Nominee Program: Skilled Worker"
+status: "ACTIVE"
 program_id: "NSNP_SKILLED_WORKER"
 stream_id: "SKILLED_WORKER"
 jurisdiction: "CA-NS"

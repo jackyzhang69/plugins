@@ -1,4 +1,8 @@
 schema_version: "1.0.0"
+catalog_id: "bcpnp_si_elss"
+jurisdiction: "CA-BC"
+category: "Skills Immigration"
+display_name: "BC PNP Skills Immigration: Entry Level and Semi-Skilled (ELSS)"
 program_id: "BC_PNP_SKILLS_IMMIGRATION"
 stream_id: "ENTRY_LEVEL_SEMI_SKILLED"
 status: "LEGACY_CLOSED"
