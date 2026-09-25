@@ -8,7 +8,7 @@ When a token is needed, prefer a file containing it and pipe the file to `anykno
 
 The CLI checks the shared Jacky Zhang login before writing the canonical shared `token/user.json`. It does not create a separate AnyKnow token file.
 
-Use `anyknow commands --json` to discover the packaged commands and `anyknow whoami` to verify the connected account (the subject is masked). Use `anyknow logout` only when the user asks to disconnect: it removes the shared user login used by the other plugins too.
+Use `anyknow commands --json` to discover the packaged commands and `anyknow whoami` to verify the connected account (the subject is masked). Use `anyknow logout` only when the user asks to disconnect: it removes the shared user login used by the other plugins too. If this machine cannot join because the account already has its allowed devices, run `anyknow devices` and `anyknow unbind --id <id>` to free an old seat, then sign in again. A local logout is not proof that the remote device was released.
 
 An ordinary verb that needs the shared connection (search, get, links, versions,
 operation, browse, topics, export, commit-import, feedback, record-reuse, pair) returns the
