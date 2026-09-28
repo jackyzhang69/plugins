@@ -93,21 +93,21 @@ Google **Error 403** / "this app is being tested" / an unverified-app
 warning, say this in everyday words:
 
 - AnyMail asked Google for permission and Google refused.
-- This is a production OAuth misconfiguration, not a broken login
-  command and not something the human can fix by being added as a
-  tester. The shipped Gmail client is still on Google's Testing path, or
-  the product is pointed at the internal development client.
-- What the operator must do: marketplace AnyMail must already ship the
-  **production** Google Desktop client. Put that client In production
-  after Google verification, or rebake/republish if an old build still
-  had the development client. Never add a real / production Gmail
-  address (including a Tell Jacky reporter) to any test-user list.
+- The screen alone does not identify the cause. A client still in Testing,
+  an unverified app or requested Gmail scope, or a different configured
+  client can each require a different operator action. Publishing status
+  **In production** does not itself complete Google's verification.
+- The operator checks the actual shipped Desktop client and the Google
+  Cloud OAuth publishing, branding, and data-access verification states,
+  then resolves the specific issue shown there. Never add a real /
+  production Gmail address (including a Tell Jacky reporter) to a
+  test-user list.
 - If they tapped Cancel on the consent screen, they can retry and allow
   access.
 - What they should not do: paste tokens, client ids, or create their own
   OAuth app.
 
 If the browser stays on Google's 403 page and never returns to AnyMail,
-the CLI wait can time out with the same production-client next step. Do
-not invent a different provider or scope. Do not ask the human to create
-an OAuth app or paste a token.
+the CLI wait can time out. Check the same OAuth status and verification
+evidence. Do not invent a different provider or scope. Do not ask the
+human to create an OAuth app or paste a token.

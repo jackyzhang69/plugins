@@ -97,3 +97,14 @@ Direction B skill-surface checks can verify coverage against `commands --json`.
 - `mail signature-set`
 - `mail signature-clear`
 
+## Doctor install status
+
+`doctor` reports `common.install_home` for the canonical AnyMail plugin install
+only. Its `path` is the canonical `plugins/anymail/current` path and
+`scope: "canonical_install"` makes that boundary explicit. A verified CLI in a
+plugin cache can run even when this canonical install is absent or invalid; the
+cached CLI does not make `present` true.
+
+When `present` is false, run the current verified package binary with
+`doctor --repair-install`. The repair validates the package containing that
+binary, then installs the verified package at the canonical path.

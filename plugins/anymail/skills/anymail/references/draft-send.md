@@ -2,6 +2,41 @@
 
 Local drafts never create cloud drafts.
 
+## Draft JSON input
+
+`mail draft create`, `reply`, `forward`, and `update` read this bounded JSON
+object from stdin. Unknown fields are rejected.
+
+Required fields:
+
+- `from`: string
+- `to`: array of strings
+- `body`: string
+
+Optional fields:
+
+- `cc`, `bcc`, `references`: arrays of strings
+- `subject`, `in_reply_to`, `signature`: string or `null`
+- `attachments`: array of attachment objects
+
+Each attachment requires string fields `id`, `filename`, and `data_base64`;
+`data_base64` contains the attachment bytes encoded as Base64. Optional
+`content_type` is a string and defaults to `application/octet-stream`.
+
+Minimal local-draft example using reserved test addresses:
+
+```bash
+anymail mail draft create --account ACCOUNT_ID <<'JSON'
+{
+  "from": "sender@example.test",
+  "to": ["recipient@example.test"],
+  "body": "Draft text"
+}
+JSON
+```
+
+## Confirmed send flow
+
 1. Create from bounded JSON on stdin:
 
 ```bash
