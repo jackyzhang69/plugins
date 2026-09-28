@@ -37,6 +37,37 @@ anymail account upgrade-google-send --account ACCOUNT_ID --json
 anymail account upgrade-microsoft-send --account ACCOUNT_ID --json
 ```
 
+## Reauthorize an existing mailbox
+
+Use reauthorization for an account that is already configured. It refreshes
+that account's authorization or credentials without opening a second account.
+
+For an existing Microsoft / Outlook OAuth account:
+
+```bash
+anymail account reauthorize-microsoft --account ACCOUNT_ID --json
+```
+
+This opens the official browser flow for the account's saved OAuth grant and
+preserves its local binding and drafts. Ask the human to complete any provider
+consent in the browser; never request a token or client secret in chat.
+
+For an existing standard IMAP/SMTP account whose credentials need replacement:
+
+```bash
+anymail account reauthorize-imap --account ACCOUNT_ID --credential-kind password --json
+```
+
+Use `--credential-kind app-password` when the replacement credentials are an
+app password / authorize-code. The command reads exactly two fresh,
+newline-terminated UTF-8 lines from nonterminal stdin, with the read (IMAP)
+credential first and send (SMTP) credential second, followed by EOF. It rejects
+interactive terminal input and credentials on argv. Pass both values only via
+a secure local stdin path. Never ask for them in chat or place them in shell
+arguments or logs. If secure stdin is unavailable, stop and request an approved
+secure input path. The command rediscovers the provider endpoints and proceeds
+only if they still match the saved account.
+
 6. Remove a standard IMAP/SMTP account locally:
 
 ```bash

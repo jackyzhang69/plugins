@@ -1,20 +1,20 @@
 {
   "schema_version": "3",
-  "version": "0.1.6",
-  "source_sha": "0d3cfd4fee25836bc13b4dbb2daff450938436e0",
+  "version": "0.1.9",
+  "source_sha": "70496f5c1d0f0c614c15e46bb275be23ce93c61c",
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anymail",
       "checksum": "bin/darwin-arm64/anymail.sha256",
-      "sha256": "b87c7127bcaa79815cb5edd10e83c6a8dfc1cfd51835ed859fa2aa461a117264",
-      "size_bytes": 12467904,
+      "sha256": "4b279bd23ced5a5b45af9a25776d04495b6345045a8d6fb2a406c2d439bdbd4c",
+      "size_bytes": 12586752,
       "signing": "signed_same_team_hardened_runtime"
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anymail.exe",
       "checksum": "bin/win32-x64/anymail.exe.sha256",
-      "sha256": "519df418dd63ad57b6486a90000e755b1079f227ff2318f942a9097e72e370a4",
-      "size_bytes": 12063016,
+      "sha256": "88053b99ddc8fe116f5c7d06390ea323f0f35807dd14f8fdd13f9c7a0cc46f26",
+      "size_bytes": 12239656,
       "signing": "signed_azure_trusted_signing"
     }
   },

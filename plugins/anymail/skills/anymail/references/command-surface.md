@@ -28,6 +28,8 @@ Direction B skill-surface checks can verify coverage against `commands --json`.
 - `account upgrade-microsoft-send`
 - `account upgrade-microsoft-readwrite`
 - `account reauthorize-google`
+- `account reauthorize-microsoft`
+- `account reauthorize-imap`
 - `account revoke-google`
 - `account revoke-microsoft`
 - `account remove`

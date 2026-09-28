@@ -11,7 +11,8 @@ when_to_use: |-
   Load on plugin start. "open my Gmail/Outlook", "open Gmail", "open Outlook",
   "search mail", "read an email", "read a conversation", "check for new mail",
   "download attachment", "draft and send", "pin this sender", "mute this sender",
-  "remember this preference", "what can AnyMail do", "Tell Jacky".
+  "reauthorize an existing mailbox", "remember this preference",
+  "what can AnyMail do", "Tell Jacky".
 ---
 
 # AnyMail — what this plugin can do
@@ -65,6 +66,7 @@ $ANYMAIL account list --json
 |---|---|---|
 | "what can AnyMail do" | Live `doctor` + `commands` + `account list` | Connect/open once if no mailbox is ready |
 | Open Gmail / Outlook / standard mailbox | [open-account](references/open-account.md); app-password providers use [app-password](references/app-password.md) | Official browser consent, or local governed app-password storage |
+| Reauthorize an existing mailbox | [open-account](references/open-account.md) | Official OAuth consent, or replacement credentials through a secure local stdin path |
 | Search / find mail | [search](references/search.md) via `mail search-intent` | Which account, only when coverage is `one` and several are ready |
 | Read a conversation thread | [thread](references/thread.md) via `mail thread-intent` | Which Gmail account, only when several are ready |
 | Check for new mail changes | [history](references/history.md) via `mail history-intent` | Which Gmail account, only when several are ready |

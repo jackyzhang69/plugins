@@ -15,4 +15,5 @@ fresh host session still loads AnyMail for ordinary mail work.
 - what can AnyMail do
 - open Gmail
 - open Outlook
+- reauthorize an existing mailbox
 - Tell Jacky
