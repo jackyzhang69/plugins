@@ -1,0 +1,403 @@
+schema_version: 1.0.0
+catalog_id: nlpnp_priority_skills
+jurisdiction: CA-NL
+category: Newfoundland and Labrador Provincial Nominee Program
+display_name: NLPNP Priority Skills, Skilled Worker, and Express Entry Skilled Worker
+status: ACTIVE
+program_id: NLPNP_PRIORITY_SKILLS
+stream_id: PRIORITY_SKILLS
+effective_date: '2026-02-01'
+source_edition: NLPNP Priority Skills questionnaire maximum 114, threshold 60, effective 2026-02-01. Skilled
+  Worker and Express Entry Skilled Worker have no provincial points total in this file.
+source_url: https://www.gov.nl.ca/immigration/
+decision_scope: Deterministic eligibility prescreen for NLPNP Priority Skills, Skilled Worker, and Express
+  Entry Skilled Worker. AnyScore owns the 114-point questionnaire and the federal skilled-worker grid.
+  This file compares caller-supplied totals and does not add the factors.
+sources:
+- id: nlpnp_ps
+  title: Newfoundland and Labrador Provincial Nominee Program Priority Skills, Skilled Worker, and Express
+    Entry Skilled Worker
+  url: https://www.gov.nl.ca/immigration/
+  citation: 'Priority Skills questionnaire maximum 114 with threshold 60: language 24, education 30, experience
+    35, age 15, family 10. Skilled Worker and Express Entry have no provincial points total in this file.
+    Express Entry compares a caller-supplied federal total with 67.'
+  legal_authority: Newfoundland and Labrador Provincial Nominee Program priority skills and skilled worker
+    eligibility
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  - employer
+  types:
+    assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
+    candidate:
+      stream: priority_skills | skilled_worker | express_entry
+      language_result_within_12_months: boolean; Priority Skills test result is under 12 months old.
+      language_result_within_2_years: boolean; Skilled Worker or Express Entry test result is under two
+        years old.
+      language_clb_minimum: integer; lowest of the four skills on one test.
+      memorial_priority_graduate: boolean; Memorial University priority graduate pathway.
+      in_demand_experience_months_past_10_years: number; in-demand experience months in the past 10 years.
+        Priority Skills floor is 12.
+      age_years: integer; Priority Skills floor is 21. This file has no upper age redline.
+      assessed_grid_points: number; points AnyScore already assessed on the 114-point Priority Skills
+        questionnaire. This file does not add the factors.
+      work_permit_basis: lmia | lmia_exempt_agreement. Express Entry offer basis.
+      related_months_past_5_years: number; Skilled Worker related months in the past 5 years. Floor is
+        12.
+      continuous_skilled_months_past_10_years: number; Express Entry continuous skilled months in the
+        past 10 years. Floor is 12.
+      express_entry_profile_valid: boolean; valid Express Entry profile.
+      assessed_fsw_points: number; caller-supplied federal skilled worker grid total. Floor is 67. This
+        file does not add that grid.
+      intends_to_reside_in_nl: boolean
+    job_offer:
+      weekly_hours: number; regular weekly hours. Floor is 30 for Skilled Worker and Express Entry.
+      is_permanent: boolean; Skilled Worker can use a 24-month duration instead. Express Entry must be
+        permanent.
+      duration_months: number; Skilled Worker offer duration in months when the offer is not permanent.
+        Floor is 24.
+      hourly_wage: number; offered hourly wage.
+      prevailing_hourly_wage: number; prevailing hourly wage supplied for this job. This file compares
+        the two numbers and does not look up a wage table.
+      noc_teer: integer; Skilled Worker TEER 0-5. Express Entry TEER 0-3.
+    employer:
+      months_operating: number; months the employer has been operating. Floor is 24.
+      jva_approved: boolean; Job Vacancy Assessment is approved.
+minimums:
+  note: Documentation only. The engine evaluates the rules, not this block.
+  streams:
+  - priority_skills
+  - skilled_worker
+  - express_entry
+  priority_skills_language_clb: 5
+  priority_skills_language_max_age_months: 12
+  priority_skills_age_min: 21
+  priority_skills_points_threshold: 60
+  priority_skills_points_maximum: 114
+  priority_skills_in_demand_months: 12
+  weekly_hours: 30
+  employer_months_operating: 24
+  skilled_worker_offer_duration_months_if_not_permanent: 24
+  skilled_worker_language_clb_teer_0_to_3: 5
+  skilled_worker_language_clb_teer_4_to_5: 4
+  express_entry_language_clb: 7
+  language_result_max_age_years_skilled: 2
+  skilled_worker_related_months_past_5_years: 12
+  express_entry_continuous_skilled_months: 12
+  express_entry_fsw_points_threshold: 67
+  skilled_worker_teer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  express_entry_teer:
+  - 0
+  - 1
+  - 2
+  - 3
+reference_points_grid:
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. Priority
+    Skills compares candidate.assessed_grid_points with 60. Skilled Worker and Express Entry have no provincial
+    points total in this file. Express Entry compares candidate.assessed_fsw_points with 67.
+  priority_skills:
+    maximum: 114
+    apply_threshold: 60
+    language: 24
+    education: 30
+    experience: 35
+    age: 15
+    family: 10
+  skilled_worker:
+    provincial_points_total: none
+  express_entry:
+    provincial_points_total: none
+    federal_fsw_threshold_caller_supplied: 67
+rules:
+- id: nlpnp_priority_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'priority_skills'
+    fields:
+    - candidate.language_result_within_12_months
+    - candidate.language_clb_minimum
+  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
+    == 'priority_skills' && candidate.language_result_within_12_months == true && candidate.language_clb_minimum
+    >= 5)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'priority_skills' && candidate.language_result_within_12_months == false)
+    || (candidate.stream == 'priority_skills' && candidate.language_clb_minimum < 5)
+  missing_or_unverified: 'NEEDS_REVIEW: Priority Skills test age or lowest CLB cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-PS-LANG-001
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Language
+    verbatim_excerpt: language test result within 12 months
+  provenance:
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Language
+    page: 1
+    verbatim: language test result within 12 months
+- id: nlpnp_priority_pathway
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'priority_skills' && candidate.memorial_priority_graduate != true && (candidate.in_demand_experience_months_past_10_years
+      == null || candidate.in_demand_experience_months_past_10_years < 12)
+    fields:
+    - candidate.memorial_priority_graduate
+    - candidate.in_demand_experience_months_past_10_years
+  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
+    == 'priority_skills' && (candidate.memorial_priority_graduate == true || candidate.in_demand_experience_months_past_10_years
+    >= 12))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'priority_skills' && candidate.memorial_priority_graduate == false && candidate.in_demand_experience_months_past_10_years
+    < 12)
+  missing_or_unverified: 'NEEDS_REVIEW: Memorial priority graduate status or in-demand experience in the
+    past 10 years cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-PS-PATH-002
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Pathway
+    verbatim_excerpt: 12 months of in-demand experience in the past 10 years
+  provenance:
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Pathway
+    page: 1
+    verbatim: 12 months of in-demand experience in the past 10 years
+- id: nlpnp_priority_age
+  category: age
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'priority_skills'
+    fields:
+    - candidate.age_years
+  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
+    == 'priority_skills' && candidate.age_years >= 21)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'priority_skills' && candidate.age_years < 21)
+  missing_or_unverified: 'NEEDS_REVIEW: Priority Skills age cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-PS-AGE-003
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Age
+    verbatim_excerpt: at least 21 years of age
+  provenance:
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Age
+    page: 1
+    verbatim: at least 21 years of age
+- id: nlpnp_priority_points
+  category: points
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'priority_skills'
+    fields:
+    - candidate.assessed_grid_points
+  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
+    == 'priority_skills' && candidate.assessed_grid_points >= 60)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'priority_skills' && candidate.assessed_grid_points < 60)
+  missing_or_unverified: 'NEEDS_REVIEW: Assessed 114-point Priority Skills total is missing. AnyScore
+    computes that number.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-PS-POINTS-004
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Points
+    verbatim_excerpt: threshold 60
+  provenance:
+    source_file: nlpnp-priority-skills.html
+    section: Priority Skills - Points
+    page: 1
+    verbatim: threshold 60
+- id: nlpnp_sw_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
+    fields:
+    - job_offer.weekly_hours
+    - employer.months_operating
+    - employer.jva_approved
+    - job_offer.hourly_wage
+    - job_offer.prevailing_hourly_wage
+  pass_if: candidate.stream == 'priority_skills' || ((candidate.stream == 'skilled_worker' || candidate.stream
+    == 'express_entry') && job_offer.weekly_hours >= 30 && employer.months_operating >= 24 && employer.jva_approved
+    == true && job_offer.hourly_wage >= job_offer.prevailing_hourly_wage && ((candidate.stream == 'skilled_worker'
+    && (job_offer.is_permanent == true || job_offer.duration_months >= 24)) || (candidate.stream == 'express_entry'
+    && job_offer.is_permanent == true && candidate.work_permit_basis in ['lmia', 'lmia_exempt_agreement'])))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && (job_offer.weekly_hours
+    < 30 || employer.months_operating < 24 || employer.jva_approved == false || job_offer.hourly_wage
+    < job_offer.prevailing_hourly_wage)) || (candidate.stream == 'skilled_worker' && job_offer.is_permanent
+    == false && job_offer.duration_months < 24) || (candidate.stream == 'express_entry' && job_offer.is_permanent
+    == false) || (candidate.stream == 'express_entry' && candidate.work_permit_basis != null && !(candidate.work_permit_basis
+    in ['lmia', 'lmia_exempt_agreement']))
+  missing_or_unverified: 'NEEDS_REVIEW: Hours, employer history, Job Vacancy Assessment, wage, permanent
+    terms, duration, or Express Entry work-permit basis cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-SW-OFFER-005
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Job Offer
+    verbatim_excerpt: at least 30 hours a week
+  provenance:
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Job Offer
+    page: 1
+    verbatim: at least 30 hours a week
+- id: nlpnp_sw_occupation
+  category: occupation
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
+    fields:
+    - job_offer.noc_teer
+  pass_if: candidate.stream == 'priority_skills' || (candidate.stream == 'skilled_worker' && job_offer.noc_teer
+    in [0, 1, 2, 3, 4, 5]) || (candidate.stream == 'express_entry' && job_offer.noc_teer in [0, 1, 2,
+    3])
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'skilled_worker' && job_offer.noc_teer != null && !(job_offer.noc_teer in
+    [0, 1, 2, 3, 4, 5])) || (candidate.stream == 'express_entry' && job_offer.noc_teer != null && !(job_offer.noc_teer
+    in [0, 1, 2, 3]))
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry TEER cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-SW-OCC-006
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Occupation
+    verbatim_excerpt: 12 related months in the past 5 years
+  provenance:
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Occupation
+    page: 1
+    verbatim: 12 related months in the past 5 years
+- id: nlpnp_sw_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
+    fields:
+    - candidate.language_result_within_2_years
+    - candidate.language_clb_minimum
+  pass_if: candidate.stream == 'priority_skills' || (candidate.language_result_within_2_years == true
+    && ((candidate.stream == 'skilled_worker' && (candidate.language_clb_minimum >= 5 || (job_offer.noc_teer
+    in [4, 5] && candidate.language_clb_minimum >= 4))) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum
+    >= 7)))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && candidate.language_result_within_2_years
+    == false) || (candidate.stream == 'skilled_worker' && candidate.language_clb_minimum < 4) || (candidate.stream
+    == 'skilled_worker' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) ||
+    (candidate.stream == 'skilled_worker' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
+    < 4) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum < 7)
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry test age, lowest CLB, or TEER
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-SW-LANG-007
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Language
+    verbatim_excerpt: under two years old
+  provenance:
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Language
+    page: 1
+    verbatim: under two years old
+- id: nlpnp_sw_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream == 'priority_skills' || (candidate.stream == 'skilled_worker' && candidate.related_months_past_5_years
+    >= 12) || (candidate.stream == 'express_entry' && candidate.continuous_skilled_months_past_10_years
+    >= 12)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'skilled_worker' && candidate.related_months_past_5_years < 12) || (candidate.stream
+    == 'express_entry' && candidate.continuous_skilled_months_past_10_years < 12)
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker related months or Express Entry continuous skilled
+    months cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-SW-EXP-008
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Experience
+    verbatim_excerpt: 12 continuous skilled months in the past 10 years
+  provenance:
+    source_file: nlpnp-skilled-worker.html
+    section: Skilled Worker - Experience
+    page: 1
+    verbatim: 12 continuous skilled months in the past 10 years
+- id: nlpnp_ee_profile
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.express_entry_profile_valid
+    - candidate.assessed_fsw_points
+  pass_if: candidate.stream == 'priority_skills' || candidate.stream == 'skilled_worker' || (candidate.stream
+    == 'express_entry' && candidate.express_entry_profile_valid == true && candidate.assessed_fsw_points
+    >= 67)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == false) || (candidate.stream
+    == 'express_entry' && candidate.assessed_fsw_points < 67)
+  missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile or the caller-supplied federal skilled worker
+    total cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-EE-009
+    source_file: nlpnp-express-entry.html
+    section: Express Entry Profile & FSW
+    verbatim_excerpt: assessed federal skilled worker points of at least 67
+  provenance:
+    source_file: nlpnp-express-entry.html
+    section: Express Entry Profile & FSW
+    page: 1
+    verbatim: assessed federal skilled worker points of at least 67
+- id: nlpnp_intent
+  category: intent
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.intends_to_reside_in_nl
+  pass_if: (candidate.stream == 'priority_skills' || candidate.stream == 'skilled_worker' || candidate.stream
+    == 'express_entry') && candidate.intends_to_reside_in_nl == true
+  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
+    || candidate.intends_to_reside_in_nl == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Newfoundland and Labrador cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NLPNP-INTENT-010
+    source_file: nlpnp-common.html
+    section: Settlement Intent
+    verbatim_excerpt: intend to reside in Newfoundland and Labrador
+  provenance:
+    source_file: nlpnp-common.html
+    section: Settlement Intent
+    page: 1
+    verbatim: intend to reside in Newfoundland and Labrador

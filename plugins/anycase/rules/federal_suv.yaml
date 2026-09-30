@@ -1,0 +1,120 @@
+schema_version: 1.0.0
+catalog_id: federal_suv
+jurisdiction: CA
+category: Federal startup visa
+display_name: Start-up Visa
+status: ACTIVE
+program_id: FEDERAL_SUV
+stream_id: SUV
+effective_date: '2026-01-01'
+source_edition: IRPR start-up business class
+source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html
+decision_scope: Deterministic Start-up Visa prescreen. No points grid.
+sources:
+- id: irpr_suv
+  title: Start-up Visa Program
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html
+  citation: IRPR start-up business class
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: The Start-up Visa has no selection points grid.
+rules:
+- id: suv_support
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.letter_of_support_valid
+  pass_if: candidate.letter_of_support_valid == true
+  fail_if: candidate.letter_of_support_valid == false
+  missing_or_unverified: 'NEEDS_REVIEW: Designated-organization letter of support cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-SUPPORT-001
+    source_file: start-visa-eligibility.html
+    section: Letter of support
+    verbatim_excerpt: get a letter of support from a designated organization
+- id: suv_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.language_clb_minimum
+  pass_if: candidate.language_clb_minimum >= 5
+  fail_if: candidate.language_clb_minimum < 5
+  missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-LANGUAGE-002
+    source_file: start-visa-language-testing.html
+    section: Language testing
+    verbatim_excerpt: If you meet the minimum score of CLB 5 in all 4 abilities, include a copy of the test results with your
+      application.
+- id: suv_ownership
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.ownership_ratio
+  - candidate.owner_count
+  - candidate.combined_control_ratio
+  pass_if: candidate.ownership_ratio >= 0.10 && candidate.owner_count <= 5 && candidate.combined_control_ratio > 0.50
+  fail_if: candidate.ownership_ratio < 0.10 || candidate.owner_count > 5 || candidate.combined_control_ratio <= 0.50
+  missing_or_unverified: 'NEEDS_REVIEW: Ownership or control cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-OWNERSHIP-003
+    source_file: start-visa-eligibility.html
+    section: Have a qualifying business
+    verbatim_excerpt: each applicant must hold 10% or more of the total voting rights applicants and the designated organization
+      together must hold more than 50% of the total voting rights
+- id: suv_business
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.incorporated_in_canada
+  - candidate.business_operating
+  pass_if: candidate.incorporated_in_canada == true && candidate.business_operating == true
+  fail_if: candidate.incorporated_in_canada == false || candidate.business_operating == false
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian incorporation or active operation cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-BUSINESS-004
+    source_file: start-visa-eligibility.html
+    section: Have a qualifying business
+    verbatim_excerpt: incorporate your business in Canada provide active and ongoing management of your business from inside
+      Canada make sure an essential part of business operations happens in Canada
+- id: suv_funds
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.settlement_funds_cad
+  - candidate.settlement_funds_required_cad
+  pass_if: candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad
+  fail_if: candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
+  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-FUNDS-005
+    source_file: start-visa-eligibility.html
+    section: Bring enough money to settle
+    verbatim_excerpt: You’ll need proof that you have the money to support yourself and your dependants after you arrive in
+      Canada.
+- id: suv_quebec
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intends_to_reside_outside_quebec
+  pass_if: candidate.intends_to_reside_outside_quebec == true
+  fail_if: candidate.intends_to_reside_outside_quebec == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SUV-QUEBEC-006
+    source_file: start-visa.html
+    section: Program scope
+    verbatim_excerpt: build businesses in Canada (outside Quebec)

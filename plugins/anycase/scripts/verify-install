@@ -30,38 +30,48 @@ echo "========================================="
 echo "AnyCase Plugin Verification & Smoke Test"
 echo "========================================="
 
-echo "[1/7] Checking Native Rust Binary..."
+echo "[1/9] Checking Native Rust Binary..."
 "${BIN}" --version
 
-echo "[2/7] Verifying doctor diagnostics..."
+echo "[2/9] Verifying doctor diagnostics..."
 DOC_OUT=$("${BIN}" doctor --json)
 require_text "$DOC_OUT" '"plugin_id"' "Doctor diagnostics"
 
-echo "[3/7] Verifying whoami identity check..."
+echo "[3/9] Verifying whoami identity check..."
 WHO_OUT=$("${BIN}" whoami --json)
 require_text "$WHO_OUT" '"status"' "Whoami check"
 
-echo "[4/7] Verifying CLB calculation..."
+echo "[4/9] Verifying CLB calculation..."
 CLB_OUT=$("${BIN}" clb --test ielts -l 8 -r 7 -w 7 -s 7 --json)
 require_text "$CLB_OUT" '"overall"' "CLB calculation"
 
-echo "[5/7] Verifying Precedent Caselaw retrieval (Global --json flag position)..."
+echo "[5/9] Verifying Precedent Caselaw retrieval (Global --json flag position)..."
 CASE_OUT=$("${BIN}" --json caselaw "study permit" --top 1)
 require_text "$CASE_OUT" '"reference"' "Caselaw retrieval"
 # Scan the raw command JSON. Parsing into a narrower projection first would hide
 # precisely the extra backend fields this installed-surface check must catch.
 reject_text "$CASE_OUT" '"(_index|_score|internal_es_doc_id|source_id)"[[:space:]]*:' "caselaw internal field leaked"
 
-echo "[6/7] Verifying IRCC Policy & Help Centre search..."
+echo "[6/9] Verifying IRCC Policy & Help Centre search..."
 POL_OUT=$("${BIN}" policy "study permit" --top 1 --json)
 require_text "$POL_OUT" '"title"' "Policy search"
 
-echo "[7/7] Verifying Practitioner Field Notes retrieval..."
+echo "[7/9] Verifying Practitioner Field Notes retrieval..."
 NOTES_OUT=$("${BIN}" notes "flagpole" --top 1 --json)
 require_text "$NOTES_OUT" '"topic"' "Field notes retrieval"
 reject_text "$NOTES_OUT" '"(_index|_score|author|body|email|emails_content|from|headers|license|message|message_id|participants|participants_names|phone|raw|sender|sender_name|signature|source_id|thread_id|to)"[[:space:]]*:' "field-notes internal field leaked"
 reject_text "$NOTES_OUT" 'https?://|@|[[:alnum:]_.%+-]+[[:space:]]*(\[at\]|\(at\))[[:space:]]*[[:alnum:]-]+|([[:alnum:]]([[:alnum:]-]{0,61}[[:alnum:]])?\.)+(xn--[[:alnum:]-]{2,59}|[[:alpha:]]{2,63})|(^|[^[:digit:]])1?[[:digit:]]{10}([^[:digit:]]|$)|\+[[:digit:]]{1,3}([[:space:].()-]*[[:digit:]]){7,14}|(^|[^[:alnum:]_])R[[:digit:]]{5,7}([^[:alnum:]_]|$)|(^|[^[:alnum:]_])(RCIC|CICC|LSO|immeforum|listserv|email-kg|immicore)([^[:alnum:]_]|$)' "field-notes contact or source marker leaked"
 
+echo "[8/9] Verifying embedded scoring grids (no checkout policies/)..."
+SCORE_OUT=$("${BIN}" score policies --json)
+require_text "$SCORE_OUT" '"bc_pnp_sirs"' "Score policies list bc_pnp_sirs"
+require_text "$SCORE_OUT" '"count"' "Score policies envelope"
+
+echo "[9/9] Verifying program scoring pin discovery without local eligibility catalog..."
+PROG_OUT=$("${BIN}" programs describe bcpnp_si_skilled_worker --json)
+require_text "$PROG_OUT" '"bc_pnp_sirs"' "Programs describe scoring pin"
+require_text "$PROG_OUT" '"calculations_status"[[:space:]]*:[[:space:]]*"ready"' "Programs describe ready"
+
 echo "========================================="
-echo "✅ All 7 AnyCase Governance & Smoke Tests PASSED!"
+echo "✅ All 9 AnyCase Governance & Smoke Tests PASSED!"
 echo "========================================="

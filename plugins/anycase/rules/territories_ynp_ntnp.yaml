@@ -1,0 +1,115 @@
+schema_version: 1.0.0
+catalog_id: territories_ynp_ntnp
+jurisdiction: CA-YT-NT
+category: Territorial nominee
+display_name: Yukon YNP and Northwest Territories NTNP
+status: ACTIVE
+program_id: TERRITORIAL_NOMINEE
+stream_id: WORKER
+effective_date: '2026-01-01'
+source_edition: YNP and NTNP worker baselines
+source_url: https://www.immigratenwt.ca/
+decision_scope: Deterministic territorial worker prescreen. The Yukon grid and the NTNP points grid stay
+  in AnyScore.
+sources:
+- id: territories
+  title: Yukon and Northwest Territories nominee worker streams
+  url: https://www.immigratenwt.ca/
+  citation: YNP and NTNP worker baselines
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. Yukon grid and NTNP ranking stay in AnyScore. No points floor in this ruleset.
+rules:
+- id: territory_age
+  category: status
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.age_years
+  pass_if: candidate.age_years >= 18
+  fail_if: candidate.age_years < 18
+  missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-TERR-AGE-001
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Applicant Eligibility - Age
+    verbatim_excerpt: The candidate must be at least 18
+  provenance:
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Applicant Eligibility - Age
+    page: 1
+    verbatim: The candidate must be at least 18
+- id: territory_job_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.weekly_hours
+  - job_offer.is_permanent
+  - job_offer.from_territorial_employer
+  pass_if: job_offer.weekly_hours >= 30 && job_offer.is_permanent == true && job_offer.from_territorial_employer
+    == true
+  fail_if: job_offer.weekly_hours < 30 || job_offer.is_permanent == false || job_offer.from_territorial_employer
+    == false
+  missing_or_unverified: 'NEEDS_REVIEW: Territorial full-time permanent offer cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-TERR-OFFER-002
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Job Offer Requirements
+    verbatim_excerpt: at least 30 hours a week from a territorial employer
+  provenance:
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Job Offer Requirements
+    page: 1
+    verbatim: at least 30 hours a week from a territorial employer
+- id: territory_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.noc_teer
+  - candidate.language_clb_minimum
+  - candidate.language_result_within_2_years
+  pass_if: candidate.language_result_within_2_years == true && ((job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
+    >= 4) || (job_offer.noc_teer in [2, 3] && candidate.language_clb_minimum >= 5) || (job_offer.noc_teer
+    in [0, 1] && candidate.language_clb_minimum >= 6))
+  fail_if: candidate.language_result_within_2_years == false || (job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
+    < 4) || (job_offer.noc_teer in [2, 3] && candidate.language_clb_minimum < 5) || (job_offer.noc_teer
+    in [0, 1] && candidate.language_clb_minimum < 6)
+  missing_or_unverified: 'NEEDS_REVIEW: Language test or TEER cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-TERR-LANG-003
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Language Requirements
+    verbatim_excerpt: CLB 4 for TEER 4-5, CLB 5 for TEER 2-3, CLB 6 for TEER 0-1
+  provenance:
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Language Requirements
+    page: 1
+    verbatim: CLB 4 for TEER 4-5, CLB 5 for TEER 2-3, CLB 6 for TEER 0-1
+- id: territory_intent
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intends_to_reside_in_territory
+  pass_if: candidate.intends_to_reside_in_territory == true
+  fail_if: candidate.intends_to_reside_in_territory == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in the territory cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-TERR-INTENT-004
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Settlement Intent
+    verbatim_excerpt: intend to reside in Yukon or the Northwest Territories
+  provenance:
+    source_file: ynp-ntnp-worker-baselines.html
+    section: Settlement Intent
+    page: 1
+    verbatim: intend to reside in Yukon or the Northwest Territories

@@ -1,0 +1,82 @@
+schema_version: 1.0.0
+catalog_id: federal_cec
+jurisdiction: CA
+category: Federal CEC
+display_name: Canadian Experience Class
+status: ACTIVE
+program_id: FEDERAL_CEC
+stream_id: CEC
+effective_date: '2026-01-01'
+source_edition: IRPR section 87.1
+source_url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.1.html
+decision_scope: Deterministic Canadian Experience Class prescreen. No points grid.
+sources:
+- id: irpr_87_1
+  title: IRPR s. 87.1 Canadian Experience Class
+  url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.1.html
+  citation: IRPR section 87.1
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: The Canadian Experience Class has no selection points grid.
+rules:
+- id: cec_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.canadian_skilled_months_past_3_years
+  - candidate.work_authorized
+  - candidate.gained_as_full_time_student
+  - candidate.self_employed_work
+  - job_offer.noc_teer
+  pass_if: candidate.canadian_skilled_months_past_3_years >= 12 && candidate.work_authorized == true &&
+    candidate.gained_as_full_time_student == false && candidate.self_employed_work == false && job_offer.noc_teer
+    in [0, 1, 2, 3]
+  fail_if: candidate.canadian_skilled_months_past_3_years < 12 || candidate.work_authorized == false ||
+    candidate.gained_as_full_time_student == true || candidate.self_employed_work == true || (job_offer.noc_teer
+    != null && !(job_offer.noc_teer in [0, 1, 2, 3]))
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian skilled experience cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-CEC-EXPERIENCE-001
+    source_file: src03.html
+    section: Canadian skilled work experience
+    verbatim_excerpt: total at least 1 year of work or 1,560 hours total (30 hours per week) in the 3
+      years before you apply
+- id: cec_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.noc_teer
+  - candidate.language_clb_minimum
+  pass_if: (job_offer.noc_teer in [0, 1] && candidate.language_clb_minimum >= 7) || (job_offer.noc_teer
+    in [2, 3] && candidate.language_clb_minimum >= 5)
+  fail_if: (job_offer.noc_teer in [0, 1] && candidate.language_clb_minimum < 7) || (job_offer.noc_teer
+    in [2, 3] && candidate.language_clb_minimum < 5)
+  missing_or_unverified: 'NEEDS_REVIEW: Language or TEER cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-CEC-LANGUAGE-001
+    source_file: src18.html
+    section: Canadian Experience Class — Minimum level for all 4 abilities
+    verbatim_excerpt: TEER 0 or 1 CLB 7 NCLC 7 TEER 2 or 3 CLB 5 NCLC 5
+- id: cec_quebec
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intends_to_reside_outside_quebec
+  pass_if: candidate.intends_to_reside_outside_quebec == true
+  fail_if: candidate.intends_to_reside_outside_quebec == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-CEC-QUEBEC-001
+    source_file: src03.html
+    section: Where you can live in Canada
+    verbatim_excerpt: You must plan to live outside the province of Quebec

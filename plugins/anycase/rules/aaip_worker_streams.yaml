@@ -1,0 +1,668 @@
+schema_version: 1.0.0
+catalog_id: aaip_worker_streams
+jurisdiction: CA-AB
+category: Alberta Advantage Immigration Program
+display_name: AAIP Worker Streams (Alberta Opportunity, Tourism and Hospitality, Rural
+  Renewal)
+status: ACTIVE
+program_id: AAIP_WORKER_STREAMS
+stream_id: WORKER_STREAMS
+effective_date: '2025-08-07'
+source_edition: AAIP worker-stream eligibility pages archived 2026-09-02 (Alberta
+  Opportunity, Tourism and Hospitality, Rural Renewal). WEOI points grid is reference
+  only.
+source_url: https://www.alberta.ca/aaip-alberta-opportunity-stream-eligibility
+decision_scope: 'Deterministic eligibility prescreen for the three AAIP worker streams:
+  Alberta Opportunity, Tourism and Hospitality, and Rural Renewal. AnyScore owns Worker
+  Expression of Interest points. This file does not score them.'
+sources:
+- id: aaip_aos
+  title: AAIP Alberta Opportunity Stream – Eligibility
+  url: https://www.alberta.ca/aaip-alberta-opportunity-stream-eligibility
+  citation: Archived page, retrieved 2026-09-02
+  legal_authority: Official AAIP program page for Alberta Opportunity Stream eligibility
+- id: aaip_ths
+  title: AAIP Tourism and Hospitality Stream – Eligibility
+  url: https://www.alberta.ca/tourism-and-hospitality-stream-eligibility
+  citation: Archived page, retrieved 2026-09-02
+  legal_authority: Official AAIP program page for Tourism and Hospitality Stream eligibility
+- id: aaip_rrs
+  title: AAIP Rural Renewal Stream – Eligibility
+  url: https://www.alberta.ca/aaip-rural-renewal-stream-eligibility
+  citation: Archived page, retrieved 2026-09-02
+  legal_authority: Official AAIP program page for Rural Renewal Stream eligibility
+- id: aaip_weoi_grid
+  title: AAIP Worker Expression of Interest points grid
+  url: https://www.alberta.ca/system/files/im-worker-stream-expression-of-interest-points-grid.pdf
+  citation: Points grid PDF, reference only, retrieved 2026-09-02
+  legal_authority: Published WEOI bands. Not an eligibility rule. AnyScore owns the
+    arithmetic.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  - employer
+  types:
+    assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
+    candidate:
+      stream: alberta_opportunity | tourism_hospitality | rural_renewal
+      work_permit_basis: lmia | lmia_exempt_trade | intra_company | iec | mobilite_francophone
+        | religious_r205d | vulnerable_worker_open | vulnerable_worker_family | pgwp_alberta_public
+        | ircc_public_policy_open | wildfire_special_measure | other | none | maintained_status
+      in_refugee_appeal_or_removal: boolean; refugee claimant, or a person in a federal
+        appeal or removal
+      residing_in_alberta: boolean; living in Alberta
+      residing_in_canada: boolean; living in Canada
+      currently_working: boolean; currently working. Used only for the Rural Renewal
+        settlement-funds trigger.
+      ece_certification: level_2_or_3 or another resolved certification value. Material
+        only for NOC 42202.
+      experience_was_full_time: boolean; qualifying experience was full-time (30 hours
+        a week)
+      alberta_experience_months_last_18: number; months of Alberta experience in the
+        last 18 months
+      occupation_experience_months_last_30: number; months in the occupation in the
+        last 30 months
+      occupation_related_to_alberta_study: boolean; occupation is related to the Alberta
+        program of study
+      ths_consecutive_months_with_employer: number; consecutive months with the Tourism
+        and Hospitality employer
+      ths_hours_with_same_employer: number; hours with that same employer
+      rrs_experience_months_last_18: number; qualifying months in the last 18 months
+      rrs_pgwp_two_year_dli_in_community: boolean; PGWP holder who completed a two-year
+        program at a DLI in the designated community
+      endorsement_letter_valid: boolean; community EDO endorsement letter is valid.
+        One-year validity is already resolved.
+      intends_to_reside_in_designated_community: boolean
+      is_contractor_owner_or_agency: boolean; independent contractor, owner, shareholder,
+        director, or agency worker
+      language_result_within_2_years: boolean; one official test, result under two
+        years old
+      language_clb_minimum: integer; lowest of the four skills
+      meets_canadian_high_school: boolean; ECA equal to Canadian high school, a Canadian
+        credential, or an Alberta AIT trade certificate. Already resolved.
+      holds_alberta_trade_certificate: boolean; Alberta AIT certificate when the offer
+        is a compulsory trade
+      holds_required_licence: boolean; required professional licence
+      settlement_funds_cad: number; unencumbered settlement funds
+      settlement_funds_required_cad: number; officer-supplied LICO requirement for
+        family size and community population
+    job_offer:
+      noc_2021_code: five-digit NOC 2021 string
+      noc_teer: integer 0-5
+      weekly_hours: number; paid hours per week
+      same_as_current_occupation: boolean; Alberta Opportunity current occupation
+        matches the offer
+      same_employer_as_qualifying_work: boolean; Tourism and Hospitality offer employer
+        is the qualifying employer
+      in_designated_community: boolean; Rural Renewal work location is in the designated
+        community
+      is_part_time_casual_or_seasonal: boolean
+      home_based_or_not_commercial: boolean; home-based or not commercially or industrially
+        zoned
+      work_on_alberta_premises: boolean; work is on premises in Alberta
+      hourly_wage: number; basic hourly wage
+      alberta_lowest_starting_wage: number; Job Bank lowest starting wage for the
+        occupation and location
+      lmia_stated_hourly_wage: number; hourly wage stated on the LMIA. Required when
+        the basis is lmia.
+      compulsory_trade: boolean
+      requires_professional_licence: boolean
+    employer:
+      wcb_industry_eligible: boolean; Tourism and Hospitality WCB industry is eligible
+      sector_association_member: boolean; recognized sector-association member
+      travel_alberta_exemption: boolean; Travel Alberta exemption from association
+        membership
+minimums:
+  note: Documentation only. The engine evaluates the rules, not this block.
+  full_time_weekly_hours: 30
+  language_result_max_age_years: 2
+  streams:
+    alberta_opportunity:
+      eligible_work_permit_basis:
+      - lmia
+      - lmia_exempt_trade
+      - intra_company
+      - iec
+      - mobilite_francophone
+      - religious_r205d
+      - vulnerable_worker_open
+      - vulnerable_worker_family
+      - pgwp_alberta_public
+      - ircc_public_policy_open
+      experience_alberta_months_last_18: 12
+      experience_occupation_months_last_30: 24
+      pgwp_or_public_policy_alberta_months_last_18: 6
+      language_clb_teer_0_3: 5
+      language_clb_noc_33102: 7
+      language_clb_teer_4_5: 4
+    tourism_hospitality:
+      eligible_work_permit_basis:
+      - lmia
+      - wildfire_special_measure
+      consecutive_months_with_employer: 6
+      hours_with_same_employer: 780
+      language_clb: 4
+    rural_renewal:
+      experience_months_last_18: 12
+      language_clb_teer_0_3: 5
+      language_clb_teer_4_5: 4
+  occupation:
+    aos_ineligible_noc_2021:
+    - '00010'
+    - '40021'
+    - '40030'
+    - '40041'
+    - '60040'
+    - '41100'
+    - '41220'
+    - '41221'
+    - '51111'
+    - '51122'
+    - '42200'
+    - '42202'
+    - '43100'
+    - '43109'
+    - '53121'
+    - '53122'
+    - '53124'
+    - '53200'
+    - '63101'
+    - '33100'
+    - '44100'
+    - '44101'
+    - '64321'
+    - '55109'
+    - '65109'
+    - '65211'
+    - '65229'
+    - '65329'
+    - '75200'
+    - '85101'
+    - '85102'
+    - '85104'
+    - '85110'
+    - '85121'
+    aos_42202_exception: 42202 is eligible only when candidate.ece_certification is
+      level_2_or_3. Other published codes are ineligible as a whole.
+    ths_eligible_noc_2021:
+    - '54100'
+    - '60030'
+    - '60031'
+    - '62020'
+    - '62200'
+    - '63200'
+    - '64300'
+    - '64301'
+    - '64314'
+    - '64320'
+    - '64322'
+    - '65200'
+    - '65201'
+    - '65210'
+    - '65310'
+    - '65311'
+    - '65312'
+    - '65320'
+    rrs_ineligible_noc_2021:
+    - '00010'
+    - '60040'
+    - '41100'
+    - '51111'
+    - '51122'
+    - '42200'
+    - '53121'
+    - '53122'
+    - '53124'
+    - '53200'
+    - '33100'
+    - '44100'
+    - '44101'
+    - '64321'
+    - '55109'
+    - '65229'
+    - '85101'
+  settlement_funds:
+    note: 'Rural Renewal Table 4, Canadian dollars, by family size (rows) and designated-community
+      population (columns: under 1,000; 1,000 to 30,000; 30,000 to 99,999). The rule
+      compares candidate.settlement_funds_cad with candidate.settlement_funds_required_cad.
+      Alberta Opportunity and Tourism and Hospitality have no funds gate.'
+    population_bands:
+    - under_1000
+    - from_1000_to_30000
+    - from_30000_to_99999
+    by_family_size:
+      1:
+      - 8922
+      - 10151
+      - 11093
+      2:
+      - 11107
+      - 12636
+      - 13810
+      3:
+      - 13655
+      - 15534
+      - 16977
+      4:
+      - 16579
+      - 18861
+      - 20613
+      5:
+      - 18803
+      - 21392
+      - 23379
+      6:
+      - 21208
+      - 24127
+      - 26367
+      7:
+      - 23611
+      - 26861
+      - 29356
+    each_additional_family_member:
+    - 2404
+    - 2735
+    - 2989
+  wage:
+    standard: Job Bank lowest starting wage. LMIA holders must also meet the LMIA
+      stated hourly wage. No median-wage rule.
+reference_weoi_grid:
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns
+    the arithmetic. There is no pass mark. Language scores the higher of the English
+    and French scales, then adds the bilingual bonus, so the language maximum is 13.
+    Published total maximum is 100.
+  maximum: 100
+  pass_mark: null
+  factors:
+    education:
+      maximum: 12
+      doctorate: 12
+      masters: 10
+      bachelors: 7
+      trades_certificate: 7
+      diploma: 4
+      secondary: 0
+    canadian_study_location:
+      maximum: 10
+      alberta: 10
+      other_province: 6
+      outside_canada: 0
+    language:
+      maximum: 13
+      english:
+        clb_6_plus: 10
+        clb_5: 8
+        clb_4: 5
+        below: 0
+      french:
+        clb_6_plus: 8
+        clb_5: 5
+        clb_4: 3
+        below: 0
+      bilingual_clb_4_in_both: 3
+    total_experience:
+      maximum: 11
+      months_12_or_more: 11
+      months_6_to_11: 7
+      under_6_months: 3
+    canadian_experience:
+      maximum: 10
+      alberta_6_months_or_more: 10
+      other_province_6_months_or_more: 6
+      otherwise: 0
+    age:
+      maximum: 5
+      age_21_to_34: 5
+      age_35_to_49: 4
+      age_18_to_20: 3
+      age_50_plus: 3
+    family_in_alberta:
+      maximum: 8
+      parent_child_or_sibling: 8
+    permanent_full_time_alberta_offer:
+      maximum: 10
+      offer: 10
+    sector_or_endorsement:
+      maximum: 6
+      rural_endorsement_or_tourism_association_or_police_association: 6
+    location:
+      maximum: 5
+      outside_calgary_and_edmonton_cma: 5
+      inside_calgary_or_edmonton_cma: 0
+    regulated_licence_or_ait_certificate:
+      maximum: 10
+      held: 10
+rules:
+- id: aaip_status_and_work_permit
+  category: status
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.work_permit_basis
+  - candidate.in_refugee_appeal_or_removal
+  conditional_required_fields:
+    when: candidate.stream == 'alberta_opportunity' || candidate.stream == 'tourism_hospitality'
+    fields:
+    - candidate.residing_in_alberta
+  pass_if: candidate.in_refugee_appeal_or_removal == false && ((candidate.stream ==
+    'alberta_opportunity' && candidate.residing_in_alberta == true && candidate.work_permit_basis
+    in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone',
+    'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family', 'pgwp_alberta_public',
+    'ircc_public_policy_open']) || (candidate.stream == 'tourism_hospitality' && candidate.residing_in_alberta
+    == true && candidate.work_permit_basis in ['lmia', 'wildfire_special_measure'])
+    || (candidate.stream == 'rural_renewal' && ((candidate.residing_in_canada == false
+    && (candidate.work_permit_basis == 'none' || (candidate.work_permit_basis != null
+    && !(candidate.work_permit_basis in ['other', 'maintained_status', 'none']))))
+    || (candidate.residing_in_canada == true && candidate.work_permit_basis != null
+    && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status'])))))
+  fail_if: candidate.in_refugee_appeal_or_removal == true || (candidate.stream !=
+    null && !(candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']))
+    || (candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta
+    == false) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis
+    != null && !(candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company',
+    'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family',
+    'pgwp_alberta_public', 'ircc_public_policy_open'])) || (candidate.stream == 'tourism_hospitality'
+    && candidate.residing_in_alberta == false) || (candidate.stream == 'tourism_hospitality'
+    && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['lmia',
+    'wildfire_special_measure'])) || (candidate.stream == 'rural_renewal' && candidate.work_permit_basis
+    in ['other', 'maintained_status']) || (candidate.stream == 'rural_renewal' &&
+    candidate.residing_in_canada == true && candidate.work_permit_basis in ['none',
+    'other', 'maintained_status'])
+  missing_or_unverified: 'NEEDS_REVIEW: Stream, work-permit basis, Alberta residence,
+    or Canadian residence cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-STATUS-001
+    source_file: src01.html
+    section: Status and eligible work permit
+    verbatim_excerpt: refugee claimants or individuals involved in a Government of
+      Canada appeal or removal process
+- id: aaip_occupation_eligible
+  category: occupation
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - job_offer.noc_2021_code
+  conditional_required_fields:
+    when: candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code ==
+      '42202'
+    fields:
+    - candidate.ece_certification
+  pass_if: (candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code !=
+    null && !(job_offer.noc_2021_code in ['00010', '40021', '40030', '40041', '60040',
+    '41100', '41220', '41221', '51111', '51122', '42200', '43100', '43109', '53121',
+    '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109',
+    '65109', '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110',
+    '85121']) && (!(job_offer.noc_2021_code == '42202') || candidate.ece_certification
+    == 'level_2_or_3')) || (candidate.stream == 'tourism_hospitality' && job_offer.noc_2021_code
+    in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314',
+    '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320'])
+    || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code != null &&
+    !(job_offer.noc_2021_code in ['00010', '60040', '41100', '51111', '51122', '42200',
+    '53121', '53122', '53124', '53200', '33100', '44100', '44101', '64321', '55109',
+    '65229', '85101']) && (job_offer.noc_teer in [0, 1, 2, 3] || (job_offer.noc_teer
+    in [4, 5] && candidate.residing_in_alberta == true && candidate.work_permit_basis
+    != null && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status']))))
+  fail_if: (candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code in
+    ['00010', '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111',
+    '51122', '42200', '43100', '43109', '53121', '53122', '53124', '53200', '63101',
+    '33100', '44100', '44101', '64321', '55109', '65109', '65211', '65229', '65329',
+    '75200', '85101', '85102', '85104', '85110', '85121']) || (candidate.stream ==
+    'alberta_opportunity' && job_offer.noc_2021_code == '42202' && candidate.ece_certification
+    != null && !(candidate.ece_certification == 'level_2_or_3')) || (candidate.stream
+    == 'tourism_hospitality' && job_offer.noc_2021_code != null && !(job_offer.noc_2021_code
+    in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314',
+    '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320']))
+    || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code in ['00010',
+    '60040', '41100', '51111', '51122', '42200', '53121', '53122', '53124', '53200',
+    '33100', '44100', '44101', '64321', '55109', '65229', '85101']) || (candidate.stream
+    == 'rural_renewal' && job_offer.noc_teer != null && !(job_offer.noc_teer in [0,
+    1, 2, 3, 4, 5])) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer
+    in [4, 5] && (candidate.residing_in_alberta == false || candidate.residing_in_canada
+    == false || candidate.work_permit_basis in ['none', 'other', 'maintained_status']))
+  missing_or_unverified: 'NEEDS_REVIEW: NOC 2021 code, TEER, Alberta residence, work-permit
+    basis, or NOC 42202 early-childhood certification cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-OCCUPATION-002
+    source_file: src01.html
+    section: Eligible and ineligible occupations
+    verbatim_excerpt: Ineligible occupations
+- id: aaip_qualifying_employment
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - job_offer.weekly_hours
+  conditional_required_fields:
+    when: candidate.stream == 'alberta_opportunity' && (candidate.work_permit_basis
+      == 'pgwp_alberta_public' || candidate.work_permit_basis == 'ircc_public_policy_open')
+    fields:
+    - candidate.alberta_experience_months_last_18
+    - candidate.occupation_related_to_alberta_study
+  pass_if: job_offer.weekly_hours >= 30 && ((candidate.stream == 'alberta_opportunity'
+    && candidate.experience_was_full_time == true && job_offer.same_as_current_occupation
+    == true && ((candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
+    && candidate.alberta_experience_months_last_18 >= 6 && candidate.occupation_related_to_alberta_study
+    == true) || (candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company',
+    'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family']
+    && (candidate.alberta_experience_months_last_18 >= 12 || candidate.occupation_experience_months_last_30
+    >= 24)))) || (candidate.stream == 'tourism_hospitality' && candidate.experience_was_full_time
+    == true && job_offer.same_employer_as_qualifying_work == true && (candidate.ths_consecutive_months_with_employer
+    >= 6 || candidate.ths_hours_with_same_employer >= 780)) || (candidate.stream ==
+    'rural_renewal' && (candidate.rrs_pgwp_two_year_dli_in_community == true || (candidate.rrs_experience_months_last_18
+    >= 12 && candidate.experience_was_full_time == true))))
+  fail_if: job_offer.weekly_hours < 30 || (candidate.stream == 'alberta_opportunity'
+    && candidate.experience_was_full_time == false) || (candidate.stream == 'alberta_opportunity'
+    && job_offer.same_as_current_occupation == false) || (candidate.stream == 'alberta_opportunity'
+    && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
+    && candidate.alberta_experience_months_last_18 < 6) || (candidate.stream == 'alberta_opportunity'
+    && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
+    && candidate.occupation_related_to_alberta_study == false) || (candidate.stream
+    == 'alberta_opportunity' && candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade',
+    'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open',
+    'vulnerable_worker_family'] && candidate.alberta_experience_months_last_18 < 12
+    && candidate.occupation_experience_months_last_30 < 24) || (candidate.stream ==
+    'tourism_hospitality' && candidate.experience_was_full_time == false) || (candidate.stream
+    == 'tourism_hospitality' && job_offer.same_employer_as_qualifying_work == false)
+    || (candidate.stream == 'tourism_hospitality' && candidate.ths_consecutive_months_with_employer
+    < 6 && candidate.ths_hours_with_same_employer < 780) || (candidate.stream == 'rural_renewal'
+    && candidate.rrs_pgwp_two_year_dli_in_community == false && candidate.rrs_experience_months_last_18
+    < 12) || (candidate.stream == 'rural_renewal' && candidate.rrs_pgwp_two_year_dli_in_community
+    == false && candidate.experience_was_full_time == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Full-time qualifying experience, current-occupation
+    match, employer continuity, or the Rural Renewal 12-month test cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-EXPERIENCE-003
+    source_file: src01.html
+    section: Qualifying work experience
+    verbatim_excerpt: minimum of 12 months full-time work experience
+- id: aaip_job_offer_genuine
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.is_part_time_casual_or_seasonal
+  - candidate.is_contractor_owner_or_agency
+  - job_offer.home_based_or_not_commercial
+  - job_offer.work_on_alberta_premises
+  - job_offer.weekly_hours
+  pass_if: job_offer.is_part_time_casual_or_seasonal == false && candidate.is_contractor_owner_or_agency
+    == false && job_offer.home_based_or_not_commercial == false && job_offer.work_on_alberta_premises
+    == true && job_offer.weekly_hours >= 30
+  fail_if: job_offer.is_part_time_casual_or_seasonal == true || candidate.is_contractor_owner_or_agency
+    == true || job_offer.home_based_or_not_commercial == true || job_offer.work_on_alberta_premises
+    == false || job_offer.weekly_hours < 30
+  missing_or_unverified: 'NEEDS_REVIEW: Offer hours, employment relationship, business
+    premises, or Alberta work location cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-JOB-OFFER-004
+    source_file: src03.html
+    section: Genuine full-time job offer redlines
+    verbatim_excerpt: part-time, casual or seasonal employees
+- id: aaip_wage_floor
+  category: wage
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.work_permit_basis
+  - job_offer.hourly_wage
+  - job_offer.alberta_lowest_starting_wage
+  conditional_required_fields:
+    when: candidate.work_permit_basis == 'lmia'
+    fields:
+    - job_offer.lmia_stated_hourly_wage
+  pass_if: job_offer.hourly_wage >= job_offer.alberta_lowest_starting_wage && (!(candidate.work_permit_basis
+    == 'lmia') || job_offer.hourly_wage >= job_offer.lmia_stated_hourly_wage)
+  fail_if: job_offer.hourly_wage < job_offer.alberta_lowest_starting_wage || (candidate.work_permit_basis
+    == 'lmia' && job_offer.hourly_wage < job_offer.lmia_stated_hourly_wage)
+  missing_or_unverified: 'NEEDS_REVIEW: Hourly wage, Job Bank lowest starting wage,
+    or the LMIA stated wage cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-WAGE-005
+    source_file: src81.html
+    section: Wage floor
+    verbatim_excerpt: Alberta job offer requirements
+- id: aaip_language_clb
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.language_result_within_2_years
+  - candidate.language_clb_minimum
+  conditional_required_fields:
+    when: candidate.stream == 'alberta_opportunity' || candidate.stream == 'rural_renewal'
+    fields:
+    - job_offer.noc_teer
+  pass_if: candidate.language_result_within_2_years == true && ((candidate.stream
+    == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && (candidate.language_clb_minimum
+    >= 7 || (job_offer.noc_2021_code != null && !(job_offer.noc_2021_code == '33102')
+    && candidate.language_clb_minimum >= 5))) || (candidate.stream == 'alberta_opportunity'
+    && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum >= 4) || (candidate.stream
+    == 'tourism_hospitality' && candidate.language_clb_minimum >= 4) || (candidate.stream
+    == 'rural_renewal' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum
+    >= 5) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5]
+    && candidate.language_clb_minimum >= 4))
+  fail_if: candidate.language_result_within_2_years == false || (candidate.stream
+    == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum
+    < 5) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [0,
+    1, 2, 3] && job_offer.noc_2021_code == '33102' && candidate.language_clb_minimum
+    < 7) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [4,
+    5] && candidate.language_clb_minimum < 4) || (candidate.stream == 'tourism_hospitality'
+    && candidate.language_clb_minimum < 4) || (candidate.stream == 'rural_renewal'
+    && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) ||
+    (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
+    < 4)
+  missing_or_unverified: 'NEEDS_REVIEW: Official-test age, lowest CLB, TEER, or the
+    NOC 33102 language exception cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-LANGUAGE-006
+    source_file: src01.html
+    section: Language CLB by TEER and stream
+    verbatim_excerpt: Canadian Language Benchmark (CLB) test score required
+- id: aaip_education
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.meets_canadian_high_school
+  pass_if: candidate.meets_canadian_high_school == true
+  fail_if: candidate.meets_canadian_high_school == false
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian high-school equivalency, Canadian
+    credential, or Alberta AIT trade certificate has not been resolved.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-EDUCATION-007
+    source_file: src01.html
+    section: Education minimum
+    verbatim_excerpt: minimum of high school education equivalent to Canadian standards
+- id: aaip_licensing
+  category: licensing
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.compulsory_trade
+  - job_offer.requires_professional_licence
+  conditional_required_fields:
+    when: job_offer.compulsory_trade == true
+    fields:
+    - candidate.holds_alberta_trade_certificate
+  pass_if: (job_offer.compulsory_trade == false || candidate.holds_alberta_trade_certificate
+    == true) && (job_offer.requires_professional_licence == false || candidate.holds_required_licence
+    == true)
+  fail_if: (job_offer.compulsory_trade == true && candidate.holds_alberta_trade_certificate
+    == false) || (job_offer.requires_professional_licence == true && candidate.holds_required_licence
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Compulsory-trade certificate or the required
+    professional licence cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-LICENSING-008
+    source_file: src03.html
+    section: Licensing and trades
+    verbatim_excerpt: Endorsement of Candidate Letter from the Designated Community
+- id: aaip_stream_endorsement
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural_renewal'
+    fields:
+    - candidate.endorsement_letter_valid
+    - candidate.intends_to_reside_in_designated_community
+    - job_offer.in_designated_community
+  pass_if: (candidate.stream != 'alberta_opportunity' || candidate.residing_in_alberta
+    == true) && (candidate.stream != 'tourism_hospitality' || (employer.wcb_industry_eligible
+    == true && (employer.sector_association_member == true || employer.travel_alberta_exemption
+    == true))) && (candidate.stream != 'rural_renewal' || (candidate.endorsement_letter_valid
+    == true && candidate.intends_to_reside_in_designated_community == true && job_offer.in_designated_community
+    == true))
+  fail_if: (candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta
+    == false) || (candidate.stream == 'tourism_hospitality' && employer.wcb_industry_eligible
+    == false) || (candidate.stream == 'tourism_hospitality' && employer.sector_association_member
+    == false && employer.travel_alberta_exemption == false) || (candidate.stream ==
+    'rural_renewal' && candidate.endorsement_letter_valid == false) || (candidate.stream
+    == 'rural_renewal' && candidate.intends_to_reside_in_designated_community == false)
+    || (candidate.stream == 'rural_renewal' && job_offer.in_designated_community ==
+    false)
+  missing_or_unverified: 'NEEDS_REVIEW: Alberta residence, Tourism and Hospitality
+    employer approval, or the Rural Renewal endorsement and designated-community facts
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-ENDORSEMENT-009
+    source_file: src03.html
+    section: Stream-specific endorsement and employer eligibility
+    verbatim_excerpt: Endorsement of Candidate Letter from the Designated Community
+- id: aaip_rrs_settlement_funds
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural_renewal' && (candidate.residing_in_canada ==
+      false || candidate.currently_working == false)
+    fields:
+    - candidate.settlement_funds_cad
+    - candidate.settlement_funds_required_cad
+  pass_if: candidate.stream == 'alberta_opportunity' || candidate.stream == 'tourism_hospitality'
+    || (candidate.stream == 'rural_renewal' && candidate.residing_in_canada == true
+    && candidate.currently_working == true) || (candidate.stream == 'rural_renewal'
+    && (candidate.residing_in_canada == false || candidate.currently_working == false)
+    && candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad)
+  fail_if: candidate.stream == 'rural_renewal' && (candidate.residing_in_canada ==
+    false || candidate.currently_working == false) && candidate.settlement_funds_cad
+    < candidate.settlement_funds_required_cad
+  missing_or_unverified: 'NEEDS_REVIEW: Rural Renewal residence, current work, or
+    settlement funds cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-WORKER-FUNDS-010
+    source_file: src03.html
+    section: Rural Renewal settlement funds
+    verbatim_excerpt: Minimum settlement funds requirements are based on the Low Income
+      Cut-Offs (LICOs)

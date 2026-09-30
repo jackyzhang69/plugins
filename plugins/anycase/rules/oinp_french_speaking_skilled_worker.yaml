@@ -1,0 +1,96 @@
+"schema_version": "1.0.0"
+"catalog_id": "oinp_french_speaking_skilled_worker"
+"jurisdiction": "CA-ON"
+"category": "OINP French-speaking"
+"display_name": "OINP French-Speaking Skilled Worker"
+"status": "ACTIVE"
+"program_id": "OINP_FRENCH_SKILLED"
+"stream_id": "FRENCH_SKILLED"
+"effective_date": "2026-01-01"
+"source_edition": "OINP French-Speaking Skilled Worker stream"
+"source_url": "https://www.ontario.ca/page/oinp-french-speaking-skilled-worker-stream"
+"decision_scope": "Deterministic French-Speaking Skilled Worker prescreen. CRS stays in AnyScore."
+"sources":
+- "id": "oinp_fssw"
+  "title": "OINP French-Speaking Skilled Worker"
+  "url": "https://www.ontario.ca/page/oinp-french-speaking-skilled-worker-stream"
+  "citation": "OINP French-Speaking Skilled Worker stream"
+  "legal_authority": >-
+    Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+"schema":
+  "input_type": "object"
+  "required_top_level":
+  - "assessment_date"
+  - "candidate"
+  "types":
+    "assessment_date": "ISO-8601 date"
+"reference_points_grid":
+  "note": "Documentation only. CRS stays in AnyScore."
+"rules":
+- "id": "fssw_french"
+  "category": "language"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.french_clb_minimum"
+  "pass_if": "candidate.french_clb_minimum >= 7"
+  "fail_if": "candidate.french_clb_minimum < 7"
+  "missing_or_unverified": "NEEDS_REVIEW: French cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_fssw"
+    "citation": "French CLB 7 in each ability."
+    "evidence_unit_id": "EU-OINP-FSSW-FRENCH-001"
+    "source_file": "src10.html"
+    "section": "Language"
+    "verbatim_excerpt": "French at a Canadian Language Benchmark ( CLB ) level 7 or higher"
+- "id": "fssw_english"
+  "category": "language"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.english_clb_minimum"
+  "pass_if": "candidate.english_clb_minimum >= 6"
+  "fail_if": "candidate.english_clb_minimum < 6"
+  "missing_or_unverified": "NEEDS_REVIEW: English cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_fssw"
+    "citation": "English CLB 6 in each ability."
+    "evidence_unit_id": "EU-OINP-FSSW-ENGLISH-002"
+    "source_file": "src10.html"
+    "section": "Language"
+    "verbatim_excerpt": >-
+      English at a Canadian Language Benchmark ( CLB ) level 6 and French at a Canadian Language Benchmark
+      ( CLB ) level 7 or higher
+- "id": "fssw_federal"
+  "category": "pathway"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.meets_fsw_or_cec"
+  "pass_if": "candidate.meets_fsw_or_cec == true"
+  "fail_if": "candidate.meets_fsw_or_cec == false"
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Federal Skilled Worker or Canadian Experience Class eligibility cannot be verified.
+  "evidence_anchor":
+    "source_id": "oinp_fssw"
+    "citation": "The person must meet Federal Skilled Worker or Canadian Experience Class."
+    "evidence_unit_id": "EU-OINP-FSSW-FEDERAL-003"
+    "source_file": "src10.html"
+    "section": "Federal eligibility"
+    "verbatim_excerpt": "Federal Skilled Workers Program Canadian Experience Class"
+- "id": "fssw_intent"
+  "category": "pathway"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.intends_to_reside_in_ontario"
+  "pass_if": "candidate.intends_to_reside_in_ontario == true"
+  "fail_if": "candidate.intends_to_reside_in_ontario == false"
+  "missing_or_unverified": "NEEDS_REVIEW: Intention to reside in Ontario cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_fssw"
+    "citation": "The person must intend to reside in Ontario."
+    "evidence_unit_id": "EU-OINP-FSSW-INTENT-004"
+    "source_file": "src10.html"
+    "section": "Intention to reside"
+    "verbatim_excerpt": "You must intend to live in Ontario after you’re granted permanent residence"

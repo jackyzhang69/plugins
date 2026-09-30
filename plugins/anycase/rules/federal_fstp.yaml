@@ -1,0 +1,81 @@
+schema_version: 1.0.0
+catalog_id: federal_fstp
+jurisdiction: CA
+category: Federal trades
+display_name: Federal Skilled Trades
+status: ACTIVE
+program_id: FEDERAL_FSTP
+stream_id: FSTP
+effective_date: '2026-01-01'
+source_edition: IRPR section 87.2
+source_url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
+decision_scope: Deterministic Federal Skilled Trades prescreen. No points grid.
+sources:
+- id: irpr_87_2
+  title: IRPR s. 87.2 Federal Skilled Trades
+  url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
+  citation: IRPR section 87.2
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: The Federal Skilled Trades class has no selection points grid.
+rules:
+- id: fstp_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.trade_months_past_5_years
+  pass_if: candidate.trade_months_past_5_years >= 24
+  fail_if: candidate.trade_months_past_5_years < 24
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled-trade experience cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-FSTP-EXPERIENCE-001
+    source_file: src04.html
+    section: Skilled trades work experience
+    verbatim_excerpt: be at least 2 years of full-time work experience (or 3,120 hours total) in a skilled
+      trade within the 5 years before you apply
+- id: fstp_offer_or_certificate
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.has_qualifying_job_offer
+  - candidate.has_certificate_of_qualification
+  pass_if: candidate.has_qualifying_job_offer == true || candidate.has_certificate_of_qualification ==
+    true
+  fail_if: candidate.has_qualifying_job_offer == false && candidate.has_certificate_of_qualification ==
+    false
+  missing_or_unverified: 'NEEDS_REVIEW: Job offer or certificate of qualification cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-FSTP-OFFER-CERT-001
+    source_file: src04.html
+    section: Job offer or certificate of qualification
+    verbatim_excerpt: a valid job offer of full-time employment for a total period of at least 1 year,
+      or a certificate of qualification in your skilled trade issued by a Canadian provincial, territorial
+      or federal authority
+- id: fstp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.speaking_clb
+  - candidate.listening_clb
+  - candidate.reading_clb
+  - candidate.writing_clb
+  pass_if: candidate.speaking_clb >= 5 && candidate.listening_clb >= 5 && candidate.reading_clb >= 4 &&
+    candidate.writing_clb >= 4
+  fail_if: candidate.speaking_clb < 5 || candidate.listening_clb < 5 || candidate.reading_clb < 4 || candidate.writing_clb
+    < 4
+  missing_or_unverified: 'NEEDS_REVIEW: Language scores cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-FED-FSTP-LANGUAGE-001
+    source_file: src18.html
+    section: Federal Skilled Trades Program — Language Abilities Minimum level
+    verbatim_excerpt: English Speaking and listening CLB 5 English Reading and writing CLB 4

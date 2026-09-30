@@ -1,0 +1,10 @@
+{
+  "vertical_id": "mpnp",
+  "evidence_units_sha256": "e7849ba5c3f15626184abef4ef0447320ef78472dd523752f47620d1e9a1691a",
+  "sources_sha256": "16c7f7e517f3e98c1f7b1a7a8c0ac03997156edeb1a7a30a8e63c5381f38a0aa",
+  "discovered": 50,
+  "member": 16,
+  "excluded": 19,
+  "review": 15,
+  "failed": 0
+}

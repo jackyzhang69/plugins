@@ -1,0 +1,90 @@
+schema_version: 1.0.0
+catalog_id: mpnp_business_investor
+jurisdiction: CA-MB
+category: MPNP business
+display_name: MPNP Business Investor
+status: ACTIVE
+program_id: MPNP_BUSINESS
+stream_id: BUSINESS
+effective_date: '2026-01-01'
+source_edition: MPNP Entrepreneur and Farm Investor pathways
+source_url: https://immigratemanitoba.com/immigrate/business/
+decision_scope: Deterministic prescreen for the entrepreneur and farm investor pathways.
+  Ranking points stay in AnyScore.
+sources:
+- id: mpnp_biz
+  title: MPNP Business Investor Stream
+  url: https://immigratemanitoba.com/immigrate/business/
+  citation: MPNP Entrepreneur and Farm Investor pathways
+  legal_authority: Official program baseline used for the redline. Points arithmetic
+    stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. AnyScore owns the business ranking arithmetic.
+rules:
+- id: mpnp_biz_entrepreneur
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'entrepreneur'
+    fields:
+    - candidate.net_worth_cad
+    - candidate.business_years_past_5
+    - candidate.language_clb_minimum
+    - candidate.meets_canadian_high_school
+    - candidate.in_winnipeg
+    - candidate.investment_cad
+    - candidate.jobs_to_create
+  pass_if: candidate.stream == 'farm_investor' || (candidate.net_worth_cad >= 500000
+    && candidate.business_years_past_5 >= 3 && candidate.language_clb_minimum >= 5
+    && candidate.meets_canadian_high_school == true && ((candidate.in_winnipeg ==
+    true && candidate.investment_cad >= 250000) || (candidate.in_winnipeg == false
+    && candidate.investment_cad >= 150000)) && candidate.jobs_to_create >= 1)
+  fail_if: candidate.stream == 'entrepreneur' && (candidate.net_worth_cad < 500000
+    || candidate.business_years_past_5 < 3 || candidate.language_clb_minimum < 5 ||
+    candidate.meets_canadian_high_school == false || (candidate.in_winnipeg == true
+    && candidate.investment_cad < 250000) || (candidate.in_winnipeg == false && candidate.investment_cad
+    < 150000) || candidate.jobs_to_create < 1)
+  missing_or_unverified: 'NEEDS_REVIEW: Entrepreneur pathway facts cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-BIZ-ENTREPRENEUR-001
+    source_file: src49.html
+    section: Entrepreneur Pathway eligibility
+    verbatim_excerpt: minimum net worth of $500,000 CAD
+- id: mpnp_biz_farm
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'farm_investor'
+    fields:
+    - candidate.net_worth_cad
+    - candidate.farm_ownership_years
+    - candidate.farm_investment_cad
+    - candidate.farm_research_visit
+    - candidate.reside_in_rural_manitoba
+  pass_if: candidate.stream == 'entrepreneur' || (candidate.net_worth_cad >= 500000
+    && candidate.farm_ownership_years >= 3 && candidate.farm_investment_cad >= 300000
+    && candidate.farm_research_visit == true && candidate.reside_in_rural_manitoba
+    == true)
+  fail_if: candidate.stream == 'farm_investor' && (candidate.net_worth_cad < 500000
+    || candidate.farm_ownership_years < 3 || candidate.farm_investment_cad < 300000
+    || candidate.farm_research_visit == false || candidate.reside_in_rural_manitoba
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Farm investor facts cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-BIZ-FARM-002
+    source_file: src47.html
+    section: Farm Investor Pathway eligibility
+    verbatim_excerpt: invest a minimum of $300,000 CAD

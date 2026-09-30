@@ -1,0 +1,10 @@
+{
+  "vertical_id": "nlpnp",
+  "evidence_units_sha256": "7f90bd63de1d3c4f57f136114a1b0ef6ff1112130f53ba89092fc795f0f5c4a9",
+  "sources_sha256": "7b513c2b2d3cd3cc7ee75703dbd6fd26f7da535f09482bce6640baa67376ea2d",
+  "discovered": 58,
+  "member": 20,
+  "excluded": 9,
+  "review": 28,
+  "failed": 1
+}

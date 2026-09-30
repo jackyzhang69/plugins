@@ -1,0 +1,357 @@
+schema_version: 1.0.0
+catalog_id: sinp_skilled_worker_110
+jurisdiction: CA-SK
+category: Saskatchewan Immigrant Nominee Program
+display_name: SINP International Skilled Worker (110-point grid)
+status: ACTIVE
+program_id: SINP_SKILLED_WORKER_110
+stream_id: INTERNATIONAL_SKILLED_WORKER
+effective_date: '2026-01-02'
+source_edition: SINP International Skilled Worker eligibility page archived 2026-09-02.
+  Grid maximum 110. Apply threshold 60.
+source_url: https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/browse-sinp-programs/applicants-international-skilled-workers/assess-your-eligibility
+decision_scope: 'Deterministic eligibility prescreen for SINP International Skilled
+  Worker: Employment Offer, Occupation In-Demand, and Saskatchewan Express Entry.
+  AnyScore owns the 110-point arithmetic. This file compares a caller-supplied total
+  with 60.'
+sources:
+- id: sinp_isw
+  title: SINP International Skilled Worker – Assess your eligibility
+  url: https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/browse-sinp-programs/applicants-international-skilled-workers/assess-your-eligibility
+  citation: Archived page, retrieved 2026-09-02. Grid maximum 110. You need at least
+    60 points to apply.
+  legal_authority: Official SINP program page for International Skilled Worker eligibility
+    and the points grid
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  types:
+    assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
+    candidate:
+      stream: employment_offer | occupation_in_demand | saskatchewan_express_entry
+      refugee_claim_status: none | claimant_in_canada | refused_unresolved | refused_departed_with_proof
+      related_skilled_months_past_10_years: number; months of related skilled work
+        in the past 10 years. Relatedness is already resolved into this count.
+      experience_was_full_time: boolean; that experience was full-time, 30 hours a
+        week
+      education_credential: doctoral_or_masters | bachelors_or_three_year_degree |
+        trade_certification_equivalent_to_sk_journeyperson | diploma_two_years_less_than_three
+        | certificate_two_semesters_less_than_two_years | less_than_two_semesters.
+        Foreign credentials are already resolved by ECA.
+      language_clb_minimum: integer; lowest of the four skills on one test
+      language_result_within_2_years: boolean; that test result is under two years
+        old
+      express_entry_language_met: boolean; the Express Entry program actually used
+        (FSW, CEC, or FSTP) has its language floor met. CLB 7 is not assumed.
+      holds_saskatchewan_licence: boolean; Saskatchewan licence when the occupation
+        is regulated
+      settlement_funds_cad: number; available settlement funds
+      settlement_funds_required_cad: number; officer-supplied funds requirement. LICO
+        dollars are not embedded.
+      express_entry_profile_valid: boolean; valid Express Entry profile
+      job_seeker_code_valid: boolean; valid Job Seeker Validation Code
+      assessed_grid_points: number; points AnyScore already assessed on the 110-point
+        grid
+      intends_to_reside_in_saskatchewan: boolean
+    job_offer:
+      noc_teer: integer 0-5; intended occupation TEER
+      noc_2021_code: five-digit NOC 2021 string kept as evidence. Not matched to a
+        live in-demand list in this file.
+      is_regulated_occupation: boolean
+      job_approval_letter_valid: boolean; SINP Job Approval Letter is valid
+      from_saskatchewan_employer: boolean
+      is_full_time: boolean; the Saskatchewan offer is full-time
+      is_eligible_in_demand_occupation: boolean; occupation is on the current in-demand
+        list. The list is not embedded.
+minimums:
+  note: Documentation only. The engine evaluates the rules, not this block.
+  eligible_teer:
+  - 0
+  - 1
+  - 2
+  - 3
+  related_skilled_months_past_10_years: 12
+  full_time_hours_per_week: 30
+  language_result_max_age_years: 2
+  language_clb_employment_offer: 4
+  language_clb_occupation_in_demand: 4
+  language_express_entry: candidate.express_entry_language_met, plus language_clb_minimum
+    of at least 4. CLB 7 is not hardcoded.
+  points_apply_threshold: 60
+  points_grid_maximum: 110
+  settlement_funds:
+    note: Employment Offer has no funds gate. Occupation In-Demand and Saskatchewan
+      Express Entry compare candidate.settlement_funds_cad with candidate.settlement_funds_required_cad.
+      LICO dollar bands are not stored here.
+reference_points_grid:
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns
+    the arithmetic. Maximum 110. You need at least 60 points to apply. The gate compares
+    candidate.assessed_grid_points with 60.
+  maximum: 110
+  apply_threshold: 60
+  factor_i:
+    name: Factor I
+    maximum: 80
+    education:
+      maximum: 23
+      doctoral_or_masters: 23
+      bachelors_or_three_year_degree: 20
+      saskatchewan_journeyperson_trade: 20
+      diploma_two_years_less_than_three: 15
+      at_least_two_semesters_less_than_two_years: 12
+    experience_in_the_5_years_before_application:
+      maximum: 10
+      years_5: 10
+      years_4: 8
+      years_3: 6
+      years_2: 4
+      years_1: 2
+    experience_in_years_6_to_10:
+      maximum: 5
+      years_5: 5
+      years_4: 4
+      years_3: 3
+      years_2: 2
+      years_1: 1
+      under_1_year: 0
+    first_language:
+      maximum: 20
+      clb_8_plus: 20
+      clb_7: 18
+      clb_6: 16
+      clb_5: 14
+      clb_4: 12
+      no_test: 0
+    second_language:
+      maximum: 10
+      clb_8_plus: 10
+      clb_7: 8
+      clb_6: 6
+      clb_5: 4
+      clb_4: 2
+      otherwise: 0
+    age:
+      maximum: 12
+      under_18: 0
+      age_18_to_21: 8
+      age_22_to_34: 12
+      age_35_to_45: 10
+      age_46_to_50: 8
+      over_50: 0
+  factor_ii:
+    name: Factor II
+    maximum: 30
+    employment_offer_only:
+      high_skilled_saskatchewan_offer: 30
+    occupation_in_demand_and_express_entry_only:
+      close_family_in_saskatchewan: 20
+      saskatchewan_work_12_months_past_5_years_on_valid_work_permit: 5
+      one_full_time_academic_year_saskatchewan_post_secondary_on_study_permit: 5
+rules:
+- id: sinp_refugee_status
+  category: status
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.refugee_claim_status
+  pass_if: candidate.refugee_claim_status in ['none', 'refused_departed_with_proof']
+  fail_if: candidate.refugee_claim_status in ['claimant_in_canada', 'refused_unresolved']
+  missing_or_unverified: 'NEEDS_REVIEW: Refugee-claim status is missing or is not
+    one of the published values.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-REFUGEE-001
+    source_file: src04.html
+    section: Refugee claimant exclusion
+    verbatim_excerpt: Refugee claimants in Canada who are claiming refugee status
+      from the Government of Canada are not eligible to apply
+- id: sinp_noc_teer
+  category: occupation
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.noc_teer
+  - job_offer.noc_2021_code
+  pass_if: job_offer.noc_teer in [0, 1, 2, 3]
+  fail_if: job_offer.noc_teer != null && !(job_offer.noc_teer in [0, 1, 2, 3])
+  missing_or_unverified: 'NEEDS_REVIEW: Intended-occupation TEER or NOC 2021 code
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-TEER-002
+    source_file: src04.html
+    section: NOC TEER eligibility
+    verbatim_excerpt: TEER level "0", "1", "2" or "3"
+- id: sinp_work_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.related_skilled_months_past_10_years
+  - candidate.experience_was_full_time
+  pass_if: candidate.related_skilled_months_past_10_years >= 12 && candidate.experience_was_full_time
+    == true
+  fail_if: candidate.related_skilled_months_past_10_years < 12 || candidate.experience_was_full_time
+    == false
+  missing_or_unverified: 'NEEDS_REVIEW: Related full-time skilled work in the past
+    10 years cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-EXPERIENCE-003
+    source_file: src05.html
+    section: Work experience
+    verbatim_excerpt: one year of full-time (minimum 30 hours per week) paid work
+      experience
+- id: sinp_education
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.education_credential
+  pass_if: candidate.education_credential in ['doctoral_or_masters', 'bachelors_or_three_year_degree',
+    'trade_certification_equivalent_to_sk_journeyperson', 'diploma_two_years_less_than_three',
+    'certificate_two_semesters_less_than_two_years']
+  fail_if: candidate.education_credential == 'less_than_two_semesters'
+  missing_or_unverified: 'NEEDS_REVIEW: Education credential is missing or has not
+    been resolved to a published credential level.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-EDUCATION-004
+    source_file: src05.html
+    section: Education
+    verbatim_excerpt: completed post-secondary education, training or apprenticeship
+      that's comparable to that in Canada
+- id: sinp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.language_clb_minimum
+  - candidate.language_result_within_2_years
+  conditional_required_fields:
+    when: candidate.stream == 'saskatchewan_express_entry'
+    fields:
+    - candidate.express_entry_language_met
+  pass_if: candidate.language_result_within_2_years == true && candidate.language_clb_minimum
+    >= 4 && (candidate.stream in ['employment_offer', 'occupation_in_demand'] || (candidate.stream
+    == 'saskatchewan_express_entry' && candidate.express_entry_language_met == true))
+  fail_if: candidate.language_result_within_2_years == false || candidate.language_clb_minimum
+    < 4 || (candidate.stream == 'saskatchewan_express_entry' && candidate.express_entry_language_met
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, or the Express Entry
+    language flag cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-LANGUAGE-005
+    source_file: src04.html
+    section: Language
+    verbatim_excerpt: language score of at least Canadian Language Benchmark (CLB)
+      4
+- id: sinp_licensure
+  category: licensing
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.is_regulated_occupation
+  conditional_required_fields:
+    when: job_offer.is_regulated_occupation == true
+    fields:
+    - candidate.holds_saskatchewan_licence
+  pass_if: job_offer.is_regulated_occupation == false || candidate.holds_saskatchewan_licence
+    == true
+  fail_if: job_offer.is_regulated_occupation == true && candidate.holds_saskatchewan_licence
+    == false
+  missing_or_unverified: 'NEEDS_REVIEW: Regulated-occupation status or the Saskatchewan
+    licence cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-LICENSURE-006
+    source_file: src04.html
+    section: Licensure
+    verbatim_excerpt: eligible for Saskatchewan licensing if your intended occupation
+      is a compulsory apprenticeship trade
+- id: sinp_settlement_funds
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'occupation_in_demand' || candidate.stream == 'saskatchewan_express_entry'
+    fields:
+    - candidate.settlement_funds_cad
+    - candidate.settlement_funds_required_cad
+  pass_if: candidate.stream == 'employment_offer' || ((candidate.stream == 'occupation_in_demand'
+    || candidate.stream == 'saskatchewan_express_entry') && candidate.settlement_funds_cad
+    >= candidate.settlement_funds_required_cad)
+  fail_if: (candidate.stream == 'occupation_in_demand' || candidate.stream == 'saskatchewan_express_entry')
+    && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
+  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds or the required amount cannot
+    be verified for Occupation In-Demand or Saskatchewan Express Entry.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-FUNDS-007
+    source_file: src05.html
+    section: Settlement funds
+    verbatim_excerpt: proof of settlement funds and a settlement plan
+- id: sinp_pathway
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'employment_offer'
+    fields:
+    - job_offer.job_approval_letter_valid
+    - job_offer.from_saskatchewan_employer
+    - job_offer.is_full_time
+  pass_if: (candidate.stream == 'employment_offer' && job_offer.job_approval_letter_valid
+    == true && job_offer.from_saskatchewan_employer == true && job_offer.is_full_time
+    == true) || (candidate.stream == 'occupation_in_demand' && job_offer.is_eligible_in_demand_occupation
+    == true) || (candidate.stream == 'saskatchewan_express_entry' && candidate.express_entry_profile_valid
+    == true && candidate.job_seeker_code_valid == true)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['employment_offer',
+    'occupation_in_demand', 'saskatchewan_express_entry'])) || (candidate.stream ==
+    'employment_offer' && job_offer.job_approval_letter_valid == false) || (candidate.stream
+    == 'employment_offer' && job_offer.from_saskatchewan_employer == false) || (candidate.stream
+    == 'employment_offer' && job_offer.is_full_time == false) || (candidate.stream
+    == 'occupation_in_demand' && job_offer.is_eligible_in_demand_occupation == false)
+    || (candidate.stream == 'saskatchewan_express_entry' && candidate.express_entry_profile_valid
+    == false) || (candidate.stream == 'saskatchewan_express_entry' && candidate.job_seeker_code_valid
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Job Approval Letter, Saskatchewan employer,
+    full-time offer, in-demand occupation, Express Entry profile, or Job Seeker code
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-PATHWAY-008
+    source_file: src04.html
+    section: Pathway-specific gates
+    verbatim_excerpt: valid Employer Position Assessment
+- id: sinp_points_floor
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.assessed_grid_points
+  pass_if: candidate.assessed_grid_points >= 60
+  fail_if: candidate.assessed_grid_points < 60
+  missing_or_unverified: 'NEEDS_REVIEW: Assessed 110-point grid total is missing.
+    AnyScore computes that number.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-POINTS-009
+    source_file: src14.html
+    section: Points floor
+    verbatim_excerpt: You need at least 60 points to apply
+- id: sinp_intent_to_reside
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intends_to_reside_in_saskatchewan
+  pass_if: candidate.intends_to_reside_in_saskatchewan == true
+  fail_if: candidate.intends_to_reside_in_saskatchewan == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Saskatchewan cannot
+    be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-SW-INTENT-010
+    source_file: src04.html
+    section: Intention to reside
+    verbatim_excerpt: Intend to reside in Saskatchewan as a permanent resident

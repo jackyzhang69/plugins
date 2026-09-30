@@ -1,3 +1,7 @@
+# What's new in 1.1.21
+
+`anycase documents` now distinguishes newer source reviews and unavailable or uncertain source baselines from the active immutable document-list pin, while source updates do not silently switch that guide.
+
 # What's new in 1.1.20
 
 Low-wage LMIA pre-check now uses the official CMA unemployment table when the city is known, requires eight weeks of advertising, and will not silently score an LMIA file as BC PNP.

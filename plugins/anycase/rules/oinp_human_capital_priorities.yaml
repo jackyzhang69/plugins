@@ -1,0 +1,106 @@
+"schema_version": "1.0.0"
+"catalog_id": "oinp_human_capital_priorities"
+"jurisdiction": "CA-ON"
+"category": "OINP human capital"
+"display_name": "OINP Human Capital Priorities"
+"status": "ACTIVE"
+"program_id": "OINP_HCP"
+"stream_id": "HCP"
+"effective_date": "2026-01-01"
+"source_edition": "OINP Human Capital Priorities stream"
+"source_url": "https://www.ontario.ca/page/oinp-human-capital-priorities-stream"
+"decision_scope": "Deterministic Human Capital Priorities prescreen. CRS stays in AnyScore."
+"sources":
+- "id": "oinp_hcp"
+  "title": "OINP Human Capital Priorities"
+  "url": "https://www.ontario.ca/page/oinp-human-capital-priorities-stream"
+  "citation": "OINP Human Capital Priorities stream"
+  "legal_authority": >-
+    Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+"schema":
+  "input_type": "object"
+  "required_top_level":
+  - "assessment_date"
+  - "candidate"
+  "types":
+    "assessment_date": "ISO-8601 date"
+"reference_points_grid":
+  "note": >-
+    Documentation only. CRS stays in AnyScore. This ruleset has no provincial points floor.
+"rules":
+- "id": "hcp_pool"
+  "category": "pathway"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.in_express_entry_pool"
+  - "candidate.meets_fsw_or_cec"
+  - "candidate.notification_of_interest"
+  "pass_if": >-
+    candidate.in_express_entry_pool == true && candidate.meets_fsw_or_cec == true && candidate.notification_of_interest
+    == true
+  "fail_if": >-
+    candidate.in_express_entry_pool == false || candidate.meets_fsw_or_cec == false || candidate.notification_of_interest
+    == false
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Express Entry pool, federal eligibility, or the Ontario notification cannot be verified.
+  "evidence_anchor":
+    "source_id": "oinp_hcp"
+    "citation": >-
+      The person must be in Express Entry, meet Federal Skilled Worker or Canadian Experience Class, and
+      hold an Ontario notification of interest.
+    "evidence_unit_id": "EU-OINP-HCP-POOL-001"
+    "source_file": "src09.html"
+    "section": "Express Entry"
+    "verbatim_excerpt": >-
+      Notification of Interest from Ontario before you can apply online to be nominated by the Ontario
+      government for permanent residence
+- "id": "hcp_education"
+  "category": "education"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.bachelors_or_above"
+  "pass_if": "candidate.bachelors_or_above == true"
+  "fail_if": "candidate.bachelors_or_above == false"
+  "missing_or_unverified": "NEEDS_REVIEW: Education cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_hcp"
+    "citation": "A bachelor degree or higher is required."
+    "evidence_unit_id": "EU-OINP-HCP-EDUCATION-002"
+    "source_file": "src09.html"
+    "section": "Education"
+    "verbatim_excerpt": >-
+      You must have a Canadian bachelor’s, master’s or PhD degree or its equivalent in another country
+- "id": "hcp_language"
+  "category": "language"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.language_clb_minimum"
+  "pass_if": "candidate.language_clb_minimum >= 7"
+  "fail_if": "candidate.language_clb_minimum < 7"
+  "missing_or_unverified": "NEEDS_REVIEW: Language cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_hcp"
+    "citation": "CLB 7 in each ability."
+    "evidence_unit_id": "EU-OINP-HCP-LANGUAGE-003"
+    "source_file": "src09.html"
+    "section": "Language"
+    "verbatim_excerpt": "Canadian Language Benchmark ( CLB ) level 7 or higher"
+- "id": "hcp_intent"
+  "category": "pathway"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.intends_to_reside_in_ontario"
+  "pass_if": "candidate.intends_to_reside_in_ontario == true"
+  "fail_if": "candidate.intends_to_reside_in_ontario == false"
+  "missing_or_unverified": "NEEDS_REVIEW: Intention to reside in Ontario cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_hcp"
+    "citation": "The person must intend to reside in Ontario."
+    "evidence_unit_id": "EU-OINP-HCP-INTENT-004"
+    "source_file": "src09.html"
+    "section": "Intention to reside"
+    "verbatim_excerpt": "You must intend to live in Ontario after you’re granted permanent residence"

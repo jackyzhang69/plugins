@@ -1,0 +1,10 @@
+{
+  "vertical_id": "aaip",
+  "evidence_units_sha256": "98e4b3b28cfb3ef5bded89ce9b9aacfbb971d2b7b30e0f9b32a9e226a92cd720",
+  "sources_sha256": "3d21be28310fc4a5dc30541140db003938f15675fcd182fe1dc88ddb33b1d29a",
+  "discovered": 61,
+  "member": 25,
+  "excluded": 9,
+  "review": 27,
+  "failed": 0
+}

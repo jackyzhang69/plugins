@@ -1,0 +1,280 @@
+schema_version: 1.0.0
+catalog_id: nbpnp_skilled_worker_100
+jurisdiction: CA-NB
+category: New Brunswick Provincial Nominee Program
+display_name: NBPNP Skilled Worker and Express Entry
+status: ACTIVE
+program_id: NBPNP_SKILLED_WORKER
+stream_id: SKILLED_WORKER
+effective_date: '2026-06-01'
+source_edition: NBPNP Skilled Worker and Express Entry eligibility redlines effective 2026-06-01. Skilled
+  worker grid maximum 100, threshold 60. Express Entry grid maximum 100, threshold 67. The business stream
+  is not in this file.
+source_url: https://www2.gnb.ca/content/gnb/en/corporate/promo/immigration.html
+decision_scope: Deterministic eligibility prescreen for NBPNP Skilled Worker and Express Entry. AnyScore
+  owns both 100-point grids. This file compares a caller-supplied total with 60 or 67 and does not add
+  the factors.
+sources:
+- id: nbpnp_sw
+  title: New Brunswick Provincial Nominee Program Skilled Worker and Express Entry
+  url: https://www2.gnb.ca/content/gnb/en/corporate/promo/immigration.html
+  citation: Skilled Worker grid maximum 100 with threshold 60. Express Entry grid maximum 100 with threshold
+    67. Age, offer, language, education, experience, and Express Entry pathway redlines are evaluated
+    separately from the grid.
+  legal_authority: New Brunswick Provincial Nominee Program skilled worker and Express Entry eligibility
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  - employer
+  types:
+    assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
+    candidate:
+      stream: skilled_worker | express_entry. The business stream is not a value in this file.
+      age_years: integer; age in years. The 19 to 55 gate applies only to skilled_worker.
+      language_clb_minimum: integer; lowest of the four skills on one test.
+      language_result_within_2_years: boolean; that test result is under two years old.
+      meets_canadian_high_school: boolean; skilled_worker credential meets Canadian high school.
+      education_above_high_school: boolean; express_entry credential is above high school.
+      related_hours_past_5_years: number; related work hours in the past 5 years. Skilled worker floor
+        is 1560 unless the graduate exemption applies.
+      nb_graduate_experience_exempt: boolean; New Brunswick graduate experience exemption. When true,
+        the 1560-hour test is not required.
+      continuous_skilled_months_past_10_years: number; continuous skilled months in the past 10 years.
+        Express Entry floor is 12.
+      express_entry_profile_valid: boolean; valid Express Entry profile. Required for express_entry pathway.
+      currently_employed_in_nb_12_months: boolean; currently employed in New Brunswick for 12 months.
+        One of the two Express Entry pathway alternatives.
+      letter_of_interest: boolean; New Brunswick letter of interest. The other Express Entry pathway alternative.
+      assessed_grid_points: number; points AnyScore already assessed on the 100-point grid for this stream.
+        This file does not add the factors.
+    job_offer:
+      weekly_hours: number; regular weekly hours. Floor is 30.
+      is_permanent: boolean; the offer is permanent.
+      is_seasonal: boolean; true means the offer is seasonal and fails.
+      noc_teer: integer; Express Entry experience must be TEER 0, 1, 2, or 3.
+    employer:
+      months_operating: number; months the employer has been operating. Floor is 24.
+      on_foreign_worker_registry: boolean; employer is on the foreign worker registry.
+minimums:
+  note: Documentation only. The engine evaluates the rules, not this block.
+  streams:
+  - skilled_worker
+  - express_entry
+  skilled_worker_age_min: 19
+  skilled_worker_age_max: 55
+  weekly_hours: 30
+  employer_months_operating: 24
+  language_result_max_age_years: 2
+  language_clb_skilled_worker: 4
+  language_clb_express_entry: 7
+  skilled_worker_related_hours_past_5_years: 1560
+  express_entry_continuous_skilled_months: 12
+  express_entry_teer:
+  - 0
+  - 1
+  - 2
+  - 3
+  skilled_worker_points_threshold: 60
+  express_entry_points_threshold: 67
+  points_grid_maximum: 100
+reference_points_grid:
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. nbpnp_points_floor
+    compares candidate.assessed_grid_points with the stream threshold. This block does not score the factors.
+  skilled_worker:
+    maximum: 100
+    apply_threshold: 60
+  express_entry:
+    maximum: 100
+    apply_threshold: 67
+rules:
+- id: nbpnp_age
+  category: age
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker'
+    fields:
+    - candidate.age_years
+  pass_if: candidate.stream == 'express_entry' || (candidate.stream == 'skilled_worker' && candidate.age_years
+    >= 19 && candidate.age_years <= 55)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    (candidate.stream == 'skilled_worker' && (candidate.age_years < 19 || candidate.age_years > 55))
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled worker age cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-AGE-001
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Applicant Eligibility - Age
+    verbatim_excerpt: Skilled Worker age must be from 19 through 55
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Applicant Eligibility - Age
+    page: 1
+    verbatim: Skilled Worker age must be from 19 through 55
+- id: nbpnp_job_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - job_offer.weekly_hours
+  - job_offer.is_permanent
+  - job_offer.is_seasonal
+  - employer.months_operating
+  - employer.on_foreign_worker_registry
+  pass_if: (candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && job_offer.weekly_hours
+    >= 30 && job_offer.is_permanent == true && job_offer.is_seasonal == false && employer.months_operating
+    >= 24 && employer.on_foreign_worker_registry == true
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    job_offer.weekly_hours < 30 || job_offer.is_permanent == false || job_offer.is_seasonal == true ||
+    employer.months_operating < 24 || employer.on_foreign_worker_registry == false
+  missing_or_unverified: 'NEEDS_REVIEW: Weekly hours, permanent terms, seasonal status, employer operating
+    history, or foreign worker registry status cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-OFFER-002
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Job Offer & Employer
+    verbatim_excerpt: at least 30 hours a week, permanent, and not seasonal
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Job Offer & Employer
+    page: 1
+    verbatim: at least 30 hours a week, permanent, and not seasonal
+- id: nbpnp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.language_clb_minimum
+  - candidate.language_result_within_2_years
+  pass_if: candidate.language_result_within_2_years == true && ((candidate.stream == 'skilled_worker'
+    && candidate.language_clb_minimum >= 4) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum
+    >= 7))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    candidate.language_result_within_2_years == false || (candidate.stream == 'skilled_worker' && candidate.language_clb_minimum
+    < 4) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum < 7)
+  missing_or_unverified: 'NEEDS_REVIEW: Test age or lowest CLB cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-LANG-003
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Language Requirements
+    verbatim_excerpt: Skilled Worker needs CLB 4 on a test under two years old
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Language Requirements
+    page: 1
+    verbatim: Skilled Worker needs CLB 4 on a test under two years old
+- id: nbpnp_education
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream == 'skilled_worker' && candidate.meets_canadian_high_school == true) || (candidate.stream
+    == 'express_entry' && candidate.education_above_high_school == true)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    (candidate.stream == 'skilled_worker' && candidate.meets_canadian_high_school == false) || (candidate.stream
+    == 'express_entry' && candidate.education_above_high_school == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian high school equivalency or education above high school
+    cannot be verified for the stream being assessed.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-EDU-004
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Education Requirements
+    verbatim_excerpt: meets Canadian high school
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Education Requirements
+    page: 1
+    verbatim: meets Canadian high school
+- id: nbpnp_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.continuous_skilled_months_past_10_years
+    - job_offer.noc_teer
+  pass_if: (candidate.stream == 'skilled_worker' && (candidate.nb_graduate_experience_exempt == true ||
+    candidate.related_hours_past_5_years >= 1560)) || (candidate.stream == 'express_entry' && candidate.continuous_skilled_months_past_10_years
+    >= 12 && job_offer.noc_teer in [0, 1, 2, 3])
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    (candidate.stream == 'skilled_worker' && candidate.nb_graduate_experience_exempt == false && candidate.related_hours_past_5_years
+    < 1560) || (candidate.stream == 'express_entry' && candidate.continuous_skilled_months_past_10_years
+    < 12) || (candidate.stream == 'express_entry' && job_offer.noc_teer != null && !(job_offer.noc_teer
+    in [0, 1, 2, 3]))
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled worker hours or graduate exemption, or Express Entry skilled
+    months and TEER, cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-EXP-005
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Experience Requirements
+    verbatim_excerpt: 1560 related hours in the past 5 years
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Experience Requirements
+    page: 1
+    verbatim: 1560 related hours in the past 5 years
+- id: nbpnp_ee_pathway
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.express_entry_profile_valid
+  pass_if: candidate.stream == 'skilled_worker' || (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid
+    == true && (candidate.currently_employed_in_nb_12_months == true || candidate.letter_of_interest ==
+    true))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == false) || (candidate.stream
+    == 'express_entry' && candidate.currently_employed_in_nb_12_months == false && candidate.letter_of_interest
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile, current New Brunswick employment, or letter
+    of interest cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-PATH-006
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Express Entry Pathway
+    verbatim_excerpt: valid Express Entry profile and either 12 months of current New Brunswick employment
+      or a letter of interest
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Express Entry Pathway
+    page: 1
+    verbatim: valid Express Entry profile and either 12 months of current New Brunswick employment or
+      a letter of interest
+- id: nbpnp_points_floor
+  category: points
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.assessed_grid_points
+  pass_if: (candidate.stream == 'skilled_worker' && candidate.assessed_grid_points >= 60) || (candidate.stream
+    == 'express_entry' && candidate.assessed_grid_points >= 67)
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
+    (candidate.stream == 'skilled_worker' && candidate.assessed_grid_points < 60) || (candidate.stream
+    == 'express_entry' && candidate.assessed_grid_points < 67)
+  missing_or_unverified: 'NEEDS_REVIEW: Assessed 100-point grid total is missing. AnyScore computes that
+    number.'
+  evidence_anchor:
+    evidence_unit_id: EU-NBPNP-POINTS-007
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Points Floor
+    verbatim_excerpt: at least 60 on the 100-point grid
+  provenance:
+    source_file: nbpnp-skilled-worker-express-entry.html
+    section: Points Floor
+    page: 1
+    verbatim: at least 60 on the 100-point grid

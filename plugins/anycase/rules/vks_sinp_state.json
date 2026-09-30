@@ -1,0 +1,10 @@
+{
+  "vertical_id": "sinp",
+  "evidence_units_sha256": "0fd5318dd469e6ec8fb68e31d81d55fb04212ad8b53312e6dff5b21d1db84ea7",
+  "sources_sha256": "64b9af527bf9a02055901bb0d473e056951262e602bec656b86e193b06731616",
+  "discovered": 81,
+  "member": 17,
+  "excluded": 19,
+  "review": 45,
+  "failed": 0
+}

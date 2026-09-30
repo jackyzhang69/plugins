@@ -1,0 +1,10 @@
+{
+  "vertical_id": "oinp",
+  "evidence_units_sha256": "023b8fd1cf2c42f51353ea03e2b4b2ec201a41e9c2fe1debc17c8191ed58e106",
+  "sources_sha256": "9daee4c3b66a64ac8b034957d78119b32d5e7c2cf1dfb36220f7c32fb49d2f33",
+  "discovered": 93,
+  "member": 30,
+  "excluded": 12,
+  "review": 51,
+  "failed": 0
+}

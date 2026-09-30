@@ -1,0 +1,403 @@
+"schema_version": "1.0.0"
+"catalog_id": "oinp_employer_job_offer"
+"jurisdiction": "CA-ON"
+"category": "Ontario Immigrant Nominee Program"
+"display_name": >-
+  OINP Employer Job Offer Streams (Foreign Worker, International Student, In-Demand Skills)
+"status": "ACTIVE"
+"program_id": "OINP_EMPLOYER_JOB_OFFER"
+"stream_id": "EMPLOYER_JOB_OFFER"
+"effective_date": "2023-11-16"
+"source_edition": >-
+  Ontario Immigration Act, 2015, S.O. 2015, c. 8; Ontario Regulation 422/17 (General) ss. 4–11; OINP Employer
+  Job Offer Program Guides (2024/2026)
+"source_url": "https://www.ontario.ca/page/oinp-employer-job-offer-streams"
+"decision_scope": >-
+  Deterministic prescreen of statutory employer eligibility, job offer terms and wage thresholds, and
+  applicant statutory qualifications for the three OINP Employer Job Offer streams (Foreign Worker, International
+  Student, and In-Demand Skills). Points are handled by AnyScore's EOI scoring model.
+"sources":
+- "id": "oia_2015"
+  "title": "Ontario Immigration Act, 2015, S.O. 2015, c. 8"
+  "url": "https://www.ontario.ca/laws/statute/15o08"
+  "citation": "S.O. 2015, c. 8, s. 11, 14, 21"
+  "legal_authority": >-
+    Provincial statute — selection of foreign nationals and approval of employment positions
+- "id": "o_reg_422_17"
+  "title": "Ontario Regulation 422/17 (General) under Ontario Immigration Act, 2015"
+  "url": "https://www.ontario.ca/laws/regulation/170422"
+  "citation": "O. Reg. 422/17 ss. 4–11"
+  "legal_authority": >-
+    Provincial regulation — employer requirements, employment requirements, and applicant criteria
+- "id": "oinp_fw_guide"
+  "title": "OINP Employer Job Offer: Foreign Worker Stream Guide"
+  "url": "https://www.ontario.ca/page/oinp-employer-job-offer-foreign-worker-stream"
+  "citation": "OINP operational guidelines — foreign worker eligibility and median wage rule"
+  "legal_authority": "Official program delivery instructions; subordinate to OIA and O. Reg. 422/17"
+- "id": "oinp_is_guide"
+  "title": "OINP Employer Job Offer: International Student Stream Guide"
+  "url": "https://www.ontario.ca/page/oinp-employer-job-offer-international-student-stream"
+  "citation": >-
+    OINP operational guidelines — eligible Canadian credentials and low wage threshold
+  "legal_authority": "Official program delivery instructions"
+- "id": "oinp_ids_guide"
+  "title": "OINP Employer Job Offer: In-Demand Skills Stream Guide"
+  "url": "https://www.ontario.ca/page/oinp-employer-job-offer-demand-skills-stream"
+  "citation": >-
+    OINP operational guidelines — eligible in-demand NOC list, 9-month Ontario experience, CLB 4
+  "legal_authority": "Official program delivery instructions"
+"schema":
+  "input_type": "object"
+  "required_top_level":
+  - "assessment_date"
+  - "candidate"
+  - "job_offer"
+  - "employer"
+  "types":
+    "assessment_date": "ISO-8601 date; application assessment date"
+    "candidate":
+      "stream": "foreign_worker | international_student | in_demand_skills"
+      "qualifying_experience_months": "non-negative number; cumulative paid FTE experience"
+      "experience_in_last_5_years": "boolean; must be within 5 years prior to application for FW"
+      "experience_in_same_noc": "boolean; experience must match the NOC code of the job offer"
+      "completed_eligible_canadian_credential": "boolean; eligible >= 2-yr degree/diploma or 1-yr post-grad\
+        \ certificate"
+      "months_since_graduation": "number; calendar months since degree/diploma was granted (max 24 for\
+        \ IS)"
+      "language_clb_minimum": >-
+        integer; minimum CLB in all four abilities (listening, reading, writing, speaking)
+      "holds_mandatory_licence": "boolean; required if occupation is regulated in Ontario"
+      "intention_to_reside_in_ontario": "boolean; demonstrated intention to settle permanently in Ontario"
+      "equity_percentage": >-
+        decimal in [0, 1]; combined direct/indirect equity of applicant and family in employer
+      "legal_status_in_canada": "boolean; valid work/study permit or visitor record if residing in Canada"
+    "job_offer":
+      "noc_2021_code": "five-digit string"
+      "noc_teer": "integer 0-5; verified against NOC 2021"
+      "is_indeterminate": "boolean; permanent position with no pre-determined end date"
+      "weekly_hours": "number; paid hours per week (minimum 30 for full-time)"
+      "hourly_wage": "non-negative decimal; basic hourly wage excluding bonuses, overtime, or tips"
+      "prevailing_median_wage": "non-negative decimal; prevailing median wage from Job Bank for NOC &\
+        \ region"
+      "prevailing_low_wage": "non-negative decimal; prevailing low/entry wage from Job Bank for NOC &\
+        \ region"
+      "is_regulated_occupation": "boolean; whether the occupation requires professional licensing in Ontario"
+      "is_eligible_in_demand_noc": "boolean; whether NOC is on the published OINP In-Demand Skills list"
+      "work_location_in_ontario": "boolean; work must occur primarily within Ontario"
+    "employer":
+      "years_operating_in_ontario": "non-negative number; active business operation in Ontario"
+      "in_gta": >-
+        boolean; true if located in City of Toronto, Durham, Halton, York, or Peel regions
+      "annual_revenue_cad": >-
+        non-negative decimal; gross annual revenue for most recently completed fiscal year
+      "full_time_pr_citizen_employees": "integer; number of permanent full-time Canadian citizens or PRs\
+        \ on payroll"
+      "has_business_premises_in_ontario": "boolean; physical business premises located in Ontario"
+      "no_employment_standards_orders": "boolean; no outstanding orders under ESA 2000 or OHSA"
+"minimums":
+  "employer":
+    "operating_years": 3
+    "revenue_gta": 1000000
+    "revenue_outside_gta": 500000
+    "ft_employees_gta": 5
+    "ft_employees_outside_gta": 3
+  "job_offer":
+    "weekly_hours_minimum": 30
+    "duration": "indeterminate"
+  "streams":
+    "foreign_worker":
+      "eligible_teer":
+      - 0
+      - 1
+      - 2
+      - 3
+      "work_experience_months": 24
+      "experience_lookback_years": 5
+      "wage_standard": "median"
+    "international_student":
+      "eligible_teer":
+      - 0
+      - 1
+      - 2
+      - 3
+      "application_window_months": 24
+      "wage_standard": "low"
+    "in_demand_skills":
+      "eligible_teer":
+      - 4
+      - 5
+      "ontario_work_experience_months": 9
+      "language_minimum_clb": 4
+      "wage_standard": "median"
+"reference_eoi_grid":
+  "note": >-
+    Reference EOI scoring factors compiled from AnyScore policies/ontario/oinp_eoi_job_offer.yaml
+  "dimensions":
+    "job_offer_noc_teer":
+      "teer_0_or_1": 10
+      "teer_2_or_3": 8
+      "teer_4_or_5": 0
+    "job_offer_broad_occupational_category":
+      "category_0_2_3": 10
+      "category_7": 7
+      "category_1_9": 5
+      "category_4_8": 4
+      "category_5_6": 3
+    "job_offer_hourly_wage":
+      "wage_40_and_above": 10
+      "wage_35_to_39_99": 8
+      "wage_30_to_34_99": 7
+      "wage_25_to_29_99": 6
+      "wage_20_to_24_99": 5
+      "wage_below_20": 0
+    "canadian_status":
+      "valid_work_or_study_permit": 10
+      "no_permit": 0
+    "job_tenure_with_employer":
+      "six_months_or_more": 3
+      "less_than_six_months": 0
+    "canadian_earnings_history":
+      "cra_noa_40k_and_above": 3
+      "less_than_40k_or_none": 0
+    "official_language_ability":
+      "clb_9_and_above": 10
+      "clb_8": 6
+      "clb_7": 4
+      "clb_below_7": 0
+    "regional_immigration":
+      "outside_gta": 10
+      "inside_gta": 0
+    "strategic_priorities":
+      "special_targeted_priority": 10
+"rules":
+- "id": "oinp_ejo_employer_operating_history"
+  "category": "employer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "employer.years_operating_in_ontario"
+  "pass_if": "employer.years_operating_in_ontario >= 3"
+  "fail_if": "employer.years_operating_in_ontario < 3"
+  "missing_or_unverified": "NEEDS_REVIEW: Employer Ontario operational history cannot be verified."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(1)(a)"
+    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-OPERATING-001"
+    "source_file": "src02.html"
+    "section": "Employer requirements"
+    "verbatim_excerpt": >-
+      have been in active business for at least three years prior to submitting your application
+- "id": "oinp_ejo_employer_revenue"
+  "category": "employer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "employer.in_gta"
+  - "employer.annual_revenue_cad"
+  "pass_if": >-
+    (employer.in_gta == true && employer.annual_revenue_cad >= 1000000) || (employer.in_gta == false &&
+    employer.annual_revenue_cad >= 500000)
+  "fail_if": >-
+    (employer.in_gta == true && employer.annual_revenue_cad < 1000000) || (employer.in_gta == false &&
+    employer.annual_revenue_cad < 500000)
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Employer gross annual revenue for the latest fiscal year is unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(1)(b)"
+    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-REVENUE-002"
+    "source_file": "src02.html"
+    "section": "Employer requirements"
+    "verbatim_excerpt": >-
+      a minimum of $1,000,000 in total gross annual revenue if you will work or report to work at a location
+      in the Greater Toronto Area
+- "id": "oinp_ejo_employer_workforce"
+  "category": "employer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "employer.in_gta"
+  - "employer.full_time_pr_citizen_employees"
+  "pass_if": >-
+    (employer.in_gta == true && employer.full_time_pr_citizen_employees >= 5) || (employer.in_gta == false
+    && employer.full_time_pr_citizen_employees >= 3)
+  "fail_if": >-
+    (employer.in_gta == true && employer.full_time_pr_citizen_employees < 5) || (employer.in_gta == false
+    && employer.full_time_pr_citizen_employees < 3)
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Number of full-time Canadian citizen or PR employees cannot be established.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(1)(c)"
+    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-WORKFORCE-003"
+    "source_file": "src02.html"
+    "section": "Employer requirements"
+    "verbatim_excerpt": >-
+      your employer must have at least 5 full-time employees who are Canadian citizens or permanent residents
+- "id": "oinp_ejo_employer_premises_and_compliance"
+  "category": "employer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "employer.has_business_premises_in_ontario"
+  - "employer.no_employment_standards_orders"
+  "pass_if": >-
+    employer.has_business_premises_in_ontario == true && employer.no_employment_standards_orders == true
+  "fail_if": >-
+    employer.has_business_premises_in_ontario == false || employer.no_employment_standards_orders == false
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Physical premises verification or ESA compliance records are missing.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(1)(d)-(e)"
+    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-PREMISES-004"
+    "source_file": "src02.html"
+    "section": "Employer requirements"
+    "verbatim_excerpt": >-
+      have business premises in Ontario where you will work have no outstanding orders made against them
+      under the Ontario Employment Standards Act, 2000
+- "id": "oinp_ejo_job_permanent_full_time"
+  "category": "job_offer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "job_offer.is_indeterminate"
+  - "job_offer.weekly_hours"
+  - "job_offer.work_location_in_ontario"
+  "pass_if": >-
+    job_offer.is_indeterminate == true && job_offer.weekly_hours >= 30 && job_offer.work_location_in_ontario
+    == true
+  "fail_if": >-
+    job_offer.is_indeterminate == false || job_offer.weekly_hours < 30 || job_offer.work_location_in_ontario
+    == false
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Indeterminate terms, full-time hours (>=30/wk), or Ontario job location unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(2)"
+    "evidence_unit_id": "EU-OINP-EJO-JOB-FULLTIME-005"
+    "source_file": "src02.html"
+    "section": "Job offer requirements"
+    "verbatim_excerpt": >-
+      The job offer must be for a full-time and permanent position. Full-time means the job must be a
+      minimum of 1,560 hours a year and a minimum of 30 hours of
+- "id": "oinp_ejo_eligible_noc"
+  "category": "job_offer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.stream"
+  - "job_offer.noc_teer"
+  "pass_if": >-
+    ((candidate.stream == 'foreign_worker' || candidate.stream == 'international_student') && job_offer.noc_teer
+    in [0, 1, 2, 3]) || (candidate.stream == 'in_demand_skills' && job_offer.noc_teer in [4, 5] && job_offer.is_eligible_in_demand_noc
+    == true)
+  "fail_if": >-
+    ((candidate.stream == 'foreign_worker' || candidate.stream == 'international_student') && !(job_offer.noc_teer
+    in [0, 1, 2, 3])) || (candidate.stream == 'in_demand_skills' && (!(job_offer.noc_teer in [4, 5]) ||
+    job_offer.is_eligible_in_demand_noc == false))
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: NOC TEER classification or In-Demand Skills occupation eligibility unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(3)"
+    "evidence_unit_id": "EU-OINP-EJO-NOC-TEER-006"
+    "source_file": "src02.html"
+    "section": "Job offer requirements"
+    "verbatim_excerpt": "TEER category 0, 1, 2 or 3 of the National Occupational Classification"
+- "id": "oinp_ejo_wage_threshold"
+  "category": "job_offer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.stream"
+  - "job_offer.hourly_wage"
+  "pass_if": >-
+    (candidate.stream == 'foreign_worker' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)
+    || (candidate.stream == 'international_student' && job_offer.hourly_wage >= job_offer.prevailing_low_wage)
+    || (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)
+  "fail_if": >-
+    (candidate.stream == 'foreign_worker' && job_offer.hourly_wage < job_offer.prevailing_median_wage)
+    || (candidate.stream == 'international_student' && job_offer.hourly_wage < job_offer.prevailing_low_wage)
+    || (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage < job_offer.prevailing_median_wage)
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Basic hourly wage or prevailing wage comparison cannot be established.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(4)"
+    "evidence_unit_id": "EU-OINP-EJO-WAGE-MEDIAN-007"
+    "source_file": "src02.html"
+    "section": "Job offer requirements"
+    "verbatim_excerpt": >-
+      The pay of the job offered must meet or be higher than the median wage level, for that occupation,
+      in the specific region of Ontario where you will be working
+- "id": "oinp_ejo_candidate_qualifications"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.stream"
+  "pass_if": >-
+    (candidate.stream == 'foreign_worker' && candidate.qualifying_experience_months >= 24 && candidate.experience_in_last_5_years
+    == true && candidate.experience_in_same_noc == true) || (candidate.stream == 'international_student'
+    && candidate.completed_eligible_canadian_credential == true && candidate.months_since_graduation <=
+    24) || (candidate.stream == 'in_demand_skills' && candidate.qualifying_experience_months >= 9 && candidate.language_clb_minimum
+    >= 4)
+  "fail_if": >-
+    (candidate.stream == 'foreign_worker' && (candidate.qualifying_experience_months < 24 || candidate.experience_in_last_5_years
+    == false || candidate.experience_in_same_noc == false)) || (candidate.stream == 'international_student'
+    && (candidate.completed_eligible_canadian_credential == false || candidate.months_since_graduation
+    > 24)) || (candidate.stream == 'in_demand_skills' && (candidate.qualifying_experience_months < 9 ||
+    candidate.language_clb_minimum < 4))
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Candidate work experience, graduation date/credential, or CLB language scores unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 5(1), 5(2), 5(3)"
+    "evidence_unit_id": "EU-OINP-EJO-CANDIDATE-FW-009"
+    "source_file": "src02.html"
+    "section": "Applicant requirements"
+    "verbatim_excerpt": >-
+      at least two years of cumulative paid full-time work experience (or the equivalent in paid part-time
+      work) in the same occupation
+- "id": "oinp_ejo_mandatory_licensing"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "job_offer.is_regulated_occupation"
+  "pass_if": >-
+    job_offer.is_regulated_occupation == false || (job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence
+    == true)
+  "fail_if": >-
+    job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence == false
+  "missing_or_unverified": "NEEDS_REVIEW: Professional regulatory licensing status in Ontario is unverified."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 5(4)"
+    "evidence_unit_id": "EU-OINP-EJO-LICENSING-011"
+    "source_file": "src02.html"
+    "section": "Applicant requirements"
+    "verbatim_excerpt": >-
+      rks, Ontario Disability Support Program OSAP Ontario Student Assistance Program Skilled Trades Ontario
+      Skilled trades and apprenticeships More accounts Topics Sign in Benefits and ta
+- "id": "oinp_ejo_candidate_equity_and_intention"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.equity_percentage"
+  - "candidate.intention_to_reside_in_ontario"
+  "pass_if": >-
+    candidate.equity_percentage < 0.10 && candidate.intention_to_reside_in_ontario == true
+  "fail_if": >-
+    candidate.equity_percentage >= 0.10 || candidate.intention_to_reside_in_ontario == false
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Business equity share (<10%) or Ontario residency intention unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17"
+    "citation": "O. Reg. 422/17 s. 4(5), s. 5(5)"
+    "evidence_unit_id": "EU-OINP-EJO-EQUITY-INTENT-012"
+    "source_file": "src02.html"
+    "section": "Applicant / Intention"
+    "verbatim_excerpt": "must be less than 10%"

@@ -1,0 +1,158 @@
+schema_version: 1.0.0
+catalog_id: pstq_arrima
+jurisdiction: CA-QC
+category: Quebec PSTQ
+display_name: Quebec PSTQ and Arrima
+status: ACTIVE
+program_id: QUEBEC_PSTQ
+stream_id: PSTQ
+effective_date: '2024-11-29'
+source_edition: Quebec Immigration Regulation, PSTQ volets
+source_url: https://www.quebec.ca/en/immigration/permanent/skilled-workers
+decision_scope: Deterministic PSTQ prescreen for French, experience, diploma, and the financial self-sufficiency
+  contract. Arrima points stay in AnyScore.
+sources:
+- id: pstq
+  title: Quebec Skilled Worker Selection Program
+  url: https://www.quebec.ca/en/immigration/permanent/skilled-workers
+  citation: Quebec Immigration Regulation, PSTQ volets
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. AnyScore owns the Arrima arithmetic. This ruleset has no points floor.
+rules:
+- id: pstq_french
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.feer
+  conditional_required_fields:
+    when: candidate.stream == 'volet_1' || candidate.stream == 'volet_2' || candidate.stream == 'volet_3'
+    fields:
+    - candidate.french_oral_level
+  pass_if: candidate.stream == 'volet_4' || (candidate.stream == 'volet_1' && candidate.french_oral_level
+    >= 7 && candidate.french_written_level >= 5) || (candidate.stream == 'volet_3' && candidate.feer in
+    [0, 1, 2] && candidate.french_oral_level >= 7 && candidate.french_written_level >= 5) || (candidate.stream
+    == 'volet_2' && candidate.french_oral_level >= 5) || (candidate.stream == 'volet_3' && candidate.feer
+    in [3, 4, 5] && candidate.french_oral_level >= 5)
+  fail_if: (candidate.stream == 'volet_1' && (candidate.french_oral_level < 7 || candidate.french_written_level
+    < 5)) || (candidate.stream == 'volet_3' && candidate.feer in [0, 1, 2] && (candidate.french_oral_level
+    < 7 || candidate.french_written_level < 5)) || (candidate.stream == 'volet_2' && candidate.french_oral_level
+    < 5) || (candidate.stream == 'volet_3' && candidate.feer in [3, 4, 5] && candidate.french_oral_level
+    < 5)
+  missing_or_unverified: 'NEEDS_REVIEW: French oral or written level, stream, or FEER cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-PSTQ-FRENCH-001
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ French Requirements
+    verbatim_excerpt: oral 7 and written 5 for Volet 1
+  provenance:
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ French Requirements
+    page: 16
+    verbatim: oral 7 and written 5 for Volet 1
+- id: pstq_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'volet_1' || candidate.stream == 'volet_2' || candidate.stream == 'volet_3'
+      || candidate.stream == 'volet_4'
+    fields:
+    - candidate.experience_months_past_5_years
+  pass_if: (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years >= 12) || (candidate.stream
+    == 'volet_2' && candidate.experience_months_past_5_years >= 24 && candidate.quebec_experience_months
+    >= 12) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years >= 36) || (candidate.stream
+    == 'volet_3' && ((candidate.feer in [0, 1, 2] && candidate.experience_months_past_5_years >= 12) ||
+    (candidate.feer in [3, 4, 5] && candidate.experience_months_past_5_years >= 24 && candidate.quebec_experience_months
+    >= 12)))
+  fail_if: (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years < 12) || (candidate.stream
+    == 'volet_2' && (candidate.experience_months_past_5_years < 24 || candidate.quebec_experience_months
+    < 12)) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years < 36) || (candidate.stream
+    == 'volet_3' && candidate.feer in [0, 1, 2] && candidate.experience_months_past_5_years < 12) || (candidate.stream
+    == 'volet_3' && candidate.feer in [3, 4, 5] && (candidate.experience_months_past_5_years < 24 || candidate.quebec_experience_months
+    < 12))
+  missing_or_unverified: 'NEEDS_REVIEW: Qualifying experience months cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-PSTQ-EXP-002
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ Experience Requirements
+    verbatim_excerpt: 1 year for Volet 1; 2 years including 1 in Quebec for Volet 2; 3 years for Volet
+      4
+  provenance:
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ Experience Requirements
+    page: 14
+    verbatim: 1 year for Volet 1; 2 years including 1 in Quebec for Volet 2; 3 years for Volet 4
+- id: pstq_diploma
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.eligible_quebec_diploma
+  pass_if: candidate.eligible_quebec_diploma == true
+  fail_if: candidate.eligible_quebec_diploma == false
+  missing_or_unverified: 'NEEDS_REVIEW: Quebec-equivalent diploma cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-PSTQ-DIPLOMA-003
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ Diploma Requirements
+    verbatim_excerpt: DEP of at least 900 hours, ASP, or AEC
+  provenance:
+    source_file: quebec-pstq-arrima.html
+    section: PSTQ Diploma Requirements
+    page: 14
+    verbatim: DEP of at least 900 hours, ASP, or AEC
+- id: pstq_funds_contract
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.self_sufficiency_contract_signed
+  pass_if: candidate.self_sufficiency_contract_signed == true
+  fail_if: candidate.self_sufficiency_contract_signed == false
+  missing_or_unverified: 'NEEDS_REVIEW: The three-month financial self-sufficiency contract cannot be
+    verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-PSTQ-FUNDS-004
+    source_file: quebec-pstq-arrima.html
+    section: Financial Self-Sufficiency Contract
+    verbatim_excerpt: financial self-sufficiency contract
+  provenance:
+    source_file: quebec-pstq-arrima.html
+    section: Financial Self-Sufficiency Contract
+    page: 1
+    verbatim: financial self-sufficiency contract
+- id: pstq_spouse_french
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.accompanying_spouse
+  conditional_required_fields:
+    when: candidate.accompanying_spouse == true
+    fields:
+    - candidate.spouse_french_oral_level
+  pass_if: candidate.accompanying_spouse == false || candidate.spouse_french_oral_level >= 4
+  fail_if: candidate.accompanying_spouse == true && candidate.spouse_french_oral_level < 4
+  missing_or_unverified: 'NEEDS_REVIEW: Spouse French oral level cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-PSTQ-SPOUSE-005
+    source_file: quebec-pstq-arrima.html
+    section: Accompanying Spouse French
+    verbatim_excerpt: French oral level 4
+  provenance:
+    source_file: quebec-pstq-arrima.html
+    section: Accompanying Spouse French
+    page: 16
+    verbatim: French oral level 4

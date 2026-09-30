@@ -1,0 +1,10 @@
+{
+  "vertical_id": "nbpnp",
+  "evidence_units_sha256": "d413a3e9718f2c486f6ff2b07b1d378a4af27a06bf7ce83131d0453a1544b587",
+  "sources_sha256": "e992660040eeb05769f80f4710b41c585310b8df63cf4ea0c4d0704243c6f387",
+  "discovered": 46,
+  "member": 19,
+  "excluded": 15,
+  "review": 12,
+  "failed": 0
+}

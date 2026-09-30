@@ -1,0 +1,153 @@
+schema_version: 1.0.0
+catalog_id: aaip_entrepreneur_streams
+jurisdiction: CA-AB
+category: AAIP entrepreneur
+display_name: AAIP Entrepreneur Streams
+status: ACTIVE
+program_id: AAIP_ENTREPRENEUR
+stream_id: ENTREPRENEUR
+effective_date: '2024-01-01'
+source_edition: AAIP Rural, Graduate, Foreign Graduate, and Farm streams
+source_url: https://www.alberta.ca/aaip-entrepreneur-streams
+decision_scope: Deterministic prescreen for endorsement, net worth, investment, equity,
+  and language. Entrepreneur points stay in AnyScore.
+sources:
+- id: aaip_ent
+  title: AAIP entrepreneur streams
+  url: https://www.alberta.ca/aaip-entrepreneur-streams
+  citation: AAIP Rural, Graduate, Foreign Graduate, and Farm streams
+  legal_authority: Official program baseline used for the redline. Points arithmetic
+    stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. AnyScore owns the entrepreneur points.
+rules:
+- id: aaip_ent_endorsement
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural' || candidate.stream == 'farm' || candidate.stream
+      == 'foreign_graduate'
+    fields:
+    - candidate.endorsement_valid
+  pass_if: candidate.stream == 'graduate' || candidate.endorsement_valid == true
+  fail_if: candidate.stream != 'graduate' && candidate.endorsement_valid == false
+  missing_or_unverified: 'NEEDS_REVIEW: Community, agency, or agriculture endorsement
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-ENT-ENDORSEMENT-001
+    source_file: src04.html
+    section: Endorsement requirements
+    verbatim_excerpt: Community Support Letter is issued
+- id: aaip_ent_net_worth
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural' || candidate.stream == 'farm'
+    fields:
+    - candidate.net_worth_cad
+  pass_if: candidate.stream == 'graduate' || (candidate.stream == 'rural' && candidate.net_worth_cad
+    >= 300000) || (candidate.stream == 'farm' && candidate.net_worth_cad >= 500000)
+    || (candidate.stream == 'foreign_graduate' && candidate.settlement_funds_cad >=
+    candidate.settlement_funds_required_cad)
+  fail_if: (candidate.stream == 'rural' && candidate.net_worth_cad < 300000) || (candidate.stream
+    == 'farm' && candidate.net_worth_cad < 500000) || (candidate.stream == 'foreign_graduate'
+    && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)
+  missing_or_unverified: 'NEEDS_REVIEW: Net worth or settlement funds cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-ENT-NET-WORTH-002
+    source_file: src04.html
+    section: Net worth and settlement funds
+    verbatim_excerpt: Minimum net worth of $300,000
+- id: aaip_ent_investment
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural' || candidate.stream == 'farm' || candidate.stream
+      == 'foreign_graduate'
+    fields:
+    - candidate.investment_cad
+  pass_if: candidate.stream == 'graduate' || (candidate.stream == 'rural' && candidate.investment_cad
+    >= 100000) || (candidate.stream == 'farm' && candidate.investment_cad >= 500000)
+    || (candidate.stream == 'foreign_graduate' && candidate.fges_urban == false &&
+    candidate.investment_cad >= 50000) || (candidate.stream == 'foreign_graduate'
+    && candidate.fges_urban == true && candidate.investment_cad >= 100000)
+  fail_if: (candidate.stream == 'rural' && candidate.investment_cad < 100000) || (candidate.stream
+    == 'farm' && candidate.investment_cad < 500000) || (candidate.stream == 'foreign_graduate'
+    && candidate.fges_urban == false && candidate.investment_cad < 50000) || (candidate.stream
+    == 'foreign_graduate' && candidate.fges_urban == true && candidate.investment_cad
+    < 100000)
+  missing_or_unverified: 'NEEDS_REVIEW: Investment amount or foreign-graduate location
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-ENT-INVESTMENT-003
+    source_file: src04.html
+    section: Business investment floors
+    verbatim_excerpt: Minimum investment of $100,000
+- id: aaip_ent_equity
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.equity_ratio
+  - candidate.business_kind
+  pass_if: (candidate.stream == 'rural' && candidate.business_kind == 'new' && candidate.equity_ratio
+    >= 0.51) || (candidate.stream == 'rural' && candidate.business_kind == 'succession'
+    && candidate.equity_ratio >= 1) || ((candidate.stream == 'graduate' || candidate.stream
+    == 'farm') && candidate.equity_ratio >= 0.34) || (candidate.stream == 'foreign_graduate'
+    && candidate.fges_urban == true && candidate.equity_ratio >= 0.34) || (candidate.stream
+    == 'foreign_graduate' && candidate.fges_urban == false && candidate.equity_ratio
+    >= 0.51)
+  fail_if: (candidate.stream == 'rural' && candidate.business_kind == 'new' && candidate.equity_ratio
+    < 0.51) || (candidate.stream == 'rural' && candidate.business_kind == 'succession'
+    && candidate.equity_ratio < 1) || ((candidate.stream == 'graduate' || candidate.stream
+    == 'farm') && candidate.equity_ratio < 0.34) || (candidate.stream == 'foreign_graduate'
+    && candidate.fges_urban == true && candidate.equity_ratio < 0.34) || (candidate.stream
+    == 'foreign_graduate' && candidate.fges_urban == false && candidate.equity_ratio
+    < 0.51)
+  missing_or_unverified: 'NEEDS_REVIEW: Equity share cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-ENT-EQUITY-004
+    source_file: src04.html
+    section: Ownership equity thresholds
+    verbatim_excerpt: Minimum ownership of 51% for a new business
+- id: aaip_ent_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural' || candidate.stream == 'graduate' || candidate.stream
+      == 'foreign_graduate'
+    fields:
+    - candidate.language_clb_minimum
+  pass_if: candidate.stream == 'farm' || (candidate.stream == 'rural' && candidate.language_clb_minimum
+    >= 4) || (candidate.stream == 'graduate' && candidate.language_clb_minimum >=
+    7) || (candidate.stream == 'foreign_graduate' && candidate.language_clb_minimum
+    >= 5)
+  fail_if: (candidate.stream == 'rural' && candidate.language_clb_minimum < 4) ||
+    (candidate.stream == 'graduate' && candidate.language_clb_minimum < 7) || (candidate.stream
+    == 'foreign_graduate' && candidate.language_clb_minimum < 5)
+  missing_or_unverified: 'NEEDS_REVIEW: Language level cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AAIP-ENT-LANGUAGE-005
+    source_file: src04.html
+    section: Language CLB floors by stream
+    verbatim_excerpt: CLB) level of 4

@@ -1,0 +1,10 @@
+{
+  "vertical_id": "quebec",
+  "evidence_units_sha256": "a6deebe50334f689bb1ae2734242ae99c878acbff9b8c5191a2b19977cf35303",
+  "sources_sha256": "9260f1c8a904509facc52e4f35ff0a4f883e074587a182b0da044eeb75538d43",
+  "discovered": 102,
+  "member": 24,
+  "excluded": 14,
+  "review": 64,
+  "failed": 0
+}

@@ -1,0 +1,129 @@
+schema_version: 1.0.0
+catalog_id: sinp_entrepreneur_160
+jurisdiction: CA-SK
+category: SINP entrepreneur
+display_name: SINP Entrepreneur Category
+status: ACTIVE
+program_id: SINP_ENTREPRENEUR
+stream_id: ENTREPRENEUR
+effective_date: '2026-01-02'
+source_edition: SINP Entrepreneur Category
+source_url: https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program
+decision_scope: Deterministic entrepreneur prescreen. The 160-point grid stays in
+  AnyScore.
+sources:
+- id: sinp_ent
+  title: SINP Entrepreneur Category
+  url: https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program
+  citation: SINP Entrepreneur Category
+  legal_authority: Official program baseline used for the redline. Points arithmetic
+    stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. Maximum 160. AnyScore owns the arithmetic.
+rules:
+- id: sinp_ent_net_worth
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.net_worth_cad
+  - candidate.net_worth_verified
+  pass_if: candidate.net_worth_cad >= 500000 && candidate.net_worth_verified == true
+  fail_if: candidate.net_worth_cad < 500000 || candidate.net_worth_verified == false
+  missing_or_unverified: 'NEEDS_REVIEW: Net worth or third-party verification cannot
+    be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-NET-WORTH-001
+    source_file: src52.html
+    section: Net worth
+    verbatim_excerpt: minimum of $500,000 (CAD) in Net Business and Personal Assets
+- id: sinp_ent_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.management_years_past_10
+  pass_if: candidate.management_years_past_10 >= 3
+  fail_if: candidate.management_years_past_10 < 3
+  missing_or_unverified: 'NEEDS_REVIEW: Entrepreneurial experience cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-EXPERIENCE-002
+    source_file: src52.html
+    section: Entrepreneurial experience
+    verbatim_excerpt: three years of relevant business management or entrepreneurial
+      experience gained in the past ten years
+- id: sinp_ent_investment
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.in_regina_or_saskatoon
+  - candidate.investment_cad
+  pass_if: (candidate.in_regina_or_saskatoon == true && candidate.investment_cad >=
+    300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad
+    >= 200000)
+  fail_if: (candidate.in_regina_or_saskatoon == true && candidate.investment_cad <
+    300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad
+    < 200000)
+  missing_or_unverified: 'NEEDS_REVIEW: Investment amount or community cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-INVESTMENT-003
+    source_file: src52.html
+    section: Investment floors
+    verbatim_excerpt: minimum of $300,000 (CAD) in the Regina census metropolitan
+      area
+- id: sinp_ent_equity
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.equity_ratio
+  - candidate.investment_cad
+  pass_if: candidate.equity_ratio >= 0.3333 || candidate.investment_cad >= 1000000
+  fail_if: candidate.equity_ratio < 0.3333 && candidate.investment_cad < 1000000
+  missing_or_unverified: 'NEEDS_REVIEW: Equity share cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-EQUITY-004
+    source_file: src52.html
+    section: Equity ownership
+    verbatim_excerpt: ownership of at least one-third (33 1/3 per cent)
+- id: sinp_ent_management
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.active_management_in_saskatchewan
+  pass_if: candidate.active_management_in_saskatchewan == true
+  fail_if: candidate.active_management_in_saskatchewan == false
+  missing_or_unverified: 'NEEDS_REVIEW: Day-to-day management in Saskatchewan cannot
+    be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-MANAGEMENT-005
+    source_file: src52.html
+    section: Active management
+    verbatim_excerpt: day-to-day management of the business
+- id: sinp_ent_jobs
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.in_regina_or_saskatoon
+  - candidate.new_business
+  - candidate.jobs_to_create
+  pass_if: candidate.new_business == false || candidate.in_regina_or_saskatoon ==
+    false || candidate.jobs_to_create >= 2
+  fail_if: candidate.new_business == true && candidate.in_regina_or_saskatoon == true
+    && candidate.jobs_to_create < 2
+  missing_or_unverified: 'NEEDS_REVIEW: Job creation cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-SINP-ENT-JOBS-006
+    source_file: src52.html
+    section: Job creation
+    verbatim_excerpt: creation of two employment opportunities in Saskatchewan

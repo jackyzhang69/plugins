@@ -1,0 +1,270 @@
+"schema_version": "1.0.0"
+"catalog_id": "oinp_postgraduate"
+"jurisdiction": "CA-ON"
+"category": "Ontario Immigrant Nominee Program"
+"display_name": "OINP Postgraduate Streams (Masters Graduate, PhD Graduate)"
+"status": "ACTIVE"
+"program_id": "OINP_POSTGRADUATE"
+"stream_id": "POSTGRADUATE"
+"effective_date": "2023-11-16"
+"source_edition": >-
+  Ontario Immigration Act, 2015, S.O. 2015, c. 8; Ontario Regulation 422/17 ss. 12 (Masters) & 13 (PhD);
+  OINP Postgraduate Guidelines (2024/2026)
+"source_url": "https://www.ontario.ca/page/oinp-masters-graduate-stream"
+"decision_scope": >-
+  Deterministic prescreen of statutory university qualification, physical Ontario residency, graduation
+  window, language competency (CLB 7 for Masters), and settlement funds for the OINP Masters Graduate
+  and PhD Graduate streams. Scoring is calculated by AnyScore EOI models.
+"sources":
+- "id": "oia_2015"
+  "title": "Ontario Immigration Act, 2015, S.O. 2015, c. 8"
+  "url": "https://www.ontario.ca/laws/statute/15o08"
+  "citation": "S.O. 2015, c. 8, s. 11, 14"
+  "legal_authority": >-
+    Provincial statute — selection of foreign nationals under human capital categories
+- "id": "o_reg_422_17_s12"
+  "title": "Ontario Regulation 422/17 (General) — Masters Graduate Stream"
+  "url": "https://www.ontario.ca/laws/regulation/170422"
+  "citation": "O. Reg. 422/17 s. 12"
+  "legal_authority": "Provincial regulation — statutory criteria for Masters Graduate stream"
+- "id": "o_reg_422_17_s13"
+  "title": "Ontario Regulation 422/17 (General) — PhD Graduate Stream"
+  "url": "https://www.ontario.ca/laws/regulation/170422"
+  "citation": "O. Reg. 422/17 s. 13"
+  "legal_authority": "Provincial regulation — statutory criteria for PhD Graduate stream"
+- "id": "oinp_masters_guide"
+  "title": "OINP Masters Graduate Stream Program Guide"
+  "url": "https://www.ontario.ca/page/oinp-masters-graduate-stream"
+  "citation": >-
+    OINP operational guidelines — eligible publicly-assisted universities, CLB 7 in 4 abilities
+  "legal_authority": "Official program delivery instructions; subordinate to OIA and O. Reg. 422/17"
+- "id": "oinp_phd_guide"
+  "title": "OINP PhD Graduate Stream Program Guide"
+  "url": "https://www.ontario.ca/page/oinp-phd-graduate-stream"
+  "citation": >-
+    OINP operational guidelines — 2 academic years PhD study, 2-year graduation window
+  "legal_authority": "Official program delivery instructions"
+- "id": "ircc_funds"
+  "title": "Low Income Cut-Off (LICO) Settlement Funds Schedule"
+  "url": >-
+    https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html
+  "citation": "IRCC LICO table for family settlement funds"
+  "legal_authority": >-
+    Statutory baseline adopted by OINP under O. Reg. 422/17 s. 12(1)(f) and s. 13(1)(e)
+"schema":
+  "input_type": "object"
+  "required_top_level":
+  - "assessment_date"
+  - "candidate"
+  - "education"
+  - "funds"
+  "types":
+    "assessment_date": "ISO-8601 date; application assessment date"
+    "candidate":
+      "stream": "masters_graduate | phd_graduate"
+      "language_test_valid": "boolean; test taken within 2 years from designated testing agency"
+      "language_clb_minimum": "integer; lowest CLB score among listening, reading, writing, and speaking"
+      "ontario_physical_residency_months_last_2_years": "number; cumulative physical residence in Ontario\
+        \ in past 24 months"
+      "months_since_degree_conferred": "number; calendar months since official degree granting date (max\
+        \ 24)"
+      "intention_to_reside_in_ontario": "boolean; demonstrated genuine ties and intention to live permanently\
+        \ in Ontario"
+      "legal_status_in_canada": "boolean; valid status if currently residing in Canada"
+      "family_size": "integer >= 1; includes applicant, spouse, and dependent children"
+      "has_qualifying_ontario_employment_income": "boolean; verified ongoing legal employment income meeting\
+        \ LICO"
+    "education":
+      "institution_is_eligible_ontario_public_university": "boolean; degree awarded by an eligible publicly-assisted\
+        \ Ontario university"
+      "degree_type": "masters | phd"
+      "academic_years_completed": "number; completed full-time academic years of study"
+      "field_of_study_cip": "string; two-digit CIP code (e.g. 14 for engineering, 11 for computer science)"
+    "funds":
+      "available_cad": "non-negative decimal; unencumbered transferable liquid funds"
+      "evidence_verified": "boolean; verified through official bank statements or employment documents"
+"minimums":
+  "application_window_months": 24
+  "ontario_residency_months": 12
+  "residency_lookback_years": 2
+  "masters_graduate":
+    "study_duration_academic_years": 1
+    "language_clb_all_abilities": 7
+    "settlement_funds": "lico_baseline"
+  "phd_graduate":
+    "study_duration_academic_years": 2
+    "language_mandatory_minimum": "none"
+    "settlement_funds": "lico_baseline"
+"reference_eoi_grid":
+  "note": >-
+    Reference EOI scoring factors compiled from AnyScore policies/ontario/oinp_eoi_postgraduate.yaml
+  "dimensions":
+    "canadian_status":
+      "valid_work_or_study_permit": 10
+      "no_permit": 0
+    "canadian_earnings_history":
+      "cra_noa_40k_and_above": 3
+      "less_than_40k_or_none": 0
+    "credential_level":
+      "phd_degree": 10
+      "masters_degree": 8
+    "field_of_study_cip":
+      "stem_health_trades_cip_11_14_26_27_40_51": 12
+      "business_social_legal_cip_42_45_52_22": 6
+      "humanities_arts_other": 0
+    "canadian_education_credentials":
+      "more_than_one_canadian_credential": 10
+      "one_canadian_credential": 5
+    "official_language_ability":
+      "clb_9_and_above": 10
+      "clb_8": 6
+      "clb_7": 4
+      "clb_below_7": 0
+    "bilingual_ability":
+      "both_clb_7_or_higher": 10
+      "clb_6_second_language": 5
+      "no_second_language": 0
+    "study_location":
+      "outside_gta": 10
+      "inside_gta": 0
+    "strategic_priorities":
+      "special_targeted_priority": 10
+"rules":
+- "id": "oinp_pg_eligible_institution"
+  "category": "education"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "education.institution_is_eligible_ontario_public_university"
+  "pass_if": "education.institution_is_eligible_ontario_public_university == true"
+  "fail_if": "education.institution_is_eligible_ontario_public_university == false"
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: University eligibility as an Ontario publicly-assisted institution unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(a), s. 13(1)(a)"
+    "evidence_unit_id": "EU-OINP-PG-INSTITUTION-001"
+    "source_file": "src04.html"
+    "section": "Education"
+    "verbatim_excerpt": "ters degree from an Ontario university. On this page Skip this page navigation\
+      \ S"
+- "id": "oinp_pg_degree_completion"
+  "category": "education"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.stream"
+  - "education.degree_type"
+  - "education.academic_years_completed"
+  "pass_if": >-
+    (candidate.stream == 'masters_graduate' && education.degree_type == 'masters' && education.academic_years_completed
+    >= 1) || (candidate.stream == 'phd_graduate' && education.degree_type == 'phd' && education.academic_years_completed
+    >= 2)
+  "fail_if": >-
+    (candidate.stream == 'masters_graduate' && (education.degree_type != 'masters' || education.academic_years_completed
+    < 1)) || (candidate.stream == 'phd_graduate' && (education.degree_type != 'phd' || education.academic_years_completed
+    < 2))
+  "missing_or_unverified": "NEEDS_REVIEW: Degree type or full-time academic duration cannot be established."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(b), s. 13(1)(b)"
+    "evidence_unit_id": "EU-OINP-PG-DEGREE-002"
+    "source_file": "src04.html"
+    "section": "Education"
+    "verbatim_excerpt": "at least one academic year of full-time study"
+- "id": "oinp_pg_graduation_window"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.months_since_degree_conferred"
+  "pass_if": "candidate.months_since_degree_conferred <= 24"
+  "fail_if": "candidate.months_since_degree_conferred > 24"
+  "missing_or_unverified": "NEEDS_REVIEW: Date degree was officially conferred is unverified."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(c), s. 13(1)(c)"
+    "evidence_unit_id": "EU-OINP-PG-WINDOW-003"
+    "source_file": "src04.html"
+    "section": "Application timing"
+    "verbatim_excerpt": "within two years"
+- "id": "oinp_pg_ontario_residency"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.ontario_physical_residency_months_last_2_years"
+  "pass_if": "candidate.ontario_physical_residency_months_last_2_years >= 12"
+  "fail_if": "candidate.ontario_physical_residency_months_last_2_years < 12"
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Physical residency in Ontario (cumulative 12 months in past 2 years) unverified.
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(d), s. 13(1)(d)"
+    "evidence_unit_id": "EU-OINP-PG-RESIDENCY-004"
+    "source_file": "src04.html"
+    "section": "Residency"
+    "verbatim_excerpt": "lived in Ontario for at least one year in the past two years"
+- "id": "oinp_pg_language_competency"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.stream"
+  "pass_if": >-
+    (candidate.stream == 'masters_graduate' && candidate.language_test_valid == true && candidate.language_clb_minimum
+    >= 7) || candidate.stream == 'phd_graduate'
+  "fail_if": >-
+    candidate.stream == 'masters_graduate' && (candidate.language_test_valid == false || candidate.language_clb_minimum
+    < 7)
+  "missing_or_unverified": "NEEDS_REVIEW: Designated language test results or CLB 7 scores unverified."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(e)"
+    "evidence_unit_id": "EU-OINP-PG-LANGUAGE-005"
+    "source_file": "src04.html"
+    "section": "Language"
+    "verbatim_excerpt": "Canadian Language Benchmark ( CLB ) level 7 or higher"
+- "id": "oinp_pg_settlement_funds"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.family_size"
+  "pass_if": >-
+    candidate.has_qualifying_ontario_employment_income == true || (funds.evidence_verified == true &&
+    ((candidate.family_size == 1 && funds.available_cad >= 15263) || (candidate.family_size == 2 && funds.available_cad
+    >= 19001) || (candidate.family_size == 3 && funds.available_cad >= 23360) || (candidate.family_size
+    == 4 && funds.available_cad >= 28362) || (candidate.family_size >= 5 && funds.available_cad >= 32168)))
+  "fail_if": >-
+    candidate.has_qualifying_ontario_employment_income == false && funds.evidence_verified == true &&
+    ((candidate.family_size == 1 && funds.available_cad < 15263) || (candidate.family_size == 2 && funds.available_cad
+    < 19001) || (candidate.family_size == 3 && funds.available_cad < 23360) || (candidate.family_size
+    == 4 && funds.available_cad < 28362) || (candidate.family_size >= 5 && funds.available_cad < 32168))
+  "missing_or_unverified": >-
+    NEEDS_REVIEW: Proof of settlement funds or qualifying Ontario employment income is missing or unverified.
+  "evidence_anchor":
+    "source_id": "ircc_funds"
+    "citation": "O. Reg. 422/17 s. 12(1)(f), s. 13(1)(e); IRCC LICO schedule"
+    "evidence_unit_id": "EU-OINP-PG-FUNDS-006"
+    "source_file": "src04.html"
+    "section": "Settlement funds"
+    "verbatim_excerpt": >-
+      You must have enough money to support yourself and your dependent family members when you settle
+      in Canada
+- "id": "oinp_pg_residence_intention"
+  "category": "candidate"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.intention_to_reside_in_ontario"
+  "pass_if": "candidate.intention_to_reside_in_ontario == true"
+  "fail_if": "candidate.intention_to_reside_in_ontario == false"
+  "missing_or_unverified": "NEEDS_REVIEW: Evidence of intention to reside permanently in Ontario unverified."
+  "evidence_anchor":
+    "source_id": "o_reg_422_17_s12"
+    "citation": "O. Reg. 422/17 s. 12(1)(g), s. 13(1)(f)"
+    "evidence_unit_id": "EU-OINP-PG-INTENT-007"
+    "source_file": "src04.html"
+    "section": "Intention to reside"
+    "verbatim_excerpt": "You must intend to live"

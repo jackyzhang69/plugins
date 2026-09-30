@@ -1,0 +1,148 @@
+"schema_version": "1.0.0"
+"catalog_id": "oinp_entrepreneur"
+"jurisdiction": "CA-ON"
+"category": "OINP entrepreneur"
+"display_name": "OINP Entrepreneur Stream"
+"status": "ACTIVE"
+"program_id": "OINP_ENTREPRENEUR"
+"stream_id": "ENTREPRENEUR"
+"effective_date": "2021-04-29"
+"source_edition": "OINP Entrepreneur Stream guide"
+"source_url": "https://www.ontario.ca/page/oinp-entrepreneur-stream"
+"decision_scope": >-
+  Deterministic entrepreneur prescreen for experience, net worth, investment, jobs, and business-plan
+  submission under O. Reg. 422/17 s. 13. EOI grid stays in AnyScore.
+"sources":
+- "id": "oinp_ent"
+  "title": "OINP Entrepreneur Stream"
+  "url": "https://www.ontario.ca/page/oinp-entrepreneur-stream"
+  "citation": "OINP Entrepreneur Stream guide"
+  "legal_authority": >-
+    Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+"schema":
+  "input_type": "object"
+  "required_top_level":
+  - "assessment_date"
+  - "candidate"
+  "types":
+    "assessment_date": "ISO-8601 date"
+"reference_points_grid":
+  "note": >-
+    Documentation only. Statutory business-plan requirement is anchored here; AnyScore owns EOI ranking.
+"rules":
+- "id": "oinp_ent_experience"
+  "category": "experience"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.business_experience_months_past_60"
+  "pass_if": "candidate.business_experience_months_past_60 >= 24"
+  "fail_if": "candidate.business_experience_months_past_60 < 24"
+  "missing_or_unverified": "NEEDS_REVIEW: Business experience cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_ent"
+    "citation": >-
+      At least 24 months of full-time business experience as an owner or senior executive in the past
+      60 months.
+    "evidence_unit_id": "EU-OINP-ENT-EXPERIENCE-001"
+    "source_file": "o_reg_422_17_v15.page.txt"
+    "section": "Entrepreneur s.13(2)"
+    "verbatim_excerpt": >-
+      The applicant has 24 months of experience, acquired within the 60-month period before the date of
+      registering the expression of interest, as either a business owner or as a senior manager
+- "id": "oinp_ent_net_worth"
+  "category": "funds"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.in_gta"
+  - "candidate.ict_or_digital"
+  - "candidate.net_worth_cad"
+  "pass_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad >= 800000)
+    || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad >=
+    400000)
+  "fail_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad < 800000)
+    || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad < 400000)
+  "missing_or_unverified": "NEEDS_REVIEW: Net worth, GTA location, or ICT status cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_ent"
+    "citation": >-
+      Net worth of 800,000 dollars inside the GTA, or 400,000 dollars outside the GTA or in ICT.
+    "evidence_unit_id": "EU-OINP-ENT-NETWORTH-002"
+    "source_file": "o_reg_422_17_v15.page.txt"
+    "section": "Entrepreneur s.13(2)"
+    "verbatim_excerpt": >-
+      The applicant has a personal net worth, which was lawfully obtained and is verifiable, of at least
+      the following: i. $800,000 if the applicant will be operating a business located in the Greater
+      Toronto Area
+- "id": "oinp_ent_investment"
+  "category": "funds"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.in_gta"
+  - "candidate.ict_or_digital"
+  - "candidate.personal_investment_cad"
+  "pass_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad
+    >= 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.personal_investment_cad
+    >= 200000)
+  "fail_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad
+    < 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.personal_investment_cad
+    < 200000)
+  "missing_or_unverified": "NEEDS_REVIEW: Personal investment cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_ent"
+    "citation": >-
+      Personal investment of 600,000 dollars inside the GTA, or 200,000 dollars outside the GTA or in
+      ICT.
+    "evidence_unit_id": "EU-OINP-ENT-INVESTMENT-003"
+    "source_file": "o_reg_422_17_v15.page.txt"
+    "section": "Entrepreneur s.13(2)"
+    "verbatim_excerpt": >-
+      $600,000 if the applicant will be operating a business located in the Greater Toronto Area
+- "id": "oinp_ent_jobs"
+  "category": "job_offer"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.in_gta"
+  - "candidate.ict_or_digital"
+  - "candidate.jobs_to_create"
+  "pass_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create >= 2) ||
+    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.jobs_to_create >= 1)
+  "fail_if": >-
+    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create < 2) ||
+    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.jobs_to_create < 1)
+  "missing_or_unverified": "NEEDS_REVIEW: Job-creation commitment cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_ent"
+    "citation": "At least 2 permanent jobs inside the GTA, or 1 outside the GTA or in ICT."
+    "evidence_unit_id": "EU-OINP-ENT-JOBS-004"
+    "source_file": "o_reg_422_17_v15.page.txt"
+    "section": "Entrepreneur s.13(2)"
+    "verbatim_excerpt": >-
+      at least two permanent, full-time jobs that are paid at no less than the median wage level for the
+      position, if the business is located in the Greater Toronto Area
+- "id": "oinp_ent_concept"
+  "category": "pathway"
+  "severity": "CRITICAL_REDLINE"
+  "eval_type": "deterministic"
+  "required_fields":
+  - "candidate.business_plan_submitted"
+  "pass_if": "candidate.business_plan_submitted == true"
+  "fail_if": "candidate.business_plan_submitted == false"
+  "missing_or_unverified": "NEEDS_REVIEW: Business plan submission cannot be verified."
+  "evidence_anchor":
+    "source_id": "oinp_ent"
+    "citation": "O. Reg. 422/17 s. 13(2) para. 10 (historical consolidation)"
+    "evidence_unit_id": "EU-OINP-ENT-BUSINESS-PLAN-005"
+    "source_file": "o_reg_422_17_v15.page.txt"
+    "section": "Entrepreneur s.13(2)"
+    "verbatim_excerpt": >-
+      The applicant will submit a business plan to the director that demonstrates that the business will
+      be viable and likely to provide material economic benefit to the economy of Ontario

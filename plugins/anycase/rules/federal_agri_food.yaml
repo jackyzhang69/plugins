@@ -1,0 +1,104 @@
+schema_version: 1.0.0
+catalog_id: federal_agri_food
+jurisdiction: CA
+category: Federal agri-food
+display_name: Agri-Food Pilot
+status: ACTIVE
+program_id: FEDERAL_AGRI_FOOD
+stream_id: AGRI_FOOD
+effective_date: '2026-01-01'
+source_edition: Agri-Food Pilot
+source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/agri-food-pilot.html
+decision_scope: Deterministic Agri-Food Pilot prescreen. No points grid. The eligible-occupation list is a supplied flag because
+  the list changes.
+sources:
+- id: afp
+  title: Agri-Food Pilot
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/agri-food-pilot.html
+  citation: Agri-Food Pilot
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: The Agri-Food Pilot has no selection points grid.
+rules:
+- id: afp_occupation
+  category: occupation
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.eligible_occupation
+  pass_if: candidate.eligible_occupation == true
+  fail_if: candidate.eligible_occupation == false
+  missing_or_unverified: 'NEEDS_REVIEW: Eligible agri-food occupation cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AFP-OCCUPATION-001
+    source_file: agri-food-pilot-eligible-industries.html
+    section: Eligible industries and occupations
+    verbatim_excerpt: The job must be in an eligible occupation listed under 1 of the eligible industries
+- id: afp_experience
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.canadian_nonseasonal_months_past_3_years
+  pass_if: candidate.canadian_nonseasonal_months_past_3_years >= 12
+  fail_if: candidate.canadian_nonseasonal_months_past_3_years < 12
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian non-seasonal experience cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AFP-EXPERIENCE-002
+    source_file: agri-food-pilot-pr-eligibility.html
+    section: Eligible work experience
+    verbatim_excerpt: at least 1 year of cumulative, non-seasonal , full-time work in the past 3 years (at least 1,560 hours)
+- id: afp_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.nonseasonal
+  - job_offer.weekly_hours
+  pass_if: job_offer.nonseasonal == true && job_offer.weekly_hours >= 30
+  fail_if: job_offer.nonseasonal == false || job_offer.weekly_hours < 30
+  missing_or_unverified: 'NEEDS_REVIEW: Job-offer terms cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AFP-JOB-OFFER-003
+    source_file: agri-food-pilot-pr-eligibility.html
+    section: Job offer
+    verbatim_excerpt: full time — This means you work at least 30 paid hours per week. non-seasonal — This means you have
+      consistent and regularly scheduled paid employment throughout the year.
+- id: afp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.language_clb_minimum
+  pass_if: candidate.language_clb_minimum >= 4
+  fail_if: candidate.language_clb_minimum < 4
+  missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AFP-LANGUAGE-004
+    source_file: agri-food-pilot-language-testing.html
+    section: Language testing
+    verbatim_excerpt: If you meet the minimum score of CLB 4 in all 4 abilities, include a copy of the test results with your
+      application.
+- id: afp_education
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.meets_canadian_high_school
+  pass_if: candidate.meets_canadian_high_school == true
+  fail_if: candidate.meets_canadian_high_school == false
+  missing_or_unverified: 'NEEDS_REVIEW: Education cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-AFP-EDUCATION-005
+    source_file: agri-food-pilot-pr-eligibility.html
+    section: Educational requirements
+    verbatim_excerpt: You must have at least a Canadian high school diploma or an educational credential assessment (ECA)
+      report from a designated organization or professional body showing that you completed a foreign credential at the secondary
+      school level or above

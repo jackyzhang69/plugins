@@ -1,0 +1,229 @@
+schema_version: 1.0.0
+catalog_id: mpnp_ranking_grid_1000
+jurisdiction: CA-MB
+category: Manitoba Provincial Nominee Program
+display_name: MPNP Skilled Worker EOI (Skilled Worker in Manitoba, Skilled Worker
+  Overseas)
+status: ACTIVE
+program_id: MPNP_SKILLED_WORKER
+stream_id: SKILLED_WORKER
+effective_date: '2026-01-01'
+source_edition: MPNP Expression of Interest ranking points grid. Positive factors
+  maximum 1000. Risk deductions up to 200. No pass mark in this ruleset.
+source_url: https://immigratemanitoba.com/wp-content/uploads/2018/02/mpnp-expression-of-interest-ranking-points-grid.pdf
+decision_scope: Deterministic eligibility prescreen for MPNP Skilled Worker in Manitoba
+  and Skilled Worker Overseas. AnyScore owns the 1000-point arithmetic. This file
+  has no points floor and does not add the grid.
+sources:
+- id: mpnp_grid
+  title: MPNP Expression of Interest ranking points grid
+  url: https://immigratemanitoba.com/wp-content/uploads/2018/02/mpnp-expression-of-interest-ranking-points-grid.pdf
+  citation: Ranking grid maximum 1000. Language 125, age 75, experience 175, education
+    125, adaptability 500. Risk deductions up to 200. No pass mark is applied in this
+    ruleset.
+  legal_authority: Manitoba Provincial Nominee Program Skilled Worker expression-of-interest
+    ranking grid
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  types:
+    assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
+    candidate:
+      stream: skilled_worker_in_manitoba | skilled_worker_overseas
+      connection_type: current_manitoba_employment | past_manitoba_work | past_manitoba_study
+        | close_relative_supporter | friend_supporter | strategic_recruitment_invitation
+        | none
+      valid_work_permit: boolean; Skilled Worker in Manitoba has a valid work permit.
+        Not read for Skilled Worker Overseas.
+      currently_working_in_manitoba: boolean; currently working in Manitoba. Not read
+        for Skilled Worker Overseas.
+      months_with_manitoba_employer: number; months with the Manitoba employer. 12
+        when graduated outside Manitoba, otherwise 6.
+      graduated_outside_manitoba: boolean; the person graduated outside Manitoba.
+        False uses the 6-month employer test. Not required when months are already
+        12 or more.
+      supporter_eligible: boolean; Skilled Worker Overseas supporter pathway. Not
+        read for Skilled Worker in Manitoba.
+      strategic_recruitment_invitation: boolean; Skilled Worker Overseas strategic
+        recruitment invitation. Separate from connection_type.
+      language_clb_minimum: integer; lowest of the four skills on one test.
+      language_result_within_2_years: boolean; that test result is under two years
+        old.
+      occupational_language_met: boolean; TEER 0-3 occupational language benchmark
+        is met. The benchmark is not a second CLB number in this file.
+      intends_to_reside_in_manitoba: boolean
+    job_offer:
+      full_time: boolean; Skilled Worker in Manitoba offer is full-time.
+      long_term: boolean; Skilled Worker in Manitoba offer is long-term.
+      noc_teer: integer 0-5; intended occupation TEER. TEER 0-3 also needs occupational_language_met.
+minimums:
+  note: Documentation only. The engine evaluates the rules, not this block.
+  streams:
+  - skilled_worker_in_manitoba
+  - skilled_worker_overseas
+  connection_types:
+  - current_manitoba_employment
+  - past_manitoba_work
+  - past_manitoba_study
+  - close_relative_supporter
+  - friend_supporter
+  - strategic_recruitment_invitation
+  manitoba_employer_months_if_graduated_outside: 12
+  manitoba_employer_months_otherwise: 6
+  language_clb_minimum: 4
+  language_result_max_age_years: 2
+  points_grid_maximum: 1000
+  points_pass_mark: none
+reference_points_grid:
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns
+    the arithmetic. Maximum 1000. This ruleset has no pass mark and no points-floor
+    rule.
+  maximum: 1000
+  pass_mark: none
+  language:
+    maximum: 125
+  age:
+    maximum: 75
+  experience:
+    maximum: 175
+  education:
+    maximum: 125
+  adaptability:
+    maximum: 500
+  risk_deductions:
+    maximum_reduction: 200
+    note: Risk deductions can reduce the score by as much as 200. AnyScore applies
+      them.
+rules:
+- id: mpnp_connection
+  category: connection
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.connection_type
+  pass_if: (candidate.stream == 'skilled_worker_in_manitoba' || candidate.stream ==
+    'skilled_worker_overseas') && candidate.connection_type in ['current_manitoba_employment',
+    'past_manitoba_work', 'past_manitoba_study', 'close_relative_supporter', 'friend_supporter',
+    'strategic_recruitment_invitation']
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker_in_manitoba',
+    'skilled_worker_overseas'])) || (candidate.connection_type != null && !(candidate.connection_type
+    in ['current_manitoba_employment', 'past_manitoba_work', 'past_manitoba_study',
+    'close_relative_supporter', 'friend_supporter', 'strategic_recruitment_invitation']))
+  missing_or_unverified: 'NEEDS_REVIEW: Manitoba connection type is missing or is
+    not one of the published values.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-SW-CONNECTION-001
+    source_file: src02.html
+    section: Manitoba connection requirement
+    verbatim_excerpt: established connection to Manitoba
+- id: mpnp_swm_employment
+  category: employment
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker_in_manitoba'
+    fields:
+    - candidate.valid_work_permit
+    - candidate.currently_working_in_manitoba
+    - job_offer.full_time
+    - job_offer.long_term
+    - candidate.months_with_manitoba_employer
+  pass_if: candidate.stream == 'skilled_worker_overseas' || (candidate.stream == 'skilled_worker_in_manitoba'
+    && candidate.valid_work_permit == true && candidate.currently_working_in_manitoba
+    == true && job_offer.full_time == true && job_offer.long_term == true && (candidate.months_with_manitoba_employer
+    >= 12 || (candidate.graduated_outside_manitoba == false && candidate.months_with_manitoba_employer
+    >= 6)))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker_in_manitoba',
+    'skilled_worker_overseas'])) || (candidate.stream == 'skilled_worker_in_manitoba'
+    && (candidate.valid_work_permit == false || candidate.currently_working_in_manitoba
+    == false || job_offer.full_time == false || job_offer.long_term == false || candidate.months_with_manitoba_employer
+    < 6 || (candidate.graduated_outside_manitoba == true && candidate.months_with_manitoba_employer
+    < 12)))
+  missing_or_unverified: 'NEEDS_REVIEW: Work permit, current Manitoba work, full-time
+    long-term offer, months with the employer, or whether the person graduated outside
+    Manitoba cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-SW-EMPLOYMENT-002
+    source_file: src02.html
+    section: Skilled Worker in Manitoba employment
+    verbatim_excerpt: worked full-time for a Manitoba employer at least six consecutive
+      months
+- id: mpnp_swo_pathway
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'skilled_worker_overseas' && candidate.supporter_eligible
+      != true && candidate.strategic_recruitment_invitation != true
+    fields:
+    - candidate.supporter_eligible
+    - candidate.strategic_recruitment_invitation
+  pass_if: candidate.stream == 'skilled_worker_in_manitoba' || (candidate.stream ==
+    'skilled_worker_overseas' && (candidate.supporter_eligible == true || candidate.strategic_recruitment_invitation
+    == true))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker_in_manitoba',
+    'skilled_worker_overseas'])) || (candidate.stream == 'skilled_worker_overseas'
+    && candidate.supporter_eligible == false && candidate.strategic_recruitment_invitation
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker Overseas supporter eligibility
+    or strategic recruitment invitation cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-SW-PATHWAY-003
+    source_file: src02.html
+    section: Skilled Worker Overseas pathway
+    verbatim_excerpt: Strategic Recruitment Initiative
+- id: mpnp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.language_clb_minimum
+  - candidate.language_result_within_2_years
+  - job_offer.noc_teer
+  conditional_required_fields:
+    when: job_offer.noc_teer in [0, 1, 2, 3]
+    fields:
+    - candidate.occupational_language_met
+  pass_if: (candidate.stream == 'skilled_worker_in_manitoba' || candidate.stream ==
+    'skilled_worker_overseas') && candidate.language_result_within_2_years == true
+    && candidate.language_clb_minimum >= 4 && ((job_offer.noc_teer in [0, 1, 2, 3]
+    && candidate.occupational_language_met == true) || (job_offer.noc_teer != null
+    && !(job_offer.noc_teer in [0, 1, 2, 3])))
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker_in_manitoba',
+    'skilled_worker_overseas'])) || candidate.language_result_within_2_years == false
+    || candidate.language_clb_minimum < 4 || (job_offer.noc_teer in [0, 1, 2, 3] &&
+    candidate.occupational_language_met == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, TEER, or the TEER 0-3
+    occupational language flag cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-SW-LANGUAGE-004
+    source_file: src26.html
+    section: Language proficiency
+    verbatim_excerpt: Canadian Language Benchmark (CLB) band scores
+- id: mpnp_intent
+  category: intent
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.intends_to_reside_in_manitoba
+  pass_if: (candidate.stream == 'skilled_worker_in_manitoba' || candidate.stream ==
+    'skilled_worker_overseas') && candidate.intends_to_reside_in_manitoba == true
+  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker_in_manitoba',
+    'skilled_worker_overseas'])) || candidate.intends_to_reside_in_manitoba == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Manitoba cannot be
+    verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-MPNP-SW-INTENT-005
+    source_file: src34.html
+    section: Intention to reside in Manitoba
+    verbatim_excerpt: reside in Manitoba

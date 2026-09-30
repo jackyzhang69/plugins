@@ -1,0 +1,161 @@
+schema_version: 1.0.0
+catalog_id: quebec_business
+jurisdiction: CA-QC
+category: Quebec business
+display_name: Quebec Business Immigration
+status: ACTIVE
+program_id: QUEBEC_BUSINESS
+stream_id: BUSINESS
+effective_date: '2024-01-01'
+source_edition: Quebec entrepreneur, self-employed, and investor programs
+source_url: https://www.quebec.ca/en/immigration/permanent/businesspeople
+decision_scope: Deterministic prescreen for French, the entrepreneur, self-employed, and investor money
+  gates, and the values attestation. Points stay in AnyScore.
+sources:
+- id: qc_biz
+  title: Quebec business immigration
+  url: https://www.quebec.ca/en/immigration/permanent/businesspeople
+  citation: Quebec entrepreneur, self-employed, and investor programs
+  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  types:
+    assessment_date: ISO-8601 date
+reference_points_grid:
+  note: Documentation only. AnyScore owns Quebec business points.
+rules:
+- id: qc_biz_french
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.french_oral_level
+  pass_if: candidate.french_oral_level >= 7
+  fail_if: candidate.french_oral_level < 7
+  missing_or_unverified: 'NEEDS_REVIEW: French oral level cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-QC-BIZ-FRENCH-006
+    source_file: quebec-business.html
+    section: Business French
+    verbatim_excerpt: Oral French level 7 on the Quebec scale
+  provenance:
+    source_file: quebec-business.html
+    section: Business French
+    page: 1
+    verbatim: Oral French level 7 on the Quebec scale
+- id: qc_biz_entrepreneur
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'entrepreneur' && candidate.incubator_supported == false
+    fields:
+    - candidate.operating_business
+    - candidate.net_worth_cad
+    - candidate.in_cmm
+    - candidate.investment_cad
+  pass_if: candidate.stream != 'entrepreneur' || candidate.incubator_supported == true || (((candidate.operating_business
+    == true && candidate.net_worth_cad >= 300000) || (candidate.operating_business == false && candidate.net_worth_cad
+    >= 600000)) && ((candidate.in_cmm == true && candidate.investment_cad >= 300000) || (candidate.in_cmm
+    == false && candidate.investment_cad >= 150000)))
+  fail_if: candidate.stream == 'entrepreneur' && candidate.incubator_supported == false && ((candidate.operating_business
+    == true && candidate.net_worth_cad < 300000) || (candidate.operating_business == false && candidate.net_worth_cad
+    < 600000) || (candidate.in_cmm == true && candidate.investment_cad < 300000) || (candidate.in_cmm
+    == false && candidate.investment_cad < 150000))
+  missing_or_unverified: 'NEEDS_REVIEW: Entrepreneur incubator support, net worth, or investment cannot
+    be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-QC-BIZ-ENT-007
+    source_file: quebec-business.html
+    section: Entrepreneur Thresholds
+    verbatim_excerpt: net worth of 600,000 dollars
+  provenance:
+    source_file: quebec-business.html
+    section: Entrepreneur Thresholds
+    page: 1
+    verbatim: net worth of 600,000 dollars
+- id: qc_biz_self_employed
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'self_employed'
+    fields:
+    - candidate.self_employed_months_past_5_years
+    - candidate.net_worth_cad
+    - candidate.in_cmm
+    - candidate.startup_deposit_cad
+  pass_if: candidate.stream != 'self_employed' || (candidate.self_employed_months_past_5_years >= 24 &&
+    candidate.net_worth_cad >= 100000 && ((candidate.in_cmm == true && candidate.startup_deposit_cad >=
+    50000) || (candidate.in_cmm == false && candidate.startup_deposit_cad >= 25000)))
+  fail_if: candidate.stream == 'self_employed' && (candidate.self_employed_months_past_5_years < 24 ||
+    candidate.net_worth_cad < 100000 || (candidate.in_cmm == true && candidate.startup_deposit_cad < 50000)
+    || (candidate.in_cmm == false && candidate.startup_deposit_cad < 25000))
+  missing_or_unverified: 'NEEDS_REVIEW: Self-employed experience, net worth, or deposit cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-QC-BIZ-SE-008
+    source_file: quebec-business.html
+    section: Self-Employed Thresholds
+    verbatim_excerpt: deposit 50,000 dollars in the Montreal region or 25,000 dollars outside
+  provenance:
+    source_file: quebec-business.html
+    section: Self-Employed Thresholds
+    page: 1
+    verbatim: deposit 50,000 dollars in the Montreal region or 25,000 dollars outside
+- id: qc_biz_investor
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'investor'
+    fields:
+    - candidate.net_worth_cad
+    - candidate.management_years_past_5
+    - candidate.investment_quebec_commitment
+    - candidate.investor_contribution_paid
+  pass_if: candidate.stream != 'investor' || (candidate.net_worth_cad >= 2000000 && candidate.management_years_past_5
+    >= 2 && candidate.investment_quebec_commitment == true && candidate.investor_contribution_paid ==
+    true)
+  fail_if: candidate.stream == 'investor' && (candidate.net_worth_cad < 2000000 || candidate.management_years_past_5
+    < 2 || candidate.investment_quebec_commitment == false || candidate.investor_contribution_paid ==
+    false)
+  missing_or_unverified: 'NEEDS_REVIEW: Investor net worth, management experience, or investment commitment
+    cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-QC-BIZ-INV-009
+    source_file: quebec-business.html
+    section: Investor Thresholds
+    verbatim_excerpt: net worth 2,000,000 dollars
+  provenance:
+    source_file: quebec-business.html
+    section: Investor Thresholds
+    page: 1
+    verbatim: net worth 2,000,000 dollars
+- id: qc_biz_values
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.values_attestation
+  pass_if: candidate.values_attestation == true
+  fail_if: candidate.values_attestation == false
+  missing_or_unverified: 'NEEDS_REVIEW: Quebec values attestation cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: EU-QC-BIZ-VALUES-010
+    source_file: quebec-business.html
+    section: Quebec Values Attestation
+    verbatim_excerpt: democratic values and Quebec values
+  provenance:
+    source_file: quebec-business.html
+    section: Quebec Values Attestation
+    page: 1
+    verbatim: democratic values and Quebec values
