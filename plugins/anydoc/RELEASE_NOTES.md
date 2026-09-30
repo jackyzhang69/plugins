@@ -1,3 +1,7 @@
+# AnyDoc 0.3.11
+
+- Guide comparisons now bind to the exact official revision, local facts, private checklist and mappings. AnyDoc presents fresh differences when the guide pin changes, retains approved plans on their original pin, and keeps case files and facts local.
+
 # AnyDoc 0.3.10
 
 - Accepts freshly exchanged account tokens even when the computer clock is wrong.

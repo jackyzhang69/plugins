@@ -47,37 +47,59 @@ When speaking to the person in the chat (not when writing tool args):
 7. **Do not ask the AnyDoc binary to OCR.** Use its native text first; read only
    unresolved scans visually in this primary session. Do not invent a subject,
    caption, category, exclusion reason, or condition result.
-8. **No packing list without a named authority.** A confirmed private model, the
-   user's own document list, or a Public Guide's conventions for deliverables
-   they already listed. Never a plan derived from filenames or folder layout.
+8. **No packing list without a named authority.** Use a confirmed private
+   model, a user-provided private list, an explicitly selected public-only
+   guide, or a complete plan the user directly specifies. Never derive a plan
+   from filenames or folder layout.
 
 ## No plan without a named authority (hard gate)
 
 Never write an assembly plan, a draft packing list, or a "starter" set of
-actions until you hold one named authority the human can see. Exactly one of
-these three is enough, and there is no fourth:
+actions until you hold one named authority the human can see. Plan v4 accepts
+exactly four `authority.kind` values: `private_model`, `manual_private_list`,
+`public_guide`, and `manual_plan`. There is no fifth:
 
 1. **A confirmed private model** — `models resolve` returned `model_found` for
    one exact `case_type`. The plan's `authority.kind` is `private_model`.
-2. **A Document List the user supplied for this case** — their explicit list of
-   the deliverables they want. The plan's `authority.kind` becomes
-   `manual_plan` once they state or approve that list as the basis.
-3. **A Public Guide**, read with
-   `"$ANYDOC_BIN" guides show --id <guide-id> --json`. A Guide carries assembly
-   conventions only: naming style, output layout, size budget, photo grid,
-   Office and HEIC handling. It reports `classifier: false` and names no
-   required evidence, so it can decide *how* outputs are named and built, never
-   *which* deliverables exist. Alone it authorizes only work the user already
-   listed; for the deliverable list itself, pair it with 1 or 2.
+2. **A user-provided private document list** — the user's explicit list of the
+   deliverables they want. The plan's `authority.kind` is
+   `manual_private_list`; its typed definition and digest stay local. AnyDoc
+   may suggest saving a reusable model, but saving requires a separate explicit
+   confirmation and never happens automatically.
+3. **A Public Guide chosen for public-only use** — the human explicitly opts in
+   with `--public-only-confirmed`. Resolve it with its exact pathway, stage,
+   channel, and revision pin. The plan's `authority.kind` is `public_guide`.
+   For `pilot_partial` status or incomplete/unknown evaluated scope, also get
+   the human's explicit `--partial-scope-acknowledged` confirmation. A Guide
+   chosen for comparison does not become authority: the saved private model or
+   unsaved private list remains the plan authority.
+4. **A complete manual plan** — the user directly supplies or explicitly
+   approves the outputs as the basis. The plan's `authority.kind` is
+   `manual_plan`.
 
-If you hold none of the three, stop. Say plainly that you have no basis for a
-packing list yet and ask for their document list. Do not guess one, do not
-produce a provisional plan, and do not start work "so they can correct it."
+If none of the four applies, stop. Say plainly that you have no basis for a
+packing list yet and ask for the user's document list or explicit choice. Do
+not guess one, produce a provisional plan, or start work "so they can correct
+it."
 
-A Public Guide is never an `authority.kind`. Show any conflict between a Guide
-and the private model and pause for the human's decision. A Guide never
-replaces a document list and never becomes hidden authority. Tell the human
-which guide id you followed.
+These are the only four Plan v4 authority kinds. A Public Guide is a plan
+authority only after the human's explicit public-only opt-in; comparison alone
+does not change the selected private authority. Tell the human which guide id
+you used and whether it was selected for comparison or public-only planning.
+
+An optional `official_case_specific` reference uses
+`local-case:<relative-path>` to point to a regular file inside the case input
+folder. AnyDoc checks that file and its SHA-256 on each validate, approve,
+assemble, and verify. It stays outside `authority`, does not change Public Guide
+facts, and is not itself an official public rule or proof that an account
+requires anything. A typed `jz.anydoc.case_checklist_overlay.v1` can record
+user-provided local slots and additional requests; synthetic fixtures must be
+labelled synthetic. AnyDoc shows unresolved local items separately as
+`case_specific_pending`. Unknown stays unresolved, and a local observation never
+changes an official requirement's status or becomes `not_applicable`. The CLI
+does not access an IRCC account or upload the local overlay. Its pinned SHA-256
+is included in approval checks, so changing the source after approval refuses
+assembly or verification until the user reviews and approves a new plan.
 
 ### Filenames and folders are not authority
 
@@ -109,11 +131,11 @@ Treat the returned state literally:
 |---|---|
 | `model_found` | Show its name and revision. Use that exact model, and bind its `model_id`, `revision`, and `model_hash` into the plan. Only here may you say the work follows the user's saved habit. Do not Teach Me, and do not replace the model because this folder looks different. |
 | `model_absent` | Start **Teach Me** below. This is the only state that permits Teach Me. |
-| `model_unavailable` | Stop the model flow. Say the saved model cannot be checked now. Do not call it absent, do not Teach Me, and do not silently switch to a manual plan. |
+| `model_unavailable` | Stop the model flow. Say the saved model cannot be checked now. Do not call it absent, do not Teach Me, and do not silently switch to another authority. |
 | `model_invalid` | Stop. Say the saved model response failed validation. Do not use it or Teach Me. |
 | exact case type is ambiguous | This is the host state `model_ambiguous`: show the concrete choices and ask the human. Do not guess and do not Teach Me. |
 
-The only offline alternative is a complete `manual_plan` explicitly supplied or approved by the user as the authority. Backend failure never authorizes this fallback, and the host must label it `manual_plan`, not “saved habit.”
+Model lookup errors never authorize automatic fallback to a manual plan, unsaved private list, or public guide. Stop and report the error. If the human then explicitly chooses a different available authority, make a new plan under its matching `authority.kind`; do not relabel the failed model path. A complete `manual_plan` remains available when the user directly supplies or approves it, independent of an automatic fallback.
 
 ## Teach Me (only after `model_absent`)
 
@@ -171,21 +193,22 @@ reported as converted native evidence with the converter identity. Conversion
 failure stays unreadable/pending; it never becomes permission to exclude.
 
 Write `document-map.json` (`generated_by=host_agent`) with summaries, suggested
-splits, and observed subjects. Then write a fully expanded Plan v3.
+splits, and observed subjects. For new plans, write a fully expanded Plan v4.
+Plan v3 is a historical format that remains readable for existing
+`private_model` and `manual_plan` plans; it cannot carry `public_guide` or
+`manual_private_list` authority or Plan v4 Public Guide context.
 
-Its `authority.kind` is exactly one of:
+In Plan v4, `authority.kind` is exactly one of the four values listed above.
+For `private_model`, embed the complete validated v2 model plus local `people`,
+scoped `condition_results`, `scope`, and `action_mappings`. Each source mapping
+binds pages to one model claim and, for per-person claims, records both
+`subject_person_id` and the host's `observed_subject_person_id`. For
+`manual_private_list`, include the locally typed list and its digest. For
+`public_guide`, include the pinned evaluation context and any explicit
+acknowledgment required by status/scope. For `manual_plan`, use only outputs
+the user directly supplied or approved.
 
-- `manual_plan`, for a complete plan explicitly supplied or approved as the basis by the user.
-- `private_model`, embedding the complete validated v2 model plus local
-  `people`, scoped `condition_results`, `scope`, and `action_mappings`. Each
-  source mapping binds pages to one model claim and, for per-person claims,
-  records both `subject_person_id` and the host's
-  `observed_subject_person_id`.
-
-There is no third `authority.kind`. A Public Guide contributes conventions to
-either kind and is never itself the authority.
-
-Plan v3 also has required `excluded_sources[]`. Actions are the included set;
+Plan v4 also has required `excluded_sources[]`. Actions are the included set;
 anything else currently in the folder is pending unless it appears in this
 explicit exclusion list or is reported as deterministic OS metadata. Reasons
 are only `information_collection`, `superseded_editable_source`, `duplicate`,

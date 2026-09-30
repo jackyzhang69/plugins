@@ -3,24 +3,24 @@
   "product": "anydoc",
   "binary": {
     "name": "anydoc",
-    "version": "0.3.10",
+    "version": "0.3.11",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "67c3246038e5ffa2fc7c9f1a5ca4adcea79808315d2e5c1ebe9e891b5786dee5",
+        "sha256": "d8c59aa1d173efc0237e2fd55207ef2ff032b3c604535c3464e95b50eeb05b4d",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "58cb2af2f7b0a77530a0d3bde37ef8fe0b87572a000fef46773cb42d83c2197b",
+          "sha256": "ca777b821be9d2a22e8418dee19416b284fb3857158ed8b2bfa29eccf457443b",
           "signing": "signed_same_team_hardened_runtime"
         },
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "69a6358241de11beca50e66521060433fda1da9d86b78c100df8f95289bbf870",
+        "sha256": "4c422370b569b18053f77674b56786bacb6cc6fed998b900e73a6df6be16b1d4",
         "pdfium": {
           "path": "bin/win32-x64/pdfium.dll",
-          "sha256": "39c837ce530317cf68972a29aa85a4749abf109d5096d53dd91b3eb7a9347508",
+          "sha256": "bcfc1b76a35fbc53c3dab3457f3320f715dc820266b58bcaca007a58da1469de",
           "signing": "signed_azure_trusted_signing"
         },
         "signing": "signed_azure_trusted_signing"
@@ -32,8 +32,8 @@
       "notarization": "accepted",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anydoc-v0.3.10",
-      "source_commit": "a4cb12975521c8e3eb456ae34d486cd4a7983e4f"
+      "tag": "anydoc-v0.3.11",
+      "source_commit": "db1443a9b99d05188fb30128ae08e9da48845e1f"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -69,5 +69,5 @@
     "packaged": true,
     "note": "Pinned Pdfium libraries are packaged per platform and verified by sha256."
   },
-  "source_sha": "a4cb12975521c8e3eb456ae34d486cd4a7983e4f"
+  "source_sha": "db1443a9b99d05188fb30128ae08e9da48845e1f"
 }
