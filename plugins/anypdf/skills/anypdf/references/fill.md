@@ -255,6 +255,22 @@ confirmation, then submit once with `--allow-incomplete --confirmation-handle
 <handle>`; `blocked` means correct the stated facts or complete the stated
 manual action. Do not copy warning or data hashes into the recommended path.
 
+`schema_version` is a **top-level** sibling of `data`, never nested inside
+`data`. Readiness POST / CLI input uses the same envelope as fill:
+
+```json
+{
+  "form_id": "IMM5710",
+  "schema_version": "2023-09.v1",
+  "data": {}
+}
+```
+
+An input file may be `{ "schema_version": "…", "data": { … } }` or raw field
+data plus `--schema-version`. A `schema_version` key inside `data` is a form
+field, not the contract version. Fetch the live schema first and copy its
+`schema_version` exactly.
+
 For a failed job, re-read its status once. Follow only the server action:
 correct input, rerun readiness once, wait, reconnect through
 [connect](connect.md) after transport authentication has already been exhausted,
