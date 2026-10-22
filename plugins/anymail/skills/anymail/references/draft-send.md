@@ -5,7 +5,8 @@ Local drafts never create cloud drafts.
 ## Draft JSON input
 
 `mail draft create`, `reply`, `forward`, and `update` read this bounded JSON
-object from stdin. Unknown fields are rejected.
+object from stdin. Unknown fields are rejected. The same schema is published on
+`anymail commands` for `mail draft create|reply|forward|update`.
 
 Required fields:
 
@@ -34,6 +35,12 @@ anymail mail draft create --account ACCOUNT_ID <<'JSON'
 }
 JSON
 ```
+
+A syntactically valid object that does not match this schema fails with
+a field-specific error, for example that `to` must be an array of
+strings or that required field `from` is missing. Only unparseable
+bytes are reported as malformed JSON. Errors do not echo submitted
+values or unknown field names.
 
 ## Confirmed send flow
 

@@ -37,6 +37,18 @@ anymail account upgrade-google-send --account ACCOUNT_ID --json
 anymail account upgrade-microsoft-send --account ACCOUNT_ID --json
 ```
 
+Before `upgrade-google-send`, tell the human in everyday words: Google
+may show an **unverified-app** or **unsafe** warning when AnyMail asks
+for send permission, even if read-only access already worked. That
+screen is Google's consent interstitial for the sensitive Gmail send
+scope, not an AnyMail crash and not proof the CLI is malware. They
+should continue only if they trust this AnyMail install, and use
+**Advanced** / proceed if Google offers that path. The warning stays
+until the operator finishes Google Cloud verification for the shipped
+send scopes. **In production** publishing status alone does not
+complete that verification. Do not ask them to create an OAuth app or
+paste secrets.
+
 ## Reauthorize an existing mailbox
 
 Use reauthorization for an account that is already configured. It refreshes
@@ -111,3 +123,47 @@ If the browser stays on Google's 403 page and never returns to AnyMail,
 the CLI wait can time out. Check the same OAuth status and verification
 evidence. Do not invent a different provider or scope. Do not ask the
 human to create an OAuth app or paste a token.
+
+## Gmail identity claims / incomplete grant
+
+If `account open-google` returns after the browser and fails with
+**OIDC identity claims are invalid** or **complete Gmail identity
+grant**, the local account was not opened or changed.
+
+Say this in everyday words:
+
+- Google returned a sign-in that AnyMail could not accept. Invalid
+  claims stay rejected; do not bypass the check.
+- `account list` can still show `configured` / `active`. That is the
+  last stored authority, not a live Gmail read. Mail search can then
+  fail while the list still looks healthy.
+- If the browser warned that AnyMail is unsafe or unverified, the
+  operator checks the shipped Desktop client's Google Cloud publishing
+  and verification status. **In production** does not finish
+  verification or guarantee a usable identity grant. Never add a real /
+  production Gmail address (including a Tell Jacky reporter) to a
+  test-user list.
+- For an account that is already configured, recover with
+  `anymail account reauthorize-google --account ACCOUNT_ID` after that
+  operator check. Reauthorization verifies the same Google identity,
+  current OAuth registration, and recorded grant, and keeps the
+  account binding and local drafts.
+- What they should not do: copy credential files, remove and reopen
+  the account to skip the check, paste tokens or client ids, or create
+  their own OAuth app.
+
+## Gmail send-consent unverified / unsafe warning
+
+If `account upgrade-google-send` opens Google and the human sees
+"unverified", "this app isn't verified", or **unsafe**, say:
+
+- Read-only Gmail access can succeed while send still shows this
+  screen, because `gmail.send` is a separate sensitive scope.
+- The warning is Google's interstitial. AnyMail cannot hide or click
+  it. Continuing is a trust choice, not a CLI bypass.
+- The durable fix is operator-side: finish Google Cloud verification
+  for the shipped send scopes on the production Desktop client.
+  Publishing **In production** without that verification still shows
+  the warning.
+- If they cancel, the CLI reports that Google did not grant access and
+  repeats the same send-scope note. Retry only if they still want send.

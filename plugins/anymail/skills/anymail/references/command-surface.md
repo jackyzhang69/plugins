@@ -99,12 +99,32 @@ Direction B skill-surface checks can verify coverage against `commands --json`.
 
 ## Doctor install status
 
-`doctor` reports `common.install_home` for the canonical AnyMail plugin install
-only. Its `path` is the canonical `plugins/anymail/current` path and
-`scope: "canonical_install"` makes that boundary explicit. A verified CLI in a
-plugin cache can run even when this canonical install is absent or invalid; the
-cached CLI does not make `present` true.
+`doctor` reports three separate facts. Do not treat an absent canonical
+install as a broken CLI.
 
-When `present` is false, run the current verified package binary with
-`doctor --repair-install`. The repair validates the package containing that
-binary, then installs the verified package at the canonical path.
+- `common.install_home` is only the canonical `plugins/anymail/current`
+  package tree (`scope: "canonical_install"`, `is_runtime_home: false`).
+  `cli_usable_when_absent: true` means a plugin-cache or other verified
+  CLI can still open and inspect accounts when `present` is false. The
+  cached CLI does not make `present` true. `running_version` is the CLI
+  that produced the report; `aligned` is true only when that version
+  matches the installed package. A cached CLI that is newer or older than
+  the canonical install does not make `aligned` true.
+- `common.runtime_home` is the plugin runtime directory for account and
+  journal state. It is not the package install tree.
+- `common.running_cli` reports this process: `usable`,
+  `canonical_install_required: false`, and `origin` of
+  `canonical_install`, `plugin_cache`, or `other`.
+
+When `install_home.present` is false or `install_home.aligned` is false
+and the operator wants the canonical package tree, run the current
+verified package binary with `doctor --repair-install`. The repair
+validates the package containing that binary, then installs it at the
+canonical path.
+
+## Draft create stdin
+
+`mail draft create`, `reply`, `forward`, and `update` publish the exact
+accepted stdin schema on `anymail commands`. Validation errors name the
+field and expected type. Syntactically valid JSON that does not match
+the schema is not reported as invalid JSON.

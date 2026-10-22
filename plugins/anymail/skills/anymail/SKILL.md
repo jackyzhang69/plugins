@@ -83,7 +83,8 @@ Playbooks: [get-started](references/get-started.md),
 [thread](references/thread.md), [history](references/history.md),
 [handling](references/handling.md), [remember-me](references/remember-me.md),
 [draft-send](references/draft-send.md),
-[tell-jacky](references/tell-jacky.md).
+[tell-jacky](references/tell-jacky.md),
+[whats-new](references/whats-new.md).
 
 ## Live CLI discovery (fail-closed)
 

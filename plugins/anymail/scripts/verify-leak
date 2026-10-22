@@ -20,6 +20,7 @@ allowed_exact=(
   skills/anymail/references/handling.md
   skills/anymail/references/remember-me.md
   skills/anymail/references/tell-jacky.md
+  skills/anymail/references/whats-new.md
   skills/anymail/references/triggers.md
   scripts/verify-package
   scripts/verify-install
