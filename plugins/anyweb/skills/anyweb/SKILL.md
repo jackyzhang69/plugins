@@ -47,9 +47,9 @@ homework. Run the intended ordinary command first; when stdout is
 the product reports `ready`, then resume the sealed request. If `status` is
 `blocked`, say the `say_to_user` sentence. Do not paste JSON into chat.
 
-Ask for the applicant's information files first. Read
-[references/ee-fill-schema.json](references/ee-fill-schema.json), compile one
-complete `local_inputs` object keyed by that schema's `fact_ref` values, then
+Ask for the applicant's information files first. Run
+`anyweb-catalog requirements --pin` and compile one
+complete `local_inputs` object keyed by that response's `fact_ref` values, then
 start the task so the product can preflight **before Chrome opens**. Prefer one
 batch of known facts from the files; ask once for what the files cannot supply.
 If the result says the JSON does not match the schema (`obtain=host_self_correct`),
@@ -105,6 +105,11 @@ Ask the live CLI, never from memory of an older release:
 
 Command path reference (not for first-session orientation):
 [references/command-surface.md](references/command-surface.md).
+The host loop for step status, resume, and saved-login cache is MCP:
+`codex mcp add anyweb -- anyweb mcp serve`. Use `step_status`,
+`task_resume`, and `credential_cache_*`. Do not shell `task status` /
+`task resume` as a Codex hang-restart or CLI-as-fallback path. Tool
+results never include passwords, passcodes, or security answers.
 
 Resolve `$ANYWEB_BIN` from the current plugin package for this host. On macOS
 Apple Silicon it is `bin/darwin-arm64/anyweb`; on Windows x64 it is

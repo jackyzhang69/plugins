@@ -15,13 +15,13 @@ security questions, clicks, and filling are executor work.
 1. Collect the user's information files first (spreadsheet, PDF, Word, or
    other applicant records). If those files are not in the conversation yet,
    ask for the files. Do not start Chrome to go fishing.
-2. Read [ee-fill-schema.json](ee-fill-schema.json). That file is the compile
-   schema for `site=ircc-ee-profile` / `task=fill-to-pre-submit`. Compile one
-   complete `local_inputs` object keyed by each field's `fact_ref`. Use only
-   values the files actually support. Dates may be `YYYY-MM-DD` or
-   `{year,month,day}`. Education and work history may be arrays of objects.
-   Do not invent answers, do not copy example placeholder keys, and do not
-   use private site field names as keys.
+2. Run the installed `anyweb-catalog requirements --pin <task pin>`. That
+   response is the production authority for the published release. This plugin
+   does not carry a site catalog or a fact schema. Compile one complete `local_inputs` object keyed by each
+   field's `fact_ref`. Use only values the files actually support. Dates may
+   be `YYYY-MM-DD` or `{year,month,day}`. Education and work history may be
+   arrays of objects. Do not invent answers, do not copy example placeholder
+   keys, and do not use private site field names as keys.
 3. Start the task with that object. The product preflights without opening Chrome.
    Treat preflight outcomes in product language: wrong/incomplete pack → fix pack
    or ask once for missing facts; business end state → explain and stop (not a
@@ -48,10 +48,11 @@ security questions, clicks, and filling are executor work.
    a new task to retry a passcode. Saved security answers are reused
    from the database; new ones are asked once, typed by the executor, and
    stored only after the website accepts them. The human does not touch the
-   browser except for Authenticator or CAPTCHA. Each CLI command returns
-   after it prints the current notice; if `runtime_active` is true, Chrome
-   stays with the local runtime until resume, timeout, or cancel. Then run
-   `task resume` as a new command. Login, passcode, and security questions are a fixed module the
+   browser except for Authenticator or CAPTCHA. After start, poll and resume
+   through MCP (`step_status` / `task_resume`). If `runtime_active` is true,
+   Chrome stays with the local runtime until resume, timeout, or cancel. Do
+   not shell `task status` / `task resume` as a hang-restart host loop.
+   Login, passcode, and security questions are a fixed module the
    product attaches in front of the fill; do not invent a second login
    flow.
 
@@ -88,7 +89,7 @@ boundary:
     "task": "fill-to-pre-submit"
   },
   "local_inputs": {
-    "input:<64-hex from ee-fill-schema.json>": "value taken from the applicant files"
+    "input:<64-hex from the live requirements response>": "value taken from the applicant files"
   }
 }
 ```
@@ -118,8 +119,9 @@ When `status` is `human_required` and `needs` has one or more items with
    collected. Ask the human once for what those files still do not contain.
    If `accepted_values` or `value_type` is present, keep the answer inside
    that shape.
-4. Send every collected `fact_ref` and answer together through redirected
-   stdin, then run the stated continuation (`task resume`).
+4. Send every collected `fact_ref` through MCP `task_resume` as
+   `fact_ref → secret_ref` file paths. Do not paste secrets into the tool
+   call or chat.
 5. After resume, the product may return a new, shorter list only if a later
    choice opened questions that could not be known from the files. Collect
    that new list the same way: files first, self-correct first, one ask, one
@@ -138,23 +140,39 @@ When `status` is `human_required` and a `needs` item has no `fact_ref`, that
 item is only a real Authenticator, CAPTCHA, or equivalent in-window
 challenge. Email one-time codes and static security answers that are not
 already saved must arrive as `fact_ref` items; collect them from the human
-once, send them through redirected stdin, and the executor types and
-continues by itself. If the product says the passcode did not take, ask for
-the new email code on that same task. Do not `task start` again.
+once, send them through MCP `task_resume` (`secret_ref`), and the executor
+types and continues by itself. If the product says the passcode did not
+take, ask for the new email code on that same task. Do not `task start`
+again.
 
 When the result says the user must complete an Authenticator or CAPTCHA in the
-visible browser, tell them what to do. After they confirm they are ready, run
-`task resume --task-ref <opaque ref> --json` as a new command. Do not keep the
-previous CLI process running.
+visible browser, tell them what to do. After they confirm they are ready, call
+MCP `task_resume` for that `task_ref`. Do not start a second CLI process to
+restart the wait.
 
 `local_inputs` and resume stdin may include dates as `YYYY-MM-DD` or
 `{year,month,day}`, and repeating education or work history as arrays of
 objects. Do not flatten those by hand and do not interview one field at a
 time.
 
-Use `task status`, `task result`, or `task cancel` with the opaque task ref.
-Report only the plain-language state and next action. Cancellation closes the
-task runtime but does not delete the user's saved local browser profile.
+The supported host loop is MCP (`task_status` / `step_status` /
+`task_resume` / `credential_cache_*`). The one-liner is
+`codex mcp add anyweb -- anyweb mcp serve`. Tool results never include
+passwords, passcodes, or security answers. If a security-question `need`
+shows `hints.last_answer_incorrect`, ask for a different answer; if
+`cache_outcome=invalidated`, do not reuse the previous saved answer. A
+passcode need may include `hints.resent` but the spoken prompt stays the
+same first-time sentence. Skill→CLI `task status` / `task resume`
+hang-restart is not a supported host path. Do not document or use CLI as
+a fallback when MCP is missing — install MCP instead.
+
+For an explicit same-page email-code resend, call MCP `task_resume` with the current `task_ref`, `action="request_passcode_resend"`, and `expected_passcode_epoch` set to the notice's `hints.passcode_epoch`, without `inputs`; duplicate or stale epochs are rejected before any click.
+
+Use MCP `step_status` for the current wait. `task result` and `task cancel`
+remain one-shot CLI commands with the opaque task ref, not a status/resume
+loop. Report only the plain-language state and next action. Cancellation
+closes the task runtime but does not delete the user's saved local browser
+profile.
 
 To delete the current Portal user's reusable EE answers for this site, obtain
 explicit user confirmation and send this object through protected stdin to `task

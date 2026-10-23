@@ -41,8 +41,9 @@ masked state and `hosted-account forget --site ircc-ee-profile --role default
 --user-confirmed --json` only after separate explicit deletion approval.
 
 When an active fill needs a website password, email code, or static security
-answer, the host notice lists it as a `fact_ref`. Send that value through
-`task resume --input-stdin`. Do not ask the human to type it in the website,
+answer, the host notice lists it as a `fact_ref`. Resume through MCP
+`task_resume` with a `secret_ref` file path. Do not shell `task resume` as a
+Codex hang-restart loop. Do not ask the human to type it in the website,
 and do not use `hosted-account set` as the way to continue that live fill. Use `hosted-security-answer set
 --challenge-ref <ref> --answer-stdin` only when the current notice includes
 that opaque challenge reference for saving after the site already accepted the
@@ -54,6 +55,14 @@ A new answer is not reusable until the current website proves it worked. If it
 fails or the page changed, stop and ask the human; never retry automatically.
 Use `hosted-security-answer status` for masked counts and
 `hosted-security-answer forget --user-confirmed` for explicit deletion.
+The host cache path is MCP `credential_cache_status`,
+`credential_cache_set`, and `credential_cache_forget` after
+`codex mcp add anyweb -- anyweb mcp serve`. Those tools wrap
+`hosted-account` / `hosted-security-answer` (local vault sqlite) only.
+Do not use Keychain `anyweb credential set` as the product cache.
+Those tools only accept a `secret_ref` file path and never print a stored
+password or answer. Host needs use `obtain=user_materials_first` or
+`obtain=host_self_correct` — never `obtain=ask`.
 
 When a task fails with `login_failure.code` of `bad_credentials`, tell the
 human the saved login was rejected and ask them to re-save with
