@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anyweb
 
-Version `0.2.20`.
+Version `0.2.21`.
 
 Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.
 
