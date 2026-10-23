@@ -1,0 +1,200 @@
+name: publish-anyweb-release
+
+# Copied verbatim into jackyzhang69/plugins by the AnyBase AnyWeb release
+# transaction (anyweb-plugin-release.yml). It reacts only to an anyweb-vX.Y.Z
+# tag pushed by that transaction, or to an explicit recovery dispatch.
+# Runtime payloads exceed GitHub's 100 MB git blob limit, so the source job
+# hands them off on the shared release host; every byte is checked against the
+# runtime-manifest.json committed in the tagged candidate before upload.
+on:
+  push:
+    tags:
+      - "anyweb-v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing anyweb-vX.Y.Z marketplace tag to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: plugins-anyweb-release-${{ github.event.inputs.release_tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish-runtime-assets:
+    runs-on: [self-hosted, macOS, ARM64, plugins-release-69]
+    timeout-minutes: 30
+    steps:
+      - name: Select release tag
+        id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ github.event.inputs.release_tag }}
+          PUSH_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = workflow_dispatch ]; then tag="$INPUT_TAG"; else tag="$PUSH_TAG"; fi
+          [[ "$tag" =~ ^anyweb-v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: refs/tags/${{ steps.release.outputs.tag }}
+          persist-credentials: false
+      - name: Verify handed-off assets against the tagged manifest
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          handoff="$HOME/.local/share/platform-ci/release-handoff/anyweb/$RELEASE_TAG"
+          test -d "$handoff"
+          printf 'HANDOFF=%s\n' "$handoff" >> "$GITHUB_ENV"
+          printf 'CANDIDATE_SHA=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          python3 - plugins/anyweb "$handoff" "$RELEASE_TAG" "$GITHUB_REPOSITORY" <<'PY'
+          import hashlib, json, os, pathlib, sys
+          plugin, handoff, tag, repo = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], sys.argv[4]
+          m = json.loads((plugin / "runtime-manifest.json").read_text())
+          version = tag.removeprefix("anyweb-v")
+          rel = m["binary"]["release"]
+          if (m.get("product"), m.get("version"), rel.get("tag"), rel.get("repo"), rel.get("host")) != ("anyweb", version, tag, repo, "github-releases"):
+              raise SystemExit("tagged manifest does not bind this public release")
+          want = {
+              "anyweb": m["binary"]["platforms"]["darwin-arm64"],
+              "anyweb.exe": m["binary"]["platforms"]["win32-x64"],
+              "anyweb-runtime": m["runtime"]["platforms"]["darwin-arm64"],
+              "anyweb-runtime.exe": m["runtime"]["platforms"]["win32-x64"],
+          }
+          names = set(want) | {f"{n}.sha256" for n in want}
+          present = {p.name for p in handoff.iterdir()}
+          if present != names:
+              raise SystemExit(f"handoff names are not the exact allowlist: {sorted(present)}")
+          for name, d in want.items():
+              path = handoff / name
+              if path.is_symlink() or not path.is_file():
+                  raise SystemExit(f"handoff payload is not a regular file: {name}")
+              data = path.read_bytes()
+              digest = hashlib.sha256(data).hexdigest()
+              if digest != d["sha256"] or len(data) != d["size"]:
+                  raise SystemExit(f"handoff payload disagrees with tagged manifest: {name}")
+              if (handoff / f"{name}.sha256").read_text() != digest + "\n":
+                  raise SystemExit(f"handoff checksum sidecar disagrees: {name}")
+          for name, rel_path in (("anyweb", "bin/darwin-arm64/anyweb"), ("anyweb.exe", "bin/win32-x64/anyweb.exe")):
+              if (plugin / rel_path).read_bytes() != (handoff / name).read_bytes():
+                  raise SystemExit(f"tagged launcher differs from handoff: {name}")
+          # Freeze the manifest-bound digests now; later checks compare the
+          # release API against these, never against a re-read of the handoff.
+          expected = {}
+          for name, d in want.items():
+              expected[name] = {"sha256": d["sha256"], "size": d["size"]}
+              sidecar = (d["sha256"] + "\n").encode()
+              expected[f"{name}.sha256"] = {"sha256": hashlib.sha256(sidecar).hexdigest(), "size": len(sidecar)}
+          (pathlib.Path(os.environ["RUNNER_TEMP"]) / "anyweb-expected-assets.json").write_text(json.dumps(expected))
+          print('{"ok":true,"assets":8}')
+          PY
+      - name: Create, upload, verify, and publish the immutable Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          names=(anyweb anyweb.sha256 anyweb.exe anyweb.exe.sha256 anyweb-runtime anyweb-runtime.sha256 anyweb-runtime.exe anyweb-runtime.exe.sha256)
+          release_json="$RUNNER_TEMP/anyweb-release.json"
+          # Bind the tag to the candidate through the ref itself. The Release
+          # API must not receive a target commit: with immutable releases it
+          # makes github.token fail with 403 (cli/cli#9514), and GitHub ignores
+          # it anyway when the tag already exists.
+          tag_object="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" --jq '.object.type + " " + .object.sha')"
+          test "$tag_object" = "commit $CANDIDATE_SHA"
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" > "$release_json" 2>/dev/null; then
+            echo "published release already exists; verifying only"
+          else
+            # The releases list is eventually consistent: a draft created a
+            # second ago is often missing from it (0.2.22 publish failure), and
+            # the gh CLI resolves drafts by tag through that same list. Take
+            # the draft id from the create response and address it by id only.
+            existing="$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+              --jq "[.[] | select(.tag_name == \"$RELEASE_TAG\" and .draft == true) | (.id | tostring)] | join(\" \")")"
+            case "$existing" in
+              "")
+                draft_id="$(gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
+                  -f tag_name="$RELEASE_TAG" -F draft=true -F prerelease=false \
+                  -f name="AnyWeb ${RELEASE_TAG#anyweb-v}" \
+                  -f body="AnyWeb ${RELEASE_TAG#anyweb-v} runtime assets. macOS is signed and notarized; see runtime-manifest.json for the Windows signing state." \
+                  --jq .id)" ;;
+              *" "*) echo "more than one draft for $RELEASE_TAG: $existing" >&2; exit 1 ;;
+              *) draft_id="$existing" ;;
+            esac
+            case "$draft_id" in ""|*[!0-9]*) echo "invalid draft id: $draft_id" >&2; exit 1 ;; esac
+            printf '%s\n' "$draft_id" > "$RUNNER_TEMP/anyweb-draft-id"
+            found=""
+            for _ in $(seq 1 12); do
+              if gh api "repos/$GITHUB_REPOSITORY/releases/$draft_id" > "$release_json" 2>/dev/null; then found=1; break; fi
+              sleep 5
+            done
+            if [ -z "$found" ]; then echo "draft $draft_id never became readable by id" >&2; exit 1; fi
+            uploaded="$(python3 -c 'import json,sys; print(" ".join(a["name"] for a in json.load(open(sys.argv[1]))["assets"]))' "$release_json")"
+            for name in "${names[@]}"; do
+              case " $uploaded " in
+                *" $name "*) ;;
+                *) gh api --method POST -H "Content-Type: application/octet-stream" \
+                     "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$draft_id/assets?name=$name" \
+                     --input "$HANDOFF/$name" > /dev/null ;;
+              esac
+            done
+            gh api "repos/$GITHUB_REPOSITORY/releases/$draft_id" > "$release_json"
+            python3 - "$release_json" "$RUNNER_TEMP/anyweb-expected-assets.json" "$RELEASE_TAG" draft <<'PY'
+          import json, pathlib, sys
+          r = json.loads(pathlib.Path(sys.argv[1]).read_text()); expected = json.loads(pathlib.Path(sys.argv[2]).read_text())
+          if r.get("draft") is not True or r.get("tag_name") != sys.argv[3] or r.get("prerelease"):
+              raise SystemExit("draft release metadata mismatch")
+          got = {a["name"]: a for a in r.get("assets", [])}
+          if set(got) != set(expected):
+              raise SystemExit(f"draft assets are not the exact allowlist: {sorted(got)}")
+          for name, a in got.items():
+              e = expected[name]
+              if a.get("state") != "uploaded" or a.get("size") != e["size"] or a.get("digest") != "sha256:" + e["sha256"]:
+                  raise SystemExit(f"draft asset mismatch: {name}")
+          PY
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/$draft_id" -F draft=false > /dev/null
+          fi
+          for _ in $(seq 1 20); do
+            if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" > "$release_json" 2>/dev/null \
+              && python3 - "$release_json" "$RUNNER_TEMP/anyweb-expected-assets.json" "$RELEASE_TAG" <<'PY'
+          import json, pathlib, sys
+          r = json.loads(pathlib.Path(sys.argv[1]).read_text()); expected = json.loads(pathlib.Path(sys.argv[2]).read_text())
+          ok = r.get("draft") is False and r.get("immutable") is True and r.get("tag_name") == sys.argv[3]
+          got = {a["name"]: a for a in r.get("assets", [])}
+          ok = ok and set(got) == set(expected)
+          for name, a in got.items():
+              ok = ok and name in expected and a.get("digest") == "sha256:" + expected[name]["sha256"]
+          raise SystemExit(0 if ok else 1)
+          PY
+            then
+              echo "published immutable release verified: $RELEASE_TAG"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "published release did not verify: $RELEASE_TAG" >&2
+          exit 1
+      - name: Remove an unpublished draft after failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # The recorded id comes first and must not depend on the lagging list.
+          ids="$(cat "$RUNNER_TEMP/anyweb-draft-id" 2>/dev/null || true)"
+          listed="$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            --jq ".[] | select(.tag_name == \"$RELEASE_TAG\" and .draft == true) | .id" || true)"
+          ids="$ids $listed"
+          for id in $(printf '%s\n' "$ids" | tr ' ' '\n' | sed '/^$/d' | sort -u); do
+            # Only ever delete a draft; a published immutable Release stays.
+            if [ "$(gh api "repos/$GITHUB_REPOSITORY/releases/$id" --jq .draft 2>/dev/null)" = true ]; then
+              gh api --method DELETE "repos/$GITHUB_REPOSITORY/releases/$id"
+            fi
+          done
