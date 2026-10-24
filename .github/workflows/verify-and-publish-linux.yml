@@ -1,0 +1,91 @@
+name: verify-and-publish-linux
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'plugins/**/bin/linux-x64/**'
+      - 'plugins/**/runtime-manifest.json'
+      - '.github/workflows/verify-and-publish-linux.yml'
+  workflow_dispatch:
+    inputs:
+      upload_releases:
+        description: Upload Linux release assets to existing GitHub releases
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-and-publish-linux-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify all plugin packages
+        run: |
+          set -euo pipefail
+          echo "Verifying Linux binaries and package integrity..."
+          for plugin_dir in plugins/any*; do
+            [ -d "$plugin_dir" ] || continue
+            p="$(basename "$plugin_dir")"
+            echo "=== Verifying $p ==="
+            test -f "$plugin_dir/bin/linux-x64/$p"
+            chmod +x "$plugin_dir/bin/linux-x64/$p"
+            expected="$(cat "$plugin_dir/bin/linux-x64/$p.sha256" | tr -d '[:space:]')"
+            actual="$(sha256sum "$plugin_dir/bin/linux-x64/$p" | awk '{print $1}')"
+            test "$expected" = "$actual"
+            echo "  $p sha256: ok"
+            "$plugin_dir/bin/linux-x64/$p" --version
+            echo "  $p --version: ok"
+          done
+
+      - name: Upload Linux assets to existing GitHub Releases
+        if: github.event_name == 'push' || inputs.upload_releases == true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo "Uploading Linux assets to existing published releases..."
+          
+          # AnyChat
+          if gh release view anychat-v0.1.99 >/dev/null 2>&1; then
+            echo "Uploading AnyChat Linux assets to anychat-v0.1.99..."
+            gh release upload anychat-v0.1.99 \
+              plugins/anychat/bin/linux-x64/anychat#anychat-linux-x64 \
+              plugins/anychat/bin/linux-x64/anychat.sha256#anychat-linux-x64.sha256 \
+              plugins/anychat/bin/linux-x64/anychat-access#anychat-access-linux-x64 \
+              plugins/anychat/bin/linux-x64/anychat-access.sha256#anychat-access-linux-x64.sha256 \
+              --clobber || true
+          fi
+
+          # AnyDoc
+          if gh release view anydoc-v0.3.14 >/dev/null 2>&1; then
+            echo "Uploading AnyDoc Linux assets to anydoc-v0.3.14..."
+            gh release upload anydoc-v0.3.14 \
+              plugins/anydoc/bin/linux-x64/anydoc#anydoc-linux-x64 \
+              plugins/anydoc/bin/linux-x64/anydoc.sha256#anydoc-linux-x64.sha256 \
+              plugins/anydoc/bin/linux-x64/libpdfium.so#libpdfium-linux-x64.so \
+              plugins/anydoc/bin/linux-x64/libpdfium.so.sha256#libpdfium-linux-x64.so.sha256 \
+              --clobber || true
+          fi
+
+          # AnyWeb
+          if gh release view anyweb-v0.2.23 >/dev/null 2>&1; then
+            echo "Uploading AnyWeb Linux assets to anyweb-v0.2.23..."
+            gh release upload anyweb-v0.2.23 \
+              plugins/anyweb/bin/linux-x64/anyweb#anyweb-linux-x64 \
+              plugins/anyweb/bin/linux-x64/anyweb.sha256#anyweb-linux-x64.sha256 \
+              --clobber || true
+          fi
+          
+          echo "Linux releases verification and assets upload completed."

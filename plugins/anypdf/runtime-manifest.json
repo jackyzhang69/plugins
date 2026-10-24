@@ -13,6 +13,12 @@
       "package_manifest_sha256": "6ded9f54a5530f8d954a3153f647ad1ea82fa4c86dd4f183acbf121c9e6f0228",
       "sha256": "236e7494316ba8ddba052e103c462a3cf8cfb1181f25581e719d8611c681ac0f",
       "size_bytes": 11449856
+    },
+    "linux-x64": {
+      "entrypoint": "bin/linux-x64/anypdf",
+      "checksum": "bin/linux-x64/anypdf.sha256",
+      "sha256": "ffb382cddea9fa8ea7b8038dd6f1fcdf6cfa38a70bc92c9bbe70978851c6c1db",
+      "size_bytes": 3441192
     }
   },
   "schema_version": "3",

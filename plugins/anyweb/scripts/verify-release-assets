@@ -12,10 +12,12 @@ root = pathlib.Path(sys.argv[1])
 specs = {
     "darwin-arm64": "bin/darwin-arm64/anyweb",
     "win32-x64": "bin/win32-x64/anyweb.exe",
+    "linux-x64": "bin/linux-x64/anyweb",
 }
 runtime_specs = {
     "darwin-arm64": ("runtime/darwin-arm64/anyweb-runtime", "anyweb-runtime"),
     "win32-x64": ("runtime/win32-x64/anyweb-runtime.exe", "anyweb-runtime.exe"),
+    "linux-x64": ("runtime/linux-x64/anyweb-runtime", "anyweb-runtime-linux-x64"),
 }
 try:
     actuals = {}
@@ -37,7 +39,7 @@ try:
         value.get("schema_version") != 1
         or value.get("product") != "anyweb"
         or value.get("version") != "0.2.23"
-        or value.get("allowedPlatforms") != ["darwin-arm64", "win32-x64"]
+        or value.get("allowedPlatforms") != ["darwin-arm64", "win32-x64", "linux-x64"]
     ):
         raise ValueError("manifest product or version mismatch")
     binary = value.get("binary", {})

@@ -8,4 +8,5 @@ if [ ! -d "$ROOT/bin" ]; then
 fi
 test -f "$ROOT/bin/darwin-arm64/anypdf" || { echo "missing darwin-arm64 anypdf" >&2; exit 1; }
 test -f "$ROOT/bin/win32-x64/anypdf.exe" || { echo "missing win32-x64 anypdf.exe" >&2; exit 1; }
+test -f "$ROOT/bin/linux-x64/anypdf" || { echo "missing linux-x64 anypdf" >&2; exit 1; }
 echo "verify-release-assets: ok"

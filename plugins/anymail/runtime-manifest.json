@@ -16,6 +16,13 @@
       "sha256": "22ea9155412b0585d8af8467913570d6e6b5c6e1b6344988ff1bbc95be083c4f",
       "size_bytes": 12262912,
       "signing": "unsigned"
+    },
+    "linux-x64": {
+      "entrypoint": "bin/linux-x64/anymail",
+      "checksum": "bin/linux-x64/anymail.sha256",
+      "sha256": "6e997cca62853569c419ad2a9fa5192418a0888a82ca17be64125b3c83b4fd4d",
+      "size_bytes": 10179040,
+      "signing": "unsigned"
     }
   },
   "notarization": "accepted"

@@ -24,6 +24,16 @@
           "signing": "unsigned"
         },
         "signing": "unsigned"
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/anydoc",
+        "sha256": "8fa9fb9bdcd0dc2a2760f61e23c5a1c5243d32f7d8a52b564ee1d37e7528940e",
+        "pdfium": {
+          "path": "bin/linux-x64/libpdfium.so",
+          "sha256": "f728930966f503652b92acc89b9374a2eeca00ce42e26dccd3e4b5c5161b2d64",
+          "signing": "unsigned"
+        },
+        "signing": "unsigned"
       }
     },
     "release": {
@@ -44,7 +54,8 @@
   },
   "allowedPlatforms": [
     "darwin-arm64",
-    "win32-x64"
+    "win32-x64",
+    "linux-x64"
   ],
   "packageHome": {
     "darwin": "${HOME}/.jackyzhang.app/plugins/anydoc/current",

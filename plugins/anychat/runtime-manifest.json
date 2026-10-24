@@ -11,6 +11,10 @@
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
         "sha256": "b83f24fedad973328215ed26e6a37291e5d3acd8857729dd81aac0dd8d167177"
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/anychat",
+        "sha256": "99d84f9b620d32d256fdf3cd826a53270e1f832de2629b504384faa0419c5714"
       }
     },
     "release": {
@@ -35,13 +39,18 @@
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat-access.exe",
         "sha256": "ef3e2c1e122e62d75807606dcdb47219101a83b7100a44e5c88615353eb96aff"
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/anychat-access",
+        "sha256": "02d6b4aac9c6228d07777a91fb68c05ba063c970fd90963bad85ae828eb4ed99"
       }
     },
     "verifyChecksum": true
   },
   "allowedPlatforms": [
     "darwin-arm64",
-    "win32-x64"
+    "win32-x64",
+    "linux-x64"
   ],
   "source_sha": "50ecb1a87aa8b2252dcf6587f181c3e762bfbd6a",
   "cacheDir": {

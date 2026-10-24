@@ -16,6 +16,11 @@
       "entrypoint": "bin/win32-x64/anyscore.exe",
       "sha256": "9b4c58a7e4b161da6c90b2e345742d3c7ff1749f4ece727a36dde8216dd49ff5",
       "size": 3788800
+    },
+    "linux-x64": {
+      "entrypoint": "bin/linux-x64/anyscore",
+      "sha256": "2e541c0ef2ce978819164be8b9fcd17a7c0693ad4c6cc222c494a10dbd873ef7",
+      "size": 4253064
     }
   },
   "release_tag": "anyscore-v0.2.2"

@@ -4,5 +4,6 @@
 set -euo pipefail
 ROOT="${PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 test -f "$ROOT/bin/darwin-arm64/anyscore" || { echo "verify-release-assets: missing bin/darwin-arm64/anyscore" >&2; exit 1; }
-test -f "$ROOT/bin/win32-x64/anyscore.exe" || { echo "verify-release-assets: missing bin/win32-x64/anyscore.exe (no official release without Windows)" >&2; exit 1; }
+test -f "$ROOT/bin/win32-x64/anyscore.exe" || { echo "verify-release-assets: missing bin/win32-x64/anyscore.exe" >&2; exit 1; }
+test -f "$ROOT/bin/linux-x64/anyscore" || { echo "verify-release-assets: missing bin/linux-x64/anyscore" >&2; exit 1; }
 echo "verify-release-assets: ok"

@@ -22,4 +22,12 @@ test -f "$ROOT/bin/win32-x64/anymail.exe.sha256" || {
   echo "missing win32-x64 checksum" >&2
   exit 1
 }
+test -f "$ROOT/bin/linux-x64/anymail" || {
+  echo "missing linux-x64 anymail" >&2
+  exit 1
+}
+test -f "$ROOT/bin/linux-x64/anymail.sha256" || {
+  echo "missing linux-x64 checksum" >&2
+  exit 1
+}
 echo "verify-release-assets: ok"

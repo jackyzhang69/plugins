@@ -57,6 +57,7 @@ expected = {}
 asset_names = {
     "darwin-arm64": ("anydoc-darwin-arm64", "libpdfium-darwin-arm64.dylib"),
     "win32-x64": ("anydoc-win32-x64.exe", "pdfium-win32-x64.dll"),
+    "linux-x64": ("anydoc-linux-x64", "libpdfium-linux-x64.so"),
 }
 for platform, record in m["binary"]["platforms"].items():
     if platform not in asset_names:
