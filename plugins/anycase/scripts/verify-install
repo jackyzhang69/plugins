@@ -4,9 +4,8 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 case "$(uname -s)" in
   Darwin) BIN="${DIR}/bin/darwin-arm64/anycase" ;;
-  Linux) BIN="${DIR}/bin/linux-x64/anycase" ;;
   MINGW*|MSYS*|CYGWIN*) BIN="${DIR}/bin/win32-x64/anycase.exe" ;;
-  *) echo "verify-install: unsupported host; AnyCase supports macOS, Windows, and Linux" >&2; exit 1 ;;
+  *) echo "verify-install: unsupported host; AnyCase supports macOS arm64 and Windows x64" >&2; exit 1 ;;
 esac
 test -x "$BIN" || { echo "verify-install: executable not found for this host" >&2; exit 1; }
 
@@ -45,6 +44,7 @@ require_text "$WHO_OUT" '"status"' "Whoami check"
 echo "[4/9] Verifying CLB calculation..."
 CLB_OUT=$("${BIN}" clb --test ielts -l 8 -r 7 -w 7 -s 7 --json)
 require_text "$CLB_OUT" '"overall"' "CLB calculation"
+
 if grep -q '"status"[[:space:]]*:[[:space:]]*"authenticated"' <<<"$WHO_OUT"; then
   echo "[5/9] Verifying Precedent Caselaw retrieval (Global --json flag position)..."
   CASE_OUT=$("${BIN}" --json caselaw "study permit" --top 1)
@@ -63,7 +63,6 @@ if grep -q '"status"[[:space:]]*:[[:space:]]*"authenticated"' <<<"$WHO_OUT"; the
 else
   echo "[5-7/9] Online search checks SKIPPED (unauthenticated; run 'anycase login' to connect)"
 fi
-echo "[8/9] Verifying embedded scoring grids (no checkout policies/)..."
 SCORE_OUT=$("${BIN}" score policies --json)
 require_text "$SCORE_OUT" '"bc_pnp_sirs"' "Score policies list bc_pnp_sirs"
 require_text "$SCORE_OUT" '"count"' "Score policies envelope"

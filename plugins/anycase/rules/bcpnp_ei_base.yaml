@@ -13,7 +13,21 @@ decision_scope: "Pre-screen of the eight rules defined below; PASS is not an inv
 
 schema:
   input_type: object
-  required_top_level: [assessment_date, candidate, business, noul]
+  required_top_level: [assessment_date, assessment_stage, candidate, business]
+  field_semantics:
+    assessment_stage: "The policy checkpoint being evaluated: registration, application, work_permit_and_nomination, arrival_report, or final_report. Rules that do not define behavior for a stage must remain NEEDS_REVIEW there."
+    business.active_management_in_bc: "At registration/application, records the applicant's commitment and proposal to manage the business day to day while physically at its B.C. place of business once operating. At work-permit, arrival, and final-report checkpoints, records actual active management in B.C.; a true value before arrival does not assert present-day physical management."
+    business.reside_within_commute: "Before arrival, records the applicant's intention to reside within 50 km of the proposed business by the shortest available road route, unless the performance agreement specifies otherwise. At final report, records actual residence within 50 km of the operating business. The route must not require a ferry journey over 30 minutes; separate evidence is still required for at least 75% physical presence in B.C. while on a work permit."
+    candidate.language_points_claimed: "Whether language points were claimed in the registration."
+    candidate.language_test.valid_at_required_submission: "Whether the designated test result was within its 24-month validity period when the evidence was first required/submitted: registration if language points were claimed; otherwise the date proof was first submitted (the Final Report only when no proof was previously provided). The source does not require a new test solely because the case reaches Final Report."
+    business.personal_net_worth_cad: "Net personal worth after liabilities, including all applicable assets and debts of the applicant, spouse/common-law partner, and dependent children; exclude future inheritances. Assets must be legally obtained and verifiable."
+    business.net_worth_verified: "True only when the personal-net-worth verification report from a BC PNP-authorized accounting firm, required after invitation to apply, has been received and verified in the case record; later checkpoints reuse that report unless new information requires review."
+    business.eligible_investment_cad: "At registration/application this is the proposed eligible personal investment for one business location; after arrival it records eligible personal investment actually made from personal net worth under the performance agreement. The number alone does not verify expenditure eligibility or the 610-day deadline."
+    business.equity_ownership_ratio: "Applicant's proposed equity ownership as a ratio from 0 to 1; the ordinary threshold is exactly at least one third, with the guide's at-least-$1-million equity-investment exception."
+    business.equity_investment_cad: "CAD equity investment in the proposed B.C. business for the less-than-one-third ownership exception; this is not interchangeable with total eligible personal investment or general business expenditures."
+    business.new_canadian_jobs_fte: "At registration/application, proposed FTE count; after arrival, actual direct employee FTEs for Canadian citizens or permanent residents. One FTE means at least 30 hours weekly on average and 1,560 hours yearly under continuous employment; contractors, remote roles, and shareholders with at least 10% ownership do not count."
+    candidate.business_owner_months: "Only qualifying months within the past 120 months as an active business owner-manager with at least 10% ownership, personally onsite and involved in day-to-day operations and decision-making. The current numeric predicate does not verify those facts."
+    candidate.senior_manager_months: "Only qualifying months within the past 120 months as an active senior manager in a NOC TEER 0 or 1 role, supervising at least three full-time employees, with no business ownership or less than 10% ownership. The current numeric predicate does not verify those facts."
 
 evaluation:
   rule_statuses: [PASS, FAIL, NEEDS_REVIEW]
@@ -29,18 +43,22 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
+      - assessment_stage
       - business.personal_net_worth_cad
-      - business.net_worth_verified
-    pass_if: "business.personal_net_worth_cad >= 600000.0 && business.net_worth_verified == true"
-    fail_if: "business.personal_net_worth_cad < 600000.0"
-    missing_or_unverified: "NEEDS_REVIEW: Personal net worth or statutory third-party verification report cannot be confirmed."
-    interpretation: "Candidate must possess at least $600,000 CAD in legally obtained, unencumbered personal net worth, certified by a designated supplier."
+    conditional_required_fields:
+      when: "assessment_stage in [\"application\", \"final_report\"]"
+      fields:
+        - business.net_worth_verified
+    pass_if: "business.personal_net_worth_cad >= 600000.0 && (assessment_stage == \"registration\" || ((assessment_stage == \"application\" || assessment_stage == \"final_report\") && business.net_worth_verified == true))"
+    fail_if: "business.personal_net_worth_cad < 600000.0 && assessment_stage in [\"registration\", \"application\", \"final_report\"]"
+    missing_or_unverified: "NEEDS_REVIEW: Personal net worth or, after invitation to apply, the required BC PNP-authorized accounting-firm verification report cannot be confirmed."
+    interpretation: "The threshold is at least $600,000 in legally obtained, verifiable personal net worth, including applicable spouse/common-law partner and dependent-child net worth. Registration points use declared information; after invitation to apply, the applicant must obtain a net-worth verification report from a BC PNP-authorized accounting firm for the application assessment."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "1.2, 2.1"
-      page: "7; 11"
-      verbatim_excerpt: "have a personal net worth of at least $600,000"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p013"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.2 (B)"
+      page: "13"
+      verbatim_excerpt: "You must have a minimum of $600,000 in personal net worth"
 
   - id: ei_base_eligible_investment
     category: financial
@@ -52,13 +70,13 @@ rules:
     pass_if: "business.eligible_investment_cad >= 200000.0"
     fail_if: "business.eligible_investment_cad < 200000.0"
     missing_or_unverified: "NEEDS_REVIEW: Proposed eligible business investment amount is missing or disputed."
-    interpretation: "Candidate must make an eligible commercial investment of at least $200,000 CAD from personal funds into the B.C. business."
+    interpretation: "The guide requires at least $200,000 CAD of eligible personal investment from personal net worth, directed to one business location and made within 610 days after arriving in B.C. on a BC PNP-supported work permit. Registration records a proposed investment; its eligibility and actual expenditure are assessed from application through nomination. This amount-only predicate does not verify eligible expenditures, source of funds, destination, or the 610-day deadline."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p21:1"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "1.2, 2.2"
-      page: "7; 12"
-      verbatim_excerpt: "make an eligible personal investment of at least $200,000"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p021"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.4 (A)"
+      page: "21"
+      verbatim_excerpt: "You must make an eligible personal investment of at least $200,000 in the proposed business"
 
   - id: ei_base_equity_ownership
     category: business
@@ -67,17 +85,20 @@ rules:
     required_fields:
       - assessment_date
       - business.equity_ownership_ratio
-      - business.eligible_investment_cad
-    pass_if: "business.equity_ownership_ratio >= 0.3333 || business.eligible_investment_cad >= 1000000.0"
-    fail_if: "business.equity_ownership_ratio < 0.3333 && business.eligible_investment_cad < 1000000.0"
+    conditional_required_fields:
+      when: "business.equity_ownership_ratio < (1.0 / 3.0)"
+      fields:
+        - business.equity_investment_cad
+    pass_if: "business.equity_ownership_ratio >= (1.0 / 3.0) || business.equity_investment_cad >= 1000000.0"
+    fail_if: "business.equity_ownership_ratio < (1.0 / 3.0) && business.equity_investment_cad < 1000000.0"
     missing_or_unverified: "NEEDS_REVIEW: Business equity stake or investment scale cannot be confirmed."
-    interpretation: "Candidate must own at least one-third (33.3%) of the business, unless making an investment of at least $1,000,000 CAD."
+    interpretation: "The applicant must generally demonstrate proposed ownership of at least one-third (33 1/3 per cent) of the B.C. business. If proposed ownership is below one third, the guide requires an equity investment of at least $1,000,000 CAD."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "1.2, 2.3"
-      page: "7; 14"
-      verbatim_excerpt: "hold at least one-third (33 1/3 per cent) equity ownership in the business, or invest at least $1,000,000"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p019"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.3 (C)"
+      page: "19"
+      verbatim_excerpt: "In general, you must demonstrate that you will own at least one-third (33 1/3 per cent) of the\nbusiness in B.C. If your proposed ownership is less than 33 1/3 per cent, you must make an equity\ninvestment of at least $1 million."
 
   - id: ei_base_job_creation
     category: business
@@ -89,13 +110,13 @@ rules:
     pass_if: "business.new_canadian_jobs_fte >= 1.0"
     fail_if: "business.new_canadian_jobs_fte < 1.0"
     missing_or_unverified: "NEEDS_REVIEW: Projected or verified job creation counts are unconfirmed."
-    interpretation: "The business must create at least one new full-time equivalent job for a Canadian citizen or permanent resident."
+    interpretation: "Numeric pre-screen: at least one new Canadian/PR FTE. At registration this is a proposed position; the job must be created within 420 days after arrival on a supported work permit. This predicate counts FTEs only; it does not verify permanence, direct employment, the employee's status, the primary business location, exclusion of contractors or shareholders with 10% or more, or the long-term employment likelihood. For nomination, the required FTE count must have been employed continuously for at least 180 days before Final Report; verify those conditions separately."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "1.2, 2.4"
-      page: "7; 15"
-      verbatim_excerpt: "create at least one new full-time equivalent job for a Canadian citizen or permanent resident"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p025"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.5 (A)"
+      page: "25"
+      verbatim_excerpt: "You must create at least one new, permanent full-time equivalent (FTE) job for a Canadian\ncitizen or permanent resident of Canada in the proposed business, within 420 days\n(approximately 14 months) of arriving in B.C. on a BC PNP-supported work permit."
 
   - id: ei_base_business_experience
     category: candidate
@@ -105,16 +126,16 @@ rules:
       - assessment_date
       - candidate.business_owner_months
       - candidate.senior_manager_months
-    pass_if: "candidate.business_owner_months >= 36.0 || candidate.senior_manager_months >= 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
-    fail_if: "candidate.business_owner_months < 36.0 && candidate.senior_manager_months < 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
+    pass_if: "candidate.business_owner_months > 36.0 || candidate.senior_manager_months > 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
+    fail_if: "candidate.business_owner_months <= 36.0 && candidate.senior_manager_months <= 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
     missing_or_unverified: "NEEDS_REVIEW: Qualifying entrepreneurial or senior management track record cannot be established."
-    interpretation: "Within the last 10 years, candidate must have at least 3 years as business owner-manager, or 4 years as senior manager, or 1 year owner + 2 years senior manager."
+    interpretation: "Within the past 120 months, the applicant needs more than 36 months as an active business owner-manager with at least 10% ownership, or more than 48 months as an active senior manager in a NOC TEER 0 or 1 role supervising at least three full-time employees and with less than 10% ownership, or the combination of at least 12 qualifying owner-manager months and at least 24 qualifying senior-manager months. The current numeric predicate assumes these months are prequalified and does not verify role, ownership, date, location, or employee-count evidence."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "1.2, 2.5"
-      page: "7; 16"
-      verbatim_excerpt: "more than 3 years of experience as an active business owner-manager, or more than 4 years of experience as a senior manager"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p015"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.2 (C)"
+      page: "15"
+      verbatim_excerpt: "more than 36 months (three years) of experience as an active business ownermanager"
 
   - id: ei_base_language_floor
     category: candidate
@@ -122,22 +143,27 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - candidate.language_test.test_type
-      - candidate.language_test.valid_at_application
-      - candidate.language_test.listening_clb
-      - candidate.language_test.reading_clb
-      - candidate.language_test.writing_clb
-      - candidate.language_test.speaking_clb
-    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
-    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
-    missing_or_unverified: "NEEDS_REVIEW: Language test results missing or CLB score below mandatory CLB 4 threshold."
-    interpretation: "Candidate must demonstrate proficiency equivalent to CLB 4 or higher in English or French across all four skills."
+      - assessment_stage
+      - candidate.language_points_claimed
+    conditional_required_fields:
+      when: "candidate.language_points_claimed == true || assessment_stage == \"final_report\""
+      fields:
+        - candidate.language_test.test_type
+        - candidate.language_test.valid_at_required_submission
+        - candidate.language_test.listening_clb
+        - candidate.language_test.reading_clb
+        - candidate.language_test.writing_clb
+        - candidate.language_test.speaking_clb
+    pass_if: "(assessment_stage in [\"registration\", \"application\", \"work_permit_and_nomination\", \"arrival_report\"] && candidate.language_points_claimed == false) || (assessment_stage in [\"registration\", \"application\", \"work_permit_and_nomination\", \"arrival_report\", \"final_report\"] && accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_required_submission == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4)"
+    fail_if: "(assessment_stage in [\"registration\", \"application\", \"work_permit_and_nomination\", \"arrival_report\"] && candidate.language_points_claimed == true && (candidate.language_test.valid_at_required_submission == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4)) || (assessment_stage == \"final_report\" && (candidate.language_test.valid_at_required_submission == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4))"
+    missing_or_unverified: "NEEDS_REVIEW: A required language test, validity period, or CLB 4 score in each of the four skills is missing. At registration, evidence is due only when language points are claimed; otherwise it is due by Final Report."
+    interpretation: "CLB 4 or higher in each of listening, speaking, reading, and writing is mandatory for nomination. If language points are claimed, a valid test result must accompany registration. Otherwise proof is due with the Final Report only if it was not previously provided. A PASS at registration/application/work-permit/arrival when no language points were claimed means only that proof is not yet due; it does not find that the applicant has met the CLB floor. Test results are valid for 24 months from issuance; this rule checks validity at the first required/submitted filing and does not require a new test solely because the case reaches Final Report."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p12:if_you_claimed_language_points_in_your_registratio"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p012"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
       section: "2.1 (C)"
       page: "12"
-      verbatim_excerpt: "basic English or French language proficiency equivalent to Canadian Language Benchmark (CLB) 4"
+      verbatim_excerpt: "You must possess basic English or French language proficiency equivalent to Canadian Language\nBenchmark (CLB) level 4 or higher in each of the four competencies: listening, speaking, reading\nand writing."
 
   - id: ei_base_active_management
     category: business
@@ -150,34 +176,25 @@ rules:
     pass_if: "business.active_management_in_bc == true && business.reside_within_commute == true"
     fail_if: "business.active_management_in_bc == false || business.reside_within_commute == false"
     missing_or_unverified: "NEEDS_REVIEW: Day-to-day active operational management or local residency commitment cannot be verified."
-    interpretation: "Candidate must actively manage the business on a day-to-day basis within B.C. and reside within 100km of the commercial premises."
+    interpretation: "At registration/application, the applicant must demonstrate an intention to actively manage the business; to be approved for nomination, they must show actual active management in B.C., physically at the business's place of business. Before arrival, the 50-km field means intended residence from the proposed business, unless the performance agreement specifies otherwise; at Final Report, the applicant must show actual residence within 50 km of the operating business. The shortest available road route applies and must not require a ferry journey over 30 minutes. Nomination also requires at least 75% physical presence in B.C. while on a work permit. The existing booleans do not calculate route, ferry, actual-management, or physical-presence evidence."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p19:businesses_involved_in_producing_distributing_o"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "2.7"
-      page: "19"
-      verbatim_excerpt: "provide active and ongoing day-to-day management of the business from within B.C."
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p011"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "2.1 (A)-(B)"
+      page: "11"
+      verbatim_excerpt: "Active management must occur while you are physically present at the place of business in B.C."
 
   - id: ei_base_business_viability
     category: integrity
-    severity: CRITICAL_REDLINE
-    eval_type: jev_semantic
+    severity: ADVISORY
+    eval_type: deterministic
     required_fields:
       - assessment_date
-      - noul.proposition_id
-      - noul.model_version
-      - noul.probability_true
-      - noul.evidence_complete
-      - noul.evidence_refs
-    noul_contract:
-      proposition_id: "ei_base_business_viability"
-      fail: "probability_true < 0.30"
-      pass: "probability_true >= 0.70"
-    missing_or_unverified: "NEEDS_REVIEW: Business plan feasibility, market analysis, or commercial viability evidence is incomplete."
-    interpretation: "Evaluates commercial viability, economic feasibility, and arm's length legitimacy of the business concept using TypeSafe Jev System One."
+    missing_or_unverified: "NEEDS_REVIEW: The BC PNP must manually assess the business concept's commercial viability and score the stated factors; no single probability cutoff is specified in the guide."
+    interpretation: "The BC PNP assesses commercial viability and assigns points across the business model, market and products/services, eligible investment, investment assessment, ownership, and risk factors. This is an advisory human-review item. The current evaluator can hold it at NEEDS_REVIEW but cannot record a human viability finding without a core review-result contract."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_program_guide:p72:5_2_b_commercial_viability"
-      source_file: "BC-PNP-Entrepreneur-Immigration-Program-Guide.pdf"
-      section: "2.8"
-      page: "20"
-      verbatim_excerpt: "demonstrate that the business has a reasonable potential for commercial viability"
+      evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p072"
+      source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
+      section: "5.2 (B)"
+      page: "72"
+      verbatim_excerpt: "The BC PNP will assess your business concept and assign points based on the commercial viability\nof your proposed business."

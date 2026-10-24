@@ -38,14 +38,17 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: French oral level cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-QC-BIZ-FRENCH-006
-    source_file: quebec-business.html
-    section: Business French
-    verbatim_excerpt: Oral French level 7 on the Quebec scale
+    source_id: quebec_business_entrepreneur_start_conditions_20260930
+    source_file: aade78718b579f11fa5ddee7e279fd02ac8b42cf2f1adeab09fb19ed6df17a65
+    section: Entrepreneur spoken French minimum
+    page: ""
+    verbatim_excerpt: "You must have a knowledge of spoken French corresponding minimally to level 7"
   provenance:
-    source_file: quebec-business.html
-    section: Business French
-    page: 1
-    verbatim: Oral French level 7 on the Quebec scale
+    source_id: quebec_business_entrepreneur_start_conditions_20260930
+    source_file: aade78718b579f11fa5ddee7e279fd02ac8b42cf2f1adeab09fb19ed6df17a65
+    section: Entrepreneur spoken French minimum
+    page: ""
+    verbatim: "You must have a knowledge of spoken French corresponding minimally to level 7"
 - id: qc_biz_entrepreneur
   category: funds
   severity: CRITICAL_REDLINE
@@ -71,14 +74,17 @@ rules:
     be verified.'
   evidence_anchor:
     evidence_unit_id: EU-QC-BIZ-ENT-007
-    source_file: quebec-business.html
-    section: Entrepreneur Thresholds
-    verbatim_excerpt: net worth of 600,000 dollars
+    source_id: quebec_business_entrepreneur_start_conditions_20260930
+    source_file: aade78718b579f11fa5ddee7e279fd02ac8b42cf2f1adeab09fb19ed6df17a65
+    section: Entrepreneur net worth minimum
+    page: ""
+    verbatim_excerpt: "You must have a minimum net worth of CAD $600,000."
   provenance:
-    source_file: quebec-business.html
-    section: Entrepreneur Thresholds
-    page: 1
-    verbatim: net worth of 600,000 dollars
+    source_id: quebec_business_entrepreneur_start_conditions_20260930
+    source_file: aade78718b579f11fa5ddee7e279fd02ac8b42cf2f1adeab09fb19ed6df17a65
+    section: Entrepreneur net worth minimum
+    page: ""
+    verbatim: "You must have a minimum net worth of CAD $600,000."
 - id: qc_biz_self_employed
   category: experience
   severity: CRITICAL_REDLINE
@@ -101,14 +107,17 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Self-employed experience, net worth, or deposit cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-QC-BIZ-SE-008
-    source_file: quebec-business.html
-    section: Self-Employed Thresholds
-    verbatim_excerpt: deposit 50,000 dollars in the Montreal region or 25,000 dollars outside
+    source_id: quebec_business_self_employed_conditions_20260930
+    source_file: b2bd2e4ca9fa7f5fd2b756b333121b8e66f32d10d95e0b6ef8904ffffee52192
+    section: Self-employed start-up deposit minimum
+    page: ""
+    verbatim_excerpt: "On the territory of the CMM, the start-up deposit is CDN$50,000."
   provenance:
-    source_file: quebec-business.html
-    section: Self-Employed Thresholds
-    page: 1
-    verbatim: deposit 50,000 dollars in the Montreal region or 25,000 dollars outside
+    source_id: quebec_business_self_employed_conditions_20260930
+    source_file: b2bd2e4ca9fa7f5fd2b756b333121b8e66f32d10d95e0b6ef8904ffffee52192
+    section: Self-employed start-up deposit minimum
+    page: ""
+    verbatim: "On the territory of the CMM, the start-up deposit is CDN$50,000."
 - id: qc_biz_investor
   category: funds
   severity: CRITICAL_REDLINE
@@ -132,30 +141,34 @@ rules:
     cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-QC-BIZ-INV-009
-    source_file: quebec-business.html
-    section: Investor Thresholds
-    verbatim_excerpt: net worth 2,000,000 dollars
+    source_id: quebec_business_investor_conditions_20260930
+    source_file: 3bffb1f3832b335aaf48494fab687e938e8a5b57766e7a32399f04380436257d
+    section: Investor net worth minimum
+    page: ""
+    verbatim_excerpt: "must have a net worth of at least CAD $2,000,000."
   provenance:
-    source_file: quebec-business.html
-    section: Investor Thresholds
-    page: 1
-    verbatim: net worth 2,000,000 dollars
+    source_id: quebec_business_investor_conditions_20260930
+    source_file: 3bffb1f3832b335aaf48494fab687e938e8a5b57766e7a32399f04380436257d
+    section: Investor net worth minimum
+    page: ""
+    verbatim: "must have a net worth of at least CAD $2,000,000."
 - id: qc_biz_values
   category: pathway
-  severity: CRITICAL_REDLINE
+  severity: ADVISORY
   eval_type: deterministic
   required_fields:
   - candidate.values_attestation
-  pass_if: candidate.values_attestation == true
-  fail_if: candidate.values_attestation == false
-  missing_or_unverified: 'NEEDS_REVIEW: Quebec values attestation cannot be verified.'
+  missing_or_unverified: 'NEEDS_REVIEW: Verify whether a post-filing request was issued, the response deadline, and attestations for the applicant, accompanying spouse aged 16 or older, and dependent children aged 18 or older.'
   evidence_anchor:
     evidence_unit_id: EU-QC-BIZ-VALUES-010
-    source_file: quebec-business.html
-    section: Quebec Values Attestation
-    verbatim_excerpt: democratic values and Quebec values
+    source_id: quebec_business_entrepreneur_takeover_conditions_20260930
+    source_file: a3e934d09e5e64323cdfa0f59084554c4d96de27ffcdbbb743470cb78948429f
+    section: Québec values attestation timing and family ages
+    page: ""
+    verbatim_excerpt: "When your file is opened, you will receive a request to obtain an <a href=\"/en/immigration/receiving-attestation-values\" target=\"_blank\">attestation of&nbsp;learning about democratic values and Québec values</a>.</p><p>You must obtain your attestation within a maximum of 60<span class=\"nbsp\">&nbsp;</span>days after receiving this request.</p><p>The members of your family accompanying you will also need to obtain it, namely, your spouse aged 16<span class=\"nbsp\">&nbsp;</span>years or older and your dependent children aged 18<span class=\"nbsp\">&nbsp;</span>years or older.</p><p>You will not receive this request if you and your family have already obtained your attestation.</p></div></div></div>\n\n"
   provenance:
-    source_file: quebec-business.html
-    section: Quebec Values Attestation
-    page: 1
-    verbatim: democratic values and Quebec values
+    source_id: quebec_business_entrepreneur_takeover_conditions_20260930
+    source_file: a3e934d09e5e64323cdfa0f59084554c4d96de27ffcdbbb743470cb78948429f
+    section: Québec values attestation timing and family ages
+    page: ""
+    verbatim: "When your file is opened, you will receive a request to obtain an <a href=\"/en/immigration/receiving-attestation-values\" target=\"_blank\">attestation of&nbsp;learning about democratic values and Québec values</a>.</p><p>You must obtain your attestation within a maximum of 60<span class=\"nbsp\">&nbsp;</span>days after receiving this request.</p><p>The members of your family accompanying you will also need to obtain it, namely, your spouse aged 16<span class=\"nbsp\">&nbsp;</span>years or older and your dependent children aged 18<span class=\"nbsp\">&nbsp;</span>years or older.</p><p>You will not receive this request if you and your family have already obtained your attestation.</p></div></div></div>\n\n"
