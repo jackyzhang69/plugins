@@ -42,14 +42,25 @@ jobs:
               raise SystemExit("marketplace tag does not match the AnyDoc manifest")
           if release.get("notarization") != "accepted":
               raise SystemExit("AnyDoc macOS payload is not notarized")
-          expected = {
-              "darwin-arm64": "signed_same_team_hardened_runtime",
-              "win32-x64": "signed_azure_trusted_signing",
-          }
-          for platform, signing in expected.items():
-              row = manifest["binary"]["platforms"][platform]
-              if row.get("signing") != signing or row.get("pdfium", {}).get("signing") != signing:
-                  raise SystemExit(f"AnyDoc {platform} signing claim is incomplete")
+          mac = manifest["binary"]["platforms"]["darwin-arm64"]
+          if mac.get("signing") != "signed_same_team_hardened_runtime" or mac.get(
+              "pdfium", {}
+          ).get("signing") != "signed_same_team_hardened_runtime":
+              raise SystemExit("AnyDoc darwin-arm64 signing claim is incomplete")
+          win = manifest["binary"]["platforms"]["win32-x64"]
+          win_signing = win.get("signing")
+          waiver = release.get("windows_signing_waiver")
+          windows_waived = (
+              win_signing == "unsigned"
+              and isinstance(waiver, str)
+              and waiver.startswith(
+                  "azure_trusted_signing_unavailable_owner_waiver"
+              )
+          )
+          if not (win_signing == "signed_azure_trusted_signing" or windows_waived):
+              raise SystemExit("AnyDoc win32-x64 signing claim is incomplete")
+          if win.get("pdfium", {}).get("signing") != win_signing:
+              raise SystemExit("AnyDoc win32-x64 Pdfium signing claim is incomplete")
           version = manifest["binary"]["version"]
           with open(pathlib.Path(os.environ["GITHUB_OUTPUT"]), "a", encoding="utf-8") as output:
               output.write(f"version={version}\n")

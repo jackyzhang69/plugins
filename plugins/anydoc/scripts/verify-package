@@ -228,15 +228,39 @@ if pdfium_packaged:
         "darwin-arm64": "signed_same_team_hardened_runtime",
         "win32-x64": "signed_azure_trusted_signing",
     }
+    # Owner waiver (2026-10-24): macOS is still signed and notarized while the
+    # Windows payload ships unsigned because Azure Trusted Signing is
+    # unavailable. The manifest must name the waiver so this state is never
+    # mistaken for a broken mixed build.
+    windows_signing_waived = signing_by_platform == {
+        "darwin-arm64": "signed_same_team_hardened_runtime",
+        "win32-x64": "unsigned",
+    }
+    waiver = release.get("windows_signing_waiver")
+    waiver_valid = isinstance(waiver, str) and waiver.startswith(
+        "azure_trusted_signing_unavailable_owner_waiver"
+    )
     fully_unsigned = set(signing_by_platform) == set(ALLOWED) and set(
         signing_by_platform.values()
     ) == {"unsigned"}
-    if not (official_release or fully_unsigned):
-        errors.append("package must be fully unsigned development or fully signed official release")
+    if not (official_release or windows_signing_waived or fully_unsigned):
+        errors.append(
+            "package must be fully unsigned development, fully signed official release, "
+            "or a macOS-signed package with a Windows signing waiver"
+        )
     if official_release and notarization != "accepted":
         errors.append("official release requires macOS notarization=accepted")
+    if windows_signing_waived:
+        if not waiver_valid:
+            errors.append(
+                "unsigned Windows payload requires binary.release.windows_signing_waiver"
+            )
+        if notarization != "accepted":
+            errors.append("Windows signing waiver requires macOS notarization=accepted")
     if fully_unsigned and notarization != "not_done":
         errors.append("unsigned development package requires notarization=not_done")
+    if waiver is not None and not windows_signing_waived:
+        errors.append("windows_signing_waiver is only valid for a Windows-unsigned macOS-signed package")
 elif notarization == "accepted":
     errors.append("notarization=accepted requires packaged Pdfium and signed platform artifacts")
 

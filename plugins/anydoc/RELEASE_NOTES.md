@@ -1,3 +1,15 @@
+# AnyDoc 0.3.14
+
+- A rejected saved-rule draft now says what is missing: every draft needs
+  `"contract": "anydoc-assembly-model-v2"`, and an export file is refused by
+  name instead of a bare schema error.
+- The installed saved-rules playbook documents the full draft shape and ships
+  one minimal valid example, so a host agent can build and validate a Teach Me
+  draft without guessing.
+- macOS remains Developer ID signed and notarized. The Windows binary ships
+  Authenticode-unsigned under an owner waiver while Azure Trusted Signing is
+  unavailable, and the package manifest records that waiver.
+
 # AnyDoc 0.3.13
 
 - Public Guide reads now use the canonical ImmiCore guide service after the

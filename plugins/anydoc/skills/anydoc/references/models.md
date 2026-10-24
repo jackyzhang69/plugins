@@ -36,6 +36,99 @@ scratch draft and export immediately.
 `roles`, `conditions`, `deliverables`). Do not pass an export file to those
 commands. The host strips server fields in scratch.
 
+## Draft JSON (the only accepted shape)
+
+A draft has exactly these six top-level keys and no others. `model_id`,
+`revision`, and `model_hash` are accountd-owned: they appear only in
+`models export` output, and including them in a draft is rejected.
+
+| Key | Rule |
+|---|---|
+| `contract` | Required. Exactly the literal string `anydoc-assembly-model-v2`. Missing or different → `model_invalid`. |
+| `case_type` | Matches `^[a-z0-9][a-z0-9._-]{0,127}$` |
+| `title` | 1–120 characters |
+| `roles` | 1–32 entries: `{role_id, label, cardinality}`. `role_id` matches `^[a-z][a-z0-9_]{0,63}$` and is unique; `label` is 1–100 characters; `cardinality` is `"one"` or `"many"`. |
+| `conditions` | Any number of entries: `{condition_id, label, scope}`. `condition_id` uses the `role_id` format and is unique; `label` is 1–200 characters; `scope` is `"case"` or `"subject"`. |
+| `deliverables` | 1–200 entries, one per final output. |
+
+A deliverable is `{deliverable_id, sequence, filename_template, output_mode,
+serves_roles, when, contents}`:
+
+- `deliverable_id` uses the `role_id` format and is unique.
+- `sequence` matches `^[0-9]{1,3}[A-Z]?$` and is unique; it orders the outputs.
+- `filename_template` renders a complete base filename with an extension
+  (`<stem>.<ext>`, both sides non-empty), at most 180 characters and 240 bytes,
+  using portable filename characters only. `per_person` needs `{person_name}`
+  exactly once, `single` needs no `{person_name}`, and no other placeholder is
+  allowed.
+- `output_mode` is `"single"` or `"per_person"`.
+- `serves_roles` is a non-empty list of declared `role_id`s without repeats.
+- `contents` is non-empty.
+
+A content is `{content_id, label, subject_mode, subject_roles, when}`.
+`content_id` uses the `role_id` format and is unique across the whole model;
+`label` is 1–160 characters; `subject_mode` is `"shared"` or `"per_person"`;
+`subject_roles` is a non-empty list of declared `role_id`s without repeats.
+
+`when` is `{"kind": "always"}` or
+`{"kind": "condition", "condition_id": "<declared condition_id>"}`. `always`
+carries no `condition_id`; `condition` needs a declared one. A `subject`-scoped
+condition needs person context: for a deliverable that means
+`output_mode = "per_person"`; for a content it means its own
+`subject_mode = "per_person"` or a per-person parent deliverable. A
+`case`-scoped condition is valid anywhere.
+
+The whole draft must serialize to at most 256 KiB.
+
+This minimal draft is valid as written:
+
+```json
+{
+  "contract": "anydoc-assembly-model-v2",
+  "case_type": "ca.visitor_visa.outside_canada",
+  "title": "Visitor visa — outside Canada",
+  "roles": [{ "role_id": "applicant", "label": "Applicant", "cardinality": "many" }],
+  "conditions": [
+    {
+      "condition_id": "minor_child",
+      "label": "Applies when the applicant is a minor child",
+      "scope": "subject"
+    }
+  ],
+  "deliverables": [
+    {
+      "deliverable_id": "passport",
+      "sequence": "01",
+      "filename_template": "Passport - {person_name}.pdf",
+      "output_mode": "per_person",
+      "serves_roles": ["applicant"],
+      "when": { "kind": "always" },
+      "contents": [
+        {
+          "content_id": "passport_bio_page",
+          "label": "Passport bio page",
+          "subject_mode": "per_person",
+          "subject_roles": ["applicant"],
+          "when": { "kind": "always" }
+        },
+        {
+          "content_id": "parental_consent",
+          "label": "Parental consent",
+          "subject_mode": "per_person",
+          "subject_roles": ["applicant"],
+          "when": { "kind": "condition", "condition_id": "minor_child" }
+        }
+      ]
+    }
+  ]
+}
+```
+
+Adapt the shape to the user's confirmed rule; never paste this JSON into chat.
+`models validate` prints `valid: true` plus `draft_sha256`; the digest stays in
+the host's confirmation receipt. The human confirms the plain-language readback
+only.
+
 ## Change a saved model
 
 A model that already exists changes only through this replace path. Do not

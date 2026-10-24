@@ -3,27 +3,27 @@
   "product": "anydoc",
   "binary": {
     "name": "anydoc",
-    "version": "0.3.13",
+    "version": "0.3.14",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "4bb709a8b057dde432fbd3e321fa8ae0ca62980892749a42f3f10f48d38521bb",
+        "sha256": "56181ed2d8f09703e7f52307a03fee9e5d8a0c21df8f3035d63068bd1cb88af1",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "a5312e72772c97f38f8d6e4a0df7e78fa9dbd1b0f1ee9145ce07eeca41f5b018",
+          "sha256": "f81dc9a79f894d6a78dc0f060a0341665bc4e374b3babf8718626600b513055e",
           "signing": "signed_same_team_hardened_runtime"
         },
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "2f9ebd6a1ac83344412471bd6f721061afb411043e4bc65ce0d030fe426822f8",
+        "sha256": "f24b81525454ed4c1590b9ff7110017d1840747b7747e54fe4ba5d3c0c7eabce",
         "pdfium": {
           "path": "bin/win32-x64/pdfium.dll",
-          "sha256": "da013248f6644a86ea9396bd77578848778d93e3549c0a95eb34a3c57695520a",
-          "signing": "signed_azure_trusted_signing"
+          "sha256": "79d4676b656cfb1abcea88f9ade3b4b0826c5200382db5f4ec72a636c598c118",
+          "signing": "unsigned"
         },
-        "signing": "signed_azure_trusted_signing"
+        "signing": "unsigned"
       }
     },
     "release": {
@@ -32,8 +32,9 @@
       "notarization": "accepted",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anydoc-v0.3.13",
-      "source_commit": "10950861f5169aa180db0d63cffbd8b2080de417"
+      "tag": "anydoc-v0.3.14",
+      "source_commit": "38aec861cd7264d64441d28b93f3d85494305549",
+      "windows_signing_waiver": "azure_trusted_signing_unavailable_owner_waiver_2026-10-24"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -69,5 +70,5 @@
     "packaged": true,
     "note": "Pinned Pdfium libraries are packaged per platform and verified by sha256."
   },
-  "source_sha": "10950861f5169aa180db0d63cffbd8b2080de417"
+  "source_sha": "38aec861cd7264d64441d28b93f3d85494305549"
 }
