@@ -67,6 +67,37 @@ voice into Chinese or any other text; that is intentional. When the human wants
 a transcript, this host agent downloads the WAV and transcribes it locally. Do
 not treat missing speech-to-text as a product gap.
 
+## Before first use — platform prerequisites
+
+Check these once, before the first real request. They are the difference between
+"AnyChat is broken" and a two-minute fix.
+
+- **Update first.** `"$ANYCHAT_BIN" update --json`, then
+  `"$ANYCHAT_BIN" doctor --json`. Releases from 0.1.99 also refresh a stale local
+  authorization cache, so an upgrade is never left showing "expired".
+- **macOS: Full Disk Access belongs to the app that runs this agent, not to
+  AnyChat.** macOS credits the archive read to the host app that launched the
+  CLI. System Settings → Privacy & Security → Full Disk Access → add that host
+  app (DeepSeek Harness, Claude, ChatGPT, Codex, Cherry Studio, …) → quit and
+  reopen it. Granting the `anychat` binary itself does not work.
+  Verify: `"$ANYCHAT_BIN" sources list --json` shows `archive_permission: granted`,
+  then `"$ANYCHAT_BIN" provision --json` reaches `ready`.
+- **Windows: one supported chat-app build, UAC allowed, chat app signed in.**
+  Install only the build the product lists, approve the UAC prompt when setup
+  asks, and keep the chat app signed in and running during setup.
+
+When setup still fails, map the support code to the first action instead of
+guessing:
+
+| support code | First action |
+|---|---|
+| `E_CONNECT_REQUIRED` | [connect](references/connect.md), then re-run the same request |
+| `E_ENTITLEMENT_REQUIRED` | update first, then re-run; no reinstall |
+| `E_ARCHIVE_NOT_FOUND` | re-check the macOS / Windows prerequisites above; never reinstall the chat app or delete chat data |
+| `E_LOCAL_ACCESS_IN_PROGRESS` | let the current scan finish; do not start a second one |
+| `E_LOCAL_KEY_NOT_FOUND` | do not retry the identical scan and do not reinstall or delete chat data; prepare Tell Jacky with the access diagnosis, then follow [tell-jacky](references/tell-jacky.md) |
+| `E_UPDATE_FAILED` | keep the installed version, retry once, then Tell Jacky |
+
 ## When the user asks "what can you do?"
 
 Do not answer from a frozen command list. Run the live client and translate

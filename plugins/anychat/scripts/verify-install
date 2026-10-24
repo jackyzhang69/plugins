@@ -7,7 +7,6 @@ os="$(uname -s)"
 arch="$(uname -m)"
 case "$os:$arch" in
   Darwin:arm64) plat=darwin-arm64; name=anychat ;;
-  Linux:x86_64) plat=linux-x64; name=anychat ;;
   MINGW*|MSYS*|CYGWIN*) plat=win32-x64; name=anychat.exe ;;
   *) echo "verify-install: unsupported host $os $arch" >&2; exit 1 ;;
 esac
