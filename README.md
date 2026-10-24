@@ -52,6 +52,15 @@ Cherry Studio, Cursor, Gemini CLI, and other Agent Skills hosts do **not** need 
 
 After attach, load `skills/<plugin_id>/SKILL.md`. Product commands use the repaired CLI under `~/.jackyzhang.app/plugins/<plugin_id>/current`, never whatever binary happens to be first on `PATH`.
 
+## Before first use — platform prerequisites
+
+Read the product's `skills/<plugin_id>/SKILL.md` first. Two platform prerequisites account for most "the plugin is broken" reports:
+
+- **macOS — Full Disk Access belongs to the app that runs your agent, not to the plugin binary.** Products that read data kept by another app (AnyChat reads the chat archive) are credited by macOS to the host app that launched the CLI. System Settings → Privacy & Security → Full Disk Access → add that agent host (DeepSeek Harness, Claude, ChatGPT, Codex, Cherry Studio, …) → quit and reopen it. Granting the bundled `anychat` binary itself does not work.
+- **Windows — one supported source-app build, permission prompt allowed, source app signed in.** Install only the build the product lists, approve the UAC prompt when setup asks, and keep the source app signed in and running during setup. If setup reports a key/permission failure, collect the product's `doctor --json` and send it through Tell Jacky; do not reinstall the source app and do not delete chat data.
+
+Update the product CLI before diagnosing — for AnyChat: `anychat update --json`, then `anychat doctor --json`. Current releases refresh a stale local authorization cache during upgrade.
+
 ## Package shape
 
 Each plugin under `plugins/<plugin_id>/` contains:
