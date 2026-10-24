@@ -4,8 +4,9 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 case "$(uname -s)" in
   Darwin) BIN="${DIR}/bin/darwin-arm64/anycase" ;;
+  Linux) BIN="${DIR}/bin/linux-x64/anycase" ;;
   MINGW*|MSYS*|CYGWIN*) BIN="${DIR}/bin/win32-x64/anycase.exe" ;;
-  *) echo "verify-install: unsupported host; AnyCase supports macOS arm64 and Windows x64" >&2; exit 1 ;;
+  *) echo "verify-install: unsupported host; AnyCase supports macOS, Windows, and Linux" >&2; exit 1 ;;
 esac
 test -x "$BIN" || { echo "verify-install: executable not found for this host" >&2; exit 1; }
 

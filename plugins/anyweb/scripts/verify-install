@@ -3,6 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 case "$(uname -s):$(uname -m)" in
   Darwin:arm64) binary="$ROOT/bin/darwin-arm64/anyweb" ;;
+  Linux:x86_64) binary="$ROOT/bin/linux-x64/anyweb" ;;
   MINGW*:*|MSYS*:*|CYGWIN*:*) binary="$ROOT/bin/win32-x64/anyweb.exe" ;;
   *) echo "verify-install: unsupported host" >&2; exit 1 ;;
 esac
@@ -11,6 +12,7 @@ test_home="${JACKYZHANG_APP_HOME:-$(mktemp -d "${TMPDIR:-/tmp}/anyweb-install.XX
 repair_raw="$("$binary" doctor --repair-install --json)"
 case "$(uname -s):$(uname -m)" in
   Darwin:arm64) installed="$test_home/plugins/anyweb/current/bin/darwin-arm64/anyweb" ;;
+  Linux:x86_64) installed="$test_home/plugins/anyweb/current/bin/linux-x64/anyweb" ;;
   MINGW*:*|MSYS*:*|CYGWIN*:*) installed="$test_home/plugins/anyweb/current/bin/win32-x64/anyweb.exe" ;;
 esac
 test -f "$installed"; test ! -L "$installed"

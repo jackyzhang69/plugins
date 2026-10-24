@@ -8,6 +8,7 @@ arch="$(uname -m)"
 case "$os:$arch" in
   Darwin:arm64) plat=darwin-arm64; name=anydoc ;;
   Darwin:x86_64) plat=darwin-x64; name=anydoc ;;
+  Linux:x86_64) plat=linux-x64; name=anydoc ;;
   MINGW*|MSYS*|CYGWIN*) plat=win32-x64; name=anydoc.exe ;;
   *) echo "verify-install: unsupported host $os $arch" >&2; exit 1 ;;
 esac
