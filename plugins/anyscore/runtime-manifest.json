@@ -1,6 +1,6 @@
 {
   "version": "0.2.2",
-  "source_sha": "e50a7ea45f6b12c9c6e3ec2f7f952bc5f7195830",
+  "source_sha": "12a14cfeb1e9381665b1bc8a7862f0269fe015aa",
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anyscore",
     "linux": "${HOME}/.jackyzhang.app/anyscore",
@@ -19,8 +19,8 @@
     },
     "linux-x64": {
       "entrypoint": "bin/linux-x64/anyscore",
-      "sha256": "2e541c0ef2ce978819164be8b9fcd17a7c0693ad4c6cc222c494a10dbd873ef7",
-      "size": 4253064
+      "sha256": "3aeb675f68b0a5aef2ee76d9a6c76bb85897fb0749011eb33cba09c7c58e7dab",
+      "size": 4312472
     }
   },
   "release_tag": "anyscore-v0.2.2"
