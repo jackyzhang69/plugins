@@ -25,6 +25,9 @@
             "sha256": "5c17a5057f89c4099f5124927bd6e67dd053a97676caecb51b23725c3e5be214"
           }
         ]
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/formbro"
       }
     },
     "release": {
@@ -44,9 +47,9 @@
     "win32": "${LOCALAPPDATA}/formbro-cli/Cache"
   },
   "configHome": {
-    "darwin": "${HOME}/.formbro",
-    "linux": "${HOME}/.formbro",
-    "win32": "${USERPROFILE}/.formbro"
+    "darwin": "${HOME}/.jackyzhang.app/formbro",
+    "linux": "${HOME}/.jackyzhang.app/formbro",
+    "win32": "${USERPROFILE}/.jackyzhang.app/formbro"
   },
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",

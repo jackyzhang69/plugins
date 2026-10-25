@@ -10,6 +10,10 @@
       "win32-x64": {
         "entrypoint": "bin/win32-x64/easybooks.exe",
         "sha256": "8286512b2407e3731d87720d143bfcd1d2da9d9105c3c2fde2f61885db0513a1"
+      },
+      "linux-x64": {
+        "entrypoint": "bin/linux-x64/easybooks",
+        "sha256": "731652bf67ee7061802beb65d471ddf4f16d3e603d4c3ec3137ab58b8ed57d53"
       }
     },
     "resolutionOrder": [
