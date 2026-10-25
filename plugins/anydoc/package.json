@@ -1,0 +1,38 @@
+{
+  "name": "dsh-anydoc",
+  "version": "0.3.14",
+  "description": "anydoc for DeepSeek Harness: Inspect a messy local document folder and assemble an approved upload pack via the bundled AnyDoc CLI. Offline packing. Optional Portal token for Tell Jacky. macOS Apple Silicon and Windows x64.",
+  "license": "Proprietary",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackyzhang69/plugins.git",
+    "directory": "plugins/anydoc"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "anydoc"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "skills",
+    "bin",
+    "runtime-manifest.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@deepseek-ai/dsh-skill-filesystem": "^0.1.1-rc.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

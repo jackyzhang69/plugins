@@ -1,0 +1,38 @@
+{
+  "name": "dsh-anymail",
+  "version": "0.1.12",
+  "description": "anymail for DeepSeek Harness: Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets.",
+  "license": "Proprietary",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackyzhang69/plugins.git",
+    "directory": "plugins/anymail"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "anymail"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "skills",
+    "bin",
+    "runtime-manifest.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@deepseek-ai/dsh-skill-filesystem": "^0.1.1-rc.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# DeepSeek Harness bundle layer. Installed with:
+#   dsh plugin --profile web add "github:jackyzhang69/plugins#formbro-v1.9.4&path:plugins/formbro"
+# The row mounts index.js, which registers this package's skills/ directory as
+# an isolated skill provider so the host agent sees the same formbro contract
+# as the Claude and Codex plugin hosts.
+- insert:
+    - id: formbro
+      name: dsh-formbro
