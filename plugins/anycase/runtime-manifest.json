@@ -16,6 +16,11 @@
       "entrypoint": "bin/win32-x64/anycase.exe",
       "sha256": "38e95c6c6b233a7e526c3bac308d9df6a5de019881ef5e654e50cec0d06d20b0",
       "size": 6985728
+    },
+    "linux-x64": {
+      "entrypoint": "bin/linux-x64/anycase",
+      "sha256": "9723841580c2e76359e7bfb728d797325f24ff4afa8e5277f377e8cd5e04d5ab",
+      "size": 7340360
     }
   },
   "release_tag": "anycase-v1.1.22"
