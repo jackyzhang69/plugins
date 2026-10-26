@@ -1,8 +1,8 @@
 {
   "name": "anychat",
-  "version": "0.1.100",
+  "version": "0.1.103",
   "min_supported_version": "0.1.0",
-  "description": "Search and export your own local chat archive (friends, groups, attachments) via the AnyChat CLI. Free Portal token. Content stays on your machine.",
+  "description": "Search and export your own local chat archive (friends, groups, attachments) via the AnyChat CLI. Free Portal token. Your archive stays on your machine; a cloud assistant only receives the bounded snapshot you asked for, and AnyChat keeps no copy.",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "AnyChat",
     "shortDescription": "Query your own local chat archive from the agent.",
-    "longDescription": "Use the bundled AnyChat CLI to search friends and groups, export transcripts, and download attachments from your personal local chat archive on macOS (Apple Silicon) or Windows x64. Setup is a one-time wizard; only a free Portal token is required. Chat content never leaves your machine except optional redacted Tell Jacky feedback you explicitly approve. On bare 'anychat' / 'what can you do' questions, load the anychat router skill and introduce the product from that contract.",
+    "longDescription": "Use the bundled AnyChat CLI to search friends and groups, export transcripts, and download attachments from your personal local chat archive on macOS (Apple Silicon) or Windows x64. Setup is a one-time wizard; only a free Portal token is required. Your archive stays on your machine. A cloud assistant receives only the bounded snapshot you asked for, and AnyChat keeps no copy; optional redacted Tell Jacky feedback still needs your approval. On bare 'anychat' / 'what can you do' questions, load the anychat router skill and introduce the product from that contract.",
     "developerName": "Jacky Zhang",
     "category": "Productivity",
     "capabilities": [

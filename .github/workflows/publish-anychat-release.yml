@@ -65,7 +65,7 @@ jobs:
           if not re.fullmatch(r"[0-9a-f]{40}", str(m.get("source_sha", ""))):
               raise SystemExit("AnyChat manifest source_sha is not an exact source commit")
           PY
-      - name: Publish exactly four signed assets
+      - name: Publish the signed and linux assets
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
@@ -78,16 +78,28 @@ jobs:
             "$plugin/bin/win32-x64/anychat.exe"
             "$plugin/bin/win32-x64/anychat-access.exe"
           )
+          # The linux binaries share the darwin file names inside the package.
+          # Release assets are named from the uploaded file, and gh treats
+          # `file#value` as a label, so the assets are staged under their
+          # public names instead.
+          linux_stage="$(mktemp -d)"
+          cp "$plugin/bin/linux-x64/anychat" "$linux_stage/anychat-linux-x64"
+          cp "$plugin/bin/linux-x64/anychat-access" "$linux_stage/anychat-access-linux-x64"
+          assets+=(
+            "$linux_stage/anychat-linux-x64"
+            "$linux_stage/anychat-access-linux-x64"
+          )
           state="draft"
           release_json="$(mktemp)"
           download_dir="$(mktemp -d)"
-          trap 'rm -rf "$release_json" "$download_dir"' EXIT
+          trap 'rm -rf "$release_json" "$download_dir" "$linux_stage"' EXIT
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName,assets > "$release_json"
             state="$(python3 - "$release_json" "$RELEASE_TAG" <<'PY'
           import json, sys
           release = json.load(open(sys.argv[1]))
-          expected = {"anychat", "anychat-access", "anychat.exe", "anychat-access.exe"}
+          expected = {"anychat", "anychat-access", "anychat.exe", "anychat-access.exe",
+                      "anychat-linux-x64", "anychat-access-linux-x64"}
           assets = release.get("assets", [])
           actual = {a.get("name") for a in assets}
           if len(actual) != len(assets) or not actual <= expected:
@@ -113,7 +125,9 @@ jobs:
           if [ "$state" = draft ]; then
             missing=()
             for asset in "${assets[@]}"; do
-              name="$(basename "$asset")"
+              src="${asset%%#*}"
+              name="${asset##*#}"
+              [ "$name" = "$asset" ] && name="$(basename "$src")"
               if [ -s "$release_json" ] && python3 - "$release_json" "$name" <<'PY'
           import json, sys
           raise SystemExit(0 if sys.argv[2] in {a.get("name") for a in json.load(open(sys.argv[1])).get("assets", [])} else 1)
@@ -121,7 +135,7 @@ jobs:
               then
                 gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern "$name" --dir "$download_dir"
                 actual="$(shasum -a 256 "$download_dir/$name" | awk '{print $1}')"
-                expected="$(shasum -a 256 "$asset" | awk '{print $1}')"
+                expected="$(shasum -a 256 "$src" | awk '{print $1}')"
                 test "$actual" = "$expected" || { echo "draft asset hash mismatch: $name" >&2; exit 1; }
               else
                 missing+=("$asset")
