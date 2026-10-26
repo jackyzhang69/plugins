@@ -36,7 +36,9 @@ when_to_use: |-
   "report this bug / file a bug report", "feature request for AnyChat",
   "note this as a tip", "connect with Jacky", "join code from Jacky",
   "request live support", "iMessage", "Telegram", "other local chats",
-  "evidence pack", "proof of what was said".
+  "evidence pack", "proof of what was said",
+  "cloud assistant", "use my chats in a cloud agent",
+  "聊到 Muse / 云端助手", "在云端助手里查聊天".
   Bare "@anychat" / "what can anychat do" / "how do I use anychat":
   if not logged in, follow references/connect.md; otherwise answer from live CLI.
 ---
@@ -46,8 +48,10 @@ when_to_use: |-
 Load this on plugin start and whenever the user asks anything AnyChat-related.
 
 AnyChat is a **local chat archive** helper: the user searches and exports **their own**
-chat history on this computer. Content stays on the machine. Portal login, explicitly connected content-free support status, and
-optional redacted Tell Jacky feedback may leave the device.
+chat history on this computer. The archive stays on this computer; a cloud
+assistant receives only the bounded snapshot the user asked for, and AnyChat
+keeps no copy of it. Portal login, explicitly connected content-free support
+status, and optional redacted Tell Jacky feedback may leave the device.
 
 ## Talk to the human
 
@@ -128,6 +132,7 @@ first.
 | identity / same person across apps | [command-router](references/command-router.md) identity list/suggest/link | Confirm the link |
 | iMessage / Telegram / WhatsApp (macOS experimental; Windows unsupported stub) / other local chats | [command-router](references/command-router.md) sources detect/status/connect | Which app when ambiguous |
 | evidence pack / proof of what was said | [command-router](references/command-router.md) evidence create/verify | Output location when needed |
+| running in a cloud assistant that cannot execute here / 在云端助手（如 Muse）里查聊天 | [cloud](references/cloud.md): `stage --days <n> --json`, upload `files[]`, answer with window + coverage stated | One consent sentence before the first upload |
 
 Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 [query](references/query.md), [media](references/media.md),
@@ -179,7 +184,7 @@ Export `ANYCHAT_BIN` once per session. On Windows use `anychat.exe`.
 |------|--------|
 | Unlock / query / export / media copy | **Local CLI** (user machine) |
 | Login entitlement / Tell Jacky submit / live connection with Jacky's assistant | Portal API host `account.jackyzhang.app` — machine HTTPS only. Never open this host in a browser as a login page. |
-| Chat message bodies | **Never uploaded** |
+| Chat message bodies | **Local by default.** In a cloud assistant, only the staged snapshot is uploaded ([cloud](references/cloud.md)); no archive db, key or token file ever is, and AnyChat keeps no copy |
 
 ## After success (stickiness, light touch)
 

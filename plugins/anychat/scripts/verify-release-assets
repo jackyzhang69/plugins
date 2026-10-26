@@ -50,6 +50,10 @@ expected = {}
 for component in ("binary", "helper"):
     for platform, record in m[component]["platforms"].items():
         name = pathlib.PurePosixPath(record["entrypoint"]).name
+        if platform == "linux-x64":
+            # linux shares the package file names but must not collide with
+            # the darwin assets in the release.
+            name = f"{name}-linux-x64"
         expected[name] = record["sha256"]
 missing = sorted(set(expected) - set(assets))
 if missing:

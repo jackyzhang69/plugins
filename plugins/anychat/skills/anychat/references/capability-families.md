@@ -18,6 +18,11 @@ phrases: export messages with X; save group transcript; export that PDF
 playbook: export.md
 commands: export
 
+## cloud
+phrases: 在云端助手里查聊天; 聊到 Muse / 云端助手; cloud assistant; use my chats in a cloud agent
+playbook: cloud.md
+commands: stage
+
 ## media
 phrases: download images from group Y; list voice messages; download voice messages; transcribe this voice
 playbook: media.md

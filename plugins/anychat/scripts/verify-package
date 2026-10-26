@@ -6,7 +6,7 @@
 # NEVER writes the manifest, sidecars, or binaries. It is idempotent: running it
 # twice cannot change anything on disk.
 #
-# Allowed platforms (hard allowlist): darwin-arm64, win32-x64 only. Any other
+# Allowed platforms (hard allowlist): darwin-arm64, win32-x64, linux-x64. Any other
 # platform key, or a missing key, is a failure.
 set -euo pipefail
 
@@ -63,7 +63,7 @@ errors = []
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
-ALLOWED = ["darwin-arm64", "win32-x64"]
+ALLOWED = ["darwin-arm64", "linux-x64", "win32-x64"]
 
 # 1. Manifest schema version.
 if m.get("version") != 4:
@@ -153,8 +153,10 @@ for comp in ("binary", "helper"):
         expected_rel = {
             ("binary", "darwin-arm64"): "bin/darwin-arm64/anychat",
             ("binary", "win32-x64"): "bin/win32-x64/anychat.exe",
+            ("binary", "linux-x64"): "bin/linux-x64/anychat",
             ("helper", "darwin-arm64"): "bin/darwin-arm64/anychat-access",
             ("helper", "win32-x64"): "bin/win32-x64/anychat-access.exe",
+            ("helper", "linux-x64"): "bin/linux-x64/anychat-access",
         }[(comp, plat)]
         if rel != expected_rel:
             errors.append(f"{comp}.{plat}: entrypoint {rel!r} != {expected_rel!r}")

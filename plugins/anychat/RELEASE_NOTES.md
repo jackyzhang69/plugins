@@ -1,3 +1,4 @@
-# AnyChat 0.1.100
+# AnyChat 0.1.102
 
-Setup guidance now tells you exactly what to fix first. On macOS, Full Disk Access must be granted to the app that runs your assistant (DeepSeek Harness, Claude, ChatGPT, Codex, Cherry Studio, and similar) — not to AnyChat itself; macOS attributes the archive read to that host app. On Windows, use one supported chat-app build, allow the permission prompt during setup, and keep the chat app signed in. Failure codes now map to a first action, so a stuck setup stops asking you to repeat the same retry or reinstall the chat app.
+- Linux (linux-x64) ships with the same release: the signed macOS and Windows binaries plus an unsigned linux binary, all listed in the runtime manifest.
+- Cloud assistants (Muse and equivalents) can query the archive through a bounded, sanitized snapshot: text bodies only, no attachment payloads, no database or key files, nothing kept on our side.
