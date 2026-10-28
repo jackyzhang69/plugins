@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+# Read-only verification for one staged AnyWrite package.
+set -euo pipefail
+ROOT="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
+
+python3 - "$ROOT" <<'PY'
+import hashlib
+import json
+import pathlib
+import platform
+import re
+import struct
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1]).resolve()
+expected_files = {
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "README.md",
+    "runtime-manifest.json",
+    "package.json",
+    "cordis.patch.yml",
+    "index.js",
+    "skills/anywrite/SKILL.md",
+    "skills/anywrite/references/connect.md",
+    "skills/anywrite/references/get-started.md",
+    "skills/anywrite/references/models.md",
+    "skills/anywrite/references/teach.md",
+    "skills/anywrite/references/triggers.md",
+    "skills/anywrite/references/write.md",
+    "scripts/verify-package",
+    "scripts/verify-install",
+    "scripts/verify-release-assets",
+}
+# A staged package carries binaries and checksum sidecars; the source tree does not.
+staged = (root / "bin").exists()
+if staged:
+    expected_files |= {
+        "bin/darwin-arm64/anywrite",
+        "bin/darwin-arm64/anywrite.sha256",
+        "bin/win32-x64/anywrite.exe",
+        "bin/win32-x64/anywrite.exe.sha256",
+        "bin/linux-x64/anywrite",
+        "bin/linux-x64/anywrite.sha256",
+    }
+errors = []
+actual_files = set()
+for path in root.rglob("*"):
+    relative = path.relative_to(root).as_posix()
+    if path.is_symlink():
+        errors.append(f"symlink is forbidden: {relative}")
+    elif path.is_file():
+        actual_files.add(relative)
+    elif not path.is_dir():
+        errors.append(f"special file is forbidden: {relative}")
+if actual_files != expected_files:
+    errors.append(f"package allowlist mismatch: extra={sorted(actual_files - expected_files)!r} missing={sorted(expected_files - actual_files)!r}")
+
+try:
+    manifest = json.loads((root / "runtime-manifest.json").read_text(encoding="utf-8"))
+except Exception as exc:
+    manifest = {}
+    errors.append(f"invalid runtime-manifest.json: {exc}")
+version = manifest.get("version")
+if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version):
+    errors.append("runtime manifest version must be semver")
+source_sha = str(manifest.get("source_sha", ""))
+if not re.fullmatch(r"[0-9a-f]{40}", source_sha):
+    errors.append("runtime manifest source_sha must be one exact git commit")
+elif staged and set(source_sha) == {"0"}:
+    errors.append("a staged package must carry the real source_sha, not the source-tree placeholder")
+if manifest.get("configHome") != {
+    "darwin": "${HOME}/.jackyzhang.app/anywrite",
+    "win32": "${USERPROFILE}/.jackyzhang.app/anywrite",
+}:
+    errors.append("runtime manifest configHome mismatch")
+
+expected_platforms = {
+    "darwin-arm64": "bin/darwin-arm64/anywrite",
+    "win32-x64": "bin/win32-x64/anywrite.exe",
+    "linux-x64": "bin/linux-x64/anywrite",
+}
+platforms = manifest.get("platforms", {})
+if set(platforms) != set(expected_platforms):
+    errors.append("runtime manifest must contain exactly darwin-arm64, win32-x64 and linux-x64")
+for name, relative in expected_platforms.items():
+    entry = platforms.get(name, {})
+    path = root / relative
+    if entry.get("entrypoint") != relative:
+        errors.append(f"{name} entrypoint mismatch")
+        continue
+    if path.is_file():
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if entry.get("sha256") != digest:
+            errors.append(f"{name} checksum mismatch")
+        if entry.get("size") != path.stat().st_size:
+            errors.append(f"{name} size mismatch")
+        sidecar = path.with_name(path.name + ".sha256")
+        if not sidecar.is_file() or sidecar.read_text(encoding="ascii").strip() != digest:
+            errors.append(f"{name} sidecar mismatch")
+
+for relative in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
+    try:
+        descriptor = json.loads((root / relative).read_text(encoding="utf-8"))
+    except Exception as exc:
+        errors.append(f"invalid {relative}: {exc}")
+        continue
+    if descriptor.get("name") != "anywrite" or descriptor.get("version") != version:
+        errors.append(f"{relative} identity/version mismatch")
+
+try:
+    dsh = json.loads((root / "package.json").read_text(encoding="utf-8"))
+except Exception as exc:
+    dsh = {}
+    errors.append(f"invalid package.json: {exc}")
+if dsh.get("name") != "dsh-anywrite" or dsh.get("version") != version:
+    errors.append("package.json identity/version mismatch")
+if (dsh.get("dsh") or {}).get("bundle", {}).get("patch") != "./cordis.patch.yml":
+    errors.append("package.json.dsh.bundle.patch must be './cordis.patch.yml'")
+
+windows = root / expected_platforms["win32-x64"]
+if windows.is_file():
+    data = windows.read_bytes()
+    if len(data) < 0x40 or data[:2] != b"MZ":
+        errors.append("win32-x64 artifact is not PE")
+    else:
+        pe = struct.unpack_from("<I", data, 0x3C)[0]
+        if data[pe:pe + 4] != b"PE\0\0" or struct.unpack_from("<H", data, pe + 4)[0] != 0x8664:
+            errors.append("win32-x64 artifact is not x64 PE")
+        elif struct.unpack_from("<I", data, pe + 8)[0] != 0:
+            errors.append("win32-x64 PE timestamp must be deterministic")
+
+linux = root / expected_platforms["linux-x64"]
+if linux.is_file():
+    data = linux.read_bytes()
+    if data[:4] != b"\x7fELF" or len(data) < 20 or struct.unpack_from("<H", data, 18)[0] != 0x3E:
+        errors.append("linux-x64 artifact is not x86-64 ELF")
+
+darwin = root / expected_platforms["darwin-arm64"]
+if darwin.is_file():
+    data = darwin.read_bytes()
+    if len(data) < 8 or struct.unpack_from("<I", data)[0] != 0xFEEDFACF:
+        errors.append("darwin-arm64 artifact is not 64-bit Mach-O")
+    elif struct.unpack_from("<I", data, 4)[0] != 0x0100000C:
+        errors.append("darwin-arm64 artifact is not arm64")
+
+forbidden = ["/Users/", "/home/", ".jackyzhang.app", "platform-vault", "docs/plans", "ANYWRITE-FINAL", "accountd", "migration"]
+for path in (root / "skills").rglob("*.md"):
+    text = path.read_text(encoding="utf-8")
+    for needle in forbidden:
+        if needle in text:
+            errors.append(f"skill text must not mention {needle!r}: {path.relative_to(root).as_posix()}")
+skill = (root / "skills/anywrite/SKILL.md")
+if skill.is_file():
+    head = skill.read_text(encoding="utf-8")
+    if not head.startswith("---\nname: anywrite\n") or "\ndescription:" not in head.split("\n---", 1)[0]:
+        errors.append("SKILL.md frontmatter must declare name anywrite and a description")
+
+native = None
+if platform.system() == "Darwin" and platform.machine() == "arm64":
+    native = darwin
+elif platform.system() == "Windows" and platform.machine().lower() in {"amd64", "x86_64"}:
+    native = windows
+if staged and native is not None and native.is_file():
+    reported = subprocess.run([str(native), "--version"], capture_output=True, text=True)
+    if reported.returncode or reported.stdout.strip() != f"anywrite {version}":
+        errors.append(f"native version mismatch: {reported.stdout.strip()!r}")
+    commands = subprocess.run([str(native), "commands", "--json"], capture_output=True, text=True)
+    try:
+        command_manifest = json.loads(commands.stdout)
+    except Exception as exc:
+        errors.append(f"native commands --json is invalid: {exc}")
+    else:
+        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v1":
+            errors.append("native command manifest schema mismatch")
+        if command_manifest.get("bin") != "anywrite" or command_manifest.get("version") != version:
+            errors.append("native command manifest identity/version mismatch")
+
+if errors:
+    for error in errors:
+        print(f"verify-package: {error}", file=sys.stderr)
+    raise SystemExit(1)
+print(f"verify-package: ok anywrite {version}")
+PY

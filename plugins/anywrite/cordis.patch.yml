@@ -1,0 +1,8 @@
+# DeepSeek Harness bundle layer. Installed with:
+#   dsh plugin --profile web add "github:jackyzhang69/plugins#anywrite-vX.Y.Z&path:plugins/anywrite"
+# The row mounts index.js, which registers this package's skills/ directory as
+# an isolated skill provider so the host agent sees the same anywrite contract
+# as the Claude and Codex plugin hosts.
+- insert:
+    - id: anywrite
+      name: dsh-anywrite

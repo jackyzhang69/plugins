@@ -1,0 +1,36 @@
+{
+  "name": "anywrite",
+  "version": "0.1.3",
+  "description": "Private writing methods learned from your finished examples, with confirmed saves and Markdown or text drafting.",
+  "author": {
+    "name": "Jacky Zhang",
+    "url": "https://jackyzhang.app"
+  },
+  "homepage": "https://jackyzhang.app",
+  "license": "Proprietary",
+  "keywords": [
+    "writing",
+    "style",
+    "templates",
+    "private"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AnyWrite",
+    "shortDescription": "Write the way you write, from methods you confirmed.",
+    "longDescription": "Teach the assistant how you write a kind of document from finished examples, confirm and keep the writing method privately, then draft new Markdown or text documents from today's materials through the anywrite skill.",
+    "developerName": "Jacky Zhang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Export"
+    ],
+    "websiteURL": "https://jackyzhang.app",
+    "defaultPrompt": [
+      "Learn how I write this kind of letter from these examples.",
+      "Write a new letter the way I taught you.",
+      "Show the writing methods I have saved."
+    ]
+  }
+}
