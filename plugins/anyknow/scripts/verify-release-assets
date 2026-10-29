@@ -7,7 +7,8 @@ python3 - "$PACKAGE" "$ASSETS" <<'PY'
 import hashlib, json, pathlib, sys
 package, assets = map(pathlib.Path, sys.argv[1:])
 manifest = json.loads((package / "runtime-manifest.json").read_text(encoding="utf-8"))
-names = {"darwin-arm64": "anyknow-darwin-arm64", "win32-x64": "anyknow-win32-x64.exe", "linux-x64": "anyknow-linux-x64"}
+names = {"darwin-arm64": "anyknow-darwin-arm64", "win32-x64": "anyknow-win32-x64.exe",
+         "linux-x64": "anyknow-linux-x64"}
 for platform, name in names.items():
     path = assets / name
     if not path.is_file():

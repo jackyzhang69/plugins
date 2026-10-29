@@ -2,7 +2,7 @@
 
 Private personal knowledge with confirmed changes, search, browsing, and portable export.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/anyknow/SKILL.md`](skills/anyknow/SKILL.md) first. Connect and product verbs are defined there and under `skills/anyknow/references/`.
 

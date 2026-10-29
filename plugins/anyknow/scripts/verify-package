@@ -19,6 +19,9 @@ expected_files = {
     ".codex-plugin/plugin.json",
     "README.md",
     "runtime-manifest.json",
+    "package.json",
+    "cordis.patch.yml",
+    "index.js",
     "skills/anyknow/SKILL.md",
     "skills/anyknow/references/connect.md",
     "skills/anyknow/references/get-started.md",
@@ -36,6 +39,8 @@ expected_files = {
     "bin/darwin-arm64/anyknow.sha256",
     "bin/win32-x64/anyknow.exe",
     "bin/win32-x64/anyknow.exe.sha256",
+    "bin/linux-x64/anyknow",
+    "bin/linux-x64/anyknow.sha256",
 }
 errors = []
 actual_files = set()
@@ -66,13 +71,24 @@ if manifest.get("configHome") != {
 }:
     errors.append("runtime manifest configHome mismatch")
 
+try:
+    dsh = json.loads((root / "package.json").read_text(encoding="utf-8"))
+except Exception as exc:
+    dsh = {}
+    errors.append(f"invalid package.json: {exc}")
+if dsh.get("name") != "dsh-anyknow" or dsh.get("version") != version:
+    errors.append("package.json identity/version mismatch")
+if (dsh.get("dsh") or {}).get("bundle", {}).get("patch") != "./cordis.patch.yml":
+    errors.append("package.json.dsh.bundle.patch must be './cordis.patch.yml'")
+
 expected_platforms = {
     "darwin-arm64": "bin/darwin-arm64/anyknow",
     "win32-x64": "bin/win32-x64/anyknow.exe",
+    "linux-x64": "bin/linux-x64/anyknow",
 }
 platforms = manifest.get("platforms", {})
 if set(platforms) != set(expected_platforms):
-    errors.append("runtime manifest must contain exactly darwin-arm64 and win32-x64")
+    errors.append("runtime manifest must contain exactly darwin-arm64, win32-x64 and linux-x64")
 for name, relative in expected_platforms.items():
     entry = platforms.get(name, {})
     path = root / relative
@@ -117,6 +133,12 @@ if darwin.is_file():
         errors.append("darwin-arm64 artifact is not 64-bit Mach-O")
     elif struct.unpack_from("<I", data, 4)[0] != 0x0100000C:
         errors.append("darwin-arm64 artifact is not arm64")
+
+linux = root / expected_platforms["linux-x64"]
+if linux.is_file():
+    data = linux.read_bytes()
+    if data[:4] != b"\x7fELF" or len(data) < 20 or struct.unpack_from("<H", data, 18)[0] != 0x3E:
+        errors.append("linux-x64 artifact is not x86-64 ELF")
 
 native = None
 if platform.system() == "Darwin" and platform.machine() == "arm64":

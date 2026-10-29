@@ -1,6 +1,6 @@
 {
   "name": "dsh-anyknow",
-  "version": "0.1.17",
+  "version": "0.1.20",
   "description": "anyknow for DeepSeek Harness: Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing.",
   "license": "Proprietary",
   "author": {

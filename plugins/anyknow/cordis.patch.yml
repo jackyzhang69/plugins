@@ -1,5 +1,5 @@
 # DeepSeek Harness bundle layer. Installed with:
-#   dsh plugin --profile web add "github:jackyzhang69/plugins#anyknow-v0.1.17&path:plugins/anyknow"
+#   dsh plugin --profile web add "github:jackyzhang69/plugins#anyknow-vX.Y.Z&path:plugins/anyknow"
 # The row mounts index.js, which registers this package's skills/ directory as
 # an isolated skill provider so the host agent sees the same anyknow contract
 # as the Claude and Codex plugin hosts.
