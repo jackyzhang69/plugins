@@ -1,6 +1,6 @@
 {
   "name": "dsh-anywrite",
-  "version": "0.1.5",
+  "version": "0.1.8",
   "description": "AnyWrite for DeepSeek Harness: teach the assistant how you write a kind of document, keep the writing methods you confirmed, and write new documents in your style via the bundled AnyWrite CLI.",
   "license": "MIT",
   "author": {

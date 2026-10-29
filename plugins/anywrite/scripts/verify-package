@@ -27,6 +27,7 @@ expected_files = {
     "skills/anywrite/references/get-started.md",
     "skills/anywrite/references/models.md",
     "skills/anywrite/references/teach.md",
+    "skills/anywrite/references/tone.md",
     "skills/anywrite/references/triggers.md",
     "skills/anywrite/references/write.md",
     "scripts/verify-package",

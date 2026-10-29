@@ -1,14 +1,19 @@
-# AnyWrite
+<!-- generated-by: render_public_plugin_docs.py ; do not edit -->
+# anywrite
 
-Teach the assistant how you write a kind of document, keep the writing methods you confirmed, and write new documents the way you do.
+Version `0.1.8`.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
+Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.
 
-Load [`skills/anywrite/SKILL.md`](skills/anywrite/SKILL.md) first. Flows live under `skills/anywrite/references/`.
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
 
-This package is an **Agent Skills** tree plus a native CLI. Any agent that can attach a skill folder or this full plugin directory can use it; marketplace install is optional convenience.
+Load [`skills/anywrite/SKILL.md`](skills/anywrite/SKILL.md) first. Connect and product verbs are defined there and under `skills/anywrite/references/`.
 
-- Full tree (preferred): this directory, including `bin/` and `runtime-manifest.json`.
-- Skill-only attach: only after the matching CLI is already installed.
+This package is an **Agent Skills** tree plus a native CLI. Any agent that can attach a skill folder or this full plugin directory can use it — marketplace `plugin install` is optional convenience, not a requirement.
 
-Read `runtime-manifest.json` for the exact package version and platform checksums.
+- Full tree (preferred): this directory, including `bin/` and `runtime-manifest.json`, then `bin/<platform>/<cli> doctor --repair-install`.
+- Skill-only attach: only after `~/.jackyzhang.app/plugins/anywrite/current` already holds the matching CLI.
+
+What changed in this version: [`skills/anywrite/references/whats-new.md`](skills/anywrite/references/whats-new.md).
+
+<!-- end generated-by: render_public_plugin_docs.py -->
