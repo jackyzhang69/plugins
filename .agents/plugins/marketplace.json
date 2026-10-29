@@ -114,7 +114,7 @@
       "description": "Teach the assistant how you write a kind of document, keep the writing methods you confirmed, and write new documents in your style.",
       "name": "anywrite",
       "source": "./plugins/anywrite",
-      "version": "0.1.4"
+      "version": "0.1.5"
     }
   ]
 }

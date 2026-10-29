@@ -1,6 +1,6 @@
 {
-  "version": "0.1.4",
-  "source_sha": "2347fc4d1f68740e7e8b76a2edfb54eb8918335e",
+  "version": "0.1.5",
+  "source_sha": "4f03616cb945f684baeba07190f52052b1673bd9",
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anywrite",
     "win32": "${USERPROFILE}/.jackyzhang.app/anywrite"
@@ -8,18 +8,18 @@
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anywrite",
-      "sha256": "3ed35c524ff5c40baf6565074343e9d754a013e9de478675215948ef0461a44c",
+      "sha256": "cc0426c1d73803e1ff77fdc4860aa10ed543d6604122810b75a283ce4414107d",
       "size": 4701472
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anywrite.exe",
-      "sha256": "61be729ec9c803c55a694b5de130fa3ae853bd97c21a729eaffa2f2f448209d9",
-      "size": 5739520
+      "sha256": "bdab452d4976286b9888013726dd416be44c23dd596221e5631354e1426c707d",
+      "size": 5741568
     },
     "linux-x64": {
       "entrypoint": "bin/linux-x64/anywrite",
-      "sha256": "3fd9e90144defc308c2fa399b7c645cdd7f2b2127f0fd817f9e86fbaf1d55f3a",
-      "size": 6045888
+      "sha256": "e497d7f696195d6315d6fac36e1c2005ca4e45029d8f0b956ff22fa52d7df403",
+      "size": 6048448
     }
   }
 }
