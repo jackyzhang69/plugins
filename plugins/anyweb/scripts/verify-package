@@ -4,7 +4,10 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 python3 - "$ROOT" <<'PY'
 import pathlib
 import re
+import struct
 import sys
+
+PLATFORMS = {"darwin-arm64", "win32-x64", "linux-x64"}
 
 root = pathlib.Path(sys.argv[1])
 required = (
@@ -60,6 +63,8 @@ try:
         ):
             raise ValueError(f"private runtime material present: {relative_text}")
         if relative.parts and relative.parts[0] in {"bin", "runtime"}:
+            if len(relative.parts) > 1 and relative.parts[1] not in PLATFORMS:
+                raise ValueError(f"unexpected platform directory: {relative_text}")
             continue
         if relative_text == "scripts/verify-package":
             continue
@@ -71,6 +76,19 @@ try:
                     file=sys.stderr,
                 )
                 raise SystemExit(1)
+    for relative_text in ("bin/linux-x64/anyweb", "runtime/linux-x64/anyweb-runtime"):
+        linux = root / relative_text
+        if not linux.is_file():
+            continue
+        with linux.open("rb") as stream:
+            header = stream.read(20)
+        if (
+            len(header) < 20
+            or header[:4] != b"\x7fELF"
+            or header[4] != 2
+            or struct.unpack_from("<H", header, 18)[0] != 0x3E
+        ):
+            raise ValueError(f"linux-x64 artifact is not x86-64 ELF: {relative_text}")
 except SystemExit:
     raise
 except ValueError as error:

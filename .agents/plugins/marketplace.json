@@ -64,7 +64,7 @@
       "description": "Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.",
       "name": "anyweb",
       "source": "./plugins/anyweb",
-      "version": "0.2.23"
+      "version": "0.2.26"
     },
     {
       "author": {

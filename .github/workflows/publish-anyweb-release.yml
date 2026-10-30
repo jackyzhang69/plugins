@@ -64,8 +64,10 @@ jobs:
           want = {
               "anyweb": m["binary"]["platforms"]["darwin-arm64"],
               "anyweb.exe": m["binary"]["platforms"]["win32-x64"],
+              "anyweb-linux-x64": m["binary"]["platforms"]["linux-x64"],
               "anyweb-runtime": m["runtime"]["platforms"]["darwin-arm64"],
               "anyweb-runtime.exe": m["runtime"]["platforms"]["win32-x64"],
+              "anyweb-runtime-linux-x64": m["runtime"]["platforms"]["linux-x64"],
           }
           names = set(want) | {f"{n}.sha256" for n in want}
           present = {p.name for p in handoff.iterdir()}
@@ -81,7 +83,7 @@ jobs:
                   raise SystemExit(f"handoff payload disagrees with tagged manifest: {name}")
               if (handoff / f"{name}.sha256").read_text() != digest + "\n":
                   raise SystemExit(f"handoff checksum sidecar disagrees: {name}")
-          for name, rel_path in (("anyweb", "bin/darwin-arm64/anyweb"), ("anyweb.exe", "bin/win32-x64/anyweb.exe")):
+          for name, rel_path in (("anyweb", "bin/darwin-arm64/anyweb"), ("anyweb.exe", "bin/win32-x64/anyweb.exe"), ("anyweb-linux-x64", "bin/linux-x64/anyweb")):
               if (plugin / rel_path).read_bytes() != (handoff / name).read_bytes():
                   raise SystemExit(f"tagged launcher differs from handoff: {name}")
           # Freeze the manifest-bound digests now; later checks compare the
@@ -92,7 +94,7 @@ jobs:
               sidecar = (d["sha256"] + "\n").encode()
               expected[f"{name}.sha256"] = {"sha256": hashlib.sha256(sidecar).hexdigest(), "size": len(sidecar)}
           (pathlib.Path(os.environ["RUNNER_TEMP"]) / "anyweb-expected-assets.json").write_text(json.dumps(expected))
-          print('{"ok":true,"assets":8}')
+          print('{"ok":true,"assets":12}')
           PY
       - name: Create, upload, verify, and publish the immutable Release
         env:
@@ -100,7 +102,7 @@ jobs:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
           set -euo pipefail
-          names=(anyweb anyweb.sha256 anyweb.exe anyweb.exe.sha256 anyweb-runtime anyweb-runtime.sha256 anyweb-runtime.exe anyweb-runtime.exe.sha256)
+          names=(anyweb anyweb.sha256 anyweb.exe anyweb.exe.sha256 anyweb-linux-x64 anyweb-linux-x64.sha256 anyweb-runtime anyweb-runtime.sha256 anyweb-runtime.exe anyweb-runtime.exe.sha256 anyweb-runtime-linux-x64 anyweb-runtime-linux-x64.sha256)
           release_json="$RUNNER_TEMP/anyweb-release.json"
           # Bind the tag to the candidate through the ref itself. The Release
           # API must not receive a target commit: with immutable releases it
@@ -122,7 +124,7 @@ jobs:
                 draft_id="$(gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
                   -f tag_name="$RELEASE_TAG" -F draft=true -F prerelease=false \
                   -f name="AnyWeb ${RELEASE_TAG#anyweb-v}" \
-                  -f body="AnyWeb ${RELEASE_TAG#anyweb-v} runtime assets. macOS is signed and notarized; see runtime-manifest.json for the Windows signing state." \
+                  -f body="AnyWeb ${RELEASE_TAG#anyweb-v} runtime assets. macOS is signed and notarized; Linux is checksummed and unsigned; see runtime-manifest.json for the Windows signing state." \
                   --jq .id)" ;;
               *" "*) echo "more than one draft for $RELEASE_TAG: $existing" >&2; exit 1 ;;
               *) draft_id="$existing" ;;
