@@ -37,11 +37,11 @@ rules:
   fail_if: candidate.relevant_experience_months_past_5_years < 24
   missing_or_unverified: 'NEEDS_REVIEW: Relevant cultural or athletic experience cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SE-EXPERIENCE-001
-    source_file: self-employed-eligibility.html
+    evidence_unit_id: se.guide.before
+    source_file: fd296489e0e92413819344ce6a36088be42504756e715ada7b9528c6c9abb61c
     section: Relevant experience
-    verbatim_excerpt: Relevant experience for a self-employed person means at least two years of experience. It must be during
-      the period starting 5 years before the day you apply and ending on the day we make a decision on your application.
+    source_id: irpr_se
+    verbatim_excerpt: "For at least two years in the period beginning five years before the date of application"
 - id: se_intent
   category: pathway
   severity: CRITICAL_REDLINE
@@ -52,10 +52,11 @@ rules:
   fail_if: candidate.intent_and_ability == false
   missing_or_unverified: 'NEEDS_REVIEW: Intention and ability to be self-employed in Canada cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SE-INTENT-002
-    source_file: self-employed-eligibility.html
+    evidence_unit_id: se.guide.before
+    source_file: fd296489e0e92413819344ce6a36088be42504756e715ada7b9528c6c9abb61c
     section: Who can apply
-    verbatim_excerpt: be willing and able to be self-employed in Canada
+    source_id: irpr_se
+    verbatim_excerpt: "must have the experience, intention and ability to"
 - id: se_contribution
   category: pathway
   severity: CRITICAL_REDLINE
@@ -66,10 +67,11 @@ rules:
   fail_if: candidate.significant_contribution == false
   missing_or_unverified: 'NEEDS_REVIEW: Significant contribution to cultural or athletic life cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SE-CONTRIBUTION-003
-    source_file: self-employed.html
+    evidence_unit_id: se.guide.before
+    source_file: fd296489e0e92413819344ce6a36088be42504756e715ada7b9528c6c9abb61c
     section: Program purpose
-    verbatim_excerpt: will make a significant contribution to the cultural or athletic life of Canada
+    source_id: irpr_se
+    verbatim_excerpt: "make a significant contribution to cultural activities or athletics in Canada"
 - id: se_funds
   category: funds
   severity: CRITICAL_REDLINE
@@ -81,10 +83,11 @@ rules:
   fail_if: candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
   missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SE-FUNDS-004
-    source_file: self-employed-eligibility.html
+    evidence_unit_id: se.guide.before
+    source_file: fd296489e0e92413819344ce6a36088be42504756e715ada7b9528c6c9abb61c
     section: Other requirements
-    verbatim_excerpt: You must also show that you have enough money to support yourself and your family after you get to Canada.
+    source_id: irpr_se
+    verbatim_excerpt: "must establish that they have enough money to support themselves and their family members for at least one year after they arrive in Canada"
 - id: se_points
   category: pathway
   severity: CRITICAL_REDLINE
@@ -95,7 +98,8 @@ rules:
   fail_if: candidate.assessed_grid_points < 35
   missing_or_unverified: 'NEEDS_REVIEW: The assessed 100-point total is missing.'
   evidence_anchor:
-    evidence_unit_id: EU-SE-POINTS-005
-    source_file: self-employed-selection-factors.html
+    evidence_unit_id: se.guide.before
+    source_file: fd296489e0e92413819344ce6a36088be42504756e715ada7b9528c6c9abb61c
     section: Selection criteria
-    verbatim_excerpt: Your maximum possible score is 100. The pass mark is currently 35 points, but it may change.
+    source_id: irpr_se
+    verbatim_excerpt: "<p>Use the table below to calculate your total score. The pass mark is <strong>35</strong>. The <strong>maximum</strong> possible <strong>score</strong> for each class is <strong>100</strong>."

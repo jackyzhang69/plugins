@@ -11,6 +11,10 @@ source_edition: "ESDC Temporary Foreign Worker Program Requirements for High-Wag
 source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html"
 decision_scope: "Pre-screen of the seven regulatory rules defined below; PASS is an assessment that program eligibility criteria are met, not an official ESDC LMIA decision."
 
+reference_points_grid:
+  note: "The high-wage stream has no selection points grid: it is a regulatory pre-screen of the seven rules below (ESDC high-wage requirements, July 2026). Scoring belongs to the permanent-residence program the worker applies under, not to the LMIA."
+  source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html"
+
 schema:
   input_type: object
   required_top_level: [assessment_date, employer, job_offer, noul]
@@ -95,11 +99,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employer compliance status, IRCC ineligibility registry standing, or past 2-year revocation history cannot be established."
     interpretation: "Service Canada has no legal authority to process LMIA applications from employers offering sex industry services, banned employers on IRCC registry, employers with unpaid administrative monetary penalties, or employers with an LMIA revoked in the last 2 years."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-008"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "47e6fed7e6539f0812f2dc5490b83e4d905f4c5016dac166d267ded87c6609fb"
       section: "Regulatory authority and ineligibility"
       verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
-
   - id: lmia_high_wage_threshold
     category: compensation
     severity: CRITICAL_REDLINE
@@ -112,10 +115,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Province or offered hourly wage is missing or unverified."
     interpretation: "The offered hourly wage must be at or above the provincial/territorial wage threshold (median wage + 20%). E.g., ON >= $36.92, BC >= $38.40, AB >= $37.50. Wages below route to Low-Wage Stream."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "median_wage_table.html"
+      evidence_unit_id: "wage-thresholds.html.full_page_projection"
+      source_file: "342c5e7cb7b100c3c7cd8abc2cb825569350c8e34c6788d3fc2dcd6d4f19c8a2"
       section: "Hourly wage threshold by province or territory"
-      verbatim_excerpt: "If the offered wage is at or above the provincial or territorial hourly wage threshold, you must apply under the stream for high-wage positions"
+      verbatim_excerpt: "<li><strong>at or above</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high.html\">stream for high-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html\">meet the program requirements</a> of this stream"
 
   - id: lmia_prevailing_wage
     category: compensation
@@ -129,11 +132,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage for occupation and sub-region or offered base wage is missing."
     interpretation: "The offered wage must equal or exceed the prevailing wage for the occupation in the sub-region on Job Bank, as well as the wage paid to current Canadian employees in the same position."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "high_wage_requirements.html"
+      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
+      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
       section: "Wages, working conditions and occupations"
-      verbatim_excerpt: "Wages offered to temporary foreign workers should be similar to wages paid to Canadians and permanent residents hired for the same job"
-
+      verbatim_excerpt: "For the purpose of the TFW Program, you must pay the prevailing wage that is defined as the highest of either:</p>\r\n  <ul>\r\n    <li>the median wage on <a href=\"http://www.jobbank.gc.ca/wage-outlook_search-eng.do?reportOption=wage\">Job Bank</a></li>\r\n    <li>the wage that is within the wage range that you're paying your current employees hired for the same job and work location, and with the same skills and years of experience"
   - id: lmia_recruitment_minimum_duration
     category: recruitment
     severity: CRITICAL_REDLINE
@@ -147,10 +149,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Recruitment advertising dates, duration, or 3-month recency window cannot be verified."
     interpretation: "Recruitment must be conducted for at least 4 consecutive weeks (minimum 28 continuous calendar days) within the 3 months prior to submitting the LMIA application."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "high_wage_requirements.html"
-      section: "Recruitment and advertising"
-      verbatim_excerpt: "Employers must conduct at least 4 consecutive weeks of recruitment within the 3 months prior to submitting an application"
+      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
+      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
+      section: "Recruitment and advertisement"
+      verbatim_excerpt: "is for a minimum of 4 consecutive weeks within the 3 months prior to submitting an LMIA application"
 
   - id: lmia_recruitment_methods_and_diversity
     category: recruitment
@@ -182,10 +184,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Transition plan commitments or documented grounds for statutory exemption are absent."
     interpretation: "A Transition Plan is mandatory for High-Wage positions to recruit, retain, and train Canadians and permanent residents, unless an exemption applies (e.g. project under 120 days or PR-only support)."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-006"
-      source_file: "high_wage_requirements.html"
+      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
+      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
       section: "Transition plan"
-      verbatim_excerpt: "A Transition Plan is a mandatory requirement for high-wage positions"
+      verbatim_excerpt: "A transition plan, valid for the duration of the employment of the temporary foreign worker, is a mandatory requirement to hire temporary foreign workers in high-wage positions."
 
   - id: lmia_genuine_labour_shortage
     category: qualitative

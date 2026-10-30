@@ -60,11 +60,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Job offer NOC code or health occupation qualification evidence is missing or disputed."
     interpretation: "Eligible occupations must be in TEER 0-3 and belong to health professions (NOC category 3) or recognized allied social/therapy codes (41300, 41301, 42201)."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p25:4_2_health_authority_stream"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p25:4_2_health_authority_stream
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "4.2(c)"
-      page: "25-26"
-      verbatim_excerpt: "An occupation identified by the NOC as a health occupation (any NOC that starts with a 3), Social workers (NOC 41300), Therapists in counselling (NOC 41301), Social and community service workers (NOC 42201)"
+      page: "25"
+      verbatim_excerpt: "If you have a regular, indeterminate, full-time job offer in an eligible health occupation\nfrom a public health authority in B.C., you may be eligible for this stream."
 
   - id: ha_professional_licensing
     category: candidate
@@ -78,11 +78,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Professional licensing or registration status with provincial regulatory body is unverified."
     interpretation: "Regulated healthcare professionals must hold or be officially eligible for provincial licensure/registration in British Columbia."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p26:social_workers_noc_41300"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p26:social_workers_noc_41300
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "4.2(d), 4.2(e)"
       page: "26"
-      verbatim_excerpt: "be licensed or be eligible to be licensed to work as a physician, nurse practitioner, or midwife in B.C."
+      verbatim_excerpt: "be licensed or be eligible to be licensed to work as a physician or nurse practitioner in B.C."
 
   - id: ha_hours_fulltime
     category: job_offer
@@ -98,11 +98,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Full-time hours, year-round status, or indeterminate job offer structure cannot be verified."
     interpretation: "Job offer must be full-time (at least 30 hours per week) year-round; direct health authority employees must have an indeterminate offer, while eligible physicians, nurse practitioners, and midwives supported by a health authority may hold eligible contracted terms."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bcpnp:bc_pnp_si_technical_guide:p36:bc_pnp_skills_immigration_application_guide
+      source_file: "BC-PNP-SI-Technical-Guide.pdf"
       section: "3.5"
-      page: "17"
-      verbatim_excerpt: "at least 30 hours per week, year-round"
+      page: "36"
+      verbatim_excerpt: "Full-time employment is as at least an average of 30\nhours per week, year-round."
 
   - id: ha_wage_prevailing
     category: compensation
@@ -118,11 +118,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Wage falls below prevailing rate or statutory minimum wage cannot be verified for assessment_date."
     interpretation: "Compensation must satisfy statutory minimums ($18.25/hr) and meet provincial healthcare collective agreement/market ranges."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p20:3_9_wages
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.9"
       page: "20"
-      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+      verbatim_excerpt: "Your offered wage must be:\n\u2022 Within the wage range posted on WorkBC or the federal Job Bank website for the\noccupation and location"
 
   - id: ha_language_floor
     category: candidate
@@ -145,11 +145,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Language test results missing or validity cannot be confirmed for TEER 2/3 healthcare occupation."
     interpretation: "Mandatory CLB 4 threshold applies to healthcare workers in TEER 2 or 3 positions."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.4"
-      page: "15"
-      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+      page: "17"
+      verbatim_excerpt: "The following table shows the minimum scores required for the designated tests to meet CLB 4"
 
   - id: ha_equity_cap
     category: candidate
@@ -169,7 +169,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.12"
       page: "22"
-      verbatim_excerpt: "10 per cent"
+      verbatim_excerpt: "\u2022 You do not hold or exercise control over an ownership stake of 10 per cent or greater in"
 
   - id: ha_job_offer_genuineness
     category: integrity
@@ -193,4 +193,4 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.11"
       page: "36"
-      verbatim_excerpt: "genuine need for the position"
+      verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."

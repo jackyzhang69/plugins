@@ -634,10 +634,11 @@ rules:
     employer approval, or the Rural Renewal endorsement and designated-community facts
     cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-WORKER-ENDORSEMENT-009
-    source_file: src03.html
+    evidence_unit_id: bc.aaip_worker_process_page.html
+    source_file: 15f447b018bc1718dfe2dfbba13123297cfc51687cab1ee801b0400de3505fa0
     section: Stream-specific endorsement and employer eligibility
-    verbatim_excerpt: Endorsement of Candidate Letter from the Designated Community
+    source_id: aaip_rrs
+    verbatim_excerpt: "To qualify for selection and receive WEOI points, an endorsement letter from a designated community is required at the time of WEOI submission"
 - id: aaip_rrs_settlement_funds
   category: funds
   severity: CRITICAL_REDLINE

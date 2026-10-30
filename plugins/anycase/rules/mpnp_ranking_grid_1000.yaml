@@ -116,10 +116,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Manitoba connection type is missing or is
     not one of the published values.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-SW-CONNECTION-001
-    source_file: src02.html
-    section: Manitoba connection requirement
-    verbatim_excerpt: established connection to Manitoba
+    evidence_unit_id: mb.mpnp_eligibility.swm.eligibility
+    source_id: "mpnp_grid"
+    source_file: "e662c6eb07efaddb9d87282df01c39450beba585e69d7fd6c84c20bd7b074991"
+    section: "Manitoba connection requirement"
+    verbatim_excerpt: "To apply to the Skilled Worker in Manitoba (SWM) Pathway, you must demonstrate <strong>ongoing Manitoba employment</strong>&nbsp;as your established connection to Manitoba."
 - id: mpnp_swm_employment
   category: employment
   severity: CRITICAL_REDLINE
@@ -149,11 +150,11 @@ rules:
     long-term offer, months with the employer, or whether the person graduated outside
     Manitoba cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-SW-EMPLOYMENT-002
-    source_file: src02.html
-    section: Skilled Worker in Manitoba employment
-    verbatim_excerpt: worked full-time for a Manitoba employer at least six consecutive
-      months
+    evidence_unit_id: "mb.mpnp_eligibility.swo.eligibility"
+    source_id: "mpnp_grid"
+    source_file: "599683128ca5f95b6847628e49f41865e36ec2777487014c9c3dbc00e3ee50f9"
+    section: "Skilled Worker in Manitoba employment"
+    verbatim_excerpt: "worked full-time for a Manitoba employer at least six consecutive months"
 - id: mpnp_swo_pathway
   category: pathway
   severity: CRITICAL_REDLINE
@@ -176,10 +177,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker Overseas supporter eligibility
     or strategic recruitment invitation cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-SW-PATHWAY-003
-    source_file: src02.html
-    section: Skilled Worker Overseas pathway
-    verbatim_excerpt: Strategic Recruitment Initiative
+    evidence_unit_id: mb.mpnp_eligibility.swo.eligibility
+    source_id: "mpnp_grid"
+    source_file: "599683128ca5f95b6847628e49f41865e36ec2777487014c9c3dbc00e3ee50f9"
+    section: "Skilled Worker Overseas pathway"
+    verbatim_excerpt: "an Invitation to Apply received directly from the MPNP as part of a Strategic Recruitment Initiative"
 - id: mpnp_language
   category: language
   severity: CRITICAL_REDLINE
@@ -205,10 +207,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, TEER, or the TEER 0-3
     occupational language flag cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-SW-LANGUAGE-004
-    source_file: src26.html
-    section: Language proficiency
-    verbatim_excerpt: Canadian Language Benchmark (CLB) band scores
+    evidence_unit_id: "bc.mpnp_eoi_page.html"
+    source_id: "mpnp_grid"
+    source_file: "fe9a37d6344c0366610901de957b6974945a9cbcdf01b45e9fccf467fe6a4a8f"
+    section: "Language proficiency"
+    verbatim_excerpt: "Canadian Language Benchmark (CLB) band scores"
 - id: mpnp_intent
   category: intent
   severity: CRITICAL_REDLINE
@@ -223,7 +226,9 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Manitoba cannot be
     verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-SW-INTENT-005
-    source_file: src34.html
+    evidence_unit_id: mb.mpnp_eligibility.swm.eligibility
+    source_id: mpnp_grid
+    source_file: e662c6eb07efaddb9d87282df01c39450beba585e69d7fd6c84c20bd7b074991
     section: Intention to reside in Manitoba
-    verbatim_excerpt: reside in Manitoba
+    verbatim_excerpt: You must demonstrate in a Settlement Plan your intention and plan
+      to live, work and establish in Manitoba as a permanent resident.

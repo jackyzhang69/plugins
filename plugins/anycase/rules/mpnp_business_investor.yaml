@@ -56,10 +56,11 @@ rules:
     < 150000) || candidate.jobs_to_create < 1)
   missing_or_unverified: 'NEEDS_REVIEW: Entrepreneur pathway facts cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-BIZ-ENTREPRENEUR-001
-    source_file: src49.html
+    evidence_unit_id: bc.mpnp_ep_apply_page.html
+    source_id: mpnp_biz
+    source_file: 78c14ad80094b450e805c0d1ebaf1dc335f9abb70a4e9143b2195467e203c445
     section: Entrepreneur Pathway eligibility
-    verbatim_excerpt: minimum net worth of $500,000 CAD
+    verbatim_excerpt: "<li><strong>Net worth:</strong> Minimum of $500,000 CAD</li>"
 - id: mpnp_biz_farm
   category: pathway
   severity: CRITICAL_REDLINE

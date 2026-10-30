@@ -45,9 +45,10 @@ rules:
     cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-AAIP-ENT-ENDORSEMENT-001
-    source_file: src04.html
+    source_file: 57394f3a0fb6b073725c440e23df0f2906b5c187792a71070d244f09752f6506
     section: Endorsement requirements
-    verbatim_excerpt: Community Support Letter is issued
+    source_id: aaip_ent
+    verbatim_excerpt: "Your EOI will include the following documents or forms:</p><ul><li>Foreign Graduate Entrepreneur Stream Business Plan</li><li>Pitch Deck</li><li>Letter of Recommendation from a Designated Agency"
 - id: aaip_ent_net_worth
   category: funds
   severity: CRITICAL_REDLINE
@@ -67,10 +68,12 @@ rules:
     && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)
   missing_or_unverified: 'NEEDS_REVIEW: Net worth or settlement funds cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-ENT-NET-WORTH-002
-    source_file: src04.html
+    evidence_unit_id: bc.aaip_farm_document_checklist.p002
+    source_file: 92984646c7a65355da07186c0ce9fc5c9d2808eee8faf84e04bce09f3af81640
+    page: "2"
     section: Net worth and settlement funds
-    verbatim_excerpt: Minimum net worth of $300,000
+    source_id: aaip_ent
+    verbatim_excerpt: "minimum net worth of\n\uf020$500,000 in unencumbered Canadian funds"
 - id: aaip_ent_investment
   category: funds
   severity: CRITICAL_REDLINE
@@ -123,10 +126,11 @@ rules:
     < 0.51)
   missing_or_unverified: 'NEEDS_REVIEW: Equity share cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-ENT-EQUITY-004
-    source_file: src04.html
+    evidence_unit_id: bc.aaip_rural_apply_page.html
+    source_file: 6abcf8b1664505061221c332dab8940ec27406ef267a8ceeca7f46a6c5c7b918
     section: Ownership equity thresholds
-    verbatim_excerpt: Minimum ownership of 51% for a new business
+    source_id: aaip_ent
+    verbatim_excerpt: "at least 51% ownership if establishing a new business or 100% ownership for business succession"
 - id: aaip_ent_language
   category: language
   severity: CRITICAL_REDLINE

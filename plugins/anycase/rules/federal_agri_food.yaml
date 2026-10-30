@@ -3,10 +3,12 @@ catalog_id: federal_agri_food
 jurisdiction: CA
 category: Federal agri-food
 display_name: Agri-Food Pilot
-status: ACTIVE
+status: "LEGACY_CLOSED"
+closure_basis: 'Agri-Food Pilot: "The Agri-Food Pilot ended on May 14, 2025. We’ll continue to process applications we accepted before this date." (unit agri.guide.after_processing_cohort)'
 program_id: FEDERAL_AGRI_FOOD
 stream_id: AGRI_FOOD
-effective_date: '2026-01-01'
+effective_date: '2025-05-14'
+effective_until: '2025-05-14'
 source_edition: Agri-Food Pilot
 source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/agri-food-pilot.html
 decision_scope: Deterministic Agri-Food Pilot prescreen. No points grid. The eligible-occupation list is a supplied flag because
@@ -27,6 +29,21 @@ schema:
 reference_points_grid:
   note: The Agri-Food Pilot has no selection points grid.
 rules:
+- id: afp_program_lifecycle
+  category: stream_policy
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - assessment_date
+  pass_if: "assessment_date <= '2025-05-14'"
+  fail_if: "false"
+  missing_or_unverified: 'NEEDS_REVIEW: the Agri-Food Pilot ended on May 14, 2025 and only applications received before that date are processed; an assessment after this date cannot pass.'
+  interpretation: 'The official programme page records the closure date. Any assessment dated after May 14, 2025 must not be treated as eligible for a new application.'
+  evidence_anchor:
+    evidence_unit_id: agri.guide.after_processing_cohort
+    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
+    section: After you apply
+    verbatim_excerpt: "<p>The Agri-Food Pilot ended on May 14, 2025. We\u2019ll continue to process applications we accepted before this date."
 - id: afp_occupation
   category: occupation
   severity: CRITICAL_REDLINE
@@ -37,10 +54,11 @@ rules:
   fail_if: candidate.eligible_occupation == false
   missing_or_unverified: 'NEEDS_REVIEW: Eligible agri-food occupation cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AFP-OCCUPATION-001
-    source_file: agri-food-pilot-eligible-industries.html
+    evidence_unit_id: agri.guide.eligibility
+    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
     section: Eligible industries and occupations
-    verbatim_excerpt: The job must be in an eligible occupation listed under 1 of the eligible industries
+    source_id: afp
+    verbatim_excerpt: "from an employer whose primary business activities are in an eligible industry (NAICS)</li>\r\n  <li>for an eligible occupation (NOC)</li>\r\n  <li>for an eligible occupation (NOC) and industry (NAICS) combination as listed above"
 - id: afp_experience
   category: experience
   severity: CRITICAL_REDLINE
@@ -51,10 +69,12 @@ rules:
   fail_if: candidate.canadian_nonseasonal_months_past_3_years < 12
   missing_or_unverified: 'NEEDS_REVIEW: Canadian non-seasonal experience cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AFP-EXPERIENCE-002
-    source_file: agri-food-pilot-pr-eligibility.html
+    evidence_unit_id: agri_food_checklist_0116_pdf.p03
+    source_file: 03beafbbc687a98e399a761fda99969636f50bbde6f3013f3aaf5a0de93298ec
+    page: "3"
     section: Eligible work experience
-    verbatim_excerpt: at least 1 year of cumulative, non-seasonal , full-time work in the past 3 years (at least 1,560 hours)
+    source_id: afp
+    verbatim_excerpt: "at least 12 months of cumulative authorized, full-time, non-seasonal work experience in Canada"
 - id: afp_offer
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -66,11 +86,11 @@ rules:
   fail_if: job_offer.nonseasonal == false || job_offer.weekly_hours < 30
   missing_or_unverified: 'NEEDS_REVIEW: Job-offer terms cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AFP-JOB-OFFER-003
-    source_file: agri-food-pilot-pr-eligibility.html
+    evidence_unit_id: agri.guide.eligibility
+    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
     section: Job offer
-    verbatim_excerpt: full time — This means you work at least 30 paid hours per week. non-seasonal — This means you have
-      consistent and regularly scheduled paid employment throughout the year.
+    source_id: afp
+    verbatim_excerpt: "full time and non-seasonal</li>\r\n  <li>indeterminate period (no end date)"
 - id: afp_language
   category: language
   severity: CRITICAL_REDLINE
@@ -81,11 +101,11 @@ rules:
   fail_if: candidate.language_clb_minimum < 4
   missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AFP-LANGUAGE-004
-    source_file: agri-food-pilot-language-testing.html
+    evidence_unit_id: agri.guide.eligibility
+    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
     section: Language testing
-    verbatim_excerpt: If you meet the minimum score of CLB 4 in all 4 abilities, include a copy of the test results with your
-      application.
+    source_id: afp
+    verbatim_excerpt: "at level 4 (or above) across all language abilities"
 - id: afp_education
   category: education
   severity: CRITICAL_REDLINE
@@ -96,9 +116,8 @@ rules:
   fail_if: candidate.meets_canadian_high_school == false
   missing_or_unverified: 'NEEDS_REVIEW: Education cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AFP-EDUCATION-005
-    source_file: agri-food-pilot-pr-eligibility.html
+    evidence_unit_id: agri.guide.eligibility
+    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
     section: Educational requirements
-    verbatim_excerpt: You must have at least a Canadian high school diploma or an educational credential assessment (ECA)
-      report from a designated organization or professional body showing that you completed a foreign credential at the secondary
-      school level or above
+    source_id: afp
+    verbatim_excerpt: "You must have a high-school diploma, post-secondary certificate or degree that is valid and equal to a Canadian"

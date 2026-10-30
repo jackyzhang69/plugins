@@ -62,8 +62,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.verified_net_worth_cad
-  pass_if: candidate.verified_net_worth_cad >= 600000.0
-  fail_if: candidate.verified_net_worth_cad < 600000.0
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Third-party designated net worth verification report is missing.'
   provenance:
     source_file: Guide-NSNP-ENT-English.pdf
@@ -81,8 +81,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - business.total_capital_investment_cad
-  pass_if: business.total_capital_investment_cad >= 150000.0
-  fail_if: business.total_capital_investment_cad < 150000.0
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Verifiable personal capital investment proof is missing.'
   provenance:
     source_file: Guide-NSNP-ENT-English.pdf
@@ -140,10 +140,11 @@ rules:
     page: 9
     verbatim: achieve a minimum CLB 5 in English or French across all four abilities
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-ENT-CANDIDATE-006
-    source_file: Guide-NSNP-ENT-English.pdf
+    evidence_unit_id: ns.nsnp_entrepreneur.p042
+    source_file: ef91e49f2005870423f57ba9b6d7c94e78d17aaa7e28005004b42a1c0e99d503
+    page: "42"
     section: Language Requirements
-    verbatim_excerpt: achieve a minimum CLB 5 in English or French across all four abilities
+    verbatim_excerpt: "The criteria listed under Canadian Language Benchmarks (CLB)\nLevel 5 or higher."
 - id: nsnp_ent_active_operation_and_job_creation
   category: business
   severity: CRITICAL_REDLINE
@@ -152,10 +153,8 @@ rules:
   - candidate.active_management_in_ns_months
   - business.fte_jobs_created_for_canadians_or_prs
   - candidate.has_signed_business_performance_agreement
-  pass_if: candidate.active_management_in_ns_months >= 12 && business.fte_jobs_created_for_canadians_or_prs >= 1 && candidate.has_signed_business_performance_agreement
-    == true
-  fail_if: candidate.active_management_in_ns_months < 12 || business.fte_jobs_created_for_canadians_or_prs < 1 || candidate.has_signed_business_performance_agreement
-    == false
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Audit proof of 12-month active operation or payroll records for 1 FTE job creation
     is unverified.'
   provenance:

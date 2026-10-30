@@ -33,8 +33,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.age_years
-  pass_if: candidate.age_years >= 18
-  fail_if: candidate.age_years < 18
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-TERR-AGE-001
@@ -60,10 +60,12 @@ rules:
     == false
   missing_or_unverified: 'NEEDS_REVIEW: Territorial full-time permanent offer cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-TERR-OFFER-002
-    source_file: ynp-ntnp-worker-baselines.html
+    evidence_unit_id: "bc.nwt_eds_skilled_worker_ee_application_checklist_2025_11.p002"
+    source_id: "territories"
+    source_file: "ae2c8188b275c705cc75cedd4a958336fa8f3f54bd1a85a3b952a51270bcff04"
+    page: "2"
     section: Job Offer Requirements
-    verbatim_excerpt: at least 30 hours a week from a territorial employer
+    verbatim_excerpt: "Be for a permanent full-time position (minimum 30 hours per week, year-round and no end date)"
   provenance:
     source_file: ynp-ntnp-worker-baselines.html
     section: Job Offer Requirements
@@ -85,10 +87,12 @@ rules:
     in [0, 1] && candidate.language_clb_minimum < 6)
   missing_or_unverified: 'NEEDS_REVIEW: Language test or TEER cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-TERR-LANG-003
-    source_file: ynp-ntnp-worker-baselines.html
+    evidence_unit_id: "bc.nwt_eds_skilled_worker_ee_application_checklist_2025_11.p002"
+    source_id: "territories"
+    source_file: "ae2c8188b275c705cc75cedd4a958336fa8f3f54bd1a85a3b952a51270bcff04"
+    page: "2"
     section: Language Requirements
-    verbatim_excerpt: CLB 4 for TEER 4-5, CLB 5 for TEER 2-3, CLB 6 for TEER 0-1
+    verbatim_excerpt: "NOC TEER 0 & 1 achieve a minimum language standard of the Canadian Language Benchmark (CLB) Level 6"
   provenance:
     source_file: ynp-ntnp-worker-baselines.html
     section: Language Requirements
@@ -104,10 +108,12 @@ rules:
   fail_if: candidate.intends_to_reside_in_territory == false
   missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in the territory cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-TERR-INTENT-004
-    source_file: ynp-ntnp-worker-baselines.html
+    evidence_unit_id: "bc.nwt_eds_guidelines_2026.p031"
+    source_id: "territories"
+    source_file: "575203f82403c039fdc6c15f35ddaacea9f374c9aef043f66059c62cc74c123d"
+    page: "31"
     section: Settlement Intent
-    verbatim_excerpt: intend to reside in Yukon or the Northwest Territories
+    verbatim_excerpt: "Whether the Nominee Applicant has the ability and intention to economically\nestablish and settle in the NWT"
   provenance:
     source_file: ynp-ntnp-worker-baselines.html
     section: Settlement Intent

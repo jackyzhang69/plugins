@@ -287,10 +287,11 @@ rules:
     page: 9
     verbatim: demonstrate sufficient settlement funds to successfully establish in Nova Scotia
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-CANDIDATE-001
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
+    evidence_unit_id: ns.nsnp_skilled_worker.p032.you_can_find_the_requirements_regarding_the
+    source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+    page: "32"
     section: Financial Resources
-    verbatim_excerpt: demonstrate sufficient settlement funds to successfully establish in Nova Scotia
+    verbatim_excerpt: "These requirements may be reduced if you are already living in Nova\nScotia or have arranged employment. In all cases, you must provide proof\nof your financial resources in your own name."
 - id: nsnp_sw_job_genuineness_noul
   category: noul
   severity: CRITICAL_REDLINE

@@ -39,7 +39,7 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: assessment_date is required to verify stream lifecycle."
     interpretation: "The International Graduate stream was permanently closed to new registrations on November 26, 2024. Applications after this date are ineligible."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p5:updates_to_this_edition"
+      evidence_unit_id: EU-BC-SI-IG-LIFECYCLE-001
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "Program Updates - Graduate Streams Phased Out"
       page: "5"
@@ -58,11 +58,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Post-secondary educational credential, graduation date, or institution eligibility cannot be confirmed."
     interpretation: "Applicant must have graduated from an eligible Canadian public or authorized private post-secondary institution within the three years prior to applying."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p52:8_2_highest_level_of_education"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p031
+      source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
       section: "8.2, Graduate Criteria"
-      page: "52-54"
-      verbatim_excerpt: "obtained a degree, diploma or certificate from an eligible Canadian post-secondary institution within the past three years"
+      page: "31"
+      verbatim_excerpt: "If you are an international student who has graduated from a university or college in Canada\nwithin the past three years"
 
   - id: ig_job_offer_noc_teer
     category: job_offer
@@ -76,16 +76,16 @@ rules:
       fields:
         - job_offer.noc_2021_code
         - job_offer.noc_teer
-    pass_if: "education.is_bc_stem_post_graduate == true || (job_offer.noc_teer in [0,1,2,3])"
-    fail_if: "education.is_bc_stem_post_graduate == false && !(job_offer.noc_teer in [0,1,2,3])"
+    pass_if: "education.is_bc_stem_post_graduate == true || (job_offer.noc_teer in [1,2,3])"
+    fail_if: "education.is_bc_stem_post_graduate == false && !(job_offer.noc_teer in [1,2,3])"
     missing_or_unverified: "NEEDS_REVIEW: Job offer NOC code or TEER level classification is unverified."
-    interpretation: "Position must be in TEER 0, 1, 2, or 3, unless the applicant qualifies under the direct STEM Post-Graduate stream."
+    interpretation: "Position must be in TEER 1, 2, or 3; management occupations (NOC TEER 0) are not eligible under this stream, unless the applicant qualifies under the direct STEM Post-Graduate stream."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p24:4_1_skilled_worker_stream"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
-      section: "4.1(b), Appendix A"
-      page: "24; 61"
-      verbatim_excerpt: "NOC TEER 0, 1, 2, or 3"
+      evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p032
+      source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
+      section: 4.3(d)
+      page: "32"
+      verbatim_excerpt: "You must be offered a job that is classified as NOC TEER category 1, 2 or 3.\nYour employer must provide you with a signed job offer on official company letterhead. For full\ndetails on the job offer requirements, refer to section 3.5 and section 6.6.\nManagement occupations (NOC TEER 0) are not eligible under this stream."
 
   - id: ig_hours_fulltime
     category: job_offer
@@ -105,11 +105,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Full-time hours (>= 30 hrs/week) or year-round position details cannot be established."
     interpretation: "Job offer must provide full-time hours (at least 30 hours per week) on a year-round basis."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bcpnp:bc_pnp_si_technical_guide:p36:bc_pnp_skills_immigration_application_guide
+      source_file: "BC-PNP-SI-Technical-Guide.pdf"
       section: "3.5"
-      page: "17"
-      verbatim_excerpt: "at least 30 hours per week, year-round"
+      page: "36"
+      verbatim_excerpt: "Full-time employment is as at least an average of 30\nhours per week, year-round."
 
   - id: ig_wage_prevailing
     category: compensation
@@ -129,11 +129,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Wage falls below statutory floor ($18.25/hr) or prevailing market rate is unverified."
     interpretation: "Offered wage must be at or above provincial minimum wage and commensurate with entry-level or prevailing graduate market rates."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p20:3_9_wages"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p20:3_9_wages
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.9"
       page: "20"
-      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+      verbatim_excerpt: "Your offered wage must be:\n\u2022 Within the wage range posted on WorkBC or the federal Job Bank website for the\noccupation and location"
 
   - id: ig_language_floor
     category: candidate
@@ -156,11 +156,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Language test results missing or CLB score below threshold for TEER 2/3 graduate occupation."
     interpretation: "CLB 4 is mandatory for international graduates employed in TEER 2 or 3 occupations."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.4"
-      page: "15"
-      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+      page: "17"
+      verbatim_excerpt: "The following table shows the minimum scores required for the designated tests to meet CLB 4"
 
   - id: ig_employer_qualifications
     category: employer
@@ -180,11 +180,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Sponsoring employer operating history or minimum full-time employee counts cannot be confirmed."
     interpretation: "Employer must have operated in B.C. for at least 12 months with at least 5 local FTEs in Metro Vancouver or 3 outside."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.7, 6.8"
       page: "33"
-      verbatim_excerpt: "operating in British Columbia for at least one year; minimum number of full-time employees"
+      verbatim_excerpt: "Your employer must have operated in B.C. for at least one year."
 
   - id: ig_equity_cap
     category: candidate
@@ -204,7 +204,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.12"
       page: "22"
-      verbatim_excerpt: "10 per cent"
+      verbatim_excerpt: "\u2022 You do not hold or exercise control over an ownership stake of 10 per cent or greater in"
 
   - id: ig_job_offer_genuineness
     category: integrity
@@ -228,4 +228,4 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.11"
       page: "36"
-      verbatim_excerpt: "genuine need for the position"
+      verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."

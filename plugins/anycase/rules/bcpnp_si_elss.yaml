@@ -39,8 +39,8 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: ELSS stream was closed to new registrations. Assessment date is either after the estimated closure window (post 2024-12-31) or the exact closure date cannot be confirmed from current VKS evidence units — officer adjudication required."
     interpretation: "The Entry Level and Semi-Skilled stream was phased out and is absent from the 2026 BC PNP SI Program Guide. The estimated closure date is December 31, 2024. Any registration after this date should be routed to NEEDS_REVIEW for officer review."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p5:updates_to_this_edition"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: EU-BC-SI-ELSS-LIFECYCLE-001
+      source_file: "BC-PNP-Program-Updates.html"
       section: "Updates to This Edition"
       page: "5"
       verbatim_excerpt: "ELSS stream closed to new registrations"
@@ -60,11 +60,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: ELSS occupation classification, industry sector, or regional eligibility cannot be verified."
     interpretation: "Position must be classified under TEER 4 or 5 in an approved industry sector (Tourism/Hospitality, Food Processing, Long-Haul Trucking) or located in the Northeast Development Region."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p23:independent_contractor_or_subcontractor_positions"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p037
+      source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
       section: "ELSS Sector Guide"
-      page: "23"
-      verbatim_excerpt: "Entry Level and Semi-Skilled occupations in tourism/hospitality, food processing, or long-haul trucking"
+      page: "37"
+      verbatim_excerpt: "You may be eligible for this stream if you are currently working in B.C. in an eligible occupation in\nthe tourism/hospitality, or food processing sectors"
 
   - id: elss_nine_months_experience
     category: candidate
@@ -79,11 +79,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Nine consecutive months of full-time employment with the sponsoring B.C. employer cannot be established."
     interpretation: "Candidate must have completed at least nine consecutive months of full-time employment with the sponsoring employer in B.C. prior to submitting an application."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p19:3_8_work_experience"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p038
+      source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
       section: "3.8, ELSS Criteria"
-      page: "19"
-      verbatim_excerpt: "employed full-time with the supporting B.C. employer for at least nine consecutive months"
+      page: "38"
+      verbatim_excerpt: "you must have been working fulltime, year-round, for at least nine (9) consecutive months, in any eligible ELSS occupation\nwith the B.C. employer supporting your BC PNP application"
 
   - id: elss_job_offer_indeterminate
     category: job_offer
@@ -99,11 +99,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Indeterminate tenure, year-round status, or full-time hours cannot be confirmed."
     interpretation: "Job offer must be indeterminate, non-seasonal, and provide at least 30 hours per week."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi"
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p037
+      source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
       section: "3.5"
-      page: "17"
-      verbatim_excerpt: "indeterminate and full-time"
+      page: "37"
+      verbatim_excerpt: "You must be offered an indeterminate, full-time job in an ELSS-eligible occupation"
 
   - id: elss_wage_prevailing
     category: compensation
@@ -123,7 +123,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.9"
       page: "20"
-      verbatim_excerpt: "wage rate that is at or above the provincial minimum wage"
+      verbatim_excerpt: "Within the wage range posted on WorkBC or the federal Job Bank website for the\noccupation and location"
 
   - id: elss_language_floor
     category: candidate
@@ -142,11 +142,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Language proficiency results missing or score below mandatory CLB 4 threshold."
     interpretation: "Mandatory CLB 4 threshold across all 4 competencies is strictly enforced for all ELSS positions."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p55:8_3_language_proficiency"
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.4"
-      page: "15"
-      verbatim_excerpt: "Canadian Language Benchmark (CLB) score of at least 4"
+      page: "17"
+      verbatim_excerpt: "The following table shows the minimum scores required for the designated tests to meet CLB 4"
 
   - id: elss_employer_operational_history
     category: employer
@@ -165,7 +165,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.7"
       page: "33"
-      verbatim_excerpt: "operating in British Columbia for at least one year"
+      verbatim_excerpt: "Your employer must have operated in B.C. for at least one year"
 
   - id: elss_employer_local_staff
     category: employer
@@ -185,7 +185,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.8"
       page: "33"
-      verbatim_excerpt: "minimum number of full-time employees in British Columbia"
+      verbatim_excerpt: "If your employer is located within the Metro Vancouver Regional District, your employer must\nhave at least five indeterminate, full-time employees (or full-time equivalents) who are\nperforming their work from within B.C."
 
   - id: elss_equity_cap
     category: candidate
@@ -205,7 +205,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.12"
       page: "22"
-      verbatim_excerpt: "10 per cent"
+      verbatim_excerpt: "\u2022 You do not hold or exercise control over an ownership stake of 10 per cent or greater in"
 
   - id: elss_job_offer_genuineness
     category: integrity
@@ -229,4 +229,4 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.11"
       page: "36"
-      verbatim_excerpt: "genuine need for the position"
+      verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."

@@ -107,11 +107,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employer standing or 2-year revocation history cannot be established."
     interpretation: "Service Canada has no legal authority to process LMIA applications from ineligible employers."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-008"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
       section: "Regulatory authority and ineligibility"
       verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
-
   - id: lmia_low_wage_threshold_gate
     category: compensation
     severity: CRITICAL_REDLINE
@@ -124,11 +123,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Offered wage or province is missing."
     interpretation: "To qualify for the Low-Wage stream, the offered hourly wage must be strictly below the applicable provincial/territorial median wage threshold (median + 20%). If at or above, application must be routed to High-Wage stream."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "median_wage_table.html"
+      evidence_unit_id: "wage-thresholds.html.full_page_projection"
+      source_file: "342c5e7cb7b100c3c7cd8abc2cb825569350c8e34c6788d3fc2dcd6d4f19c8a2"
       section: "Hourly wage threshold by province or territory"
-      verbatim_excerpt: "below the provincial or territorial hourly wage threshold, you must apply under the stream for low-wage positions"
-
+      verbatim_excerpt: "below</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low.html\">stream for low-wage positions"
   - id: lmia_cma_unemployment_refusal_gate
     category: geographic_labour_market
     severity: CRITICAL_REDLINE
@@ -141,11 +139,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Postal code CMA classification or official quarterly unemployment rate is missing or unverified."
     interpretation: "Under Ministerial Instructions effective Sept 26, 2024, Service Canada refuses to process low-wage LMIA applications in CMAs with an unemployment rate of 6.0% or higher, unless the occupation belongs to an exempt priority sector (Construction NAICS 23, Food Manufacturing NAICS 311, Hospitals NAICS 622, Nursing Homes NAICS 623, Primary Agriculture, eligible Caregiver NOCs, or short-duration positions <= 120 days). Non-CMA locations (Census Agglomerations / rural) are exempt from this refusal."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-002"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
       section: "Low-wage positions in CMAs with an unemployment rate of 6% or higher"
-      verbatim_excerpt: "Certain LMIA applications submitted as of September 26, 2024, won't be processed. Those with: a wage below the provincial or territorial wage threshold, and a work location in a CMA with an unemployment rate of 6% or higher"
-
+      verbatim_excerpt: "Certain LMIA applications submitted as of September 26, 2024, won't be processed. Those with:</p>\r\n<ul>\r\n  <li>a wage below the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage.html\">provincial or territorial wage threshold</a>, and </li>\r\n  <li>a work location in a CMA with an unemployment rate of 6% or higher"
   - id: lmia_workforce_proportion_cap
     category: employer_workforce
     severity: CRITICAL_REDLINE
@@ -159,10 +156,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Total staff count or foreign worker count at work location cannot be established."
     interpretation: "The proportion of low-wage temporary foreign workers at a work location is capped at 10% of the total workforce for standard sectors, and 20% for priority sectors (NAICS 23 construction, NAICS 311 food manufacturing, NAICS 622 hospitals, NAICS 623 nursing homes, and eligible caregiver NOCs)."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-003"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
       section: "Positions above the cap on the proportion of low-wage positions"
-      verbatim_excerpt: "LMIA applications won't be processed if the proportion of low-wage positions is above the 10%... above the 20% for construction, food manufacturing, hospitals, nursing facilities"
+      verbatim_excerpt: "Low-wage positions above the 10% cap</h4>\r\n<p>LMIA applications won’t be processed if the proportion of low-wage positions is above the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html#h2.9\">10% of the total workforce</a> at a given  work location.</p>\r\n<h4>Low-wage positions above the 20% cap</h4>\r\n<p>For the sectors, subsectors and occupations below, LMIA applications won’t be processed if the proportion of low-wage positions is above the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html#h2.9\">20% of the total workforce</a> at a given work location:"
 
   - id: lmia_duration_ceiling
     category: job_offer
@@ -175,10 +172,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employment term or contract duration is missing."
     interpretation: "The maximum duration of employment approved under the low-wage stream is strictly capped at 1 year (365 days)."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-004"
-      source_file: "low_wage_requirements.html"
+      evidence_unit_id: "low-wage-overview.html.full_page_projection"
+      source_file: "3aa68d159d12363e5f4462c4eb6980311c290659a9b018fd890738e7b63d8141"
       section: "Duration of employment"
-      verbatim_excerpt: "The maximum duration of employment for positions approved under the low-wage stream is 1 year"
+      verbatim_excerpt: "The program allows you to hire temporary foreign workers for a maximum of 1 year."
 
   - id: lmia_prevailing_wage
     category: compensation
@@ -192,10 +189,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage on Job Bank for occupation/region or offered wage is missing."
     interpretation: "Even in the Low-Wage stream, the offered hourly wage must equal or exceed the prevailing median wage on Job Bank for the occupation in the specific economic region."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "low_wage_requirements.html"
+      evidence_unit_id: "lmia_employer_eligibility.low_wage_requirements.full_page_projection"
+      source_file: "02b044a0f9d4c3387cf47f5138d8d3f69226e06c13655e85679a76749c56fed4"
       section: "Wages, working conditions and occupations"
-      verbatim_excerpt: "Employers must pay the prevailing wage rate for the occupation"
+      verbatim_excerpt: "For the purpose of the Temporary Foreign Worker Program, you must pay the prevailing wage that is defined as the highest of either:</p>\r\n  <ul>\r\n    <li>the median wage on <a href=\"https://www.jobbank.gc.ca/trend-analysis/search-wages\">Job Bank</a></li>\r\n    <li>the wage that is within the wage range that you're paying your current employees hired for the same job and work location, and with the same skills and years of experience"
 
   - id: lmia_recruitment_minimum_duration
     category: recruitment
@@ -213,12 +210,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Recruitment evidence, Job Bank posting records, or diversity outreach proof is missing."
     interpretation: "Employers must advertise on Job Bank plus 2 additional recruitment methods for at least 8 consecutive weeks (56 days) within the 3 months prior to submission, including targeted outreach to underrepresented domestic groups. High-wage recruitment remains 4 consecutive weeks and must not be used for this stream."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "low_wage_requirements.html"
-      source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html"
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
       section: "Job advertisement duration"
       verbatim_excerpt: "is for a minimum of 8 consecutive weeks within the 3 months prior to submitting an LMIA application"
-
   - id: lmia_employer_obligations_transport_housing_health
     category: employer_obligations
     severity: STATUTORY_GATE
@@ -232,10 +227,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employer commitment for round-trip transportation, affordable housing, or private health insurance is missing or incomplete."
     interpretation: "Under the Low-Wage stream, the employer is legally obligated to pay for round-trip transportation, ensure suitable and affordable housing is available (spending no more than 30% of gross pay on rent), and provide private health insurance until provincial health coverage takes effect."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-004"
-      source_file: "low_wage_requirements.html"
+      evidence_unit_id: "lmia_employer_eligibility.low_wage_requirements.full_page_projection"
+      source_file: "02b044a0f9d4c3387cf47f5138d8d3f69226e06c13655e85679a76749c56fed4"
       section: "Transportation, housing and health care"
-      verbatim_excerpt: "Employers must provide round-trip transportation... ensure affordable housing... provide private health insurance"
+      verbatim_excerpt: "You must pay for the round-trip transportation costs for temporary foreign workers to arrive at their work location in Canada at the beginning of their work period, and to return to their country of residence at the end of their work period.</p>\r\n  <p>If the temporary foreign worker finds a new employer, who was issued a positive LMIA, the new employer is responsible for the transportation costs.</p>\r\n  <p>The transportation costs mustn't be recovered from the temporary foreign workers. </p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.16\">Housing</h2>\r\n  <p>You must provide or ensure that suitable and affordable housing is available for the temporary foreign worker you'll employ. </p>\r\n  <p>For the purpose of the Temporary Foreign Worker Program, Canada Mortgage and Housing Corporation definitions are used to determine the suitability and affordability of housing:</p>\r\n  <ul>\r\n    <li>suitable housing: doesn't require any major repairs, according to residents. Major repairs include those to defective plumbing or electrical wiring, or structural repairs to walls, floors or ceilings</li>\r\n    <li>affordable housing: costs less than 30% of the temporary foreign worker's before-tax income. Shelter costs include, rent (or mortgage payment) and any payments for electricity, fuel, water and other municipal services</li>\r\n  </ul>\r\n  <p>We may ask for proof (for example, newspaper ads) that affordable housing is available.</p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.17\">Health insurance </h2>\r\n  <p>In applicable provinces or territories, you must obtain and pay for private health insurance that covers emergency medical care"
 
   - id: lmia_genuine_labour_shortage
     category: qualitative

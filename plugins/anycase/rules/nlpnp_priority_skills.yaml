@@ -137,10 +137,12 @@ rules:
     || (candidate.stream == 'priority_skills' && candidate.language_clb_minimum < 5)
   missing_or_unverified: 'NEEDS_REVIEW: Priority Skills test age or lowest CLB cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NLPNP-PS-LANG-001
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Language
-    verbatim_excerpt: language test result within 12 months
+    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
+    source_id: "nl_priority_skills_guide_archive_20201230"
+    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
+    section: "Eligibility Criteria"
+    page: "4"
+    verbatim_excerpt: "Must have taken an International English Language Testing System (IELTS) or Canadian English\nLanguage Proficiency Index Program (CELPIP) language test within the last twelve months and scored\nequivalent to Canadian Language Benchmark (CLB) level 5 or higher."
   provenance:
     source_file: nlpnp-priority-skills.html
     section: Priority Skills - Language
@@ -167,10 +169,12 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Memorial priority graduate status or in-demand experience in the
     past 10 years cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NLPNP-PS-PATH-002
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Pathway
-    verbatim_excerpt: 12 months of in-demand experience in the past 10 years
+    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
+    source_id: "nl_priority_skills_guide_archive_20201230"
+    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
+    section: "In-demand Work candidates"
+    page: "4"
+    verbatim_excerpt: "Must have worked in a specialized, highly skilled, high-demand occupation for at least one full year in\nthe last 10 years"
   provenance:
     source_file: nlpnp-priority-skills.html
     section: Priority Skills - Pathway
@@ -192,10 +196,12 @@ rules:
     || (candidate.stream == 'priority_skills' && candidate.age_years < 21)
   missing_or_unverified: 'NEEDS_REVIEW: Priority Skills age cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NLPNP-PS-AGE-003
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Age
-    verbatim_excerpt: at least 21 years of age
+    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
+    source_id: "nl_priority_skills_guide_archive_20201230"
+    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
+    section: "Eligibility Criteria"
+    page: "4"
+    verbatim_excerpt: "\u2022 Be at least 21 years of age;\n\u2022 Intend to live permanently in Newfoundland and Labrador"
   provenance:
     source_file: nlpnp-priority-skills.html
     section: Priority Skills - Age
@@ -218,10 +224,12 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Assessed 114-point Priority Skills total is missing. AnyScore
     computes that number.'
   evidence_anchor:
-    evidence_unit_id: EU-NLPNP-PS-POINTS-004
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Points
-    verbatim_excerpt: threshold 60
+    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p03"
+    source_id: "nl_priority_skills_guide_archive_20201230"
+    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
+    section: "Overview"
+    page: "3"
+    verbatim_excerpt: "minimum score of 60 points will be accepted and their information will be viewable by staff and local"
   provenance:
     source_file: nlpnp-priority-skills.html
     section: Priority Skills - Points
@@ -241,18 +249,8 @@ rules:
     - employer.jva_approved
     - job_offer.hourly_wage
     - job_offer.prevailing_hourly_wage
-  pass_if: candidate.stream == 'priority_skills' || ((candidate.stream == 'skilled_worker' || candidate.stream
-    == 'express_entry') && job_offer.weekly_hours >= 30 && employer.months_operating >= 24 && employer.jva_approved
-    == true && job_offer.hourly_wage >= job_offer.prevailing_hourly_wage && ((candidate.stream == 'skilled_worker'
-    && (job_offer.is_permanent == true || job_offer.duration_months >= 24)) || (candidate.stream == 'express_entry'
-    && job_offer.is_permanent == true && candidate.work_permit_basis in ['lmia', 'lmia_exempt_agreement'])))
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && (job_offer.weekly_hours
-    < 30 || employer.months_operating < 24 || employer.jva_approved == false || job_offer.hourly_wage
-    < job_offer.prevailing_hourly_wage)) || (candidate.stream == 'skilled_worker' && job_offer.is_permanent
-    == false && job_offer.duration_months < 24) || (candidate.stream == 'express_entry' && job_offer.is_permanent
-    == false) || (candidate.stream == 'express_entry' && candidate.work_permit_basis != null && !(candidate.work_permit_basis
-    in ['lmia', 'lmia_exempt_agreement']))
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Hours, employer history, Job Vacancy Assessment, wage, permanent
     terms, duration, or Express Entry work-permit basis cannot be verified.'
   evidence_anchor:
@@ -275,13 +273,8 @@ rules:
     when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
     fields:
     - job_offer.noc_teer
-  pass_if: candidate.stream == 'priority_skills' || (candidate.stream == 'skilled_worker' && job_offer.noc_teer
-    in [0, 1, 2, 3, 4, 5]) || (candidate.stream == 'express_entry' && job_offer.noc_teer in [0, 1, 2,
-    3])
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'skilled_worker' && job_offer.noc_teer != null && !(job_offer.noc_teer in
-    [0, 1, 2, 3, 4, 5])) || (candidate.stream == 'express_entry' && job_offer.noc_teer != null && !(job_offer.noc_teer
-    in [0, 1, 2, 3]))
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry TEER cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-NLPNP-SW-OCC-006
@@ -304,16 +297,8 @@ rules:
     fields:
     - candidate.language_result_within_2_years
     - candidate.language_clb_minimum
-  pass_if: candidate.stream == 'priority_skills' || (candidate.language_result_within_2_years == true
-    && ((candidate.stream == 'skilled_worker' && (candidate.language_clb_minimum >= 5 || (job_offer.noc_teer
-    in [4, 5] && candidate.language_clb_minimum >= 4))) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum
-    >= 7)))
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && candidate.language_result_within_2_years
-    == false) || (candidate.stream == 'skilled_worker' && candidate.language_clb_minimum < 4) || (candidate.stream
-    == 'skilled_worker' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) ||
-    (candidate.stream == 'skilled_worker' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
-    < 4) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum < 7)
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry test age, lowest CLB, or TEER
     cannot be verified.'
   evidence_anchor:
@@ -332,12 +317,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  pass_if: candidate.stream == 'priority_skills' || (candidate.stream == 'skilled_worker' && candidate.related_months_past_5_years
-    >= 12) || (candidate.stream == 'express_entry' && candidate.continuous_skilled_months_past_10_years
-    >= 12)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'skilled_worker' && candidate.related_months_past_5_years < 12) || (candidate.stream
-    == 'express_entry' && candidate.continuous_skilled_months_past_10_years < 12)
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker related months or Express Entry continuous skilled
     months cannot be verified.'
   evidence_anchor:
@@ -361,12 +342,8 @@ rules:
     fields:
     - candidate.express_entry_profile_valid
     - candidate.assessed_fsw_points
-  pass_if: candidate.stream == 'priority_skills' || candidate.stream == 'skilled_worker' || (candidate.stream
-    == 'express_entry' && candidate.express_entry_profile_valid == true && candidate.assessed_fsw_points
-    >= 67)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == false) || (candidate.stream
-    == 'express_entry' && candidate.assessed_fsw_points < 67)
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile or the caller-supplied federal skilled worker
     total cannot be verified.'
   evidence_anchor:
@@ -392,10 +369,12 @@ rules:
     || candidate.intends_to_reside_in_nl == false
   missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Newfoundland and Labrador cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NLPNP-INTENT-010
-    source_file: nlpnp-common.html
-    section: Settlement Intent
-    verbatim_excerpt: intend to reside in Newfoundland and Labrador
+    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
+    source_id: "nl_priority_skills_guide_archive_20201230"
+    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
+    section: "Eligibility Criteria"
+    page: "4"
+    verbatim_excerpt: "Intend to live permanently in Newfoundland and Labrador"
   provenance:
     source_file: nlpnp-common.html
     section: Settlement Intent

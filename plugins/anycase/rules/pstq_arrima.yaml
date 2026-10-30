@@ -50,10 +50,11 @@ rules:
     < 5)
   missing_or_unverified: 'NEEDS_REVIEW: French oral or written level, stream, or FEER cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-PSTQ-FRENCH-001
-    source_file: quebec-pstq-arrima.html
+    evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
+    source_id: "pstq"
+    source_file: "84e2fcf8ddfb3dc41fb89db6aae02577193f949236956c9368266f9a17f3473a"
     section: PSTQ French Requirements
-    verbatim_excerpt: oral 7 and written 5 for Volet 1
+    verbatim_excerpt: "oral knowledge of French of level 7 or higher and a written knowledge of level 5 or higher"
   provenance:
     source_file: quebec-pstq-arrima.html
     section: PSTQ French Requirements
@@ -84,11 +85,11 @@ rules:
     < 12))
   missing_or_unverified: 'NEEDS_REVIEW: Qualifying experience months cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-PSTQ-EXP-002
-    source_file: quebec-pstq-arrima.html
+    evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
+    source_id: "pstq"
+    source_file: "84e2fcf8ddfb3dc41fb89db6aae02577193f949236956c9368266f9a17f3473a"
     section: PSTQ Experience Requirements
-    verbatim_excerpt: 1 year for Volet 1; 2 years including 1 in Quebec for Volet 2; 3 years for Volet
-      4
+    verbatim_excerpt: "at least two years' paid work experience in your main occupation, i<strong>ncluding at least one year in Québec</strong>"
   provenance:
     source_file: quebec-pstq-arrima.html
     section: PSTQ Experience Requirements
@@ -104,10 +105,11 @@ rules:
   fail_if: candidate.eligible_quebec_diploma == false
   missing_or_unverified: 'NEEDS_REVIEW: Quebec-equivalent diploma cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-PSTQ-DIPLOMA-003
-    source_file: quebec-pstq-arrima.html
+    evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
+    source_id: "pstq"
+    source_file: "84e2fcf8ddfb3dc41fb89db6aae02577193f949236956c9368266f9a17f3473a"
     section: PSTQ Diploma Requirements
-    verbatim_excerpt: DEP of at least 900 hours, ASP, or AEC
+    verbatim_excerpt: "At least 900 hours, if it is at secondary or college level"
   provenance:
     source_file: quebec-pstq-arrima.html
     section: PSTQ Diploma Requirements
@@ -124,10 +126,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: The three-month financial self-sufficiency contract cannot be
     verified.'
   evidence_anchor:
-    evidence_unit_id: EU-PSTQ-FUNDS-004
-    source_file: quebec-pstq-arrima.html
-    section: Financial Self-Sufficiency Contract
-    verbatim_excerpt: financial self-sufficiency contract
+    evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
+    source_id: "pstq"
+    source_file: "84e2fcf8ddfb3dc41fb89db6aae02577193f949236956c9368266f9a17f3473a"
+    section: "Financial Self-Sufficiency Contract"
+    verbatim_excerpt: "</li><li>Demonstrate, by signing a Financial Self-Sufficiency Contract, your capacity to provide for yourself and, if applicable, that of your accompanying family members for the three months after becoming a permanent resident."
   provenance:
     source_file: quebec-pstq-arrima.html
     section: Financial Self-Sufficiency Contract
@@ -147,10 +150,11 @@ rules:
   fail_if: candidate.accompanying_spouse == true && candidate.spouse_french_oral_level < 4
   missing_or_unverified: 'NEEDS_REVIEW: Spouse French oral level cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-PSTQ-SPOUSE-005
-    source_file: quebec-pstq-arrima.html
+    evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
+    source_id: "pstq"
+    source_file: "84e2fcf8ddfb3dc41fb89db6aae02577193f949236956c9368266f9a17f3473a"
     section: Accompanying Spouse French
-    verbatim_excerpt: French oral level 4
+    verbatim_excerpt: "Your accompanying spouse must have a spoken knowledge of French at level 4 or higher"
   provenance:
     source_file: quebec-pstq-arrima.html
     section: Accompanying Spouse French

@@ -37,6 +37,21 @@ for rel in rels:
     versions[rel] = got
 
 ref = versions[".claude-plugin/plugin.json"]
+
+for rel in ("package.json", "cordis.patch.yml", "index.js"):
+    if not (root / rel).is_file():
+        sys.exit(f"verify-package: missing DeepSeek Harness bundle file {rel}")
+try:
+    dsh = json.loads((root / "package.json").read_text(encoding="utf-8"))
+except Exception as exc:
+    sys.exit(f"verify-package: invalid package.json: {exc}")
+if dsh.get("name") != "dsh-anycase" or dsh.get("version") != ref:
+    sys.exit(
+        f"verify-package: package.json identity/version mismatch "
+        f"(name={dsh.get('name')!r} version={dsh.get('version')!r}, expected dsh-anycase {ref!r})"
+    )
+if ((dsh.get("dsh") or {}).get("bundle") or {}).get("patch") != "./cordis.patch.yml":
+    sys.exit("verify-package: package.json.dsh.bundle.patch must be './cordis.patch.yml'")
 bad = [f"{rel}={got!r}" for rel, got in versions.items() if got != ref]
 if bad:
     sys.exit(f"verify-package: version disagreement against {ref!r}: {', '.join(bad)}")

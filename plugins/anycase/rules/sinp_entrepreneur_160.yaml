@@ -37,14 +37,12 @@ rules:
   fail_if: candidate.net_worth_cad < 500000 || candidate.net_worth_verified_by_approved_professional == false
   missing_or_unverified: 'NEEDS_REVIEW: Net worth or Ministry-approved professional verification cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P013
+    evidence_unit_id: "sinp.prairies_documents.guide.p013"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 13
-    section: Eligibility Requirements — minimum net worth
-    verbatim_excerpt: |-
-      a. Applicants must have a minimum $500,000 CAD in Net Business and Personal
-      Assets, verified by a Ministry approved professional third party.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "13"
+    section: "Eligibility Requirements \u2014 minimum net worth"
+    verbatim_excerpt: "a. Applicants must have a minimum $500,000 CAD in Net Business and Personal\nAssets, verified by a Ministry approved professional third party."
 - id: sinp_ent_accumulation_verification
   category: funds
   severity: CRITICAL_REDLINE
@@ -56,15 +54,12 @@ rules:
   fail_if: candidate.net_worth_accumulation_verified_percent < 80 || candidate.net_worth_accumulation_verified_by_approved_professional == false
   missing_or_unverified: 'NEEDS_REVIEW: Legal accumulation of claimed net worth or its Ministry-approved professional verification cannot be verified to at least 80 percent.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P013
+    evidence_unit_id: "sinp.prairies_documents.guide.p013"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 13
-    section: Eligibility Requirements — accumulation of claimed net worth
-    verbatim_excerpt: |-
-      b. Applicants must be able to demonstrate accumulation of claimed net worth
-      through legal means, verified to at least 80 percent by a Ministry approved
-      professional third party.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "13"
+    section: "Eligibility Requirements \u2014 accumulation of claimed net worth"
+    verbatim_excerpt: "b. Applicants must be able to demonstrate accumulation of claimed net worth\nthrough legal means, verified to at least 80 percent by a Ministry approved\nprofessional third party."
 - id: sinp_ent_experience
   category: experience
   severity: CRITICAL_REDLINE
@@ -75,15 +70,12 @@ rules:
   fail_if: candidate.entrepreneurial_years_past_10 < 3
   missing_or_unverified: 'NEEDS_REVIEW: Three years of entrepreneurial experience within the ten years before EOI submission cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P013
+    evidence_unit_id: "sinp.prairies_documents.guide.p013"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 13
-    section: Eligibility Requirements — entrepreneurial experience
-    verbatim_excerpt: |-
-      c. Applicants must have a minimum of three years of
-      entrepreneurialexperience within the ten years prior to
-      submitting their EOI.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "13"
+    section: "Eligibility Requirements \u2014 entrepreneurial experience"
+    verbatim_excerpt: "c. Applicants must have a minimum of three years of\nentrepreneurialexperience within the ten years prior to\nsubmitting their EOI."
 - id: sinp_ent_investment
   category: funds
   severity: CRITICAL_REDLINE
@@ -95,15 +87,12 @@ rules:
   fail_if: (candidate.in_regina_or_saskatoon == true && candidate.investment_cad < 300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad < 200000)
   missing_or_unverified: 'NEEDS_REVIEW: Equity investment amount or whether the community is Regina or Saskatoon cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P013
+    evidence_unit_id: "sinp.prairies_documents.guide.p013"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 13
-    section: Eligibility Requirements — equity investment
-    verbatim_excerpt: |-
-      d. Applicants will be required to make a minimum equity investment of
-      $300,000 CAD in Regina or Saskatoon, or a minimum equity investment of
-      $200,000 CAD in any other Saskatchewan community.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "13"
+    section: "Eligibility Requirements \u2014 equity investment"
+    verbatim_excerpt: "d. Applicants will be required to make a minimum equity investment of\n$300,000 CAD in Regina or Saskatoon, or a minimum equity investment of\n$200,000 CAD in any other Saskatchewan community."
 - id: sinp_ent_equity
   category: pathway
   severity: CRITICAL_REDLINE
@@ -115,17 +104,12 @@ rules:
   fail_if: candidate.equity_ratio < 1 / 3 && candidate.investment_cad < 1000000
   missing_or_unverified: 'NEEDS_REVIEW: Equity share or investment amount cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P014
+    evidence_unit_id: "sinp.prairies_documents.guide.p014"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 14
-    section: Eligibility Requirements — business equity
-    verbatim_excerpt: |-
-      4. Applicants must own at least one third (33 1/3%) of the equity of the business and
-      provide active and on-going participation in the day to day management and direction
-      of the business. If an Applicant will own less than 33 1/3 % they must invest $1 million
-      CAD and provide active and on-going participation in the day to day management and
-      direction of the business.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "14"
+    section: "Eligibility Requirements \u2014 business equity"
+    verbatim_excerpt: "4. Applicants must own at least one third (33 1/3%) of the equity of the business and\nprovide active and on-going participation in the day to day management and direction\nof the business. If an Applicant will own less than 33 1/3 % they must invest $1 million\nCAD and provide active and on-going participation in the day to day management and\ndirection of the business."
 - id: sinp_ent_management
   category: pathway
   severity: CRITICAL_REDLINE
@@ -141,15 +125,12 @@ rules:
   fail_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false) || (candidate.business_establishment_stage == "established" && candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false)
   missing_or_unverified: 'NEEDS_REVIEW: The application-stage commitment or, when established, actual active and ongoing day-to-day management and direction in Saskatchewan cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P014
+    evidence_unit_id: "sinp.prairies_documents.guide.p014"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 14
-    section: Eligibility Requirements — business management
-    verbatim_excerpt: |-
-      Applicants must own at least one third (33 1/3%) of the equity of the business and
-      provide active and on-going participation in the day to day management and direction
-      of the business.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "14"
+    section: "Eligibility Requirements \u2014 business management"
+    verbatim_excerpt: "Applicants must own at least one third (33 1/3%) of the equity of the business and\nprovide active and on-going participation in the day to day management and direction\nof the business."
 - id: sinp_ent_jobs
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -166,14 +147,12 @@ rules:
   fail_if: (candidate.business_establishment_stage == "application" || candidate.business_establishment_stage == "established") && candidate.in_regina_or_saskatoon == true && candidate.new_business == true && candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives < 2
   missing_or_unverified: 'NEEDS_REVIEW: At application, planned qualifying jobs for Canadians or permanent residents who are not relatives; after establishment, created or maintained qualifying jobs cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P014
+    evidence_unit_id: "sinp.prairies_documents.guide.p014"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 14
-    section: Eligibility Requirements — new business employment
-    verbatim_excerpt: |-
-      5. Applicants establishing a new business in Saskatoon or Regina must create or maintain at
-      least two (2) jobs for two Canadians or Permanent Residents in Saskatchewan (nonrelative workers).
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "14"
+    section: "Eligibility Requirements \u2014 new business employment"
+    verbatim_excerpt: "5. Applicants establishing a new business in Saskatoon or Regina must create or maintain at\nleast two (2) jobs for two Canadians or Permanent Residents in Saskatchewan (nonrelative workers)."
 - id: sinp_ent_existing_business_staffing
   category: pathway
   severity: CRITICAL_REDLINE
@@ -189,15 +168,12 @@ rules:
   fail_if: candidate.purchased_existing_business_in_regina_or_saskatoon == true && ((candidate.business_establishment_stage == "established" && candidate.post_purchase_qualifying_canadian_or_pr_staff_count < candidate.pre_purchase_qualifying_canadian_or_pr_staff_count) || (candidate.business_establishment_stage == "application" && candidate.commitment_to_maintain_existing_staffing_complement == false))
   missing_or_unverified: 'NEEDS_REVIEW: Commitment to maintain the existing Regina or Saskatoon business staffing complement, or actual counts when established, cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P014
+    evidence_unit_id: "sinp.prairies_documents.guide.p014"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 14
-    section: Eligibility Requirements — purchase of existing business
-    verbatim_excerpt: |-
-      If applicants purchase an existing business in Saskatoon or Regina they
-      must maintain the business’ staffing complement (the number of Canadian or permanent
-      resident workers) in place at the time of purchase.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "14"
+    section: "Eligibility Requirements \u2014 purchase of existing business"
+    verbatim_excerpt: "If applicants purchase an existing business in Saskatoon or Regina they\nmust maintain the business\u2019 staffing complement (the number of Canadian or permanent\nresident workers) in place at the time of purchase."
 - id: sinp_ent_residence
   category: pathway
   severity: CRITICAL_REDLINE
@@ -213,14 +189,12 @@ rules:
   fail_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_reside_in_saskatchewan_with_dependents == false) || (candidate.business_establishment_stage == "established" && candidate.actual_residence_with_dependents_in_saskatchewan == false)
   missing_or_unverified: 'NEEDS_REVIEW: The application-stage residence commitment, or actual Saskatchewan residence when established, cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P014
+    evidence_unit_id: "sinp.prairies_documents.guide.p014"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 14
-    section: Eligibility Requirements — residence
-    verbatim_excerpt: |-
-      3. Applicants are required to reside in Saskatchewan with their dependent family
-      members.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "14"
+    section: "Eligibility Requirements \u2014 residence"
+    verbatim_excerpt: "3. Applicants are required to reside in Saskatchewan with their dependent family\nmembers."
 - id: sinp_ent_bep_knowledge
   category: pathway
   severity: CRITICAL_REDLINE
@@ -231,10 +205,9 @@ rules:
   fail_if: candidate.bep_knowledge_human_review_outcome == "not_demonstrated"
   missing_or_unverified: 'NEEDS_REVIEW: An authorized human assessment of in-depth Business Establishment Plan knowledge is missing or inconclusive.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-ENT-HIST-GUIDE-P013
+    evidence_unit_id: "sinp.prairies_documents.guide.p013"
     source_id: sinp_entrepreneur_application_guide_before_2024_03_14
-    source_file: cc3a3af59344ca525ce379e753a9abc10b57b6028bbc72fc1ec0e0319598efb1
-    page: 13
-    section: Eligibility Requirements — Business Establishment Plan knowledge
-    verbatim_excerpt: |-
-      2. Applicants must have and be able to demonstrate an in-depth knowledge of their BEP.
+    source_file: "4b6c40497a6331f9b1a59d06fae08744e994eae0a1022db10595aed1a184d25f"
+    page: "13"
+    section: "Eligibility Requirements \u2014 Business Establishment Plan knowledge"
+    verbatim_excerpt: "2. Applicants must have and be able to demonstrate an in-depth knowledge of their BEP."

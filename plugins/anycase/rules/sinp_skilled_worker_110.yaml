@@ -162,11 +162,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Refugee-claim status is missing or is not
     one of the published values.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-REFUGEE-001
-    source_file: src04.html
-    section: Refugee claimant exclusion
-    verbatim_excerpt: Refugee claimants in Canada who are claiming refugee status
-      from the Government of Canada are not eligible to apply
+    evidence_unit_id: "bc.sinp_isw_oid_page.html"
+    source_id: "sinp_isw_oid_page"
+    source_file: "85c02dbe0f0ec50152589bedfca6bae9a7aab800ec365ff63881ced338a2f637"
+    section: ""
+    verbatim_excerpt: "Refugee claimants in Canada who are claiming refugee status from the Government of Canada are not eligible to apply."
 - id: sinp_noc_teer
   category: occupation
   severity: CRITICAL_REDLINE
@@ -179,10 +179,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Intended-occupation TEER or NOC 2021 code
     cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-TEER-002
-    source_file: src04.html
-    section: NOC TEER eligibility
-    verbatim_excerpt: TEER level "0", "1", "2" or "3"
+    evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
+    source_id: "sinp_isw_employment_offer_page"
+    source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
+    section: ""
+    verbatim_excerpt: "<p>You must have a letter of offer for full-time, permanent job from a Saskatchewan employer in a NOC TEER level \"0\", \"1\", \"2\" or \"3\" occupation."
 - id: sinp_work_experience
   category: experience
   severity: CRITICAL_REDLINE
@@ -197,11 +198,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Related full-time skilled work in the past
     10 years cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-EXPERIENCE-003
-    source_file: src05.html
-    section: Work experience
-    verbatim_excerpt: one year of full-time (minimum 30 hours per week) paid work
-      experience
+    evidence_unit_id: "bc.sinp_isw_oid_page.html"
+    source_id: "sinp_isw_oid_page"
+    source_file: "85c02dbe0f0ec50152589bedfca6bae9a7aab800ec365ff63881ced338a2f637"
+    section: ""
+    verbatim_excerpt: "You must have a minimum of one year of full-time (minimum 30 hours per week) paid work experience in a skilled occupation over the past 10 years related to your field of education."
 - id: sinp_education
   category: education
   severity: CRITICAL_REDLINE
@@ -215,11 +216,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Education credential is missing or has not
     been resolved to a published credential level.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-EDUCATION-004
-    source_file: src05.html
-    section: Education
-    verbatim_excerpt: completed post-secondary education, training or apprenticeship
-      that's comparable to that in Canada
+    evidence_unit_id: "bc.sinp_isw_oid_page.html"
+    source_id: "sinp_isw_oid_page"
+    source_file: "85c02dbe0f0ec50152589bedfca6bae9a7aab800ec365ff63881ced338a2f637"
+    section: ""
+    verbatim_excerpt: "Have completed post-secondary education, training or apprenticeship that's comparable to that in Canada."
 - id: sinp_language
   category: language
   severity: CRITICAL_REDLINE
@@ -241,11 +242,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, or the Express Entry
     language flag cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-LANGUAGE-005
-    source_file: src04.html
-    section: Language
-    verbatim_excerpt: language score of at least Canadian Language Benchmark (CLB)
-      4
+    evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
+    source_id: "sinp_isw_employment_offer_page"
+    source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
+    section: ""
+    verbatim_excerpt: "Have a language score of at least Canadian Language Benchmark (CLB) 4."
 - id: sinp_licensure
   category: licensing
   severity: CRITICAL_REDLINE
@@ -263,11 +264,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Regulated-occupation status or the Saskatchewan
     licence cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-LICENSURE-006
-    source_file: src04.html
-    section: Licensure
-    verbatim_excerpt: eligible for Saskatchewan licensing if your intended occupation
-      is a compulsory apprenticeship trade
+    evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
+    source_id: "sinp_isw_employment_offer_page"
+    source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
+    section: ""
+    verbatim_excerpt: "Be eligible for Saskatchewan licensing if your intended occupation is a compulsory apprenticeship trade or a credential is legally required for you to work in that occupation in Saskatchewan."
 - id: sinp_settlement_funds
   category: funds
   severity: CRITICAL_REDLINE
@@ -287,10 +288,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Settlement funds or the required amount cannot
     be verified for Occupation In-Demand or Saskatchewan Express Entry.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-FUNDS-007
-    source_file: src05.html
-    section: Settlement funds
-    verbatim_excerpt: proof of settlement funds and a settlement plan
+    evidence_unit_id: "bc.sinp_isw_oid_page.html"
+    source_id: "sinp_isw_oid_page"
+    source_file: "85c02dbe0f0ec50152589bedfca6bae9a7aab800ec365ff63881ced338a2f637"
+    section: ""
+    verbatim_excerpt: "Have proof of settlement funds and a settlement plan"
 - id: sinp_pathway
   category: pathway
   severity: CRITICAL_REDLINE
@@ -321,10 +323,11 @@ rules:
     full-time offer, in-demand occupation, Express Entry profile, or Job Seeker code
     cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-PATHWAY-008
-    source_file: src04.html
-    section: Pathway-specific gates
-    verbatim_excerpt: valid Employer Position Assessment
+    evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
+    source_id: "sinp_isw_employment_offer_page"
+    source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
+    section: ""
+    verbatim_excerpt: "Have an offer for an eligible permanent, full-time job in Saskatchewan. You will need a valid Employer Position Assessment when applying for the SINP."
 - id: sinp_points_floor
   category: pathway
   severity: CRITICAL_REDLINE
@@ -336,10 +339,11 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Assessed 110-point grid total is missing.
     AnyScore computes that number.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-POINTS-009
-    source_file: src14.html
-    section: Points floor
-    verbatim_excerpt: You need at least 60 points to apply
+    evidence_unit_id: "bc.sinp_isw_oid_page.html"
+    source_id: "sinp_isw_oid_page"
+    source_file: "85c02dbe0f0ec50152589bedfca6bae9a7aab800ec365ff63881ced338a2f637"
+    section: ""
+    verbatim_excerpt: "You must score a minimum of 60 points out of 110 points"
 - id: sinp_intent_to_reside
   category: pathway
   severity: CRITICAL_REDLINE
@@ -351,7 +355,8 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Saskatchewan cannot
     be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SINP-SW-INTENT-010
-    source_file: src04.html
-    section: Intention to reside
-    verbatim_excerpt: Intend to reside in Saskatchewan as a permanent resident
+    evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
+    source_id: "sinp_isw_employment_offer_page"
+    source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
+    section: ""
+    verbatim_excerpt: "Intend to reside in Saskatchewan as a permanent resident."

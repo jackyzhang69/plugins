@@ -88,7 +88,8 @@ rules:
   fail_if: candidate.working_in_canada == false && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
   missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-AIP-FUNDS-003
-    source_file: atlantic-immigration-proof-funds.html
+    evidence_unit_id: "atl.aip_imm0155_checklist_2025_01.p004"
+    source_file: "53f4e3bebab2622cf7572fcb41e1e829d45765c8b52edd470e1ef93ab2363659"
+    page: "4"
     section: Proof of funds
-    verbatim_excerpt: You do not need to show proof of funds if you’re already working in Canada with a valid work permit.
+    verbatim_excerpt: "You are not required to provide proof of funds if you are already working in Canada with a valid work permit."

@@ -167,8 +167,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p22:3_12_eligible_employment_situations"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.12; 6.12(e)"
-      page: "22; 38"
-      verbatim_excerpt: "10 per cent"
+      page: "22"
+      verbatim_excerpt: "\u2022 You do not hold or exercise control over an ownership stake of 10 per cent or greater in"
 
   - id: si_noc_teer
     category: job_offer
@@ -185,8 +185,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p24:4_1_skilled_worker_stream"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "4.1(b); 3.11"
-      page: "24; 22"
-      verbatim_excerpt: "NOC TEER 0"
+      page: "24"
+      verbatim_excerpt: "1 (b) You must be offered a job in an eligible skilled occupation (NOC TEER 0, 1, 2, or 3)"
 
   - id: si_qualifying_experience
     category: candidate
@@ -205,8 +205,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p24:4_1_skilled_worker_stream"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "4.1(c); 3.8"
-      page: "24; 19-20"
-      verbatim_excerpt: "two years"
+      page: "24"
+      verbatim_excerpt: "1 (c) You must have a minimum of two years of full-time (or full-time equivalent) work"
 
   - id: si_hours_fulltime
     category: job_offer
@@ -224,7 +224,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.5(b)"
       page: "17"
-      verbatim_excerpt: "30 hours"
+      verbatim_excerpt: "The BC PNP defines full-time employment as at least an average of 30 hours per week, year-"
 
   - id: si_offer_duration
     category: job_offer
@@ -233,6 +233,13 @@ rules:
     required_fields:
       - job_offer.indeterminate
       - job_offer.noc_2021_code
+    conditional_required_fields:
+      when: "job_offer.indeterminate == false"
+      fields:
+        - job_offer.single_position
+        - job_offer.term_days
+        - job_offer.days_remaining_at_application
+        - job_offer.appendix_a_occupation_conditions_met
     pass_if: "job_offer.indeterminate == true || (job_offer.indeterminate == false && job_offer.noc_2021_code in appendix_a_limited_term_noc_codes && job_offer.single_position == true && job_offer.term_days >= 365 && job_offer.days_remaining_at_application >= 120 && job_offer.appendix_a_occupation_conditions_met == true)"
     fail_if: "job_offer.indeterminate == false && (!(job_offer.noc_2021_code in appendix_a_limited_term_noc_codes) || job_offer.single_position != true || job_offer.term_days < 365 || job_offer.days_remaining_at_application < 120 || job_offer.appendix_a_occupation_conditions_met != true)"
     missing_or_unverified: "NEEDS_REVIEW: duration terms or an applicable Appendix A condition cannot be verified."
@@ -241,8 +248,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p17:3_5_job_offer"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.5(c); Appendix A"
-      page: "17-18; 61-62"
-      verbatim_excerpt: "indeterminate"
+      page: "17"
+      verbatim_excerpt: "5 (c) Job offer duration\nYour job offer must be indeterminate. Indeterminate means the job offer must not be temporary"
 
   - id: si_language_floor
     category: candidate
@@ -270,8 +277,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p16:benchmark_clb_level_4_in_each_of_the_four_compe"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.4"
-      page: "15-17"
-      verbatim_excerpt: "level 4"
+      page: "16"
+      verbatim_excerpt: "Benchmark (CLB) level 4  in each of the four competencies: listening, speaking, reading , and"
 
   - id: si_wage_prevailing
     category: job_offer
@@ -295,7 +302,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "3.9"
       page: "20"
-      verbatim_excerpt: "wage range"
+      verbatim_excerpt: "\u2022 Within the wage range posted on WorkBC or the federal Job Bank website for the"
     statutory_anchor:
       source_file: "BC government minimum-wage announcement, May 26, 2026"
       section: "Summary"
@@ -320,7 +327,7 @@ rules:
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.7"
       page: "33"
-      verbatim_excerpt: "one year"
+      verbatim_excerpt: "Your employer must have operated in B.C. for at least one year.\nYour employer may be required to provide additional documentation as evidence that the"
 
   - id: si_employer_local_staff
     category: employer
@@ -339,8 +346,8 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_8_minimum_number_of_full_time_employees_in_briti"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.8"
-      page: "33-34"
-      verbatim_excerpt: "at least five"
+      page: "33"
+      verbatim_excerpt: "have at least five indeterminate, full-time employees (or full-time equivalents) who are"
 
   - id: si_job_offer_genuineness
     category: job_offer
@@ -361,5 +368,5 @@ rules:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p36:6_11_genuine_need_for_the_position"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.11"
-      page: "36-37"
-      verbatim_excerpt: "genuine need"
+      page: "36"
+      verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."

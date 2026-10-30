@@ -135,14 +135,15 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Weekly hours, permanent terms, seasonal status, employer operating
     history, or foreign worker registry status cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-OFFER-002
-    source_file: nbpnp-skilled-worker-express-entry.html
+    evidence_unit_id: "nbpnp.nbpnp_sw_priority_guide_2026_06.p006.full_time_non_seasonal_year_round_employment"
+    source_file: "5380658e959607c462d715aeaf0b4f013a74b3aa40f7b6d3f84f6e87c9c93ea6"
+    page: "6"
     section: Job Offer & Employer
-    verbatim_excerpt: at least 30 hours a week, permanent, and not seasonal
+    verbatim_excerpt: "Full time means at least 30 hours a week, which is 1,560 hours a year.\nNon-seasonal means you work throughout the year without an extended\nbreak."
   provenance:
     source_file: nbpnp-skilled-worker-express-entry.html
     section: Job Offer & Employer
-    page: 1
+    page: "6"
     verbatim: at least 30 hours a week, permanent, and not seasonal
 - id: nbpnp_language
   category: language
@@ -160,14 +161,15 @@ rules:
     < 4) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum < 7)
   missing_or_unverified: 'NEEDS_REVIEW: Test age or lowest CLB cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-LANG-003
-    source_file: nbpnp-skilled-worker-express-entry.html
+    evidence_unit_id: "nbpnp.nbpnp_sw_priority_guide_2026_06.p004.5_have_at_least_canadian_language_benchmarks_clb"
+    source_file: "5380658e959607c462d715aeaf0b4f013a74b3aa40f7b6d3f84f6e87c9c93ea6"
+    page: "4"
     section: Language Requirements
-    verbatim_excerpt: Skilled Worker needs CLB 4 on a test under two years old
+    verbatim_excerpt: "have at least Canadian Language Benchmarks (CLB) 4 in listening, reading, writing,\nand speaking;"
   provenance:
     source_file: nbpnp-skilled-worker-express-entry.html
     section: Language Requirements
-    page: 1
+    page: "4"
     verbatim: Skilled Worker needs CLB 4 on a test under two years old
 - id: nbpnp_education
   category: education
@@ -214,14 +216,15 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Skilled worker hours or graduate exemption, or Express Entry skilled
     months and TEER, cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-EXP-005
-    source_file: nbpnp-skilled-worker-express-entry.html
+    evidence_unit_id: "nbpnp.nbpnp_sw_priority_guide_2026_06.p008.2_work_experience"
+    source_file: "5380658e959607c462d715aeaf0b4f013a74b3aa40f7b6d3f84f6e87c9c93ea6"
+    page: "8"
     section: Experience Requirements
-    verbatim_excerpt: 1560 related hours in the past 5 years
+    verbatim_excerpt: "You must have at least 1 year of paid work experience, which is equal to a minimum of 1,560\nhours, acquired within the last 5 years in Canada or abroad."
   provenance:
     source_file: nbpnp-skilled-worker-express-entry.html
     section: Experience Requirements
-    page: 1
+    page: "8"
     verbatim: 1560 related hours in the past 5 years
 - id: nbpnp_ee_pathway
   category: pathway

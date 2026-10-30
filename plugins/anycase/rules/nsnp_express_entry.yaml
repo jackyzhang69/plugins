@@ -69,18 +69,19 @@ rules:
     page: 6
     verbatim: have an active profile in the IRCC Express Entry system
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
+    evidence_unit_id: ns.nsnp_express_entry.p028
+    source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
+    page: "28"
     section: Federal Express Entry Profile
-    verbatim_excerpt: have an active profile in the IRCC Express Entry system
+    verbatim_excerpt: "You need both of these numbers to submit an EOI to the Nova\nScotia: Express Entry Stream."
 - id: nsnp_ee_age_range
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.age
-  pass_if: candidate.age >= 21 && candidate.age <= 55
-  fail_if: candidate.age < 21 || candidate.age > 55
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Candidate age cannot be verified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
@@ -107,10 +108,11 @@ rules:
     page: 6
     verbatim: work experience in Nova Scotia in a TEER 0, 1, 2, or 3 occupation; TEER 4 and 5 are strictly excluded
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
+    evidence_unit_id: ns.nsnp_express_entry.p021
+    source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
+    page: "21"
     section: Eligible Occupations
-    verbatim_excerpt: work experience in Nova Scotia in a TEER 0, 1, 2, or 3 occupation; TEER 4 and 5 are strictly excluded
+    verbatim_excerpt: "the work experience was in a job that meets the criteria for NOC\ncategories 0, 1, 2, or 3"
 - id: nsnp_ee_experience_duration_and_legality
   category: candidate
   severity: CRITICAL_REDLINE
@@ -132,12 +134,11 @@ rules:
       in a TEER 0, 1, 2, or 3 occupation within the three years prior to application; gained with proper work authorization;
       self-employment and student work experience do not count
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
+    evidence_unit_id: ns.nsnp_express_entry.p021
+    source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
+    page: "21"
     section: Work Experience Requirements
-    verbatim_excerpt: at least one year (1,560 hours) of full-time (or equivalent part-time) skilled work experience in Nova
-      Scotia in a TEER 0, 1, 2, or 3 occupation within the three years prior to application; gained with proper work authorization;
-      self-employment and student work experience do not count
+    verbatim_excerpt: "at least 12 months of full-time paid work experience—30 hours per\nweek for 12 months (1,560 hours)"
 - id: nsnp_ee_language_threshold
   category: candidate
   severity: CRITICAL_REDLINE
@@ -149,14 +150,8 @@ rules:
   - candidate.language_test.reading_clb
   - candidate.language_test.writing_clb
   - candidate.language_test.speaking_clb
-  pass_if: candidate.language_test.valid_at_application == true && ((candidate.primary_noc_teer in [0, 1] && candidate.language_test.listening_clb
-    >= 7 && candidate.language_test.reading_clb >= 7 && candidate.language_test.writing_clb >= 7 && candidate.language_test.speaking_clb
-    >= 7) || (candidate.primary_noc_teer in [2, 3] && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb
-    >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5))
-  fail_if: candidate.language_test.valid_at_application == false || (candidate.primary_noc_teer in [0, 1] && (candidate.language_test.listening_clb
-    < 7 || candidate.language_test.reading_clb < 7 || candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb
-    < 7)) || (candidate.primary_noc_teer in [2, 3] && (candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb
-    < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5))
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Official language results are missing, expired, or below threshold.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
@@ -197,8 +192,8 @@ rules:
   - noul.evidence_complete
   - noul.evidence_refs
   precondition: noul.evidence_complete == true
-  pass_if: noul.probability_true >= 0.70
-  fail_if: noul.probability_true < 0.30
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf

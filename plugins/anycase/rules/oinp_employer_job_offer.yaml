@@ -4,7 +4,8 @@
 "category": "Ontario Immigrant Nominee Program"
 "display_name": >-
   OINP Employer Job Offer Streams (Foreign Worker, International Student, In-Demand Skills)
-"status": "ACTIVE"
+"status": "LEGACY_CLOSED"
+"closure_basis": "\"As part of the redesign of the OINP, the following streams have been closed: Employer Job Offer: Foreign Worker …\"; each EJO checklist banner: \"this stream was closed as of May 30, 2026\" (d6.b05.html.ontario-checklists.d9b928770333 / ontario-2026-updates.8b36171d46df)."
 "program_id": "OINP_EMPLOYER_JOB_OFFER"
 "stream_id": "EMPLOYER_JOB_OFFER"
 "effective_date": "2023-11-16"
@@ -182,11 +183,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(1)(a)"
-    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-OPERATING-001"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Employer requirements"
-    "verbatim_excerpt": >-
-      have been in active business for at least three years prior to submitting your application
+    "verbatim_excerpt": "have been in active business for at least three years prior to applying"
 - "id": "oinp_ejo_employer_revenue"
   "category": "employer"
   "severity": "CRITICAL_REDLINE"
@@ -205,12 +205,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(1)(b)"
-    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-REVENUE-002"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Employer requirements"
-    "verbatim_excerpt": >-
-      a minimum of $1,000,000 in total gross annual revenue if you will work or report to work at a location
-      in the Greater Toronto Area
+    "verbatim_excerpt": "A minimum of $1,000,000 in total gross annual revenue if the employee will work or report to work at a location in the Greater Toronto Area"
 - "id": "oinp_ejo_employer_workforce"
   "category": "employer"
   "severity": "CRITICAL_REDLINE"
@@ -229,11 +227,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(1)(c)"
-    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-WORKFORCE-003"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Employer requirements"
-    "verbatim_excerpt": >-
-      your employer must have at least 5 full-time employees who are Canadian citizens or permanent residents
+    "verbatim_excerpt": "your business must have at least <strong>5</strong> full-time employees who are Canadian citizens or permanent residents who work or report to work at that location.</p><h4>Work location outside the Greater Toronto Area</h4><p>If the employee will work at a location outside the <abbr title=\"Greater Toronto Area\">GTA</abbr> or will work at more than one location but report to work at a location outside the&nbsp;<abbr title=\"Greater Toronto Area\">GTA</abbr>, your business must have at least&nbsp;<strong>3</strong>&nbsp;full-time employees who are Canadian citizens or permanent residents who work or report to work at that location."
 - "id": "oinp_ejo_employer_premises_and_compliance"
   "category": "employer"
   "severity": "CRITICAL_REDLINE"
@@ -250,12 +247,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(1)(d)-(e)"
-    "evidence_unit_id": "EU-OINP-EJO-EMPLOYER-PREMISES-004"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Employer requirements"
-    "verbatim_excerpt": >-
-      have business premises in Ontario where you will work have no outstanding orders made against them
-      under the Ontario Employment Standards Act, 2000
+    "verbatim_excerpt": "have business premises in Ontario where the employee will work</li><li data-list-item-id=\"e9c3a4ec08b642cd50218166fa3f47799\">have no outstanding orders made against your business under the Ontario&nbsp;<a href=\"/laws/statute/00e41\"><cite>Employment Standards Act, 2000</cite></a>&nbsp;or the&nbsp;<a href=\"/laws/statute/90o01\"><cite>Occupational Health and Safety Act</cite></a>"
 - "id": "oinp_ejo_job_permanent_full_time"
   "category": "job_offer"
   "severity": "CRITICAL_REDLINE"
@@ -275,12 +270,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(2)"
-    "evidence_unit_id": "EU-OINP-EJO-JOB-FULLTIME-005"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Job offer requirements"
-    "verbatim_excerpt": >-
-      The job offer must be for a full-time and permanent position. Full-time means the job must be a
-      minimum of 1,560 hours a year and a minimum of 30 hours of
+    "verbatim_excerpt": "The job offer must be for a full-time and permanent position.</p><ul><li data-list-item-id=\"e8dd67bd440aa2fb53135babbb659a245\">full-time means the job must be a minimum of 1,560&nbsp;hours a year and a minimum of 30&nbsp;hours of paid work per week.</li>"
 - "id": "oinp_ejo_eligible_noc"
   "category": "job_offer"
   "severity": "CRITICAL_REDLINE"
@@ -325,12 +318,10 @@
   "evidence_anchor":
     "source_id": "o_reg_422_17"
     "citation": "O. Reg. 422/17 s. 4(4)"
-    "evidence_unit_id": "EU-OINP-EJO-WAGE-MEDIAN-007"
-    "source_file": "src02.html"
+    "evidence_unit_id": "oinp.wps.current.employer-guide"
+    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
     "section": "Job offer requirements"
-    "verbatim_excerpt": >-
-      The pay of the job offered must meet or be higher than the median wage level, for that occupation,
-      in the specific region of Ontario where you will be working
+    "verbatim_excerpt": "The wage offered for the position under the Ontario Workforce Priority stream must meet or exceed the wage level assigned to the specific region of Ontario where the employee will be working and be at or above either:</p><ul><li data-list-item-id=\"e356561d56f29ded505fb76f50181250f\">the median wage level</li><li data-list-item-id=\"e27cc2a27b4a1283a526a0e92a949b870\">the low wage level, if the employee is a recent Ontario graduate and the job offer is in a TEER 0-3 category occupation</li>"
 - "id": "oinp_ejo_candidate_qualifications"
   "category": "candidate"
   "severity": "CRITICAL_REDLINE"
@@ -379,8 +370,8 @@
     "source_file": "src02.html"
     "section": "Applicant requirements"
     "verbatim_excerpt": >-
-      rks, Ontario Disability Support Program OSAP Ontario Student Assistance Program Skilled Trades Ontario
-      Skilled trades and apprenticeships More accounts Topics Sign in Benefits and ta
+      Regulated occupation: the official licensing or registration requirement is not present in the pinned
+      knowledge revisions.
 - "id": "oinp_ejo_candidate_equity_and_intention"
   "category": "candidate"
   "severity": "CRITICAL_REDLINE"

@@ -88,11 +88,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employer compliance standing cannot be established."
     interpretation: "Service Canada has no legal authority to process LMIA applications from ineligible employers."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-008"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_global_talent.refusal.full_page_projection"
+      source_file: "43b29dc7de2289539bd22bd339072b3b8796f6d7c27520596ad6e43c5933a875"
       section: "Regulatory authority and ineligibility"
       verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
-
   - id: lmia_gts_stream_eligibility
     category: gts_qualifying_pathway
     severity: CRITICAL_REDLINE
@@ -105,10 +104,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: GTS Category, referral partner endorsement, or NOC classification evidence is missing."
     interpretation: "An employer must qualify under either Category A (innovative firms referred by a designated referral partner) or Category B (hiring highly skilled foreign workers in in-demand STEM occupations on the Global Talent Occupations List)."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "global_talent_requirements.html"
+      evidence_unit_id: "lmia_global_talent.gts_requirements.full_page_projection"
+      source_file: "9a77f4dd42f34da5c12efd6ebf8baddc13cf8f00572edc29efed071c720abc0a"
       section: "Category A and Category B"
-      verbatim_excerpt: "Employers can apply under Category A or Category B of the Global Talent Stream"
+      verbatim_excerpt: "You may be eligible for <a href=\"#h2.20\">Category A</a> of the Global Talent Stream (GTS) if you’ve been referred to the GTS by one of <a href=\"#h2.19\">the stream's designated referral partners</a> and if you’re hiring an individual with unique and specialized talent to help your business scale up and grow.</p>\r\n\r\n<p>If the requested occupation is included on the <a href=\"#h2.21\">global talent occupations list</a>, it’ll be processed as a Category B application and must meet Category B requirements.</p>\r\n\r\n<p><strong>Or</strong></p>\r\n\r\n<p>You may be eligible for <a href=\"#h2.21\">Category B</a> of the GTS if you’re seeking to hire highly skilled temporary foreign workers to fill positions in in-demand occupations found on the <a href=\"#h2.21\">global talent occupations list</a>. A referral isn’t required to be eligible for Category B."
 
   - id: lmia_prevailing_wage
     category: compensation
@@ -122,10 +121,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage for occupation and sub-region or offered base wage is missing."
     interpretation: "Wages offered to temporary foreign workers under GTS must equal or exceed the prevailing wage for the occupation in the sub-region."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "global_talent_requirements.html"
+      evidence_unit_id: "lmia_global_talent.gts_requirements.full_page_projection"
+      source_file: "9a77f4dd42f34da5c12efd6ebf8baddc13cf8f00572edc29efed071c720abc0a"
       section: "Wages and working conditions"
-      verbatim_excerpt: "Employers must pay the prevailing wage rate"
+      verbatim_excerpt: "For the purpose of the GTS, you must pay the prevailing wage, which is defined as the highest of either:</p>\r\n\r\n<ul>\r\n\t<li>the regional median hourly wage posted on <a href=\"https://www.jobbank.gc.ca/trend-analysis/search-wages\">Job Bank</a></li>\r\n\t<li>the wage that is within the wage range that you’re paying your current employees hired for the same job and work location, and with the same skills and years of experience"
 
   - id: lmia_gts_labour_market_benefits_plan
     category: employer_commitments
@@ -138,10 +137,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Labour Market Benefits Plan (LMBP) agreement is missing or incomplete."
     interpretation: "Under GTS, employers are legally required to develop a Labour Market Benefits Plan committing to either job creation for Canadians (mandatory under Cat A) or skills/training investment for Canadians (mandatory under Cat B)."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-006"
-      source_file: "global_talent_requirements.html"
+      evidence_unit_id: "lmia_global_talent.gts_requirements.full_page_projection"
+      source_file: "9a77f4dd42f34da5c12efd6ebf8baddc13cf8f00572edc29efed071c720abc0a"
       section: "Labour Market Benefits Plan"
-      verbatim_excerpt: "Employers must work with ESDC to develop a Labour Market Benefits Plan"
+      verbatim_excerpt: "You’re required to work with ESDC to develop an LMBP that demonstrates your commitment to activities that will have lasting, positive impacts on the Canadian labour market.</p>\r\n\r\n<p>An LMBP will help you and the Government of Canada identify and track your overall job creation, skills and training investments and other activities that will benefit the Canadian economy through your employment of highly skilled global talent.</p>\r\n\r\n<p>The commitments in your LMBP will be divided into mandatory and complementary benefits.</p>\r\n\r\n<p>If you’ve been referred by one of the <a href=\"#h2.19\">GTS’s designated referral partners</a> and are seeking to hire <a href=\"#h2.20\">unique and specialized talent</a> (Category A), you must commit to creating jobs for Canadians and permanent residents as your mandatory benefit.</p>\r\n\r\n<p>If you’re an employer in Canada seeking to hire highly skilled temporary foreign workers to fill positions in occupations on the <a href=\"#h2.21\">global talent occupations list</a> (Category B), you must commit to increasing skills and training investments for Canadians and permanent residents as your mandatory benefit."
 
   - id: lmia_genuine_labour_shortage
     category: qualitative

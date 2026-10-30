@@ -38,11 +38,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Community Referral, enrolled participating community status, exploratory visit record, or population criteria cannot be verified."
     interpretation: "Candidate must complete an exploratory visit and receive an official Community Referral from an enrolled participating municipality with a population under 75,000."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      evidence_unit_id: bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance
       source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
       section: "1.2, 2.1"
-      page: "7; 11"
-      verbatim_excerpt: "obtain a referral from an enrolled community with a population of fewer than 75,000"
+      page: "7"
+      verbatim_excerpt: "establish a new business in B.C. and be referred\nby an enrolled community."
 
   - id: ei_reg_personal_net_worth
     category: financial
@@ -57,11 +57,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Personal net worth or statutory third-party verification report cannot be confirmed."
     interpretation: "Candidate must have at least $300,000 CAD in legally obtained, unencumbered personal net worth."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "1.2, 2.2"
       page: "7; 12"
-      verbatim_excerpt: "have a personal net worth of at least $300,000"
+      verbatim_excerpt: "Must have a personal net worth of at least $300,000 CAD"
 
   - id: ei_reg_eligible_investment
     category: financial
@@ -75,11 +75,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Proposed eligible investment in the participating community is unverified."
     interpretation: "Candidate must make an eligible commercial investment of at least $100,000 CAD from personal funds into the community business."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p21:2_4_ei_regional_minimum_investment_requirements"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "1.2, 2.3"
       page: "7; 13"
-      verbatim_excerpt: "make an eligible personal investment of at least $100,000"
+      verbatim_excerpt: "Must make an eligible personal investment of at least $100,000 CAD in the business"
 
   - id: ei_reg_equity_ownership
     category: business
@@ -93,11 +93,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Controlling equity ownership percentage cannot be confirmed."
     interpretation: "Candidate must hold at least 51% (majority controlling ownership) of the newly established regional enterprise."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
+      evidence_unit_id: bcpnp:bc_pnp_ei_regional_guide:p19:any_other_type_of_business_that_by_association_w
       source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
       section: "1.2, 2.4"
-      page: "7; 14"
-      verbatim_excerpt: "hold at least 51 per cent equity ownership in the business"
+      page: "19"
+      verbatim_excerpt: "You must demonstrate that you will own at least 51 per cent of the business in B.C."
 
   - id: ei_reg_job_creation
     category: business
@@ -111,11 +111,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Full-time job creation projections or documentation cannot be established."
     interpretation: "Candidate must create at least one new full-time equivalent job for a Canadian citizen or permanent resident in the community."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "1.2, 2.5"
       page: "7; 15"
-      verbatim_excerpt: "create at least one new full-time equivalent job for a Canadian citizen or permanent resident"
+      verbatim_excerpt: "text-align: left\">Must create at least one new full-time job for a Canadian citizen or permanent resident</td><td style=\"width: 40."
 
   - id: ei_reg_business_experience
     category: candidate
@@ -130,11 +130,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Qualifying managerial or business ownership experience cannot be established."
     interpretation: "Within the last 5 years, candidate must have at least 3 years as business owner, 4 years as senior manager, or 1 year owner + 2 years senior manager."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "1.2, 2.6"
       page: "7; 16"
-      verbatim_excerpt: "3+ years of experience as a business owner-manager, or 4+ years of experience as a senior manager"
+      verbatim_excerpt: "Must have a minimum of 3 years experience* as a business owner-manager in the last 5 years"
 
   - id: ei_reg_new_business_only
     category: business
@@ -149,11 +149,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Business structure classification (new vs acquisition) cannot be confirmed."
     interpretation: "Under the Regional Stream, only the establishment of a brand-new business is permitted. Business acquisitions are explicitly disqualified."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p7:1_2_streams_at_a_glance"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "1.2, 2.7"
       page: "7; 17"
-      verbatim_excerpt: "establish a new business; business acquisitions are not eligible"
+      verbatim_excerpt: "Must establish an eligible new business aligned with the economic development priorities of the referring host community"
 
   - id: ei_reg_language_floor
     category: candidate
@@ -172,11 +172,11 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Mandatory language proficiency test (CLB 4) is unverified or expired."
     interpretation: "Candidate must demonstrate CLB 4 across all four competencies on a designated test."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p8:1"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "2.8"
       page: "18"
-      verbatim_excerpt: "Canadian Language Benchmark (CLB) 4 or higher in each of the four competencies"
+      verbatim_excerpt: "text-align: left\">Must meet the minimum language requirement of Canadian Language Benchmark level 4<br></td><td style=\"width: 40."
 
   - id: ei_reg_community_alignment
     category: integrity
@@ -196,8 +196,8 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Community economic priority alignment evidence is incomplete or probability is uncertain."
     interpretation: "Evaluates genuine strategic alignment between the proposed enterprise and the host community's published economic development plan."
     evidence_anchor:
-      evidence_unit_id: "bcpnp:bc_pnp_ei_regional_guide:p20:by_the_ministry_of_agriculture_for_more_informati"
-      source_file: "BC-PNP-EI-Regional-Program-Guide.pdf"
+      evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
+      source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
       section: "2.9"
       page: "20"
-      verbatim_excerpt: "establish a business that aligns with the community's economic development priorities"
+      verbatim_excerpt: "Must establish an eligible new business aligned with the economic development priorities of the referring host community"

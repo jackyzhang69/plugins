@@ -36,10 +36,11 @@ rules:
   fail_if: candidate.letter_of_support_valid == false
   missing_or_unverified: 'NEEDS_REVIEW: Designated-organization letter of support cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-SUPPORT-001
-    source_file: start-visa-eligibility.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Letter of support
-    verbatim_excerpt: get a letter of support from a designated organization
+    source_id: irpr_suv
+    verbatim_excerpt: "have received a Letter of Support from a designated entity"
 - id: suv_language
   category: language
   severity: CRITICAL_REDLINE
@@ -50,11 +51,11 @@ rules:
   fail_if: candidate.language_clb_minimum < 5
   missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-LANGUAGE-002
-    source_file: start-visa-language-testing.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Language testing
-    verbatim_excerpt: If you meet the minimum score of CLB 5 in all 4 abilities, include a copy of the test results with your
-      application.
+    source_id: irpr_suv
+    verbatim_excerpt: "level of proficiency of <strong>at least benchmark level 5</strong>"
 - id: suv_ownership
   category: pathway
   severity: CRITICAL_REDLINE
@@ -63,15 +64,15 @@ rules:
   - candidate.ownership_ratio
   - candidate.owner_count
   - candidate.combined_control_ratio
-  pass_if: candidate.ownership_ratio >= 0.10 && candidate.owner_count <= 5 && candidate.combined_control_ratio > 0.50
-  fail_if: candidate.ownership_ratio < 0.10 || candidate.owner_count > 5 || candidate.combined_control_ratio <= 0.50
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Ownership or control cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-OWNERSHIP-003
-    source_file: start-visa-eligibility.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Have a qualifying business
-    verbatim_excerpt: each applicant must hold 10% or more of the total voting rights applicants and the designated organization
-      together must hold more than 50% of the total voting rights
+    source_id: irpr_suv
+    verbatim_excerpt: "Each applicant holds 10% or more of the voting rights attached to all shares of the corporation outstanding at that time"
 - id: suv_business
   category: pathway
   severity: CRITICAL_REDLINE
@@ -83,11 +84,11 @@ rules:
   fail_if: candidate.incorporated_in_canada == false || candidate.business_operating == false
   missing_or_unverified: 'NEEDS_REVIEW: Canadian incorporation or active operation cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-BUSINESS-004
-    source_file: start-visa-eligibility.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Have a qualifying business
-    verbatim_excerpt: incorporate your business in Canada provide active and ongoing management of your business from inside
-      Canada make sure an essential part of business operations happens in Canada
+    source_id: irpr_suv
+    verbatim_excerpt: "incorporated in and carrying on business in Canada"
 - id: suv_funds
   category: funds
   severity: CRITICAL_REDLINE
@@ -99,11 +100,11 @@ rules:
   fail_if: candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
   missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-FUNDS-005
-    source_file: start-visa-eligibility.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Bring enough money to settle
-    verbatim_excerpt: You’ll need proof that you have the money to support yourself and your dependants after you arrive in
-      Canada.
+    source_id: irpr_suv
+    verbatim_excerpt: "have sufficient settlement funds (transferable and available funds, free of debts or other obligations"
 - id: suv_quebec
   category: pathway
   severity: CRITICAL_REDLINE
@@ -114,7 +115,8 @@ rules:
   fail_if: candidate.intends_to_reside_outside_quebec == false
   missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-SUV-QUEBEC-006
-    source_file: start-visa.html
+    evidence_unit_id: suv.guide.before
+    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
     section: Program scope
-    verbatim_excerpt: build businesses in Canada (outside Quebec)
+    source_id: irpr_suv
+    verbatim_excerpt: "You cannot apply under the Start-up Business Class if you intend to reside in Quebec."

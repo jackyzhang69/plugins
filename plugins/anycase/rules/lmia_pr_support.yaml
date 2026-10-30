@@ -11,6 +11,10 @@ source_edition: "ESDC Temporary Foreign Worker Program Requirements for Permanen
 source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/permanent/requirements.html"
 decision_scope: "Pre-screen of the five regulatory rules defined below; PASS confirms eligibility to support an Express Entry / Permanent Residence application."
 
+reference_points_grid:
+  note: "The PR-support stream has no selection points grid: it is a regulatory pre-screen of the five rules below (ESDC PR-support requirements, July 2026). Scoring belongs to the Express Entry program the job offer supports, not to the LMIA."
+  source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/permanent/requirements.html"
+
 schema:
   input_type: object
   required_top_level: [assessment_date, employer, job_offer, noul]
@@ -80,11 +84,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Employer compliance status cannot be established."
     interpretation: "Service Canada has no legal authority to process LMIA applications from ineligible employers."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-008"
-      source_file: "refusal_to_process.html"
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "b3e62a397180bead064ffbfac5a7d866cc72ca9bcdfc49014f08e75d33be0ee4"
       section: "Regulatory authority and ineligibility"
       verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
-
   - id: lmia_pr_permanent_indeterminate_offer
     category: job_offer
     severity: CRITICAL_REDLINE
@@ -114,10 +117,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: NOC TEER classification is missing."
     interpretation: "Permanent residency support LMIAs under Express Entry (FSW, CEC, FST) require positions classified under NOC 2021 TEER 0, 1, 2, or 3. TEER 4 and 5 occupations do not qualify for Express Entry PR support."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "permanent_residence_requirements.html"
+      evidence_unit_id: "lmia_employer_eligibility.pr_support_overview.full_page_projection"
+      source_file: "457cee2e2dc086d640566cd0ba0ab4888fd980820b12c74fc76f3043e0a9e9a6"
       section: "Occupations"
-      verbatim_excerpt: "The position must be in a skilled trade or professional occupation (NOC TEER 0, 1, 2, or 3)"
+      verbatim_excerpt: "positions in TEER 0/1/2/3 (Training, Education, Experience and Responsibilities) of the NOC, such as management, professional, scientific, technical or trade occupations"
 
   - id: lmia_prevailing_wage
     category: compensation
@@ -131,10 +134,10 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage on Job Bank or offered base wage is missing."
     interpretation: "The offered hourly wage must equal or exceed the prevailing wage for the occupation in the sub-region."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-001"
-      source_file: "permanent_residence_requirements.html"
+      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
+      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
       section: "Wages and benefits"
-      verbatim_excerpt: "Employers must pay the prevailing wage rate for the occupation"
+      verbatim_excerpt: "For the purpose of the TFW Program, you must pay the prevailing wage that is defined as the highest of either:</p>\r\n  <ul>\r\n    <li>the median wage on <a href=\"http://www.jobbank.gc.ca/wage-outlook_search-eng.do?reportOption=wage\">Job Bank</a></li>\r\n    <li>the wage that is within the wage range that you're paying your current employees hired for the same job and work location, and with the same skills and years of experience"
 
   - id: lmia_genuine_labour_shortage
     category: qualitative
@@ -150,7 +153,7 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Qualitative evidence is incomplete or probability is borderline."
     interpretation: "Service Canada officers must be satisfied that the job offer is genuine and the position has a real commercial rationale."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "permanent_residence_requirements.html"
+      evidence_unit_id: EU-LMIA-005
+      source_file: "1f4ddbd8270582922733748101ca349aaf0505ff21f6f51a809e1f88779813d7"
       section: "Assessment criteria"
-      verbatim_excerpt: "Service Canada will assess whether the job offer is genuine"
+      verbatim_excerpt: "all job offers made by employers must be assessed to ensure that both the business and the job offer are genuine and legitimate.</p>\r\n<p>We assess your LMIA application and any supporting documents to confirm that your business:</p>\r\n<ol class=\"lst-upr-alph\">\r\n  <li>is providing a good or a service in Canada</li>\r\n  <li>is offering employment that's consistent with the reasonable needs of your business"

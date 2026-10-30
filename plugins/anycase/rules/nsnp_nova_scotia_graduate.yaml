@@ -75,10 +75,8 @@ rules:
   - candidate.completed_ns_program_duration_years
   - candidate.graduated_within_past_36_months
   - candidate.credential_issued
-  pass_if: candidate.institution_is_ns_dli == true && candidate.credential_issued == true && candidate.graduated_within_past_36_months
-    == true && (candidate.completed_ns_program_duration_years >= 2.0 || candidate.is_eligible_postgraduate_program == true)
-  fail_if: candidate.institution_is_ns_dli == false || candidate.credential_issued == false || candidate.graduated_within_past_36_months
-    == false || (candidate.completed_ns_program_duration_years < 2.0 && candidate.is_eligible_postgraduate_program == false)
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Official Nova Scotia DLI transcript, completion letter, or credential date is missing.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -100,8 +98,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.has_valid_pgwp_or_maintained_status
-  pass_if: candidate.has_valid_pgwp_or_maintained_status == true
-  fail_if: candidate.has_valid_pgwp_or_maintained_status == false
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Post-Graduation Work Permit (PGWP) or maintained status authorization is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -119,8 +117,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.ownership_max_combined_ratio
-  pass_if: candidate.ownership_max_combined_ratio < 0.10
-  fail_if: candidate.ownership_max_combined_ratio >= 0.10
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Applicant and family equity ratio cannot be established.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -141,10 +139,8 @@ rules:
   - job_offer.weekly_regular_hours
   - job_offer.is_in_nova_scotia
   - job_offer.is_telework_outside_ns
-  pass_if: job_offer.indeterminate == true && job_offer.weekly_regular_hours >= 30.0 && job_offer.is_in_nova_scotia == true
-    && job_offer.is_telework_outside_ns == false
-  fail_if: job_offer.indeterminate == false || job_offer.weekly_regular_hours < 30.0 || job_offer.is_in_nova_scotia == false
-    || job_offer.is_telework_outside_ns == true
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Job offer permanence, hours, or Nova Scotia location is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -162,8 +158,8 @@ rules:
   eval_type: deterministic
   required_fields:
   - job_offer.directly_related_to_field_of_study
-  pass_if: job_offer.directly_related_to_field_of_study == true
-  fail_if: job_offer.directly_related_to_field_of_study == false
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Job duties alignment with Nova Scotia educational program is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -186,14 +182,8 @@ rules:
   - candidate.language_test.reading_clb
   - candidate.language_test.writing_clb
   - candidate.language_test.speaking_clb
-  pass_if: candidate.language_test.valid_at_application == true && ((job_offer.noc_teer in [0, 1, 2] && candidate.language_test.listening_clb
-    >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb
-    >= 5) || (job_offer.noc_teer in [3, 4, 5] && candidate.language_test.listening_clb >= 4 && candidate.language_test.reading_clb
-    >= 4 && candidate.language_test.writing_clb >= 4 && candidate.language_test.speaking_clb >= 4))
-  fail_if: candidate.language_test.valid_at_application == false || (job_offer.noc_teer in [0, 1, 2] && (candidate.language_test.listening_clb
-    < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb
-    < 5)) || (job_offer.noc_teer in [3, 4, 5] && (candidate.language_test.listening_clb < 4 || candidate.language_test.reading_clb
-    < 4 || candidate.language_test.writing_clb < 4 || candidate.language_test.speaking_clb < 4))
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Official language results are missing, expired, or unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -213,10 +203,8 @@ rules:
   - job_offer.regular_base_hourly_cad
   - job_offer.prevailing_median_hourly_cad
   - job_offer.statutory_minimum_wage_cad
-  pass_if: job_offer.regular_base_hourly_cad >= job_offer.statutory_minimum_wage_cad && job_offer.regular_base_hourly_cad
-    >= job_offer.prevailing_median_hourly_cad
-  fail_if: job_offer.regular_base_hourly_cad < job_offer.statutory_minimum_wage_cad || job_offer.regular_base_hourly_cad <
-    job_offer.prevailing_median_hourly_cad
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Wage rates or prevailing regional wage is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -236,10 +224,8 @@ rules:
   - employer.ns_operating_months
   - employer.permanent_establishment_in_ns
   - employer.in_good_standing
-  pass_if: employer.ns_operating_months >= 24 && employer.permanent_establishment_in_ns == true && employer.in_good_standing
-    == true
-  fail_if: employer.ns_operating_months < 24 || employer.permanent_establishment_in_ns == false || employer.in_good_standing
-    == false
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Employer business documentation is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf
@@ -261,8 +247,8 @@ rules:
   - noul.evidence_complete
   - noul.evidence_refs
   precondition: noul.evidence_complete == true
-  pass_if: noul.probability_true >= 0.70
-  fail_if: noul.probability_true < 0.30
+  pass_if: "candidate.stream == '__source_threshold_missing__'"
+  fail_if: "candidate.stream == '__source_threshold_missing__'"
   missing_or_unverified: 'NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Graduate-English.pdf

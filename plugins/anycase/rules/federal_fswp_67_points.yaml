@@ -319,10 +319,11 @@ rules:
     || candidate.experience_paid == false || candidate.experience_continuous_months < 12 || candidate.experience_counted_hours
     < 1560 || candidate.experience_last_10_years == false
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-EXPERIENCE-001
-    source_file: src02.html
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:eligibility.work_experience"
+    source_id: ircc_fswp
+    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
     section: Skilled work experience
-    verbatim_excerpt: be at least 1 year of continuous work or 1,560 hours total (30 hours per week)
+    verbatim_excerpt: "<label for=\"elig6\">be at least <strong>1 year of continuous work</strong> or 1,560 hours total (30 hours"
 - id: fswp_gate_language_clb7
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -341,10 +342,11 @@ rules:
     == false || candidate.language_test.listening_clb < 7 || candidate.language_test.reading_clb < 7 ||
     candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb < 7
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-LANGUAGE-001
-    source_file: src18.html
+    evidence_unit_id: federal_ee:express_entry_language_results:language.fswp.tests_and_validity
+    source_id: ircc_language
+    source_file: "971b0c655e309b3d7c4ced420e04e6b9dbed6f15d9643dc5679c927557b2e5fb"
     section: Federal Skilled Worker Program — First official language
-    verbatim_excerpt: English CLB 7
+    verbatim_excerpt: "First official language</h4>\r\n            <div class=\"table-responsive\">\r\n                <table class=\"table\">\r\n                    <thead>\r\n                        <tr>\r\n                            <th scope=\"col\">Language</th>\r\n                            <th scope=\"col\">Minimum level for all 4 abilities</th>\r\n                        </tr>\r\n                    </thead>\r\n                    <tbody>\r\n                        <tr>\r\n                            <th>English</th>\r\n                            <td>CLB 7</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>French</th>\r\n                            <td>NCLC7"
 - id: fswp_gate_education_credential
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -364,11 +366,11 @@ rules:
     == false || candidate.education.eca_designated == false || candidate.education.eca_valid_within_five_years
     == false)
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-EDUCATION-001
-    source_file: src02.html
+    evidence_unit_id: "federal_ee:express_entry_education_assessment:education.fswp_foreign_eca"
+    source_file: 8fa09a2725649e70223cbfe02c5ec4cb9330e118fce6f5488a8e393d85e3ccb2
     section: Education
-    verbatim_excerpt: 'If you have foreign education, you must have: a completed educational credential
-      and an Educational Credential Assessment for immigration purposes'
+    source_id: ircc_eca
+    verbatim_excerpt: "If you completed your education <strong>outside Canada</strong>, you need an Educational credential assessment (ECA)\r\n    to:</p>\r\n<ul>\r\n    <li>be eligible as the principal applicant for Federal Skilled Workers Program (Express Entry)"
 - id: fswp_gate_settlement_funds
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -399,10 +401,11 @@ rules:
     > 7 && funds.available_cad < 40392 + (candidate.family_size - 7) * 4112))'
   missing_or_unverified: NEEDS_REVIEW — funds evidence, exemption or family-size calculation is unverified.
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-FUNDS-001
-    source_file: src19.html
-    section: Proof of funds — How much money you need
-    verbatim_excerpt: Number of family members Funds you need (CAD) Updated July 7, 2025 1 $15,263
+    evidence_unit_id: "federal_ee:express_entry_proof_of_funds:funds.minimum_amounts_2025"
+    source_id: ircc_funds
+    source_file: ac73b9ce66b4740551aa4a34486dfe738cfd184abe1c376e4c7538d319e9e08d
+    section: How much money you need
+    verbatim_excerpt: "<th class=\"text-center\" scope=\"row\">1</th>\r\n                <td class=\"text-center\">$15,263</td>\r\n            </tr>"
 - id: fswp_gate_intended_residence
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -412,77 +415,84 @@ rules:
   pass_if: candidate.intended_province != 'quebec'
   fail_if: candidate.intended_province == 'quebec'
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-QUEBEC-001
-    source_file: src02.html
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:eligibility.intended_residence"
+    source_id: ircc_fswp
+    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
     section: Where you can live in Canada
-    verbatim_excerpt: You must plan to live outside the province of Quebec
+    verbatim_excerpt: "<p>You must plan to live <strong>outside the province of Quebec</strong>."
 - id: fswp_gate_selection_score
   category: statutory_gate
   severity: CRITICAL_REDLINE
   eval_type: federal_score_total
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SELECTION-67-001
-    source_file: src02.html
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
+    source_id: ircc_fswp
+    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
     section: Selection factors
-    verbatim_excerpt: If you score 67 points or higher , you may qualify for the Federal Skilled Worker
-      Program
+    verbatim_excerpt: "<li>If you score <strong>67&nbsp;points or higher</strong>, you may qualify for the Federal Skilled Worker Program."
 - id: fswp_score_language
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: language
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-LANGUAGE-001
-    source_file: src02.html
-    section: Language skills (maximum 28 points)
-    verbatim_excerpt: Language skills (maximum 28 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_language"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Language skills (maximum 28 points)"
+    verbatim_excerpt: "<h3>Language skills (maximum 28 points)</h3>\r\n    </summary>"
 - id: fswp_score_education
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: education
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-EDUCATION-001
-    source_file: src02.html
-    section: Education (maximum 25 points)
-    verbatim_excerpt: Education (maximum 25 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Education (maximum 25 points)"
+    verbatim_excerpt: "<summary>\r\n        <h3>Education (maximum 25 points)</h3>\r\n    </summary>"
 - id: fswp_score_experience
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: experience
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-EXPERIENCE-001
-    source_file: src02.html
-    section: Skilled work experience (maximum 15 points)
-    verbatim_excerpt: Skilled work experience (maximum 15 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_work_experience"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Skilled work experience (maximum 15 points)"
+    verbatim_excerpt: "<h3>Skilled work experience (maximum 15 points)</h3>"
 - id: fswp_score_age
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: age
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-AGE-001
-    source_file: src02.html
-    section: Age (maximum 12 points)
-    verbatim_excerpt: Age (maximum 12 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Age (maximum 12 points)"
+    verbatim_excerpt: "<summary>\r\n        <h3>Age (maximum 12 points)</h3>\r\n    </summary>"
 - id: fswp_score_arranged_employment
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: arranged_employment
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-ARRANGED-001
-    source_file: src02.html
-    section: Arranged employment in Canada (maximum 10 points)
-    verbatim_excerpt: Arranged employment in Canada (maximum 10 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_arranged_employment"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Arranged employment in Canada (maximum 10 points)"
+    verbatim_excerpt: "Arranged employment in Canada (maximum 10 points)"
 - id: fswp_score_adaptability
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: adaptability
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSWP-SCORE-ADAPT-001
-    source_file: src02.html
-    section: Adaptability (maximum 10 points)
-    verbatim_excerpt: Adaptability (maximum 10 points)
+    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_adaptability"
+    source_id: ircc_fswp
+    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
+    section: "Adaptability (maximum 10 points)"
+    verbatim_excerpt: "<h3>Adaptability (maximum 10 points)</h3>\r\n    </summary>"
