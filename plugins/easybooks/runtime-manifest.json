@@ -5,15 +5,15 @@
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/easybooks",
-        "sha256": "a3ec19549d3ec83988fc8e4a34079c86dc5a259e6bab52b0d8b10f3b250988b3"
+        "sha256": "b853992c4e049df2e8f970dbe69c7634d361e8400123bf825f9f7407a7e2796f"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/easybooks.exe",
-        "sha256": "8286512b2407e3731d87720d143bfcd1d2da9d9105c3c2fde2f61885db0513a1"
+        "sha256": "31f38e7e29a2a43d924e13e52039a84c3782d1cb6eb296648295efd8c20217fa"
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/easybooks",
-        "sha256": "731652bf67ee7061802beb65d471ddf4f16d3e603d4c3ec3137ab58b8ed57d53"
+        "sha256": "91deb824c9524f038b4af4eb10c97695d69749cf717430c55093fd57a5f946d4"
       }
     },
     "resolutionOrder": [
@@ -30,5 +30,5 @@
   },
   "configFile": "config.json",
   "defaultBaseUrl": "https://easybooks.jackyzhang.app",
-  "source_sha": "e8d7bf91bbb7704ca3173e380d2a6a3d96db624c"
+  "source_sha": "3a311b4143591905ad9678262e8823902ddfe824"
 }
