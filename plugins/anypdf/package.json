@@ -1,11 +1,11 @@
 {
   "name": "dsh-anypdf",
-  "version": "0.7.26",
+  "version": "0.7.27",
   "description": "anypdf for DeepSeek Harness: Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list.",
-  "license": "Proprietary",
+  "license": "MIT",
   "author": {
     "name": "Jacky Zhang",
-    "url": "https://jackyzhang.app"
+    "url": "https://github.com/jackyzhang69/anypdf"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-skill-filesystem": "^0.1.1-rc.2"
+    "@deepseek-ai/dsh-skill-filesystem": "0.2.1-rc.2"
   },
   "dsh": {
     "bundle": {

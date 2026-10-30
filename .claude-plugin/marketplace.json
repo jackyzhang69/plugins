@@ -21,7 +21,7 @@
       "author": {
         "name": "Jacky Zhang"
       },
-      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories.",
+      "description": "Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes \u2014 record income/expenses, create and send invoices, and resolve clients/categories.",
       "name": "easybooks",
       "source": "./plugins/easybooks",
       "version": "0.5.26"
@@ -98,6 +98,16 @@
     },
     {
       "author": {
+        "name": "Jacky Zhang"
+      },
+      "category": "productivity",
+      "description": "Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.",
+      "name": "anywrite",
+      "source": "./plugins/anywrite",
+      "version": "0.1.8"
+    },
+    {
+      "author": {
         "name": "Jacky Zhang",
         "url": "https://github.com/jackyzhang69/anypdf"
       },
@@ -106,17 +116,7 @@
       "homepage": "https://github.com/jackyzhang69/anypdf",
       "name": "anypdf",
       "source": "./plugins/anypdf",
-      "version": "0.7.26"
-    },
-    {
-      "author": {
-        "name": "Jacky Zhang"
-      },
-      "category": "productivity",
-      "description": "Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.",
-      "name": "anywrite",
-      "source": "./plugins/anywrite",
-      "version": "0.1.8"
+      "version": "0.7.27"
     }
   ]
 }

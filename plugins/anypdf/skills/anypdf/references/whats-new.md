@@ -1,6 +1,6 @@
-# AnyPDF — what changed in 0.7.26
+# AnyPDF — what changed in 0.7.27
 
-The native client now ships without debug symbols or local build paths. Filling and reading forms work as before.
+This version adds Linux x64 packaging and DeepSeek Harness support. Filling and reading forms work as before.
 
 # AnyPDF — what changed in 0.7.25
 

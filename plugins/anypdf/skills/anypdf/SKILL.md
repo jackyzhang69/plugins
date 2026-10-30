@@ -72,31 +72,6 @@ $ANYPDF forms catalog --json
    live discovery cannot verify availability, say so without inventing a
    capability.
 
-## Token delivery to the host agent (connect) — LOCKED 2026-08-14
-
-The host agent performs connect **for** the human. **Never** tell the human to open a terminal and run login commands themselves.
-
-Accept input in this order:
-
-1. **File containing the token (preferred).** If the human provides a filesystem path (e.g. `~/Desktop/jacky-token.txt`) or an attached/readable file whose contents are a single `jz_…` value (optional surrounding whitespace/newline only):
-   - Read the file in the agent tool channel.
-   - Pipe the token to the product CLI via stdin only: `"$ANYPDF" login --token-stdin`
-   - Do **not** put the token on argv, in chat echo, in logs, or in screenshots.
-   - Confirm success with masked doctor/whoami only.
-
-2. **Plaintext token in chat (allowed, discouraged).** If the human pastes a raw `jz_…` into the conversation:
-   - **Warn once** in plain language: prefer a local file path next time so the secret is not retained in chat history; do **not** refuse.
-   - Proceed immediately: feed that value to `login --token-stdin` via your non-echoing bash/exec tool (`printf '%s' "$TOKEN" | "$ANYPDF" login --token-stdin`).
-   - Do not repeat the raw token back in the reply.
-
-3. **No token yet.** Ask the human to send either a **file path** (best) or paste the token. Still do not ask them to run terminal commands.
-
-Hard rules:
-
-- `--token <value>` / argv secrets remain **forbidden** for the CLI.
-- After any successful connect, other official plugins must not re-prompt when `user.json` is present.
-- Confirm success with masked output: `"$ANYPDF" whoami --json`.
-
 ## Agent router — intents
 
 | User intent | Host does | Human may be asked |
