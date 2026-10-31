@@ -1,5 +1,5 @@
 # DeepSeek Harness bundle layer. Installed with:
-#   dsh plugin --profile web add "github:jackyzhang69/plugins#anypdf-v0.7.27&path:plugins/anypdf"
+#   dsh plugin --profile web add "github:jackyzhang69/plugins#anypdf-v0.7.28&path:plugins/anypdf"
 # The row mounts index.js, which registers this package's skills/ directory as
 # an isolated skill provider so the host agent sees the same anypdf contract
 # as the Claude and Codex plugin hosts.

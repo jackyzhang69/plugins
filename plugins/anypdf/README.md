@@ -1,9 +1,9 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anypdf
 
-Version `0.7.27`.
+Version `0.7.28`.
 
-Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list.
+Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router and confirm current support with `anypdf forms catalog`, including IMM0008; never promise support from a frozen form list. New-template intake accepts only the issuing authority's official blank PDF; `new_source` does not mean published or fill-ready. Do not guess unconfirmed facts or submit an application to an issuer on the user's behalf. IRCC PDFs still requiring Acrobat Validate are not ready for upload.
 
 Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
 

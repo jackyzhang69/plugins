@@ -19,7 +19,7 @@ One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI l
 | [`anymail`](./plugins/anymail) | 0.1.12 | macOS (`arm64`), Windows (`x64`) | Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets. |
 | [`anyscore`](./plugins/anyscore) | 0.2.2 | macOS (`arm64`), Windows (`x64`) | Canadian immigration points grids: Express Entry and provincial scoring. Deterministic grid_assessment only — never eligibility. |
 | [`anywrite`](./plugins/anywrite) | 0.1.8 | macOS (`arm64`), Windows (`x64`) | Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style. |
-| [`anypdf`](./plugins/anypdf) | 0.7.27 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router; ask the live CLI, never a frozen form list. |
+| [`anypdf`](./plugins/anypdf) | 0.7.28 | macOS (`arm64`), Windows (`x64`) | Secure agent-native PDF form filling, one-shot intake, and Tell-Jacky feedback. Load the anypdf router and confirm current support with `anypdf forms catalog`, including IMM0008; never promise support from a frozen form list. New-template intake accepts only the issuing authority's official blank PDF; `new_source` does not mean published or fill-ready. Do not guess unconfirmed facts or submit an application to an issuer on the user's behalf. IRCC PDFs still requiring Acrobat Validate are not ready for upload. |
 
 ## Installation
 
