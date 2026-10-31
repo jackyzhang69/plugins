@@ -1,6 +1,6 @@
 {
-  "version": "0.2.2",
-  "source_sha": "12a14cfeb1e9381665b1bc8a7862f0269fe015aa",
+  "version": "0.2.3",
+  "source_sha": "1e693f0d1b45bd3adb32653b32d39de02b3db565",
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anyscore",
     "linux": "${HOME}/.jackyzhang.app/anyscore",
@@ -9,19 +9,19 @@
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anyscore",
-      "sha256": "f13b509b86722ddbf4ae7f78c06e713681bc982d5a2928cbe87f7f20ec4d8c78",
-      "size": 3101984
+      "sha256": "885c7cff9781e99981c3a7c91310c07c0306f2a529f308c93d168275a4f2269f",
+      "size": 3186480
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anyscore.exe",
-      "sha256": "9b4c58a7e4b161da6c90b2e345742d3c7ff1749f4ece727a36dde8216dd49ff5",
-      "size": 3788800
+      "sha256": "0fd0abc9d56a371489815e8e79072903154a37232b7f19087c5eef14988f7860",
+      "size": 3855360
     },
     "linux-x64": {
       "entrypoint": "bin/linux-x64/anyscore",
-      "sha256": "3aeb675f68b0a5aef2ee76d9a6c76bb85897fb0749011eb33cba09c7c58e7dab",
-      "size": 4312472
+      "sha256": "f7ad129904d80c783f89436af9344291d3628f191764538e904f72cfd5fb4fdd",
+      "size": 4140008
     }
   },
-  "release_tag": "anyscore-v0.2.2"
+  "release_tag": "anyscore-v0.2.3"
 }

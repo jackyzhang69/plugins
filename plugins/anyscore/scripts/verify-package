@@ -12,7 +12,7 @@ test -f "$ROOT/.claude-plugin/plugin.json"
 count="$(find "$ROOT/skills" -name SKILL.md | wc -l | tr -d ' ')"
 test "$count" = "1" || { echo "verify-package: expected 1 SKILL.md, found $count" >&2; exit 1; }
 python3 - "$ROOT" <<'PY'
-import json, re, sys
+import json, re, struct, sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
@@ -35,6 +35,23 @@ expected = next(iter(versions.values()))
 for rel, got in versions.items():
     if got != expected:
         sys.exit(f"verify-package: {rel} version {got!r} != {expected!r}")
+
+platforms = set(
+    json.loads((root / "runtime-manifest.json").read_text(encoding="utf-8")).get("platforms") or {}
+)
+if platforms != {"darwin-arm64", "win32-x64", "linux-x64"}:
+    sys.exit(
+        "verify-package: runtime-manifest platforms must be exactly "
+        f"darwin-arm64, win32-x64, linux-x64 (got {sorted(platforms)})"
+    )
+
+linux_bin = root / "bin" / "linux-x64" / "anyscore"
+if linux_bin.is_file():
+    data = linux_bin.read_bytes()
+    if data[:4] != b"\x7fELF" or len(data) < 20 or data[4] != 2 or data[5] != 1:
+        sys.exit("verify-package: bin/linux-x64/anyscore is not a 64-bit little-endian ELF file")
+    if struct.unpack_from("<H", data, 18)[0] != 0x3E:
+        sys.exit("verify-package: bin/linux-x64/anyscore is not x86-64 ELF")
 
 cargo_path = root / "crates" / "anyscore-cli" / "Cargo.toml"
 if cargo_path.is_file():

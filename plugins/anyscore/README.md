@@ -42,3 +42,26 @@ This repository also builds the deterministic server. The official client is the
 cargo test --workspace
 bash scripts/verify-package
 ```
+
+The dispatch-only `source-watch` workflow is retired and only directs operators
+to AnyCase's canonical workflow. If invoked, its notice job still uses the
+governed `[self-hosted, macOS, ARM64]` runner capability labels; it does not
+restart source watching or deploy anything.
+
+## Change a grid without rebuilding
+
+Policy YAML is data. The server binary only interprets the current rows in Supabase Postgres (`anyscore.policy_versions`).
+
+1. Edit `policies/<area>/<grid>.yaml` and bump `revision` (a revision is immutable once synced).
+2. Sync into Supabase. Set `ANYSCORE_SUPABASE_DB_URL` in the environment (do not pass the URI as an argument). This does not compile the server:
+
+```bash
+anyscore-policy-sync \
+  --policies policies \
+  --schema schema/policy-schema.json
+```
+
+3. Reload the running server: send `SIGHUP`, or `POST /api/v1/anyscore/policies/reload`.
+4. `evaluate` uses the new points. The same policy bytes still score the same way; only the stored payload changed.
+
+`schema/policy-schema.json` is the write constraint (`$id` is stored as `schema_version`). The image build ignores `policies/`, so a points change does not rebuild the image. DDL lives at `crates/anyscore-core/migrations/001_policy_versions.sql` and is applied by the sync tool.

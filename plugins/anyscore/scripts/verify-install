@@ -2,11 +2,13 @@
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-case "$(uname -s)" in
-  Darwin) BIN="${DIR}/bin/darwin-arm64/anyscore" ;;
-  Linux) BIN="${DIR}/bin/linux-x64/anyscore" ;;
-  *) BIN="${DIR}/bin/anyscore" ;;
-esac
+BIN="${DIR}/bin/anyscore"
+if [ ! -x "$BIN" ]; then
+  case "$(uname -s):$(uname -m)" in
+    Linux:x86_64) BIN="${DIR}/bin/linux-x64/anyscore" ;;
+    *) BIN="${DIR}/bin/darwin-arm64/anyscore" ;;
+  esac
+fi
 
 echo "========================================="
 echo "AnyScore Plugin Verification & Smoke Test"
