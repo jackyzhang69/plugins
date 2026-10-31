@@ -179,6 +179,40 @@ Work inside the user’s folder. Keep local semantic artifacts under
 `<input>/anydoc-output/v001`, then `v002`, `v003`, and so on. Never overwrite a
 snapshot or alter the user's originals.
 
+### Source paths and roots
+
+- `--input` selects an existing local directory and may be absolute. With it,
+  write `"input_root": "."` unless deliberately selecting a child directory.
+  A child `input_root` is relative to `--input` and must stay inside it after
+  resolving filesystem links.
+- Without `--input`, `input_root` is relative to the **plan file's directory**,
+  not the shell cwd or workspace. A plan saved in `<input>/.anydoc-work/`
+  therefore needs `--input <input>` with `"input_root": "."`; never use `..`
+  to reach out of the plan directory.
+- Every action `from`, photo item source, exclusion `from`, and exclusion
+  `related_source` is relative to that resolved source root. Use the literal
+  `path` reported by `inspect`, with `/` separators on every platform:
+  `"from": "资料/Passport scan.pdf"`, not `/Users/.../Passport scan.pdf`,
+  `C:\\Users\\...`, or a UNC share. Native Windows relative backslashes are
+  accepted on Windows, but are literal filename characters on macOS/Linux.
+- Spaces, Chinese text, and literal `%` sequences are not URL-encoded.
+  Do not expand `~` or pass `file://` URIs in plan paths. Do not add leading
+  or trailing whitespace. Filesystem-equivalent case/Unicode spellings and
+  harmless `./` or repeated separators resolve to the actual inventory entry;
+  they do not permit nonexistent aliases on a case-sensitive disk. Use one
+  spelling per file across all actions and `action_mappings`; two spellings of
+  the same file are refused so per-person reuse checks stay exact.
+- Symlinks inside the source tree remain refused. Download iCloud/OneDrive
+  files locally first; AnyDoc does not hydrate placeholders or guess another
+  file when a provider/read fails.
+
+For `path_traversal` or `invalid_path`, keep the selected root and replace the
+source with its relative inspection path; never broaden the root just to bypass
+a refusal. For `source_not_found`, inspect that same root again and correct the
+source spelling or base. `io` means a filesystem/provider/permission error,
+not proof the source is absent. These errors do not authorize dropping a file.
+
+
 ```bash
 "$ANYDOC_BIN" doctor --json
 "$ANYDOC_BIN" inspect --input /absolute/folder --json
@@ -207,6 +241,9 @@ binds pages to one model claim and, for per-person claims, records both
 `public_guide`, include the pinned evaluation context and any explicit
 acknowledgment required by status/scope. For `manual_plan`, use only outputs
 the user directly supplied or approved.
+
+For the exact Plan v4 field tables, digest rules, and complete authority examples,
+see the [Plan v4 contract](plan-v4.md#plan-v4-contract).
 
 Plan v4 also has required `excluded_sources[]`. Actions are the included set;
 anything else currently in the folder is pending unless it appears in this

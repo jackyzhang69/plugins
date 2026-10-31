@@ -61,6 +61,11 @@ jobs:
               raise SystemExit("AnyDoc win32-x64 signing claim is incomplete")
           if win.get("pdfium", {}).get("signing") != win_signing:
               raise SystemExit("AnyDoc win32-x64 Pdfium signing claim is incomplete")
+          linux = manifest["binary"]["platforms"]["linux-x64"]
+          if linux.get("signing") != "unsigned" or linux.get("pdfium", {}).get(
+              "signing"
+          ) != "unsigned":
+              raise SystemExit("AnyDoc linux-x64 payload must be recorded as unsigned")
           version = manifest["binary"]["version"]
           with open(pathlib.Path(os.environ["GITHUB_OUTPUT"]), "a", encoding="utf-8") as output:
               output.write(f"version={version}\n")
@@ -74,6 +79,8 @@ jobs:
           cp plugins/anydoc/bin/darwin-arm64/libpdfium.dylib release-assets/libpdfium-darwin-arm64.dylib
           cp plugins/anydoc/bin/win32-x64/anydoc.exe release-assets/anydoc-win32-x64.exe
           cp plugins/anydoc/bin/win32-x64/pdfium.dll release-assets/pdfium-win32-x64.dll
+          cp plugins/anydoc/bin/linux-x64/anydoc release-assets/anydoc-linux-x64
+          cp plugins/anydoc/bin/linux-x64/libpdfium.so release-assets/libpdfium-linux-x64.so
       - name: Create marketplace GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}

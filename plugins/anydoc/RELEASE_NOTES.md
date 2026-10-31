@@ -1,3 +1,29 @@
+# AnyDoc 0.3.16
+
+- AnyDoc 0.3.15 was never published: its release stopped at the final
+  package check. 0.3.16 ships the same changes listed under 0.3.15 below,
+  plus that fix.
+- The release package check now scans text files only, so the bundled Linux
+  PDF engine no longer trips the retired-credential check.
+- macOS remains Developer ID signed and notarized. The Windows binary ships
+  Authenticode-unsigned under the existing owner waiver.
+
+# AnyDoc 0.3.15
+
+- Plan v4 contracts are documented in the installed playbook with complete
+  examples, and a rejected plan now names the exact field path and expected
+  value instead of a bare schema error. An omitted single-valued model
+  contract is filled in automatically.
+- Source paths accept equivalent spellings of the same file (`./x`, doubled
+  separators, Unicode normalization, and case variants where the disk accepts
+  them). Refusals name the allowed root and the corrected form, permission
+  errors are reported as I/O errors, and an input root that escapes `--input`
+  through a symlink is refused.
+- Product signals carry redacted, content-free error diagnostics, platform
+  metadata and timed steps so failures can be diagnosed without case data.
+- macOS remains Developer ID signed and notarized. The Windows binary ships
+  Authenticode-unsigned under the existing owner waiver.
+
 # AnyDoc 0.3.14
 
 - A rejected saved-rule draft now says what is missing: every draft needs

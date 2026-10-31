@@ -1,8 +1,0 @@
-# DeepSeek Harness bundle layer. Installed with:
-#   dsh plugin --profile web add "github:jackyzhang69/plugins#anydoc-v0.3.14&path:plugins/anydoc"
-# The row mounts index.js, which registers this package's skills/ directory as
-# an isolated skill provider so the host agent sees the same anydoc contract
-# as the Claude and Codex plugin hosts.
-- insert:
-    - id: anydoc
-      name: dsh-anydoc

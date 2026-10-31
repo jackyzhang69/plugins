@@ -36,6 +36,11 @@ scratch draft and export immediately.
 `roles`, `conditions`, `deliverables`). Do not pass an export file to those
 commands. The host strips server fields in scratch.
 
+The standalone model draft API always requires `contract`. Plan v4 embeds a
+draft under `authority.list` or a saved model under `authority.model`; its
+local-only omitted-contract rule, exact digest, and full plan shapes are in the
+[Plan v4 contract](plan-v4.md#plan-v4-contract).
+
 ## Draft JSON (the only accepted shape)
 
 A draft has exactly these six top-level keys and no others. `model_id`,

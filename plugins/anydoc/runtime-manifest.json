@@ -3,21 +3,21 @@
   "product": "anydoc",
   "binary": {
     "name": "anydoc",
-    "version": "0.3.14",
+    "version": "0.3.16",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anydoc",
-        "sha256": "56181ed2d8f09703e7f52307a03fee9e5d8a0c21df8f3035d63068bd1cb88af1",
+        "sha256": "52cc58468d977633fb0c5af2da3ad9f286bc9fe940ff5bb62bdb596150936b86",
         "pdfium": {
           "path": "bin/darwin-arm64/libpdfium.dylib",
-          "sha256": "f81dc9a79f894d6a78dc0f060a0341665bc4e374b3babf8718626600b513055e",
+          "sha256": "d0c44b6f9d7644edc8519dca4d25607c8764fcedf3377ad949ae575f83fb82d9",
           "signing": "signed_same_team_hardened_runtime"
         },
         "signing": "signed_same_team_hardened_runtime"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anydoc.exe",
-        "sha256": "f24b81525454ed4c1590b9ff7110017d1840747b7747e54fe4ba5d3c0c7eabce",
+        "sha256": "f4a792bf456be963558a7733025149d33624ea7c2df1b84013b982969402fd9a",
         "pdfium": {
           "path": "bin/win32-x64/pdfium.dll",
           "sha256": "79d4676b656cfb1abcea88f9ade3b4b0826c5200382db5f4ec72a636c598c118",
@@ -27,7 +27,7 @@
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/anydoc",
-        "sha256": "8fa9fb9bdcd0dc2a2760f61e23c5a1c5243d32f7d8a52b564ee1d37e7528940e",
+        "sha256": "53108ed49932c91bfbcce67d47ae1394dcecab949f0adf6d4a54d07169e2c7c8",
         "pdfium": {
           "path": "bin/linux-x64/libpdfium.so",
           "sha256": "f728930966f503652b92acc89b9374a2eeca00ce42e26dccd3e4b5c5161b2d64",
@@ -42,8 +42,8 @@
       "notarization": "accepted",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anydoc-v0.3.14",
-      "source_commit": "38aec861cd7264d64441d28b93f3d85494305549",
+      "tag": "anydoc-v0.3.16",
+      "source_commit": "464b6f359d8762980199009d9c330191f13a6623",
       "windows_signing_waiver": "azure_trusted_signing_unavailable_owner_waiver_2026-10-24"
     },
     "resolutionOrder": [
@@ -81,5 +81,5 @@
     "packaged": true,
     "note": "Pinned Pdfium libraries are packaged per platform and verified by sha256."
   },
-  "source_sha": "38aec861cd7264d64441d28b93f3d85494305549"
+  "source_sha": "464b6f359d8762980199009d9c330191f13a6623"
 }
