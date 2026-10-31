@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anychat
 
-Version `0.1.103`.
+Version `0.1.104`.
 
 Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
 
 Load [`skills/anychat/SKILL.md`](skills/anychat/SKILL.md) first. Connect and product verbs are defined there and under `skills/anychat/references/`.
 

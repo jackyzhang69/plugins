@@ -39,6 +39,10 @@ AnyChat resumes the exact original media request without another human turn.
 
 - `present` — at least one local media blob exists; download still verifies that an image can be converted into a normal raster
 - `missing` — the message is in the archive, but this attachment is not a non-empty file on this computer. A later download looks again for that exact file, including one cached after the first try. If it was never cached on this machine, retry cannot recover it. A different file is never saved in its place.
+- Single `missing` returns exit 0 with `E_MEDIA_MISSING`; it does not mean a file was downloaded. Use the per-item status, not exit status alone.
+- A batch with missing items but **no processing errors** returns exit 0 and `download-all partial`, with copied/missing/error totals and per-item missing codes. Keep and report the files that were copied, including when none were cached. **Do not automatically retry missing items**: never-cached bytes cannot be recovered by repeating this command. Retry only after the local cache actually changes; `recovery=refused` means ambiguous identity, not permission to substitute another file.
+- Actual processing errors still return exit 1: a batch reports `E_MEDIA_PARTIAL` plus per-item codes. `E_OUTPUT_UNWRITABLE` needs a different/writable output destination; `E_VOICE_DECODE` / `E_IMAGE_NOT_PREVIEWABLE` need an honest unavailable/unreadable result, not a blind retry loop. `E_MESSAGE_QUERY_UNREADABLE` is a real local query/read error. Follow a returned protected continuation for image access instead of repeating download.
+
 
 ## Voice (download yes, speech-to-text no)
 
