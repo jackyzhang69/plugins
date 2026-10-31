@@ -1,6 +1,6 @@
 {
   "name": "dsh-anycase",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "AnyCase for DeepSeek Harness: Canadian immigration intelligence (Federal Court precedents, IRCC policy and Q&A, CLB calculators) via the bundled AnyCase CLI.",
   "license": "Proprietary",
   "author": {
