@@ -68,16 +68,20 @@ schema:
         cec: boolean; independently checked under IRPR R87.1
         fstp: boolean; independently checked under IRPR R87.2
       language_test:
+        test_name: CELPIP-General, IELTS-General-Training, PTE-Core, TEF-Canada or TCF-Canada; the test actually taken, which fixes the official language of the slot; any other name, or a name contradicted by approved_designated_test, is not scored
         approved_designated_test: boolean
         valid_within_two_years: boolean
+        test_date: original ISO-8601 date of the principal's language test; checked against assessment_date
         listening_clb: integer
         reading_clb: integer
         writing_clb: integer
         speaking_clb: integer
       second_language_test:
         present: boolean; false if no second official language test
+        test_name: CELPIP-General, IELTS-General-Training, PTE-Core, TEF-Canada or TCF-Canada; must be in the other official language than language_test.test_name, because points are assigned for the second official language only
         approved_designated_test: boolean; required when present
         valid_within_two_years: boolean; required when present
+        test_date: original ISO-8601 date of the second-language test; required when present
         listening_clb: integer; required when present
         reading_clb: integer; required when present
         writing_clb: integer; required when present
@@ -109,8 +113,23 @@ schema:
         credential_canadian: boolean
       age: age at application
       education_level: supported scoring_grid core education level
-      spouse_language_test: optional for accompanying spouse; absent or present=false scores 0; approved
-        valid test and four CLB abilities required only when claiming spouse language points
+      education_credential_source: canadian | eca | none; basis for principal education points, not the diploma label
+      eca_designated_organization: boolean; required for an eca basis
+      eca_assessment_date: original ISO-8601 principal ECA issue date; checked independently over five calendar years
+      spouse_education_level: supported scoring_grid spouse education level
+      spouse_education_credential_source: canadian | eca | none; accompanying spouse's own credential basis
+      spouse_eca_designated_organization: boolean; required for the spouse's eca basis
+      spouse_eca_assessment_date: original ISO-8601 spouse ECA issue date; never inferred from the principal's
+      spouse_language_test:
+        present: boolean; whether the accompanying spouse's test results are supplied; supplied results are scored whatever points are declared, and only a slot that supplies nothing at all scores zero spouse language points
+        test_name: CELPIP-General, IELTS-General-Training, PTE-Core, TEF-Canada or TCF-Canada; the test actually taken, which fixes the spouse's own first official language
+        approved_designated_test: boolean; required when the spouse's results are supplied
+        valid_within_two_years: boolean; required when the spouse's results are supplied
+        test_date: original ISO-8601 spouse language-test date; required when the spouse's results are supplied
+        listening_clb: integer; required when the spouse's results are supplied
+        reading_clb: integer; required when the spouse's results are supplied
+        writing_clb: integer; required when the spouse's results are supplied
+        speaking_clb: integer; required when the spouse's results are supplied
       canadian_work_years: completed qualifying years
       foreign_work_years: completed qualifying years
       accompanying_spouse: boolean
@@ -613,7 +632,7 @@ rules:
     fields:
     - candidate.category_occupation.noc_code
     - candidate.category_occupation.experience_in_canada
-  pass_if: '!(candidate.category_request in [''physicians_canadian_experience'', ''senior_managers_canadian_experience'',
+  pass_if: 'candidate.category_request == null || !(candidate.category_request in [''physicians_canadian_experience'', ''senior_managers_canadian_experience'',
     ''researchers_canadian_experience'']) || (candidate.category_occupation.experience_in_canada == true
     && ((candidate.category_request == ''physicians_canadian_experience'' && candidate.category_occupation.noc_code
     in [''31100'', ''31101'', ''31102'']) || (candidate.category_request == ''senior_managers_canadian_experience''
@@ -650,7 +669,7 @@ rules:
     - candidate.military_recruit.offer_from_forces_recruiting_group
     - candidate.military_recruit.postsecondary_credential_years
     - candidate.military_recruit.credential_canadian
-  pass_if: candidate.category_request != 'skilled_military_recruits' || (candidate.military_recruit.currently_serving_recognized_foreign_military
+  pass_if: candidate.category_request == null || candidate.category_request != 'skilled_military_recruits' || (candidate.military_recruit.currently_serving_recognized_foreign_military
     == true && candidate.military_recruit.recognized_foreign_military_service_years >= 10 && candidate.military_recruit.duties_aligned_noc_code
     in ['40042', '42102', '43204'] && candidate.military_recruit.canadian_forces_offer_noc_code in ['40042',
     '42102', '43204'] && candidate.military_recruit.canadian_forces_offer_full_time_years >= 3 && candidate.military_recruit.offer_from_forces_recruiting_group
