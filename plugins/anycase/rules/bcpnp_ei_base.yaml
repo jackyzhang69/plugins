@@ -46,11 +46,13 @@ rules:
       - assessment_stage
       - business.personal_net_worth_cad
     conditional_required_fields:
-      when: "assessment_stage in [\"application\", \"final_report\"]"
+      when: "assessment_stage in ['application', 'arrival_report', 'final_report', 'work_permit_and_nomination']"
       fields:
         - business.net_worth_verified
-    pass_if: "business.personal_net_worth_cad >= 600000.0 && (assessment_stage == \"registration\" || ((assessment_stage == \"application\" || assessment_stage == \"final_report\") && business.net_worth_verified == true))"
-    fail_if: "business.personal_net_worth_cad < 600000.0 && assessment_stage in [\"registration\", \"application\", \"final_report\"]"
+        - business.net_worth_report_age_months_at_application
+        - business.net_worth_report_after_invitation
+    pass_if: "business.personal_net_worth_cad >= 600000 && (assessment_stage == 'registration' || (assessment_stage in ['application', 'arrival_report', 'final_report', 'work_permit_and_nomination'] && business.net_worth_verified == true && business.net_worth_report_age_months_at_application >= 0 && business.net_worth_report_age_months_at_application < 12 && business.net_worth_report_after_invitation == true))"
+    fail_if: "business.personal_net_worth_cad < 600000 && assessment_stage in ['registration', 'application', 'arrival_report', 'final_report', 'work_permit_and_nomination']"
     missing_or_unverified: "NEEDS_REVIEW: Personal net worth or, after invitation to apply, the required BC PNP-authorized accounting-firm verification report cannot be confirmed."
     interpretation: "The threshold is at least $600,000 in legally obtained, verifiable personal net worth, including applicable spouse/common-law partner and dependent-child net worth. Registration points use declared information; after invitation to apply, the applicant must obtain a net-worth verification report from a BC PNP-authorized accounting firm for the application assessment."
     evidence_anchor:
@@ -126,10 +128,10 @@ rules:
       - assessment_date
       - candidate.business_owner_months
       - candidate.senior_manager_months
-    pass_if: "candidate.business_owner_months > 36.0 || candidate.senior_manager_months > 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
+    pass_if: "(candidate.business_owner_months > 36 && candidate.owner_ownership_ratio >= 0.10 && candidate.owner_active_onsite == true && candidate.owner_lookback_months <= 120) || (candidate.senior_manager_months > 48 && candidate.senior_ownership_ratio < 0.10 && candidate.senior_noc_teer in [0,1] && candidate.senior_supervised_fte >= 3 && candidate.senior_active_onsite == true && candidate.senior_lookback_months <= 120) || (candidate.business_owner_months >= 12 && candidate.senior_manager_months >= 24 && candidate.owner_ownership_ratio >= 0.10 && candidate.owner_active_onsite == true && candidate.owner_lookback_months <= 120 && candidate.senior_ownership_ratio < 0.10 && candidate.senior_noc_teer in [0,1] && candidate.senior_supervised_fte >= 3 && candidate.senior_active_onsite == true && candidate.senior_lookback_months <= 120)"
     fail_if: "candidate.business_owner_months <= 36.0 && candidate.senior_manager_months <= 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
     missing_or_unverified: "NEEDS_REVIEW: Qualifying entrepreneurial or senior management track record cannot be established."
-    interpretation: "Within the past 120 months, the applicant needs more than 36 months as an active business owner-manager with at least 10% ownership, or more than 48 months as an active senior manager in a NOC TEER 0 or 1 role supervising at least three full-time employees and with less than 10% ownership, or the combination of at least 12 qualifying owner-manager months and at least 24 qualifying senior-manager months. The current numeric predicate assumes these months are prequalified and does not verify role, ownership, date, location, or employee-count evidence."
+    interpretation: "Qualifying experience is within the past 120 months: active onsite owner-manager with at least 10% ownership, or active onsite TEER 0/1 senior manager supervising at least three FTE with less than 10% ownership. Standalone thresholds are strictly more than 36/48 months; the combination is at least 12/24. Unknown role or lookback facts cannot establish PASS."
     evidence_anchor:
       evidence_unit_id: "bc.bcpnp_ei_base_policy_2024_05_27.p015"
       source_file: "4458af5d457438668b2114442a32e6315443623babab2320e39a27513d5153e2"
@@ -198,3 +200,120 @@ rules:
       section: "5.2 (B)"
       page: "72"
       verbatim_excerpt: "The BC PNP will assess your business concept and assign points based on the commercial viability\nof your proposed business."
+
+  - id: ei_base_education_or_full_ownership
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    pass_if: (education.has_postsecondary_credential == true && education.institution_licensed == true && education.language_training == false) || (candidate.full_family_ownership_ratio == 1 && candidate.full_ownership_active_months_last_60 >= 36)
+    fail_if: (education.has_postsecondary_credential == true && education.institution_licensed == true && education.language_training == false) == false && (candidate.full_family_ownership_ratio == 1 && candidate.full_ownership_active_months_last_60 >= 36) == false
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: A licensed postsecondary credential (not language training), or 36 of the last 60 active owner-manager months with 100% ownership shared only with spouse/common-law partner/dependent children. Unknown alternative remains unresolved.
+    evidence_anchor:
+      source_file: ei_base_guide_2024_05_27.txt
+      section: 2.2(D)
+      verbatim_excerpt: experience as an active business owner-manager with 100 per cent ownership of the business for at least 36 of the past 60 months
+  - id: ei_base_ineligible_business_types
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    - business.category
+    - business.immigration_linked_investment
+    - business.redemption_option
+    - business.passive_investment
+    - business.disrepute_decision
+    - business.disrepute_evidence_ref
+    pass_if: business.immigration_linked_investment == false && business.redemption_option == false && business.passive_investment == false && !(business.category in ["bed_and_breakfast", "hobby_farm", "home_based", "payday_loan", "cheque_cashing", "money_changing", "cash_machine", "pawnbroker", "tanning_salon", "dvd_rental", "coin_laundry", "automated_car_wash", "scrap_metal_recycling", "real_estate_brokerage", "insurance_brokerage", "business_brokerage", "real_estate_development", "sexually_explicit_products_or_services"]) && (!(business.category in ["used_goods", "goods_trading"]) || business.value_added_services == true) && business.disrepute_decision == "cleared" && business.disrepute_evidence_ref != ""
+    fail_if: business.immigration_linked_investment == true || business.redemption_option == true || business.passive_investment == true || business.category in ["bed_and_breakfast", "hobby_farm", "home_based", "payday_loan", "cheque_cashing", "money_changing", "cash_machine", "pawnbroker", "tanning_salon", "dvd_rental", "coin_laundry", "automated_car_wash", "scrap_metal_recycling", "real_estate_brokerage", "insurance_brokerage", "business_brokerage", "real_estate_development", "sexually_explicit_products_or_services"] || (business.category == "used_goods" && business.value_added_services == false) || (business.category == "goods_trading" && business.value_added_services == false) || business.disrepute_decision == "adverse"
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: Separate business category, investment terms and documented human disrepute finding; used-goods repairs/refurbishing/recycling and demonstrated value-add goods trading preserve their exceptions. A cleared disrepute finding requires a source/case evidence reference, not a probability.
+    evidence_anchor:
+      source_file: ei_base_guide_2024_05_27.txt
+      section: 2.3(B)
+      verbatim_excerpt: Your registration will be disqualified if you propose an ineligible business.
+
+  - id: ei_base_investment_source_conditions
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    - assessment_stage
+    - business.investment_from_personal_net_worth_cad
+    - business.investment_location_count
+    - business.new_equipment_cad
+    - business.leasehold_improvements_cad
+    - business.new_marketing_cad
+    - business.purchase_business_cad
+    - business.vehicle_cad
+    - business.vehicle_essential
+    - business.operating_expenses_cad
+    - business.operating_expense_months
+    - business.inventory_cad
+    - business.inventory_months
+    - business.investment_business_type
+    - business.improvement_expansion_cad
+    - business.investment_expense_decision
+    - business.investment_expense_evidence_ref
+    conditional_required_fields:
+      when: "assessment_stage in ['arrival_report', 'final_report', 'work_permit_and_nomination']"
+      fields:
+        - business.investment_completion_days_after_supported_arrival
+    pass_if: (business.new_equipment_cad + business.leasehold_improvements_cad + business.new_marketing_cad + min(business.purchase_business_cad, 150000) + min(business.vehicle_cad, 15000) + business.operating_expenses_cad + business.inventory_cad) >= 200000 && business.investment_from_personal_net_worth_cad >= 200000 && business.investment_location_count == 1 && (business.vehicle_cad == 0 || business.vehicle_essential == true) && business.inventory_months <= 3 && ((business.investment_business_type == "new" && business.operating_expense_months <= 6) || (business.investment_business_type in ["existing", "franchise"] && business.operating_expense_months <= 3)) && (business.investment_business_type != "existing" || business.improvement_expansion_cad >= 50000) && business.investment_expense_decision == "accepted" && business.investment_expense_evidence_ref != "" && (assessment_stage in ["registration", "application"] || (assessment_stage in ["arrival_report", "final_report", "work_permit_and_nomination"] && business.investment_completion_days_after_supported_arrival >= 0 && business.investment_completion_days_after_supported_arrival <= 610))
+    fail_if: '!((business.new_equipment_cad + business.leasehold_improvements_cad + business.new_marketing_cad + min(business.purchase_business_cad, 150000) + min(business.vehicle_cad, 15000) + business.operating_expenses_cad + business.inventory_cad) >= 200000 && business.investment_from_personal_net_worth_cad >= 200000 && business.investment_location_count == 1 && (business.vehicle_cad == 0 || business.vehicle_essential == true) && business.inventory_months <= 3 && ((business.investment_business_type == "new" && business.operating_expense_months <= 6) || (business.investment_business_type in ["existing", "franchise"] && business.operating_expense_months <= 3)) && (business.investment_business_type != "existing" || business.improvement_expansion_cad >= 50000) && business.investment_expense_decision == "accepted" && business.investment_expense_evidence_ref != "" && (assessment_stage in ["registration", "application"] || (assessment_stage in ["arrival_report", "final_report", "work_permit_and_nomination"] && business.investment_completion_days_after_supported_arrival >= 0 && business.investment_completion_days_after_supported_arrival <= 610)))'
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: Expense amounts are only proposed before arrival, actual afterward. Sum excludes cash, working capital, family/co-owner wages, refundable deposits, real estate and related fees. Existing purchase value capped at 150000, eligible improvement >=50000 excluding recurring costs, real estate and separate locations; vehicle essential and capped at 15000; operating expenses <=6 months for new nonfranchise or <=3 existing/franchise; inventory <=3 months with documented reasonableness and substantially new products for expansion. BC PNP essential-expense decision requires evidence. Completion days run from arrival on supported permit, <=610; proposals do not require completed investment.
+    evidence_anchor:
+      source_file: ei_base_guide_2024_05_27.txt
+      section: 2.4(A)-(B)
+      verbatim_excerpt: The proposed investment must be directed toward one business location.
+  - id: ei_base_job_source_conditions
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    - assessment_stage
+    - business.new_canadian_jobs_fte
+    - business.new_jobs_worker_status
+    - business.new_jobs_direct_employees
+    - business.new_jobs_permanent
+    - business.new_jobs_primary_site
+    - business.new_jobs_max_ownership_ratio
+    - business.new_jobs_min_weekly_hours
+    - business.new_jobs_min_annual_hours
+    - business.new_jobs_continuous_employment
+    - business.long_term_employment_decision
+    - business.long_term_employment_evidence_ref
+    conditional_required_fields:
+      when: "assessment_stage in ['arrival_report', 'final_report', 'work_permit_and_nomination']"
+      fields:
+        - business.job_creation_days_after_supported_arrival
+        - business.jobs_continuous_days_before_final_report
+    pass_if: business.new_canadian_jobs_fte >= 1 && business.new_jobs_worker_status == "canadian_or_pr" && business.new_jobs_direct_employees == true && business.new_jobs_permanent == true && business.new_jobs_primary_site == true && business.new_jobs_max_ownership_ratio < 0.10 && business.new_jobs_min_weekly_hours >= 30 && business.new_jobs_min_annual_hours >= 1560 && business.new_jobs_continuous_employment == true && business.long_term_employment_decision == "supported" && business.long_term_employment_evidence_ref != "" && (assessment_stage in ["registration", "application"] || (assessment_stage in ["arrival_report", "final_report", "work_permit_and_nomination"] && business.job_creation_days_after_supported_arrival >= 0 && business.job_creation_days_after_supported_arrival <= 420)) && (assessment_stage != "final_report" || business.jobs_continuous_days_before_final_report >= 180)
+    fail_if: '!(business.new_canadian_jobs_fte >= 1 && business.new_jobs_worker_status == "canadian_or_pr" && business.new_jobs_direct_employees == true && business.new_jobs_permanent == true && business.new_jobs_primary_site == true && business.new_jobs_max_ownership_ratio < 0.10 && business.new_jobs_min_weekly_hours >= 30 && business.new_jobs_min_annual_hours >= 1560 && business.new_jobs_continuous_employment == true && business.long_term_employment_decision == "supported" && business.long_term_employment_evidence_ref != "" && (assessment_stage in ["registration", "application"] || (assessment_stage in ["arrival_report", "final_report", "work_permit_and_nomination"] && business.job_creation_days_after_supported_arrival >= 0 && business.job_creation_days_after_supported_arrival <= 420)) && (assessment_stage != "final_report" || business.jobs_continuous_days_before_final_report >= 180))'
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: All counted new FTE positions must satisfy the separate worker-status, permanence, direct employment, onsite, <10% ownership, 30h/week and 1560h/year continuous conditions. Before arrival facts describe proposed positions. Completion days run from supported-permit arrival, <=420. Final Report requires >=180 continuous days. Long-term employment likelihood remains a documented human finding, not a probability.
+    evidence_anchor:
+      source_file: ei_base_guide_2024_05_27.txt
+      section: 2.5(A),(D)
+      verbatim_excerpt: FTEs must work at the primary place of business and not remotely.
+
+  - id: ei_base_immigration_status
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    pass_if: candidate.prohibited_from_entering_canada == false && candidate.lawfully_admitted_current_country == true && (candidate.in_canada == false || candidate.valid_canadian_status == true || (candidate.restoration_applied == true && candidate.restoration_application_days_after_expiry >= 0 && candidate.restoration_application_days_after_expiry <= 90)) && candidate.working_without_authorization == false && candidate.unresolved_refugee_claim == false && candidate.removal_order == false
+    fail_if: candidate.prohibited_from_entering_canada == true || candidate.lawfully_admitted_current_country == false || (candidate.in_canada == true && candidate.valid_canadian_status == false && (candidate.restoration_applied == false || candidate.restoration_application_days_after_expiry > 90)) || candidate.working_without_authorization == true || candidate.unresolved_refugee_claim == true || candidate.removal_order == true
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: Independent source exclusions; an expired status with a restoration application submitted within the 90-day eligibility period is not automatically treated as out of status by this pre-screen. This does not authorize work while restoring status.
+    evidence_anchor:
+      source_file: ei_base_guide_2024_05_27.txt
+      section: 2.2(A)
+      verbatim_excerpt: is working in Canada without authorization

@@ -30,7 +30,7 @@ schema:
     candidate:
       stream: skilled_worker | critical_worker | international_graduate | intermediate_experience | occupations_in_demand
         | express_entry. The business stream is not a value in this file.
-      age_years: integer; age in years. Floor is 18. There is no upper age redline in this file.
+      age_years: integer; workforce applicants must be 18 to 59 inclusive. Express Entry retains its separate minimum.
       language_clb_minimum: integer; lowest of the four skills on one test.
       language_result_within_2_years: boolean; that test result is under two years old.
       express_entry_language_met: boolean; the Express Entry program on the profile has its language floor
@@ -59,6 +59,7 @@ minimums:
   - occupations_in_demand
   - express_entry
   age_years_min: 18
+  workforce_age_years_max: 59
   offer_duration_months_if_not_permanent: 24
   language_result_max_age_years: 2
   language_clb_critical_or_teer_4_or_5: 4
@@ -91,22 +92,24 @@ rules:
   required_fields:
   - candidate.stream
   - candidate.age_years
-  pass_if: (candidate.stream == 'skilled_worker' || candidate.stream == 'critical_worker' || candidate.stream
-    == 'international_graduate' || candidate.stream == 'intermediate_experience' || candidate.stream ==
-    'occupations_in_demand' || candidate.stream == 'express_entry') && candidate.age_years >= 18
+  pass_if: candidate.age_years >= 18 && ((candidate.stream in ['skilled_worker', 'critical_worker',
+    'international_graduate', 'intermediate_experience', 'occupations_in_demand'] && candidate.age_years <= 59)
+    || candidate.stream == 'express_entry')
   fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
     'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || candidate.age_years < 18
+    || (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
+    'intermediate_experience', 'occupations_in_demand'] && candidate.age_years > 59)
   missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
   evidence_anchor:
     evidence_unit_id: EU-PEIPNP-AGE-001
     source_file: PEI-Workforce-Application-Guide.pdf
-    section: Applicant Eligibility - Age
-    verbatim_excerpt: Age must be at least 18
+    section: Step 1 - five workforce streams, January 2026 guide pages 1-3
+    verbatim_excerpt: be 18 to 59 years old
   provenance:
     source_file: PEI-Workforce-Application-Guide.pdf
-    section: Applicant Eligibility - Age
-    page: 2
-    verbatim: Age must be at least 18
+    section: Step 1 - Occupations in Demand; same age range for the other four workforce streams
+    page: 3
+    verbatim: be 18 to 59 years old
 - id: pei_job_offer
   category: job_offer
   severity: CRITICAL_REDLINE

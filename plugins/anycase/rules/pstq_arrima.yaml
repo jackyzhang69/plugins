@@ -26,6 +26,2023 @@ schema:
     assessment_date: ISO-8601 date
 reference_points_grid:
   note: Documentation only. AnyScore owns the Arrima arithmetic. This ruleset has no points floor.
+evaluation:
+  round_teer_group:
+    c406824-exercise-1: 1
+    c406824-exercise-2: 1
+    c406824-exercise-3: 1
+    c411047-exercise-1: 1
+    c411047-exercise-2: 1
+    c411047-exercise-3: 1
+    c414285-exercise-1: 1
+    c414285-exercise-2: 1
+    c414285-exercise-3: 1
+    c422383-exercise-1: 1
+    c422383-exercise-2: 1
+    c422383-exercise-3: 1
+    c429123-exercise-1: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c429123-exercise-4: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c406814-exercise-1: 2
+    c406814-exercise-2: 2
+    c406814-exercise-3: 2
+    c411048-exercise-1: 2
+    c411048-exercise-2: 2
+    c411048-exercise-3: 2
+    c414292-exercise-1: 2
+    c414292-exercise-2: 2
+    c414292-exercise-3: 2
+    c422462-exercise-1: 2
+    c422462-exercise-2: 2
+    c422462-exercise-3: 2
+    c429131-exercise-1: 2
+    c429131-exercise-2: 2
+    c429131-exercise-3: 2
+    c429131-exercise-4: 2
+    c434613-exercise-1: 2
+    c434613-exercise-2: 2
+    c434613-exercise-3: 3
+    c438937-exercise-1: 2
+    c438937-exercise-2: 2
+    c438937-exercise-3: 3
+    c442050-exercise-1: 2
+    c442050-exercise-2: 2
+    c442050-exercise-3: 2
+    c442050-exercise-4: 3
+    c445520-exercise-1: 2
+    c445520-exercise-2: 2
+    c445520-exercise-3: 2
+    c445520-exercise-4: 3
+    c406806-exercise-1: 1
+    c406806-exercise-2: 1
+    c406806-exercise-3: 2
+    c406806-exercise-4: 1
+    c406806-exercise-5: 2
+    c411049-exercise-1: 1
+    c411049-exercise-2: 1
+    c411049-exercise-3: 1
+    c411049-exercise-4: 2
+    c411049-exercise-5: 1
+    c411049-exercise-6: 2
+    c414296-exercise-1: 1
+    c414296-exercise-2: 1
+    c414296-exercise-3: 1
+    c414296-exercise-4: 2
+    c414296-exercise-5: 1
+    c414296-exercise-6: 2
+    c422477-exercise-1: 1
+    c422477-exercise-2: 1
+    c422477-exercise-3: 1
+    c422477-exercise-4: 2
+    c422477-exercise-5: 1
+    c422477-exercise-6: 2
+    c429134-exercise-1: 1
+    c429134-exercise-2: 1
+    c429134-exercise-3: 1
+    c429134-exercise-4: 1
+    c429134-exercise-5: 2
+    c434617-exercise-1: 1
+    c434617-exercise-2: 1
+    c434617-exercise-3: 2
+    c434617-exercise-4: 3
+    c438940-exercise-1: 1
+    c438940-exercise-2: 1
+    c438940-exercise-3: 3
+    c442063-exercise-1: 1
+    c442063-exercise-2: 1
+    c442063-exercise-3: 3
+    c445522-exercise-1: 1
+    c445522-exercise-2: 1
+    c445522-exercise-3: 2
+    c445522-exercise-4: 3
+  round_unregulated:
+    c406824-exercise-1: 1
+    c406824-exercise-2: 1
+    c406824-exercise-3: 1
+    c411047-exercise-1: 1
+    c411047-exercise-2: 1
+    c411047-exercise-3: 1
+    c414285-exercise-1: 1
+    c414285-exercise-2: 1
+    c414285-exercise-3: 1
+    c422383-exercise-1: 1
+    c422383-exercise-2: 1
+    c422383-exercise-3: 1
+    c429123-exercise-1: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c429123-exercise-4: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c406814-exercise-1: 1
+    c406814-exercise-2: 1
+    c406814-exercise-3: 1
+    c411048-exercise-1: 1
+    c411048-exercise-2: 1
+    c411048-exercise-3: 1
+    c414292-exercise-1: 1
+    c414292-exercise-2: 1
+    c414292-exercise-3: 1
+    c422462-exercise-1: 1
+    c422462-exercise-2: 1
+    c422462-exercise-3: 1
+    c429131-exercise-1: 1
+    c429131-exercise-2: 1
+    c429131-exercise-3: 1
+    c429131-exercise-4: 1
+    c434613-exercise-1: 1
+    c434613-exercise-2: 1
+    c434613-exercise-3: 1
+    c438937-exercise-1: 1
+    c438937-exercise-2: 1
+    c438937-exercise-3: 1
+    c442050-exercise-1: 1
+    c442050-exercise-2: 1
+    c442050-exercise-3: 1
+    c442050-exercise-4: 1
+    c445520-exercise-1: 1
+    c445520-exercise-2: 1
+    c445520-exercise-3: 1
+    c445520-exercise-4: 1
+  round_experience_min:
+    c406824-exercise-1: 12
+    c406824-exercise-2: 12
+    c406824-exercise-3: 12
+    c411047-exercise-1: 12
+    c411047-exercise-2: 12
+    c411047-exercise-3: 12
+    c414285-exercise-1: 12
+    c414285-exercise-2: 12
+    c414285-exercise-3: 12
+    c422383-exercise-1: 12
+    c422383-exercise-2: 12
+    c422383-exercise-3: 12
+    c429123-exercise-1: 12
+    c429123-exercise-2: 12
+    c429123-exercise-3: 12
+    c429123-exercise-4: 12
+    c434610-exercise-1: 12
+    c434610-exercise-2: 12
+    c434610-exercise-3: 12
+    c438882-exercise-1: 12
+    c438882-exercise-2: 12
+    c438882-exercise-3: 12
+    c442047-exercise-1: 12
+    c442047-exercise-2: 12
+    c442047-exercise-3: 12
+    c445518-exercise-1: 12
+    c445518-exercise-2: 12
+    c445518-exercise-3: 12
+    c406814-exercise-1: 24
+    c406814-exercise-2: 24
+    c406814-exercise-3: 24
+    c411048-exercise-1: 24
+    c411048-exercise-2: 24
+    c411048-exercise-3: 24
+    c414292-exercise-1: 24
+    c414292-exercise-2: 24
+    c414292-exercise-3: 24
+    c422462-exercise-1: 24
+    c422462-exercise-2: 24
+    c422462-exercise-3: 24
+    c429131-exercise-1: 24
+    c429131-exercise-2: 24
+    c429131-exercise-3: 24
+    c429131-exercise-4: 24
+    c434613-exercise-1: 24
+    c434613-exercise-2: 24
+    c434613-exercise-3: 24
+    c438937-exercise-1: 24
+    c438937-exercise-2: 24
+    c438937-exercise-3: 24
+    c442050-exercise-1: 24
+    c442050-exercise-2: 24
+    c442050-exercise-3: 24
+    c442050-exercise-4: 24
+    c445520-exercise-1: 24
+    c445520-exercise-2: 24
+    c445520-exercise-3: 24
+    c445520-exercise-4: 24
+    c406792-exercise-1: 36
+    c406792-exercise-2: 36
+    c411050-exercise-1: 36
+    c411050-exercise-2: 36
+    c414306-exercise-1: 36
+    c422494-exercise-1: 36
+    c422494-exercise-2: 36
+    c429141-exercise-1: 36
+    c429141-exercise-2: 36
+    c434619-exercise-1: 36
+    c438968-exercise-1: 36
+    c438968-exercise-2: 36
+    c442071-exercise-1: 36
+    c442071-exercise-2: 36
+    c445524-exercise-1: 36
+    c445524-exercise-2: 36
+  round_written_min:
+    c406824-exercise-1: 5
+    c406824-exercise-2: 5
+    c406824-exercise-3: 5
+    c411047-exercise-1: 5
+    c411047-exercise-2: 5
+    c411047-exercise-3: 5
+    c414285-exercise-1: 5
+    c414285-exercise-2: 5
+    c414285-exercise-3: 5
+    c422383-exercise-1: 5
+    c422383-exercise-2: 5
+    c422383-exercise-3: 5
+    c429123-exercise-1: 5
+    c429123-exercise-2: 5
+    c429123-exercise-3: 5
+    c429123-exercise-4: 5
+    c434610-exercise-1: 5
+    c434610-exercise-2: 5
+    c434610-exercise-3: 5
+    c438882-exercise-1: 5
+    c438882-exercise-2: 5
+    c438882-exercise-3: 5
+    c442047-exercise-1: 5
+    c442047-exercise-2: 5
+    c442047-exercise-3: 5
+    c445518-exercise-1: 5
+    c445518-exercise-2: 5
+    c445518-exercise-3: 5
+    c406806-exercise-1: 5
+    c406806-exercise-2: 5
+    c406806-exercise-4: 5
+    c411049-exercise-1: 5
+    c411049-exercise-2: 5
+    c411049-exercise-3: 5
+    c411049-exercise-5: 5
+    c414296-exercise-1: 5
+    c414296-exercise-2: 5
+    c414296-exercise-3: 5
+    c414296-exercise-5: 5
+    c422477-exercise-1: 5
+    c422477-exercise-2: 5
+    c422477-exercise-3: 5
+    c422477-exercise-5: 5
+    c429134-exercise-1: 5
+    c429134-exercise-2: 5
+    c429134-exercise-3: 5
+    c429134-exercise-4: 5
+    c434617-exercise-1: 5
+    c434617-exercise-2: 5
+    c438940-exercise-1: 5
+    c438940-exercise-2: 5
+    c442063-exercise-1: 5
+    c442063-exercise-2: 5
+    c445522-exercise-1: 5
+    c445522-exercise-2: 5
+  round_oral_min:
+    c406824-exercise-1: 7
+    c406824-exercise-2: 7
+    c406824-exercise-3: 7
+    c411047-exercise-1: 7
+    c411047-exercise-2: 7
+    c411047-exercise-3: 7
+    c414285-exercise-1: 7
+    c414285-exercise-2: 7
+    c414285-exercise-3: 7
+    c422383-exercise-1: 7
+    c422383-exercise-2: 7
+    c422383-exercise-3: 7
+    c429123-exercise-1: 7
+    c429123-exercise-2: 7
+    c429123-exercise-3: 7
+    c429123-exercise-4: 7
+    c434610-exercise-1: 7
+    c434610-exercise-2: 7
+    c434610-exercise-3: 7
+    c438882-exercise-1: 7
+    c438882-exercise-2: 7
+    c438882-exercise-3: 7
+    c442047-exercise-1: 7
+    c442047-exercise-2: 7
+    c442047-exercise-3: 7
+    c445518-exercise-1: 7
+    c445518-exercise-2: 7
+    c445518-exercise-3: 7
+    c406814-exercise-1: 5
+    c406814-exercise-2: 5
+    c406814-exercise-3: 5
+    c411048-exercise-1: 5
+    c411048-exercise-2: 5
+    c411048-exercise-3: 5
+    c414292-exercise-1: 5
+    c414292-exercise-2: 5
+    c414292-exercise-3: 5
+    c422462-exercise-1: 5
+    c422462-exercise-2: 5
+    c422462-exercise-3: 5
+    c429131-exercise-1: 5
+    c429131-exercise-2: 5
+    c429131-exercise-3: 5
+    c429131-exercise-4: 5
+    c434613-exercise-1: 5
+    c434613-exercise-2: 5
+    c434613-exercise-3: 5
+    c438937-exercise-1: 5
+    c438937-exercise-2: 5
+    c438937-exercise-3: 5
+    c442050-exercise-1: 5
+    c442050-exercise-2: 5
+    c442050-exercise-3: 5
+    c442050-exercise-4: 5
+    c445520-exercise-1: 5
+    c445520-exercise-2: 5
+    c445520-exercise-3: 5
+    c445520-exercise-4: 5
+    c406806-exercise-1: 7
+    c406806-exercise-2: 7
+    c406806-exercise-3: 5
+    c406806-exercise-4: 7
+    c406806-exercise-5: 5
+    c411049-exercise-1: 7
+    c411049-exercise-2: 7
+    c411049-exercise-3: 7
+    c411049-exercise-4: 5
+    c411049-exercise-5: 7
+    c411049-exercise-6: 5
+    c414296-exercise-1: 7
+    c414296-exercise-2: 7
+    c414296-exercise-3: 7
+    c414296-exercise-4: 5
+    c414296-exercise-5: 7
+    c414296-exercise-6: 5
+    c422477-exercise-1: 7
+    c422477-exercise-2: 7
+    c422477-exercise-3: 7
+    c422477-exercise-4: 5
+    c422477-exercise-5: 7
+    c422477-exercise-6: 5
+    c429134-exercise-1: 7
+    c429134-exercise-2: 7
+    c429134-exercise-3: 7
+    c429134-exercise-4: 7
+    c429134-exercise-5: 5
+    c434617-exercise-1: 7
+    c434617-exercise-2: 7
+    c434617-exercise-3: 5
+    c434617-exercise-4: 5
+    c438940-exercise-1: 7
+    c438940-exercise-2: 7
+    c438940-exercise-3: 5
+    c442063-exercise-1: 7
+    c442063-exercise-2: 7
+    c442063-exercise-3: 5
+    c445522-exercise-1: 7
+    c445522-exercise-2: 7
+    c445522-exercise-3: 5
+    c445522-exercise-4: 5
+  round_spouse_oral_min:
+    c406824-exercise-1: 4
+    c406824-exercise-2: 4
+    c406824-exercise-3: 4
+    c411047-exercise-1: 4
+    c411047-exercise-2: 4
+    c411047-exercise-3: 4
+    c414285-exercise-1: 4
+    c414285-exercise-2: 4
+    c414285-exercise-3: 4
+    c422383-exercise-1: 4
+    c422383-exercise-2: 4
+    c422383-exercise-3: 4
+    c429123-exercise-1: 4
+    c429123-exercise-2: 4
+    c429123-exercise-3: 4
+    c429123-exercise-4: 4
+    c434610-exercise-1: 4
+    c434610-exercise-2: 4
+    c434610-exercise-3: 4
+    c438882-exercise-1: 4
+    c438882-exercise-2: 4
+    c438882-exercise-3: 4
+    c442047-exercise-1: 4
+    c442047-exercise-2: 4
+    c442047-exercise-3: 4
+    c445518-exercise-1: 4
+    c445518-exercise-2: 4
+    c445518-exercise-3: 4
+    c406814-exercise-1: 4
+    c406814-exercise-2: 4
+    c406814-exercise-3: 4
+    c411048-exercise-1: 4
+    c411048-exercise-2: 4
+    c411048-exercise-3: 4
+    c414292-exercise-1: 4
+    c414292-exercise-2: 4
+    c414292-exercise-3: 4
+    c422462-exercise-1: 4
+    c422462-exercise-2: 4
+    c422462-exercise-3: 4
+    c429131-exercise-1: 4
+    c429131-exercise-2: 4
+    c429131-exercise-3: 4
+    c429131-exercise-4: 4
+    c434613-exercise-1: 4
+    c434613-exercise-2: 4
+    c434613-exercise-3: 4
+    c438937-exercise-1: 4
+    c438937-exercise-2: 4
+    c438937-exercise-3: 4
+    c442050-exercise-1: 4
+    c442050-exercise-2: 4
+    c442050-exercise-3: 4
+    c442050-exercise-4: 4
+    c445520-exercise-1: 4
+    c445520-exercise-2: 4
+    c445520-exercise-3: 4
+    c445520-exercise-4: 4
+    c406806-exercise-1: 4
+    c406806-exercise-2: 4
+    c406806-exercise-3: 4
+    c406806-exercise-4: 4
+    c406806-exercise-5: 4
+    c411049-exercise-1: 4
+    c411049-exercise-2: 4
+    c411049-exercise-3: 4
+    c411049-exercise-4: 4
+    c411049-exercise-5: 4
+    c411049-exercise-6: 4
+    c414296-exercise-1: 4
+    c414296-exercise-2: 4
+    c414296-exercise-3: 4
+    c414296-exercise-4: 4
+    c414296-exercise-5: 4
+    c414296-exercise-6: 4
+    c422477-exercise-1: 4
+    c422477-exercise-2: 4
+    c422477-exercise-3: 4
+    c422477-exercise-4: 4
+    c422477-exercise-5: 4
+    c422477-exercise-6: 4
+    c429134-exercise-1: 4
+    c429134-exercise-2: 4
+    c429134-exercise-3: 4
+    c429134-exercise-4: 4
+    c429134-exercise-5: 4
+    c434617-exercise-1: 4
+    c434617-exercise-2: 4
+    c434617-exercise-3: 4
+    c434617-exercise-4: 4
+    c438940-exercise-1: 4
+    c438940-exercise-2: 4
+    c438940-exercise-3: 4
+    c442063-exercise-1: 4
+    c442063-exercise-2: 4
+    c442063-exercise-3: 4
+    c445522-exercise-1: 4
+    c445522-exercise-2: 4
+    c445522-exercise-3: 4
+    c445522-exercise-4: 4
+  round_quebec_stay:
+    c406824-exercise-1: 1
+    c406824-exercise-2: 1
+    c406824-exercise-3: 1
+    c411047-exercise-1: 1
+    c411047-exercise-2: 1
+    c411047-exercise-3: 1
+    c414285-exercise-1: 1
+    c414285-exercise-2: 1
+    c414285-exercise-3: 1
+    c422383-exercise-1: 1
+    c422383-exercise-2: 1
+    c422383-exercise-3: 1
+    c429123-exercise-1: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c429123-exercise-4: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c406814-exercise-1: 1
+    c406814-exercise-2: 1
+    c406814-exercise-3: 1
+    c411048-exercise-1: 1
+    c411048-exercise-2: 1
+    c411048-exercise-3: 1
+    c414292-exercise-1: 1
+    c414292-exercise-2: 1
+    c414292-exercise-3: 1
+    c422462-exercise-1: 1
+    c422462-exercise-2: 1
+    c422462-exercise-3: 1
+    c429131-exercise-1: 1
+    c429131-exercise-2: 1
+    c429131-exercise-3: 1
+    c429131-exercise-4: 1
+    c434613-exercise-1: 1
+    c434613-exercise-2: 1
+    c434613-exercise-3: 1
+    c438937-exercise-1: 1
+    c438937-exercise-2: 1
+    c438937-exercise-3: 1
+    c442050-exercise-1: 1
+    c442050-exercise-2: 1
+    c442050-exercise-3: 1
+    c442050-exercise-4: 1
+    c445520-exercise-1: 1
+    c445520-exercise-2: 1
+    c445520-exercise-3: 1
+    c445520-exercise-4: 1
+    c406806-exercise-1: 1
+    c406806-exercise-2: 1
+    c406806-exercise-3: 1
+    c406806-exercise-4: 1
+    c406806-exercise-5: 1
+    c411049-exercise-1: 1
+    c411049-exercise-2: 1
+    c411049-exercise-3: 1
+    c411049-exercise-4: 1
+    c411049-exercise-5: 1
+    c411049-exercise-6: 1
+    c414296-exercise-1: 1
+    c414296-exercise-2: 1
+    c414296-exercise-3: 1
+    c414296-exercise-4: 1
+    c414296-exercise-5: 1
+    c414296-exercise-6: 1
+    c422477-exercise-1: 1
+    c422477-exercise-2: 1
+    c422477-exercise-3: 1
+    c422477-exercise-4: 1
+    c422477-exercise-5: 1
+    c422477-exercise-6: 1
+    c429134-exercise-1: 1
+    c429134-exercise-2: 1
+    c429134-exercise-3: 1
+    c429134-exercise-4: 1
+    c429134-exercise-5: 1
+    c434617-exercise-1: 1
+    c434617-exercise-2: 1
+    c434617-exercise-3: 1
+    c434617-exercise-4: 1
+    c438940-exercise-1: 1
+    c438940-exercise-2: 1
+    c438940-exercise-3: 1
+    c442063-exercise-1: 1
+    c442063-exercise-2: 1
+    c442063-exercise-3: 1
+    c445522-exercise-1: 1
+    c445522-exercise-2: 1
+    c445522-exercise-3: 1
+    c445522-exercise-4: 1
+  round_quebec_diploma_group:
+    c406824-exercise-1: 1
+    c411047-exercise-1: 1
+    c414285-exercise-1: 1
+    c422383-exercise-1: 1
+    c429123-exercise-1: 1
+    c406814-exercise-1: 2
+    c411048-exercise-1: 2
+    c414292-exercise-1: 2
+    c422462-exercise-1: 2
+    c429131-exercise-1: 2
+    c406806-exercise-1: 1
+    c411049-exercise-1: 1
+    c414296-exercise-1: 1
+    c422477-exercise-1: 1
+    c429134-exercise-1: 1
+  round_score_min:
+    c406824-exercise-1: 782
+    c406824-exercise-2: 674
+    c406824-exercise-3: 737
+    c411047-exercise-1: 741
+    c411047-exercise-2: 627
+    c411047-exercise-3: 722
+    c414285-exercise-1: 718
+    c414285-exercise-2: 588
+    c414285-exercise-3: 709
+    c422383-exercise-1: 716
+    c422383-exercise-2: 571
+    c422383-exercise-3: 704
+    c429123-exercise-1: 677
+    c429123-exercise-3: 666
+    c429123-exercise-4: 692
+    c434610-exercise-1: 628
+    c434610-exercise-2: 726
+    c434610-exercise-3: 656
+    c438882-exercise-1: 651
+    c438882-exercise-2: 702
+    c438882-exercise-3: 701
+    c442047-exercise-1: 639
+    c442047-exercise-2: 710
+    c442047-exercise-3: 694
+    c445518-exercise-1: 634
+    c445518-exercise-2: 706
+    c445518-exercise-3: 696
+    c406814-exercise-2: 609
+    c406814-exercise-3: 657
+    c411048-exercise-1: 756
+    c411048-exercise-2: 562
+    c411048-exercise-3: 688
+    c414292-exercise-1: 679
+    c414292-exercise-2: 505
+    c414292-exercise-3: 662
+    c422462-exercise-1: 660
+    c422462-exercise-2: 494
+    c422462-exercise-3: 660
+    c429131-exercise-1: 624
+    c429131-exercise-3: 653
+    c429131-exercise-4: 652
+    c434613-exercise-1: 628
+    c434613-exercise-2: 726
+    c434613-exercise-3: 628
+    c438937-exercise-1: 656
+    c438937-exercise-2: 702
+    c438937-exercise-3: 621
+    c442050-exercise-1: 638
+    c442050-exercise-2: 706
+    c442050-exercise-3: 695
+    c442050-exercise-4: 616
+    c445520-exercise-1: 631
+    c445520-exercise-2: 706
+    c445520-exercise-3: 698
+    c445520-exercise-4: 611
+    c406806-exercise-1: 781
+    c406806-exercise-2: 694
+    c406806-exercise-3: 546
+    c406806-exercise-4: 722
+    c406806-exercise-5: 855
+    c411049-exercise-1: 730
+    c411049-exercise-2: 632
+    c411049-exercise-4: 452
+    c411049-exercise-5: 693
+    c411049-exercise-6: 774
+    c414296-exercise-1: 672
+    c414296-exercise-2: 563
+    c414296-exercise-4: 397
+    c414296-exercise-5: 650
+    c414296-exercise-6: 740
+    c422477-exercise-1: 632
+    c422477-exercise-2: 495
+    c422477-exercise-4: 382
+    c422477-exercise-5: 625
+    c422477-exercise-6: 728
+    c429134-exercise-1: 562
+    c429134-exercise-3: 556
+    c429134-exercise-4: 580
+    c429134-exercise-5: 637
+    c434617-exercise-1: 628
+    c434617-exercise-2: 656
+    c434617-exercise-3: 656
+    c434617-exercise-4: 475
+    c438940-exercise-1: 649
+    c438940-exercise-2: 700
+    c438940-exercise-3: 376
+    c442063-exercise-1: 639
+    c442063-exercise-2: 694
+    c442063-exercise-3: 393
+    c445522-exercise-1: 631
+    c445522-exercise-2: 697
+    c445522-exercise-3: 696
+    c445522-exercise-4: 380
+  round_noc_allowed:
+    c406824-exercise-2:20010: 1
+    c406824-exercise-2:22300: 1
+    c406824-exercise-2:22301: 1
+    c406824-exercise-2:22302: 1
+    c406824-exercise-2:31303: 1
+    c406824-exercise-2:32124: 1
+    c406824-exercise-2:41301: 1
+    c406824-exercise-2:42201: 1
+    c406824-exercise-2:42202: 1
+    c406824-exercise-2:72102: 1
+    c406824-exercise-2:72105: 1
+    c406824-exercise-2:72106: 1
+    c406824-exercise-2:72204: 1
+    c406824-exercise-2:72301: 1
+    c406824-exercise-2:72310: 1
+    c406824-exercise-2:72320: 1
+    c406824-exercise-2:72321: 1
+    c406824-exercise-2:72400: 1
+    c406824-exercise-2:72401: 1
+    c406824-exercise-2:72500: 1
+    c411047-exercise-2:20010: 1
+    c411047-exercise-2:21321: 1
+    c411047-exercise-2:22300: 1
+    c411047-exercise-2:22301: 1
+    c411047-exercise-2:22302: 1
+    c411047-exercise-2:22310: 1
+    c411047-exercise-2:31303: 1
+    c411047-exercise-2:32124: 1
+    c411047-exercise-2:41301: 1
+    c411047-exercise-2:42201: 1
+    c411047-exercise-2:42202: 1
+    c411047-exercise-2:42203: 1
+    c411047-exercise-2:72100: 1
+    c411047-exercise-2:72102: 1
+    c411047-exercise-2:72105: 1
+    c411047-exercise-2:72106: 1
+    c411047-exercise-2:72203: 1
+    c411047-exercise-2:72204: 1
+    c411047-exercise-2:72301: 1
+    c411047-exercise-2:72310: 1
+    c411047-exercise-2:72320: 1
+    c411047-exercise-2:72321: 1
+    c411047-exercise-2:72400: 1
+    c411047-exercise-2:72401: 1
+    c411047-exercise-2:72422: 1
+    c411047-exercise-2:72500: 1
+    c414285-exercise-2:20010: 1
+    c414285-exercise-2:21321: 1
+    c414285-exercise-2:22300: 1
+    c414285-exercise-2:22301: 1
+    c414285-exercise-2:22302: 1
+    c414285-exercise-2:22310: 1
+    c414285-exercise-2:31303: 1
+    c414285-exercise-2:32124: 1
+    c414285-exercise-2:41301: 1
+    c414285-exercise-2:42201: 1
+    c414285-exercise-2:42202: 1
+    c414285-exercise-2:42203: 1
+    c414285-exercise-2:72100: 1
+    c414285-exercise-2:72102: 1
+    c414285-exercise-2:72105: 1
+    c414285-exercise-2:72106: 1
+    c414285-exercise-2:72203: 1
+    c414285-exercise-2:72204: 1
+    c414285-exercise-2:72301: 1
+    c414285-exercise-2:72310: 1
+    c414285-exercise-2:72320: 1
+    c414285-exercise-2:72321: 1
+    c414285-exercise-2:72400: 1
+    c414285-exercise-2:72401: 1
+    c414285-exercise-2:72422: 1
+    c414285-exercise-2:72500: 1
+    c422383-exercise-2:20010: 1
+    c422383-exercise-2:21321: 1
+    c422383-exercise-2:22300: 1
+    c422383-exercise-2:22301: 1
+    c422383-exercise-2:22302: 1
+    c422383-exercise-2:22310: 1
+    c422383-exercise-2:31303: 1
+    c422383-exercise-2:32124: 1
+    c422383-exercise-2:41301: 1
+    c422383-exercise-2:42201: 1
+    c422383-exercise-2:42202: 1
+    c422383-exercise-2:42203: 1
+    c422383-exercise-2:72100: 1
+    c422383-exercise-2:72102: 1
+    c422383-exercise-2:72105: 1
+    c422383-exercise-2:72106: 1
+    c422383-exercise-2:72203: 1
+    c422383-exercise-2:72204: 1
+    c422383-exercise-2:72301: 1
+    c422383-exercise-2:72310: 1
+    c422383-exercise-2:72320: 1
+    c422383-exercise-2:72321: 1
+    c422383-exercise-2:72400: 1
+    c422383-exercise-2:72401: 1
+    c422383-exercise-2:72422: 1
+    c422383-exercise-2:72500: 1
+    c429123-exercise-2:31303: 1
+    c429123-exercise-2:32124: 1
+    c429123-exercise-2:41301: 1
+    c429123-exercise-2:42201: 1
+    c429123-exercise-2:42202: 1
+    c429123-exercise-2:42203: 1
+    c429123-exercise-3:20010: 1
+    c429123-exercise-3:21321: 1
+    c429123-exercise-3:22300: 1
+    c429123-exercise-3:22301: 1
+    c429123-exercise-3:22302: 1
+    c429123-exercise-3:22310: 1
+    c429123-exercise-3:22313: 1
+    c429123-exercise-3:62020: 1
+    c429123-exercise-3:62200: 1
+    c429123-exercise-3:72100: 1
+    c429123-exercise-3:72102: 1
+    c429123-exercise-3:72105: 1
+    c429123-exercise-3:72106: 1
+    c429123-exercise-3:72203: 1
+    c429123-exercise-3:72204: 1
+    c429123-exercise-3:72301: 1
+    c429123-exercise-3:72310: 1
+    c429123-exercise-3:72320: 1
+    c429123-exercise-3:72321: 1
+    c429123-exercise-3:72400: 1
+    c429123-exercise-3:72401: 1
+    c429123-exercise-3:72404: 1
+    c429123-exercise-3:72422: 1
+    c429123-exercise-3:72500: 1
+    c434610-exercise-1:32124: 1
+    c434610-exercise-1:41301: 1
+    c434610-exercise-1:42201: 1
+    c434610-exercise-1:42202: 1
+    c434610-exercise-1:42203: 1
+    c434610-exercise-2:62020: 1
+    c434610-exercise-2:62200: 1
+    c434610-exercise-2:72400: 1
+    c434610-exercise-2:72404: 1
+    c434610-exercise-2:72422: 1
+    c434610-exercise-3:20010: 1
+    c434610-exercise-3:21321: 1
+    c434610-exercise-3:22300: 1
+    c434610-exercise-3:22301: 1
+    c434610-exercise-3:22302: 1
+    c434610-exercise-3:22310: 1
+    c434610-exercise-3:72100: 1
+    c434610-exercise-3:72102: 1
+    c434610-exercise-3:72105: 1
+    c434610-exercise-3:72106: 1
+    c434610-exercise-3:72203: 1
+    c434610-exercise-3:72301: 1
+    c434610-exercise-3:72310: 1
+    c434610-exercise-3:72320: 1
+    c434610-exercise-3:72321: 1
+    c434610-exercise-3:72400: 1
+    c434610-exercise-3:72401: 1
+    c434610-exercise-3:72422: 1
+    c434610-exercise-3:72500: 1
+    c438882-exercise-1:21100: 1
+    c438882-exercise-1:21110: 1
+    c438882-exercise-1:31209: 1
+    c438882-exercise-1:31303: 1
+    c438882-exercise-1:32109: 1
+    c438882-exercise-1:32124: 1
+    c438882-exercise-1:41301: 1
+    c438882-exercise-1:42201: 1
+    c438882-exercise-1:42202: 1
+    c438882-exercise-1:42203: 1
+    c438882-exercise-2:62020: 1
+    c438882-exercise-2:62200: 1
+    c438882-exercise-3:20010: 1
+    c438882-exercise-3:21211: 1
+    c438882-exercise-3:21220: 1
+    c438882-exercise-3:21321: 1
+    c438882-exercise-3:22100: 1
+    c438882-exercise-3:22232: 1
+    c438882-exercise-3:22300: 1
+    c438882-exercise-3:22301: 1
+    c438882-exercise-3:22302: 1
+    c438882-exercise-3:22310: 1
+    c438882-exercise-3:22313: 1
+    c438882-exercise-3:72100: 1
+    c438882-exercise-3:72102: 1
+    c438882-exercise-3:72105: 1
+    c438882-exercise-3:72106: 1
+    c438882-exercise-3:72203: 1
+    c438882-exercise-3:72301: 1
+    c438882-exercise-3:72310: 1
+    c438882-exercise-3:72320: 1
+    c438882-exercise-3:72321: 1
+    c438882-exercise-3:72400: 1
+    c438882-exercise-3:72401: 1
+    c438882-exercise-3:72404: 1
+    c438882-exercise-3:72410: 1
+    c438882-exercise-3:72422: 1
+    c438882-exercise-3:72500: 1
+    c442047-exercise-1:21100: 1
+    c442047-exercise-1:21110: 1
+    c442047-exercise-1:31209: 1
+    c442047-exercise-1:31303: 1
+    c442047-exercise-1:32109: 1
+    c442047-exercise-1:32124: 1
+    c442047-exercise-1:41301: 1
+    c442047-exercise-1:42201: 1
+    c442047-exercise-1:42202: 1
+    c442047-exercise-1:42203: 1
+    c442047-exercise-2:62020: 1
+    c442047-exercise-2:62200: 1
+    c442047-exercise-3:20010: 1
+    c442047-exercise-3:21211: 1
+    c442047-exercise-3:21220: 1
+    c442047-exercise-3:21321: 1
+    c442047-exercise-3:22100: 1
+    c442047-exercise-3:22232: 1
+    c442047-exercise-3:22300: 1
+    c442047-exercise-3:22301: 1
+    c442047-exercise-3:22302: 1
+    c442047-exercise-3:22310: 1
+    c442047-exercise-3:22313: 1
+    c442047-exercise-3:72100: 1
+    c442047-exercise-3:72102: 1
+    c442047-exercise-3:72105: 1
+    c442047-exercise-3:72106: 1
+    c442047-exercise-3:72203: 1
+    c442047-exercise-3:72301: 1
+    c442047-exercise-3:72310: 1
+    c442047-exercise-3:72320: 1
+    c442047-exercise-3:72321: 1
+    c442047-exercise-3:72400: 1
+    c442047-exercise-3:72401: 1
+    c442047-exercise-3:72404: 1
+    c442047-exercise-3:72410: 1
+    c442047-exercise-3:72422: 1
+    c442047-exercise-3:72500: 1
+    c445518-exercise-1:21100: 1
+    c445518-exercise-1:21110: 1
+    c445518-exercise-1:31209: 1
+    c445518-exercise-1:31303: 1
+    c445518-exercise-1:32109: 1
+    c445518-exercise-1:32124: 1
+    c445518-exercise-1:41301: 1
+    c445518-exercise-1:42201: 1
+    c445518-exercise-1:42202: 1
+    c445518-exercise-1:42203: 1
+    c445518-exercise-2:62020: 1
+    c445518-exercise-2:62200: 1
+    c445518-exercise-3:20010: 1
+    c445518-exercise-3:21211: 1
+    c445518-exercise-3:21220: 1
+    c445518-exercise-3:21321: 1
+    c445518-exercise-3:22100: 1
+    c445518-exercise-3:22232: 1
+    c445518-exercise-3:22300: 1
+    c445518-exercise-3:22301: 1
+    c445518-exercise-3:22302: 1
+    c445518-exercise-3:22310: 1
+    c445518-exercise-3:22313: 1
+    c445518-exercise-3:72100: 1
+    c445518-exercise-3:72102: 1
+    c445518-exercise-3:72105: 1
+    c445518-exercise-3:72106: 1
+    c445518-exercise-3:72203: 1
+    c445518-exercise-3:72301: 1
+    c445518-exercise-3:72310: 1
+    c445518-exercise-3:72320: 1
+    c445518-exercise-3:72321: 1
+    c445518-exercise-3:72400: 1
+    c445518-exercise-3:72401: 1
+    c445518-exercise-3:72404: 1
+    c445518-exercise-3:72410: 1
+    c445518-exercise-3:72422: 1
+    c445518-exercise-3:72500: 1
+    c406814-exercise-2:33101: 1
+    c406814-exercise-2:33102: 1
+    c406814-exercise-2:33103: 1
+    c406814-exercise-2:73100: 1
+    c406814-exercise-2:73101: 1
+    c406814-exercise-2:73102: 1
+    c406814-exercise-2:73110: 1
+    c406814-exercise-2:73111: 1
+    c406814-exercise-2:73112: 1
+    c406814-exercise-2:73113: 1
+    c406814-exercise-2:73400: 1
+    c406814-exercise-2:75110: 1
+    c411048-exercise-2:33101: 1
+    c411048-exercise-2:33102: 1
+    c411048-exercise-2:33103: 1
+    c411048-exercise-2:73100: 1
+    c411048-exercise-2:73101: 1
+    c411048-exercise-2:73102: 1
+    c411048-exercise-2:73110: 1
+    c411048-exercise-2:73111: 1
+    c411048-exercise-2:73112: 1
+    c411048-exercise-2:73113: 1
+    c411048-exercise-2:73400: 1
+    c411048-exercise-2:75110: 1
+    c414292-exercise-2:33101: 1
+    c414292-exercise-2:33102: 1
+    c414292-exercise-2:33103: 1
+    c414292-exercise-2:73100: 1
+    c414292-exercise-2:73101: 1
+    c414292-exercise-2:73102: 1
+    c414292-exercise-2:73110: 1
+    c414292-exercise-2:73111: 1
+    c414292-exercise-2:73112: 1
+    c414292-exercise-2:73113: 1
+    c414292-exercise-2:73400: 1
+    c414292-exercise-2:75110: 1
+    c422462-exercise-2:33101: 1
+    c422462-exercise-2:33102: 1
+    c422462-exercise-2:33103: 1
+    c422462-exercise-2:73100: 1
+    c422462-exercise-2:73101: 1
+    c422462-exercise-2:73102: 1
+    c422462-exercise-2:73110: 1
+    c422462-exercise-2:73111: 1
+    c422462-exercise-2:73112: 1
+    c422462-exercise-2:73113: 1
+    c422462-exercise-2:73400: 1
+    c422462-exercise-2:75110: 1
+    c429131-exercise-2:33101: 1
+    c429131-exercise-2:33102: 1
+    c429131-exercise-2:33103: 1
+    c429131-exercise-3:54100: 1
+    c429131-exercise-3:63200: 1
+    c429131-exercise-3:65200: 1
+    c429131-exercise-3:65201: 1
+    c429131-exercise-3:65310: 1
+    c429131-exercise-3:73100: 1
+    c429131-exercise-3:73101: 1
+    c429131-exercise-3:73102: 1
+    c429131-exercise-3:73110: 1
+    c429131-exercise-3:73111: 1
+    c429131-exercise-3:73112: 1
+    c429131-exercise-3:73113: 1
+    c429131-exercise-3:73400: 1
+    c429131-exercise-3:75110: 1
+    c434613-exercise-1:33101: 1
+    c434613-exercise-1:33102: 1
+    c434613-exercise-1:33103: 1
+    c434613-exercise-2:54100: 1
+    c434613-exercise-2:63200: 1
+    c434613-exercise-2:65200: 1
+    c434613-exercise-2:65201: 1
+    c434613-exercise-2:65310: 1
+    c438937-exercise-1:13112: 1
+    c438937-exercise-1:33101: 1
+    c438937-exercise-1:33102: 1
+    c438937-exercise-1:33103: 1
+    c438937-exercise-1:43100: 1
+    c438937-exercise-1:44101: 1
+    c438937-exercise-2:63200: 1
+    c438937-exercise-2:65310: 1
+    c442050-exercise-1:13112: 1
+    c442050-exercise-1:33101: 1
+    c442050-exercise-1:33102: 1
+    c442050-exercise-1:33103: 1
+    c442050-exercise-1:43100: 1
+    c442050-exercise-1:44101: 1
+    c442050-exercise-2:63200: 1
+    c442050-exercise-2:65310: 1
+    c442050-exercise-3:73100: 1
+    c442050-exercise-3:73101: 1
+    c442050-exercise-3:73102: 1
+    c442050-exercise-3:73110: 1
+    c442050-exercise-3:73111: 1
+    c442050-exercise-3:73112: 1
+    c442050-exercise-3:73113: 1
+    c442050-exercise-3:73300: 1
+    c442050-exercise-3:75110: 1
+    c442050-exercise-3:93200: 1
+    c442050-exercise-3:94106: 1
+    c445520-exercise-1:13112: 1
+    c445520-exercise-1:33101: 1
+    c445520-exercise-1:33102: 1
+    c445520-exercise-1:33103: 1
+    c445520-exercise-1:43100: 1
+    c445520-exercise-1:44101: 1
+    c445520-exercise-2:63200: 1
+    c445520-exercise-2:65310: 1
+    c445520-exercise-3:73100: 1
+    c445520-exercise-3:73101: 1
+    c445520-exercise-3:73102: 1
+    c445520-exercise-3:73110: 1
+    c445520-exercise-3:73111: 1
+    c445520-exercise-3:73112: 1
+    c445520-exercise-3:73113: 1
+    c445520-exercise-3:73300: 1
+    c445520-exercise-3:75110: 1
+    c445520-exercise-3:93200: 1
+    c445520-exercise-3:94106: 1
+    c406806-exercise-2:21203: 1
+    c406806-exercise-2:21300: 1
+    c406806-exercise-2:21310: 1
+    c406806-exercise-2:21320: 1
+    c406806-exercise-2:21321: 1
+    c406806-exercise-2:21322: 1
+    c406806-exercise-2:21390: 1
+    c406806-exercise-2:31100: 1
+    c406806-exercise-2:31101: 1
+    c406806-exercise-2:31102: 1
+    c406806-exercise-2:31103: 1
+    c406806-exercise-2:31110: 1
+    c406806-exercise-2:31112: 1
+    c406806-exercise-2:31120: 1
+    c406806-exercise-2:31121: 1
+    c406806-exercise-2:31200: 1
+    c406806-exercise-2:31202: 1
+    c406806-exercise-2:31203: 1
+    c406806-exercise-2:31300: 1
+    c406806-exercise-2:31301: 1
+    c406806-exercise-2:31302: 1
+    c406806-exercise-2:31303: 1
+    c406806-exercise-2:32100: 1
+    c406806-exercise-2:32101: 1
+    c406806-exercise-2:32102: 1
+    c406806-exercise-2:32103: 1
+    c406806-exercise-2:32104: 1
+    c406806-exercise-2:32111: 1
+    c406806-exercise-2:32112: 1
+    c406806-exercise-2:32120: 1
+    c406806-exercise-2:32121: 1
+    c406806-exercise-2:32122: 1
+    c406806-exercise-2:32123: 1
+    c406806-exercise-2:32124: 1
+    c406806-exercise-2:41220: 1
+    c406806-exercise-2:41221: 1
+    c406806-exercise-2:41300: 1
+    c406806-exercise-2:41301: 1
+    c406806-exercise-2:42202: 1
+    c406806-exercise-2:72102: 1
+    c406806-exercise-2:72105: 1
+    c406806-exercise-2:72106: 1
+    c406806-exercise-2:72200: 1
+    c406806-exercise-2:72204: 1
+    c406806-exercise-2:72301: 1
+    c406806-exercise-2:72310: 1
+    c406806-exercise-2:72320: 1
+    c406806-exercise-2:72321: 1
+    c406806-exercise-2:72400: 1
+    c406806-exercise-2:72401: 1
+    c406806-exercise-2:72402: 1
+    c406806-exercise-2:72406: 1
+    c406806-exercise-2:72500: 1
+    c406806-exercise-3:73100: 1
+    c406806-exercise-3:73101: 1
+    c406806-exercise-3:73102: 1
+    c406806-exercise-3:73110: 1
+    c406806-exercise-3:73111: 1
+    c406806-exercise-3:73112: 1
+    c406806-exercise-3:73113: 1
+    c406806-exercise-3:73400: 1
+    c406806-exercise-3:73402: 1
+    c406806-exercise-3:75110: 1
+    c411049-exercise-2:21203: 1
+    c411049-exercise-2:21300: 1
+    c411049-exercise-2:21301: 1
+    c411049-exercise-2:21310: 1
+    c411049-exercise-2:21320: 1
+    c411049-exercise-2:21321: 1
+    c411049-exercise-2:21322: 1
+    c411049-exercise-2:21390: 1
+    c411049-exercise-2:22300: 1
+    c411049-exercise-2:22301: 1
+    c411049-exercise-2:22302: 1
+    c411049-exercise-2:22310: 1
+    c411049-exercise-2:31103: 1
+    c411049-exercise-2:31110: 1
+    c411049-exercise-2:31112: 1
+    c411049-exercise-2:31120: 1
+    c411049-exercise-2:31121: 1
+    c411049-exercise-2:31200: 1
+    c411049-exercise-2:31202: 1
+    c411049-exercise-2:31203: 1
+    c411049-exercise-2:31300: 1
+    c411049-exercise-2:31301: 1
+    c411049-exercise-2:31302: 1
+    c411049-exercise-2:31303: 1
+    c411049-exercise-2:32100: 1
+    c411049-exercise-2:32101: 1
+    c411049-exercise-2:32102: 1
+    c411049-exercise-2:32103: 1
+    c411049-exercise-2:32104: 1
+    c411049-exercise-2:32111: 1
+    c411049-exercise-2:32112: 1
+    c411049-exercise-2:32120: 1
+    c411049-exercise-2:32121: 1
+    c411049-exercise-2:32122: 1
+    c411049-exercise-2:32123: 1
+    c411049-exercise-2:41220: 1
+    c411049-exercise-2:41221: 1
+    c411049-exercise-2:41300: 1
+    c411049-exercise-2:41301: 1
+    c411049-exercise-2:42202: 1
+    c411049-exercise-2:72102: 1
+    c411049-exercise-2:72105: 1
+    c411049-exercise-2:72106: 1
+    c411049-exercise-2:72200: 1
+    c411049-exercise-2:72203: 1
+    c411049-exercise-2:72300: 1
+    c411049-exercise-2:72301: 1
+    c411049-exercise-2:72310: 1
+    c411049-exercise-2:72320: 1
+    c411049-exercise-2:72321: 1
+    c411049-exercise-2:72400: 1
+    c411049-exercise-2:72401: 1
+    c411049-exercise-2:72402: 1
+    c411049-exercise-2:72406: 1
+    c411049-exercise-2:72422: 1
+    c411049-exercise-2:72500: 1
+    c411049-exercise-3:31100: 1
+    c411049-exercise-3:31101: 1
+    c411049-exercise-3:31102: 1
+    c411049-exercise-4:73100: 1
+    c411049-exercise-4:73101: 1
+    c411049-exercise-4:73102: 1
+    c411049-exercise-4:73110: 1
+    c411049-exercise-4:73111: 1
+    c411049-exercise-4:73112: 1
+    c411049-exercise-4:73113: 1
+    c411049-exercise-4:73400: 1
+    c411049-exercise-4:73402: 1
+    c411049-exercise-4:75110: 1
+    c414296-exercise-2:21203: 1
+    c414296-exercise-2:21300: 1
+    c414296-exercise-2:21301: 1
+    c414296-exercise-2:21310: 1
+    c414296-exercise-2:21320: 1
+    c414296-exercise-2:21321: 1
+    c414296-exercise-2:21322: 1
+    c414296-exercise-2:21390: 1
+    c414296-exercise-2:22300: 1
+    c414296-exercise-2:22301: 1
+    c414296-exercise-2:22302: 1
+    c414296-exercise-2:22310: 1
+    c414296-exercise-2:31103: 1
+    c414296-exercise-2:31110: 1
+    c414296-exercise-2:31112: 1
+    c414296-exercise-2:31120: 1
+    c414296-exercise-2:31121: 1
+    c414296-exercise-2:31200: 1
+    c414296-exercise-2:31202: 1
+    c414296-exercise-2:31203: 1
+    c414296-exercise-2:31300: 1
+    c414296-exercise-2:31301: 1
+    c414296-exercise-2:31302: 1
+    c414296-exercise-2:31303: 1
+    c414296-exercise-2:32100: 1
+    c414296-exercise-2:32101: 1
+    c414296-exercise-2:32102: 1
+    c414296-exercise-2:32103: 1
+    c414296-exercise-2:32104: 1
+    c414296-exercise-2:32111: 1
+    c414296-exercise-2:32112: 1
+    c414296-exercise-2:32120: 1
+    c414296-exercise-2:32121: 1
+    c414296-exercise-2:32122: 1
+    c414296-exercise-2:32123: 1
+    c414296-exercise-2:41220: 1
+    c414296-exercise-2:41221: 1
+    c414296-exercise-2:41300: 1
+    c414296-exercise-2:41301: 1
+    c414296-exercise-2:42202: 1
+    c414296-exercise-2:72102: 1
+    c414296-exercise-2:72105: 1
+    c414296-exercise-2:72106: 1
+    c414296-exercise-2:72200: 1
+    c414296-exercise-2:72203: 1
+    c414296-exercise-2:72300: 1
+    c414296-exercise-2:72301: 1
+    c414296-exercise-2:72310: 1
+    c414296-exercise-2:72320: 1
+    c414296-exercise-2:72321: 1
+    c414296-exercise-2:72400: 1
+    c414296-exercise-2:72401: 1
+    c414296-exercise-2:72402: 1
+    c414296-exercise-2:72406: 1
+    c414296-exercise-2:72422: 1
+    c414296-exercise-2:72500: 1
+    c414296-exercise-3:31100: 1
+    c414296-exercise-3:31101: 1
+    c414296-exercise-3:31102: 1
+    c414296-exercise-4:73100: 1
+    c414296-exercise-4:73101: 1
+    c414296-exercise-4:73102: 1
+    c414296-exercise-4:73110: 1
+    c414296-exercise-4:73111: 1
+    c414296-exercise-4:73112: 1
+    c414296-exercise-4:73113: 1
+    c414296-exercise-4:73400: 1
+    c414296-exercise-4:73402: 1
+    c414296-exercise-4:75110: 1
+    c422477-exercise-2:21203: 1
+    c422477-exercise-2:21300: 1
+    c422477-exercise-2:21301: 1
+    c422477-exercise-2:21310: 1
+    c422477-exercise-2:21320: 1
+    c422477-exercise-2:21321: 1
+    c422477-exercise-2:21322: 1
+    c422477-exercise-2:21390: 1
+    c422477-exercise-2:22300: 1
+    c422477-exercise-2:22301: 1
+    c422477-exercise-2:22302: 1
+    c422477-exercise-2:22310: 1
+    c422477-exercise-2:31103: 1
+    c422477-exercise-2:31110: 1
+    c422477-exercise-2:31112: 1
+    c422477-exercise-2:31120: 1
+    c422477-exercise-2:31121: 1
+    c422477-exercise-2:31200: 1
+    c422477-exercise-2:31202: 1
+    c422477-exercise-2:31203: 1
+    c422477-exercise-2:31300: 1
+    c422477-exercise-2:31301: 1
+    c422477-exercise-2:31302: 1
+    c422477-exercise-2:31303: 1
+    c422477-exercise-2:32100: 1
+    c422477-exercise-2:32101: 1
+    c422477-exercise-2:32102: 1
+    c422477-exercise-2:32103: 1
+    c422477-exercise-2:32104: 1
+    c422477-exercise-2:32111: 1
+    c422477-exercise-2:32112: 1
+    c422477-exercise-2:32120: 1
+    c422477-exercise-2:32121: 1
+    c422477-exercise-2:32122: 1
+    c422477-exercise-2:32123: 1
+    c422477-exercise-2:41220: 1
+    c422477-exercise-2:41221: 1
+    c422477-exercise-2:41300: 1
+    c422477-exercise-2:41301: 1
+    c422477-exercise-2:42202: 1
+    c422477-exercise-2:72102: 1
+    c422477-exercise-2:72105: 1
+    c422477-exercise-2:72106: 1
+    c422477-exercise-2:72200: 1
+    c422477-exercise-2:72203: 1
+    c422477-exercise-2:72300: 1
+    c422477-exercise-2:72301: 1
+    c422477-exercise-2:72310: 1
+    c422477-exercise-2:72320: 1
+    c422477-exercise-2:72321: 1
+    c422477-exercise-2:72400: 1
+    c422477-exercise-2:72401: 1
+    c422477-exercise-2:72402: 1
+    c422477-exercise-2:72406: 1
+    c422477-exercise-2:72422: 1
+    c422477-exercise-2:72500: 1
+    c422477-exercise-3:31100: 1
+    c422477-exercise-3:31101: 1
+    c422477-exercise-3:31102: 1
+    c422477-exercise-4:73100: 1
+    c422477-exercise-4:73101: 1
+    c422477-exercise-4:73102: 1
+    c422477-exercise-4:73110: 1
+    c422477-exercise-4:73111: 1
+    c422477-exercise-4:73112: 1
+    c422477-exercise-4:73113: 1
+    c422477-exercise-4:73400: 1
+    c422477-exercise-4:73402: 1
+    c422477-exercise-4:75110: 1
+    c429134-exercise-2:31100: 1
+    c429134-exercise-2:31101: 1
+    c429134-exercise-2:31102: 1
+    c429134-exercise-2:31103: 1
+    c429134-exercise-2:31110: 1
+    c429134-exercise-2:31112: 1
+    c429134-exercise-2:31120: 1
+    c429134-exercise-2:31121: 1
+    c429134-exercise-2:31200: 1
+    c429134-exercise-2:31202: 1
+    c429134-exercise-2:31203: 1
+    c429134-exercise-2:31300: 1
+    c429134-exercise-2:31301: 1
+    c429134-exercise-2:31302: 1
+    c429134-exercise-2:31303: 1
+    c429134-exercise-2:32100: 1
+    c429134-exercise-2:32101: 1
+    c429134-exercise-2:32102: 1
+    c429134-exercise-2:32103: 1
+    c429134-exercise-2:32104: 1
+    c429134-exercise-2:32111: 1
+    c429134-exercise-2:32112: 1
+    c429134-exercise-2:32120: 1
+    c429134-exercise-2:32121: 1
+    c429134-exercise-2:32122: 1
+    c429134-exercise-2:32123: 1
+    c429134-exercise-2:41220: 1
+    c429134-exercise-2:41221: 1
+    c429134-exercise-2:41300: 1
+    c429134-exercise-2:41301: 1
+    c429134-exercise-2:42202: 1
+    c429134-exercise-3:21203: 1
+    c429134-exercise-3:21300: 1
+    c429134-exercise-3:21301: 1
+    c429134-exercise-3:21310: 1
+    c429134-exercise-3:21320: 1
+    c429134-exercise-3:21321: 1
+    c429134-exercise-3:21322: 1
+    c429134-exercise-3:21390: 1
+    c429134-exercise-3:22300: 1
+    c429134-exercise-3:22301: 1
+    c429134-exercise-3:22302: 1
+    c429134-exercise-3:22310: 1
+    c429134-exercise-3:72102: 1
+    c429134-exercise-3:72105: 1
+    c429134-exercise-3:72106: 1
+    c429134-exercise-3:72200: 1
+    c429134-exercise-3:72201: 1
+    c429134-exercise-3:72203: 1
+    c429134-exercise-3:72300: 1
+    c429134-exercise-3:72301: 1
+    c429134-exercise-3:72310: 1
+    c429134-exercise-3:72320: 1
+    c429134-exercise-3:72321: 1
+    c429134-exercise-3:72400: 1
+    c429134-exercise-3:72401: 1
+    c429134-exercise-3:72402: 1
+    c429134-exercise-3:72406: 1
+    c429134-exercise-3:72422: 1
+    c429134-exercise-3:72500: 1
+    c429134-exercise-3:72602: 1
+    c434617-exercise-1:31100: 1
+    c434617-exercise-1:31101: 1
+    c434617-exercise-1:31102: 1
+    c434617-exercise-1:31103: 1
+    c434617-exercise-1:31112: 1
+    c434617-exercise-1:31120: 1
+    c434617-exercise-1:31121: 1
+    c434617-exercise-1:31200: 1
+    c434617-exercise-1:31202: 1
+    c434617-exercise-1:31203: 1
+    c434617-exercise-1:31300: 1
+    c434617-exercise-1:31301: 1
+    c434617-exercise-1:31302: 1
+    c434617-exercise-1:32100: 1
+    c434617-exercise-1:32101: 1
+    c434617-exercise-1:32102: 1
+    c434617-exercise-1:32103: 1
+    c434617-exercise-1:32111: 1
+    c434617-exercise-1:32112: 1
+    c434617-exercise-1:32120: 1
+    c434617-exercise-1:32121: 1
+    c434617-exercise-1:32123: 1
+    c434617-exercise-1:41220: 1
+    c434617-exercise-1:41221: 1
+    c434617-exercise-1:41300: 1
+    c434617-exercise-1:41301: 1
+    c434617-exercise-1:42202: 1
+    c434617-exercise-2:21300: 1
+    c434617-exercise-2:21301: 1
+    c434617-exercise-2:21310: 1
+    c434617-exercise-2:21321: 1
+    c434617-exercise-2:21322: 1
+    c434617-exercise-2:21331: 1
+    c434617-exercise-2:21390: 1
+    c434617-exercise-2:22300: 1
+    c434617-exercise-2:22301: 1
+    c434617-exercise-2:22302: 1
+    c434617-exercise-2:22310: 1
+    c434617-exercise-2:72102: 1
+    c434617-exercise-2:72105: 1
+    c434617-exercise-2:72106: 1
+    c434617-exercise-2:72200: 1
+    c434617-exercise-2:72203: 1
+    c434617-exercise-2:72300: 1
+    c434617-exercise-2:72310: 1
+    c434617-exercise-2:72320: 1
+    c434617-exercise-2:72321: 1
+    c434617-exercise-2:72400: 1
+    c434617-exercise-2:72401: 1
+    c434617-exercise-2:72402: 1
+    c434617-exercise-2:72406: 1
+    c434617-exercise-2:72422: 1
+    c434617-exercise-2:72500: 1
+    c434617-exercise-3:73100: 1
+    c434617-exercise-3:73101: 1
+    c434617-exercise-3:73102: 1
+    c434617-exercise-3:73110: 1
+    c434617-exercise-3:73111: 1
+    c434617-exercise-3:73112: 1
+    c434617-exercise-3:73113: 1
+    c434617-exercise-3:75110: 1
+    c438940-exercise-1:31100: 1
+    c438940-exercise-1:31101: 1
+    c438940-exercise-1:31102: 1
+    c438940-exercise-1:31103: 1
+    c438940-exercise-1:31110: 1
+    c438940-exercise-1:31112: 1
+    c438940-exercise-1:31120: 1
+    c438940-exercise-1:31121: 1
+    c438940-exercise-1:31200: 1
+    c438940-exercise-1:31202: 1
+    c438940-exercise-1:31203: 1
+    c438940-exercise-1:31209: 1
+    c438940-exercise-1:31300: 1
+    c438940-exercise-1:31301: 1
+    c438940-exercise-1:31302: 1
+    c438940-exercise-1:31303: 1
+    c438940-exercise-1:32100: 1
+    c438940-exercise-1:32101: 1
+    c438940-exercise-1:32102: 1
+    c438940-exercise-1:32103: 1
+    c438940-exercise-1:32109: 1
+    c438940-exercise-1:32111: 1
+    c438940-exercise-1:32112: 1
+    c438940-exercise-1:32120: 1
+    c438940-exercise-1:32121: 1
+    c438940-exercise-1:32122: 1
+    c438940-exercise-1:32123: 1
+    c438940-exercise-1:41220: 1
+    c438940-exercise-1:41221: 1
+    c438940-exercise-1:41300: 1
+    c438940-exercise-1:41301: 1
+    c438940-exercise-1:42202: 1
+    c438940-exercise-2:21300: 1
+    c438940-exercise-2:21301: 1
+    c438940-exercise-2:21310: 1
+    c438940-exercise-2:21321: 1
+    c438940-exercise-2:21322: 1
+    c438940-exercise-2:21331: 1
+    c438940-exercise-2:21390: 1
+    c438940-exercise-2:22300: 1
+    c438940-exercise-2:22301: 1
+    c438940-exercise-2:22302: 1
+    c438940-exercise-2:22310: 1
+    c438940-exercise-2:72102: 1
+    c438940-exercise-2:72105: 1
+    c438940-exercise-2:72106: 1
+    c438940-exercise-2:72200: 1
+    c438940-exercise-2:72201: 1
+    c438940-exercise-2:72203: 1
+    c438940-exercise-2:72300: 1
+    c438940-exercise-2:72301: 1
+    c438940-exercise-2:72310: 1
+    c438940-exercise-2:72320: 1
+    c438940-exercise-2:72321: 1
+    c438940-exercise-2:72400: 1
+    c438940-exercise-2:72401: 1
+    c438940-exercise-2:72402: 1
+    c438940-exercise-2:72406: 1
+    c438940-exercise-2:72422: 1
+    c438940-exercise-2:72500: 1
+    c438940-exercise-2:72602: 1
+    c438940-exercise-2:72603: 1
+    c442063-exercise-1:31100: 1
+    c442063-exercise-1:31101: 1
+    c442063-exercise-1:31102: 1
+    c442063-exercise-1:31103: 1
+    c442063-exercise-1:31110: 1
+    c442063-exercise-1:31112: 1
+    c442063-exercise-1:31120: 1
+    c442063-exercise-1:31121: 1
+    c442063-exercise-1:31200: 1
+    c442063-exercise-1:31202: 1
+    c442063-exercise-1:31203: 1
+    c442063-exercise-1:31209: 1
+    c442063-exercise-1:31300: 1
+    c442063-exercise-1:31301: 1
+    c442063-exercise-1:31302: 1
+    c442063-exercise-1:31303: 1
+    c442063-exercise-1:32100: 1
+    c442063-exercise-1:32101: 1
+    c442063-exercise-1:32102: 1
+    c442063-exercise-1:32103: 1
+    c442063-exercise-1:32109: 1
+    c442063-exercise-1:32111: 1
+    c442063-exercise-1:32112: 1
+    c442063-exercise-1:32120: 1
+    c442063-exercise-1:32121: 1
+    c442063-exercise-1:32122: 1
+    c442063-exercise-1:32123: 1
+    c442063-exercise-1:41220: 1
+    c442063-exercise-1:41221: 1
+    c442063-exercise-1:41300: 1
+    c442063-exercise-1:41301: 1
+    c442063-exercise-1:42202: 1
+    c442063-exercise-2:21300: 1
+    c442063-exercise-2:21301: 1
+    c442063-exercise-2:21310: 1
+    c442063-exercise-2:21321: 1
+    c442063-exercise-2:21322: 1
+    c442063-exercise-2:21331: 1
+    c442063-exercise-2:21390: 1
+    c442063-exercise-2:22300: 1
+    c442063-exercise-2:22301: 1
+    c442063-exercise-2:22302: 1
+    c442063-exercise-2:22310: 1
+    c442063-exercise-2:72102: 1
+    c442063-exercise-2:72105: 1
+    c442063-exercise-2:72106: 1
+    c442063-exercise-2:72200: 1
+    c442063-exercise-2:72201: 1
+    c442063-exercise-2:72203: 1
+    c442063-exercise-2:72300: 1
+    c442063-exercise-2:72301: 1
+    c442063-exercise-2:72310: 1
+    c442063-exercise-2:72320: 1
+    c442063-exercise-2:72321: 1
+    c442063-exercise-2:72400: 1
+    c442063-exercise-2:72401: 1
+    c442063-exercise-2:72402: 1
+    c442063-exercise-2:72406: 1
+    c442063-exercise-2:72422: 1
+    c442063-exercise-2:72500: 1
+    c442063-exercise-2:72602: 1
+    c442063-exercise-2:72603: 1
+    c445522-exercise-1:31100: 1
+    c445522-exercise-1:31101: 1
+    c445522-exercise-1:31102: 1
+    c445522-exercise-1:31103: 1
+    c445522-exercise-1:31110: 1
+    c445522-exercise-1:31112: 1
+    c445522-exercise-1:31120: 1
+    c445522-exercise-1:31121: 1
+    c445522-exercise-1:31200: 1
+    c445522-exercise-1:31202: 1
+    c445522-exercise-1:31203: 1
+    c445522-exercise-1:31209: 1
+    c445522-exercise-1:31300: 1
+    c445522-exercise-1:31301: 1
+    c445522-exercise-1:31302: 1
+    c445522-exercise-1:31303: 1
+    c445522-exercise-1:32100: 1
+    c445522-exercise-1:32101: 1
+    c445522-exercise-1:32102: 1
+    c445522-exercise-1:32103: 1
+    c445522-exercise-1:32109: 1
+    c445522-exercise-1:32111: 1
+    c445522-exercise-1:32112: 1
+    c445522-exercise-1:32120: 1
+    c445522-exercise-1:32121: 1
+    c445522-exercise-1:32122: 1
+    c445522-exercise-1:32123: 1
+    c445522-exercise-1:41220: 1
+    c445522-exercise-1:41221: 1
+    c445522-exercise-1:41300: 1
+    c445522-exercise-1:41301: 1
+    c445522-exercise-1:42202: 1
+    c445522-exercise-2:21300: 1
+    c445522-exercise-2:21301: 1
+    c445522-exercise-2:21310: 1
+    c445522-exercise-2:21321: 1
+    c445522-exercise-2:21322: 1
+    c445522-exercise-2:21331: 1
+    c445522-exercise-2:21390: 1
+    c445522-exercise-2:22300: 1
+    c445522-exercise-2:22301: 1
+    c445522-exercise-2:22302: 1
+    c445522-exercise-2:22310: 1
+    c445522-exercise-2:72102: 1
+    c445522-exercise-2:72105: 1
+    c445522-exercise-2:72106: 1
+    c445522-exercise-2:72200: 1
+    c445522-exercise-2:72201: 1
+    c445522-exercise-2:72203: 1
+    c445522-exercise-2:72300: 1
+    c445522-exercise-2:72301: 1
+    c445522-exercise-2:72310: 1
+    c445522-exercise-2:72320: 1
+    c445522-exercise-2:72321: 1
+    c445522-exercise-2:72400: 1
+    c445522-exercise-2:72401: 1
+    c445522-exercise-2:72402: 1
+    c445522-exercise-2:72406: 1
+    c445522-exercise-2:72422: 1
+    c445522-exercise-2:72500: 1
+    c445522-exercise-2:72602: 1
+    c445522-exercise-2:72603: 1
+    c445522-exercise-3:73100: 1
+    c445522-exercise-3:73101: 1
+    c445522-exercise-3:73102: 1
+    c445522-exercise-3:73110: 1
+    c445522-exercise-3:73111: 1
+    c445522-exercise-3:73112: 1
+    c445522-exercise-3:73113: 1
+    c445522-exercise-3:75110: 1
+  round_noc_restricted:
+    c406824-exercise-2: 1
+    c411047-exercise-2: 1
+    c414285-exercise-2: 1
+    c422383-exercise-2: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c406814-exercise-2: 1
+    c411048-exercise-2: 1
+    c414292-exercise-2: 1
+    c422462-exercise-2: 1
+    c429131-exercise-2: 1
+    c429131-exercise-3: 1
+    c434613-exercise-1: 1
+    c434613-exercise-2: 1
+    c438937-exercise-1: 1
+    c438937-exercise-2: 1
+    c442050-exercise-1: 1
+    c442050-exercise-2: 1
+    c442050-exercise-3: 1
+    c445520-exercise-1: 1
+    c445520-exercise-2: 1
+    c445520-exercise-3: 1
+    c406806-exercise-2: 1
+    c406806-exercise-3: 1
+    c411049-exercise-2: 1
+    c411049-exercise-3: 1
+    c411049-exercise-4: 1
+    c414296-exercise-2: 1
+    c414296-exercise-3: 1
+    c414296-exercise-4: 1
+    c422477-exercise-2: 1
+    c422477-exercise-3: 1
+    c422477-exercise-4: 1
+    c429134-exercise-2: 1
+    c429134-exercise-3: 1
+    c434617-exercise-1: 1
+    c434617-exercise-2: 1
+    c434617-exercise-3: 1
+    c438940-exercise-1: 1
+    c438940-exercise-2: 1
+    c442063-exercise-1: 1
+    c442063-exercise-2: 1
+    c445522-exercise-1: 1
+    c445522-exercise-2: 1
+    c445522-exercise-3: 1
+  round_general_diploma_group:
+    c411047-exercise-1: 1
+    c411047-exercise-2: 1
+    c411047-exercise-3: 1
+    c414285-exercise-1: 1
+    c414285-exercise-2: 1
+    c414285-exercise-3: 1
+    c422383-exercise-1: 1
+    c422383-exercise-2: 1
+    c422383-exercise-3: 1
+    c429123-exercise-1: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c429123-exercise-4: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c411048-exercise-1: 2
+    c411048-exercise-2: 2
+    c411048-exercise-3: 2
+    c414292-exercise-1: 2
+    c414292-exercise-2: 2
+    c414292-exercise-3: 2
+    c422462-exercise-1: 2
+    c422462-exercise-2: 2
+    c422462-exercise-3: 2
+    c429131-exercise-1: 2
+    c429131-exercise-2: 2
+    c429131-exercise-3: 2
+    c429131-exercise-4: 2
+    c434613-exercise-1: 2
+    c434613-exercise-2: 2
+    c434613-exercise-3: 2
+    c438937-exercise-1: 2
+    c438937-exercise-2: 2
+    c438937-exercise-3: 2
+    c442050-exercise-1: 2
+    c442050-exercise-2: 2
+    c442050-exercise-3: 2
+    c442050-exercise-4: 2
+    c445520-exercise-1: 2
+    c445520-exercise-2: 2
+    c445520-exercise-3: 2
+    c445520-exercise-4: 2
+  round_quebec_experience_min:
+    c406814-exercise-1: 12
+    c406814-exercise-2: 12
+    c406814-exercise-3: 12
+    c411048-exercise-1: 12
+    c411048-exercise-2: 12
+    c411048-exercise-3: 12
+    c414292-exercise-1: 12
+    c414292-exercise-2: 12
+    c414292-exercise-3: 12
+    c422462-exercise-1: 12
+    c422462-exercise-2: 12
+    c422462-exercise-3: 12
+    c429131-exercise-1: 12
+    c429131-exercise-2: 12
+    c429131-exercise-3: 12
+    c429131-exercise-4: 12
+    c434613-exercise-1: 12
+    c434613-exercise-2: 12
+    c434613-exercise-3: 12
+    c438937-exercise-1: 12
+    c438937-exercise-2: 12
+    c438937-exercise-3: 12
+    c442050-exercise-1: 12
+    c442050-exercise-2: 12
+    c442050-exercise-3: 12
+    c442050-exercise-4: 12
+    c445520-exercise-1: 12
+    c445520-exercise-2: 12
+    c445520-exercise-3: 12
+    c445520-exercise-4: 12
+  round_outside_cmm:
+    c406814-exercise-3: 1
+  round_regulated:
+    c406806-exercise-1: 1
+    c406806-exercise-2: 1
+    c406806-exercise-3: 1
+    c406806-exercise-4: 1
+    c406806-exercise-5: 1
+    c411049-exercise-1: 1
+    c411049-exercise-2: 1
+    c411049-exercise-3: 1
+    c411049-exercise-4: 1
+    c411049-exercise-5: 1
+    c411049-exercise-6: 1
+    c414296-exercise-1: 1
+    c414296-exercise-2: 1
+    c414296-exercise-3: 1
+    c414296-exercise-4: 1
+    c414296-exercise-5: 1
+    c414296-exercise-6: 1
+    c422477-exercise-1: 1
+    c422477-exercise-2: 1
+    c422477-exercise-3: 1
+    c422477-exercise-4: 1
+    c422477-exercise-5: 1
+    c422477-exercise-6: 1
+    c429134-exercise-1: 1
+    c429134-exercise-2: 1
+    c429134-exercise-3: 1
+    c429134-exercise-4: 1
+    c429134-exercise-5: 1
+    c434617-exercise-1: 1
+    c434617-exercise-2: 1
+    c434617-exercise-3: 1
+    c434617-exercise-4: 1
+    c438940-exercise-1: 1
+    c438940-exercise-2: 1
+    c438940-exercise-3: 1
+    c442063-exercise-1: 1
+    c442063-exercise-2: 1
+    c442063-exercise-3: 1
+    c445522-exercise-1: 1
+    c445522-exercise-2: 1
+    c445522-exercise-3: 1
+    c445522-exercise-4: 1
+  round_authorization_or_recognition:
+    c411049-exercise-3: 1
+    c414296-exercise-3: 1
+    c422477-exercise-3: 1
+  round_partner_positive:
+    c406792-exercise-1: 1
+    c411050-exercise-1: 1
+    c422494-exercise-1: 1
+    c429141-exercise-1: 1
+    c434619-exercise-1: 1
+    c438968-exercise-1: 1
+    c442071-exercise-1: 1
+    c445524-exercise-1: 1
+  round_exceptional_document:
+    c406792-exercise-2: 1
+    c411050-exercise-2: 1
+    c414306-exercise-1: 1
+    c422494-exercise-2: 1
+    c429141-exercise-2: 1
+    c438968-exercise-2: 1
+    c442071-exercise-2: 1
+    c445524-exercise-2: 1
+  round_doctorate:
+    c406792-exercise-2: 1
+    c411050-exercise-2: 1
+    c414306-exercise-1: 1
+    c422494-exercise-2: 1
+    c429141-exercise-2: 1
+    c438968-exercise-2: 1
+    c442071-exercise-2: 1
+    c445524-exercise-2: 1
+  round_volet:
+    c406824-exercise-1: 1
+    c406824-exercise-2: 1
+    c406824-exercise-3: 1
+    c411047-exercise-1: 1
+    c411047-exercise-2: 1
+    c411047-exercise-3: 1
+    c414285-exercise-1: 1
+    c414285-exercise-2: 1
+    c414285-exercise-3: 1
+    c422383-exercise-1: 1
+    c422383-exercise-2: 1
+    c422383-exercise-3: 1
+    c429123-exercise-1: 1
+    c429123-exercise-2: 1
+    c429123-exercise-3: 1
+    c429123-exercise-4: 1
+    c434610-exercise-1: 1
+    c434610-exercise-2: 1
+    c434610-exercise-3: 1
+    c438882-exercise-1: 1
+    c438882-exercise-2: 1
+    c438882-exercise-3: 1
+    c442047-exercise-1: 1
+    c442047-exercise-2: 1
+    c442047-exercise-3: 1
+    c445518-exercise-1: 1
+    c445518-exercise-2: 1
+    c445518-exercise-3: 1
+    c406814-exercise-1: 2
+    c406814-exercise-2: 2
+    c406814-exercise-3: 2
+    c411048-exercise-1: 2
+    c411048-exercise-2: 2
+    c411048-exercise-3: 2
+    c414292-exercise-1: 2
+    c414292-exercise-2: 2
+    c414292-exercise-3: 2
+    c422462-exercise-1: 2
+    c422462-exercise-2: 2
+    c422462-exercise-3: 2
+    c429131-exercise-1: 2
+    c429131-exercise-2: 2
+    c429131-exercise-3: 2
+    c429131-exercise-4: 2
+    c434613-exercise-1: 2
+    c434613-exercise-2: 2
+    c434613-exercise-3: 2
+    c438937-exercise-1: 2
+    c438937-exercise-2: 2
+    c438937-exercise-3: 2
+    c442050-exercise-1: 2
+    c442050-exercise-2: 2
+    c442050-exercise-3: 2
+    c442050-exercise-4: 2
+    c445520-exercise-1: 2
+    c445520-exercise-2: 2
+    c445520-exercise-3: 2
+    c445520-exercise-4: 2
+    c406806-exercise-1: 3
+    c406806-exercise-2: 3
+    c406806-exercise-3: 3
+    c406806-exercise-4: 3
+    c406806-exercise-5: 3
+    c411049-exercise-1: 3
+    c411049-exercise-2: 3
+    c411049-exercise-3: 3
+    c411049-exercise-4: 3
+    c411049-exercise-5: 3
+    c411049-exercise-6: 3
+    c414296-exercise-1: 3
+    c414296-exercise-2: 3
+    c414296-exercise-3: 3
+    c414296-exercise-4: 3
+    c414296-exercise-5: 3
+    c414296-exercise-6: 3
+    c422477-exercise-1: 3
+    c422477-exercise-2: 3
+    c422477-exercise-3: 3
+    c422477-exercise-4: 3
+    c422477-exercise-5: 3
+    c422477-exercise-6: 3
+    c429134-exercise-1: 3
+    c429134-exercise-2: 3
+    c429134-exercise-3: 3
+    c429134-exercise-4: 3
+    c429134-exercise-5: 3
+    c434617-exercise-1: 3
+    c434617-exercise-2: 3
+    c434617-exercise-3: 3
+    c434617-exercise-4: 3
+    c438940-exercise-1: 3
+    c438940-exercise-2: 3
+    c438940-exercise-3: 3
+    c442063-exercise-1: 3
+    c442063-exercise-2: 3
+    c442063-exercise-3: 3
+    c445522-exercise-1: 3
+    c445522-exercise-2: 3
+    c445522-exercise-3: 3
+    c445522-exercise-4: 3
+    c406792-exercise-1: 4
+    c406792-exercise-2: 4
+    c411050-exercise-1: 4
+    c411050-exercise-2: 4
+    c414306-exercise-1: 4
+    c422494-exercise-1: 4
+    c422494-exercise-2: 4
+    c429141-exercise-1: 4
+    c429141-exercise-2: 4
+    c434619-exercise-1: 4
+    c438968-exercise-1: 4
+    c438968-exercise-2: 4
+    c442071-exercise-1: 4
+    c442071-exercise-2: 4
+    c445524-exercise-1: 4
+    c445524-exercise-2: 4
 rules:
 - id: pstq_french
   category: language
@@ -67,22 +2084,11 @@ rules:
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'volet_1' || candidate.stream == 'volet_2' || candidate.stream == 'volet_3'
-      || candidate.stream == 'volet_4'
+    when: candidate.stream in ['volet_1', 'volet_2', 'volet_4']
     fields:
     - candidate.experience_months_past_5_years
-  pass_if: (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years >= 12) || (candidate.stream
-    == 'volet_2' && candidate.experience_months_past_5_years >= 24 && candidate.quebec_experience_months
-    >= 12) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years >= 36) || (candidate.stream
-    == 'volet_3' && ((candidate.feer in [0, 1, 2] && candidate.experience_months_past_5_years >= 12) ||
-    (candidate.feer in [3, 4, 5] && candidate.experience_months_past_5_years >= 24 && candidate.quebec_experience_months
-    >= 12)))
-  fail_if: (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years < 12) || (candidate.stream
-    == 'volet_2' && (candidate.experience_months_past_5_years < 24 || candidate.quebec_experience_months
-    < 12)) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years < 36) || (candidate.stream
-    == 'volet_3' && candidate.feer in [0, 1, 2] && candidate.experience_months_past_5_years < 12) || (candidate.stream
-    == 'volet_3' && candidate.feer in [3, 4, 5] && (candidate.experience_months_past_5_years < 24 || candidate.quebec_experience_months
-    < 12))
+  pass_if: candidate.stream == 'volet_3' || (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years >= 12) || (candidate.stream == 'volet_2' && candidate.experience_months_past_5_years >= 24 && candidate.quebec_experience_months >= 12) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years >= 36)
+  fail_if: (candidate.stream == 'volet_1' && candidate.experience_months_past_5_years < 12) || (candidate.stream == 'volet_2' && (candidate.experience_months_past_5_years < 24 || candidate.quebec_experience_months < 12)) || (candidate.stream == 'volet_4' && candidate.experience_months_past_5_years < 36)
   missing_or_unverified: 'NEEDS_REVIEW: Qualifying experience months cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "d6.b05.html.quebec-pstq-requirements.9e5f322dab39"
@@ -160,3 +2166,585 @@ rules:
     section: Accompanying Spouse French
     page: 16
     verbatim: French oral level 4
+- id: pstq_declaration_of_interest_validity_window
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  - candidate.declaration_of_interest_date
+  - candidate.invitation_received
+  - candidate.linked_spouse_accepted
+  - candidate.refused_without_maintaining_interest
+  pass_if: >-
+    (candidate.stage == 'selection-application' && candidate.invitation_received == true && candidate.invitation_response == 'accepted' &&
+    candidate.invitation_date >= candidate.declaration_of_interest_date &&
+    candidate.invitation_response_date >= candidate.invitation_date &&
+    candidate.invitation_response_date < calendar_months_after(candidate.declaration_of_interest_date, 12) &&
+    calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) <= 30 &&
+    (candidate.linked_spouse_accepted == false || candidate.linked_spouse_acceptance_date > candidate.invitation_response_date) &&
+    (candidate.refused_without_maintaining_interest == false || candidate.refusal_date > candidate.invitation_response_date)) ||
+    (candidate.stage == 'doi-ranking' && assessment_date >= candidate.declaration_of_interest_date &&
+    assessment_date < calendar_months_after(candidate.declaration_of_interest_date, 12) &&
+    candidate.linked_spouse_accepted == false && candidate.refused_without_maintaining_interest == false &&
+    (candidate.invitation_received == false ||
+    (candidate.invitation_response == 'pending' && calendar_days_between(candidate.invitation_date, assessment_date) < 30) ||
+    (candidate.invitation_response == 'refused' && candidate.maintains_interest == true &&
+    calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) >= 0 &&
+    calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) < 30)))
+  fail_if: >-
+    candidate.stage == 'doi-ranking' &&
+    (assessment_date >= calendar_months_after(candidate.declaration_of_interest_date, 12) ||
+    (candidate.linked_spouse_accepted == true && candidate.linked_spouse_acceptance_date <= assessment_date) ||
+    (candidate.refused_without_maintaining_interest == true && candidate.refusal_date <= assessment_date) ||
+    (candidate.invitation_response == 'accepted' && candidate.invitation_response_date <= assessment_date) ||
+    (candidate.invitation_received == true && candidate.invitation_response == 'pending' &&
+    calendar_days_between(candidate.invitation_date, assessment_date) >= 30))
+  missing_or_unverified: 'NEEDS_REVIEW: Verify the first RIQ art.27 invalidation event; an accepted invitation is assessed at acceptance, not by expiring its former DOI at the current date.'
+  evidence_anchor:
+    source_file: b53422848bab6a871ec3af6d45380447b0ad21c2a6a7a6caef6f1afbc2f88826
+    section: RIQ art.27
+    verbatim_excerpt: devient invalide à compter de la première des dates suivantes
+- id: pstq_invitation_response_window
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.invitation_received
+  pass_if: candidate.invitation_received == false || (calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) >= 0 && calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) <= 30)
+  fail_if: candidate.invitation_received == true && calendar_days_between(candidate.invitation_date, candidate.invitation_response_date) > 30
+  missing_or_unverified: 'NEEDS_REVIEW: Invitation and response dates are required; refusal preserving interest does not itself satisfy invited application conditions.'
+  evidence_anchor:
+    source_file: b53422848bab6a871ec3af6d45380447b0ad21c2a6a7a6caef6f1afbc2f88826
+    section: RIQ art.27
+    verbatim_excerpt: celle qui suit de 30 jours la date de l’invitation
+- id: pstq_experience_window_5y
+  category: experience
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream == 'volet_3' || (candidate.stream in ['volet_1', 'volet_2', 'volet_4'] && dated_periods_within(candidate.counted_experience_periods, candidate.application_date, 60))
+  missing_or_unverified: 'NEEDS_REVIEW: Supply every counted experience interval. Intervals crossing the five-year cutoff need verified clipping and duration reconciliation; this date check does not recompute claimed qualifying months.'
+  evidence_anchor:
+    source_file: b53422848bab6a871ec3af6d45380447b0ad21c2a6a7a6caef6f1afbc2f88826
+    section: RIQ arts.32.5, 32.8, 32.11, 32.13
+    verbatim_excerpt: dans les 5 ans précédant la date de présentation de la demande
+- id: pstq_french_evidence_recency
+  category: language
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: pstq_french_proof_current(candidate.french_proofs, candidate.application_date, candidate.stream)
+  missing_or_unverified: 'NEEDS_REVIEW: GPI pp.40-41 uses the newest test, test precedence over a French secondary diploma, and separate professional-order proof conditions. No universal two-year diploma expiry. Scalar ability normalization remains unverified.'
+  evidence_anchor:
+    source_file: 7a762c5dcaabdfb9803f5d297cd1ef86840bf936af8c38c3c13112b0331e0115
+    section: GPI 2026-10-21 pp.40-41
+    verbatim_excerpt: le résultat le plus récent est considéré
+- id: pstq_volet3_recognition_recency
+  category: education
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['volet_1', 'volet_2', 'volet_4'] || (candidate.stream == 'volet_3' && (candidate.professional_authorization_quebec == true || (candidate.regulatory_recognition_partial_or_complete == true && candidate.recognition_date >= calendar_months_after(candidate.application_date, 0 - 60) && candidate.recognition_date <= candidate.application_date)))
+  missing_or_unverified: 'NEEDS_REVIEW: V3 authorization or partial/complete regulatory recognition dated no more than five years before application; no V3 experience condition.'
+  evidence_anchor:
+    source_file: b53422848bab6a871ec3af6d45380447b0ad21c2a6a7a6caef6f1afbc2f88826
+    section: RIQ art.32.11(2)
+    verbatim_excerpt: datée d’au plus 5 ans à la date de présentation de la demande
+- id: pstq_invitation_round_identity
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && round_volet.get(candidate.invitation_round_id,
+    0) == candidate.original_doi.volet && candidate.invitation_round_source_sha256 == '71f07c150f7fb6081c203d412a69ef3f2a22f8d75e340a870e3fa9e175e789e3'
+    && candidate.original_doi.snapshot_id != '')
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application'
+    fields:
+    - candidate.invitation_round_id
+    - candidate.original_doi.volet
+    - candidate.original_doi.snapshot_id
+    - candidate.invitation_round_source_sha256
+- id: pstq_invitation_round_extraction_binding
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (candidate.invitation_round_id
+    in ['c406824-exercise-1', 'c406824-exercise-2', 'c406824-exercise-3'] && candidate.invitation_date in ['2026-01-29']
+    && candidate.original_doi.extraction_date == '2026-01-26' && candidate.original_doi.extraction_hour_quebec ==
+    6) || (candidate.invitation_round_id in ['c411047-exercise-1', 'c411047-exercise-2', 'c411047-exercise-3'] &&
+    candidate.invitation_date in ['2026-02-26'] && candidate.original_doi.extraction_date == '2026-02-23' && candidate.original_doi.extraction_hour_quebec
+    == 7) || (candidate.invitation_round_id in ['c414285-exercise-1', 'c414285-exercise-2', 'c414285-exercise-3']
+    && candidate.invitation_date in ['2026-03-19', '2026-03-20'] && candidate.original_doi.extraction_date == '2026-03-16'
+    && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in ['c422383-exercise-1',
+    'c422383-exercise-2', 'c422383-exercise-3'] && candidate.invitation_date in ['2026-04-30'] && candidate.original_doi.extraction_date
+    == '2026-04-27' && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in
+    ['c429123-exercise-1', 'c429123-exercise-2', 'c429123-exercise-3', 'c429123-exercise-4'] && candidate.invitation_date
+    in ['2026-06-04'] && candidate.original_doi.extraction_date == '2026-06-01' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c434610-exercise-1', 'c434610-exercise-2', 'c434610-exercise-3']
+    && candidate.invitation_date in ['2026-07-03'] && candidate.original_doi.extraction_date == '2026-06-26' &&
+    candidate.original_doi.extraction_hour_quebec == 10) || (candidate.invitation_round_id in ['c438882-exercise-1',
+    'c438882-exercise-2', 'c438882-exercise-3'] && candidate.invitation_date in ['2026-07-30'] && candidate.original_doi.extraction_date
+    == '2026-07-27' && candidate.original_doi.extraction_hour_quebec == 16) || (candidate.invitation_round_id in
+    ['c442047-exercise-1', 'c442047-exercise-2', 'c442047-exercise-3'] && candidate.invitation_date in ['2026-08-27']
+    && candidate.original_doi.extraction_date == '2026-08-24' && candidate.original_doi.extraction_hour_quebec ==
+    11) || (candidate.invitation_round_id in ['c445518-exercise-1', 'c445518-exercise-2', 'c445518-exercise-3']
+    && candidate.invitation_date in ['2026-09-24'] && candidate.original_doi.extraction_date == '2026-09-21' &&
+    candidate.original_doi.extraction_hour_quebec == 13) || (candidate.invitation_round_id in ['c406814-exercise-1',
+    'c406814-exercise-2', 'c406814-exercise-3'] && candidate.invitation_date in ['2026-01-29'] && candidate.original_doi.extraction_date
+    == '2026-01-26' && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in
+    ['c411048-exercise-1', 'c411048-exercise-2', 'c411048-exercise-3'] && candidate.invitation_date in ['2026-02-26']
+    && candidate.original_doi.extraction_date == '2026-02-23' && candidate.original_doi.extraction_hour_quebec ==
+    7) || (candidate.invitation_round_id in ['c414292-exercise-1', 'c414292-exercise-2', 'c414292-exercise-3'] &&
+    candidate.invitation_date in ['2026-03-19', '2026-03-20'] && candidate.original_doi.extraction_date == '2026-03-16'
+    && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in ['c422462-exercise-1',
+    'c422462-exercise-2', 'c422462-exercise-3'] && candidate.invitation_date in ['2026-04-30'] && candidate.original_doi.extraction_date
+    == '2026-04-27' && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in
+    ['c429131-exercise-1', 'c429131-exercise-2', 'c429131-exercise-3', 'c429131-exercise-4'] && candidate.invitation_date
+    in ['2026-06-04'] && candidate.original_doi.extraction_date == '2026-06-01' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c434613-exercise-1', 'c434613-exercise-2', 'c434613-exercise-3']
+    && candidate.invitation_date in ['2026-07-03'] && candidate.original_doi.extraction_date == '2026-06-26' &&
+    candidate.original_doi.extraction_hour_quebec == 10) || (candidate.invitation_round_id in ['c438937-exercise-1',
+    'c438937-exercise-2', 'c438937-exercise-3'] && candidate.invitation_date in ['2026-07-30'] && candidate.original_doi.extraction_date
+    == '2026-07-27' && candidate.original_doi.extraction_hour_quebec == 16) || (candidate.invitation_round_id in
+    ['c442050-exercise-1', 'c442050-exercise-2', 'c442050-exercise-3', 'c442050-exercise-4'] && candidate.invitation_date
+    in ['2026-08-27'] && candidate.original_doi.extraction_date == '2026-08-24' && candidate.original_doi.extraction_hour_quebec
+    == 11) || (candidate.invitation_round_id in ['c445520-exercise-1', 'c445520-exercise-2', 'c445520-exercise-3',
+    'c445520-exercise-4'] && candidate.invitation_date in ['2026-09-24'] && candidate.original_doi.extraction_date
+    == '2026-09-21' && candidate.original_doi.extraction_hour_quebec == 13) || (candidate.invitation_round_id in
+    ['c406806-exercise-1', 'c406806-exercise-2', 'c406806-exercise-3', 'c406806-exercise-4', 'c406806-exercise-5']
+    && candidate.invitation_date in ['2026-01-29'] && candidate.original_doi.extraction_date == '2026-01-26' &&
+    candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in ['c411049-exercise-1',
+    'c411049-exercise-2', 'c411049-exercise-3', 'c411049-exercise-4', 'c411049-exercise-5', 'c411049-exercise-6']
+    && candidate.invitation_date in ['2026-02-26'] && candidate.original_doi.extraction_date == '2026-02-23' &&
+    candidate.original_doi.extraction_hour_quebec == 7) || (candidate.invitation_round_id in ['c414296-exercise-1',
+    'c414296-exercise-2', 'c414296-exercise-3', 'c414296-exercise-4', 'c414296-exercise-5', 'c414296-exercise-6']
+    && candidate.invitation_date in ['2026-03-19', '2026-03-20'] && candidate.original_doi.extraction_date == '2026-03-16'
+    && candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in ['c422477-exercise-1',
+    'c422477-exercise-2', 'c422477-exercise-3', 'c422477-exercise-4', 'c422477-exercise-5', 'c422477-exercise-6']
+    && candidate.invitation_date in ['2026-04-30'] && candidate.original_doi.extraction_date == '2026-04-27' &&
+    candidate.original_doi.extraction_hour_quebec == 6) || (candidate.invitation_round_id in ['c429134-exercise-1',
+    'c429134-exercise-2', 'c429134-exercise-3', 'c429134-exercise-4', 'c429134-exercise-5'] && candidate.invitation_date
+    in ['2026-06-04'] && candidate.original_doi.extraction_date == '2026-06-01' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c434617-exercise-1', 'c434617-exercise-2', 'c434617-exercise-3',
+    'c434617-exercise-4'] && candidate.invitation_date in ['2026-07-03'] && candidate.original_doi.extraction_date
+    == '2026-06-26' && candidate.original_doi.extraction_hour_quebec == 10) || (candidate.invitation_round_id in
+    ['c438940-exercise-1', 'c438940-exercise-2', 'c438940-exercise-3'] && candidate.invitation_date in ['2026-07-30']
+    && candidate.original_doi.extraction_date == '2026-07-27' && candidate.original_doi.extraction_hour_quebec ==
+    16) || (candidate.invitation_round_id in ['c442063-exercise-1', 'c442063-exercise-2', 'c442063-exercise-3']
+    && candidate.invitation_date in ['2026-08-27'] && candidate.original_doi.extraction_date == '2026-08-24' &&
+    candidate.original_doi.extraction_hour_quebec == 11) || (candidate.invitation_round_id in ['c445522-exercise-1',
+    'c445522-exercise-2', 'c445522-exercise-3', 'c445522-exercise-4'] && candidate.invitation_date in ['2026-09-24']
+    && candidate.original_doi.extraction_date == '2026-09-21' && candidate.original_doi.extraction_hour_quebec ==
+    13) || (candidate.invitation_round_id in ['c406792-exercise-1', 'c406792-exercise-2'] && candidate.invitation_date
+    in ['2026-01-29'] && candidate.original_doi.extraction_date == '2026-01-26' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c411050-exercise-1', 'c411050-exercise-2'] && candidate.invitation_date
+    in ['2026-02-26'] && candidate.original_doi.extraction_date == '2026-02-23' && candidate.original_doi.extraction_hour_quebec
+    == 7) || (candidate.invitation_round_id in ['c414306-exercise-1'] && candidate.invitation_date in ['2026-03-19',
+    '2026-03-20'] && candidate.original_doi.extraction_date == '2026-03-16' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c422494-exercise-1', 'c422494-exercise-2'] && candidate.invitation_date
+    in ['2026-04-30'] && candidate.original_doi.extraction_date == '2026-04-27' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c429141-exercise-1', 'c429141-exercise-2'] && candidate.invitation_date
+    in ['2026-06-04'] && candidate.original_doi.extraction_date == '2026-06-01' && candidate.original_doi.extraction_hour_quebec
+    == 6) || (candidate.invitation_round_id in ['c434619-exercise-1'] && candidate.invitation_date in ['2026-07-03']
+    && candidate.original_doi.extraction_date == '2026-06-26' && candidate.original_doi.extraction_hour_quebec ==
+    10) || (candidate.invitation_round_id in ['c438968-exercise-1', 'c438968-exercise-2'] && candidate.invitation_date
+    in ['2026-07-30'] && candidate.original_doi.extraction_date == '2026-07-27' && candidate.original_doi.extraction_hour_quebec
+    == 16) || (candidate.invitation_round_id in ['c442071-exercise-1', 'c442071-exercise-2'] && candidate.invitation_date
+    in ['2026-08-27'] && candidate.original_doi.extraction_date == '2026-08-24' && candidate.original_doi.extraction_hour_quebec
+    == 11) || (candidate.invitation_round_id in ['c445524-exercise-1', 'c445524-exercise-2'] && candidate.invitation_date
+    in ['2026-09-24'] && candidate.original_doi.extraction_date == '2026-09-21' && candidate.original_doi.extraction_hour_quebec
+    == 13))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application'
+    fields:
+    - candidate.invitation_round_id
+    - candidate.invitation_date
+    - candidate.original_doi.extraction_date
+    - candidate.original_doi.extraction_hour_quebec
+- id: pstq_invitation_round_teer_group
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_teer_group.get(candidate.invitation_round_id,
+    0) == 0 || ((round_teer_group.get(candidate.invitation_round_id, 0) == 1 && candidate.original_doi.feer in [0,
+    1, 2]) || (round_teer_group.get(candidate.invitation_round_id, 0) == 2 && candidate.original_doi.feer in [3,
+    4, 5]) || (round_teer_group.get(candidate.invitation_round_id, 0) == 3 && candidate.original_doi.feer in [4,
+    5]))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_teer_group.get(candidate.invitation_round_id, 0) >
+      0
+    fields:
+    - candidate.original_doi.feer
+- id: pstq_invitation_round_unregulated
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_unregulated.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.profession_regulated_on_round_list == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_unregulated.get(candidate.invitation_round_id, 0)
+      > 0
+    fields:
+    - candidate.original_doi.profession_regulated_on_round_list
+- id: pstq_invitation_round_regulated
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_regulated.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.profession_regulated_on_round_list == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_regulated.get(candidate.invitation_round_id, 0) >
+      0
+    fields:
+    - candidate.original_doi.profession_regulated_on_round_list
+- id: pstq_invitation_round_experience_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_experience_min.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.principal_profession_experience_months_last_5y >= round_experience_min.get(candidate.invitation_round_id,
+    0) && dated_periods_within(candidate.original_doi.counted_experience_periods, candidate.original_doi.extraction_date,
+    60))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_experience_min.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.principal_profession_experience_months_last_5y
+    - candidate.original_doi.counted_experience_periods
+    - candidate.original_doi.extraction_date
+- id: pstq_invitation_round_quebec_experience_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_quebec_experience_min.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.quebec_experience_months_last_5y >= round_quebec_experience_min.get(candidate.invitation_round_id,
+    0))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_quebec_experience_min.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.quebec_experience_months_last_5y
+- id: pstq_invitation_round_oral_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_oral_min.get(candidate.invitation_round_id,
+    0) == 0 || (min(candidate.original_doi.french_listening, candidate.original_doi.french_speaking) >= round_oral_min.get(candidate.invitation_round_id,
+    0))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_oral_min.get(candidate.invitation_round_id, 0) > 0
+    fields:
+    - candidate.original_doi.french_listening
+    - candidate.original_doi.french_speaking
+- id: pstq_invitation_round_written_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_written_min.get(candidate.invitation_round_id,
+    0) == 0 || (min(candidate.original_doi.french_reading, candidate.original_doi.french_writing) >= round_written_min.get(candidate.invitation_round_id,
+    0))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_written_min.get(candidate.invitation_round_id, 0)
+      > 0
+    fields:
+    - candidate.original_doi.french_reading
+    - candidate.original_doi.french_writing
+- id: pstq_invitation_round_spouse_oral_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_spouse_oral_min.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.accompanying_spouse == false || (candidate.original_doi.spouse_french_listening
+    != null && candidate.original_doi.spouse_french_speaking != null && min(candidate.original_doi.spouse_french_listening,
+    candidate.original_doi.spouse_french_speaking) >= 4))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_spouse_oral_min.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.accompanying_spouse
+- id: pstq_invitation_round_quebec_stay
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_quebec_stay.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.staying_in_quebec == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_quebec_stay.get(candidate.invitation_round_id, 0)
+      > 0
+    fields:
+    - candidate.original_doi.staying_in_quebec
+- id: pstq_invitation_round_outside_cmm
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_outside_cmm.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.staying_outside_cmm == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_outside_cmm.get(candidate.invitation_round_id, 0)
+      > 0
+    fields:
+    - candidate.original_doi.staying_outside_cmm
+- id: pstq_invitation_round_score_min
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_score_min.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.ranking_score >= round_score_min.get(candidate.invitation_round_id, 0) &&
+    candidate.original_doi.ranking_calculation_identity != '')))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_score_min.get(candidate.invitation_round_id, 0) >
+      0
+    fields:
+    - candidate.original_doi.ranking_score
+    - candidate.original_doi.ranking_calculation_identity
+- id: pstq_invitation_round_noc_restricted
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_noc_restricted.get(candidate.invitation_round_id,
+    0) == 0 || (round_noc_allowed.get(candidate.invitation_round_id + ':' + candidate.original_doi.profession_noc,
+    0) == 1)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_noc_restricted.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.profession_noc
+- id: pstq_invitation_round_quebec_diploma_group
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_quebec_diploma_group.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.diploma_location == 'quebec' && ((candidate.original_doi.diploma_level ==
+    'university' && candidate.original_doi.diploma_credits >= 30) || (candidate.original_doi.diploma_level == 'college'
+    && candidate.original_doi.diploma_hours >= 900) || (candidate.original_doi.diploma_level == 'secondary_vocational'
+    && ((round_quebec_diploma_group.get(candidate.invitation_round_id, 0) == 1 && candidate.original_doi.diploma_hours
+    >= 900) || (round_quebec_diploma_group.get(candidate.invitation_round_id, 0) == 2 && candidate.original_doi.diploma_hours
+    >= 600))) || (round_quebec_diploma_group.get(candidate.invitation_round_id, 0) == 2 && candidate.original_doi.diploma_level
+    == 'secondary_general')))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_quebec_diploma_group.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.diploma_location
+    - candidate.original_doi.diploma_level
+- id: pstq_invitation_round_general_diploma_group
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_general_diploma_group.get(candidate.invitation_round_id,
+    0) == 0 || ((round_general_diploma_group.get(candidate.invitation_round_id, 0) == 2 && (candidate.original_doi.diploma_equivalence
+    == 'secondary' || (candidate.original_doi.diploma_equivalence == 'postsecondary_general' && candidate.original_doi.diploma_full_time_months
+    >= 24))) || (candidate.original_doi.diploma_equivalence in ['dep', 'asp', 'aec', 'dec_technique', 'certificat',
+    'mineure', 'majeure', 'baccalaureat', 'dess', 'maitrise', 'doctorat'] && candidate.original_doi.diploma_full_time_months
+    >= 12 && (round_general_diploma_group.get(candidate.invitation_round_id, 0) == 1 || candidate.original_doi.diploma_location
+    != 'quebec' || !(candidate.original_doi.diploma_equivalence in ['dep', 'asp']) || candidate.original_doi.diploma_hours
+    > 600)))))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_general_diploma_group.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.diploma_equivalence
+- id: pstq_invitation_round_doctorate
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_doctorate.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.diploma_equivalence == 'doctorat')))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_doctorate.get(candidate.invitation_round_id, 0) >
+      0
+    fields:
+    - candidate.original_doi.diploma_equivalence
+- id: pstq_invitation_round_partner_positive
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_partner_positive.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.targeted_partner_positive_opinion == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_partner_positive.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.targeted_partner_positive_opinion
+- id: pstq_invitation_round_exceptional_document
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_exceptional_document.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.listed_exceptional_accomplishment_document == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants
+  conditional_required_fields:
+    when: candidate.stage == 'selection-application' && round_exceptional_document.get(candidate.invitation_round_id,
+      0) > 0
+    fields:
+    - candidate.original_doi.listed_exceptional_accomplishment_document
+- id: pstq_invitation_round_authorization_or_recognition
+  category: invitation_round
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'doi-ranking' || (candidate.stage == 'selection-application' && (round_authorization_or_recognition.get(candidate.invitation_round_id,
+    0) == 0 || (candidate.original_doi.professional_authorization == true || candidate.original_doi.regulatory_recognition_partial_or_complete
+    == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Bind the exact captured round/exercise edition and original DOI extraction
+    facts; never infer a route from invitation_received or current facts. Ranking arithmetic is evaluated separately.'
+  evidence_anchor:
+    source_file: qc-pstq-invitations-2026.html
+    section: Captured 2026 invitation rounds; exact source selector and exercise
+    verbatim_excerpt: Ces invitations s’adressaient aux personnes répondant aux critères suivants

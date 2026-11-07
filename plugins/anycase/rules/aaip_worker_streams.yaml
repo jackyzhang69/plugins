@@ -2,19 +2,19 @@ schema_version: 1.0.0
 catalog_id: aaip_worker_streams
 jurisdiction: CA-AB
 category: Alberta Advantage Immigration Program
-display_name: AAIP Worker Streams (Alberta Opportunity, Tourism and Hospitality, Rural
-  Renewal)
+display_name: AAIP Worker Streams and Express Entry Pathways
 status: ACTIVE
 program_id: AAIP_WORKER_STREAMS
 stream_id: WORKER_STREAMS
 effective_date: '2025-08-07'
-source_edition: AAIP worker-stream eligibility pages archived 2026-09-02 (Alberta
-  Opportunity, Tourism and Hospitality, Rural Renewal). WEOI points grid is reference
-  only.
+source_edition: AAIP worker eligibility pages and source-edition extracts captured
+  for the 2026-11-02 content audit. Draw-specific selection remains individually assessed.
 source_url: https://www.alberta.ca/aaip-alberta-opportunity-stream-eligibility
-decision_scope: 'Deterministic eligibility prescreen for the three AAIP worker streams:
-  Alberta Opportunity, Tourism and Hospitality, and Rural Renewal. AnyScore owns Worker
-  Expression of Interest points. This file does not score them.'
+decision_scope: 'Deterministic source-bound prescreen for Alberta Opportunity,
+  Tourism and Hospitality, Rural Renewal, Alberta Express Entry priority sectors,
+  Accelerated Tech, Law Enforcement, and Dedicated Health Care Express Entry.
+  Criterion PASS does not guarantee selection or establish an historical release binding.
+  AnyScore owns Worker Expression of Interest points.'
 sources:
 - id: aaip_aos
   title: AAIP Alberta Opportunity Stream – Eligibility
@@ -47,7 +47,7 @@ schema:
   types:
     assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
     candidate:
-      stream: alberta_opportunity | tourism_hospitality | rural_renewal
+      stream: alberta_opportunity | tourism_hospitality | rural_renewal | aee_general | accelerated_tech | law_enforcement | health_ee
       work_permit_basis: lmia | lmia_exempt_trade | intra_company | iec | mobilite_francophone
         | religious_r205d | vulnerable_worker_open | vulnerable_worker_family | pgwp_alberta_public
         | ircc_public_policy_open | wildfire_special_measure | other | none | maintained_status
@@ -267,8 +267,8 @@ minimums:
     - 2735
     - 2989
   wage:
-    standard: Job Bank lowest starting wage. LMIA holders must also meet the LMIA
-      stated hourly wage. No median-wage rule.
+    standard: Provincial minimum wage AND either the applicable LMIA wage or Alberta
+      lowest starting wage. LMIA-exempt NOC 41302/42204 needs minimum wage only.
 reference_weoi_grid:
   note: Documentation only. The eligibility engine ignores this key. AnyScore owns
     the arithmetic. There is no pass mark. Language scores the higher of the English
@@ -342,36 +342,13 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.work_permit_basis
-  - candidate.in_refugee_appeal_or_removal
   conditional_required_fields:
-    when: candidate.stream == 'alberta_opportunity' || candidate.stream == 'tourism_hospitality'
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
     fields:
-    - candidate.residing_in_alberta
-  pass_if: candidate.in_refugee_appeal_or_removal == false && ((candidate.stream ==
-    'alberta_opportunity' && candidate.residing_in_alberta == true && candidate.work_permit_basis
-    in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone',
-    'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family', 'pgwp_alberta_public',
-    'ircc_public_policy_open']) || (candidate.stream == 'tourism_hospitality' && candidate.residing_in_alberta
-    == true && candidate.work_permit_basis in ['lmia', 'wildfire_special_measure'])
-    || (candidate.stream == 'rural_renewal' && ((candidate.residing_in_canada == false
-    && (candidate.work_permit_basis == 'none' || (candidate.work_permit_basis != null
-    && !(candidate.work_permit_basis in ['other', 'maintained_status', 'none']))))
-    || (candidate.residing_in_canada == true && candidate.work_permit_basis != null
-    && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status'])))))
-  fail_if: candidate.in_refugee_appeal_or_removal == true || (candidate.stream !=
-    null && !(candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']))
-    || (candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta
-    == false) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis
-    != null && !(candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company',
-    'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family',
-    'pgwp_alberta_public', 'ircc_public_policy_open'])) || (candidate.stream == 'tourism_hospitality'
-    && candidate.residing_in_alberta == false) || (candidate.stream == 'tourism_hospitality'
-    && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['lmia',
-    'wildfire_special_measure'])) || (candidate.stream == 'rural_renewal' && candidate.work_permit_basis
-    in ['other', 'maintained_status']) || (candidate.stream == 'rural_renewal' &&
-    candidate.residing_in_canada == true && candidate.work_permit_basis in ['none',
-    'other', 'maintained_status'])
+    - candidate.work_permit_basis
+    - candidate.in_refugee_appeal_or_removal
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.in_refugee_appeal_or_removal == false && ((candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta == true && candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family', 'pgwp_alberta_public', 'ircc_public_policy_open']) || (candidate.stream == 'tourism_hospitality' && candidate.residing_in_alberta == true && candidate.work_permit_basis in ['lmia', 'wildfire_special_measure']) || (candidate.stream == 'rural_renewal' && ((candidate.residing_in_canada == false && (candidate.work_permit_basis == 'none' || (candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['other', 'maintained_status', 'none'])))) || (candidate.residing_in_canada == true && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status'])))))))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (candidate.in_refugee_appeal_or_removal == true || (candidate.stream != null && !(candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'])) || (candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta == false) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family', 'pgwp_alberta_public', 'ircc_public_policy_open'])) || (candidate.stream == 'tourism_hospitality' && candidate.residing_in_alberta == false) || (candidate.stream == 'tourism_hospitality' && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['lmia', 'wildfire_special_measure'])) || (candidate.stream == 'rural_renewal' && candidate.work_permit_basis in ['other', 'maintained_status']) || (candidate.stream == 'rural_renewal' && candidate.residing_in_canada == true && candidate.work_permit_basis in ['none', 'other', 'maintained_status']))
   missing_or_unverified: 'NEEDS_REVIEW: Stream, work-permit basis, Alberta residence,
     or Canadian residence cannot be verified.'
   evidence_anchor:
@@ -386,44 +363,12 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - job_offer.noc_2021_code
   conditional_required_fields:
-    when: candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code ==
-      '42202'
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
     fields:
-    - candidate.ece_certification
-  pass_if: (candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code !=
-    null && !(job_offer.noc_2021_code in ['00010', '40021', '40030', '40041', '60040',
-    '41100', '41220', '41221', '51111', '51122', '42200', '43100', '43109', '53121',
-    '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109',
-    '65109', '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110',
-    '85121']) && (!(job_offer.noc_2021_code == '42202') || candidate.ece_certification
-    == 'level_2_or_3')) || (candidate.stream == 'tourism_hospitality' && job_offer.noc_2021_code
-    in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314',
-    '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320'])
-    || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code != null &&
-    !(job_offer.noc_2021_code in ['00010', '60040', '41100', '51111', '51122', '42200',
-    '53121', '53122', '53124', '53200', '33100', '44100', '44101', '64321', '55109',
-    '65229', '85101']) && (job_offer.noc_teer in [0, 1, 2, 3] || (job_offer.noc_teer
-    in [4, 5] && candidate.residing_in_alberta == true && candidate.work_permit_basis
-    != null && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status']))))
-  fail_if: (candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code in
-    ['00010', '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111',
-    '51122', '42200', '43100', '43109', '53121', '53122', '53124', '53200', '63101',
-    '33100', '44100', '44101', '64321', '55109', '65109', '65211', '65229', '65329',
-    '75200', '85101', '85102', '85104', '85110', '85121']) || (candidate.stream ==
-    'alberta_opportunity' && job_offer.noc_2021_code == '42202' && candidate.ece_certification
-    != null && !(candidate.ece_certification == 'level_2_or_3')) || (candidate.stream
-    == 'tourism_hospitality' && job_offer.noc_2021_code != null && !(job_offer.noc_2021_code
-    in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314',
-    '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320']))
-    || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code in ['00010',
-    '60040', '41100', '51111', '51122', '42200', '53121', '53122', '53124', '53200',
-    '33100', '44100', '44101', '64321', '55109', '65229', '85101']) || (candidate.stream
-    == 'rural_renewal' && job_offer.noc_teer != null && !(job_offer.noc_teer in [0,
-    1, 2, 3, 4, 5])) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer
-    in [4, 5] && (candidate.residing_in_alberta == false || candidate.residing_in_canada
-    == false || candidate.work_permit_basis in ['none', 'other', 'maintained_status']))
+    - job_offer.noc_2021_code
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && ((candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code != null && !(job_offer.noc_2021_code in ['00010', '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111', '51122', '42200', '43100', '43109', '53121', '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109', '65109', '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110', '85121']) && (!(job_offer.noc_2021_code == '42202') || candidate.ece_certification == 'level_2_or_3')) || (candidate.stream == 'tourism_hospitality' && job_offer.noc_2021_code in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314', '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320']) || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code != null && !(job_offer.noc_2021_code in ['00010', '60040', '41100', '51111', '51122', '42200', '53121', '53122', '53124', '53200', '33100', '44100', '44101', '64321', '55109', '65229', '85101']) && (job_offer.noc_teer in [0, 1, 2, 3] || (job_offer.noc_teer in [4, 5] && candidate.residing_in_alberta == true && candidate.work_permit_basis != null && !(candidate.work_permit_basis in ['none', 'other', 'maintained_status']))))))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && ((candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code in ['00010', '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111', '51122', '42200', '43100', '43109', '53121', '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109', '65109', '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110', '85121']) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_2021_code == '42202' && candidate.ece_certification != null && !(candidate.ece_certification == 'level_2_or_3')) || (candidate.stream == 'tourism_hospitality' && job_offer.noc_2021_code != null && !(job_offer.noc_2021_code in ['54100', '60030', '60031', '62020', '62200', '63200', '64300', '64301', '64314', '64320', '64322', '65200', '65201', '65210', '65310', '65311', '65312', '65320'])) || (candidate.stream == 'rural_renewal' && job_offer.noc_2021_code in ['00010', '60040', '41100', '51111', '51122', '42200', '53121', '53122', '53124', '53200', '33100', '44100', '44101', '64321', '55109', '65229', '85101']) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer != null && !(job_offer.noc_teer in [0, 1, 2, 3, 4, 5])) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5] && (candidate.residing_in_alberta == false || candidate.residing_in_canada == false || candidate.work_permit_basis in ['none', 'other', 'maintained_status'])))
   missing_or_unverified: 'NEEDS_REVIEW: NOC 2021 code, TEER, Alberta residence, work-permit
     basis, or NOC 42202 early-childhood certification cannot be verified.'
   evidence_anchor:
@@ -437,43 +382,12 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - job_offer.weekly_hours
   conditional_required_fields:
-    when: candidate.stream == 'alberta_opportunity' && (candidate.work_permit_basis
-      == 'pgwp_alberta_public' || candidate.work_permit_basis == 'ircc_public_policy_open')
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
     fields:
-    - candidate.alberta_experience_months_last_18
-    - candidate.occupation_related_to_alberta_study
-  pass_if: job_offer.weekly_hours >= 30 && ((candidate.stream == 'alberta_opportunity'
-    && candidate.experience_was_full_time == true && job_offer.same_as_current_occupation
-    == true && ((candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
-    && candidate.alberta_experience_months_last_18 >= 6 && candidate.occupation_related_to_alberta_study
-    == true) || (candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company',
-    'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family']
-    && (candidate.alberta_experience_months_last_18 >= 12 || candidate.occupation_experience_months_last_30
-    >= 24)))) || (candidate.stream == 'tourism_hospitality' && candidate.experience_was_full_time
-    == true && job_offer.same_employer_as_qualifying_work == true && (candidate.ths_consecutive_months_with_employer
-    >= 6 || candidate.ths_hours_with_same_employer >= 780)) || (candidate.stream ==
-    'rural_renewal' && (candidate.rrs_pgwp_two_year_dli_in_community == true || (candidate.rrs_experience_months_last_18
-    >= 12 && candidate.experience_was_full_time == true))))
-  fail_if: job_offer.weekly_hours < 30 || (candidate.stream == 'alberta_opportunity'
-    && candidate.experience_was_full_time == false) || (candidate.stream == 'alberta_opportunity'
-    && job_offer.same_as_current_occupation == false) || (candidate.stream == 'alberta_opportunity'
-    && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
-    && candidate.alberta_experience_months_last_18 < 6) || (candidate.stream == 'alberta_opportunity'
-    && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open']
-    && candidate.occupation_related_to_alberta_study == false) || (candidate.stream
-    == 'alberta_opportunity' && candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade',
-    'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open',
-    'vulnerable_worker_family'] && candidate.alberta_experience_months_last_18 < 12
-    && candidate.occupation_experience_months_last_30 < 24) || (candidate.stream ==
-    'tourism_hospitality' && candidate.experience_was_full_time == false) || (candidate.stream
-    == 'tourism_hospitality' && job_offer.same_employer_as_qualifying_work == false)
-    || (candidate.stream == 'tourism_hospitality' && candidate.ths_consecutive_months_with_employer
-    < 6 && candidate.ths_hours_with_same_employer < 780) || (candidate.stream == 'rural_renewal'
-    && candidate.rrs_pgwp_two_year_dli_in_community == false && candidate.rrs_experience_months_last_18
-    < 12) || (candidate.stream == 'rural_renewal' && candidate.rrs_pgwp_two_year_dli_in_community
-    == false && candidate.experience_was_full_time == false)
+    - job_offer.weekly_hours
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (job_offer.weekly_hours >= 30 && ((candidate.stream == 'alberta_opportunity' && candidate.experience_was_full_time == true && job_offer.same_as_current_occupation == true && ((candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open'] && candidate.alberta_experience_months_last_18 >= 6 && candidate.occupation_related_to_alberta_study == true) || (candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family'] && (candidate.alberta_experience_months_last_18 >= 12 || candidate.occupation_experience_months_last_30 >= 24)))) || (candidate.stream == 'tourism_hospitality' && candidate.experience_was_full_time == true && job_offer.same_employer_as_qualifying_work == true && (candidate.ths_consecutive_months_with_employer >= 6 || candidate.ths_hours_with_same_employer >= 780)) || (candidate.stream == 'rural_renewal' && (candidate.rrs_pgwp_two_year_dli_in_community == true || (candidate.rrs_experience_months_last_18 >= 12 && candidate.experience_was_full_time == true))))))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (job_offer.weekly_hours < 30 || (candidate.stream == 'alberta_opportunity' && candidate.experience_was_full_time == false) || (candidate.stream == 'alberta_opportunity' && job_offer.same_as_current_occupation == false) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open'] && candidate.alberta_experience_months_last_18 < 6) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis in ['pgwp_alberta_public', 'ircc_public_policy_open'] && candidate.occupation_related_to_alberta_study == false) || (candidate.stream == 'alberta_opportunity' && candidate.work_permit_basis in ['lmia', 'lmia_exempt_trade', 'intra_company', 'iec', 'mobilite_francophone', 'religious_r205d', 'vulnerable_worker_open', 'vulnerable_worker_family'] && candidate.alberta_experience_months_last_18 < 12 && candidate.occupation_experience_months_last_30 < 24) || (candidate.stream == 'tourism_hospitality' && candidate.experience_was_full_time == false) || (candidate.stream == 'tourism_hospitality' && job_offer.same_employer_as_qualifying_work == false) || (candidate.stream == 'tourism_hospitality' && candidate.ths_consecutive_months_with_employer < 6 && candidate.ths_hours_with_same_employer < 780) || (candidate.stream == 'rural_renewal' && candidate.rrs_pgwp_two_year_dli_in_community == false && candidate.rrs_experience_months_last_18 < 12) || (candidate.stream == 'rural_renewal' && candidate.rrs_pgwp_two_year_dli_in_community == false && candidate.experience_was_full_time == false))
   missing_or_unverified: 'NEEDS_REVIEW: Full-time qualifying experience, current-occupation
     match, employer continuity, or the Rural Renewal 12-month test cannot be verified.'
   evidence_anchor:
@@ -486,17 +400,17 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - job_offer.is_part_time_casual_or_seasonal
-  - candidate.is_contractor_owner_or_agency
-  - job_offer.home_based_or_not_commercial
-  - job_offer.work_on_alberta_premises
-  - job_offer.weekly_hours
-  pass_if: job_offer.is_part_time_casual_or_seasonal == false && candidate.is_contractor_owner_or_agency
-    == false && job_offer.home_based_or_not_commercial == false && job_offer.work_on_alberta_premises
-    == true && job_offer.weekly_hours >= 30
-  fail_if: job_offer.is_part_time_casual_or_seasonal == true || candidate.is_contractor_owner_or_agency
-    == true || job_offer.home_based_or_not_commercial == true || job_offer.work_on_alberta_premises
-    == false || job_offer.weekly_hours < 30
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
+    fields:
+    - job_offer.is_part_time_casual_or_seasonal
+    - candidate.is_contractor_owner_or_agency
+    - job_offer.home_based_or_not_commercial
+    - job_offer.work_on_alberta_premises
+    - job_offer.weekly_hours
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (job_offer.is_part_time_casual_or_seasonal == false && candidate.is_contractor_owner_or_agency == false && job_offer.home_based_or_not_commercial == false && job_offer.work_on_alberta_premises == true && job_offer.weekly_hours >= 30))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (job_offer.is_part_time_casual_or_seasonal == true || candidate.is_contractor_owner_or_agency == true || job_offer.home_based_or_not_commercial == true || job_offer.work_on_alberta_premises == false || job_offer.weekly_hours < 30)
   missing_or_unverified: 'NEEDS_REVIEW: Offer hours, employment relationship, business
     premises, or Alberta work location cannot be verified.'
   evidence_anchor:
@@ -505,59 +419,40 @@ rules:
     section: Genuine full-time job offer redlines
     verbatim_excerpt: part-time, casual or seasonal employees
 - id: aaip_wage_floor
-  category: wage
+  category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.work_permit_basis
-  - job_offer.hourly_wage
-  - job_offer.alberta_lowest_starting_wage
-  conditional_required_fields:
-    when: candidate.work_permit_basis == 'lmia'
-    fields:
-    - job_offer.lmia_stated_hourly_wage
-  pass_if: job_offer.hourly_wage >= job_offer.alberta_lowest_starting_wage && (!(candidate.work_permit_basis
-    == 'lmia') || job_offer.hourly_wage >= job_offer.lmia_stated_hourly_wage)
-  fail_if: job_offer.hourly_wage < job_offer.alberta_lowest_starting_wage || (candidate.work_permit_basis
-    == 'lmia' && job_offer.hourly_wage < job_offer.lmia_stated_hourly_wage)
-  missing_or_unverified: 'NEEDS_REVIEW: Hourly wage, Job Bank lowest starting wage,
-    or the LMIA stated wage cannot be verified.'
+  - candidate.stream
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (job_offer.hourly_wage >= job_offer.provincial_minimum_wage && ((candidate.work_permit_basis != null && candidate.work_permit_basis != 'lmia' && job_offer.noc_2021_code in ['41302', '42204']) || (candidate.work_permit_basis == 'lmia' && job_offer.hourly_wage >= job_offer.lmia_stated_hourly_wage) || job_offer.hourly_wage >= job_offer.alberta_lowest_starting_wage)))
+  fail_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && job_offer.hourly_wage != null &&
+    ((job_offer.provincial_minimum_wage != null && job_offer.hourly_wage < job_offer.provincial_minimum_wage) ||
+    (job_offer.alberta_lowest_starting_wage != null && job_offer.hourly_wage < job_offer.alberta_lowest_starting_wage &&
+    ((candidate.work_permit_basis == 'lmia' && job_offer.lmia_stated_hourly_wage != null && job_offer.hourly_wage < job_offer.lmia_stated_hourly_wage) ||
+    (candidate.work_permit_basis != null && candidate.work_permit_basis != 'lmia' && job_offer.noc_2021_code != null &&
+    !(job_offer.noc_2021_code in ['41302', '42204'])))))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-WORKER-WAGE-005
-    source_file: src81.html
-    section: Wage floor
-    verbatim_excerpt: Alberta job offer requirements
+    evidence_unit_id: prairies:detail:E:worker-offer-wage
+    source_file: regions/prairies/detail/E/sources/aaip-job-offer-employer-requirements.txt
+    section: lines 25-26
+    verbatim_excerpt: Wages and benefits must meet provincial minimum wage and EITHER meet/exceed the LMIA
+      wage (if applicable) OR meet/exceed Alberta's lowest starting wage for the occupation across all industries.
+    source_sha256: 5a036e45374247203b3c2641e755a1ae5b004754d72f898f365dc88f38917210
 - id: aaip_language_clb
   category: language
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.language_result_within_2_years
-  - candidate.language_clb_minimum
   conditional_required_fields:
-    when: candidate.stream == 'alberta_opportunity' || candidate.stream == 'rural_renewal'
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
     fields:
-    - job_offer.noc_teer
-  pass_if: candidate.language_result_within_2_years == true && ((candidate.stream
-    == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && (candidate.language_clb_minimum
-    >= 7 || (job_offer.noc_2021_code != null && !(job_offer.noc_2021_code == '33102')
-    && candidate.language_clb_minimum >= 5))) || (candidate.stream == 'alberta_opportunity'
-    && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum >= 4) || (candidate.stream
-    == 'tourism_hospitality' && candidate.language_clb_minimum >= 4) || (candidate.stream
-    == 'rural_renewal' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum
-    >= 5) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5]
-    && candidate.language_clb_minimum >= 4))
-  fail_if: candidate.language_result_within_2_years == false || (candidate.stream
-    == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum
-    < 5) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [0,
-    1, 2, 3] && job_offer.noc_2021_code == '33102' && candidate.language_clb_minimum
-    < 7) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [4,
-    5] && candidate.language_clb_minimum < 4) || (candidate.stream == 'tourism_hospitality'
-    && candidate.language_clb_minimum < 4) || (candidate.stream == 'rural_renewal'
-    && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) ||
-    (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
-    < 4)
+    - candidate.language_result_within_2_years
+    - candidate.language_clb_minimum
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.language_result_within_2_years == true && ((candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && (candidate.language_clb_minimum >= 7 || (job_offer.noc_2021_code != null && !(job_offer.noc_2021_code == '33102') && candidate.language_clb_minimum >= 5))) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum >= 4) || (candidate.stream == 'tourism_hospitality' && candidate.language_clb_minimum >= 4) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum >= 5) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum >= 4))))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (candidate.language_result_within_2_years == false || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [0, 1, 2, 3] && job_offer.noc_2021_code == '33102' && candidate.language_clb_minimum < 7) || (candidate.stream == 'alberta_opportunity' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum < 4) || (candidate.stream == 'tourism_hospitality' && candidate.language_clb_minimum < 4) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) || (candidate.stream == 'rural_renewal' && job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum < 4))
   missing_or_unverified: 'NEEDS_REVIEW: Official-test age, lowest CLB, TEER, or the
     NOC 33102 language exception cannot be verified.'
   evidence_anchor:
@@ -570,9 +465,13 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.meets_canadian_high_school
-  pass_if: candidate.meets_canadian_high_school == true
-  fail_if: candidate.meets_canadian_high_school == false
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
+    fields:
+    - candidate.meets_canadian_high_school
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.meets_canadian_high_school == true))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (candidate.meets_canadian_high_school == false)
   missing_or_unverified: 'NEEDS_REVIEW: Canadian high-school equivalency, Canadian
     credential, or Alberta AIT trade certificate has not been resolved.'
   evidence_anchor:
@@ -585,18 +484,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - job_offer.compulsory_trade
-  - job_offer.requires_professional_licence
+  - candidate.stream
   conditional_required_fields:
-    when: job_offer.compulsory_trade == true
+    when: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']
     fields:
-    - candidate.holds_alberta_trade_certificate
-  pass_if: (job_offer.compulsory_trade == false || candidate.holds_alberta_trade_certificate
-    == true) && (job_offer.requires_professional_licence == false || candidate.holds_required_licence
-    == true)
-  fail_if: (job_offer.compulsory_trade == true && candidate.holds_alberta_trade_certificate
-    == false) || (job_offer.requires_professional_licence == true && candidate.holds_required_licence
-    == false)
+    - job_offer.compulsory_trade
+    - job_offer.requires_professional_licence
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && ((job_offer.compulsory_trade == false || candidate.holds_alberta_trade_certificate == true) && (job_offer.requires_professional_licence == false || candidate.holds_required_licence == true)))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && ((job_offer.compulsory_trade == true && candidate.holds_alberta_trade_certificate == false) || (job_offer.requires_professional_licence == true && candidate.holds_required_licence == false))
   missing_or_unverified: 'NEEDS_REVIEW: Compulsory-trade certificate or the required
     professional licence cannot be verified.'
   evidence_anchor:
@@ -611,25 +506,13 @@ rules:
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'rural_renewal'
+    when: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.stream == 'rural_renewal')
     fields:
     - candidate.endorsement_letter_valid
     - candidate.intends_to_reside_in_designated_community
     - job_offer.in_designated_community
-  pass_if: (candidate.stream != 'alberta_opportunity' || candidate.residing_in_alberta
-    == true) && (candidate.stream != 'tourism_hospitality' || (employer.wcb_industry_eligible
-    == true && (employer.sector_association_member == true || employer.travel_alberta_exemption
-    == true))) && (candidate.stream != 'rural_renewal' || (candidate.endorsement_letter_valid
-    == true && candidate.intends_to_reside_in_designated_community == true && job_offer.in_designated_community
-    == true))
-  fail_if: (candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta
-    == false) || (candidate.stream == 'tourism_hospitality' && employer.wcb_industry_eligible
-    == false) || (candidate.stream == 'tourism_hospitality' && employer.sector_association_member
-    == false && employer.travel_alberta_exemption == false) || (candidate.stream ==
-    'rural_renewal' && candidate.endorsement_letter_valid == false) || (candidate.stream
-    == 'rural_renewal' && candidate.intends_to_reside_in_designated_community == false)
-    || (candidate.stream == 'rural_renewal' && job_offer.in_designated_community ==
-    false)
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && ((candidate.stream != 'alberta_opportunity' || candidate.residing_in_alberta == true) && (candidate.stream != 'tourism_hospitality' || (employer.wcb_industry_eligible == true && (employer.sector_association_member == true || employer.travel_alberta_exemption == true))) && (candidate.stream != 'rural_renewal' || (candidate.endorsement_letter_valid == true && candidate.intends_to_reside_in_designated_community == true && job_offer.in_designated_community == true))))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && ((candidate.stream == 'alberta_opportunity' && candidate.residing_in_alberta == false) || (candidate.stream == 'tourism_hospitality' && employer.wcb_industry_eligible == false) || (candidate.stream == 'tourism_hospitality' && employer.sector_association_member == false && employer.travel_alberta_exemption == false) || (candidate.stream == 'rural_renewal' && candidate.endorsement_letter_valid == false) || (candidate.stream == 'rural_renewal' && candidate.intends_to_reside_in_designated_community == false) || (candidate.stream == 'rural_renewal' && job_offer.in_designated_community == false))
   missing_or_unverified: 'NEEDS_REVIEW: Alberta residence, Tourism and Hospitality
     employer approval, or the Rural Renewal endorsement and designated-community facts
     cannot be verified.'
@@ -646,19 +529,12 @@ rules:
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'rural_renewal' && (candidate.residing_in_canada ==
-      false || candidate.currently_working == false)
+    when: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.stream == 'rural_renewal' && (candidate.residing_in_canada == false || candidate.currently_working == false))
     fields:
     - candidate.settlement_funds_cad
     - candidate.settlement_funds_required_cad
-  pass_if: candidate.stream == 'alberta_opportunity' || candidate.stream == 'tourism_hospitality'
-    || (candidate.stream == 'rural_renewal' && candidate.residing_in_canada == true
-    && candidate.currently_working == true) || (candidate.stream == 'rural_renewal'
-    && (candidate.residing_in_canada == false || candidate.currently_working == false)
-    && candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad)
-  fail_if: candidate.stream == 'rural_renewal' && (candidate.residing_in_canada ==
-    false || candidate.currently_working == false) && candidate.settlement_funds_cad
-    < candidate.settlement_funds_required_cad
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (candidate.stream == 'alberta_opportunity' || candidate.stream == 'tourism_hospitality' || (candidate.stream == 'rural_renewal' && candidate.residing_in_canada == true && candidate.currently_working == true) || (candidate.stream == 'rural_renewal' && (candidate.residing_in_canada == false || candidate.currently_working == false) && candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad)))
+  fail_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal'] && (candidate.stream == 'rural_renewal' && (candidate.residing_in_canada == false || candidate.currently_working == false) && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)
   missing_or_unverified: 'NEEDS_REVIEW: Rural Renewal residence, current work, or
     settlement funds cannot be verified.'
   evidence_anchor:
@@ -667,3 +543,197 @@ rules:
     section: Rural Renewal settlement funds
     verbatim_excerpt: Minimum settlement funds requirements are based on the Low Income
       Cut-Offs (LICOs)
+
+- id: aaip_employer_active_history
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.registered_in_canada == true && employer.established_alberta_capacity == true && employer.active_complete_fiscal_years >= 2 && employer.regular_reporting_and_assignments_place == true))
+  fail_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.registered_in_canada
+    == false || employer.established_alberta_capacity == false || employer.active_complete_fiscal_years
+    < 2 || employer.regular_reporting_and_assignments_place == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:worker-employer-active-history
+    source_file: regions/prairies/detail/E/sources/aaip-job-offer-employer-requirements.txt
+    section: lines 6-16
+    verbatim_excerpt: have been in continuous and active operation in Alberta for a minimum of 2 complete
+      fiscal years before application submission;
+    source_sha256: 5a036e45374247203b3c2641e755a1ae5b004754d72f898f365dc88f38917210
+
+- id: aaip_employer_need_fulfilment
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.legitimacy_assessed == true && employer.good_or_service_in_alberta == true && employer.position_business_need_assessed == true && employer.contract_fulfilment_assessed == true && (candidate.valid_tfw_or_imp_permit == true || employer.reasonable_recruitment_assessed == true || (candidate.residing_in_alberta == true && candidate.currently_working == true && employer.stream_need_evidence_required == false))))
+  fail_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.legitimacy_assessed
+    == false || employer.good_or_service_in_alberta == false || employer.position_business_need_assessed
+    == false || employer.contract_fulfilment_assessed == false || (candidate.valid_tfw_or_imp_permit ==
+    false && employer.reasonable_recruitment_assessed == false && (candidate.residing_in_alberta == false
+    || candidate.currently_working == false || employer.stream_need_evidence_required == true)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:worker-employer-need-and-fulfilment
+    source_file: regions/prairies/detail/E/sources/aaip-job-offer-employer-requirements.txt
+    section: lines 6-16
+    verbatim_excerpt: they can fulfill all of the terms of the job offer or employment contract.
+    source_sha256: 5a036e45374247203b3c2641e755a1ae5b004754d72f898f365dc88f38917210
+
+- id: aaip_employer_size_cap
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.threshold_exemption_kind in ['indigenous', 'municipal', 'provincial', 'federal', 'alberta_government'] || (employer.gross_revenue_latest_fiscal_cad >= 400000 && employer.qualifying_alberta_fte >= 3) || (candidate.application_received_date >= '2024-03-18' && employer.active_complete_fiscal_years >= 2 && employer.supported_nominees_including_departed + 1 <= employer.active_complete_fiscal_years - 1)))
+  fail_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) && (employer.threshold_exemption_kind
+    == 'none' && candidate.application_received_date >= '2024-03-18' && (employer.gross_revenue_latest_fiscal_cad
+    < 400000 || employer.qualifying_alberta_fte < 3) && employer.supported_nominees_including_departed +
+    1 > employer.active_complete_fiscal_years - 1)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:worker-employer-size-cap
+    source_file: regions/prairies/detail/E/sources/aaip-job-offer-employer-requirements.txt
+    section: lines 17-20
+    verbatim_excerpt: Contractors do not count. Two part-time employees can count as 1 FTE when total hours
+      average at least 30/week.
+    source_sha256: 5a036e45374247203b3c2641e755a1ae5b004754d72f898f365dc88f38917210
+
+- id: aaip_aee_general_entry
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal']) || ((candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) && (candidate.ee_profile_active == true && candidate.ee_federal_class in ['CEC', 'FST', 'FSW'] && candidate.crs >= 300 && candidate.primary_occupation_pathway_assessed == true && candidate.intends_and_able_live_work_alberta == true && candidate.ee_primary_noc != null && !(candidate.ee_primary_noc in ['00010', '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111', '51122', '42200', '42202', '43100', '43109', '53121', '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109', '65109', '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110', '85121']) && candidate.in_refugee_appeal_or_removal == false && candidate.active_aaip_nomination == false && candidate.misrepresentation_bar == false && (candidate.invited_on_job_offer == false || (candidate.invited_on_job_offer == true && candidate.job_offer_employer_requirements_assessed == true))))
+  fail_if: (candidate.stream in ['aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee']) &&
+    (candidate.ee_profile_active == false || (candidate.ee_federal_class != null && !(candidate.ee_federal_class
+    in ['CEC', 'FST', 'FSW'])) || candidate.crs < 300 || candidate.primary_occupation_pathway_assessed ==
+    false || candidate.intends_and_able_live_work_alberta == false || candidate.ee_primary_noc in ['00010',
+    '40021', '40030', '40041', '60040', '41100', '41220', '41221', '51111', '51122', '42200', '42202', '43100',
+    '43109', '53121', '53122', '53124', '53200', '63101', '33100', '44100', '44101', '64321', '55109', '65109',
+    '65211', '65229', '65329', '75200', '85101', '85102', '85104', '85110', '85121'] || candidate.in_refugee_appeal_or_removal
+    == true || candidate.active_aaip_nomination == true || candidate.misrepresentation_bar == true || (candidate.invited_on_job_offer
+    == true && candidate.job_offer_employer_requirements_assessed == false))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:aee-general-entry
+    source_file: regions/prairies/sources/current/ab_express_entry_eligibility.txt
+    section: lines 15-36
+    verbatim_excerpt: you must have a minimum Comprehensive Ranking System score of 300
+    source_sha256: 42a9b221155a8c7e9a01c8499be628be2409530c61b8fe61e3a9f7d3fadd93de
+
+- id: aaip_aee_law_enforcement
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal', 'aee_general', 'accelerated_tech', 'health_ee']) || ((candidate.stream == 'law_enforcement') && (candidate.aacp_identified_international_recruit == true && job_offer.valid_verifiable == true && employer.valid_aacp_member == true && job_offer.noc_2021_code in ['40040', '41310', '42100'] && candidate.ee_primary_noc == job_offer.noc_2021_code && candidate.police_title_duties_assessed == true))
+  fail_if: (candidate.stream == 'law_enforcement') && (candidate.aacp_identified_international_recruit ==
+    false || job_offer.valid_verifiable == false || employer.valid_aacp_member == false || (job_offer.noc_2021_code
+    != null && !(job_offer.noc_2021_code in ['40040', '41310', '42100'])) || (candidate.ee_primary_noc !=
+    null && job_offer.noc_2021_code != null && candidate.ee_primary_noc != job_offer.noc_2021_code) || candidate.police_title_duties_assessed
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:aee-law-enforcement
+    source_file: regions/prairies/sources/current/ab_express_entry_eligibility.txt
+    section: lines 56-66
+    verbatim_excerpt: you have been identified by AACP to AAIP as an internationally recruited police officer
+    source_sha256: 42a9b221155a8c7e9a01c8499be628be2409530c61b8fe61e3a9f7d3fadd93de
+
+- id: aaip_aee_priority_sectors
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal', 'accelerated_tech', 'law_enforcement', 'health_ee']) || ((candidate.stream == 'aee_general') && (candidate.priority_sector in ['construction', 'agriculture', 'aviation'] && candidate.priority_occupation_assessed == true && candidate.draw_additional_parameters_assessed == true && (candidate.draw_requires_offer == false || (candidate.draw_requires_offer == true && job_offer.valid_verifiable == true && job_offer.priority_occupation_assessed == true))))
+  fail_if: (candidate.stream == 'aee_general') && ((candidate.priority_sector != null && !(candidate.priority_sector
+    in ['construction', 'agriculture', 'aviation'])) || candidate.priority_occupation_assessed == false
+    || candidate.draw_additional_parameters_assessed == false || (candidate.draw_requires_offer == true
+    && (job_offer.valid_verifiable == false || job_offer.priority_occupation_assessed == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:aee-priority-sectors
+    source_file: regions/prairies/sources/current/ab_express_entry_eligibility.txt
+    section: lines 68-77
+    verbatim_excerpt: At the time of application and assessment you must demonstrate you meet all additional
+      selection factors for the draw under which you were invited to apply.
+    source_sha256: 42a9b221155a8c7e9a01c8499be628be2409530c61b8fe61e3a9f7d3fadd93de
+
+- id: aaip_aee_accelerated_tech
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal', 'aee_general', 'law_enforcement', 'health_ee']) || ((candidate.stream == 'accelerated_tech') && (job_offer.valid_verifiable == true && job_offer.weekly_hours >= 30 && job_offer.tech_occupation_assessed == true && employer.tech_naics_assessed == true && candidate.ee_primary_noc == job_offer.noc_2021_code && (candidate.working_in_alberta == false || (candidate.working_in_alberta == true && candidate.status in ['valid_work_permit', 'maintained'])) && job_offer.is_part_time_casual_or_seasonal == false && candidate.is_contractor_owner_or_agency == false && job_offer.work_on_alberta_premises == true))
+  fail_if: (candidate.stream == 'accelerated_tech') && (job_offer.valid_verifiable == false || job_offer.weekly_hours
+    < 30 || job_offer.tech_occupation_assessed == false || employer.tech_naics_assessed == false || (candidate.ee_primary_noc
+    != null && job_offer.noc_2021_code != null && candidate.ee_primary_noc != job_offer.noc_2021_code) ||
+    (candidate.working_in_alberta == true && candidate.status != null && !(candidate.status in ['valid_work_permit',
+    'maintained'])) || job_offer.is_part_time_casual_or_seasonal == true || candidate.is_contractor_owner_or_agency
+    == true || job_offer.work_on_alberta_premises == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:aee-tech-criteria
+    source_file: regions/prairies/sources/current/ab_express_entry_eligibility.txt
+    section: lines 42-55
+    verbatim_excerpt: your primary occupation in your Express Entry profile must be the same occupation
+      as your current Alberta employment or job offer
+    source_sha256: 42a9b221155a8c7e9a01c8499be628be2409530c61b8fe61e3a9f7d3fadd93de
+
+- id: aaip_healthcare_ee
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal', 'aee_general', 'accelerated_tech', 'law_enforcement']) || ((candidate.stream == 'health_ee') && (job_offer.valid_verifiable == true && employer.health_sector_wcb_valid == true && candidate.health_profession in ['physician', 'registered_nurse', 'licensed_practical_nurse', 'nurse_practitioner', 'physician_assistant', 'occupational_therapist', 'physiotherapist', 'clinical_social_worker', 'psychologist'] && candidate.regulator_minimum_practice_proof_assessed == true && candidate.ee_primary_health_occupation_assessed == true && candidate.ee_profile_active == true && candidate.ee_federal_class in ['CEC', 'FST', 'FSW'] && candidate.crs >= 300 && candidate.intends_and_able_live_work_alberta == true))
+  fail_if: (candidate.stream == 'health_ee') && (job_offer.valid_verifiable == false || employer.health_sector_wcb_valid
+    == false || (candidate.health_profession != null && !(candidate.health_profession in ['physician', 'registered_nurse',
+    'licensed_practical_nurse', 'nurse_practitioner', 'physician_assistant', 'occupational_therapist', 'physiotherapist',
+    'clinical_social_worker', 'psychologist'])) || candidate.regulator_minimum_practice_proof_assessed ==
+    false || candidate.ee_primary_health_occupation_assessed == false || candidate.ee_profile_active ==
+    false || (candidate.ee_federal_class != null && !(candidate.ee_federal_class in ['CEC', 'FST', 'FSW']))
+    || candidate.crs < 300 || candidate.intends_and_able_live_work_alberta == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:healthcare-ee
+    source_file: regions/prairies/sources/current/ab_health_care.txt
+    section: lines 19-48
+    verbatim_excerpt: provide verifiable proof of meeting the minimal requirements prescribed by the applicable
+      regulatory organization to be able to practice the eligible health care profession in Alberta
+    source_sha256: b901011fb7b92dac55549fe19795b6e23c9f721127744190ad327515d4d1ef97
+
+- id: aaip_stream_declared
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['alberta_opportunity', 'tourism_hospitality', 'rural_renewal', 'aee_general',
+    'accelerated_tech', 'law_enforcement', 'health_ee']
+  fail_if: candidate.stream != null && !(candidate.stream in ['alberta_opportunity', 'tourism_hospitality',
+    'rural_renewal', 'aee_general', 'accelerated_tech', 'law_enforcement', 'health_ee'])
+  missing_or_unverified: 'NEEDS_REVIEW: Worker stream is missing.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:aee-general-entry
+    source_file: regions/prairies/sources/current/ab_express_entry_eligibility.txt
+    section: lines 15-36
+    verbatim_excerpt: you must have a minimum Comprehensive Ranking System score of 300
+    source_sha256: 42a9b221155a8c7e9a01c8499be628be2409530c61b8fe61e3a9f7d3fadd93de

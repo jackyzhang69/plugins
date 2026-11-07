@@ -7,20 +7,20 @@ status: ACTIVE
 program_id: NBPNP_SKILLED_WORKER
 stream_id: SKILLED_WORKER
 effective_date: '2026-06-01'
-source_edition: NBPNP Skilled Worker and Express Entry eligibility redlines effective 2026-06-01. Skilled
-  worker grid maximum 100, threshold 60. Express Entry grid maximum 100, threshold 67. The business stream
-  is not in this file.
+source_edition: NBPNP Skilled Worker and Express Entry eligibility redlines effective 2026-06-01.
+  Skilled Worker points threshold is unverified. Express Entry threshold is 67 out of 100
+  under the June 2026 Employment in New Brunswick guide. Business is not in this file.
 source_url: https://www2.gnb.ca/content/gnb/en/corporate/promo/immigration.html
-decision_scope: Deterministic eligibility prescreen for NBPNP Skilled Worker and Express Entry. AnyScore
-  owns both 100-point grids. This file compares a caller-supplied total with 60 or 67 and does not add
-  the factors.
+decision_scope: Deterministic eligibility prescreen for NBPNP Skilled Worker and Express Entry.
+  Only Express Entry compares a caller-supplied total with the official 67-point threshold.
+  Skilled Worker points remain NEEDS_REVIEW; this file does not add factors.
 sources:
 - id: nbpnp_sw
   title: New Brunswick Provincial Nominee Program Skilled Worker and Express Entry
   url: https://www2.gnb.ca/content/gnb/en/corporate/promo/immigration.html
-  citation: Skilled Worker grid maximum 100 with threshold 60. Express Entry grid maximum 100 with threshold
-    67. Age, offer, language, education, experience, and Express Entry pathway redlines are evaluated
-    separately from the grid.
+  citation: Employment in New Brunswick (June 2026), printed page 10, requires at least 67
+    points out of 100 for Express Entry. The New Brunswick Experience guide publishes no
+    Skilled Worker points threshold.
   legal_authority: New Brunswick Provincial Nominee Program skilled worker and Express Entry eligibility
 schema:
   input_type: object
@@ -33,7 +33,7 @@ schema:
     assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
     candidate:
       stream: skilled_worker | express_entry. The business stream is not a value in this file.
-      age_years: integer; age in years. The 19 to 55 gate applies only to skilled_worker.
+      age_years: integer; age in years. Current skilled_worker requires at least 19, without an upper age limit.
       language_clb_minimum: integer; lowest of the four skills on one test.
       language_result_within_2_years: boolean; that test result is under two years old.
       meets_canadian_high_school: boolean; skilled_worker credential meets Canadian high school.
@@ -48,8 +48,8 @@ schema:
       currently_employed_in_nb_12_months: boolean; currently employed in New Brunswick for 12 months.
         One of the two Express Entry pathway alternatives.
       letter_of_interest: boolean; New Brunswick letter of interest. The other Express Entry pathway alternative.
-      assessed_grid_points: number; points AnyScore already assessed on the 100-point grid for this stream.
-        This file does not add the factors.
+      assessed_grid_points: number; caller-assessed Express Entry total for the 67-point threshold.
+        Skilled Worker total is retained for grid reporting only; no threshold decision.
     job_offer:
       weekly_hours: number; regular weekly hours. Floor is 30.
       is_permanent: boolean; the offer is permanent.
@@ -64,7 +64,6 @@ minimums:
   - skilled_worker
   - express_entry
   skilled_worker_age_min: 19
-  skilled_worker_age_max: 55
   weekly_hours: 30
   employer_months_operating: 24
   language_result_max_age_years: 2
@@ -77,15 +76,15 @@ minimums:
   - 1
   - 2
   - 3
-  skilled_worker_points_threshold: 60
+  skilled_worker_points_threshold: unverified
   express_entry_points_threshold: 67
   points_grid_maximum: 100
 reference_points_grid:
-  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. nbpnp_points_floor
-    compares candidate.assessed_grid_points with the stream threshold. This block does not score the factors.
+  note: Documentation only. AnyScore owns arithmetic. Only Express Entry has a verified
+    threshold; the Skilled Worker grid total cannot decide eligibility.
   skilled_worker:
     maximum: 100
-    apply_threshold: 60
+    apply_threshold: unverified
   express_entry:
     maximum: 100
     apply_threshold: 67
@@ -100,21 +99,20 @@ rules:
     when: candidate.stream == 'skilled_worker'
     fields:
     - candidate.age_years
-  pass_if: candidate.stream == 'express_entry' || (candidate.stream == 'skilled_worker' && candidate.age_years
-    >= 19 && candidate.age_years <= 55)
+  pass_if: candidate.stream == 'express_entry' || (candidate.stream == 'skilled_worker' && candidate.age_years >= 19)
   fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
-    (candidate.stream == 'skilled_worker' && (candidate.age_years < 19 || candidate.age_years > 55))
+    (candidate.stream == 'skilled_worker' && candidate.age_years < 19)
   missing_or_unverified: 'NEEDS_REVIEW: Skilled worker age cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-AGE-001
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Applicant Eligibility - Age
-    verbatim_excerpt: Skilled Worker age must be from 19 through 55
+    evidence_unit_id: nbpnp.skilled_worker.minimum_age_2026_06
+    source_file: regions/atlantic/sources/nb_experience_guide.txt
+    section: Current Skilled Worker pathways — Age (June 2026); G-NB-CURRENT-AGE-CEILING
+    verbatim_excerpt: You must be at least 19 years old.
   provenance:
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Applicant Eligibility - Age
-    page: 1
-    verbatim: Skilled Worker age must be from 19 through 55
+    source_file: regions/atlantic/sources/nb_experience_guide.txt
+    section: Overview — minimum age; also Graduates and Priority Occupations June 2026 guides
+    page: 2
+    verbatim: are at least 19 years old.
 - id: nbpnp_job_offer
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -185,10 +183,10 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Canadian high school equivalency or education above high school
     cannot be verified for the stream being assessed.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-EDU-004
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Education Requirements
-    verbatim_excerpt: meets Canadian high school
+    evidence_unit_id: nbpnp.skilled_worker.education_2026_06
+    source_file: regions/atlantic/sources/nb_experience_guide.txt
+    section: Overview and education requirements (June 2026)
+    verbatim_excerpt: have at least a Canadian high school diploma
   provenance:
     source_file: nbpnp-skilled-worker-express-entry.html
     section: Education Requirements
@@ -246,11 +244,10 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile, current New Brunswick employment, or letter
     of interest cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-PATH-006
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Express Entry Pathway
-    verbatim_excerpt: valid Express Entry profile and either 12 months of current New Brunswick employment
-      or a letter of interest
+    evidence_unit_id: nbpnp.express_entry.pathways_2026_06
+    source_file: sources/atlantic/nb_guide_employment_in_nb.pdf; sources/atlantic/nb_guide_nb_interests.pdf
+    section: Valid federal Express Entry profile; NB employment; Letter of interest
+    verbatim_excerpt: You must have a valid profile in the federal Express Entry pool.
   provenance:
     source_file: nbpnp-skilled-worker-express-entry.html
     section: Express Entry Pathway
@@ -263,21 +260,23 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.assessed_grid_points
-  pass_if: (candidate.stream == 'skilled_worker' && candidate.assessed_grid_points >= 60) || (candidate.stream
-    == 'express_entry' && candidate.assessed_grid_points >= 67)
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.assessed_grid_points
+  pass_if: candidate.stream == 'express_entry' && candidate.assessed_grid_points >= 67
   fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'express_entry'])) ||
-    (candidate.stream == 'skilled_worker' && candidate.assessed_grid_points < 60) || (candidate.stream
-    == 'express_entry' && candidate.assessed_grid_points < 67)
-  missing_or_unverified: 'NEEDS_REVIEW: Assessed 100-point grid total is missing. AnyScore computes that
-    number.'
+    (candidate.stream == 'express_entry' && candidate.assessed_grid_points < 67)
+  missing_or_unverified: 'NEEDS_REVIEW: No current official New Brunswick points threshold is published
+    for the Skilled Worker pathway; the 100-point grid total cannot decide eligibility. Express Entry
+    requires a verified assessed total of at least 67.'
   evidence_anchor:
-    evidence_unit_id: EU-NBPNP-POINTS-007
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Points Floor
-    verbatim_excerpt: at least 60 on the 100-point grid
+    evidence_unit_id: nbpnp.express_entry.selection_factors_2026_06.p010
+    source_file: sources/atlantic/nb_guide_employment_in_nb.pdf
+    section: Selection factors, printed page 10 (PDF page 12); Express Entry only
+    verbatim_excerpt: You must receive a score of at least 67 points out of 100; otherwise, your application will be refused.
   provenance:
-    source_file: nbpnp-skilled-worker-express-entry.html
-    section: Points Floor
-    page: 1
-    verbatim: at least 60 on the 100-point grid
+    source_file: sources/atlantic/nb_guide_employment_in_nb.pdf
+    section: Selection factors; Express Entry only
+    page: 10
+    verbatim: You must receive a score of at least 67 points out of 100; otherwise, your application will be refused.

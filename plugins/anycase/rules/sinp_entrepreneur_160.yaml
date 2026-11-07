@@ -2,20 +2,25 @@ schema_version: 1.0.0
 catalog_id: sinp_entrepreneur_160
 jurisdiction: CA-SK
 category: SINP entrepreneur
-display_name: "SINP Entrepreneur Category: Historical Criteria"
-status: HISTORICAL
+display_name: "SINP Entrepreneur: Explicit Source-Edition Criteria"
+status: SOURCE_BOUND
 program_id: SINP_ENTREPRENEUR
 stream_id: ENTREPRENEUR
 effective_date: unknown
-source_edition: Application Guide for the Entrepreneur Category (Before March 2024)
+source_edition: Explicit candidate.source_edition selects before_2024_03_14 or current_2024_guide
 source_url: https://publications.saskatchewan.ca/api/v1/products/124721/formats/145475/download
-decision_scope: Historical application prescreen using the pre-March 2024 guide. Date applicability is determined from the application and EOI record. Residence, management, and job predicates are application-stage commitments unless an established-business stage is explicitly recorded. BEP knowledge requires human assessment.
+decision_scope: Local source-bound criteria only. Explicit source_edition, stream and stage facts do not establish legal cohort applicability or published release identity. Historical criteria retain their pre-March-2024 scope; the six current-guide criteria are not a complete current program assessment. Other obligations remain unknown.
 sources:
 - id: sinp_entrepreneur_application_guide_before_2024_03_14
   title: Application Guide for the Entrepreneur Category (Before March 2024)
   url: https://publications.saskatchewan.ca/api/v1/products/124721/formats/145475/download
   citation: Application Guide for the Entrepreneur Category (Before March 2024)
   legal_authority: Historical official program criteria for the pre-March 2024 application edition. The 160-point grid is separate from this eligibility redline.
+- id: sinp_entrepreneur_guide_current_captured
+  title: Captured current SINP Entrepreneur guide
+  url: https://www.saskatchewan.ca/residents/moving-to-saskatchewan/immigrating-to-saskatchewan/sinp-entrepreneur
+  citation: Captured official guide SHA256 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133;
+    not a freshness or release claim
 schema:
   input_type: object
   required_top_level:
@@ -31,10 +36,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.net_worth_cad
-  - candidate.net_worth_verified_by_approved_professional
-  pass_if: candidate.net_worth_cad >= 500000 && candidate.net_worth_verified_by_approved_professional == true
-  fail_if: candidate.net_worth_cad < 500000 || candidate.net_worth_verified_by_approved_professional == false
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.net_worth_cad
+    - candidate.net_worth_verified_by_approved_professional
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.net_worth_cad >= 500000 && candidate.net_worth_verified_by_approved_professional == true))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.net_worth_cad < 500000 || candidate.net_worth_verified_by_approved_professional == false)
   missing_or_unverified: 'NEEDS_REVIEW: Net worth or Ministry-approved professional verification cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p013"
@@ -48,10 +57,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.net_worth_accumulation_verified_percent
-  - candidate.net_worth_accumulation_verified_by_approved_professional
-  pass_if: candidate.net_worth_accumulation_verified_percent >= 80 && candidate.net_worth_accumulation_verified_by_approved_professional == true
-  fail_if: candidate.net_worth_accumulation_verified_percent < 80 || candidate.net_worth_accumulation_verified_by_approved_professional == false
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.net_worth_accumulation_verified_percent
+    - candidate.net_worth_accumulation_verified_by_approved_professional
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.net_worth_accumulation_verified_percent >= 80 && candidate.net_worth_accumulation_verified_by_approved_professional == true))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.net_worth_accumulation_verified_percent < 80 || candidate.net_worth_accumulation_verified_by_approved_professional == false)
   missing_or_unverified: 'NEEDS_REVIEW: Legal accumulation of claimed net worth or its Ministry-approved professional verification cannot be verified to at least 80 percent.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p013"
@@ -65,9 +78,13 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.entrepreneurial_years_past_10
-  pass_if: candidate.entrepreneurial_years_past_10 >= 3
-  fail_if: candidate.entrepreneurial_years_past_10 < 3
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.entrepreneurial_years_past_10
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.entrepreneurial_years_past_10 >= 3))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.entrepreneurial_years_past_10 < 3)
   missing_or_unverified: 'NEEDS_REVIEW: Three years of entrepreneurial experience within the ten years before EOI submission cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p013"
@@ -81,10 +98,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.in_regina_or_saskatoon
-  - candidate.investment_cad
-  pass_if: (candidate.in_regina_or_saskatoon == true && candidate.investment_cad >= 300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad >= 200000)
-  fail_if: (candidate.in_regina_or_saskatoon == true && candidate.investment_cad < 300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad < 200000)
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.in_regina_or_saskatoon
+    - candidate.investment_cad
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && ((candidate.in_regina_or_saskatoon == true && candidate.investment_cad >= 300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad >= 200000)))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && ((candidate.in_regina_or_saskatoon == true && candidate.investment_cad < 300000) || (candidate.in_regina_or_saskatoon == false && candidate.investment_cad < 200000))
   missing_or_unverified: 'NEEDS_REVIEW: Equity investment amount or whether the community is Regina or Saskatoon cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p013"
@@ -98,10 +119,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.equity_ratio
-  - candidate.investment_cad
-  pass_if: candidate.equity_ratio >= 1 / 3 || candidate.investment_cad >= 1000000
-  fail_if: candidate.equity_ratio < 1 / 3 && candidate.investment_cad < 1000000
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.equity_ratio
+    - candidate.investment_cad
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.equity_ratio >= 1 / 3 || candidate.investment_cad >= 1000000))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.equity_ratio < 1 / 3 && candidate.investment_cad < 1000000)
   missing_or_unverified: 'NEEDS_REVIEW: Equity share or investment amount cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p014"
@@ -115,14 +140,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan
-  - candidate.business_establishment_stage
+  - candidate.source_edition
   conditional_required_fields:
-    when: candidate.business_establishment_stage == "established"
+    when: candidate.source_edition == "before_2024_03_14"
     fields:
-    - candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan
-  pass_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == true) || (candidate.business_establishment_stage == "established" && candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == true)
-  fail_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false) || (candidate.business_establishment_stage == "established" && candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false)
+    - candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan
+    - candidate.business_establishment_stage
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" && candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == true) || (candidate.business_establishment_stage == "established" && candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == true)))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" && candidate.committed_to_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false) || (candidate.business_establishment_stage == "established" && candidate.actual_active_ongoing_day_to_day_management_and_direction_in_saskatchewan == false))
   missing_or_unverified: 'NEEDS_REVIEW: The application-stage commitment or, when established, actual active and ongoing day-to-day management and direction in Saskatchewan cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p014"
@@ -136,15 +161,15 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.in_regina_or_saskatoon
-  - candidate.new_business
-  - candidate.business_establishment_stage
+  - candidate.source_edition
   conditional_required_fields:
-    when: candidate.in_regina_or_saskatoon == true && candidate.new_business == true
+    when: candidate.source_edition == "before_2024_03_14"
     fields:
-    - candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives
-  pass_if: (candidate.business_establishment_stage == "application" || candidate.business_establishment_stage == "established") && (candidate.in_regina_or_saskatoon == false || candidate.new_business == false || candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives >= 2)
-  fail_if: (candidate.business_establishment_stage == "application" || candidate.business_establishment_stage == "established") && candidate.in_regina_or_saskatoon == true && candidate.new_business == true && candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives < 2
+    - candidate.in_regina_or_saskatoon
+    - candidate.new_business
+    - candidate.business_establishment_stage
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" || candidate.business_establishment_stage == "established") && (candidate.in_regina_or_saskatoon == false || candidate.new_business == false || candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives >= 2)))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" || candidate.business_establishment_stage == "established") && candidate.in_regina_or_saskatoon == true && candidate.new_business == true && candidate.qualifying_jobs_committed_or_created_for_canadians_or_pr_nonrelatives < 2)
   missing_or_unverified: 'NEEDS_REVIEW: At application, planned qualifying jobs for Canadians or permanent residents who are not relatives; after establishment, created or maintained qualifying jobs cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p014"
@@ -158,14 +183,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.purchased_existing_business_in_regina_or_saskatoon
-  - candidate.business_establishment_stage
+  - candidate.source_edition
   conditional_required_fields:
-    when: candidate.purchased_existing_business_in_regina_or_saskatoon == true && candidate.business_establishment_stage != "established"
+    when: candidate.source_edition == "before_2024_03_14"
     fields:
-    - candidate.commitment_to_maintain_existing_staffing_complement
-  pass_if: candidate.purchased_existing_business_in_regina_or_saskatoon == false || (candidate.business_establishment_stage == "established" && candidate.post_purchase_qualifying_canadian_or_pr_staff_count >= candidate.pre_purchase_qualifying_canadian_or_pr_staff_count) || (candidate.business_establishment_stage == "application" && candidate.commitment_to_maintain_existing_staffing_complement == true)
-  fail_if: candidate.purchased_existing_business_in_regina_or_saskatoon == true && ((candidate.business_establishment_stage == "established" && candidate.post_purchase_qualifying_canadian_or_pr_staff_count < candidate.pre_purchase_qualifying_canadian_or_pr_staff_count) || (candidate.business_establishment_stage == "application" && candidate.commitment_to_maintain_existing_staffing_complement == false))
+    - candidate.purchased_existing_business_in_regina_or_saskatoon
+    - candidate.business_establishment_stage
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.purchased_existing_business_in_regina_or_saskatoon == false || (candidate.business_establishment_stage == "established" && candidate.post_purchase_qualifying_canadian_or_pr_staff_count >= candidate.pre_purchase_qualifying_canadian_or_pr_staff_count) || (candidate.business_establishment_stage == "application" && candidate.commitment_to_maintain_existing_staffing_complement == true)))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.purchased_existing_business_in_regina_or_saskatoon == true && ((candidate.business_establishment_stage == "established" && candidate.post_purchase_qualifying_canadian_or_pr_staff_count < candidate.pre_purchase_qualifying_canadian_or_pr_staff_count) || (candidate.business_establishment_stage == "application" && candidate.commitment_to_maintain_existing_staffing_complement == false)))
   missing_or_unverified: 'NEEDS_REVIEW: Commitment to maintain the existing Regina or Saskatoon business staffing complement, or actual counts when established, cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p014"
@@ -179,14 +204,14 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.committed_to_reside_in_saskatchewan_with_dependents
-  - candidate.business_establishment_stage
+  - candidate.source_edition
   conditional_required_fields:
-    when: candidate.business_establishment_stage == "established"
+    when: candidate.source_edition == "before_2024_03_14"
     fields:
-    - candidate.actual_residence_with_dependents_in_saskatchewan
-  pass_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_reside_in_saskatchewan_with_dependents == true) || (candidate.business_establishment_stage == "established" && candidate.actual_residence_with_dependents_in_saskatchewan == true)
-  fail_if: (candidate.business_establishment_stage == "application" && candidate.committed_to_reside_in_saskatchewan_with_dependents == false) || (candidate.business_establishment_stage == "established" && candidate.actual_residence_with_dependents_in_saskatchewan == false)
+    - candidate.committed_to_reside_in_saskatchewan_with_dependents
+    - candidate.business_establishment_stage
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" && candidate.committed_to_reside_in_saskatchewan_with_dependents == true) || (candidate.business_establishment_stage == "established" && candidate.actual_residence_with_dependents_in_saskatchewan == true)))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && ((candidate.business_establishment_stage == "application" && candidate.committed_to_reside_in_saskatchewan_with_dependents == false) || (candidate.business_establishment_stage == "established" && candidate.actual_residence_with_dependents_in_saskatchewan == false))
   missing_or_unverified: 'NEEDS_REVIEW: The application-stage residence commitment, or actual Saskatchewan residence when established, cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p014"
@@ -200,9 +225,13 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.bep_knowledge_human_review_outcome
-  pass_if: candidate.bep_knowledge_human_review_outcome == "demonstrated"
-  fail_if: candidate.bep_knowledge_human_review_outcome == "not_demonstrated"
+  - candidate.source_edition
+  conditional_required_fields:
+    when: candidate.source_edition == "before_2024_03_14"
+    fields:
+    - candidate.bep_knowledge_human_review_outcome
+  pass_if: (candidate.source_edition == "current_2024_guide") || ((candidate.source_edition == "before_2024_03_14") && (candidate.bep_knowledge_human_review_outcome == "demonstrated"))
+  fail_if: (candidate.source_edition == "before_2024_03_14") && (candidate.bep_knowledge_human_review_outcome == "not_demonstrated")
   missing_or_unverified: 'NEEDS_REVIEW: An authorized human assessment of in-depth Business Establishment Plan knowledge is missing or inconclusive.'
   evidence_anchor:
     evidence_unit_id: "sinp.prairies_documents.guide.p013"
@@ -211,3 +240,829 @@ rules:
     page: "13"
     section: "Eligibility Requirements \u2014 Business Establishment Plan knowledge"
     verbatim_excerpt: "2. Applicants must have and be able to demonstrate an in-depth knowledge of their BEP."
+- id: sinp_current_arrival_approval
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.approval_letter_date
+    - candidate.arrival_meeting_date
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.approval_letter_date, candidate.arrival_meeting_date) >= 0 && candidate.arrival_meeting_date <= calendar_months_after(candidate.approval_letter_date, 18)))
+  fail_if: (calendar_days_between(candidate.approval_letter_date, candidate.approval_letter_date) == 0 && calendar_days_between(candidate.arrival_meeting_date, candidate.arrival_meeting_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.approval_letter_date, candidate.arrival_meeting_date) < 0 || candidate.arrival_meeting_date > calendar_months_after(candidate.approval_letter_date, 18)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 422-438
+    verbatim_excerpt: "2 (e). Arriving in Saskatchewan and Business Establishment\n\n    \u2022   All approved applicants that don't attend an arrival meeting in Saskatchewan\n        within 18 months of the date on the SINP Entrepreneur Approval letter will be\n        deemed to have failed to fulfill BPA terms, and their applications will be\n        closed.\n    \u2022   Upon arrival in Saskatchewan, you are required to:\n          o     Attend an Arrival Meeting with SINP within 90 days of arriving in Canada.\n                SINP staff will provide valuable information, answer questions regarding\n                fulfilling the BPA terms, and offer referrals to relevant service providers for\n                business establishment guidance.\n          o     Notify SINP Entrepreneur Category of your arrival. Appendix E includes a\n                list of documents you are required to provide.\n          o     No later than 12 months after the Landing Date, submit to the SINP\n                Entrepreneur category the Business Establishment Progress Report\n                outlining your business establishment activities to date.\n          o     Appendix G includes the Business Establishment Progress Report form."
+- id: sinp_current_arrival_canada
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.canada_arrival_date
+    - candidate.arrival_meeting_date
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.canada_arrival_date, candidate.arrival_meeting_date) >= 0 && calendar_days_between(candidate.canada_arrival_date, candidate.arrival_meeting_date) <= 90))
+  fail_if: (calendar_days_between(candidate.canada_arrival_date, candidate.canada_arrival_date) == 0 && calendar_days_between(candidate.arrival_meeting_date, candidate.arrival_meeting_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.canada_arrival_date, candidate.arrival_meeting_date) < 0 || calendar_days_between(candidate.canada_arrival_date, candidate.arrival_meeting_date) > 90))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 422-438
+    verbatim_excerpt: "2 (e). Arriving in Saskatchewan and Business Establishment\n\n    \u2022   All approved applicants that don't attend an arrival meeting in Saskatchewan\n        within 18 months of the date on the SINP Entrepreneur Approval letter will be\n        deemed to have failed to fulfill BPA terms, and their applications will be\n        closed.\n    \u2022   Upon arrival in Saskatchewan, you are required to:\n          o     Attend an Arrival Meeting with SINP within 90 days of arriving in Canada.\n                SINP staff will provide valuable information, answer questions regarding\n                fulfilling the BPA terms, and offer referrals to relevant service providers for\n                business establishment guidance.\n          o     Notify SINP Entrepreneur Category of your arrival. Appendix E includes a\n                list of documents you are required to provide.\n          o     No later than 12 months after the Landing Date, submit to the SINP\n                Entrepreneur category the Business Establishment Progress Report\n                outlining your business establishment activities to date.\n          o     Appendix G includes the Business Establishment Progress Report form."
+- id: sinp_current_progress_report
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.landing_date
+    - candidate.progress_report_submission_date
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.landing_date, candidate.progress_report_submission_date) >= 0 && candidate.progress_report_submission_date <= calendar_months_after(candidate.landing_date, 12)))
+  fail_if: (calendar_days_between(candidate.landing_date, candidate.landing_date) == 0 && calendar_days_between(candidate.progress_report_submission_date, candidate.progress_report_submission_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (calendar_days_between(candidate.landing_date, candidate.progress_report_submission_date) < 0 || candidate.progress_report_submission_date > calendar_months_after(candidate.landing_date, 12)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 422-438
+    verbatim_excerpt: "2 (e). Arriving in Saskatchewan and Business Establishment\n\n    \u2022   All approved applicants that don't attend an arrival meeting in Saskatchewan\n        within 18 months of the date on the SINP Entrepreneur Approval letter will be\n        deemed to have failed to fulfill BPA terms, and their applications will be\n        closed.\n    \u2022   Upon arrival in Saskatchewan, you are required to:\n          o     Attend an Arrival Meeting with SINP within 90 days of arriving in Canada.\n                SINP staff will provide valuable information, answer questions regarding\n                fulfilling the BPA terms, and offer referrals to relevant service providers for\n                business establishment guidance.\n          o     Notify SINP Entrepreneur Category of your arrival. Appendix E includes a\n                list of documents you are required to provide.\n          o     No later than 12 months after the Landing Date, submit to the SINP\n                Entrepreneur category the Business Establishment Progress Report\n                outlining your business establishment activities to date.\n          o     Appendix G includes the Business Establishment Progress Report form."
+- id: sinp_current_arrival_notice
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.sinp_notified_of_arrival
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.sinp_notified_of_arrival == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.sinp_notified_of_arrival == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 422-438
+    verbatim_excerpt: "2 (e). Arriving in Saskatchewan and Business Establishment\n\n    \u2022   All approved applicants that don't attend an arrival meeting in Saskatchewan\n        within 18 months of the date on the SINP Entrepreneur Approval letter will be\n        deemed to have failed to fulfill BPA terms, and their applications will be\n        closed.\n    \u2022   Upon arrival in Saskatchewan, you are required to:\n          o     Attend an Arrival Meeting with SINP within 90 days of arriving in Canada.\n                SINP staff will provide valuable information, answer questions regarding\n                fulfilling the BPA terms, and offer referrals to relevant service providers for\n                business establishment guidance.\n          o     Notify SINP Entrepreneur Category of your arrival. Appendix E includes a\n                list of documents you are required to provide.\n          o     No later than 12 months after the Landing Date, submit to the SINP\n                Entrepreneur category the Business Establishment Progress Report\n                outlining your business establishment activities to date.\n          o     Appendix G includes the Business Establishment Progress Report form."
+- id: sinp_current_visit_window
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])
+    fields:
+    - candidate.visit_start_date
+    - candidate.visit_end_date
+    - candidate.eoi_submission_date
+  pass_if: (candidate.source_edition == "before_2024_03_14") || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (calendar_days_between(candidate.visit_start_date, candidate.visit_end_date) >= 0 && calendar_days_between(candidate.visit_end_date, candidate.eoi_submission_date) > 0 && candidate.visit_start_date >= calendar_months_after(candidate.eoi_submission_date, 0 - 12)))
+  fail_if: (calendar_days_between(candidate.visit_start_date, candidate.visit_start_date) == 0 && calendar_days_between(candidate.visit_end_date, candidate.visit_end_date) == 0 && calendar_days_between(candidate.eoi_submission_date, candidate.eoi_submission_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (calendar_days_between(candidate.visit_start_date, candidate.visit_end_date) < 0 || calendar_days_between(candidate.visit_end_date, candidate.eoi_submission_date) <= 0 || candidate.visit_start_date < calendar_months_after(candidate.eoi_submission_date, 0 - 12)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_days
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])
+    fields:
+    - candidate.visit_qualifying_days_excluding_travel
+    - candidate.visit_start_date
+    - candidate.visit_end_date
+  pass_if: (candidate.source_edition == "before_2024_03_14") || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_qualifying_days_excluding_travel >= 5 && candidate.visit_qualifying_days_excluding_travel <= calendar_days_between(candidate.visit_start_date, candidate.visit_end_date) + 1))
+  fail_if: (calendar_days_between(candidate.visit_start_date, candidate.visit_start_date) == 0 && calendar_days_between(candidate.visit_end_date, candidate.visit_end_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_qualifying_days_excluding_travel < 5 || candidate.visit_qualifying_days_excluding_travel > calendar_days_between(candidate.visit_start_date, candidate.visit_end_date) + 1))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_met_local_stakeholders_and_service_providers
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])
+    fields:
+    - candidate.visit_met_local_stakeholders_and_service_providers
+  pass_if: (candidate.source_edition == "before_2024_03_14") || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_met_local_stakeholders_and_service_providers == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_met_local_stakeholders_and_service_providers == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_activities_directly_related_to_bep
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])
+    fields:
+    - candidate.visit_activities_directly_related_to_bep
+  pass_if: (candidate.source_edition == "before_2024_03_14") || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_activities_directly_related_to_bep == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.visit_activities_directly_related_to_bep == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_report_submitted
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)
+    fields:
+    - candidate.visit_report_submitted
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.invited_to_apply == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_submitted == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_submitted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_report_covers_entire_canada_stay
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)
+    fields:
+    - candidate.visit_report_covers_entire_canada_stay
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.invited_to_apply == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_covers_entire_canada_stay == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_covers_entire_canada_stay == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_report_dates_times_contacts_activities_and_business_or_settlement_relation
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)
+    fields:
+    - candidate.visit_report_dates_times_contacts_activities_and_business_or_settlement_relation
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.invited_to_apply == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_dates_times_contacts_activities_and_business_or_settlement_relation == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_dates_times_contacts_activities_and_business_or_settlement_relation == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_visit_report_supporting_travel_evidence
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)
+    fields:
+    - candidate.visit_report_supporting_travel_evidence
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.invited_to_apply == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_supporting_travel_evidence == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.invited_to_apply == true)) && (candidate.visit_report_supporting_travel_evidence == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 191-211
+    verbatim_excerpt: "\fExploratory Visit\n\n    EOI Candidates are required to have participated in an exploratory visit to Saskatchewan of\n    no less than five (5) days over the previous 12-month period prior to submitting an\n    Expression of Interest. During this visit the person must have conducted meetings with\n    local stakeholders and service providers relevant to the candidate\u2019s Business\n    Establishment Plan including, but not limited to, suppliers, commercial realtors, lawyers,\n    accountants, business brokers/consultants, financial institutions, and economic\n    development agencies. Activities such as meetings, information sessions and workshops\n    are only eligible for consideration if the candidate can demonstrate how they directly\n    relate to the candidate\u2019s Business Establishment Plan. Travel days to or from Saskatchewan\n    do not count as one of the five days required.\n\n    If invited to apply, candidates are required to complete and submit an Exploratory Visit\n    Report that details the activities undertaken during their visit. The report must cover the\n    entire length of your stay in Canada, including time spent in other provinces, if any. The\n    report must list the dates, times, contact information and description of the activity and/or\n    meeting and how it relates to the candidate\u2019s business establishment or settlement. The\n    report should include copies of airline tickets, boarding passes, hotel receipts, and\n    business cards. Please do not include photographs, brochures, flyers, maps, or other\n    promotional information collected during the Exploratory Visit."
+- id: sinp_current_purchase_same_owner_three_years
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.same_owner_continuous_operation_since
+    - assessment_date
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (calendar_days_between(candidate.same_owner_continuous_operation_since, assessment_date) >= 0 && assessment_date >= calendar_months_after(candidate.same_owner_continuous_operation_since, 36)))
+  fail_if: (calendar_days_between(assessment_date, assessment_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (calendar_days_between(candidate.same_owner_continuous_operation_since, assessment_date) < 0 || assessment_date < calendar_months_after(candidate.same_owner_continuous_operation_since, 36)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_business_in_saskatchewan
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.business_in_saskatchewan
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.business_in_saskatchewan == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.business_in_saskatchewan == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_same_owner_operation_continuity_verified
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.same_owner_operation_continuity_verified
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.same_owner_operation_continuity_verified == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.same_owner_operation_continuity_verified == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_visited_previous_owner
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.visited_previous_owner
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.visited_previous_owner == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.visited_previous_owner == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_reasonable_fair_market_value_efforts_evidenced
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.reasonable_fair_market_value_efforts_evidenced
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.reasonable_fair_market_value_efforts_evidenced == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.reasonable_fair_market_value_efforts_evidenced == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_complete_ownership_change_and_full_control
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.complete_ownership_change_and_full_control
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.complete_ownership_change_and_full_control == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.complete_ownership_change_and_full_control == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_commitment_to_maintain_existing_canadian_pr_employment_above_minimum
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.commitment_to_maintain_existing_canadian_pr_employment_above_minimum
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.commitment_to_maintain_existing_canadian_pr_employment_above_minimum == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.commitment_to_maintain_existing_canadian_pr_employment_above_minimum == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_commitment_to_maintain_existing_wages_and_terms
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])
+    fields:
+    - candidate.commitment_to_maintain_existing_wages_and_terms
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new")) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.commitment_to_maintain_existing_wages_and_terms == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"])) && (candidate.commitment_to_maintain_existing_wages_and_terms == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 645-660
+    verbatim_excerpt: "   Purchasing an Existing Business or Business Succession\n\n    \u2022   Additional points are available if purchasing an existing rural business.\n          o The Saskatchewan based business must have been in continuous\n                operation by the same owner for the previous three years.\n          o All applicants purchasing an existing business or a business succession\n                opportunity must complete an exploratory visit to meet the previous\n                owners.\n          o Applicants must provide evidence that reasonable efforts were taken to\n                establish a fair market value for the business.\n          o The succession buy-out must result in a complete change in\n                ownership where the applicant will assume full control of the\n                business.\n          o Applicants must commit to maintaining employment for existing Canadian\n                citizens or permanent residents above the minimum required, as well as\n                maintaining existing wages and employment terms."
+- id: sinp_current_residence_application
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")
+    fields:
+    - candidate.application_resides_in_saskatchewan_with_accompanying_dependents
+    - candidate.application_maximum_residence_distance_km
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "established"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")) && (candidate.application_resides_in_saskatchewan_with_accompanying_dependents == true && candidate.application_maximum_residence_distance_km >= 0 && candidate.application_maximum_residence_distance_km <= 50))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")) && (candidate.application_resides_in_saskatchewan_with_accompanying_dependents == false || candidate.application_maximum_residence_distance_km > 50)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 584-590
+    verbatim_excerpt: "\f3. Applicants are required to reside in Saskatchewan with their accompanying dependent\n      family members within 50 kilometres of the applicant\u2019s business.\n4. Applicants must own at least one third (33 1/3%) of the equity of the business and\n   provide active and on-going participation in the day to day management and direction of\n   the business. If an Applicant will own less than 33 1/3 % they must invest $1 million CAD\n   and provide active and on-going participation in the day to day management and\n   direction of the business."
+- id: sinp_current_residence_established
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.established_resides_in_saskatchewan_with_accompanying_dependents
+    - candidate.established_maximum_residence_distance_km
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.established_resides_in_saskatchewan_with_accompanying_dependents == true && candidate.established_maximum_residence_distance_km >= 0 && candidate.established_maximum_residence_distance_km <= 50))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.established_resides_in_saskatchewan_with_accompanying_dependents == false || candidate.established_maximum_residence_distance_km > 50)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 584-590
+    verbatim_excerpt: "\f3. Applicants are required to reside in Saskatchewan with their accompanying dependent\n      family members within 50 kilometres of the applicant\u2019s business.\n4. Applicants must own at least one third (33 1/3%) of the equity of the business and\n   provide active and on-going participation in the day to day management and direction of\n   the business. If an Applicant will own less than 33 1/3 % they must invest $1 million CAD\n   and provide active and on-going participation in the day to day management and\n   direction of the business."
+- id: sinp_current_equity
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && candidate.investment_cad != null && candidate.investment_cad < 1000000
+    fields:
+    - candidate.equity_owned_units
+    - candidate.equity_total_units
+  pass_if: (candidate.source_edition == "before_2024_03_14") || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && ((candidate.investment_cad != null && candidate.investment_cad >= 1000000) || (candidate.equity_owned_units != null && candidate.equity_total_units != null && candidate.equity_owned_units >= 0 && candidate.equity_total_units > 0 && candidate.equity_owned_units <= candidate.equity_total_units && candidate.equity_owned_units * 3 >= candidate.equity_total_units)))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"])) && (candidate.equity_owned_units != null && candidate.equity_total_units != null && candidate.investment_cad != null && candidate.equity_owned_units * 3 < candidate.equity_total_units && candidate.investment_cad < 1000000)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 584-590
+    verbatim_excerpt: "\f3. Applicants are required to reside in Saskatchewan with their accompanying dependent\n      family members within 50 kilometres of the applicant\u2019s business.\n4. Applicants must own at least one third (33 1/3%) of the equity of the business and\n   provide active and on-going participation in the day to day management and direction of\n   the business. If an Applicant will own less than 33 1/3 % they must invest $1 million CAD\n   and provide active and on-going participation in the day to day management and\n   direction of the business."
+- id: sinp_current_management_application
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")
+    fields:
+    - candidate.committed_to_active_ongoing_day_to_day_management_in_saskatchewan_not_remote
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "established"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")) && (candidate.committed_to_active_ongoing_day_to_day_management_in_saskatchewan_not_remote == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "application")) && (candidate.committed_to_active_ongoing_day_to_day_management_in_saskatchewan_not_remote == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 624-634
+    verbatim_excerpt: "     \u2022 The Applicant must own at least one third (33 1/3%) of the business. If the\n          Applicant will own less than one third of the business, then a minimum\n          investment of $1 million dollars CAD will be required.\n     \u2022 You are required to reside in Saskatchewan and operate your business and be\n          involved in its day-to-day management. You may not do this remotely, or from\n\n\n\n\n                                                                                               14\n\f        another Canadian Province or Territory or from another Country."
+- id: sinp_current_management_established
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.actual_active_ongoing_day_to_day_management_in_saskatchewan_not_remote
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.actual_active_ongoing_day_to_day_management_in_saskatchewan_not_remote == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.actual_active_ongoing_day_to_day_management_in_saskatchewan_not_remote == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 624-634
+    verbatim_excerpt: "     \u2022 The Applicant must own at least one third (33 1/3%) of the business. If the\n          Applicant will own less than one third of the business, then a minimum\n          investment of $1 million dollars CAD will be required.\n     \u2022 You are required to reside in Saskatchewan and operate your business and be\n          involved in its day-to-day management. You may not do this remotely, or from\n\n\n\n\n                                                                                               14\n\f        another Canadian Province or Territory or from another Country."
+- id: sinp_current_urban_staffing
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.pre_purchase_canadian_pr_staff_count
+    - candidate.post_purchase_canadian_pr_staff_count
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new") || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"]) && (candidate.business_in_regina_or_saskatoon_cma == false || candidate.business_establishment_stage in ["eoi", "application"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "established")) && (candidate.pre_purchase_canadian_pr_staff_count >= 0 && candidate.post_purchase_canadian_pr_staff_count >= candidate.pre_purchase_canadian_pr_staff_count))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "established")) && (candidate.pre_purchase_canadian_pr_staff_count < 0 || candidate.post_purchase_canadian_pr_staff_count < candidate.pre_purchase_canadian_pr_staff_count)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 591-596
+    verbatim_excerpt: "5. Applicants establishing a new business in the Regina CMA or Saskatoon CMA must create\n   or maintain at least two (2) jobs for two Canadians or Permanent Residents in\n   Saskatchewan (non-relative workers). If applicants purchase an existing business in the\n   Regina CMA or Saskatoon CMA, they must maintain the business\u2019s staffing complement\n   (the number of Canadian or permanent resident workers) in place at the time of\n   purchase."
+- id: sinp_current_urban_staffing_commitment
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "application")
+    fields:
+    - candidate.commitment_to_maintain_urban_staffing_complement
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && candidate.stream == "ent_new") || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"]) && (candidate.business_in_regina_or_saskatoon_cma == false || candidate.business_establishment_stage in ["eoi", "established"]))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "application")) && (candidate.commitment_to_maintain_urban_staffing_complement == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_existing", "ent_succession"] && candidate.business_in_regina_or_saskatoon_cma == true && candidate.business_establishment_stage == "application")) && (candidate.commitment_to_maintain_urban_staffing_complement == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 591-596
+    verbatim_excerpt: "5. Applicants establishing a new business in the Regina CMA or Saskatoon CMA must create\n   or maintain at least two (2) jobs for two Canadians or Permanent Residents in\n   Saskatchewan (non-relative workers). If applicants purchase an existing business in the\n   Regina CMA or Saskatoon CMA, they must maintain the business\u2019s staffing complement\n   (the number of Canadian or permanent resident workers) in place at the time of\n   purchase."
+- id: sinp_current_joint_venture_disclosed_and_partners_identified
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.joint_venture_disclosed_and_partners_identified
+    - candidate.proposed_partner_ids
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_disclosed_and_partners_identified == true && candidate.proposed_partner_ids != []))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_disclosed_and_partners_identified == false || candidate.proposed_partner_ids == [])
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_individual_eois_submitted_simultaneously
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.individual_eois_submitted_simultaneously
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.individual_eois_submitted_simultaneously == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.individual_eois_submitted_simultaneously == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_each_applicant_individually_assessed
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.each_applicant_individually_assessed
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.each_applicant_individually_assessed == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.each_applicant_individually_assessed == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_joint_venture_business_in_saskatchewan
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.joint_venture_business_in_saskatchewan
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_business_in_saskatchewan == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_business_in_saskatchewan == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_joint_venture_same_owner_continuity_verified
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.joint_venture_same_owner_continuity_verified
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_same_owner_continuity_verified == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_same_owner_continuity_verified == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_visited_previous_owners_or_partners
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.visited_previous_owners_or_partners
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.visited_previous_owners_or_partners == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.visited_previous_owners_or_partners == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_joint_venture_fair_value_efforts_evidenced
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.joint_venture_fair_value_efforts_evidenced
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_fair_value_efforts_evidenced == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (candidate.joint_venture_fair_value_efforts_evidenced == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_jv_three_years
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)
+    fields:
+    - candidate.joint_venture_same_owner_since
+    - assessment_date
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (assessment_date >= calendar_months_after(candidate.joint_venture_same_owner_since, 36)))
+  fail_if: (calendar_days_between(assessment_date, assessment_date) == 0) && (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true)) && (assessment_date < calendar_months_after(candidate.joint_venture_same_owner_since, 36)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_joint_venture_complete_ownership_change_and_full_control
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.joint_venture_is_succession == true)
+    fields:
+    - candidate.joint_venture_complete_ownership_change_and_full_control
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false || (candidate.joint_venture == true && (candidate.joint_venture_is_succession == false))))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.joint_venture_is_succession == true)) && (candidate.joint_venture_complete_ownership_change_and_full_control == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.joint_venture_is_succession == true)) && (candidate.joint_venture_complete_ownership_change_and_full_control == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_remaining_partners_updated_business_proposal_preserving_eligibility_and_points
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.any_partner_not_selected == true)
+    fields:
+    - candidate.remaining_partners_updated_business_proposal_preserving_eligibility_and_points
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false || (candidate.joint_venture == true && (candidate.any_partner_not_selected == false))))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.any_partner_not_selected == true)) && (candidate.remaining_partners_updated_business_proposal_preserving_eligibility_and_points == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.any_partner_not_selected == true)) && (candidate.remaining_partners_updated_business_proposal_preserving_eligibility_and_points == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_each_partner_separate_bpa_signed
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.all_partners_selected_and_approved == true)
+    fields:
+    - candidate.each_partner_separate_bpa_signed
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false || (candidate.joint_venture == true && (candidate.all_partners_selected_and_approved == false))))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.all_partners_selected_and_approved == true)) && (candidate.each_partner_separate_bpa_signed == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.all_partners_selected_and_approved == true)) && (candidate.each_partner_separate_bpa_signed == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_each_partner_bpa_terms_met
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.nomination_requested == true)
+    fields:
+    - candidate.each_partner_bpa_terms_met
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false || (candidate.joint_venture == true && (candidate.nomination_requested == false))))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.nomination_requested == true)) && (candidate.each_partner_bpa_terms_met == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.nomination_requested == true)) && (candidate.each_partner_bpa_terms_met == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_remaining_partners_updated_bpa_meeting_program_criteria
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.partner_bpa_failure == true && candidate.sinp_hc_exception_determined == false)
+    fields:
+    - candidate.remaining_partners_updated_bpa_meeting_program_criteria
+  pass_if: (candidate.source_edition == "before_2024_03_14" || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.joint_venture == false || (candidate.joint_venture == true && (candidate.partner_bpa_failure == false || candidate.sinp_hc_exception_determined == true))))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.partner_bpa_failure == true && candidate.sinp_hc_exception_determined == false)) && (candidate.remaining_partners_updated_bpa_meeting_program_criteria == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.joint_venture == true && candidate.partner_bpa_failure == true && candidate.sinp_hc_exception_determined == false)) && (candidate.remaining_partners_updated_bpa_meeting_program_criteria == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_new_business_jobs
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && candidate.stream == "ent_new" && candidate.business_in_regina_or_saskatoon_cma == true) && (candidate.joint_venture == false || candidate.committed_to_maintain_existing_canadian_pr_employment == false)
+    fields:
+    - candidate.qualifying_nonrelative_canadian_pr_jobs
+  pass_if: ((candidate.source_edition == "before_2024_03_14") || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && (candidate.stream in ["ent_existing", "ent_succession"] || candidate.business_in_regina_or_saskatoon_cma == false))) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && candidate.stream == "ent_new" && candidate.business_in_regina_or_saskatoon_cma == true) && ((candidate.joint_venture == true && candidate.committed_to_maintain_existing_canadian_pr_employment == true) || candidate.qualifying_nonrelative_canadian_pr_jobs >= 2))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && candidate.stream == "ent_new" && candidate.business_in_regina_or_saskatoon_cma == true) && (candidate.joint_venture == false || candidate.committed_to_maintain_existing_canadian_pr_employment == false) && candidate.qualifying_nonrelative_canadian_pr_jobs < 2
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 686-720
+    verbatim_excerpt: "\fJoint Ventures between SINP Program Applicants\n\n    \u2022    For applicants proposing a joint venture with another SINP applicant in the operation\n         of a new business, the purchase of an existing business or a partnership with a\n         Permanent Resident or Canadian Citizen:\n         o The Saskatchewan based business must have been in continuous operation by the\n            same owner for the previous three years.\n         o Applicants must complete an exploratory visit to meet the previous owners or\n            business partners.\n         o Applicants must provide evidence that reasonable efforts were taken to\n            establish a fair market value for the business or investment amount.\n         o Any succession buy-out must result in a complete change in ownership where\n            the applicants will assume full control of the business.\n         o When committing to maintain employment for existing Canadian citizens or\n            permanent residents, applicants will not be required to create additional jobs.\n         o When applying, all applicants must clearly indicate in their application form that\n            they are proposing a joint venture with a program applicant or a permanent\n            resident or Canadian citizen, and identify their proposed business partners;\n         o Each prospective applicant must submit their individual EOI simultaneously;\n         o Each prospective applicant will be evaluated individually, with selection from the\n            EOI pool dependent on their ability to meet eligibility criteria and earn points as an\n            individual, not part of a group or partnership;\n         o If any partner is not selected from the EOI pool for processing, all remaining\n            partners will be required to update their business proposal, making any required\n            changes to ensure they continue to be eligible for the EOI points previously\n            earned;\n       \
+      \  o If all partners are selected from the EOI pool and approved, each partner will be\n            required to sign a separate Business Performance Agreement, and each partner\n            must meet the agreement terms in order to be approved for nomination;\n         o In the event that the SINP determines that one or more partners failed to meet the\n            terms of their individual Business Performance Agreement for reasons beyond\n            humanitarian and compassionate circumstances, all remaining partners will be\n            required to update their performance agreement to ensure they continue to meet\n            program criteria, including, but not limited to, changes to the required investment\n            amount."
+- id: sinp_current_arrival_meeting_location
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.source_edition
+  conditional_required_fields:
+    when: (candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")
+    fields:
+    - candidate.arrival_meeting_in_saskatchewan
+  pass_if: ((candidate.source_edition == "before_2024_03_14") || ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"]) && candidate.business_establishment_stage in ["eoi", "application"])) || (((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.arrival_meeting_in_saskatchewan == true))
+  fail_if: ((candidate.source_edition == "current_2024_guide") && (candidate.stream in ["ent_new", "ent_existing", "ent_succession"] && candidate.business_establishment_stage == "established")) && (candidate.arrival_meeting_in_saskatchewan == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-edition, branch/stage selector or source-required evidence is missing or inconclusive.'
+  evidence_anchor:
+    source_id: sinp_entrepreneur_guide_current_captured
+    source_file: sinp-entrepreneur-guide-current.txt
+    source_sha256: 562fc295d7b6e00347d99dd2e271e6e26096c23d08903188b5ce295d1a265133
+    section: lines 422-438
+    verbatim_excerpt: "2 (e). Arriving in Saskatchewan and Business Establishment\n\n    \u2022   All approved applicants that don't attend an arrival meeting in Saskatchewan\n        within 18 months of the date on the SINP Entrepreneur Approval letter will be\n        deemed to have failed to fulfill BPA terms, and their applications will be\n        closed.\n    \u2022   Upon arrival in Saskatchewan, you are required to:\n          o     Attend an Arrival Meeting with SINP within 90 days of arriving in Canada.\n                SINP staff will provide valuable information, answer questions regarding\n                fulfilling the BPA terms, and offer referrals to relevant service providers for\n                business establishment guidance.\n          o     Notify SINP Entrepreneur Category of your arrival. Appendix E includes a\n                list of documents you are required to provide.\n          o     No later than 12 months after the Landing Date, submit to the SINP\n                Entrepreneur category the Business Establishment Progress Report\n                outlining your business establishment activities to date.\n          o     Appendix G includes the Business Establishment Progress Report form."

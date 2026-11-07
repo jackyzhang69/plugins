@@ -53,10 +53,22 @@ rules:
       - assessment_date
       - education.is_eligible_canadian_institution
       - education.credential_completion_years
-    pass_if: "education.is_eligible_canadian_institution == true && education.credential_completion_years <= 3.0"
-    fail_if: "education.is_eligible_canadian_institution == false || education.credential_completion_years > 3.0"
-    missing_or_unverified: "NEEDS_REVIEW: Post-secondary educational credential, graduation date, or institution eligibility cannot be confirmed."
-    interpretation: "Applicant must have graduated from an eligible Canadian public or authorized private post-secondary institution within the three years prior to applying."
+      - education.credential_issue_delay_months
+      - education.program_language
+      - education.study_in_canada_ratio
+      - education.campus_in_canada
+      - education.distance_education
+      - education.credential_type
+    conditional_required_fields:
+      when: "education.credential_type in ['diploma', 'certificate']"
+      fields:
+        - education.institution_public
+        - education.coursework_months_excluding_work_terms
+        - education.language_training
+    pass_if: "education.is_eligible_canadian_institution == true && education.credential_completion_years <= 3 && education.credential_issue_delay_months < 12 && education.program_language in [\"English\", \"French\"] && education.study_in_canada_ratio >= 0.5 && education.campus_in_canada == true && (education.distance_education == false || (education.distance_education == true && education.online_start_date >= \"2020-01-01\" && education.online_end_date <= \"2023-06-30\" && education.online_start_date <= education.online_end_date && education.online_resided_in_canada == true)) && ((education.credential_type == \"degree\" && education.institution_authorized_degrees == true) || (education.credential_type in [\"diploma\", \"certificate\"] && education.institution_public == true && education.coursework_months_excluding_work_terms >= 8 && education.language_training == false))"
+    fail_if: "education.is_eligible_canadian_institution == false || education.credential_completion_years > 3 || education.credential_issue_delay_months >= 12 || !(education.program_language in ['English', 'French']) || education.study_in_canada_ratio < 0.5 || education.campus_in_canada == false || (education.distance_education == true && (education.online_start_date < '2020-01-01' || education.online_end_date > '2023-06-30' || education.online_start_date > education.online_end_date || education.online_resided_in_canada == false)) || (education.credential_type == 'degree' && education.institution_authorized_degrees == false) || (education.credential_type in ['diploma', 'certificate'] && (education.institution_public == false || education.coursework_months_excluding_work_terms < 8 || education.language_training == true))"
+    missing_or_unverified: "NEEDS_REVIEW: Source-required credential, location, language, duration or graduation timing is unverified."
+    interpretation: "September 4, 2024 IG criteria: English/French, at least 50% study in Canada, no foreign campus, no distance education except January 2020–June 2023 coursework while residing in Canada. Degrees require provincial authority; diplomas/certificates require public institution and 8 FTE coursework months excluding co-op/practicum/internship and language training. Register within 3 years, with credential issued less than 12 months after completion."
     evidence_anchor:
       evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p031
       source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
@@ -70,16 +82,12 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - education.is_bc_stem_post_graduate
-    conditional_required_fields:
-      when: "education.is_bc_stem_post_graduate == false"
-      fields:
-        - job_offer.noc_2021_code
-        - job_offer.noc_teer
-    pass_if: "education.is_bc_stem_post_graduate == true || (job_offer.noc_teer in [1,2,3])"
-    fail_if: "education.is_bc_stem_post_graduate == false && !(job_offer.noc_teer in [1,2,3])"
+      - job_offer.noc_2021_code
+      - job_offer.noc_teer
+    pass_if: "job_offer.noc_teer in [1,2,3]"
+    fail_if: "!(job_offer.noc_teer in [1,2,3])"
     missing_or_unverified: "NEEDS_REVIEW: Job offer NOC code or TEER level classification is unverified."
-    interpretation: "Position must be in TEER 1, 2, or 3; management occupations (NOC TEER 0) are not eligible under this stream, unless the applicant qualifies under the direct STEM Post-Graduate stream."
+    interpretation: "International Graduate requires TEER 1, 2, or 3. TEER 0 is excluded. The separate International Post-Graduate route is not an exemption within this stream."
     evidence_anchor:
       evidence_unit_id: bc.bcpnp_si_program_2024_09_04.p032
       source_file: "54e669b1d8ae503874e9a1d797c260ec1d31c51c8f09643e7f01127673fcd075"
@@ -93,15 +101,11 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - education.is_bc_stem_post_graduate
-    conditional_required_fields:
-      when: "education.is_bc_stem_post_graduate == false"
-      fields:
-        - job_offer.weekly_regular_hours
-        - job_offer.year_round
-        - job_offer.single_position
-    pass_if: "education.is_bc_stem_post_graduate == true || (job_offer.weekly_regular_hours >= 30.0 && job_offer.year_round == true && job_offer.single_position == true)"
-    fail_if: "education.is_bc_stem_post_graduate == false && (job_offer.weekly_regular_hours < 30.0 || job_offer.year_round == false || job_offer.single_position == false)"
+      - job_offer.weekly_regular_hours
+      - job_offer.year_round
+      - job_offer.single_position
+    pass_if: "job_offer.weekly_regular_hours >= 30.0 && job_offer.year_round == true && job_offer.single_position == true"
+    fail_if: "job_offer.weekly_regular_hours < 30.0 || job_offer.year_round == false || job_offer.single_position == false"
     missing_or_unverified: "NEEDS_REVIEW: Full-time hours (>= 30 hrs/week) or year-round position details cannot be established."
     interpretation: "Job offer must provide full-time hours (at least 30 hours per week) on a year-round basis."
     evidence_anchor:
@@ -117,15 +121,11 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - education.is_bc_stem_post_graduate
-    conditional_required_fields:
-      when: "education.is_bc_stem_post_graduate == false"
-      fields:
-        - job_offer.regular_base_hourly_cad
-        - job_offer.market_range_verified
-    precondition: "education.is_bc_stem_post_graduate == true || current_statutory_minimum_verified(assessment_date) == true"
-    pass_if: "education.is_bc_stem_post_graduate == true || (job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true)"
-    fail_if: "education.is_bc_stem_post_graduate == false && (job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date))"
+      - job_offer.regular_base_hourly_cad
+      - job_offer.market_range_verified
+    precondition: "current_statutory_minimum_verified(assessment_date) == true"
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date)"
     missing_or_unverified: "NEEDS_REVIEW: Wage falls below statutory floor ($18.25/hr) or prevailing market rate is unverified."
     interpretation: "Offered wage must be at or above provincial minimum wage and commensurate with entry-level or prevailing graduate market rates."
     evidence_anchor:
@@ -141,9 +141,9 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - education.is_bc_stem_post_graduate
+      - job_offer.noc_teer
     conditional_required_fields:
-      when: "education.is_bc_stem_post_graduate == false && job_offer.noc_teer in [2,3]"
+      when: "job_offer.noc_teer in [2,3] || candidate.language_points_claimed == true || candidate.language_test_requested == true"
       fields:
         - candidate.language_test.test_type
         - candidate.language_test.valid_at_application
@@ -151,10 +151,10 @@ rules:
         - candidate.language_test.reading_clb
         - candidate.language_test.writing_clb
         - candidate.language_test.speaking_clb
-    pass_if: "education.is_bc_stem_post_graduate == true || !(job_offer.noc_teer in [2,3]) || (accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4)"
-    fail_if: "education.is_bc_stem_post_graduate == false && job_offer.noc_teer in [2,3] && (candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4)"
+    pass_if: "(!(job_offer.noc_teer in [2,3]) && candidate.language_points_claimed == false && candidate.language_test_requested == false) || (accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4)"
+    fail_if: "(job_offer.noc_teer in [2,3] || candidate.language_points_claimed == true || candidate.language_test_requested == true) && (candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4)"
     missing_or_unverified: "NEEDS_REVIEW: Language test results missing or CLB score below threshold for TEER 2/3 graduate occupation."
-    interpretation: "CLB 4 is mandatory for international graduates employed in TEER 2 or 3 occupations."
+    interpretation: "CLB 4 in each ability on a valid designated test is required for TEER 2/3 and when language points are claimed or the BC PNP requests a test. No STEM exemption applies within International Graduate."
     evidence_anchor:
       evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p17:the_following_table_shows_the_minimum_scores_requi
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
@@ -168,15 +168,11 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - education.is_bc_stem_post_graduate
-    conditional_required_fields:
-      when: "education.is_bc_stem_post_graduate == false"
-      fields:
-        - employer.bc_operating_months
-        - employer.in_metro_vancouver_regional_district
-        - employer.eligible_bc_payroll_fte
-    pass_if: "education.is_bc_stem_post_graduate == true || (employer.bc_operating_months >= 12.0 && ((employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte >= 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte >= 3.0)))"
-    fail_if: "education.is_bc_stem_post_graduate == false && (employer.bc_operating_months < 12.0 || (employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte < 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte < 3.0))"
+      - employer.bc_operating_months
+      - employer.in_metro_vancouver_regional_district
+      - employer.eligible_bc_payroll_fte
+    pass_if: "employer.bc_operating_months >= 12.0 && ((employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte >= 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte >= 3.0))"
+    fail_if: "employer.bc_operating_months < 12.0 || (employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte < 5.0) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte < 3.0)"
     missing_or_unverified: "NEEDS_REVIEW: Sponsoring employer operating history or minimum full-time employee counts cannot be confirmed."
     interpretation: "Employer must have operated in B.C. for at least 12 months with at least 5 local FTEs in Metro Vancouver or 3 outside."
     evidence_anchor:

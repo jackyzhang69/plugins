@@ -34,10 +34,24 @@
   "category": "experience"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.business_experience_months_past_60"
-  "pass_if": "candidate.business_experience_months_past_60 >= 24"
-  "fail_if": "candidate.business_experience_months_past_60 < 24"
+  required_fields:
+  - candidate.business_experience_months_past_60
+  - candidate.experience_lookback_event
+  - candidate.experience_full_time
+  - candidate.experience_role
+  conditional_required_fields:
+    when: candidate.experience_role == 'owner'
+    fields:
+    - candidate.experience_active_role
+    - candidate.experience_ownership_fraction
+  pass_if: candidate.business_experience_months_past_60 >= 24 && candidate.experience_lookback_event == 'eoi_registration'
+    && candidate.experience_full_time == true && ((candidate.experience_role == 'owner' && candidate.experience_active_role
+    == true && candidate.experience_ownership_fraction >= 1 / 3) || (candidate.experience_role == 'senior_manager'
+    && candidate.experience_senior_decisions == true && candidate.experience_daily_management == true))
+  fail_if: '!(candidate.business_experience_months_past_60 >= 24 && candidate.experience_lookback_event == ''eoi_registration''
+    && candidate.experience_full_time == true && ((candidate.experience_role == ''owner'' && candidate.experience_active_role
+    == true && candidate.experience_ownership_fraction >= 1 / 3) || (candidate.experience_role == ''senior_manager''
+    && candidate.experience_senior_decisions == true && candidate.experience_daily_management == true)))'
   "missing_or_unverified": "NEEDS_REVIEW: Business experience cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_ent"
@@ -54,17 +68,18 @@
   "category": "funds"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.in_gta"
-  - "candidate.ict_or_digital"
-  - "candidate.net_worth_cad"
-  "pass_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad >= 800000)
-    || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad >=
-    400000)
-  "fail_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad < 800000)
-    || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad < 400000)
+  required_fields:
+  - candidate.in_gta
+  - candidate.ict_or_digital
+  - candidate.net_worth_cad
+  - candidate.net_worth_source_lawful
+  - candidate.asset_liability_evidence_complete
+  pass_if: ((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad >= 800000) ||
+    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad >= 400000)) && candidate.net_worth_source_lawful
+    == true && candidate.asset_liability_evidence_complete == true
+  fail_if: '!(((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.net_worth_cad >= 800000)
+    || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.net_worth_cad >= 400000)) &&
+    candidate.net_worth_source_lawful == true && candidate.asset_liability_evidence_complete == true)'
   "missing_or_unverified": "NEEDS_REVIEW: Net worth, GTA location, or ICT status cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_ent"
@@ -81,18 +96,24 @@
   "category": "funds"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.in_gta"
-  - "candidate.ict_or_digital"
-  - "candidate.personal_investment_cad"
-  "pass_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad
-    >= 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.personal_investment_cad
-    >= 200000)
-  "fail_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad
-    < 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.personal_investment_cad
-    < 200000)
+  required_fields:
+  - candidate.in_gta
+  - candidate.ict_or_digital
+  - candidate.personal_investment_cad
+  - candidate.excluded_investment_cad
+  - candidate.investment_from_personal_net_worth
+  - candidate.investment_essential_to_business
+  - candidate.investment_redeemable
+  pass_if: ((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad -
+    candidate.excluded_investment_cad >= 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true)
+    && candidate.personal_investment_cad - candidate.excluded_investment_cad >= 200000)) && candidate.investment_from_personal_net_worth
+    == true && candidate.investment_essential_to_business == true && candidate.investment_redeemable == false && candidate.excluded_investment_cad
+    >= 0 && candidate.excluded_investment_cad <= candidate.personal_investment_cad
+  fail_if: '!(((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.personal_investment_cad
+    - candidate.excluded_investment_cad >= 600000) || ((candidate.in_gta == false || candidate.ict_or_digital == true)
+    && candidate.personal_investment_cad - candidate.excluded_investment_cad >= 200000)) && candidate.investment_from_personal_net_worth
+    == true && candidate.investment_essential_to_business == true && candidate.investment_redeemable == false && candidate.excluded_investment_cad
+    >= 0 && candidate.excluded_investment_cad <= candidate.personal_investment_cad)'
   "missing_or_unverified": "NEEDS_REVIEW: Personal investment cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_ent"
@@ -108,16 +129,24 @@
   "category": "job_offer"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.in_gta"
-  - "candidate.ict_or_digital"
-  - "candidate.jobs_to_create"
-  "pass_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create >= 2) ||
-    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.jobs_to_create >= 1)
-  "fail_if": >-
-    (candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create < 2) ||
-    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.jobs_to_create < 1)
+  required_fields:
+  - candidate.in_gta
+  - candidate.ict_or_digital
+  - candidate.jobs_to_create
+  - candidate.jobs_permanent_full_time
+  - candidate.jobs_workers_citizen_or_pr
+  - candidate.jobs_lowest_wage_to_median_ratio
+  - candidate.jobs_months_after_establishment_or_acquisition
+  pass_if: ((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create >= 2) || ((candidate.in_gta
+    == false || candidate.ict_or_digital == true) && candidate.jobs_to_create >= 1)) && candidate.jobs_permanent_full_time
+    == true && candidate.jobs_workers_citizen_or_pr == true && candidate.jobs_lowest_wage_to_median_ratio >= 1 &&
+    candidate.jobs_months_after_establishment_or_acquisition >= 0 && candidate.jobs_months_after_establishment_or_acquisition
+    <= 20
+  fail_if: '!(((candidate.in_gta == true && candidate.ict_or_digital == false && candidate.jobs_to_create >= 2) ||
+    ((candidate.in_gta == false || candidate.ict_or_digital == true) && candidate.jobs_to_create >= 1)) && candidate.jobs_permanent_full_time
+    == true && candidate.jobs_workers_citizen_or_pr == true && candidate.jobs_lowest_wage_to_median_ratio >= 1 &&
+    candidate.jobs_months_after_establishment_or_acquisition >= 0 && candidate.jobs_months_after_establishment_or_acquisition
+    <= 20)'
   "missing_or_unverified": "NEEDS_REVIEW: Job-creation commitment cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_ent"
@@ -146,3 +175,143 @@
     "verbatim_excerpt": >-
       The applicant will submit a business plan to the director that demonstrates that the business will
       be viable and likely to provide material economic benefit to the economy of Ontario
+- id: oinp_ent_acquisition_continuity
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - business.is_acquisition
+  conditional_required_fields:
+    when: business.is_acquisition == true
+    fields:
+    - business.ontario_business_visit_months_before_eoi
+    - business.continuous_same_owners_months_before_purchase
+    - business.complete_ownership_transfer
+    - business.transfer_recipient
+    - business.prior_oinp_nominee_owner
+  pass_if: business.is_acquisition == false || (business.is_acquisition == true && business.ontario_business_visit_months_before_eoi
+    >= 0 && business.ontario_business_visit_months_before_eoi <= 12 && business.continuous_same_owners_months_before_purchase
+    >= 60 && business.complete_ownership_transfer == true && business.transfer_recipient in ['applicant', 'partner',
+    'third_party_investors', 'combination'] && business.prior_oinp_nominee_owner == false)
+  fail_if: '!(business.is_acquisition == false || (business.is_acquisition == true && business.ontario_business_visit_months_before_eoi
+    >= 0 && business.ontario_business_visit_months_before_eoi <= 12 && business.continuous_same_owners_months_before_purchase
+    >= 60 && business.complete_ownership_transfer == true && business.transfer_recipient in [''applicant'', ''partner'',
+    ''third_party_investors'', ''combination''] && business.prior_oinp_nominee_owner == false))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_ent_acquisition_continuity are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_ent
+    citation: O. Reg. 422/17 s.13(2)17(i)-(iii),(v)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.13(2)17(i)-(iii),(v)
+    verbatim_excerpt: the applicant has made at least one business-related visit to Ontario in the last 12 months
+      before the date of registering the expression of interest
+- id: oinp_ent_acquisition_preservation
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - business.is_acquisition
+  conditional_required_fields:
+    when: business.is_acquisition == true
+    fields:
+    - business.improvement_expansion_investment_cad
+    - candidate.personal_investment_cad
+    - business.permanent_jobs_after
+    - business.permanent_jobs_before
+    - business.lowest_preserved_wage_ratio
+    - business.preserved_employment_terms_no_less_favourable
+  pass_if: business.is_acquisition == false || (business.is_acquisition == true && business.improvement_expansion_investment_cad
+    >= candidate.personal_investment_cad * 0.10 && business.permanent_jobs_after >= business.permanent_jobs_before
+    && business.lowest_preserved_wage_ratio >= 1 && business.preserved_employment_terms_no_less_favourable == true)
+  fail_if: '!(business.is_acquisition == false || (business.is_acquisition == true && business.improvement_expansion_investment_cad
+    >= candidate.personal_investment_cad * 0.10 && business.permanent_jobs_after >= business.permanent_jobs_before
+    && business.lowest_preserved_wage_ratio >= 1 && business.preserved_employment_terms_no_less_favourable == true))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_ent_acquisition_preservation are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_ent
+    citation: O. Reg. 422/17 s.13(2)17(iv),(vi)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.13(2)17(iv),(vi)
+    verbatim_excerpt: at least 10 per cent of the applicant’s investment in the business described in paragraph
+      4 will be allocated towards improving or expanding the business in Ontario
+- id: oinp_ent_management_residence
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - business.ongoing_active_management
+  - business.equity_fraction
+  - business.lawful_ontario_days_during_establishment
+  - business.establishment_period_days
+  pass_if: business.ongoing_active_management == true && business.equity_fraction >= 1 / 3 && business.lawful_ontario_days_during_establishment
+    >= business.establishment_period_days * 0.75 && business.establishment_period_days > 0
+  fail_if: '!(business.ongoing_active_management == true && business.equity_fraction >= 1 / 3 && business.lawful_ontario_days_during_establishment
+    >= business.establishment_period_days * 0.75 && business.establishment_period_days > 0)'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_ent_management_residence are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_ent
+    citation: O. Reg. 422/17 s.13(2)7,7.1,8
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.13(2)7,7.1,8
+    verbatim_excerpt: lawfully residing in Ontario for a least 75 per cent of the period during which the applicant
+      establishes the business
+- id: oinp_ent_business_operations
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - business.profit_from_goods_or_services
+  - business.primary_income_active
+  - business.primary_purpose_passive_returns
+  - business.legal_regulatory_licensing_compliance
+  - business.permanent_operation
+  - business.ontario_premises_at_all_times
+  - business.prior_oinp_nominee_owner
+  - business.type
+  - candidate.in_gta
+  pass_if: business.profit_from_goods_or_services == true && business.primary_income_active == true && business.primary_purpose_passive_returns
+    == false && business.legal_regulatory_licensing_compliance == true && business.permanent_operation == true &&
+    business.ontario_premises_at_all_times == true && business.prior_oinp_nominee_owner == false && !(business.type
+    in ['tire_recycling', 'scrap_metal_recycling', 'pawnbroker', 'holding_company', 'laundromat', 'automated_car_wash',
+    'payday_loan_or_related', 'sexually_explicit_products_or_services']) && (candidate.in_gta == false || (candidate.in_gta
+    == true && !(business.type in ['existing_ontario_franchise', 'gas_station', 'bed_and_breakfast'])))
+  fail_if: '!(business.profit_from_goods_or_services == true && business.primary_income_active == true && business.primary_purpose_passive_returns
+    == false && business.legal_regulatory_licensing_compliance == true && business.permanent_operation == true &&
+    business.ontario_premises_at_all_times == true && business.prior_oinp_nominee_owner == false && !(business.type
+    in [''tire_recycling'', ''scrap_metal_recycling'', ''pawnbroker'', ''holding_company'', ''laundromat'', ''automated_car_wash'',
+    ''payday_loan_or_related'', ''sexually_explicit_products_or_services'']) && (candidate.in_gta == false || (candidate.in_gta
+    == true && !(business.type in [''existing_ontario_franchise'', ''gas_station'', ''bed_and_breakfast'']))))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_ent_business_operations are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_ent
+    citation: O. Reg. 422/17 s.13(2)9,11-15,18-19
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.13(2)9,11-15,18-19
+    verbatim_excerpt: The business commits to operating as a permanent business in Ontario and not on a seasonal
+      or project-dependent basis.
+- id: oinp_ent_third_party_financing
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - business.receives_third_party_financing
+  conditional_required_fields:
+    when: business.receives_third_party_financing == true
+    fields:
+    - business.financing_provider
+  pass_if: business.receives_third_party_financing == false || (business.receives_third_party_financing == true &&
+    (business.financing_provider in ['schedule_I_bank', 'schedule_II_bank'] || (business.financing_provider == 'institutional_investor'
+    && business.investor_primary_purpose_financial_asset_management == true && business.investor_regulated_by_osc_or_equivalent
+    == true)))
+  fail_if: '!(business.receives_third_party_financing == false || (business.receives_third_party_financing == true
+    && (business.financing_provider in [''schedule_I_bank'', ''schedule_II_bank''] || (business.financing_provider
+    == ''institutional_investor'' && business.investor_primary_purpose_financial_asset_management == true && business.investor_regulated_by_osc_or_equivalent
+    == true))))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_ent_third_party_financing are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_ent
+    citation: O. Reg. 422/17 s.13(2)16
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.13(2)16
+    verbatim_excerpt: if the business receives third-party financing, such financing will be provided by a bank
+      named in Schedule I or Schedule II to the Bank Act (Canada) or an institutional investor.

@@ -55,22 +55,34 @@ rules:
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'entrepreneur' && candidate.incubator_supported == false
+    when: candidate.stream == 'entrepreneur'
     fields:
-    - candidate.operating_business
-    - candidate.net_worth_cad
-    - candidate.in_cmm
-    - candidate.investment_cad
-  pass_if: candidate.stream != 'entrepreneur' || candidate.incubator_supported == true || (((candidate.operating_business
-    == true && candidate.net_worth_cad >= 300000) || (candidate.operating_business == false && candidate.net_worth_cad
-    >= 600000)) && ((candidate.in_cmm == true && candidate.investment_cad >= 300000) || (candidate.in_cmm
-    == false && candidate.investment_cad >= 150000)))
-  fail_if: candidate.stream == 'entrepreneur' && candidate.incubator_supported == false && ((candidate.operating_business
-    == true && candidate.net_worth_cad < 300000) || (candidate.operating_business == false && candidate.net_worth_cad
-    < 600000) || (candidate.in_cmm == true && candidate.investment_cad < 300000) || (candidate.in_cmm
-    == false && candidate.investment_cad < 150000))
-  missing_or_unverified: 'NEEDS_REVIEW: Entrepreneur incubator support, net worth, or investment cannot
-    be verified.'
+    - candidate.entrepreneur_profile
+  pass_if: >-
+    candidate.stream in ['investor', 'self_employed'] ||
+    (candidate.stream == 'entrepreneur' && candidate.entrepreneur_profile in ['demarrage_entreprise_innovante', 'realisation_projet_novateur'] &&
+    candidate.innovation_support_services_obtained == true && candidate.equity_capital_share_percent >= 10) ||
+    (candidate.stream == 'entrepreneur' && candidate.entrepreneur_profile == 'entreprise_en_demarrage' &&
+    candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad >= 600000 &&
+    candidate.equity_capital_share_percent >= 25 &&
+    ((candidate.in_cmm == true && candidate.investment_cad >= 300000) || (candidate.in_cmm == false && candidate.investment_cad >= 150000))) ||
+    (candidate.stream == 'entrepreneur' && candidate.entrepreneur_profile == 'entreprise_demarree' &&
+    candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad >= 300000 &&
+    candidate.equity_capital_share_percent >= 25 && candidate.business_started == true) ||
+    (candidate.stream == 'entrepreneur' && candidate.entrepreneur_profile in ['entreprise_en_voie_acquisition', 'entreprise_acquise'] &&
+    candidate.repreneuriat_support_services_obtained == true &&
+    ((candidate.entrepreneur_profile == 'entreprise_en_voie_acquisition' && candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad >= 600000) ||
+    (candidate.entrepreneur_profile == 'entreprise_acquise' && candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad >= 300000 && candidate.business_control_acquired_and_held == true)))
+  fail_if: >-
+    candidate.stream == 'entrepreneur' && candidate.article58_requested == false &&
+    ((candidate.entrepreneur_profile == 'entreprise_en_demarrage' &&
+    (candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad < 600000 ||
+    candidate.equity_capital_share_percent < 25 ||
+    (candidate.in_cmm == true && candidate.investment_cad < 300000) ||
+    (candidate.in_cmm == false && candidate.investment_cad < 150000))) ||
+    (candidate.entrepreneur_profile == 'entreprise_demarree' &&
+    (candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad < 300000 || candidate.equity_capital_share_percent < 25)))
+  missing_or_unverified: 'NEEDS_REVIEW: Identify the official entrepreneur profile and its conditions. Incubator status is neither a universal bypass nor a universal S1 requirement; an article 58 claim needs individual review.'
   evidence_anchor:
     evidence_unit_id: "d6.b05.html.quebec-entrepreneur-start-conditions.1e92c35cf81f"
     source_id: qc_biz
@@ -125,17 +137,12 @@ rules:
     when: candidate.stream == 'investor'
     fields:
     - candidate.net_worth_cad
+    - candidate.net_worth_donations_received_last_6_months_cad
     - candidate.management_years_past_5
     - candidate.investment_quebec_commitment
-    - candidate.investor_contribution_paid
-  pass_if: candidate.stream != 'investor' || (candidate.net_worth_cad >= 2000000 && candidate.management_years_past_5
-    >= 2 && candidate.investment_quebec_commitment == true && candidate.investor_contribution_paid ==
-    true)
-  fail_if: candidate.stream == 'investor' && (candidate.net_worth_cad < 2000000 || candidate.management_years_past_5
-    < 2 || candidate.investment_quebec_commitment == false || candidate.investor_contribution_paid ==
-    false)
-  missing_or_unverified: 'NEEDS_REVIEW: Investor net worth, management experience, or investment commitment
-    cannot be verified.'
+  pass_if: candidate.stream != 'investor' || (candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad >= 2000000 && candidate.management_years_past_5 >= 2 && candidate.investment_quebec_commitment == true && ((candidate.stage == 'paper-application' && candidate.investor_payment_request_date == null) || candidate.investor_contribution_paid == true))
+  fail_if: candidate.stream == 'investor' && candidate.article58_requested == false && (candidate.net_worth_cad - candidate.net_worth_donations_received_last_6_months_cad < 2000000 || candidate.management_years_past_5 < 2 || candidate.investment_quebec_commitment == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Investor net worth, management and commitment; contribution is not unconditionally due at filing. Request clock is evaluated separately, preserving individual article 58 review.'
   evidence_anchor:
     evidence_unit_id: "d6.b05.html.quebec-investor-conditions.d39eac55f657"
     source_id: qc_biz
@@ -153,8 +160,9 @@ rules:
   severity: ADVISORY
   eval_type: deterministic
   required_fields:
-  - candidate.values_attestation
-  missing_or_unverified: 'NEEDS_REVIEW: Verify whether a post-filing request was issued, the response deadline, and attestations for the applicant, accompanying spouse aged 16 or older, and dependent children aged 18 or older.'
+  - candidate.stage
+  pass_if: quebec_values_current(candidate.values_members, candidate.values_attestation_request_date, candidate.application_examination_date, candidate.stage)
+  missing_or_unverified: 'NEEDS_REVIEW: Verify each subject, medical exemption, Minister receipt within 60 days of request, and proof obtained within two years of examination. No unconditional pre-filing values gate.'
   evidence_anchor:
     evidence_unit_id: "d6.b05.html.quebec-entrepreneur-takeover-conditions.a3964b59c5a9"
     source_id: qc_biz
@@ -167,3 +175,125 @@ rules:
     section: Québec values attestation timing and family ages
     page: ""
     verbatim: "When your file is opened, you will receive a request to obtain an <a href=\"/en/immigration/receiving-attestation-values\" target=\"_blank\">attestation of&nbsp;learning about democratic values and Québec values</a>.</p><p>You must obtain your attestation within a maximum of 60<span class=\"nbsp\">&nbsp;</span>days after receiving this request.</p><p>The members of your family accompanying you will also need to obtain it, namely, your spouse aged 16<span class=\"nbsp\">&nbsp;</span>years or older and your dependent children aged 18<span class=\"nbsp\">&nbsp;</span>years or older.</p><p>You will not receive this request if you and your family have already obtained your attestation.</p></div></div></div>\n\n"
+- id: qc_business_financial_self_sufficiency_scale_matches_household
+  category: funds
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: >-
+    candidate.stream == 'investor' ||
+    (candidate.stream in ['entrepreneur', 'self_employed'] &&
+    candidate.financial_contract_signature_date >= '2026-01-01' && candidate.financial_contract_signature_date <= '2026-12-31' &&
+    candidate.household_children_18_or_over_count >= 0 &&
+    ((candidate.household_adults_count == 1 && candidate.household_children_18_or_over_count == 0 &&
+    ((candidate.household_children_under_18_count == 0 && candidate.financial_self_sufficiency_required_amount_cad == 3957) ||
+    (candidate.household_children_under_18_count == 1 && candidate.financial_self_sufficiency_required_amount_cad == 5318) ||
+    (candidate.household_children_under_18_count == 2 && candidate.financial_self_sufficiency_required_amount_cad == 6002) ||
+    (candidate.household_children_under_18_count >= 3 && candidate.financial_self_sufficiency_required_amount_cad == 6687 + (candidate.household_children_under_18_count - 3) * 685))) ||
+    (candidate.household_adults_count == 2 &&
+    ((candidate.household_children_under_18_count == 0 && candidate.financial_self_sufficiency_required_amount_cad == 5803 + candidate.household_children_18_or_over_count * 1845) ||
+    (candidate.household_children_under_18_count == 1 && candidate.financial_self_sufficiency_required_amount_cad == 6500 + candidate.household_children_18_or_over_count * 1845) ||
+    (candidate.household_children_under_18_count == 2 && candidate.financial_self_sufficiency_required_amount_cad == 7016 + candidate.household_children_18_or_over_count * 1845) ||
+    (candidate.household_children_under_18_count >= 3 && candidate.financial_self_sufficiency_required_amount_cad == 7531 + (candidate.household_children_under_18_count - 3) * 516 + candidate.household_children_18_or_over_count * 1845)))) &&
+    candidate.financial_self_sufficiency_resources_cad >= candidate.financial_self_sufficiency_required_amount_cad)
+  missing_or_unverified: 'NEEDS_REVIEW: Verify applicable 2026 household scale, dependent roles and resources; no Schedule C lookup for investor, no extrapolation to another edition or unsupported household.'
+  evidence_anchor:
+    source_file: 2fc8bddd5d69d2630bb0803dc2a54718fae6c8036a259ace65f308af5aff5500
+    section: Financial self sufficiency contract 2026, p.1
+    verbatim_excerpt: Barèmes en vigueur du 1er janvier au 31 décembre 2026
+- id: qc_inv_investment_120_day_window
+  category: funds
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['entrepreneur', 'self_employed'] || (candidate.stream == 'investor' && ((candidate.stage == 'paper-application' && candidate.investor_payment_request_date == null) || (calendar_days_between(candidate.investor_payment_request_date, candidate.investor_placement_date) >= 0 && calendar_days_between(candidate.investor_payment_request_date, candidate.investor_placement_date) <= 120 && calendar_days_between(candidate.investor_payment_request_date, candidate.investor_contribution_date) >= 0 && calendar_days_between(candidate.investor_payment_request_date, candidate.investor_contribution_date) <= 120)))
+  missing_or_unverified: 'NEEDS_REVIEW: Placement and contribution are due within 120 days of the Minister request, not unconditionally at filing; preserve article 58 review.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.37(5)
+    verbatim_excerpt: au plus tard 120 jours suivant la date de la demande du ministre
+- id: qc_inv_stay_within_24_months_of_permit
+  category: residence
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['entrepreneur', 'self_employed'] || (candidate.stream == 'investor' && (candidate.stage == 'paper-application' || (candidate.applicant_stay_months_in_quebec >= 6 && candidate.additional_stay_months_in_quebec >= 6 && quebec_investor_stays_current(candidate.investor_counted_stay_periods, candidate.work_permit_issued_date))))
+  missing_or_unverified: 'NEEDS_REVIEW: Preserve verified six-month aggregates; verify separate principal/additional periods and permitted person within 24 months of permit. Not a filing-stage payment/stay gate.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.37(7)
+    verbatim_excerpt: une autre période d’au moins 6 mois
+- id: qc_ta_profession_recognition_within_5_years
+  category: education
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['entrepreneur', 'investor'] || (candidate.stream == 'self_employed' && (candidate.profession_authorization_required == false || candidate.profession_authorization_held == true || (candidate.profession_recognition_quebec_obtained == true && candidate.profession_recognition_date >= calendar_months_after(candidate.application_date, 0 - 60) && candidate.profession_recognition_date <= candidate.application_date)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific authorization exemption or recognition within five years; do not invent an authorization requirement.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.48(2)
+    verbatim_excerpt: datée d’au plus 5 ans à la date de présentation de la demande
+- id: qc_ent_profile_stay_in_quebec_2_years
+  category: residence
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['investor', 'self_employed'] || (candidate.stream == 'entrepreneur' && (candidate.entrepreneur_profile in ['demarrage_entreprise_innovante', 'entreprise_en_demarrage', 'entreprise_en_voie_acquisition'] || (candidate.entrepreneur_profile in ['realisation_projet_novateur', 'entreprise_demarree', 'entreprise_acquise'] && candidate.stay_in_quebec_start_date <= calendar_months_after(candidate.application_date, 0 - 24) && candidate.stay_in_quebec_end_date >= candidate.application_date && candidate.work_permit_type_category in ['open_not_under_206', 'linked_to_own_quebec_business', 'study_permit'])))
+  missing_or_unverified: 'NEEDS_REVIEW: Two-year stay and source-listed authorization apply only to S1-existing, S2-existing and S3-acquired; preserve article 58 discretion.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ arts.50.2(1),53(1),57(1)
+    verbatim_excerpt: séjourner au Québec depuis au moins 2 ans à la date de présentation de la demande
+- id: qc_ent_startup_demonstration_window
+  category: business_project
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['investor', 'self_employed'] || (candidate.stream == 'entrepreneur' && (candidate.entrepreneur_profile in ['demarrage_entreprise_innovante', 'realisation_projet_novateur', 'entreprise_demarree', 'entreprise_en_voie_acquisition', 'entreprise_acquise'] || (candidate.entrepreneur_profile == 'entreprise_en_demarrage' && (candidate.stage == 'paper-application' || (candidate.work_permit_issued_date > candidate.avis_intention_selection_date && candidate.business_startup_demonstrated_date >= calendar_months_after(candidate.business_registration_date, 12) && candidate.business_startup_demonstrated_date <= calendar_months_after(candidate.work_permit_issued_date, 24))))))
+  missing_or_unverified: 'NEEDS_REVIEW: RIQ 52(5) demonstration no earlier than registration+1y and no later than permit+2y. Not a later-stage proof demanded at filing; article 58 remains individual.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.52(4)-(5)
+    verbatim_excerpt: au plus tôt un an après l’immatriculation de l’entreprise
+- id: qc_ent_started_effective_start_after_registration
+  category: business_project
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['investor', 'self_employed'] || (candidate.stream == 'entrepreneur' && (candidate.entrepreneur_profile in ['demarrage_entreprise_innovante', 'realisation_projet_novateur', 'entreprise_en_demarrage', 'entreprise_en_voie_acquisition', 'entreprise_acquise'] || (candidate.entrepreneur_profile == 'entreprise_demarree' && candidate.business_effective_start_demonstrated_date >= calendar_months_after(candidate.business_registration_date, 12) && candidate.business_effective_start_demonstrated_date <= assessment_date)))
+  missing_or_unverified: 'NEEDS_REVIEW: RIQ 53(5) uses the demonstration/receipt event, not business-start date; no upper registration limit, no imported art.52(5) startup expenses, no unconditional rejection of article 58 claim.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.53(5)
+    verbatim_excerpt: démontrer le caractère effectif du démarrage de l’entreprise au plus tôt un an après son immatriculation
+- id: qc_ent_acquisition_offer_within_2_years
+  category: business_project
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['investor', 'self_employed'] || (candidate.stream == 'entrepreneur' && (candidate.entrepreneur_profile in ['demarrage_entreprise_innovante', 'realisation_projet_novateur', 'entreprise_en_demarrage', 'entreprise_demarree', 'entreprise_acquise'] || (candidate.entrepreneur_profile == 'entreprise_en_voie_acquisition' && (candidate.stage == 'paper-application' || (candidate.offer_of_acquisition_date >= candidate.application_date && candidate.offer_of_acquisition_date <= calendar_months_after(candidate.application_date, 24))))))
+  missing_or_unverified: 'NEEDS_REVIEW: Acquisition offer by application+2y only for S3-acquiring. Not a universal entrepreneur deadline; article 58 remains individual.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.56(5)
+    verbatim_excerpt: au plus tard 2 ans suivant la date de présentation de la demande
+- id: qc_ta_experience_window_5y
+  category: experience
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.stream]
+  pass_if: candidate.stream in ['entrepreneur', 'investor'] || (candidate.stream == 'self_employed' && dated_periods_within(candidate.counted_self_employed_periods, candidate.application_date, 60))
+  missing_or_unverified: 'NEEDS_REVIEW: Every counted self-employed interval must lie within the application five-year window; crossing intervals require verified clipping, not an invented categorical failure.'
+  evidence_anchor:
+    source_file: 1ca85382c99716fe3eb849073e8c43c52398dd2038a82a0ac0c60e2448cc510d
+    section: RIQ art.48(1)
+    verbatim_excerpt: dans les 5 ans précédant la date de présentation de la demande

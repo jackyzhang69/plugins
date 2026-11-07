@@ -9,7 +9,7 @@ stream_id: "HEALTH_AUTHORITY"
 effective_date: "2026-06-10"
 source_edition: "BC PNP Skills Immigration Program Guide, Section 4.2"
 source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
-decision_scope: "Pre-screen of the eight rules defined below; PASS is not a nomination or complete program-eligibility decision."
+decision_scope: "Pre-screen of the source-scoped rules below; PASS is not a nomination or complete program-eligibility decision. Added employer operation/staff screens cover direct employees, not alternative professional routes."
 
 schema:
   input_type: object
@@ -33,12 +33,16 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-      - employer.health_authority_name
-      - employer.has_health_authority_support
-    pass_if: "employer.has_health_authority_support == true && employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care']"
-    fail_if: "employer.has_health_authority_support == false || !(employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care'])"
-    missing_or_unverified: "NEEDS_REVIEW: Sponsoring public health authority or official support letter cannot be verified."
-    interpretation: "Candidate must be employed by or have the official support of one of B.C.'s 8 designated public health authorities."
+      - candidate.profession
+    conditional_required_fields:
+      when: "candidate.profession != 'midwife'"
+      fields:
+        - employer.health_authority_name
+        - employer.has_health_authority_support
+    pass_if: "(employer.has_health_authority_support == true && employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care']) || (candidate.profession == 'midwife' && employer.has_midwife_practice_group_support == true)"
+    fail_if: "(candidate.profession != 'midwife' && (employer.has_health_authority_support == false || (employer.health_authority_name != None && !(employer.health_authority_name in ['Provincial Health Services Authority', 'First Nations Health Authority', 'Fraser Health', 'Interior Health', 'Island Health', 'Northern Health', 'Vancouver Coastal Health', 'Providence Health Care'])))) || (candidate.profession == 'midwife' && employer.has_midwife_practice_group_support == false && employer.has_health_authority_support == false)"
+    missing_or_unverified: "NEEDS_REVIEW: Source-required authority support or, for a midwife, practice-group support is not verified."
+    interpretation: "June 10, 2026 source: physicians and nurse practitioners may be non-direct employees but require listed health-authority support. Midwives may instead have support from a B.C. midwife practice group; licensure is checked independently. This rule does not grant a complete eligibility determination."
     evidence_anchor:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p25:4_2_health_authority_stream"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
@@ -73,10 +77,11 @@ rules:
     required_fields:
       - assessment_date
       - candidate.licensing_registration_status
-    pass_if: "candidate.licensing_registration_status in ['licensed', 'eligible_to_be_licensed', 'not_regulated']"
-    fail_if: "candidate.licensing_registration_status == 'ineligible'"
-    missing_or_unverified: "NEEDS_REVIEW: Professional licensing or registration status with provincial regulatory body is unverified."
-    interpretation: "Regulated healthcare professionals must hold or be officially eligible for provincial licensure/registration in British Columbia."
+      - candidate.profession
+    pass_if: "(candidate.profession == 'midwife' && candidate.licensing_registration_status == 'licensed') || (candidate.profession in ['physician', 'nurse_practitioner'] && candidate.licensing_registration_status in ['licensed', 'eligible_to_be_licensed']) || (!(candidate.profession in ['midwife', 'physician', 'nurse_practitioner']) && candidate.licensing_registration_status in ['licensed', 'eligible_to_be_licensed', 'not_regulated'])"
+    fail_if: "candidate.licensing_registration_status == 'ineligible' || (candidate.profession == 'midwife' && candidate.licensing_registration_status in ['eligible_to_be_licensed', 'not_regulated']) || (candidate.profession in ['physician', 'nurse_practitioner'] && candidate.licensing_registration_status == 'not_regulated')"
+    missing_or_unverified: "NEEDS_REVIEW: Profession-specific B.C. licensure or eligibility is not verified."
+    interpretation: "June 10, 2026 source only: midwives must be licensed; physicians and nurse practitioners may be licensed or eligible to be licensed. Direct employment is not a requirement of these alternative professional routes. The 2025 historical route is not inferred or reinterpreted."
     evidence_anchor:
       evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p26:social_workers_noc_41300
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
@@ -112,11 +117,15 @@ rules:
       - assessment_date
       - job_offer.regular_base_hourly_cad
       - job_offer.market_range_verified
+      - job_offer.market_range_low_cad
+      - job_offer.market_range_high_cad
+      - job_offer.peer_wage_comparable
+      - job_offer.employer_pay_structure_consistent
     precondition: "current_statutory_minimum_verified(assessment_date) == true"
-    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true"
-    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date)"
-    missing_or_unverified: "NEEDS_REVIEW: Wage falls below prevailing rate or statutory minimum wage cannot be verified for assessment_date."
-    interpretation: "Compensation must satisfy statutory minimums ($18.25/hr) and meet provincial healthcare collective agreement/market ranges."
+    pass_if: "job_offer.regular_base_hourly_cad >= statutory_minimum(assessment_date) && job_offer.market_range_verified == true && job_offer.regular_base_hourly_cad >= job_offer.market_range_low_cad && job_offer.regular_base_hourly_cad <= job_offer.market_range_high_cad && job_offer.peer_wage_comparable == true && job_offer.employer_pay_structure_consistent == true"
+    fail_if: "job_offer.regular_base_hourly_cad < statutory_minimum(assessment_date) || job_offer.regular_base_hourly_cad < job_offer.market_range_low_cad || job_offer.regular_base_hourly_cad > job_offer.market_range_high_cad || job_offer.peer_wage_comparable == false || job_offer.employer_pay_structure_consistent == false"
+    missing_or_unverified: "NEEDS_REVIEW: Regular base pay, dated NOC/location wage range, peer wages or employer pay structure cannot be verified."
+    interpretation: "Regular base pay excludes bonuses, commissions, profit sharing, tips, overtime, housing/room/board and similar allowances. Family income is assessed separately."
     evidence_anchor:
       evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p20:3_9_wages
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
@@ -194,3 +203,132 @@ rules:
       section: "6.11"
       page: "36"
       verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."
+
+  - id: ha_immigration_status
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - candidate.in_canada
+    - candidate.working_without_authorization
+    - candidate.inadmissible
+    - candidate.unresolved_refugee_claim
+    - candidate.under_removal_order
+    - candidate.requires_authorization_to_return
+    pass_if: (candidate.in_canada == false || candidate.status_valid == true || (candidate.status_valid == false && candidate.restoration_filed == true && candidate.restoration_filing_days_after_expiry >= 0 && candidate.restoration_filing_days_after_expiry <= 90)) && candidate.working_without_authorization == false && candidate.inadmissible == false && candidate.unresolved_refugee_claim == false && candidate.under_removal_order == false && candidate.requires_authorization_to_return == false
+    fail_if: (candidate.in_canada == true && candidate.status_valid == false && (candidate.restoration_filed == false || candidate.restoration_filing_days_after_expiry > 90)) || candidate.working_without_authorization == true || candidate.inadmissible == true || candidate.unresolved_refugee_claim == true || candidate.under_removal_order == true || candidate.requires_authorization_to_return == true
+    missing_or_unverified: 'NEEDS_REVIEW: Source-required facts or discretionary assessment are missing or unresolved; no adverse inference from absent evidence.'
+    interpretation: Only the out-of-status exception is satisfied by timely restoration; all independent nomination blockers remain assessed. Days are elapsed calendar days from status expiry to actual filing, not assessment. Missing conditional facts remain unresolved.
+    evidence_anchor:
+      source_file: si_guide_2026_06_10.txt
+      section: '3.3'
+      verbatim_excerpt: restoration of status within the 90-day eligibility period
+  - id: ha_family_income
+    category: compensation
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - family.size
+    - family.size_evidence_complete
+    - family.in_metro_vancouver
+    - job_offer.regular_base_hourly_cad
+    - job_offer.weekly_regular_hours
+    pass_if: (family.in_metro_vancouver == true && family.size == 1 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 31264 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 31264))) || (family.in_metro_vancouver == true && family.size == 2 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 38922 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 38922))) || (family.in_metro_vancouver == true && family.size == 3 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 47851 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 47851))) || (family.in_metro_vancouver == true && family.size == 4 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 58096 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 58096))) || (family.in_metro_vancouver == true && family.size == 5 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 65892 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 65892))) || (family.in_metro_vancouver == true && family.size == 6 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 74315 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 74315))) || (family.in_metro_vancouver == true && family.size >= 7 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 82739 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 82739))) || (family.in_metro_vancouver == false && family.size == 1 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 26057 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 26057))) || (family.in_metro_vancouver == false && family.size == 2 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 32437 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 32437))) || (family.in_metro_vancouver == false && family.size == 3 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 39878 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 39878))) || (family.in_metro_vancouver == false && family.size == 4 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 48418 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 48418))) || (family.in_metro_vancouver == false && family.size == 5 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 54914 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 54914))) || (family.in_metro_vancouver == false && family.size == 6 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 61935 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 61935))) || (family.in_metro_vancouver == false && family.size >= 7 && ((job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) >= 68955 || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) >= 68955)))
+    fail_if: (family.in_metro_vancouver == true && family.size == 1 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 31264 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 31264))) || (family.in_metro_vancouver == true && family.size == 2 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 38922 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 38922))) || (family.in_metro_vancouver == true && family.size == 3 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 47851 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 47851))) || (family.in_metro_vancouver == true && family.size == 4 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 58096 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 58096))) || (family.in_metro_vancouver == true && family.size == 5 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 65892 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 65892))) || (family.in_metro_vancouver == true && family.size == 6 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 74315 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 74315))) || (family.in_metro_vancouver == true && family.size >= 7 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 82739 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 82739))) || (family.in_metro_vancouver == false && family.size == 1 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 26057 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 26057))) || (family.in_metro_vancouver == false && family.size == 2 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 32437 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 32437))) || (family.in_metro_vancouver == false && family.size == 3 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 39878 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 39878))) || (family.in_metro_vancouver == false && family.size == 4 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 48418 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 48418))) || (family.in_metro_vancouver == false && family.size == 5 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 54914 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 54914))) || (family.in_metro_vancouver == false && family.size == 6 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 61935 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 61935))) || (family.in_metro_vancouver == false && family.size >= 7 && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) < 68955 && (family.spouse_income_claimed == false || family.spouse_valid_work_authorization == false || family.spouse_currently_employed_in_bc == false || (family.spouse_valid_work_authorization == true && family.spouse_currently_employed_in_bc == true && (job_offer.regular_base_hourly_cad * min(job_offer.weekly_regular_hours, 40) * 52) + (family.spouse_regular_base_hourly_cad * min(family.spouse_weekly_regular_hours, 40) * 52) < 68955)))
+    missing_or_unverified: 'NEEDS_REVIEW: Source-required facts or discretionary assessment are missing or unresolved; no adverse inference from absent evidence.'
+    interpretation: 2026 source table; 7+ uses the last row. Family size includes applicant, spouse and dependent children whether accompanying or not, excluding Canadian/PR dependants. Separated spouse counts unless an official separation/divorce document establishes the relationship ended. size_evidence_complete verifies these underlying household facts. Only regular base wages count, never bonuses or allowances. Spouse wages count only with current BC employment and valid work authorization. Unknown spouse facts cannot cure a known own-income deficit.
+    evidence_anchor:
+      source_file: si_guide_2026_06_10.txt
+      section: 3.9; 3.10
+      verbatim_excerpt: your annual wage must be calculated using your hourly wage and the number of hours worked in a week to a maximum of 40 hours/week x 52 weeks per year.
+    precondition: family.size_evidence_complete == true && family.size >= 1
+  - id: ha_wage_inflation
+    category: compensation
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - job_offer.income_inflation_assessment
+    - job_offer.income_inflation_evidence_ref
+    pass_if: job_offer.income_inflation_assessment == 'no_reasonable_grounds'
+    fail_if: job_offer.income_inflation_assessment == 'reasonable_grounds_established'
+    missing_or_unverified: 'NEEDS_REVIEW: Source-required facts or discretionary assessment are missing or unresolved; no adverse inference from absent evidence.'
+    interpretation: This is an evidenced human assessment of grounds, not an inference from wage amount or a model probability. Unknown or contested assessment remains review.
+    evidence_anchor:
+      source_file: si_guide_2026_06_10.txt
+      section: '3.10'
+      verbatim_excerpt: Applications will not be approved where the BC PNP has reasonable grounds to believe that your offered wage has been inflated
+  - id: ha_employer_operational_history
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - employer.bc_operating_months
+    - employer.operation_evidence_complete
+    precondition: candidate.profession != None && !(candidate.profession in ['physician', 'nurse_practitioner', 'midwife']) && employer.direct_employee == true && (employer.operation_evidence_complete == true)
+    pass_if: employer.bc_operating_months >= 12
+    fail_if: candidate.profession != None && !(candidate.profession in ['physician', 'nurse_practitioner', 'midwife']) && employer.direct_employee == true && employer.bc_operating_months < 12
+    missing_or_unverified: 'NEEDS_REVIEW: date of actual B.C. operations or supporting operational evidence is incomplete.'
+    interpretation: Incorporation date alone does not prove the duration of B.C. operations. This added employer screen covers direct employees only; it does not determine the alternative professional routes.
+    evidence_anchor:
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis
+      source_file: BC-PNP-Skills-Immigration-Program-Guide.pdf
+      section: '6.7'
+      page: '33'
+      verbatim_excerpt: 'Your employer must have operated in B.C. for at least one year.
+
+        Your employer may be required to provide additional documentation as evidence that the'
+  - id: ha_employer_local_staff
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - employer.in_metro_vancouver_regional_district
+    - employer.eligible_bc_payroll_fte
+    - employer.staff_evidence_complete
+    precondition: candidate.profession != None && !(candidate.profession in ['physician', 'nurse_practitioner', 'midwife']) && employer.direct_employee == true && (employer.staff_evidence_complete == true)
+    pass_if: (employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte >= 5) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte >= 3)
+    fail_if: candidate.profession != None && !(candidate.profession in ['physician', 'nurse_practitioner', 'midwife']) && employer.direct_employee == true && ((employer.in_metro_vancouver_regional_district == true && employer.eligible_bc_payroll_fte < 5) || (employer.in_metro_vancouver_regional_district == false && employer.eligible_bc_payroll_fte < 3))
+    missing_or_unverified: 'NEEDS_REVIEW: work location, payroll roster, hours, permanence, or FTE calculation is incomplete.'
+    interpretation: Count eligible employees working from within B.C. and on employer payroll; exclude independent contractors and employees working outside B.C. The cited section does not impose the citizenship/permanent-residence condition stated in the task summary. This added employer screen covers direct employees only; it does not determine the alternative professional routes.
+    evidence_anchor:
+      evidence_unit_id: bcpnp:bc_pnp_si_program_guide:p33:6_8_minimum_number_of_full_time_employees_in_briti
+      source_file: BC-PNP-Skills-Immigration-Program-Guide.pdf
+      section: '6.8'
+      page: '33'
+      verbatim_excerpt: have at least five indeterminate, full-time employees (or full-time equivalents) who are
+  - id: ha_employer_compliance
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - employer.penalty_or_fine_last_2_years
+    - employer.immigration_penalty_last_5_years
+    - employer.under_regulatory_investigation
+    - employer.related_criminal_charge
+    - employer.noncompliance_identified
+    pass_if: employer.penalty_or_fine_last_2_years == false && employer.immigration_penalty_last_5_years == false && employer.under_regulatory_investigation == false && employer.related_criminal_charge == false && employer.noncompliance_identified == false
+    fail_if: 'false'
+    missing_or_unverified: 'NEEDS_REVIEW: Source-required facts or discretionary assessment are missing or unresolved; no adverse inference from absent evidence.'
+    interpretation: Signals include the supporting employer and directors/owners. Any disclosed signal requires BC PNP discretion, not automatic FAIL; absence of evidence is not a clean compliance finding.
+    evidence_anchor:
+      source_file: si_guide_2026_06_10.txt
+      section: '6.9'
+      verbatim_excerpt: 'Your application may be refused if:'
+  - id: ha_local_recruitment
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - employer.recruitment_ad_locations
+    - employer.recruitment_ad_days
+    - employer.recruitment_ads_source_conditions_met
+    - employer.recruitment_scrutiny_evidence_complete
+    - employer.recruitment_declaration_completed
+    pass_if: employer.recruitment_ad_locations >= 2 && employer.recruitment_ad_days >= 14 && employer.recruitment_ads_source_conditions_met == true && employer.recruitment_scrutiny_evidence_complete == true && employer.recruitment_declaration_completed == true
+    fail_if: 'false'
+    missing_or_unverified: 'NEEDS_REVIEW: Source-required facts or discretionary assessment are missing or unresolved; no adverse inference from absent evidence.'
+    interpretation: 'Ads must use acceptable locations, reasonable NOC-consistent qualifications and source-required employer/duties/wage/location/contact/skills particulars. Inadequate ordinary recruitment is review, not automatic refusal: authorized current full-time workers in the offered occupation and specialized senior candidates may receive discretionary consideration; study-permit workers must have graduated at registration. Targeted senior recruitment and the Employer Declaration remain required. No automatic exemption or final approval is inferred.'
+    evidence_anchor:
+      source_file: si_guide_2026_06_10.txt
+      section: '6.10'
+      verbatim_excerpt: At its sole discretion, the BC PNP may consider the recruitment requirement met

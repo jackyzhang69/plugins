@@ -51,14 +51,19 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
+  - candidate.branch
   - job_offer.weekly_hours
   - job_offer.is_permanent
   - job_offer.from_territorial_employer
-  pass_if: job_offer.weekly_hours >= 30 && job_offer.is_permanent == true && job_offer.from_territorial_employer
-    == true
-  fail_if: job_offer.weekly_hours < 30 || job_offer.is_permanent == false || job_offer.from_territorial_employer
-    == false
-  missing_or_unverified: 'NEEDS_REVIEW: Territorial full-time permanent offer cannot be verified.'
+  pass_if: >-
+    job_offer.is_permanent == true && job_offer.from_territorial_employer == true &&
+    ((candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee', 'nt_francophone_2025'] && job_offer.weekly_hours >= 30) ||
+    (candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee'] && job_offer.weekly_hours >= 35 && job_offer.weekly_hours <= 40 && job_offer.annual_hours >= 1820))
+  fail_if: >-
+    job_offer.is_permanent == false || job_offer.from_territorial_employer == false ||
+    (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee', 'nt_francophone_2025'] && job_offer.weekly_hours < 30) ||
+    (candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee'] && (job_offer.weekly_hours < 35 || job_offer.weekly_hours > 40 || job_offer.annual_hours < 1820))
+  missing_or_unverified: 'NEEDS_REVIEW: Identify branch; NWT minimum 30h is distinct from Yukon 35-40h and annual 1,820h. Generic employer flags do not establish branch eligibility.'
   evidence_anchor:
     evidence_unit_id: "bc.nwt_eds_skilled_worker_ee_application_checklist_2025_11.p002"
     source_id: "territories"
@@ -76,16 +81,27 @@ rules:
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
+  - candidate.branch
   - job_offer.noc_teer
-  - candidate.language_clb_minimum
-  - candidate.language_result_within_2_years
-  pass_if: candidate.language_result_within_2_years == true && ((job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
-    >= 4) || (job_offer.noc_teer in [2, 3] && candidate.language_clb_minimum >= 5) || (job_offer.noc_teer
-    in [0, 1] && candidate.language_clb_minimum >= 6))
-  fail_if: candidate.language_result_within_2_years == false || (job_offer.noc_teer in [4, 5] && candidate.language_clb_minimum
-    < 4) || (job_offer.noc_teer in [2, 3] && candidate.language_clb_minimum < 5) || (job_offer.noc_teer
-    in [0, 1] && candidate.language_clb_minimum < 6)
-  missing_or_unverified: 'NEEDS_REVIEW: Language test or TEER cannot be verified.'
+  conditional_required_fields:
+    when: candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee']
+    fields:
+    - candidate.language.listening
+    - candidate.language.speaking
+    - candidate.language.reading
+    - candidate.language.writing
+  pass_if: >-
+    candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] &&
+    ((candidate.branch == 'nt_els' && job_offer.noc_teer in [4, 5] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) >= 4) ||
+    (candidate.branch == 'nt_skilled' && job_offer.noc_teer in [0, 1] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) >= 6) ||
+    (candidate.branch == 'nt_ee' && job_offer.noc_teer in [0, 1] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) >= 7) ||
+    (candidate.branch in ['nt_skilled', 'nt_ee'] && job_offer.noc_teer in [2, 3] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) >= 5))
+  fail_if: >-
+    (candidate.branch == 'nt_els' && job_offer.noc_teer in [4, 5] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) < 4) ||
+    (candidate.branch == 'nt_skilled' && job_offer.noc_teer in [0, 1] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) < 6) ||
+    (candidate.branch == 'nt_ee' && job_offer.noc_teer in [0, 1] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) < 7) ||
+    (candidate.branch in ['nt_skilled', 'nt_ee'] && job_offer.noc_teer in [2, 3] && min(candidate.language.listening, candidate.language.speaking, candidate.language.reading, candidate.language.writing) < 5)
+  missing_or_unverified: 'NEEDS_REVIEW: All four abilities and exact NWT category required. Yukon Skilled governing-edition conflict remains unresolved; no unconditional Yukon CLB6 or CLB7 determination.'
   evidence_anchor:
     evidence_unit_id: "bc.nwt_eds_skilled_worker_ee_application_checklist_2025_11.p002"
     source_id: "territories"
@@ -119,3 +135,192 @@ rules:
     section: Settlement Intent
     page: 1
     verbatim: intend to reside in Yukon or the Northwest Territories
+- id: nwt_category_teer
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.branch, job_offer.noc_teer]
+  pass_if: candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] || (candidate.branch == 'nt_els' && job_offer.noc_teer in [4, 5]) || (candidate.branch in ['nt_skilled', 'nt_ee'] && job_offer.noc_teer in [0, 1, 2, 3])
+  fail_if: (candidate.branch == 'nt_els' && job_offer.noc_teer in [0, 1, 2, 3]) || (candidate.branch in ['nt_skilled', 'nt_ee'] && job_offer.noc_teer in [4, 5])
+  missing_or_unverified: 'NEEDS_REVIEW: Select NWT ELS, Skilled or Express Entry; this rule makes no Yukon branch decision.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: 2026-03-09 guidelines pp.9,18
+    verbatim_excerpt: TEER 0, 1, 2, and 3
+- id: nwt_language_proof
+  category: language
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] &&
+    candidate.language.test_type in ['IELTS-General-Training', 'CELPIP-General', 'PTE-Core', 'TEF-Canada', 'TCF-Canada'] &&
+    candidate.language.listening_session != '' &&
+    candidate.language.listening_session == candidate.language.speaking_session &&
+    candidate.language.listening_session == candidate.language.reading_session &&
+    candidate.language.listening_session == candidate.language.writing_session &&
+    candidate.language.result_date >= calendar_months_after(assessment_date, 0 - 24) && candidate.language.result_date <= assessment_date)
+  missing_or_unverified: 'NEEDS_REVIEW: One accepted test session across all four abilities; validity two years from results, no combined sessions.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.16-17,24-25
+    verbatim_excerpt: The minimum language standards must all be achieved in one testing session.
+- id: nwt_employer_and_job
+  category: employer
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] &&
+    employer.jurisdiction == 'NT' && employer.registered == true && employer.operates_year_round == true &&
+    calendar_months_after(employer.operating_since, 12) <= candidate.application_date &&
+    employer.wscc_good_standing == true && employer.employment_standards_or_collective_compliant == true &&
+    employer.identifier != '' && job_offer.employer_identifier == employer.identifier &&
+    job_offer.work_jurisdiction == 'NT' && job_offer.non_seasonal == true &&
+    job_offer.duties_match_noc == true && job_offer.contract_signed == true &&
+    job_offer.hourly_wage >= job_offer.applicable_job_bank_median && job_offer.hourly_wage >= job_offer.nwt_minimum_wage &&
+    candidate.occupational_certification_met == true)
+  missing_or_unverified: 'NEEDS_REVIEW: NWT employer/location, one-year operation, WSCC, compliance, genuine aligned job, applicable wage and certification require evidence. NWT/Yukon/Alberta/Canada median fallback must be source-verified, not guessed.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.9-15,18-24
+    verbatim_excerpt: Work must take place within the NWT.
+- id: nwt_recruitment
+  category: employer
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] &&
+    (employer.positive_lmia == true ||
+    (employer.local_advertisement == true && employer.national_advertisement == true &&
+    employer.advertising_results_signed == true &&
+    (calendar_days_between(employer.local_ad_start, employer.local_ad_end) >= 30 || employer.local_ad_consecutive_weeks >= 4) &&
+    (calendar_days_between(employer.national_ad_start, employer.national_ad_end) >= 30 || employer.national_ad_consecutive_weeks >= 4) &&
+    employer.local_ad_start >= calendar_months_after(candidate.application_date, 0 - 18) &&
+    employer.national_ad_start >= calendar_months_after(candidate.application_date, 0 - 18) &&
+    employer.local_ad_end <= candidate.application_date && employer.national_ad_end <= candidate.application_date)))
+  missing_or_unverified: 'NEEDS_REVIEW: Positive LMIA or source-listed local and national advertising, duration, recency and signed results; no Yukon recruitment inference.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.11-12,20-21
+    verbatim_excerpt: a minimum of 30 consecutive days (or 4 consecutive weeks)
+- id: nwt_worker_status
+  category: status
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] && candidate.refugee_claimant == false &&
+    (candidate.in_canada == false || (candidate.in_canada == true &&
+    (candidate.work_permit_expiry_date >= assessment_date || candidate.maintained_status_proven == true) &&
+    (candidate.work_permit_closed == false || candidate.work_permit_conditions_met == true))))
+  missing_or_unverified: 'NEEDS_REVIEW: In-Canada work authorization or proven maintained status, closed permit conditions and claimant exclusion; no inferred status from a job offer.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.9,14,18,23
+    verbatim_excerpt: they must provide proof that they are on “maintained status.”
+- id: nwt_worker_experience
+  category: experience
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['nt_skilled', 'nt_ee'] &&
+    candidate.same_or_similar_occupation == true && candidate.experience_teer_equal_or_higher == true &&
+    candidate.full_time_work_months - candidate.extended_leave_months >= 12 &&
+    dated_periods_within(candidate.counted_work_periods, candidate.application_date, 120)) ||
+    (candidate.branch == 'nt_els' && candidate.same_nominating_position == true &&
+    candidate.experience_immediately_precedes_application == true &&
+    (candidate.extended_leave_months == 0 || (candidate.extended_leave_type in ['medical', 'parental', 'maternity', 'extended_vacation'] &&
+    candidate.extended_leave_documented == true && candidate.return_to_work_date != null)) &&
+    (candidate.nominating_employer_full_time_months - candidate.extended_leave_months >= 12 ||
+    (candidate.abuse_transfer_approved_by_ntnp == true && candidate.abuse_transfer_evidence == true &&
+    candidate.nominating_employer_full_time_months + candidate.approved_transfer_months - candidate.extended_leave_months >= 12)))
+  missing_or_unverified: 'NEEDS_REVIEW: Skilled/EE one year same/similar occupation within ten years; ELS twelve full-time months immediately before filing. Exclude extended leave time without resetting approved accrued work; abuse transfer requires NTNP evidence and approval, not merely a claim.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.15,23-24
+    verbatim_excerpt: get approval from the NTNP to transfer the experience prior to applying
+- id: nwt_express_entry_pool
+  category: pathway
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: candidate.branch in ['nt_els', 'nt_skilled', 'yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] || (candidate.branch == 'nt_ee' && candidate.ee_acceptance_letter == true && candidate.ee_profile_number != '' && candidate.ee_job_seeker_validation_code != '' && candidate.ee_pool_status == 'valid')
+  missing_or_unverified: 'NEEDS_REVIEW: NWT EE requires IRCC acceptance letter/profile, valid job seeker code and maintained pool status, in addition to Skilled criteria.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: p.17
+    verbatim_excerpt: Maintain valid status in IRCC’s Express Entry pool throughout the application process
+- id: yukon_ordinary_intake_cohort
+  category: pathway
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: >-
+    candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee', 'nt_francophone_2025'] ||
+    (candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee'] && candidate.yukon_intake_route == 'ordinary' &&
+    ((candidate.stage == 'eoi' && ((candidate.eoi_submission_date >= '2026-01-19' && candidate.eoi_submission_date <= '2026-01-30') ||
+    (candidate.eoi_submission_date >= '2026-07-06' && candidate.eoi_submission_date <= '2026-07-17')) &&
+    candidate.eoi_submission_within_published_yukon_time == true) ||
+    (candidate.stage == 'invited-application' && candidate.invitation_received == true &&
+    candidate.application_date >= candidate.invitation_date && candidate.application_date <= candidate.invitation_application_deadline) ||
+    (candidate.stage == 'nomination-pr' && candidate.nomination_issued == true &&
+    candidate.application_date <= candidate.invitation_application_deadline)))
+  missing_or_unverified: 'NEEDS_REVIEW: Ordinary 2026 EOI windows are Jan19-30 and Jul6-17 (Yukon local times). Timely invited application/nomination is not rejected because EOI is now closed. TML is separate and unresolved; do not infer its intake.'
+  evidence_anchor:
+    source_file: yukon-ynp-operational-guidance-2026-07-03.pdf
+    section: EOI intakes and application pp.8-12
+    verbatim_excerpt: there will be two EOI intakes in 2026
+- id: nwt_francophone_2025_dual_language
+  category: language
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  conditional_required_fields:
+    when: candidate.branch == 'nt_francophone_2025'
+    fields:
+    - candidate.french.listening
+    - candidate.french.speaking
+    - candidate.french.reading
+    - candidate.french.writing
+    - candidate.english.listening
+    - candidate.english.speaking
+    - candidate.english.reading
+    - candidate.english.writing
+  pass_if: >-
+    candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee', 'yt_critical', 'yt_skilled', 'yt_ee'] ||
+    (candidate.branch == 'nt_francophone_2025' && candidate.source_cohort == '2025-closed-historical' &&
+    candidate.historical_assessment_date >= '2025-01-01' && candidate.historical_assessment_date <= '2025-12-23' &&
+    min(candidate.french.listening, candidate.french.speaking, candidate.french.reading, candidate.french.writing) >= 5 &&
+    min(candidate.english.listening, candidate.english.speaking, candidate.english.reading, candidate.english.writing) >= 4 &&
+    candidate.french.test_type in ['TEF-Canada', 'TCF-Canada'] &&
+    candidate.english.test_type in ['IELTS-General-Training', 'CELPIP-General', 'PTE-Core'] &&
+    candidate.french.listening_session != '' && candidate.english.listening_session != '' &&
+    candidate.french.listening_session == candidate.french.speaking_session && candidate.french.listening_session == candidate.french.reading_session && candidate.french.listening_session == candidate.french.writing_session &&
+    candidate.english.listening_session == candidate.english.speaking_session && candidate.english.listening_session == candidate.english.reading_session && candidate.english.listening_session == candidate.english.writing_session &&
+    candidate.french.result_date >= calendar_months_after(candidate.historical_assessment_date, 0 - 24) && candidate.french.result_date <= candidate.historical_assessment_date &&
+    candidate.english.result_date >= calendar_months_after(candidate.historical_assessment_date, 0 - 24) && candidate.english.result_date <= candidate.historical_assessment_date)
+  fail_if: candidate.branch == 'nt_francophone_2025' && candidate.source_cohort == '2025-closed-historical' && (min(candidate.french.listening, candidate.french.speaking, candidate.french.reading, candidate.french.writing) < 5 || min(candidate.english.listening, candidate.english.speaking, candidate.english.reading, candidate.english.writing) < 4)
+  missing_or_unverified: 'NEEDS_REVIEW: Historical 2025 French>=5 AND English>=4 in each ability, one accepted session per language. Scalar CLB4 is insufficient. Historical condition comparison only; the 2025 intake is closed and no current reopening is inferred.'
+  evidence_anchor:
+    source_file: nwt-francophone-guidelines-2025-11.pdf
+    section: pp.7-8; captured Francophone page confirms 2025 intake closed
+    verbatim_excerpt: one testing session, per language
+- id: nwt_education_credential
+  category: education
+  severity: ADVISORY
+  eval_type: deterministic
+  required_fields: [candidate.branch]
+  pass_if: candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] || (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] && (candidate.education_outside_canada == false || (candidate.education_outside_canada == true && candidate.eca_provider in ['WES', 'CES', 'ICAS', 'MCC', 'PEBC', 'ICES', 'IQAS'] && candidate.eca_issue_date <= assessment_date && candidate.eca_issue_date >= calendar_months_after(assessment_date, 0 - 60))))
+  missing_or_unverified: 'NEEDS_REVIEW: Foreign education needs an IRCC-designated ECA valid for five years; local occupational certification remains independently required.'
+  evidence_anchor:
+    source_file: nwt-employer-driven-guidelines-2026.pdf
+    section: pp.15-16,24
+    verbatim_excerpt: The validity of an ECA is five years from the date of issuance.

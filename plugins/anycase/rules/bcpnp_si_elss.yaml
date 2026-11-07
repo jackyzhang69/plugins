@@ -156,16 +156,16 @@ rules:
       - assessment_date
       - employer.bc_operating_months
       - employer.operation_evidence_complete
-    pass_if: "employer.bc_operating_months >= 12.0 && employer.operation_evidence_complete == true"
-    fail_if: "employer.bc_operating_months < 12.0"
+    pass_if: "employer.bc_operating_months >= 24.0 && employer.operation_evidence_complete == true"
+    fail_if: "employer.bc_operating_months < 24.0"
     missing_or_unverified: "NEEDS_REVIEW: Operational history in British Columbia cannot be verified."
-    interpretation: "Employer must have been actively operating in B.C. for at least one full year."
+    interpretation: "The September 2024 ELSS employer threshold is two full years (24 months), not the one-year threshold applicable to other streams. This change applies to the default/registration threshold; the frozen invitation-only application policy does not contain this criterion."
     evidence_anchor:
       evidence_unit_id: "bcpnp:bc_pnp_si_program_guide:p33:6_7_minimum_number_of_years_in_operation_in_britis"
       source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
       section: "6.7"
       page: "33"
-      verbatim_excerpt: "Your employer must have operated in B.C. for at least one year"
+      verbatim_excerpt: "Your employer must have operated in B.C. for at least one year (two years if you are applying under the Entry Level and Semi-Skilled (ELSS) stream)."
 
   - id: elss_employer_local_staff
     category: employer
@@ -230,3 +230,28 @@ rules:
       section: "6.11"
       page: "36"
       verbatim_excerpt: "Your employer must demonstrate that there is a genuine need for the position."
+
+  - id: elss_continuity_income_secondary
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    - assessment_stage
+    - candidate.working_fulltime_eligible_same_employer
+    - candidate.lost_work_authorization_at_invitation
+    - candidate.legal_status_in_canada
+    - candidate.left_canada
+    - candidate.qualifying_months_at_registration
+    - candidate.valid_offer_throughout
+    - candidate.employer_ongoing_recruitment
+    - candidate.minimum_income_history_months
+    - candidate.secondary_education_completed
+    pass_if: (candidate.working_fulltime_eligible_same_employer == true || (assessment_stage == "application" && candidate.lost_work_authorization_at_invitation == true && (candidate.legal_status_in_canada == true || candidate.left_canada == true) && candidate.qualifying_months_at_registration >= 9 && candidate.valid_offer_throughout == true && candidate.employer_ongoing_recruitment == true)) && candidate.minimum_income_history_months >= 9 && candidate.secondary_education_completed == true
+    fail_if: '!((candidate.working_fulltime_eligible_same_employer == true || (assessment_stage == "application" && candidate.lost_work_authorization_at_invitation == true && (candidate.legal_status_in_canada == true || candidate.left_canada == true) && candidate.qualifying_months_at_registration >= 9 && candidate.valid_offer_throughout == true && candidate.employer_ongoing_recruitment == true)) && candidate.minimum_income_history_months >= 9 && candidate.secondary_education_completed == true)'
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: September 2024 cohort only. Independent income history covering the full nine months before registration and application, and completed secondary education. Maintain full-time eligible same-employer work; at application, preserve the documented loss-of-work-authorization-at-invitation exception with legal status or departure, nine qualified months already met at registration, continuously valid offer and employer ongoing recruitment. This local pre-screen does not claim complete case/portal effects or expand the invitation-only immutable application policy.
+    evidence_anchor:
+      source_file: si_guide_2024_09_04.txt
+      section: 4.5(d)-(f)
+      verbatim_excerpt: who maintain legal status in Canada (e.g. as a visitor) or leave Canada

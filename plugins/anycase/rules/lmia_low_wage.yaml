@@ -39,6 +39,8 @@ schema:
       noc_teer: "integer 0-5"
       title: string
       term_days: "positive integer; employment contract duration in days"
+      guaranteed_weekly_hours: "non-negative decimal; hours guaranteed by the employment offer"
+      guaranteed_weekly_hours_verified: "boolean; true only after verifying the guaranteed hours against the offer"
       regular_hourly_wage_cad: "non-negative decimal"
       prevailing_wage_cad: "non-negative decimal"
       work_location:
@@ -93,6 +95,22 @@ evaluation:
     "YT": 45.60
 
 rules:
+  - id: lmia_lw_full_time_30_hours
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.guaranteed_weekly_hours
+      - job_offer.guaranteed_weekly_hours_verified
+    precondition: "job_offer.guaranteed_weekly_hours_verified == true"
+    pass_if: "job_offer.guaranteed_weekly_hours_verified == true && job_offer.guaranteed_weekly_hours >= 30"
+    fail_if: "job_offer.guaranteed_weekly_hours_verified == true && job_offer.guaranteed_weekly_hours >= 0 && job_offer.guaranteed_weekly_hours < 30"
+    missing_or_unverified: "NEEDS_REVIEW: Guaranteed weekly hours must be verified against the employment offer; missing or unverified hours cannot determine this criterion."
+    interpretation: "Only the verified full-time minimum is assessed. Passing this criterion does not clear other requirements or constitute an LMIA decision."
+    evidence_anchor:
+      source_file: "8b350911eaf3e0905a19a29de66412d95ca5c5fbb7583d53b0f13d84521922b6"
+      section: "Program requirements, full-time position"
+      verbatim_excerpt: "a full-time position, which means that it has to be for a minimum of 30 hours of work per week."
   - id: lmia_employer_ineligibility
     category: employer
     severity: CRITICAL_REDLINE

@@ -153,18 +153,24 @@
   "category": "education"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.stream"
-  - "education.degree_type"
-  - "education.academic_years_completed"
-  "pass_if": >-
-    (candidate.stream == 'masters_graduate' && education.degree_type == 'masters' && education.academic_years_completed
+  required_fields:
+  - candidate.stream
+  - education.degree_type
+  - education.academic_years_completed
+  conditional_required_fields:
+    when: candidate.stream == 'phd_graduate'
+    fields:
+    - education.degree_requirements_completed
+    - education.institution_is_eligible_ontario_public_university
+    - education.phd_years_lawfully_residing_studying_in_ontario
+  pass_if: (candidate.stream == 'masters_graduate' && education.degree_type == 'masters' && education.academic_years_completed
     >= 1) || (candidate.stream == 'phd_graduate' && education.degree_type == 'phd' && education.academic_years_completed
-    >= 2)
-  "fail_if": >-
-    (candidate.stream == 'masters_graduate' && (education.degree_type != 'masters' || education.academic_years_completed
-    < 1)) || (candidate.stream == 'phd_graduate' && (education.degree_type != 'phd' || education.academic_years_completed
-    < 2))
+    >= 2 && education.degree_requirements_completed == true && education.institution_is_eligible_ontario_public_university
+    == true && education.phd_years_lawfully_residing_studying_in_ontario >= 2)
+  fail_if: '!((candidate.stream == ''masters_graduate'' && education.degree_type == ''masters'' && education.academic_years_completed
+    >= 1) || (candidate.stream == ''phd_graduate'' && education.degree_type == ''phd'' && education.academic_years_completed
+    >= 2 && education.degree_requirements_completed == true && education.institution_is_eligible_ontario_public_university
+    == true && education.phd_years_lawfully_residing_studying_in_ontario >= 2))'
   "missing_or_unverified": "NEEDS_REVIEW: Degree type or full-time academic duration cannot be established."
   "evidence_anchor":
     "source_id": "o_reg_422_17_s12"
@@ -193,12 +199,11 @@
   "category": "candidate"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.ontario_physical_residency_months_last_2_years"
-  "pass_if": "candidate.ontario_physical_residency_months_last_2_years >= 12"
-  "fail_if": "candidate.ontario_physical_residency_months_last_2_years < 12"
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Physical residency in Ontario (cumulative 12 months in past 2 years) unverified.
+  required_fields:
+  - candidate.ontario_lawful_residency_months_last_2_years
+  pass_if: candidate.ontario_lawful_residency_months_last_2_years >= 12
+  fail_if: '!(candidate.ontario_lawful_residency_months_last_2_years >= 12)'
+  "missing_or_unverified": "NEEDS_REVIEW: Lawful Ontario residence in the application lookback is unverified."
   "evidence_anchor":
     "source_id": "o_reg_422_17_s12"
     "citation": "O. Reg. 422/17 s. 12(1)(d), s. 13(1)(d)"
@@ -230,20 +235,39 @@
   "category": "candidate"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.family_size"
-  "pass_if": >-
-    candidate.has_qualifying_ontario_employment_income == true || (funds.evidence_verified == true &&
-    ((candidate.family_size == 1 && funds.available_cad >= 15263) || (candidate.family_size == 2 && funds.available_cad
-    >= 19001) || (candidate.family_size == 3 && funds.available_cad >= 23360) || (candidate.family_size
-    == 4 && funds.available_cad >= 28362) || (candidate.family_size >= 5 && funds.available_cad >= 32168)))
-  "fail_if": >-
-    candidate.has_qualifying_ontario_employment_income == false && funds.evidence_verified == true &&
-    ((candidate.family_size == 1 && funds.available_cad < 15263) || (candidate.family_size == 2 && funds.available_cad
-    < 19001) || (candidate.family_size == 3 && funds.available_cad < 23360) || (candidate.family_size
-    == 4 && funds.available_cad < 28362) || (candidate.family_size >= 5 && funds.available_cad < 32168))
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Proof of settlement funds or qualifying Ontario employment income is missing or unverified.
+  required_fields:
+  - funds.schedule_edition
+  - funds.evidence_verified
+  - funds.available_cad
+  - funds.ongoing_ontario_annual_earnings_cad
+  - funds.ontario_job_offer_annual_earnings_cad
+  - candidate.family_size
+  pass_if: funds.schedule_edition == '2025-07-07' && funds.evidence_verified == true && funds.available_cad >= 0 &&
+    funds.ongoing_ontario_annual_earnings_cad >= 0 && funds.ontario_job_offer_annual_earnings_cad >= 0 && candidate.family_size
+    >= 1 && ((candidate.family_size == 1 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 15263) || (candidate.family_size == 2 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 19001) || (candidate.family_size == 3 && (funds.available_cad
+    + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad) >= 23360) || (candidate.family_size
+    == 4 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 28362) || (candidate.family_size == 5 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 32168) || (candidate.family_size == 6 && (funds.available_cad
+    + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad) >= 36280) || (candidate.family_size
+    == 7 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 40392) || (candidate.family_size > 7 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 40392 + (candidate.family_size - 7) * 4112))
+  fail_if: funds.schedule_edition == '2025-07-07' && funds.evidence_verified == true && candidate.family_size >= 1
+    && !((candidate.family_size == 1 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 15263) || (candidate.family_size == 2 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 19001) || (candidate.family_size == 3 && (funds.available_cad
+    + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad) >= 23360) || (candidate.family_size
+    == 4 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 28362) || (candidate.family_size == 5 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 32168) || (candidate.family_size == 6 && (funds.available_cad
+    + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad) >= 36280) || (candidate.family_size
+    == 7 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad + funds.ontario_job_offer_annual_earnings_cad)
+    >= 40392) || (candidate.family_size > 7 && (funds.available_cad + funds.ongoing_ontario_annual_earnings_cad +
+    funds.ontario_job_offer_annual_earnings_cad) >= 40392 + (candidate.family_size - 7) * 4112))
+  "missing_or_unverified": "NEEDS_REVIEW: Dated funds schedule, family composition, or evidence for resource amounts is unverified."
   "evidence_anchor":
     "source_id": "ircc_funds"
     "citation": "O. Reg. 422/17 s. 12(1)(f), s. 13(1)(e); IRCC LICO schedule"
@@ -269,3 +293,50 @@
     "source_file": "src04.html"
     "section": "Intention to reside"
     "verbatim_excerpt": "You must intend to live"
+- id: oinp_pg_masters_enrolment
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'masters_graduate'
+    fields:
+    - education.currently_enrolled
+  pass_if: candidate.stream == 'phd_graduate' || (candidate.stream == 'masters_graduate' && (education.currently_enrolled
+    == false || (education.currently_enrolled == true && (education.enrolment_for_ontario_licensing == true || candidate.working_full_time_in_ontario
+    == true))))
+  fail_if: '!(candidate.stream == ''phd_graduate'' || (candidate.stream == ''masters_graduate'' && (education.currently_enrolled
+    == false || (education.currently_enrolled == true && (education.enrolment_for_ontario_licensing == true || candidate.working_full_time_in_ontario
+    == true)))))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_pg_masters_enrolment are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_masters_guide
+    citation: O. Reg. 422/17 s.8(2)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.8(2)
+    verbatim_excerpt: The applicant must not be currently enrolled in studies, unless it is for the purpose of meeting
+      the requirements to be licensed in a regulated occupation in Ontario, or unless the applicant is working on
+      a full-time basis in Ontario.
+- id: oinp_pg_masters_scholarship
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'masters_graduate'
+    fields:
+    - education.funding_requires_home_return
+  pass_if: candidate.stream == 'phd_graduate' || (candidate.stream == 'masters_graduate' && (education.funding_requires_home_return
+    == false || (education.funding_requires_home_return == true && education.home_return_obligation_fulfilled == true)))
+  fail_if: '!(candidate.stream == ''phd_graduate'' || (candidate.stream == ''masters_graduate'' && (education.funding_requires_home_return
+    == false || (education.funding_requires_home_return == true && education.home_return_obligation_fulfilled == true))))'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for oinp_pg_masters_scholarship are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_masters_guide
+    citation: O. Reg. 422/17 Masters guide, Education
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Masters guide, Education
+    verbatim_excerpt: You don’t qualify if you have received a bursary, grant or scholarship that requires you to
+      return to your home country after you earn your masters degree.

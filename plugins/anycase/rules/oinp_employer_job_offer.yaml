@@ -10,13 +10,13 @@
 "stream_id": "EMPLOYER_JOB_OFFER"
 "effective_date": "2023-11-16"
 "source_edition": >-
-  Ontario Immigration Act, 2015, S.O. 2015, c. 8; Ontario Regulation 422/17 (General) ss. 4–11; OINP Employer
-  Job Offer Program Guides (2024/2026)
+  Historical O. Reg. 422/17 consolidation effective 2026-01-01 through 2026-06-24,
+  ss. 1, 3–7, 15–16; archived Employer Job Offer stream guides. Not a current WPS policy.
 "source_url": "https://www.ontario.ca/page/oinp-employer-job-offer-streams"
 "decision_scope": >-
-  Deterministic prescreen of statutory employer eligibility, job offer terms and wage thresholds, and
-  applicant statutory qualifications for the three OINP Employer Job Offer streams (Foreign Worker, International
-  Student, and In-Demand Skills). Points are handled by AnyScore's EOI scoring model.
+  Local historical EJO criterion checks only. Intention/ties remain human-reviewed;
+  missing source facts remain NEEDS_REVIEW. This file does not implement current WPS,
+  update fixed published eligibility pins, or establish complete eligibility.
 "sources":
 - "id": "oia_2015"
   "title": "Ontario Immigration Act, 2015, S.O. 2015, c. 8"
@@ -47,54 +47,90 @@
   "citation": >-
     OINP operational guidelines — eligible in-demand NOC list, 9-month Ontario experience, CLB 4
   "legal_authority": "Official program delivery instructions"
-"schema":
-  "input_type": "object"
-  "required_top_level":
-  - "assessment_date"
-  - "candidate"
-  - "job_offer"
-  - "employer"
-  "types":
-    "assessment_date": "ISO-8601 date; application assessment date"
-    "candidate":
-      "stream": "foreign_worker | international_student | in_demand_skills"
-      "qualifying_experience_months": "non-negative number; cumulative paid FTE experience"
-      "experience_in_last_5_years": "boolean; must be within 5 years prior to application for FW"
-      "experience_in_same_noc": "boolean; experience must match the NOC code of the job offer"
-      "completed_eligible_canadian_credential": "boolean; eligible >= 2-yr degree/diploma or 1-yr post-grad\
-        \ certificate"
-      "months_since_graduation": "number; calendar months since degree/diploma was granted (max 24 for\
-        \ IS)"
-      "language_clb_minimum": >-
-        integer; minimum CLB in all four abilities (listening, reading, writing, speaking)
-      "holds_mandatory_licence": "boolean; required if occupation is regulated in Ontario"
-      "intention_to_reside_in_ontario": "boolean; demonstrated intention to settle permanently in Ontario"
-      "equity_percentage": >-
-        decimal in [0, 1]; combined direct/indirect equity of applicant and family in employer
-      "legal_status_in_canada": "boolean; valid work/study permit or visitor record if residing in Canada"
-    "job_offer":
-      "noc_2021_code": "five-digit string"
-      "noc_teer": "integer 0-5; verified against NOC 2021"
-      "is_indeterminate": "boolean; permanent position with no pre-determined end date"
-      "weekly_hours": "number; paid hours per week (minimum 30 for full-time)"
-      "hourly_wage": "non-negative decimal; basic hourly wage excluding bonuses, overtime, or tips"
-      "prevailing_median_wage": "non-negative decimal; prevailing median wage from Job Bank for NOC &\
-        \ region"
-      "prevailing_low_wage": "non-negative decimal; prevailing low/entry wage from Job Bank for NOC &\
-        \ region"
-      "is_regulated_occupation": "boolean; whether the occupation requires professional licensing in Ontario"
-      "is_eligible_in_demand_noc": "boolean; whether NOC is on the published OINP In-Demand Skills list"
-      "work_location_in_ontario": "boolean; work must occur primarily within Ontario"
-    "employer":
-      "years_operating_in_ontario": "non-negative number; active business operation in Ontario"
-      "in_gta": >-
-        boolean; true if located in City of Toronto, Durham, Halton, York, or Peel regions
-      "annual_revenue_cad": >-
-        non-negative decimal; gross annual revenue for most recently completed fiscal year
-      "full_time_pr_citizen_employees": "integer; number of permanent full-time Canadian citizens or PRs\
-        \ on payroll"
-      "has_business_premises_in_ontario": "boolean; physical business premises located in Ontario"
-      "no_employment_standards_orders": "boolean; no outstanding orders under ESA 2000 or OHSA"
+schema:
+  input_type: object
+  required_top_level:
+  - assessment_date
+  - candidate
+  - job_offer
+  - employer
+  types:
+    assessment_date: ISO-8601 date; application assessment date
+    candidate:
+      stream: foreign_worker | international_student | in_demand_skills
+      qualifying_experience_months: non-negative number; cumulative paid FTE experience
+      experience_in_last_5_years: boolean; must be within 5 years prior to application for FW
+      experience_in_same_noc: boolean; experience must match the NOC code of the job offer
+      experience_work_pattern: full_time | concurrent_part_time | single_part_time; paid work counted under s. 16
+      experience_weekly_paid_hours: number; combined concurrent hours, or hours in the single position
+      experience_paid_months: number; actual paid duration in the same NOC within the five-year window, not an eligibility Boolean
+      months_since_graduation: number; calendar months since degree/diploma was granted (max 24 for IS)
+      holds_mandatory_licence: boolean; required if occupation is regulated in Ontario
+      equity_percentage: decimal in [0, 1]; combined direct/indirect equity of applicant and family in employer
+      applies_with_job_offer: boolean; false exempts offer/employer requirements only for the historical foreign_worker
+        self-employed-physician route
+      applying_from_inside_canada: boolean; filing location at applicant application
+      temporary_resident_status: visitor_record | study_permit | work_permit | maintained_status | none | expired_no_maintained_status
+      interview_requested_by_director: boolean; source interview request
+      interview_attended: boolean; only material if interview requested
+      has_approved_employment_position: boolean; Director approval of the offered position
+      currently_working_for_employer: boolean; determines the current-wage comparison
+      experience_gained_in_canada: boolean; location of the experience relied upon
+      experience_lawful_residence_in_canada: boolean; lawful residence throughout relied-on Canadian work
+      experience_authorized_work_in_canada: boolean; authorization throughout relied-on Canadian work
+      equity_obtained_as_employee_remuneration: boolean; provenance of current combined direct/indirect applicant/family
+        holding
+      historical_equity_percentage: decimal ratio; combined direct/indirect applicant/family holding for historical
+        interests; zero only if no historical interest
+      historical_equity_obtained_as_employee_remuneration: boolean; provenance of all historical holdings relied
+        upon under the exception
+      language_test_name: IELTS-General-Training | CELPIP-General | PTE-Core | TEF-Canada | TCF-Canada
+      language_clb_listening: number; independently verified CLB listening
+      language_clb_reading: number; independently verified CLB reading
+      language_clb_writing: number; independently verified CLB writing
+      language_clb_speaking: number; independently verified CLB speaking
+      education:
+        credential_type: undergraduate_degree_or_diploma | graduate_degree_or_diploma | ontario_college_graduate_certificate
+          | ontario_university_graduate_certificate
+        credential_completed: boolean; obtained credential or institution letter confirming all requirements completed
+        institution_name: exact name on the captured historical Ministry institution list; no DLI/eligibility Boolean substitute
+        full_time_program_years: number; program duration on a full-time basis
+        total_requirement_units: positive number; common unit for all credential requirements
+        units_completed_while_lawfully_residing_and_studying_in_canada: number; requirement units supported by both
+          lawful Canadian residence and study
+      physician:
+        cpso_class: independent_practice | academic_practice | provisional; no postgraduate-education class
+        cpso_good_standing: boolean; current CPSO membership in good standing
+        ohip_payment_eligible: boolean; eligible for publicly funded payment under the Health Insurance Act
+      living_outside_canada: boolean; at the relevant recruitment trigger
+      working_outside_ontario: boolean; at the relevant recruitment trigger
+      holds_valid_ontario_work_permit: boolean; recruitment alternative only
+    job_offer:
+      noc_2021_code: five-digit string
+      noc_teer: integer 0-5; verified against NOC 2021
+      is_indeterminate: boolean; permanent position with no pre-determined end date
+      weekly_hours: number; paid hours per week (minimum 30 for full-time)
+      hourly_wage: non-negative decimal; basic hourly wage excluding bonuses, overtime, or tips
+      prevailing_median_wage: non-negative decimal; prevailing median wage from Job Bank for NOC & region
+      prevailing_low_wage: non-negative decimal; prevailing low/entry wage from Job Bank for NOC & region
+      is_regulated_occupation: boolean; whether the occupation requires professional licensing in Ontario
+      annual_paid_hours: number; paid hours in a 12-month period, at least 1560
+      activities_primarily_in_ontario: boolean; independent position activity test with only 73300/73301 exception
+      current_wage_paid_by_employer: number; basic hourly wage currently paid in the position
+    employer:
+      years_operating_in_ontario: non-negative number; active business operation in Ontario
+      in_gta: boolean; true if located in City of Toronto, Durham, Halton, York, or Peel regions
+      annual_revenue_cad: non-negative decimal; gross annual revenue for most recently completed fiscal year
+      full_time_pr_citizen_employees: integer; number of permanent full-time Canadian citizens or PRs on payroll
+      has_business_premises_in_ontario: boolean; physical business premises located in Ontario
+      no_outstanding_esa_orders: boolean; no outstanding Employment Standards Act order
+      no_outstanding_ohsa_orders: boolean; no outstanding Occupational Health and Safety Act order
+      collective_agreement_determines_wages: boolean; true requires agreement-specific human review
+      has_valid_cvor_certificate: boolean; only required for offered NOC 73300/73301
+      cvor_safety_rating: Excellent | Satisfactory | Satisfactory Unaudited; historical EJO rating set only
+      director_determined_recruitment_necessary: boolean; statutory trigger before recruitment evidence is demanded
+      has_positive_lmia_for_position: boolean; named recruitment alternative
+      domestic_recruitment_efforts_made: boolean; reasonable unsuccessful efforts before offering the position
 "minimums":
   "employer":
     "operating_years": 3
@@ -170,225 +206,804 @@
       "inside_gta": 0
     "strategic_priorities":
       "special_targeted_priority": 10
-"rules":
-- "id": "oinp_ejo_employer_operating_history"
-  "category": "employer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "employer.years_operating_in_ontario"
-  "pass_if": "employer.years_operating_in_ontario >= 3"
-  "fail_if": "employer.years_operating_in_ontario < 3"
-  "missing_or_unverified": "NEEDS_REVIEW: Employer Ontario operational history cannot be verified."
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(1)(a)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Employer requirements"
-    "verbatim_excerpt": "have been in active business for at least three years prior to applying"
-- "id": "oinp_ejo_employer_revenue"
-  "category": "employer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "employer.in_gta"
-  - "employer.annual_revenue_cad"
-  "pass_if": >-
-    (employer.in_gta == true && employer.annual_revenue_cad >= 1000000) || (employer.in_gta == false &&
-    employer.annual_revenue_cad >= 500000)
-  "fail_if": >-
-    (employer.in_gta == true && employer.annual_revenue_cad < 1000000) || (employer.in_gta == false &&
-    employer.annual_revenue_cad < 500000)
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Employer gross annual revenue for the latest fiscal year is unverified.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(1)(b)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Employer requirements"
-    "verbatim_excerpt": "A minimum of $1,000,000 in total gross annual revenue if the employee will work or report to work at a location in the Greater Toronto Area"
-- "id": "oinp_ejo_employer_workforce"
-  "category": "employer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "employer.in_gta"
-  - "employer.full_time_pr_citizen_employees"
-  "pass_if": >-
-    (employer.in_gta == true && employer.full_time_pr_citizen_employees >= 5) || (employer.in_gta == false
-    && employer.full_time_pr_citizen_employees >= 3)
-  "fail_if": >-
-    (employer.in_gta == true && employer.full_time_pr_citizen_employees < 5) || (employer.in_gta == false
-    && employer.full_time_pr_citizen_employees < 3)
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Number of full-time Canadian citizen or PR employees cannot be established.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(1)(c)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Employer requirements"
-    "verbatim_excerpt": "your business must have at least <strong>5</strong> full-time employees who are Canadian citizens or permanent residents who work or report to work at that location.</p><h4>Work location outside the Greater Toronto Area</h4><p>If the employee will work at a location outside the <abbr title=\"Greater Toronto Area\">GTA</abbr> or will work at more than one location but report to work at a location outside the&nbsp;<abbr title=\"Greater Toronto Area\">GTA</abbr>, your business must have at least&nbsp;<strong>3</strong>&nbsp;full-time employees who are Canadian citizens or permanent residents who work or report to work at that location."
-- "id": "oinp_ejo_employer_premises_and_compliance"
-  "category": "employer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "employer.has_business_premises_in_ontario"
-  - "employer.no_employment_standards_orders"
-  "pass_if": >-
-    employer.has_business_premises_in_ontario == true && employer.no_employment_standards_orders == true
-  "fail_if": >-
-    employer.has_business_premises_in_ontario == false || employer.no_employment_standards_orders == false
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Physical premises verification or ESA compliance records are missing.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(1)(d)-(e)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Employer requirements"
-    "verbatim_excerpt": "have business premises in Ontario where the employee will work</li><li data-list-item-id=\"e9c3a4ec08b642cd50218166fa3f47799\">have no outstanding orders made against your business under the Ontario&nbsp;<a href=\"/laws/statute/00e41\"><cite>Employment Standards Act, 2000</cite></a>&nbsp;or the&nbsp;<a href=\"/laws/statute/90o01\"><cite>Occupational Health and Safety Act</cite></a>"
-- "id": "oinp_ejo_job_permanent_full_time"
-  "category": "job_offer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "job_offer.is_indeterminate"
-  - "job_offer.weekly_hours"
-  - "job_offer.work_location_in_ontario"
-  "pass_if": >-
-    job_offer.is_indeterminate == true && job_offer.weekly_hours >= 30 && job_offer.work_location_in_ontario
+rules:
+- id: oinp_ejo_employer_operating_history
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (employer.years_operating_in_ontario
+    >= 3)
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (employer.years_operating_in_ontario
+    < 3)
+  missing_or_unverified: 'NEEDS_REVIEW: Employer Ontario operational history cannot be verified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 1
+    citation: O. Reg. 422/17, s. 4 (1) 1
+    verbatim_excerpt: The employer’s business must have existed and been active for at least three years before the
+      date of making the application.
+- id: oinp_ejo_employer_revenue
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || ((employer.in_gta
+    == true && employer.annual_revenue_cad >= 1000000) || (employer.in_gta == false && employer.annual_revenue_cad
+    >= 500000))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && ((employer.in_gta
+    == true && employer.annual_revenue_cad < 1000000) || (employer.in_gta == false && employer.annual_revenue_cad
+    < 500000))
+  missing_or_unverified: 'NEEDS_REVIEW: Employer gross annual revenue for the latest fiscal year is unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 3 i
+    citation: O. Reg. 422/17, s. 4 (1) 3 i-ii
+    verbatim_excerpt: a total gross annual revenue of at least $1,000,000, or
+- id: oinp_ejo_employer_workforce
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || ((employer.in_gta
+    == true && employer.full_time_pr_citizen_employees >= 5) || (employer.in_gta == false && employer.full_time_pr_citizen_employees
+    >= 3))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && ((employer.in_gta
+    == true && employer.full_time_pr_citizen_employees < 5) || (employer.in_gta == false && employer.full_time_pr_citizen_employees
+    < 3))
+  missing_or_unverified: 'NEEDS_REVIEW: Number of full-time Canadian citizen or PR employees cannot be established.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 3.1 i
+    citation: O. Reg. 422/17, s. 4 (1) 3.1 i-ii
+    verbatim_excerpt: at least five full-time employees at that location who are permanent residents or Canadian citizens,
+      or
+- id: oinp_ejo_employer_premises_and_compliance
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (employer.has_business_premises_in_ontario
+    == true && employer.no_outstanding_esa_orders == true && employer.no_outstanding_ohsa_orders == true)
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (employer.has_business_premises_in_ontario
+    == false || employer.no_outstanding_esa_orders == false || employer.no_outstanding_ohsa_orders == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Ontario premises or independent ESA/OHSA order evidence is missing.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 10
+    citation: O. Reg. 422/17, s. 4 (1) 10
+    verbatim_excerpt: There must be no outstanding orders made against the employer under the
+- id: oinp_ejo_job_permanent_full_time
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (job_offer.is_indeterminate
+    == true && job_offer.weekly_hours >= 30 && job_offer.annual_paid_hours >= 1560)
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (job_offer.is_indeterminate
+    == false || job_offer.weekly_hours < 30 || job_offer.annual_paid_hours < 1560)
+  missing_or_unverified: 'NEEDS_REVIEW: Permanent duration, 30 paid weekly hours or 1,560 paid annual hours is unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Definitions, full-time
+    citation: O. Reg. 422/17, s. 1, definition of full-time (a)
+    verbatim_excerpt: a position that requires no fewer than 1,560 hours of paid work in a 12-month period and no
+      fewer than 30 hours of paid work per week in a 12-month period,
+- id: oinp_ejo_eligible_noc
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (((candidate.stream
+    == 'foreign_worker' || candidate.stream == 'international_student') && job_offer.noc_teer in [0,1,2,3]) || (candidate.stream
+    == 'in_demand_skills' && job_offer.noc_teer in [4,5] && (valid_noc_2021_code(job_offer.noc_2021_code) && (job_offer.noc_2021_code
+    in ['44101', '65202', '75110', '75119', '84120', '85100', '85101', '85103', '94141'] || (employer.in_gta ==
+    false && job_offer.noc_2021_code in ['14400', '14402', '65320', '74200', '74203', '74204', '74205', '75101',
+    '75211', '75212', '85102', '94100', '94101', '94102', '94103', '94104', '94105', '94106', '94107', '94110',
+    '94111', '94112', '94120', '94121', '94123', '94124', '94132', '94140', '94142', '94143', '94200', '94201',
+    '94202', '94203', '94204', '94205', '94211', '94212', '94213', '94219', '95100', '95101', '95102', '95103',
+    '95104', '95106', '95107'])))))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (!(((candidate.stream
+    == 'foreign_worker' || candidate.stream == 'international_student') && job_offer.noc_teer in [0,1,2,3]) || (candidate.stream
+    == 'in_demand_skills' && job_offer.noc_teer in [4,5] && (valid_noc_2021_code(job_offer.noc_2021_code) && (job_offer.noc_2021_code
+    in ['44101', '65202', '75110', '75119', '84120', '85100', '85101', '85103', '94141'] || (employer.in_gta ==
+    false && job_offer.noc_2021_code in ['14400', '14402', '65320', '74200', '74203', '74204', '74205', '75101',
+    '75211', '75212', '85102', '94100', '94101', '94102', '94103', '94104', '94105', '94106', '94107', '94110',
+    '94111', '94112', '94120', '94121', '94123', '94124', '94132', '94140', '94142', '94143', '94200', '94201',
+    '94202', '94203', '94204', '94205', '94211', '94212', '94213', '94219', '95100', '95101', '95102', '95103',
+    '95104', '95106', '95107']))))))
+  missing_or_unverified: 'NEEDS_REVIEW: NOC TEER classification or In-Demand Skills occupation eligibility unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: In-demand skills, paragraph 1
+    citation: O. Reg. 422/17, s. 7 (1) 1 and 1.1
+    verbatim_excerpt: 'in one of the following occupations listed in the National Occupational Classification under
+      Training, Education, Experience and Responsibilities (TEER) Category 4 or 5:'
+- id: oinp_ejo_wage_threshold
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (employer.collective_agreement_determines_wages
+    == true || ((candidate.stream == 'foreign_worker' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)
+    || (candidate.stream == 'international_student' && job_offer.hourly_wage >= job_offer.prevailing_low_wage) ||
+    (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (employer.collective_agreement_determines_wages
+    == false && ((candidate.stream == 'foreign_worker' && job_offer.hourly_wage < job_offer.prevailing_median_wage)
+    || (candidate.stream == 'international_student' && job_offer.hourly_wage < job_offer.prevailing_low_wage) ||
+    (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage < job_offer.prevailing_median_wage)))
+  missing_or_unverified: 'NEEDS_REVIEW: Basic hourly wage or prevailing wage comparison cannot be established.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 9 i
+    citation: O. Reg. 422/17, s. 4 (1) 9 i-ii
+    verbatim_excerpt: the median wage level that applies for the occupation and region to which the position relates,
+      as shown by the Government of Canada Job Bank, if the position will be filled by an applicant for a certificate
+      of nomination in the foreign worker category or the in-demand skills category, or
+- id: oinp_ejo_candidate_qualifications
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: >-
+    (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) ||
+    (candidate.stream == 'foreign_worker' &&
+      ((candidate.experience_in_last_5_years == true && candidate.experience_in_same_noc == true &&
+        (((candidate.experience_work_pattern in ['full_time', 'concurrent_part_time']) &&
+           candidate.experience_weekly_paid_hours >= 30 && candidate.experience_paid_months >= 24) ||
+         (candidate.experience_work_pattern == 'single_part_time' &&
+           candidate.experience_weekly_paid_hours >= 15 && candidate.experience_paid_months >= 48))) ||
+       (job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence == true))) ||
+    (candidate.stream == 'international_student' && candidate.months_since_graduation <= 24) ||
+    (candidate.stream == 'in_demand_skills' && candidate.qualifying_experience_months >= 9)
+  fail_if: >-
+    (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) &&
+    ((candidate.stream == 'foreign_worker' &&
+      (candidate.experience_in_last_5_years == false || candidate.experience_in_same_noc == false ||
+       (candidate.experience_work_pattern in ['full_time', 'concurrent_part_time'] &&
+        (candidate.experience_weekly_paid_hours < 30 || candidate.experience_paid_months < 24)) ||
+       (candidate.experience_work_pattern == 'single_part_time' &&
+        (candidate.experience_weekly_paid_hours < 15 || candidate.experience_paid_months < 48))) &&
+      (job_offer.is_regulated_occupation == false || candidate.holds_mandatory_licence == false)) ||
+     (candidate.stream == 'international_student' && candidate.months_since_graduation > 24) ||
+     (candidate.stream == 'in_demand_skills' && candidate.qualifying_experience_months < 9))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound paid experience, statutory licence alternative or legacy credential-date evidence is unverified.'
+  evidence_anchor:
+    source_id: o_reg_422_17_v26
+    citation: O. Reg. 422/17 s. 5(1)2 and s. 16
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Foreign worker experience alternative; Part-time work equivalent
+    verbatim_excerpt: >-
+      the applicant worked in one position for no fewer than 15 hours per week for double the period required under those provisions.
+- id: oinp_ejo_mandatory_licensing
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (job_offer.is_regulated_occupation
+    == false || (job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence == true))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (job_offer.is_regulated_occupation
+    == true && candidate.holds_mandatory_licence == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Professional regulatory licensing status in Ontario is unverified.'
+  evidence_anchor:
+    source_id: o_reg_422_17_v26
+    citation: O. Reg. 422/17 ss. 5(1)1.1, 6(2), 7(4)
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Applicant licensing requirements
+    verbatim_excerpt: The applicant must have obtained a licence or other authorization to engage in the activity required by the employment position to which the application relates if the law of Ontario requires that licence or other authorization for engaging in the activity.
+- id: oinp_ejo_applicant_legal_status_inside_canada
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.applying_from_inside_canada == false || candidate.temporary_resident_status in ['visitor_record','study_permit','work_permit','maintained_status']
+  fail_if: candidate.applying_from_inside_canada == true && candidate.temporary_resident_status in ['none','expired_no_maintained_status']
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Eligibility requirements, all categories, subsection (3)
+    citation: O. Reg. 422/17, s. 3 (3)
+    verbatim_excerpt: A person who applies for a certificate of nomination from inside Canada must be a temporary
+      resident of Canada under section 22 of the
+- id: oinp_ejo_applicant_attended_requested_interview
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.interview_requested_by_director == false || candidate.interview_attended == true
+  fail_if: candidate.interview_requested_by_director == true && candidate.interview_attended == false
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Eligibility requirements, all categories, subsection (4)
+    citation: O. Reg. 422/17, s. 3 (4)
+    verbatim_excerpt: must have attended any in-person interview with the director that was requested by the director
+- id: oinp_ejo_applicant_holds_approved_job_offer
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || candidate.has_approved_employment_position
     == true
-  "fail_if": >-
-    job_offer.is_indeterminate == false || job_offer.weekly_hours < 30 || job_offer.work_location_in_ontario
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && candidate.has_approved_employment_position
     == false
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Indeterminate terms, full-time hours (>=30/wk), or Ontario job location unverified.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(2)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Job offer requirements"
-    "verbatim_excerpt": "The job offer must be for a full-time and permanent position.</p><ul><li data-list-item-id=\"e8dd67bd440aa2fb53135babbb659a245\">full-time means the job must be a minimum of 1,560&nbsp;hours a year and a minimum of 30&nbsp;hours of paid work per week.</li>"
-- "id": "oinp_ejo_eligible_noc"
-  "category": "job_offer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.stream"
-  - "job_offer.noc_teer"
-  "pass_if": >-
-    ((candidate.stream == 'foreign_worker' || candidate.stream == 'international_student') && job_offer.noc_teer
-    in [0, 1, 2, 3]) || (candidate.stream == 'in_demand_skills' && job_offer.noc_teer in [4, 5] && job_offer.is_eligible_in_demand_noc
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Foreign worker category, paragraph 1
+    citation: O. Reg. 422/17, s. 5 (1) 1 (identically s. 6 and s. 7)
+    verbatim_excerpt: The applicant must have obtained a job offer for an employment position that has been approved
+      by the director in accordance with the Act.
+- id: oinp_ejo_position_activities_primarily_in_ontario
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (job_offer.activities_primarily_in_ontario
+    == true || job_offer.noc_2021_code in ['73300','73301'])
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (job_offer.activities_primarily_in_ontario
+    == false && !(job_offer.noc_2021_code in ['73300','73301']))
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 2.1
+    citation: O. Reg. 422/17, s. 4 (1) 2.1
+    verbatim_excerpt: The anticipated employment activities related to the position must occur primarily in Ontario,
+      unless the position is listed in the National Occupational Classification as occupation 73300
+- id: oinp_ejo_transport_occupation_cvor_and_safety_rating
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (!(job_offer.noc_2021_code
+    in ['73300','73301']) || (employer.has_valid_cvor_certificate == true && employer.cvor_safety_rating in ['Excellent','Satisfactory','Satisfactory
+    Unaudited']))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && job_offer.noc_2021_code
+    in ['73300','73301'] && (employer.has_valid_cvor_certificate == false || !(employer.cvor_safety_rating in ['Excellent','Satisfactory','Satisfactory
+    Unaudited']))
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 2.2
+    citation: O. Reg. 422/17, s. 4 (1) 2.2
+    verbatim_excerpt: the employer must demonstrate that it has a valid CVOR certificate, as defined in subsection
+      1 (1) of the
+- id: oinp_ejo_position_wage_not_below_current_wage_paid
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (employer.collective_agreement_determines_wages
+    == true || candidate.currently_working_for_employer == false || job_offer.hourly_wage >= job_offer.current_wage_paid_by_employer)
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && employer.collective_agreement_determines_wages
+    == false && candidate.currently_working_for_employer == true && job_offer.hourly_wage < job_offer.current_wage_paid_by_employer
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 8
+    citation: O. Reg. 422/17, s. 4 (1) 8
+    verbatim_excerpt: the wage level for the position must be at least equal to the wage level that the employer
+      currently pays the applicant in that position, if the applicant is currently working for the employer.
+- id: oinp_ejo_wage_collective_agreement_exception
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: manual_source_review
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || (employer.collective_agreement_determines_wages
+    == false)
+  fail_if: null
+  missing_or_unverified: 'NEEDS_REVIEW: Verify coverage and occupational/regional rates in the applicable collective
+    agreement.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, subsection (2)
+    citation: O. Reg. 422/17, s. 4 (2)
+    verbatim_excerpt: References to wage levels in paragraphs 8 and 9 of subsection (1) shall be determined with
+      reference to any collective agreement that applies to them.
+- id: oinp_ejo_is_credential_majority_requirements_in_canada
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: >-
+    candidate.stream != 'international_student' ||
+    (candidate.education.total_requirement_units > 0 &&
+     candidate.education.units_completed_while_lawfully_residing_and_studying_in_canada <= candidate.education.total_requirement_units &&
+     candidate.education.units_completed_while_lawfully_residing_and_studying_in_canada * 2 > candidate.education.total_requirement_units)
+  fail_if: >-
+    candidate.stream == 'international_student' && candidate.education.total_requirement_units > 0 &&
+    candidate.education.units_completed_while_lawfully_residing_and_studying_in_canada >= 0 &&
+    candidate.education.units_completed_while_lawfully_residing_and_studying_in_canada * 2 <= candidate.education.total_requirement_units
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: International student with a job offer, paragraph 3 i
+    citation: O. Reg. 422/17, s. 6, paragraph 3 i
+    verbatim_excerpt: and that more than half of the requirements necessary to obtain the degree, diploma or certificate
+      were obtained while lawfully residing and studying in Canada.
+- id: oinp_ejo_fw_experience_lawful_in_canada
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.stream != 'foreign_worker' || (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer
+    == false) || (job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence == true) || candidate.experience_gained_in_canada
+    == false || (candidate.experience_lawful_residence_in_canada == true && candidate.experience_authorized_work_in_canada
     == true)
-  "fail_if": >-
-    ((candidate.stream == 'foreign_worker' || candidate.stream == 'international_student') && !(job_offer.noc_teer
-    in [0, 1, 2, 3])) || (candidate.stream == 'in_demand_skills' && (!(job_offer.noc_teer in [4, 5]) ||
-    job_offer.is_eligible_in_demand_noc == false))
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: NOC TEER classification or In-Demand Skills occupation eligibility unverified.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(3)"
-    "evidence_unit_id": "EU-OINP-EJO-NOC-TEER-006"
-    "source_file": "src02.html"
-    "section": "Job offer requirements"
-    "verbatim_excerpt": "TEER category 0, 1, 2 or 3 of the National Occupational Classification"
-- "id": "oinp_ejo_wage_threshold"
-  "category": "job_offer"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.stream"
-  - "job_offer.hourly_wage"
-  "pass_if": >-
-    (candidate.stream == 'foreign_worker' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)
-    || (candidate.stream == 'international_student' && job_offer.hourly_wage >= job_offer.prevailing_low_wage)
-    || (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage >= job_offer.prevailing_median_wage)
-  "fail_if": >-
-    (candidate.stream == 'foreign_worker' && job_offer.hourly_wage < job_offer.prevailing_median_wage)
-    || (candidate.stream == 'international_student' && job_offer.hourly_wage < job_offer.prevailing_low_wage)
-    || (candidate.stream == 'in_demand_skills' && job_offer.hourly_wage < job_offer.prevailing_median_wage)
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Basic hourly wage or prevailing wage comparison cannot be established.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(4)"
-    "evidence_unit_id": "oinp.wps.current.employer-guide"
-    "source_file": "e80367ba912163b29e689f7dd84ca3c3871353d0c205f8ad6ac775f6bfb401b1"
-    "section": "Job offer requirements"
-    "verbatim_excerpt": "The wage offered for the position under the Ontario Workforce Priority stream must meet or exceed the wage level assigned to the specific region of Ontario where the employee will be working and be at or above either:</p><ul><li data-list-item-id=\"e356561d56f29ded505fb76f50181250f\">the median wage level</li><li data-list-item-id=\"e27cc2a27b4a1283a526a0e92a949b870\">the low wage level, if the employee is a recent Ontario graduate and the job offer is in a TEER 0-3 category occupation</li>"
-- "id": "oinp_ejo_candidate_qualifications"
-  "category": "candidate"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.stream"
-  "pass_if": >-
-    (candidate.stream == 'foreign_worker' && candidate.qualifying_experience_months >= 24 && candidate.experience_in_last_5_years
-    == true && candidate.experience_in_same_noc == true) || (candidate.stream == 'international_student'
-    && candidate.completed_eligible_canadian_credential == true && candidate.months_since_graduation <=
-    24) || (candidate.stream == 'in_demand_skills' && candidate.qualifying_experience_months >= 9 && candidate.language_clb_minimum
-    >= 4)
-  "fail_if": >-
-    (candidate.stream == 'foreign_worker' && (candidate.qualifying_experience_months < 24 || candidate.experience_in_last_5_years
-    == false || candidate.experience_in_same_noc == false)) || (candidate.stream == 'international_student'
-    && (candidate.completed_eligible_canadian_credential == false || candidate.months_since_graduation
-    > 24)) || (candidate.stream == 'in_demand_skills' && (candidate.qualifying_experience_months < 9 ||
-    candidate.language_clb_minimum < 4))
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Candidate work experience, graduation date/credential, or CLB language scores unverified.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 5(1), 5(2), 5(3)"
-    "evidence_unit_id": "EU-OINP-EJO-CANDIDATE-FW-009"
-    "source_file": "src02.html"
-    "section": "Applicant requirements"
-    "verbatim_excerpt": >-
-      at least two years of cumulative paid full-time work experience (or the equivalent in paid part-time
-      work) in the same occupation
-- "id": "oinp_ejo_mandatory_licensing"
-  "category": "candidate"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "job_offer.is_regulated_occupation"
-  "pass_if": >-
-    job_offer.is_regulated_occupation == false || (job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence
-    == true)
-  "fail_if": >-
-    job_offer.is_regulated_occupation == true && candidate.holds_mandatory_licence == false
-  "missing_or_unverified": "NEEDS_REVIEW: Professional regulatory licensing status in Ontario is unverified."
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 5(4)"
-    "evidence_unit_id": "EU-OINP-EJO-LICENSING-011"
-    "source_file": "src02.html"
-    "section": "Applicant requirements"
-    "verbatim_excerpt": >-
-      Regulated occupation: the official licensing or registration requirement is not present in the pinned
-      knowledge revisions.
-- "id": "oinp_ejo_candidate_equity_and_intention"
-  "category": "candidate"
-  "severity": "CRITICAL_REDLINE"
-  "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.equity_percentage"
-  - "candidate.intention_to_reside_in_ontario"
-  "pass_if": >-
-    candidate.equity_percentage < 0.10 && candidate.intention_to_reside_in_ontario == true
-  "fail_if": >-
-    candidate.equity_percentage >= 0.10 || candidate.intention_to_reside_in_ontario == false
-  "missing_or_unverified": >-
-    NEEDS_REVIEW: Business equity share (<10%) or Ontario residency intention unverified.
-  "evidence_anchor":
-    "source_id": "o_reg_422_17"
-    "citation": "O. Reg. 422/17 s. 4(5), s. 5(5)"
-    "evidence_unit_id": "EU-OINP-EJO-EQUITY-INTENT-012"
-    "source_file": "src02.html"
-    "section": "Applicant / Intention"
-    "verbatim_excerpt": "must be less than 10%"
+  fail_if: candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == true && candidate.experience_gained_in_canada
+    == true && (candidate.experience_lawful_residence_in_canada == false || candidate.experience_authorized_work_in_canada
+    == false) && (job_offer.is_regulated_occupation == false || candidate.holds_mandatory_licence == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Foreign worker category, paragraph 2 i B
+    citation: O. Reg. 422/17, s. 5 (1) 2 i B
+    verbatim_excerpt: if the experience was completed in Canada, was completed while lawfully residing and working
+      in Canada, or
+- id: oinp_ejo_fw_self_employed_physician_route
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: '!(candidate.stream == ''foreign_worker'' && candidate.applies_with_job_offer == false) || (candidate.physician.cpso_class
+    in [''independent_practice'',''academic_practice'',''provisional''] && candidate.physician.cpso_good_standing
+    == true && candidate.physician.ohip_payment_eligible == true)'
+  fail_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) && (!(candidate.physician.cpso_class
+    in ['independent_practice','academic_practice','provisional']) || candidate.physician.cpso_good_standing ==
+    false || candidate.physician.ohip_payment_eligible == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Foreign worker category, self-employed, subsection (2)
+    citation: O. Reg. 422/17, s. 5 (2) 1-2
+    verbatim_excerpt: 'The applicant must hold a certificate in one of the following classes and be a member in
+      good standing with the College of Physicians and Surgeons of Ontario:'
+- id: oinp_ejo_ids_language_test_and_scores
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.stream != 'in_demand_skills' || (accepted_designated_test(candidate.language_test_name) &&
+    candidate.language_clb_listening >= 4 && candidate.language_clb_reading >= 4 && candidate.language_clb_writing
+    >= 4 && candidate.language_clb_speaking >= 4)
+  fail_if: candidate.stream == 'in_demand_skills' && (!accepted_designated_test(candidate.language_test_name) ||
+    candidate.language_clb_listening < 4 || candidate.language_clb_reading < 4 || candidate.language_clb_writing
+    < 4 || candidate.language_clb_speaking < 4)
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: oinp_ejo_ids_stream
+    evidence_unit_id: oinp_ejo_ids_stream.full_document_body
+    source_file: fa5d44121439230023c631ae8538c5148b2f8a01c6a1b66e1bd4db1589904ff4
+    section: Language testing
+    citation: 'OINP Employer Job Offer: In-Demand Skills stream (archived), accepted English and French tests'
+    verbatim_excerpt: we only accept the General Training test. Please note that we do not accept
+- id: oinp_ejo_equity_holding_limit
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: (candidate.stream == 'foreign_worker' && candidate.applies_with_job_offer == false) || ((candidate.equity_percentage
+    == 0 || (candidate.equity_percentage < 0.10 && candidate.equity_obtained_as_employee_remuneration == true))
+    && (candidate.historical_equity_percentage == 0 || (candidate.historical_equity_percentage < 0.10 && candidate.historical_equity_obtained_as_employee_remuneration
+    == true)))
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && (candidate.equity_percentage
+    >= 0.10 || candidate.historical_equity_percentage >= 0.10 || (candidate.equity_percentage > 0 && candidate.equity_obtained_as_employee_remuneration
+    == false) || (candidate.historical_equity_percentage > 0 && candidate.historical_equity_obtained_as_employee_remuneration
+    == false))
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Foreign worker category, paragraph 3
+    citation: O. Reg. 422/17, s. 5 (1) 3 (identically s. 6 (4) and s. 7 (7))
+    verbatim_excerpt: unless it was obtained as part of their remuneration as an employee and the total amount of
+      equity held by the applicant and his or her family members is less than 10 per cent of the equity in the employer’s
+      business.
+- id: oinp_ejo_applicant_intention_to_reside_in_ontario
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: manual_source_review
+  required_fields: []
+  pass_if: null
+  fail_if: null
+  missing_or_unverified: 'NEEDS_REVIEW: Intention must be assessed separately from status and interview, using Ontario
+    ties and supporting evidence.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Eligibility requirements, all categories, subsection (2)
+    citation: O. Reg. 422/17, s. 3 (2)
+    verbatim_excerpt: An applicant for a certificate of nomination must have demonstrated on a reasonable basis
+      an intention to reside in Ontario.
+- id: oinp_ejo_employer_recruitment_efforts_or_exception
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: employer.director_determined_recruitment_necessary == false || (candidate.living_outside_canada == false
+    && candidate.working_outside_ontario == false) || candidate.holds_valid_ontario_work_permit == true || employer.has_positive_lmia_for_position
+    == true || employer.domestic_recruitment_efforts_made == true
+  fail_if: (candidate.stream != 'foreign_worker' || candidate.applies_with_job_offer == true) && employer.director_determined_recruitment_necessary
+    == true && (candidate.living_outside_canada == true || candidate.working_outside_ontario == true) && candidate.holds_valid_ontario_work_permit
+    == false && employer.has_positive_lmia_for_position == false && employer.domestic_recruitment_efforts_made ==
+    false
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: Approval of an employment position, paragraph 11
+    citation: O. Reg. 422/17, s. 4 (1) 11
+    verbatim_excerpt: the employer must have made reasonable but unsuccessful efforts to fill the position with
+      a Canadian citizen or permanent resident prior to offering the position to the applicant.
+- id: oinp_ejo_is_education_credential_type
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.stream != 'international_student' || (candidate.education.credential_completed == true && ((candidate.education.credential_type
+    == 'undergraduate_degree_or_diploma' && candidate.education.full_time_program_years >= 2) || (candidate.education.credential_type
+    in ['graduate_degree_or_diploma','ontario_college_graduate_certificate','ontario_university_graduate_certificate']
+    && candidate.education.full_time_program_years >= 1)))
+  fail_if: candidate.stream == 'international_student' && (candidate.education.credential_completed == false ||
+    !(candidate.education.credential_type in ['undergraduate_degree_or_diploma','graduate_degree_or_diploma','ontario_college_graduate_certificate','ontario_university_graduate_certificate'])
+    || (candidate.education.credential_type == 'undergraduate_degree_or_diploma' && candidate.education.full_time_program_years
+    < 2) || (candidate.education.credential_type in ['graduate_degree_or_diploma','ontario_college_graduate_certificate','ontario_university_graduate_certificate']
+    && candidate.education.full_time_program_years < 1))
+  missing_or_unverified: 'NEEDS_REVIEW: Required source facts are missing or unverified.'
+  evidence_anchor:
+    page: ''
+    source_id: o_reg_422_17_v26
+    evidence_unit_id: o_reg_422_17_v26.full_document_body
+    source_file: 11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: International student with a job offer, paragraph 3 i A
+    citation: O. Reg. 422/17, s. 6, paragraph 3
+    verbatim_excerpt: an undergraduate degree or diploma from an eligible Canadian institution that takes at least
+      two years to complete if pursued on a full-time basis,
+- id: oinp_ejo_is_credential_institution_designated
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: []
+  pass_if: candidate.stream != 'international_student' || ((candidate.education.credential_type in ['undergraduate_degree_or_diploma','graduate_degree_or_diploma']
+    && candidate.education.institution_name in historical_ejo_canadian_institutions) || (candidate.education.credential_type
+    == 'ontario_college_graduate_certificate' && candidate.education.institution_name in historical_ejo_ontario_colleges)
+    || (candidate.education.credential_type == 'ontario_university_graduate_certificate' && candidate.education.institution_name
+    in historical_ejo_ontario_universities))
+  fail_if: candidate.stream == 'international_student' && ((candidate.education.credential_type in ['undergraduate_degree_or_diploma','graduate_degree_or_diploma']
+    && !(candidate.education.institution_name in historical_ejo_canadian_institutions)) || (candidate.education.credential_type
+    == 'ontario_college_graduate_certificate' && !(candidate.education.institution_name in historical_ejo_ontario_colleges))
+    || (candidate.education.credential_type == 'ontario_university_graduate_certificate' && !(candidate.education.institution_name
+    in historical_ejo_ontario_universities)))
+  missing_or_unverified: 'NEEDS_REVIEW: Supply the institution name exactly as captured in the historical Ministry
+    list and the credential category. No private-institution/DLI Boolean substitutes for that list.'
+  evidence_anchor:
+    source_id: oinp_is_guide
+    evidence_unit_id: oinp_is_guide.historical_eligible_institutions
+    source_file: cd7ee122ffdc7e7a015505c4673f9b9949e5e6b7bd77fd2203ddfc46ddedb374
+    section: Eligible Canadian and Ontario institutions
+    citation: Archived International Student stream, Eligible Canadian and Ontario institutions; O. Reg. 422/17
+      s.6(3)
+    verbatim_excerpt: Eligible Canadian and Ontario institutions
+evaluation:
+  historical_ejo_canadian_institutions:
+  - Algonquin College of Applied Arts and Technology
+  - Cambrian College of Applied Arts and Technology
+  - Canadore College of Applied Arts and Technology
+  - Centennial College
+  - Collège Boréal
+  - Conestoga College Institute of Technology and Advanced Learning
+  - Confederation College of Applied Arts and Technology
+  - Durham College of Applied Arts and Technology
+  - Fanshawe College of Applied Arts and Technology
+  - Fleming College of Applied Arts and Technology
+  - George Brown College
+  - Georgian College
+  - Humber College Institute of Technology and Advanced Learning
+  - La Cité collégiale
+  - Lambton College of Applied Arts and Technology
+  - Loyalist College of Applied Arts and Technology
+  - Michener Institute of Education at UHN
+  - Mohawk College of Applied Arts and Technology
+  - Niagara College of Applied Arts and Technology
+  - Northern College of Applied Arts and Technology
+  - Royal Military College of Canada
+  - Sault College of Applied Arts and Technology
+  - Seneca College of Applied Arts and Technology
+  - Sheridan College of Applied Arts and Technology
+  - St. Clair College of Applied Arts and Technology
+  - St. Lawrence College of Applied Arts and Technology
+  - Algoma University
+  - Brock University
+  - Carleton University
+  - Lakehead University
+  - Laurentian University
+  - McMaster University
+  - Nipissing University
+  - Ontario College of Art and Design University
+  - Queen’s University
+  - Toronto Metropolitan University (formerly Ryerson University)
+  - Trent University
+  - Université de l’Ontario français
+  - University of Guelph
+  - Université de Hearst
+  - University of Ontario Institute of Technology
+  - University of Ottawa
+  - University of Sudbury
+  - University of Toronto
+  - University of Waterloo
+  - University of Windsor
+  - Western University
+  - Wilfrid Laurier University
+  - York University
+  - Six Nations Polytechnic
+  - Bow Valley College
+  - Keyano College
+  - Lakeland College
+  - Lethbridge College
+  - Medicine Hat College
+  - NAIT (Northern Alberta Institute of Technology)
+  - NorQuest College
+  - Northern Lakes College
+  - Olds College
+  - Portage College
+  - Red Deer College
+  - SAIT - Southern Alberta Institute of Technology
+  - Athabasca University
+  - MacEwen University
+  - Mount Royal University
+  - University of Alberta
+  - University of Calgary
+  - University of Lethbridge
+  - British Columbia Institute of Technology
+  - Camosun College
+  - College of New Caledonia
+  - College of the Rockies
+  - Douglas College
+  - Justice Institute of British Columbia
+  - Langara College
+  - Nicola Valley Institute of Technology
+  - North Island College
+  - Northern Lights College
+  - Okanagan College
+  - Selkirk College - Castelgar Campus
+  - Vancouver Community College
+  - Capilano University
+  - Emily Carr Institute of Art and Design
+  - Kwantlen Polytechnic University
+  - Royal Roads University
+  - Simon Fraser University
+  - Thompson Rivers University
+  - University of British Columbia
+  - University of Northern British Columbia
+  - University of the Fraser Valley
+  - University of Victoria
+  - Vancouver Island University
+  - Assiniboine Community College
+  - Red River Polytechnic
+  - Manitoba Institute of Trades and Technology
+  - Brandon University
+  - University of Winnipeg
+  - Université de Saint-Boniface
+  - University College of the North
+  - University of Manitoba
+  - Collège communautaire du Nouveau-Brunswick
+  - Maritime College of Forest Technology
+  - New Brunswick College of Craft and Design
+  - New Brunswick Community College
+  - Mount Allison University
+  - St. Thomas University
+  - Université de Moncton
+  - University of New Brunswick
+  - Centre for Nursing Studies
+  - College of the North Atlantic
+  - Western Regional School of Nursing
+  - Memorial University of Newfoundland
+  - Aurora College
+  - Nova Scotia Community College
+  - Acadia University
+  - Atlantic School of Theology
+  - Cape Breton University
+  - Dalhousie University
+  - Mount Saint Vincent University
+  - Nova Scotia College of Art and Design (NSCAD University)
+  - Saint Mary’s University
+  - St. Francis Xavier University
+  - Université Sainte-Anne
+  - University of King’s College (Associated with Dalhousie University)
+  - Collège de l'île
+  - Holland College
+  - University of Prince Edward Island
+  - Cégep André-Laurendeau
+  - Cégep Beauce-Appalaches
+  - Cégep d'Ahuntsic
+  - Cégep de Baie-Comeau
+  - Cégep de Bois-de-Boulogne
+  - Cégep de Chicoutimi
+  - Cégep de Drummondville
+  - Cégep de Granby Haute-Yamaska
+  - Cégep de Jonquière
+  - Cégep de l’Abitibi-Témiscamingue
+  - Cégep de l’Outaouais
+  - Cégep de la Gaspésie et des Îles
+  - Cégep de la Pocatière
+  - Cégep de Lévis-Lauzon
+  - Cégep de Maisonneuve
+  - Cégep de Matane
+  - Cégep de Rimouski
+  - Cégep de Rivière-du-Loup
+  - Cégep de Rosemont
+  - Cégep de Saint-Félicien
+  - Cégep de Saint-Hyacinthe
+  - Cégep de Saint-Jérôme
+  - Cégep de Saint-Laurent
+  - Cégep de Sainte-Foy
+  - Cégep de Sept-Îles
+  - Cégep de Sherbrooke
+  - Cégep de Sorel-Tracy
+  - Cégep de Thetford
+  - Cégep de Trois-Rivières
+  - Cégep de Valleyfield
+  - Cégep de Victoriaville
+  - Cégep du Vieux Montréal
+  - Cégep Eduoard-Montpetit
+  - Cégep Francois-Xavier Garneau
+  - Cégep Gérald-Godin
+  - Cégep John Abbott
+  - Cégep Lionel-Groulx
+  - Cégep Marie-Victorin
+  - Cégep Montmorency
+  - Cégep Limoilou
+  - Cégep régional de Lanaudière
+  - Cégep Saint-Jean-sur-Richelieu
+  - Cégep Vanier
+  - Centre régional de formation à distance du Grand-Montréal
+  - Collège Ahuntsic
+  - Collège d'Alma
+  - Collège Dawson
+  - Collège de Bois-de-Boulogne
+  - Collège de Maisonneuve
+  - Collège de Matane
+  - Collège de Rosemont
+  - Collège de Valleyfield
+  - Collège Gérald-Godin
+  - Collège Héritage
+  - Collège Montmorency
+  - Collège régional Champlain
+  - Collège Vanier
+  - Centre de formation professionnelle EXPÉ - secteur des Sources
+  - Bishop’s University
+  - Concordia University
+  - École de technologie supérieure (Université du Québec)
+  - École nationale d’administration publique (Université du Québec)
+  - École Polytechnique de Montréal (affiliated with Université du Montréal)
+  - École des Hautes Études Commerciales de Montréal
+  - HEC Montréal (affiliated with Université du Montréal)
+  - Institut national de la recherche scientifique (Université du Québec)
+  - McGill University
+  - Télé-Université (TÉLUQ)
+  - Université de Montréal
+  - Université de Sherbrooke
+  - Université du Québec
+  - Université Laval
+  - Great Plains College
+  - North West Regional College
+  - Saskatchewan Polytechnic
+  - Southeast College
+  - Campion College (Federated with the University of Regina)
+  - First Nations University of Canada
+  - Luther College (Federated with the University of Regina)
+  - St. Thomas More College (Federated with the University of Saskatchewan)
+  - University of Regina
+  - University of Saskatchewan
+  - Yukon University
+  historical_ejo_ontario_colleges:
+  - Algonquin College of Applied Arts and Technology
+  - Cambrian College of Applied Arts and Technology
+  - Canadore College of Applied Arts and Technology
+  - Centennial College
+  - Collège Boréal
+  - Conestoga College Institute of Technology and Advanced Learning
+  - Confederation College of Applied Arts and Technology
+  - Durham College of Applied Arts and Technology
+  - Fanshawe College of Applied Arts and Technology
+  - Fleming College of Applied Arts and Technology
+  - George Brown College
+  - Georgian College
+  - Humber College Institute of Technology and Advanced Learning
+  - La Cité collégiale
+  - Lambton College of Applied Arts and Technology
+  - Loyalist College of Applied Arts and Technology
+  - Michener Institute of Education at UHN
+  - Mohawk College of Applied Arts and Technology
+  - Niagara College of Applied Arts and Technology
+  - Northern College of Applied Arts and Technology
+  - Royal Military College of Canada
+  - Sault College of Applied Arts and Technology
+  - Seneca College of Applied Arts and Technology
+  - Sheridan College of Applied Arts and Technology
+  - St. Clair College of Applied Arts and Technology
+  - St. Lawrence College of Applied Arts and Technology
+  historical_ejo_ontario_universities:
+  - Algoma University
+  - Brock University
+  - Carleton University
+  - Lakehead University
+  - Laurentian University
+  - McMaster University
+  - Nipissing University
+  - Ontario College of Art and Design University
+  - Queen’s University
+  - Toronto Metropolitan University (formerly Ryerson University)
+  - Trent University
+  - Université de l’Ontario français
+  - University of Guelph
+  - Université de Hearst
+  - University of Ontario Institute of Technology
+  - University of Ottawa
+  - University of Sudbury
+  - University of Toronto
+  - University of Waterloo
+  - University of Windsor
+  - Western University
+  - Wilfrid Laurier University
+  - York University

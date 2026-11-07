@@ -55,10 +55,11 @@ schema:
       intends_to_reside_in_nl: boolean
     job_offer:
       weekly_hours: number; regular weekly hours. Floor is 30 for Skilled Worker and Express Entry.
-      is_permanent: boolean; Skilled Worker can use a 24-month duration instead. Express Entry must be
-        permanent.
-      duration_months: number; Skilled Worker offer duration in months when the offer is not permanent.
-        Floor is 24.
+      is_permanent: boolean; Express Entry must be permanent. Skilled Worker applicant guidance states
+        12 months (nl_skilled_worker.txt:27); employer criteria state at least 2 years (nl_employer_criteria.raw:595);
+        unresolved, rule stays NEEDS_REVIEW.
+      duration_months: number; Skilled Worker applicant guidance states 12 months (nl_skilled_worker.txt:27);
+        employer criteria state at least 2 years (nl_employer_criteria.raw:595); unresolved, rule stays NEEDS_REVIEW.
       hourly_wage: number; offered hourly wage.
       prevailing_hourly_wage: number; prevailing hourly wage supplied for this job. This file compares
         the two numbers and does not look up a wage table.
@@ -80,7 +81,7 @@ minimums:
   priority_skills_in_demand_months: 12
   weekly_hours: 30
   employer_months_operating: 24
-  skilled_worker_offer_duration_months_if_not_permanent: 24
+  skilled_worker_offer_duration_months_if_not_permanent: unresolved_12_vs_24
   skilled_worker_language_clb_teer_0_to_3: 5
   skilled_worker_language_clb_teer_4_to_5: 4
   express_entry_language_clb: 7

@@ -48,6 +48,9 @@ schema:
         (FSW, CEC, or FSTP) has its language floor met. CLB 7 is not assumed.
       holds_saskatchewan_licence: boolean; Saskatchewan licence when the occupation
         is regulated
+      saskatchewan_licensing_eligibility_proven: boolean; Employment Offer only,
+        verified regulatory-body proof of eligibility to be licensed for the
+        intended occupation, not merely an application or self-attestation
       settlement_funds_cad: number; available settlement funds
       settlement_funds_required_cad: number; officer-supplied funds requirement. LICO
         dollars are not embedded.
@@ -256,19 +259,21 @@ rules:
   conditional_required_fields:
     when: job_offer.is_regulated_occupation == true
     fields:
-    - candidate.holds_saskatchewan_licence
+    - candidate.stream
   pass_if: job_offer.is_regulated_occupation == false || candidate.holds_saskatchewan_licence
-    == true
+    == true || (candidate.stream == 'employment_offer' && candidate.saskatchewan_licensing_eligibility_proven
+    == true)
   fail_if: job_offer.is_regulated_occupation == true && candidate.holds_saskatchewan_licence
-    == false
-  missing_or_unverified: 'NEEDS_REVIEW: Regulated-occupation status or the Saskatchewan
-    licence cannot be verified.'
+    == false && ((candidate.stream == 'employment_offer' && candidate.saskatchewan_licensing_eligibility_proven
+    == false) || candidate.stream in ['occupation_in_demand', 'saskatchewan_express_entry'])
+  missing_or_unverified: 'NEEDS_REVIEW: Regulated-occupation status, route, licence
+    or Employment Offer regulatory proof of eligibility to be licensed cannot be verified.'
   evidence_anchor:
     evidence_unit_id: "bc.sinp_isw_employment_offer_page.html"
     source_id: "sinp_isw_employment_offer_page"
     source_file: "c3986bcc1664118a51bc6b57998c7ff04e0a477dfc0600d54402226ae7a0b3f2"
     section: ""
-    verbatim_excerpt: "Be eligible for Saskatchewan licensing if your intended occupation is a compulsory apprenticeship trade or a credential is legally required for you to work in that occupation in Saskatchewan."
+    verbatim_excerpt: "If you are planning to work a job that is regulated in Saskatchewan and requires a certification or licensing in Saskatchewan, you must obtain proof of eligibility to be licensed. Submit this proof with your SINP application."
 - id: sinp_settlement_funds
   category: funds
   severity: CRITICAL_REDLINE

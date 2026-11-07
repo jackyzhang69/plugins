@@ -32,10 +32,26 @@
   "category": "language"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.french_clb_minimum"
-  "pass_if": "candidate.french_clb_minimum >= 7"
-  "fail_if": "candidate.french_clb_minimum < 7"
+  required_fields:
+  - language.french_listening_clb
+  - language.french_reading_clb
+  - language.french_writing_clb
+  - language.french_speaking_clb
+  - candidate.french_clb_minimum
+  - language.french_test
+  - language.french_one_skill_retake
+  - language.french_test_date_yyyymmdd
+  - candidate.application_date_yyyymmdd
+  pass_if: min(language.french_listening_clb, language.french_reading_clb, language.french_writing_clb, language.french_speaking_clb)
+    >= 7 && candidate.french_clb_minimum == min(language.french_listening_clb, language.french_reading_clb, language.french_writing_clb,
+    language.french_speaking_clb) && language.french_test in ['TEF-Canada', 'TCF-Canada'] && language.french_one_skill_retake
+    == false && language.french_test_date_yyyymmdd <= candidate.application_date_yyyymmdd && language.french_test_date_yyyymmdd
+    > candidate.application_date_yyyymmdd - 20000
+  fail_if: '!(min(language.french_listening_clb, language.french_reading_clb, language.french_writing_clb, language.french_speaking_clb)
+    >= 7 && candidate.french_clb_minimum == min(language.french_listening_clb, language.french_reading_clb, language.french_writing_clb,
+    language.french_speaking_clb) && language.french_test in [''TEF-Canada'', ''TCF-Canada''] && language.french_one_skill_retake
+    == false && language.french_test_date_yyyymmdd <= candidate.application_date_yyyymmdd && language.french_test_date_yyyymmdd
+    > candidate.application_date_yyyymmdd - 20000)'
   "missing_or_unverified": "NEEDS_REVIEW: French cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_fssw"
@@ -48,10 +64,26 @@
   "category": "language"
   "severity": "CRITICAL_REDLINE"
   "eval_type": "deterministic"
-  "required_fields":
-  - "candidate.english_clb_minimum"
-  "pass_if": "candidate.english_clb_minimum >= 6"
-  "fail_if": "candidate.english_clb_minimum < 6"
+  required_fields:
+  - language.english_listening_clb
+  - language.english_reading_clb
+  - language.english_writing_clb
+  - language.english_speaking_clb
+  - candidate.english_clb_minimum
+  - language.english_test
+  - language.english_one_skill_retake
+  - language.english_test_date_yyyymmdd
+  - candidate.application_date_yyyymmdd
+  pass_if: min(language.english_listening_clb, language.english_reading_clb, language.english_writing_clb, language.english_speaking_clb)
+    >= 6 && candidate.english_clb_minimum == min(language.english_listening_clb, language.english_reading_clb, language.english_writing_clb,
+    language.english_speaking_clb) && language.english_test in ['IELTS-General-Training', 'CELPIP-General', 'PTE-Core']
+    && language.english_one_skill_retake == false && language.english_test_date_yyyymmdd <= candidate.application_date_yyyymmdd
+    && language.english_test_date_yyyymmdd > candidate.application_date_yyyymmdd - 20000
+  fail_if: '!(min(language.english_listening_clb, language.english_reading_clb, language.english_writing_clb, language.english_speaking_clb)
+    >= 6 && candidate.english_clb_minimum == min(language.english_listening_clb, language.english_reading_clb, language.english_writing_clb,
+    language.english_speaking_clb) && language.english_test in [''IELTS-General-Training'', ''CELPIP-General'', ''PTE-Core'']
+    && language.english_one_skill_retake == false && language.english_test_date_yyyymmdd <= candidate.application_date_yyyymmdd
+    && language.english_test_date_yyyymmdd > candidate.application_date_yyyymmdd - 20000)'
   "missing_or_unverified": "NEEDS_REVIEW: English cannot be verified."
   "evidence_anchor":
     "source_id": "oinp_fssw"

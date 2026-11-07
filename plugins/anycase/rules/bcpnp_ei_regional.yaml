@@ -125,10 +125,10 @@ rules:
       - assessment_date
       - candidate.business_owner_months
       - candidate.senior_manager_months
-    pass_if: "candidate.business_owner_months >= 36.0 || candidate.senior_manager_months >= 48.0 || (candidate.business_owner_months >= 12.0 && candidate.senior_manager_months >= 24.0)"
-    fail_if: "candidate.business_owner_months < 36.0 && candidate.senior_manager_months < 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
+    pass_if: "(candidate.business_owner_months > 36 && candidate.owner_ownership_ratio >= 0.10 && candidate.owner_active_onsite == true && candidate.owner_lookback_months <= 60) || (candidate.senior_manager_months > 48 && candidate.senior_ownership_ratio < 0.10 && candidate.senior_noc_teer in [0,1] && candidate.senior_supervised_fte >= 3 && candidate.senior_active_onsite == true && candidate.senior_lookback_months <= 60) || (candidate.business_owner_months >= 12 && candidate.senior_manager_months >= 24 && candidate.owner_ownership_ratio >= 0.10 && candidate.owner_active_onsite == true && candidate.owner_lookback_months <= 60 && candidate.senior_ownership_ratio < 0.10 && candidate.senior_noc_teer in [0,1] && candidate.senior_supervised_fte >= 3 && candidate.senior_active_onsite == true && candidate.senior_lookback_months <= 60)"
+    fail_if: "candidate.business_owner_months <= 36.0 && candidate.senior_manager_months <= 48.0 && (candidate.business_owner_months < 12.0 || candidate.senior_manager_months < 24.0)"
     missing_or_unverified: "NEEDS_REVIEW: Qualifying managerial or business ownership experience cannot be established."
-    interpretation: "Within the last 5 years, candidate must have at least 3 years as business owner, 4 years as senior manager, or 1 year owner + 2 years senior manager."
+    interpretation: "Within the last 60 months: more than 36 active onsite owner-manager months at >=10% ownership; more than 48 active onsite TEER 0/1 senior-manager months with <10% ownership and >=3 supervised FTE; or at least 12+24 qualifying months. Unknown role evidence does not pass."
     evidence_anchor:
       evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
       source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
@@ -162,15 +162,15 @@ rules:
     required_fields:
       - assessment_date
       - candidate.language_test.test_type
-      - candidate.language_test.valid_at_application
+      - candidate.language_test.valid_at_registration
       - candidate.language_test.listening_clb
       - candidate.language_test.reading_clb
       - candidate.language_test.writing_clb
       - candidate.language_test.speaking_clb
-    pass_if: "accepted_designated_test(candidate.language_test.test_type) && candidate.language_test.valid_at_application == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
-    fail_if: "candidate.language_test.valid_at_application == false || (candidate.language_test.test_type != None && !accepted_designated_test(candidate.language_test.test_type)) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
+    pass_if: "candidate.language_test.test_type in ['IELTS-General-Training', 'CELPIP-General', 'TEF', 'TCF Canada'] && candidate.language_test.valid_at_registration == true && min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) >= 4"
+    fail_if: "candidate.language_test.valid_at_registration == false || (candidate.language_test.test_type != None && !(candidate.language_test.test_type in ['IELTS-General-Training', 'CELPIP-General', 'TEF', 'TCF Canada'])) || min(candidate.language_test.listening_clb, candidate.language_test.reading_clb, candidate.language_test.writing_clb, candidate.language_test.speaking_clb) < 4"
     missing_or_unverified: "NEEDS_REVIEW: Mandatory language proficiency test (CLB 4) is unverified or expired."
-    interpretation: "Candidate must demonstrate CLB 4 across all four competencies on a designated test."
+    interpretation: "CLB 4 in each ability on one of the four tests designated by the May 27, 2024 guide; results must be within 24 months at registration, not at a later application date."
     evidence_anchor:
       evidence_unit_id: bc.bcpnp_entrepreneur_page_2025_09_10.html
       source_file: "7d502d3264cc66d8e4e7068674169929aec2a97b840206a9c09687ac873b9654"
@@ -201,3 +201,38 @@ rules:
       section: "2.9"
       page: "20"
       verbatim_excerpt: "Must establish an eligible new business aligned with the economic development priorities of the referring host community"
+
+  - id: ei_reg_education_or_full_ownership
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    pass_if: (education.has_postsecondary_credential == true && education.institution_licensed == true && education.language_training == false && education.recognized_in_canada == true) || (candidate.full_family_ownership_ratio == 1 && candidate.full_ownership_active_months_last_60 >= 36)
+    fail_if: (education.has_postsecondary_credential == true && education.institution_licensed == true && education.language_training == false && education.recognized_in_canada == true) == false && (candidate.full_family_ownership_ratio == 1 && candidate.full_ownership_active_months_last_60 >= 36) == false
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: A licensed postsecondary credential (not language training), or 36 of the last 60 active owner-manager months with 100% ownership shared only with spouse/common-law partner/dependent children. Unknown alternative remains unresolved.
+    evidence_anchor:
+      source_file: ei_regional_guide_2024_05_27.txt
+      section: 2.2(D)
+      verbatim_excerpt: experience as an active business owner-manager with 100 per cent ownership of the business for at least 36 of the past 60 months
+  - id: ei_reg_ineligible_business_types
+    category: candidate
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+    - assessment_date
+    - business.category
+    - business.immigration_linked_investment
+    - business.redemption_option
+    - business.passive_investment
+    - business.disrepute_decision
+    - business.disrepute_evidence_ref
+    pass_if: business.immigration_linked_investment == false && business.redemption_option == false && business.passive_investment == false && !(business.category in ["bed_and_breakfast", "hobby_farm", "home_based", "payday_loan", "cheque_cashing", "money_changing", "cash_machine", "pawnbroker", "tanning_salon", "dvd_rental", "coin_laundry", "automated_car_wash", "scrap_metal_recycling", "real_estate_brokerage", "insurance_brokerage", "business_brokerage", "real_estate_development", "sexually_explicit_products_or_services"]) && (!(business.category in ["used_goods", "goods_trading"]) || business.value_added_services == true) && business.disrepute_decision == "cleared" && business.disrepute_evidence_ref != ""
+    fail_if: business.immigration_linked_investment == true || business.redemption_option == true || business.passive_investment == true || business.category in ["bed_and_breakfast", "hobby_farm", "home_based", "payday_loan", "cheque_cashing", "money_changing", "cash_machine", "pawnbroker", "tanning_salon", "dvd_rental", "coin_laundry", "automated_car_wash", "scrap_metal_recycling", "real_estate_brokerage", "insurance_brokerage", "business_brokerage", "real_estate_development", "sexually_explicit_products_or_services"] || (business.category == "used_goods" && business.value_added_services == false) || (business.category == "goods_trading" && business.value_added_services == false) || business.disrepute_decision == "adverse"
+    missing_or_unverified: 'NEEDS_REVIEW: Missing or unverified source-required facts; no negative inference from absent evidence.'
+    interpretation: Separate business category, investment terms and documented human disrepute finding; used-goods repairs/refurbishing/recycling and demonstrated value-add goods trading preserve their exceptions. A cleared disrepute finding requires a source/case evidence reference, not a probability.
+    evidence_anchor:
+      source_file: ei_regional_guide_2024_05_27.txt
+      section: 2.3(B)
+      verbatim_excerpt: Your registration will be disqualified if you propose an ineligible business.

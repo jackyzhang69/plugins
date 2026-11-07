@@ -89,3 +89,88 @@ rules:
     source_file: src47.html
     section: Farm Investor Pathway eligibility
     verbatim_excerpt: invest a minimum of $300,000 CAD
+
+- id: mpnp_fip_ownership_operation
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['entrepreneur']) || ((candidate.stream == 'farm_investor') && (candidate.farm_ownership_years >= 3 && candidate.farm_operation_years >= 3 && candidate.farm_history_documents_verified == true))
+  fail_if: (candidate.stream == 'farm_investor') && (candidate.farm_ownership_years < 3 || candidate.farm_operation_years
+    < 3 || candidate.farm_history_documents_verified == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:mpnp-fip-farm-history
+    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
+    section: lines 3-16
+    verbatim_excerpt: You must have a minimum of 3 years of farm ownership and operation experience, supported
+      by verifiable documents.
+    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+
+- id: mpnp_fip_active_operation
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['entrepreneur']) || ((candidate.stream == 'farm_investor') && (candidate.farm_research_visit == true && candidate.farm_recurring_activities == true && candidate.lives_on_farm == true && candidate.manages_from_manitoba == true && candidate.primary_production == true && candidate.economically_viable_assessed == true && candidate.value_added_manitoba == true && candidate.third_party_farm_manager == false && candidate.speculative_farm == false))
+  fail_if: (candidate.stream == 'farm_investor') && (candidate.farm_research_visit == false || candidate.farm_recurring_activities
+    == false || candidate.lives_on_farm == false || candidate.manages_from_manitoba == false || candidate.primary_production
+    == false || candidate.economically_viable_assessed == false || candidate.value_added_manitoba == false
+    || candidate.third_party_farm_manager == true || candidate.speculative_farm == true)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:mpnp-fip-visit-viability-operation
+    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
+    section: lines 3-16
+    verbatim_excerpt: The farm business must be in active primary agriculture production and economically
+      viable.
+    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+
+- id: mpnp_fip_adaptability_interview
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['entrepreneur']) || ((candidate.stream == 'farm_investor') && (candidate.practical_farming_skills_assessed == true && candidate.technical_knowledge_assessed == true && candidate.technology_transfer_assessed == true && (candidate.interview_invited == false || (candidate.interview_invited == true && candidate.interview_language in ['English', 'French']))))
+  fail_if: (candidate.stream == 'farm_investor') && (candidate.practical_farming_skills_assessed == false
+    || candidate.technical_knowledge_assessed == false || candidate.technology_transfer_assessed == false
+    || (candidate.interview_invited == true && candidate.interview_language != null && !(candidate.interview_language
+    in ['English', 'French'])))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:mpnp-fip-practical-skills-interview
+    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
+    section: lines 3-16
+    verbatim_excerpt: If you are invited to attend a FIP interview, you will be required to conduct the
+      interview in either French or English.
+    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+
+- id: mpnp_fip_interest_submission
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream == 'entrepreneur' || (candidate.stream == 'farm_investor' && candidate.stage != null && candidate.stage != 'interest_submission')) || ((candidate.stream == 'farm_investor' && candidate.stage == 'interest_submission') && (candidate.minimum_fip_criteria_assessed == true && candidate.interest_guidelines_complete == true && candidate.farm_business_concept_complete == true && candidate.farm_comparable_technology_assessed == true && candidate.farm_comparable_practices_assessed == true && candidate.farm_comparable_scale_assessed == true && candidate.farm_comparable_equipment_assessed == true && candidate.farm_comparable_output_assessed == true && candidate.practical_farming_skills_assessed == true && candidate.technical_knowledge_assessed == true && candidate.technology_transfer_assessed == true && candidate.submission_channel == 'email' && (candidate.representative_used == false || (candidate.representative_used == true && candidate.representative_code_of_conduct_complete == true))))
+  fail_if: (candidate.stream == 'farm_investor' && candidate.stage == 'interest_submission') && (candidate.minimum_fip_criteria_assessed
+    == false || candidate.interest_guidelines_complete == false || candidate.farm_business_concept_complete
+    == false || candidate.farm_comparable_technology_assessed == false || candidate.farm_comparable_practices_assessed
+    == false || candidate.farm_comparable_scale_assessed == false || candidate.farm_comparable_equipment_assessed
+    == false || candidate.farm_comparable_output_assessed == false || candidate.practical_farming_skills_assessed
+    == false || candidate.technical_knowledge_assessed == false || candidate.technology_transfer_assessed
+    == false || (candidate.submission_channel != null && candidate.submission_channel != 'email') || (candidate.representative_used
+    == true && candidate.representative_code_of_conduct_complete == false))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:mpnp-fip-interest-submission-gate
+    source_file: regions/prairies/sources/current/mb_fip_apply.txt
+    section: lines 3-17
+    verbatim_excerpt: Please note that the business concept is not an application to the MPNP.
+    source_sha256: 711ba9f28408eb7bcbf30b1db9311e07a690020b6cd7f861850ff25bbf28c8ca

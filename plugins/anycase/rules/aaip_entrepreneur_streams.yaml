@@ -155,3 +155,66 @@ rules:
     source_file: src04.html
     section: Language CLB floors by stream
     verbatim_excerpt: CLB) level of 4
+
+- id: aaip_rural_personal_capital
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['farm', 'graduate', 'foreign_graduate']) || ((candidate.stream == 'rural') && (candidate.net_worth_cad >= 300000 && candidate.net_worth_personal_or_spousal == true && candidate.personal_spousal_equity_investment_cad >= 100000 && ((candidate.business_kind == 'new' && candidate.equity_ratio >= 0.51 && candidate.partners_canadian_or_pr == true) || (candidate.business_kind == 'succession' && candidate.equity_ratio >= 1 && candidate.complete_ownership_transfer == true))))
+  fail_if: (candidate.stream == 'rural') && (candidate.net_worth_cad < 300000 || candidate.net_worth_personal_or_spousal
+    == false || candidate.personal_spousal_equity_investment_cad < 100000 || (candidate.business_kind ==
+    'new' && (candidate.equity_ratio < 0.51 || candidate.partners_canadian_or_pr == false)) || (candidate.business_kind
+    == 'succession' && (candidate.equity_ratio < 1 || candidate.complete_ownership_transfer == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:rural-funds-investment-equity
+    source_file: regions/prairies/sources/current/ab_rural_entrepreneur_eligibility.txt
+    section: lines 45-65
+    verbatim_excerpt: Minimum investment of $100,000 from candidate’s own (and/or spouse/common-law partner)
+      equity.
+    source_sha256: 4b2e144deef9e331c6398093b5e8ec8eab8e8ba442be06ce9bc81084625c9120
+
+- id: aaip_rural_business_jobs
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['farm', 'graduate', 'foreign_graduate']) || ((candidate.stream == 'rural') && (candidate.business_exclusion_assessed == false && (candidate.business_kind == 'succession' || (candidate.business_kind == 'new' && candidate.qualifying_jobs >= 1 && candidate.jobs_full_time == true && candidate.job_workers_canadian_or_pr == true && candidate.job_workers_non_relative == true && candidate.jobs_maintained_months >= 6))))
+  fail_if: (candidate.stream == 'rural') && (candidate.business_exclusion_assessed == true || (candidate.business_kind
+    == 'new' && (candidate.qualifying_jobs < 1 || candidate.jobs_full_time == false || candidate.job_workers_canadian_or_pr
+    == false || candidate.job_workers_non_relative == false || candidate.jobs_maintained_months < 6)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:rural-business-creation-exclusions
+    source_file: regions/prairies/sources/current/ab_rural_entrepreneur_eligibility.txt
+    section: lines 60-70
+    verbatim_excerpt: For business succession, job creation is not required.
+    source_sha256: 4b2e144deef9e331c6398093b5e8ec8eab8e8ba442be06ce9bc81084625c9120
+
+- id: aaip_fge_experience_education_plan
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: (candidate.stream in ['rural', 'farm', 'graduate']) || ((candidate.stream == 'foreign_graduate') && (candidate.qualifying_full_time_business_or_incubator_months >= 6 && candidate.foreign_postsecondary_degree == true && candidate.degree_years_before_eoi >= 0 && candidate.degree_years_before_eoi <= 10 && candidate.eca_canadian_degree_equivalent == true && candidate.business_plan_projected_financials == true && candidate.pitch_minutes == 10 && candidate.pitch_slides_only == true))
+  fail_if: (candidate.stream == 'foreign_graduate') && (candidate.qualifying_full_time_business_or_incubator_months
+    < 6 || candidate.foreign_postsecondary_degree == false || candidate.degree_years_before_eoi < 0 || candidate.degree_years_before_eoi
+    > 10 || candidate.eca_canadian_degree_equivalent == false || candidate.business_plan_projected_financials
+    == false || (candidate.pitch_minutes != null && candidate.pitch_minutes != 10) || candidate.pitch_slides_only
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
+    a determination.'
+  evidence_anchor:
+    evidence_unit_id: prairies:detail:E:fge-experience-education-plan
+    source_file: regions/prairies/sources/current/ab_foreign_graduate_eligibility.txt
+    section: lines 22-38
+    verbatim_excerpt: Minimum of 6 months full-time work experience that can be a combination of actively
+      managing or owning the business or equivalent (equivalencies are work experience with business incubator
+      or business accelerator).
+    source_sha256: 157264e037cbb300d319cefe8fa11ea8516070ec07974ea7c8148d351870e361

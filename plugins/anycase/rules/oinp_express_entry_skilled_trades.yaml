@@ -1,0 +1,256 @@
+schema_version: 1.0.0
+catalog_id: oinp_express_entry_skilled_trades
+jurisdiction: CA-ON
+category: OINP Express Entry Skilled Trades
+display_name: OINP Express Entry Skilled Trades — historical applications
+status: LEGACY_CLOSED
+program_id: OINP_EETS
+stream_id: SKILLED_TRADES
+source_edition: Captured O. Reg. 422/17 s.12; O. Reg. 421/17 s.3.2; historical pre-2026-05-30 intake only
+decision_scope: Independent historical Skilled Trades criteria, not HCP. CEC qualification, restricted occupations,
+  dated settlement minimum and published NOI deadline require independently verified reference facts; absent facts
+  remain NEEDS_REVIEW. No registration or publication is implied.
+sources:
+- id: oinp_eets
+  title: O. Reg. 422/17, Skilled trades
+  url: https://www.ontario.ca/laws/regulation/170422
+  citation: s.12(0.1)-(7)
+rules:
+- id: eets_profile_pool
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.in_express_entry_pool
+  pass_if: candidate.in_express_entry_pool == true
+  fail_if: '!(candidate.in_express_entry_pool == true)'
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_profile_pool are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 421/17 s.3.2(1)-(4)
+    source_file: snapshot/official-raw/8fe24f2835f59463f23600272c342f2d2d9ec912b91fa0976ef1962fa642efe4
+    section: s.3.2(1)-(4)
+    verbatim_excerpt: Express Entry system
+- id: eets_cec_qualification
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.federal_class == 'CEC' && candidate.cec_eligible == true
+  fail_if: candidate.stage == 'application' && !(candidate.federal_class == 'CEC' && candidate.cec_eligible == true)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_cec_qualification are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(1)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(1)
+    verbatim_excerpt: The applicant must meet the criteria to be eligible to receive, under the Express Entry system
+      as a member of the Canadian experience class, an invitation to apply to become a permanent resident.
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - candidate.federal_class
+    - candidate.cec_eligible
+  precondition: candidate.stage == 'application'
+- id: eets_noi_application
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.stage == 'application' && candidate.notification_of_interest == true && candidate.noi_attributes_demonstrated
+    == true && candidate.application_date_yyyymmdd <= candidate.published_noi_deadline_yyyymmdd && candidate.application_date_yyyymmdd
+    >= candidate.noi_date_yyyymmdd && candidate.application_date_yyyymmdd < 20260530
+  fail_if: candidate.stage == 'application' && !(candidate.stage == 'application' && candidate.notification_of_interest
+    == true && candidate.noi_attributes_demonstrated == true && candidate.application_date_yyyymmdd <= candidate.published_noi_deadline_yyyymmdd
+    && candidate.application_date_yyyymmdd >= candidate.noi_date_yyyymmdd && candidate.application_date_yyyymmdd
+    < 20260530)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_noi_application are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(0.1),(2)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(0.1),(2)
+    verbatim_excerpt: The applicant must have been issued a notification of interest from Ontario and have applied
+      for a certificate of nomination within the deadline determined by the director
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - candidate.notification_of_interest
+    - candidate.noi_attributes_demonstrated
+    - candidate.application_date_yyyymmdd
+    - candidate.published_noi_deadline_yyyymmdd
+    - candidate.noi_date_yyyymmdd
+  precondition: candidate.stage == 'application'
+- id: eets_qualifying_work
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: work.paid_full_time_equivalent_months_in_last_24 >= 12 && work.lawfully_worked_in_ontario == true &&
+    work.during_full_time_study == false && work.self_employment == false && work.occupation_identified_in_express_entry
+    == true && work.restricted_occupation == false && noc_code_matches_verified_noc_2021_teer(work.noc_code, work.noc_teer)
+    && work.noc_teer in [2, 3] && ((work.noc_code >= '72000' && work.noc_code < '72600') || (work.noc_code >= '73000'
+    && work.noc_code < '74000') || (work.noc_code >= '82000' && work.noc_code < '84000') || (work.noc_code >= '93000'
+    && work.noc_code < '94000' && work.noc_code != '93200') || (work.noc_code >= '63200' && work.noc_code < '63210'
+    && work.noc_code != '63200'))
+  fail_if: candidate.stage == 'application' && !(work.paid_full_time_equivalent_months_in_last_24 >= 12 && work.lawfully_worked_in_ontario
+    == true && work.during_full_time_study == false && work.self_employment == false && work.occupation_identified_in_express_entry
+    == true && work.restricted_occupation == false && noc_code_matches_verified_noc_2021_teer(work.noc_code, work.noc_teer)
+    && work.noc_teer in [2, 3] && ((work.noc_code >= '72000' && work.noc_code < '72600') || (work.noc_code >= '73000'
+    && work.noc_code < '74000') || (work.noc_code >= '82000' && work.noc_code < '84000') || (work.noc_code >= '93000'
+    && work.noc_code < '94000' && work.noc_code != '93200') || (work.noc_code >= '63200' && work.noc_code < '63210'
+    && work.noc_code != '63200')))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_qualifying_work are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(3)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(3)
+    verbatim_excerpt: within two years before the date of making the application and while lawfully working in Ontario,
+      a cumulative period of at least one year of paid full-time work experience
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - work.paid_full_time_equivalent_months_in_last_24
+    - work.lawfully_worked_in_ontario
+    - work.during_full_time_study
+    - work.self_employment
+    - work.occupation_identified_in_express_entry
+    - work.restricted_occupation
+    - work.noc_code
+    - work.noc_teer
+  precondition: candidate.stage == 'application'
+- id: eets_licence
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: work.ontario_licence_required == false || (work.ontario_licence_required == true && work.licence_held_during_work
+    == true && work.licence_valid_at_application == true)
+  fail_if: candidate.stage == 'application' && !(work.ontario_licence_required == false || (work.ontario_licence_required
+    == true && work.licence_held_during_work == true && work.licence_valid_at_application == true))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_licence are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(4)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(4)
+    verbatim_excerpt: the applicant must have held the required licence or other authorization during the time the
+      individual engaged in the activity and at the time of making the application.
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - work.ontario_licence_required
+    - work.licence_held_during_work
+    - work.licence_valid_at_application
+  precondition: candidate.stage == 'application'
+- id: eets_language
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: min(language.listening_clb, language.reading_clb, language.writing_clb, language.speaking_clb) >= 5 &&
+    language.test in ['IELTS-General-Training', 'CELPIP-General', 'PTE-Core', 'TEF-Canada', 'TCF-Canada'] && language.one_skill_retake
+    == false && language.test_date_yyyymmdd <= candidate.application_date_yyyymmdd && language.test_date_yyyymmdd
+    > candidate.application_date_yyyymmdd - 20000
+  fail_if: candidate.stage == 'application' && !(min(language.listening_clb, language.reading_clb, language.writing_clb,
+    language.speaking_clb) >= 5 && language.test in ['IELTS-General-Training', 'CELPIP-General', 'PTE-Core', 'TEF-Canada',
+    'TCF-Canada'] && language.one_skill_retake == false && language.test_date_yyyymmdd <= candidate.application_date_yyyymmdd
+    && language.test_date_yyyymmdd > candidate.application_date_yyyymmdd - 20000)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_language are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(5)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(5)
+    verbatim_excerpt: English or French language proficiency at or above the level of Canadian Language Benchmark
+      5, as set out in the Canadian Language Benchmarks, in all four proficiencies
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - language.listening_clb
+    - language.reading_clb
+    - language.writing_clb
+    - language.speaking_clb
+    - language.test
+    - language.one_skill_retake
+    - language.test_date_yyyymmdd
+    - candidate.application_date_yyyymmdd
+  precondition: candidate.stage == 'application'
+- id: eets_ontario_status
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.lawfully_residing_in_ontario == true && candidate.valid_work_permit == true
+  fail_if: candidate.stage == 'application' && !(candidate.lawfully_residing_in_ontario == true && candidate.valid_work_permit
+    == true)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_ontario_status are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(6)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(6)
+    verbatim_excerpt: At the time of making the application, the applicant must be lawfully residing in Ontario
+      and hold a valid work permit.
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - candidate.lawfully_residing_in_ontario
+    - candidate.valid_work_permit
+  precondition: candidate.stage == 'application'
+- id: eets_settlement_funds
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: funds.minimum_settlement_amount_cad > 0 && funds.transferable_available_unencumbered_cad >= 0 && funds.ontario_job_offer_annual_earnings_cad
+    >= 0 && funds.transferable_available_unencumbered_cad + funds.ontario_job_offer_annual_earnings_cad >= funds.minimum_settlement_amount_cad
+  fail_if: candidate.stage == 'application' && !(funds.minimum_settlement_amount_cad > 0 && funds.transferable_available_unencumbered_cad
+    >= 0 && funds.ontario_job_offer_annual_earnings_cad >= 0 && funds.transferable_available_unencumbered_cad +
+    funds.ontario_job_offer_annual_earnings_cad >= funds.minimum_settlement_amount_cad)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_settlement_funds are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 422/17 s.12(7)
+    source_file: snapshot/official-raw/11dd020ae4e80a513f05d84488b51badb3d5f68488ff8c7e89e8ad2e4ffae108
+    section: s.12(7)
+    verbatim_excerpt: Funds that are transferable, available and unencumbered by debts or other obligations
+  conditional_required_fields:
+    when: candidate.stage == 'application'
+    fields:
+    - funds.minimum_settlement_amount_cad
+    - funds.transferable_available_unencumbered_cad
+    - funds.ontario_job_offer_annual_earnings_cad
+  precondition: candidate.stage == 'application'
+- id: eets_noi_selection
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stage
+  pass_if: candidate.in_express_entry_pool == true && candidate.notification_of_interest == true && candidate.noi_attributes_demonstrated
+    == true
+  fail_if: candidate.stage == 'noi' && !(candidate.in_express_entry_pool == true && candidate.notification_of_interest
+    == true && candidate.noi_attributes_demonstrated == true)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-bound facts for eets_noi_selection are absent or unverified.'
+  evidence_anchor:
+    source_id: oinp_eets
+    citation: O. Reg. 421/17 s.3.2(1)-(4)
+    source_file: snapshot/official-raw/8fe24f2835f59463f23600272c342f2d2d9ec912b91fa0976ef1962fa642efe4
+    section: s.3.2(1)-(4)
+    verbatim_excerpt: Express Entry system
+  conditional_required_fields:
+    when: candidate.stage == 'noi'
+    fields:
+    - candidate.in_express_entry_pool
+    - candidate.notification_of_interest
+    - candidate.noi_attributes_demonstrated
+  precondition: candidate.stage == 'noi'

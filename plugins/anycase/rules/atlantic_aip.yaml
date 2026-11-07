@@ -16,6 +16,26 @@ sources:
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/atlantic-immigration.html
   citation: Atlantic Immigration Program
   legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+- id: aip_work_experience
+  title: Atlantic Immigration Program — Work experience
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/atlantic-immigration/how-to-immigrate/work-experience.html
+  citation: Work experience and Atlantic graduate exemption
+  legal_authority: Official IRCC guidance for experience hours, TEER, graduate exemption, dates, and excluded studies.
+- id: aip_recognized_institutions
+  title: Atlantic Immigration Program — Recognized post-secondary institutions
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/atlantic-immigration/post-secondary-institutions.html
+  citation: Recognized post-secondary institutions
+  legal_authority: Official IRCC institution list used to verify the Atlantic graduate institution condition.
+- id: aip_regulation_87_3
+  title: Immigration and Refugee Protection Regulations, section 87.3(3)–(5)
+  url: https://laws-lois.justice.gc.ca/eng/regulations/SOR-2002-227/section-87.3.html
+  citation: Work-experience and recent-graduate requirements
+  legal_authority: Federal regulation current to 2026-09-30; statutory work, authorization, and recent-graduate conditions.
+- id: aip_proof_funds
+  title: Atlantic Immigration Program — Proof of funds
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/atlantic-immigration/proof-funds.html
+  citation: Minimum table updated July 29 2025; page dated May 28 2026; observed November 7 2026
+  legal_authority: Published minimum table and family, accessible nonborrowed funds, bank-letter and application/visa-issuance requirements. Update date is not an annual expiry; later changes and historical cohorts are not certified.
 schema:
   input_type: object
   required_top_level:
@@ -56,40 +76,62 @@ rules:
   - job_offer.noc_teer
   - candidate.language_clb_minimum
   conditional_required_fields:
-    when: job_offer.noc_teer in [0, 1, 2, 3, 4]
+    when: job_offer.noc_teer == 4
     fields:
-    - candidate.experience_months
-  pass_if: (job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum >= 5 && (candidate.experience_months >= 12
-    || candidate.post_secondary == true)) || (job_offer.noc_teer == 4 && candidate.language_clb_minimum >= 4 && candidate.meets_canadian_high_school
-    == true && candidate.experience_months >= 12)
-  fail_if: (job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) || (job_offer.noc_teer in [0, 1, 2,
-    3] && candidate.experience_months < 12 && candidate.post_secondary == false) || (job_offer.noc_teer == 4 && (candidate.language_clb_minimum
-    < 4 || candidate.meets_canadian_high_school == false || candidate.experience_months < 12)) || (job_offer.noc_teer != null
-    && !(job_offer.noc_teer in [0, 1, 2, 3, 4]))
-  missing_or_unverified: 'NEEDS_REVIEW: Language, education, or experience cannot be verified.'
+    - candidate.meets_canadian_high_school
+  pass_if: >-
+    ((job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum >= 5) ||
+    (job_offer.noc_teer == 4 && candidate.language_clb_minimum >= 4 &&
+    candidate.meets_canadian_high_school == true)) &&
+    ((candidate.aip_work_experience_hours >= 1560 &&
+    candidate.aip_work_experience_period_at_least_one_year == true) ||
+    candidate.aip_graduate_exception_eligible == true)
+  fail_if: >-
+    (job_offer.noc_teer in [0, 1, 2, 3] && candidate.language_clb_minimum < 5) ||
+    (job_offer.noc_teer == 4 && (candidate.language_clb_minimum < 4 ||
+    candidate.meets_canadian_high_school == false)) ||
+    (job_offer.noc_teer != null && !(job_offer.noc_teer in [0, 1, 2, 3, 4])) ||
+    (job_offer.noc_teer in [0, 1, 2, 3, 4] &&
+    candidate.aip_work_experience_inputs_complete == true &&
+    (candidate.aip_work_experience_hours < 1560 ||
+    candidate.aip_work_experience_period_at_least_one_year == false) &&
+    candidate.aip_graduate_exception_eligible == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Verified work history or the detailed Atlantic graduate exception facts cannot be established.'
   evidence_anchor:
-    evidence_unit_id: EU-AIP-LANGUAGE-EXPERIENCE-002
-    source_file: atlantic-immigration-language-testing.html
-    section: Language, education and work experience
-    verbatim_excerpt: CLB 5 for job offer in TEER 0, 1, 2 or 3 CLB 4 for job offer in TEER 4 You need at least 1,560 hours
-      of related work experience over the past 5 years. This is the same as working 30 hours per week for 1 year.
+    evidence_unit_id: aip.work_experience.native_facts_2026_05_28
+    source_file: regions/atlantic/sources/aip_work_experience.txt
+    section: Work experience; Exemption if you studied and graduated in Atlantic Canada; Ineligible studies
+    verbatim_excerpt: |-
+      You need at least 1,560 hours of related work experience over the past 5 years.
+      You must have worked these hours over a period of at least 1 year.
+      Your qualifying work experience must:
+      - have been for a paid job
+      - not be from a self-employed job
+      - include the actions in the description of your NOC
+      - include most of the main NOC duties
+      - be in the same TEER category as your job offer or higher:
+      You do not need to meet the work experience requirements if you’re an international graduate and you:
+      - have a degree, diploma, certificate, or trade or apprenticeship certification that took at least 2 years
+      - is from a recognized post-secondary institution in 1 of the 4 Atlantic provinces
+      - received it less than 2 years before you applied for permanent residence
+      - were a full-time student for the entire time you were studying
+      - lived in 1 of the 4 Atlantic provinces for at least 16 months during the last 2 years before you graduated
+      - had the visa or permit you needed to work, study or get training while you were in Canada
+      The study of English or French as a second language was at least half of the program.
+      Distance learning was at least half of the program.
+      You received a scholarship or fellowship with an agreement that you return to your home country to apply the knowledge and skills you gained.
 - id: aip_funds
   category: funds
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.working_in_canada
-  conditional_required_fields:
-    when: candidate.working_in_canada == false
-    fields:
-    - candidate.settlement_funds_cad
-    - candidate.settlement_funds_required_cad
-  pass_if: candidate.working_in_canada == true || candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad
-  fail_if: candidate.working_in_canada == false && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
-  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
+  # Native intake recomputes dated exemption and source-bound family/amount facts.
+  # Application PASS covers that stage only; visa issuance requires a later recheck.
+  required_fields: []
+  pass_if: candidate.aip_funds_exempt == true || candidate.aip_funds_amount_sufficient == true
+  fail_if: candidate.aip_funds_exempt == false && candidate.aip_funds_amount_sufficient == false
+  missing_or_unverified: 'NEEDS_REVIEW: Verify dated employment and valid permit together, or complete the evidence-backed family and stage-specific funds contract. The published table is bound to its recorded source/as-of, not a caller-required threshold. Application PASS does not establish future visa-issuance availability.'
   evidence_anchor:
-    evidence_unit_id: "atl.aip_imm0155_checklist_2025_01.p004"
-    source_file: "53f4e3bebab2622cf7572fcb41e1e829d45765c8b52edd470e1ef93ab2363659"
-    page: "4"
-    section: Proof of funds
-    verbatim_excerpt: "You are not required to provide proof of funds if you are already working in Canada with a valid work permit."
+    evidence_unit_id: aip.proof_funds.published_table_2025_07_29
+    source_file: "90ea4cf2a00433344866a067d74224156ea8bcfc1643e96ce440b4b271203eb8"
+    section: How much money you need; What we accept as proof
+    verbatim_excerpt: "The table below shows the minimum amount you need to immigrate to Canada."
