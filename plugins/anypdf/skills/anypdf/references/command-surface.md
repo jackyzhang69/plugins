@@ -7,7 +7,10 @@ Public commands: `login`, `whoami`, `logout`, `doctor`, `read`, `validate`,
 `forms catalog`, `forms resolve`, `forms schema`, `fill submit`,
 `fill readiness`, `fill status`, `fill download`, `intake submit`,
 `feedback submit`, `feedback status`, `knowledge list`, `knowledge add`,
-`knowledge remove`, `resume --envelope-stdin`, `commands`.
+`knowledge remove`, `resume --envelope-stdin`, `commands`,
+`signatures create`, `signatures status`, `signatures add-asset`,
+`signatures assign`, `signatures preview`, `signatures confirm`,
+`signatures download`.
 
 When an ordinary command returns `jz.plugin.envelope.v1` with
 `status=needs_agent`, complete its requested agent step and pipe that exact JSON

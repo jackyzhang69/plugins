@@ -139,11 +139,11 @@ tools unless the user asks for technical detail. Never show credentials.
    treat `--flatten` as IRCC upload, submission-ready, or a replacement for the
    interactive filled PDF.
 
-   Unsigned IMM5476 stays that interactive fill. After the user supplies
-   signatures, AnyPDF itself returns a static page-image PDF as the signed
-   result. Do not run pdftoppm, img2pdf, or any other local rasterizer, and do
-   not use `--flatten` to manufacture that signed copy. The static signed file
-   is still not an IRCC upload or government-portal submission.
+   Unsigned IMM5476 stays interactive. To add supplied signature images and
+   obtain a signed page-image PDF, follow [Sign a completed IMM5476](#sign-a-completed-imm5476)
+   after the fill succeeds. Every connected user can sign their own fill;
+   this does not require an administrator. Do not manufacture the signed copy
+   with a local rasterizer or `--flatten`. It is not an IRCC submission.
 
    Saved memory is not consent, a warning acknowledgement, or submit
    authorization. Obtain those confirmations in the current run even when a
@@ -283,3 +283,83 @@ Suggest [tell-jacky](tell-jacky.md) only after a reportable typed action or an e
 reproducible supported recovery. Draft a plain, redacted report with no field
 values, PDF files, credentials, local paths, raw output, or stack traces; send
 it only after the person explicitly confirms the draft. Never send feedback automatically.
+
+## Sign a completed IMM5476
+
+Use only the current user's succeeded IMM5476 fill job. Signing is separate
+from filling; never treat a request to fill as permission to sign. The host
+agent locates the supplied images and prepares JSON files for the human.
+Do not ask the human to run commands or transcribe paths.
+
+1. Save the explicit signing context to an absolute JSON path:
+
+   ```json
+   {"request_type":"appointing","submission_mode":"paper"}
+   ```
+
+   `request_type` is `appointing`, `updating`, `cancelling`,
+   `cancel_and_appointing`, or `withdrawing`, matching this form's purpose.
+   Include `representative_is_supervised_trainee`,
+   `sponsorship_with_spouse_included`, and `applicant_signature_unavailable`
+   only when those facts apply; absent means false. Ask about an unknown fact
+   that changes the required signers; do not guess or omit a required signer.
+
+   ```bash
+   $ANYPDF signatures create --job-id <succeeded_job_id> --input /absolute/context.json
+   $ANYPDF signatures status --session-id <session_id>
+   ```
+
+   Keep the returned one-time `nonce` for confirmation. The response supplies
+   the required `slot_id` and `signer_role` pairs; do not invent slots.
+
+2. Explain that the selected signature images will be sent to AnyPDF for this
+   document. Locate the images the user supplied; never search unrelated
+   people's signatures or fabricate handwriting. PNG, JPEG and HEIC images
+   may be supplied, up to 6 MiB each; unreadable images are refused.
+
+   ```bash
+   $ANYPDF signatures add-asset --session-id <session_id> --image /absolute/signature.png
+   ```
+
+   For each returned requirement, write an assignment JSON:
+
+   ```json
+   {"slot_id":"section_e_applicant","subject_id":"applicant-1","role":"applicant","asset_id":"<uploaded_asset_id>","date":"2026-11-07"}
+   ```
+
+   Use the signer's agreed identifier and signing date, never a future date.
+   Match each person's own image to their role. Reusing one image for different
+   people needs explicit approval and `"allow_shared_asset":true`; never add
+   that flag merely to clear an error.
+
+   ```bash
+   $ANYPDF signatures assign --session-id <session_id> --input /absolute/assignment.json
+   $ANYPDF signatures preview --session-id <session_id> --expected-version <current_version>
+   ```
+
+3. Show the human all signer/image/date matches and any shared-image warning.
+   Obtain approval for this exact preview before confirming. Put the returned
+   current version and the session's one-time nonce in a private JSON file:
+
+   ```json
+   {"expected_version":1,"nonce":"<one_time_nonce>"}
+   ```
+
+   ```bash
+   $ANYPDF signatures confirm --session-id <session_id> --input /absolute/confirmation.json --user-confirmed
+   ```
+
+   The flag records the human's approval; it is not permission to skip asking.
+   Never reuse approval for a different preview. A stale version or consumed
+   nonce is refused. A failed session requires a fresh preview and approval;
+   retain any newly returned nonce rather than retrying the consumed one.
+
+4. Only when `state` is `succeeded`, save to a new absolute path:
+
+   ```bash
+   $ANYPDF signatures download --session-id <session_id> --output /absolute/signed.pdf
+   ```
+
+   The signed file is a static page-image PDF with the supplied signatures;
+   the original unsigned filled PDF remains separate. It is not a certificate-
+   based digital signature, an issuer upload, or a government submission.

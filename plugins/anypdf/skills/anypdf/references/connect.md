@@ -14,7 +14,7 @@ which prints Markdown.
 
 Do not call whichever `anypdf` is first on PATH.
 
-Platform: macOS arm64 `darwin-arm64`; Windows x64 `win32-x64` (`anypdf.exe`).
+Platform: macOS arm64 `darwin-arm64`; Linux x64 `linux-x64`; Windows x64 `win32-x64` (`anypdf.exe`).
 
 This skill is an **Agent Skills** router. It may arrive via a host marketplace
 plugin install, or because the human/agent attached the skill folder or the
