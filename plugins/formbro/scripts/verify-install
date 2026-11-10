@@ -37,6 +37,8 @@ def current_platform() -> tuple[str | None, str | None]:
         return "darwin-arm64", "formbro"
     if system == "windows" and machine in {"amd64", "x86_64"}:
         return "win32-x64", "formbro.exe"
+    if system == "linux" and machine in {"x86_64", "amd64"}:
+        return "linux-x64", "formbro"
     return None, None
 
 
@@ -66,7 +68,7 @@ def main() -> int:
     if release_tag != f"plugin-v{args.expected_version}":
         failures.append("runtime_release_tag_mismatch")
     platforms = runtime.get("binary", {}).get("platforms", {})
-    if set(platforms) != {"darwin-arm64", "win32-x64"}:
+    if set(platforms) != {"darwin-arm64", "win32-x64", "linux-x64"}:
         failures.append("runtime_platform_set_mismatch")
     if "pdf" in json.dumps(runtime).lower():
         failures.append("runtime_declares_pdf_component")

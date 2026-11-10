@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # formbro
 
-Version `1.9.4`.
+Version `1.9.6`.
 
 Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write entities, validate, fill IMM PDFs, and drive local webform fills.
 

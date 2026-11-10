@@ -11,7 +11,7 @@
             "name": "webform-worker",
             "asset": "webform-worker-darwin-arm64.tar.gz",
             "archive": "tar.gz",
-            "sha256": "95561f45979ec3d4af4d8dbc9030e63b7dbf27821e2b8ff93e638c1256785f4f"
+            "sha256": "585e2401bb99efd97edb450a43bb33fc970df1d60105281a27d7de1d5cb70362"
           }
         ]
       },
@@ -22,18 +22,26 @@
             "name": "webform-worker.exe",
             "asset": "webform-worker-win32-x64.zip",
             "archive": "zip",
-            "sha256": "5c17a5057f89c4099f5124927bd6e67dd053a97676caecb51b23725c3e5be214"
+            "sha256": "8538effa38046981ce9b19a47b65e10560b31f342b0eeb66c588ed5545cdcf69"
           }
         ]
       },
       "linux-x64": {
-        "entrypoint": "bin/linux-x64/formbro"
+        "entrypoint": "bin/linux-x64/formbro",
+        "lazy": [
+          {
+            "name": "webform-worker",
+            "asset": "webform-worker-linux-x64.tar.gz",
+            "archive": "tar.gz",
+            "sha256": "3e2cb6f14ca43c7b0e7d3851ac2628d6eb378083cef254d8a976dbeb952ac72f"
+          }
+        ]
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "plugin-v1.9.4"
+      "tag": "plugin-v1.9.6"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -47,12 +55,12 @@
     "win32": "${LOCALAPPDATA}/formbro-cli/Cache"
   },
   "configHome": {
-    "darwin": "${HOME}/.jackyzhang.app/formbro",
-    "linux": "${HOME}/.jackyzhang.app/formbro",
-    "win32": "${USERPROFILE}/.jackyzhang.app/formbro"
+    "darwin": "${HOME}/.formbro",
+    "linux": "${HOME}/.formbro",
+    "win32": "${USERPROFILE}/.formbro"
   },
   "configFile": "config.json",
   "tokenEnvVar": "FORMBRO_API_TOKEN",
   "defaultBaseUrl": "https://formbro-api.jackyzhang.app",
-  "source_sha": "4b1acfc3f9e08f1aac46a5254ff86a33483cfd00"
+  "source_sha": "1cb354f6574f116cbf67a6886cd72ecf3fade5f3"
 }

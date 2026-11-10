@@ -9,7 +9,7 @@ One skill tree per product under `plugins/<plugin_id>/skills/`. The native CLI l
 
 | Plugin | Version | Platforms | Description |
 |---|---|---|---|
-| [`formbro`](./plugins/formbro) | 1.9.4 | macOS (`arm64`), Windows (`x64`) | Canadian immigration form automation: import cases via JSON contracts, validate against IRCC schemas, generate filled IMM PDFs, and drive local browser webform fills (stops safely before submit). |
+| [`formbro`](./plugins/formbro) | 1.9.6 | macOS (`arm64`), Windows (`x64`) | Canadian immigration form automation: import cases via JSON contracts, validate against IRCC schemas, generate filled IMM PDFs, and drive local browser webform fills (stops safely before submit). |
 | [`easybooks`](./plugins/easybooks) | 0.5.27 | macOS (`arm64`), Windows (`x64`) | Bookkeeping for self-employed Canadians via the bundled EasyBooks CLI: drop a receipt, invoice, or scan Gmail and have it recorded into EasyBooks. The CLI is the only boundary for all EasyBooks reads and writes — record income/expenses, create and send invoices, and resolve clients/categories. |
 | [`anychat`](./plugins/anychat) | 0.1.105 | macOS (`arm64`), Windows (`x64`) | Search and export your own local chat archive via the AnyChat CLI. Answers 'what can AnyChat do' from the anychat router; Tell Jacky feedback goes to Portal after user confirm. |
 | [`anycase`](./plugins/anycase) | 1.2.8 | macOS (`arm64`), Windows (`x64`) | Canadian Immigration Intelligence via the anycase router: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators. |

@@ -20,4 +20,29 @@ if [ -d "$ROOT/plugin-metadata" ]; then
 else
   test "$count" = "1" || { echo "verify-package: packed tree must have exactly 1 SKILL.md, found $count" >&2; exit 1; }
 fi
+
+# DeepSeek Harness bundle layer (delivery/plugin-policy.md required host surface).
+for f in package.json cordis.patch.yml index.js; do
+  test -f "$META/$f" || { echo "verify-package: missing DeepSeek Harness bundle file $f" >&2; exit 1; }
+done
+python3 - "$META/package.json" "$META/runtime-manifest.json" <<'PY'
+import json, pathlib, sys
+pkg = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+bad = []
+if pkg.get("name") != "dsh-formbro":
+    bad.append(f"package.json name={pkg.get('name')!r} (expected 'dsh-formbro')")
+if ((pkg.get("dsh") or {}).get("bundle") or {}).get("patch") != "./cordis.patch.yml":
+    bad.append("package.json.dsh.bundle.patch must be './cordis.patch.yml'")
+# Source mode: release tag is the CI placeholder; packed: tag pins the version.
+tag = (
+    json.loads(pathlib.Path(sys.argv[2]).read_text(encoding="utf-8"))
+    .get("binary", {})
+    .get("release", {})
+    .get("tag", "")
+)
+if tag.startswith("plugin-v") and pkg.get("version") != tag[len("plugin-v"):]:
+    bad.append(f"package.json version={pkg.get('version')!r} disagrees with release tag {tag!r}")
+if bad:
+    sys.exit("verify-package: " + "; ".join(bad))
+PY
 echo "verify-package: ok"

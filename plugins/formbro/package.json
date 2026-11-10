@@ -1,21 +1,17 @@
 {
   "name": "dsh-formbro",
-  "version": "1.9.4",
-  "description": "formbro for DeepSeek Harness: Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write entities, validate, fill IMM PDFs, and drive local webform fills.",
-  "license": "Proprietary",
+  "version": "1.9.6",
+  "description": "FormBro for DeepSeek Harness: Canadian immigration form automation and guided web-form filling through the bundled FormBro CLI.",
+  "license": "MIT",
   "author": {
     "name": "Jacky Zhang",
     "url": "https://jackyzhang.app"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jackyzhang69/plugins.git",
-    "directory": "plugins/formbro"
-  },
   "keywords": [
     "dsh-plugin",
     "deepseek-harness",
-    "formbro"
+    "formbro",
+    "immigration"
   ],
   "type": "module",
   "main": "index.js",
@@ -24,11 +20,12 @@
     "cordis.patch.yml",
     "skills",
     "bin",
+    "scripts",
     "runtime-manifest.json",
     "README.md"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-skill-filesystem": "^0.1.1-rc.2"
+    "@deepseek-ai/dsh-skill-filesystem": "0.2.1-rc.2"
   },
   "dsh": {
     "bundle": {

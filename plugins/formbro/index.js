@@ -1,4 +1,4 @@
-// DeepSeek Harness (dsh) plugin entry for the formbro bundle.
+// DeepSeek Harness (dsh) plugin entry for the FormBro bundle.
 //
 // The packaged skill tree lives next to this file. A cordis patch cannot name
 // its own package directory, so this plugin resolves it at runtime and mounts
