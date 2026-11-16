@@ -4,6 +4,7 @@ Not for first-session orientation. Host agents discover the live surface via
 `"$ANYPDF" commands --json` and translate it for the human.
 
 Public commands: `login`, `whoami`, `logout`, `doctor`, `read`, `validate`,
+`complete start`, `complete apply`, `complete result`,
 `forms catalog`, `forms resolve`, `forms schema`, `fill submit`,
 `fill readiness`, `fill status`, `fill download`, `intake submit`,
 `feedback submit`, `feedback status`, `knowledge list`, `knowledge add`,

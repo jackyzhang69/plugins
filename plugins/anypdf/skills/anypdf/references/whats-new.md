@@ -1,3 +1,15 @@
+# AnyPDF — what changed in 0.7.33
+
+This unreleased candidate adds advisory warnings (`date_before_today_source_rule`) when entered dates fall before the source form's expected future or today-or-later date rules.
+
+# AnyPDF — what changed in 0.7.32
+
+When answers are missing, AnyPDF now works out which fields are needed and gives you a short form to fill in, in the chat or in your browser on this machine. After you send it, your agent receives the completed answers and can fill the PDF.
+
+# AnyPDF — what changed in 0.7.31
+
+This unreleased candidate improves guidance for handling source-length warnings and incomplete answers during form filling.
+
 # AnyPDF — what changed in 0.7.30
 
 No change to form filling or service availability. This is an unreleased candidate and does not establish that a reported connection or account-service incident is resolved.

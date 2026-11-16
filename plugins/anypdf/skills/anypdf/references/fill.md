@@ -105,15 +105,18 @@ tools unless the user asks for technical detail. Never show credentials.
      `assessment.issues[].allowed_values`; never read raw validation `errors`.
    - Date format follows each field's own `format` and guidance. Never force a
      global date pattern when the field disagrees.
-   - Never invent missing required facts. Ask the user. Leave unknown optional
-     fields absent, except the published `x-anypdf-guidance.absence_defaults`
-     list (today: US PR / US green card = No only). If user materials and
-     private memory still have no value for that published field, fill the
-     published default. Target memory may override; if it conflicts with the
-     guide, pause as above. After fill, tell the user once using the validate
-     `infos[]` message. Do not invent a No for passport, national ID, alias,
-     military, background, CSQ, or any unpublished indicator to satisfy
-     Acrobat Validate.
+   - Never invent missing required facts. When facts are missing, run
+     `$ANYPDF complete start --form-id <id> --version <version> --input /absolute/data.json`
+     and follow [Complete missing answers](#complete-missing-answers). Leave
+     unknown optional fields absent, except the published
+     `x-anypdf-guidance.absence_defaults` list (today: US PR / US green card =
+     No only). If user materials and private memory still have no value for that
+     published field, fill the published default. Target memory may override; if
+     it conflicts with the guide, pause as above. Tell the user which default
+     was applied. If the answer remains absent, validation reports it as missing
+     and confirmation is required before a partial fill. Do not invent a No for
+     passport, national ID, alias, military, background, CSQ, or any unpublished
+     indicator to satisfy Acrobat Validate.
    - Two fill modes are both valid: wait until required facts are complete, or
      fill now and treat validate `missing_required_field` /
      `missing_recommended_field` warnings as the user's list of fields to
@@ -151,6 +154,13 @@ tools unless the user asks for technical detail. Never show credentials.
 
    The response contains `job_id`, `status_url`, and `result_url`. It contains
    no template, mapping, profile, or PDF bytes.
+   If `assessment.issues` or a confirmation warning contains
+   `exceeds_source_field_limit`, tell the user the field, source limit and
+   entered length; the form may cut its displayed text. If it contains
+   `date_before_today_source_rule`, tell the user the field and its source
+   date expectation (`not_before_today` or `after_today`); the value was still
+   written unchanged. Neither advisory requires confirmation on its own. Never
+   repeat the entered value.
 
 5. Poll manually. Each invocation performs one GET; wait according to
    `Retry-After` and invoke status again. Do not implement a long-held poll or a
@@ -195,6 +205,37 @@ tools unless the user asks for technical detail. Never show credentials.
    interactive filled PDF. Keep the ordinary download as the job result.
    This `--flatten` viewing copy is for unsigned fills. A signed IMM5476
    download is already the static copy AnyPDF made; do not rasterize it.
+
+## Complete missing answers
+
+Run `$ANYPDF complete start --form-id <id> --version <version> --input /absolute/data.json`
+when answers are missing:
+
+- `status: complete` → go straight to `fill submit` with `data_file`.
+- `status: blocked` → correct the listed input issues; show only `issues[].message`.
+- `status: needs_input` → tell the human which fields are missing
+  (`fields[].label` and `fields[].group` for the part of the form), then use
+  exactly one shape, chosen by host: a host that
+  renders HTML in the conversation (Claude web/desktop, Codex desktop) reads
+  `inline_html_path` and renders that fragment unchanged; any other host
+  (Claude Code, Codex CLI, DeepSeek, Antigravity) gives the human `url` to open
+  in a browser on this machine.
+- Inline shape: the human's Send returns a JSON block that may carry `skipped`;
+  save the entire block verbatim to a file and run
+  `$ANYPDF complete apply --session-id <id> --values /absolute/values.json`.
+  Link shape: run `$ANYPDF complete result --session-id <id> --wait 540` and
+  repeat while `status` is `pending`; `expired` → run `complete start` again.
+- On `complete`, submit `data_file` with `fill submit` unchanged. Never edit
+  `data_file`, never type values for the human, never put values in command
+  arguments.
+- `skipped_required_fields` in a complete result are required answers the human
+  chose to leave for the PDF. Do not ask for them again; proceed to `fill submit`
+  and keep its existing blank-field confirmation step unchanged.
+- `manual_fields` stay for the human to complete on the PDF.
+- Any blanks left in `manual_fields`, `skipped_required_fields` or optional fields
+  still go through the
+  existing `fill submit` confirmation step (do not bypass warning or
+  incomplete-field confirmation).
 
 ## Remembering how this user wants forms filled
 
