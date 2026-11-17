@@ -7,17 +7,27 @@ status: ACTIVE
 program_id: PEIPNP_WORKFORCE
 stream_id: WORKFORCE
 effective_date: '2026-01-01'
-source_edition: PEI PNP Workforce and Express Entry expression-of-interest grids, each maximum 100. No
-  numeric pass mark in this ruleset. The business stream is not in this file.
-source_url: https://www.princeedwardisland.ca/en/topic/immigrate
-decision_scope: Deterministic eligibility prescreen for PEI PNP Workforce and Express Entry. AnyScore
-  owns the 100-point grids. This file has no points floor and states no numeric pass mark.
+source_edition: >-
+  PEI Workforce Application Guide, January 2026 edition (footer 'January 2026 - page N', PDF pp.2-22); the live bytes
+  of the guide are identical to the pinned artifact (raw sha256 94eb5b53...b5537), retrieved 2026-11-16. The PEI
+  web pages are behind a bot challenge and were not used.
+source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+decision_scope: >-
+  Deterministic prescreen of the age, job-offer, language, education, intent and Express Entry profile conditions that the
+  January 2026 guide prints for the five workforce streams and PEI Express Entry. Not evaluated here: work-experience
+  years, legal status, financial resources, the Occupations in Demand NOC list, the Critical Worker trucking rule,
+  employer requirements beyond the offer terms, the general ineligibility list, and the Express Entry 9-month and
+  4-month permit conditions. Express Entry has no age, education, language or intent condition in the guide, so none
+  is evaluated for it. The 100-point grids belong to AnyScore; this file has no points floor and states no pass mark. The
+  Occupations in Demand offer term is 'permanent' in the stream list but 'permanent or minimum 24 months' in the
+  all-streams employer list and the Appendix D definition and the guide does not reconcile them, so a fixed-term
+  Occupations in Demand offer is NEEDS_REVIEW.
 sources:
-- id: peipnp_eoi
-  title: Prince Edward Island Provincial Nominee Program Workforce and Express Entry
-  url: https://www.princeedwardisland.ca/en/topic/immigrate
-  citation: Each workforce column and the Express Entry grid have a maximum of 100. This ruleset states
-    no numeric pass mark. Age, offer, language, education, and intent are the redlines.
+- id: pei_workforce_application_guide
+  title: PEI Workforce Application Guide (January 2026)
+  url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+  sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+  citation: Step 1 Assess Your Eligibility (PDF pp.2-6) and Appendix D definitions (PDF pp.17-20).
   legal_authority: Prince Edward Island Provincial Nominee Program workforce and Express Entry eligibility
 schema:
   input_type: object
@@ -30,25 +40,21 @@ schema:
     candidate:
       stream: skilled_worker | critical_worker | international_graduate | intermediate_experience | occupations_in_demand
         | express_entry. The business stream is not a value in this file.
-      age_years: integer; workforce applicants must be 18 to 59 inclusive. Express Entry retains its separate minimum.
-      language_clb_minimum: integer; lowest of the four skills on one test.
-      language_result_within_2_years: boolean; that test result is under two years old.
-      express_entry_language_met: boolean; the Express Entry program on the profile has its language floor
-        met. This file does not store that floor as a CLB number.
-      occupational_language_met: boolean; occupational language benchmark is met for skilled worker, international
-        graduate, or occupations in demand when TEER is not 4 or 5. This file does not store that benchmark
-        as a CLB number.
-      meets_canadian_high_school: boolean; credential meets Canadian high school.
+      age_years: integer; workforce applicants must be 18 to 59 inclusive. Express Entry has no stated age.
+      language_clb_minimum: integer; lowest of the four skills on one test. Test minimum is CLB/NCLC 4.
+      language_result_within_2_years: boolean; the test result is at most two years old.
+      occupational_language_met: boolean; the employer confirms on PEIW-02 that the applicant's English or French is sufficient. Alternative to a test for Skilled Worker, and the only route for International Graduate in TEER 0 to 3.
+      meets_canadian_high_school: boolean; the applicant holds a secondary school diploma (high school).
+      completed_postsecondary_two_year: boolean; post-secondary degree or diploma, minimum two-year program. Required for Skilled Worker.
+      express_entry_profile_valid: boolean; the applicant holds a valid federal Express Entry profile number.
       intends_to_reside_in_pei: boolean
     job_offer:
       from_pei_employer: boolean; the offer is from a Prince Edward Island employer.
-      full_time: boolean; the offer is full-time.
+      full_time: boolean; the offer is full-time (at least 30 hours per week for which wages are paid).
       is_seasonal: boolean; true means the offer is seasonal and fails.
-      is_permanent: boolean; the offer is permanent. A non-permanent offer can still pass when duration_months
-        is at least 24.
-      duration_months: number; offer duration in months when the offer is not permanent. Floor is 24.
-      noc_teer: integer; TEER 4 or 5 on skilled worker, international graduate, or occupations in demand
-        uses the CLB 4 floor without the occupational language flag.
+      is_permanent: boolean; the offer is permanent. A non-permanent offer passes when duration_months is at least 24, except Occupations in Demand.
+      duration_months: number; offer duration in months when the offer is not permanent.
+      noc_teer: integer; TEER 0 to 5. Decides the International Graduate language route.
 minimums:
   note: Documentation only. The engine evaluates the rules, not this block.
   streams:
@@ -58,32 +64,15 @@ minimums:
   - intermediate_experience
   - occupations_in_demand
   - express_entry
-  age_years_min: 18
+  workforce_age_years_min: 18
   workforce_age_years_max: 59
   offer_duration_months_if_not_permanent: 24
   language_result_max_age_years: 2
-  language_clb_critical_or_teer_4_or_5: 4
-  language_clb_intermediate_experience: 5
-  language_clb_express_entry_floor: 4
-  points_grid_maximum: 100
+  language_clb_test_minimum: 4
   points_pass_mark: none
 reference_points_grid:
-  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. There
-    is no numeric pass mark in this ruleset and no points-floor rule.
+  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. There is no numeric pass mark in this ruleset and no points-floor rule.
   pass_mark: none
-  workforce:
-    skilled_worker:
-      maximum: 100
-    critical_worker:
-      maximum: 100
-    international_graduate:
-      maximum: 100
-    intermediate_experience:
-      maximum: 100
-    occupations_in_demand:
-      maximum: 100
-  express_entry:
-    maximum: 100
 rules:
 - id: pei_age
   category: age
@@ -91,25 +80,49 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.age_years
-  pass_if: candidate.age_years >= 18 && ((candidate.stream in ['skilled_worker', 'critical_worker',
-    'international_graduate', 'intermediate_experience', 'occupations_in_demand'] && candidate.age_years <= 59)
-    || candidate.stream == 'express_entry')
-  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || candidate.age_years < 18
-    || (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand'] && candidate.age_years > 59)
+  conditional_required_fields:
+    when: candidate.stream != 'express_entry'
+    fields:
+    - candidate.age_years
+  pass_if: >-
+    candidate.stream == 'express_entry' ||
+    (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.age_years != null && candidate.age_years >= 18 && candidate.age_years <= 59)
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.age_years != null && (candidate.age_years < 18 || candidate.age_years > 59))
   missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-PEIPNP-AGE-001
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Step 1 - five workforce streams, January 2026 guide pages 1-3
-    verbatim_excerpt: be 18 to 59 years old
   provenance:
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Step 1 - Occupations in Demand; same age range for the other four workforce streams
-    page: 3
-    verbatim: be 18 to 59 years old
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Step 1 - Occupations in Demand (the other four workforce streams print the same range)
+    page: 4
+    verbatim: be 18 to 59 years old;
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p004"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+    source_id: pei_workforce_application_guide_jan_2026
+    source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+    source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+    source_sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+    source_edition: "January 2026"
+    page: "4"
+    section: "Step 1 - Occupations in Demand"
+    verbatim_excerpt: "be 18 to 59 years old;"
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p002"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "2"
+      verbatim_excerpt: "be between the ages of18 and 59;"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "3"
+      verbatim_excerpt: "be between the ages of 18 and 59;"
 - id: pei_job_offer
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -123,114 +136,237 @@ rules:
     when: job_offer.is_permanent == false
     fields:
     - job_offer.duration_months
-  pass_if: (candidate.stream == 'skilled_worker' || candidate.stream == 'critical_worker' || candidate.stream
-    == 'international_graduate' || candidate.stream == 'intermediate_experience' || candidate.stream ==
-    'occupations_in_demand' || candidate.stream == 'express_entry') && job_offer.from_pei_employer ==
-    true && job_offer.full_time == true && job_offer.is_seasonal == false && (job_offer.is_permanent ==
-    true || job_offer.duration_months >= 24)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || job_offer.from_pei_employer
-    == false || job_offer.full_time == false || job_offer.is_seasonal == true || (job_offer.is_permanent
-    == false && job_offer.duration_months < 24)
-  missing_or_unverified: 'NEEDS_REVIEW: Prince Edward Island employer, full-time terms, seasonal status,
-    permanent terms, or offer duration cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-PEIPNP-OFFER-002
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Job Offer Requirements
-    verbatim_excerpt: permanent or for a minimum of 24 months
+  pass_if: >-
+    candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'] &&
+    job_offer.from_pei_employer == true && job_offer.full_time == true && job_offer.is_seasonal == false &&
+    (job_offer.is_permanent == true ||
+    (candidate.stream != 'occupations_in_demand' && job_offer.duration_months != null && job_offer.duration_months >= 24))
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    job_offer.from_pei_employer == false || job_offer.full_time == false || job_offer.is_seasonal == true ||
+    (job_offer.is_permanent == false && candidate.stream != 'occupations_in_demand' && job_offer.duration_months != null && job_offer.duration_months < 24)
+  missing_or_unverified: 'NEEDS_REVIEW: Prince Edward Island employer, full-time terms, seasonal status or offer duration cannot be verified, or an Occupations in Demand offer is fixed-term (the guide prints permanent in the stream list and permanent or 24 months in the employer list).'
   provenance:
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Job Offer Requirements
-    page: 2
-    verbatim: permanent or for a minimum of 24 months
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Employer Requirements - All Streams
+    page: 6
+    verbatim: Employment is full-time, non-seasonal with a contract for a permanent position or a minimum length of two years;
+  evidence_anchor:
+    evidence_unit_id: atl.pei_workforce_application_guide.p006
+    source_file: d4ac2814c7b9e7639b5878897c95745552fdf7dd055315943ffdf4e63da23d51
+    page: "6"
+    section: Employer Requirements - All Streams
+    verbatim_excerpt: "Employment is full\u2010time, non-seasonal with a contract for a permanent position or a minimum length of two\nyears;"
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p002"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "2"
+      verbatim_excerpt: "have a full-time, non-seasonal (permanent or minimum of two years) job offer from a PEI employer in a high\nskilled occupation"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p004"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "4"
+      verbatim_excerpt: "have a full-time, non-seasonal permanent job offer from a PEI employer in either"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p019"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "19"
+      verbatim_excerpt: "Valid job offer: A job offer that is permanent or for a minimum of 24 months."
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p005"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "5"
+      verbatim_excerpt: "have been offered a seasonal, part-time or casual job in Prince Edward Island;"
 - id: pei_language
   category: language
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.language_clb_minimum
-  - candidate.language_result_within_2_years
   conditional_required_fields:
-    when: candidate.stream == 'express_entry'
+    when: candidate.stream != 'express_entry'
     fields:
-    - candidate.express_entry_language_met
-  pass_if: candidate.language_result_within_2_years == true && ((candidate.stream == 'critical_worker'
-    && candidate.language_clb_minimum >= 4) || (candidate.stream == 'intermediate_experience' && candidate.language_clb_minimum
-    >= 5) || (candidate.stream == 'express_entry' && candidate.language_clb_minimum >= 4 && candidate.express_entry_language_met
-    == true) || ((candidate.stream == 'skilled_worker' || candidate.stream == 'international_graduate'
-    || candidate.stream == 'occupations_in_demand') && candidate.language_clb_minimum >= 4 && (job_offer.noc_teer
-    in [4, 5] || candidate.occupational_language_met == true)))
-  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || candidate.language_result_within_2_years
-    == false || (candidate.stream == 'critical_worker' && candidate.language_clb_minimum < 4) || (candidate.stream
-    == 'intermediate_experience' && candidate.language_clb_minimum < 5) || (candidate.stream == 'express_entry'
-    && candidate.language_clb_minimum < 4) || (candidate.stream == 'express_entry' && candidate.express_entry_language_met
-    == false) || ((candidate.stream == 'skilled_worker' || candidate.stream == 'international_graduate'
-    || candidate.stream == 'occupations_in_demand') && candidate.language_clb_minimum < 4) || ((candidate.stream
-    == 'skilled_worker' || candidate.stream == 'international_graduate' || candidate.stream == 'occupations_in_demand')
-    && job_offer.noc_teer != null && !(job_offer.noc_teer in [4, 5]) && candidate.occupational_language_met
-    == false)
-  missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, TEER, Express Entry language flag, or occupational
-    language flag cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-PEIPNP-LANG-003
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Language Requirements
-    verbatim_excerpt: Language tests are valid for 2 years after the date of the test result
+    - candidate.language_clb_minimum
+    - candidate.language_result_within_2_years
+    - candidate.occupational_language_met
+    - job_offer.noc_teer
+  pass_if: >-
+    candidate.stream == 'express_entry' ||
+    (candidate.stream in ['critical_worker', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.language_result_within_2_years == true && candidate.language_clb_minimum != null && candidate.language_clb_minimum >= 4) ||
+    (candidate.stream == 'skilled_worker' &&
+    ((candidate.language_result_within_2_years == true && candidate.language_clb_minimum != null && candidate.language_clb_minimum >= 4) ||
+    candidate.occupational_language_met == true)) ||
+    (candidate.stream == 'international_graduate' &&
+    ((job_offer.noc_teer in [0, 1, 2, 3] && candidate.occupational_language_met == true) ||
+    (job_offer.noc_teer in [4, 5] && candidate.language_result_within_2_years == true &&
+    candidate.language_clb_minimum != null && candidate.language_clb_minimum >= 4)))
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    (candidate.stream in ['critical_worker', 'intermediate_experience', 'occupations_in_demand'] &&
+    (candidate.language_result_within_2_years == false || (candidate.language_clb_minimum != null && candidate.language_clb_minimum < 4))) ||
+    (candidate.stream == 'skilled_worker' && candidate.occupational_language_met == false &&
+    (candidate.language_result_within_2_years == false || (candidate.language_clb_minimum != null && candidate.language_clb_minimum < 4))) ||
+    (candidate.stream == 'international_graduate' &&
+    ((job_offer.noc_teer in [0, 1, 2, 3] && candidate.occupational_language_met == false) ||
+    (job_offer.noc_teer in [4, 5] && (candidate.language_result_within_2_years == false ||
+    (candidate.language_clb_minimum != null && candidate.language_clb_minimum < 4)))))
+  missing_or_unverified: 'NEEDS_REVIEW: Test age, lowest CLB, PEIW-02 confirmation or TEER cannot be verified. Express Entry has no language condition in the guide.'
   provenance:
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Language Requirements
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Step 1 - Skilled Worker, Critical Worker, International Graduate, Intermediate Experience, Occupations in Demand
     page: 3
-    verbatim: Language tests are valid for 2 years after the date of the test result
+    verbatim: Providing a valid language test result from an IRCC-approved testing institution, with a minimum score of CLB/NCLC 4. Language tests are valid for 2 years after the date of the test result; or
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+    source_id: pei_workforce_application_guide_jan_2026
+    source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+    source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+    source_sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+    source_edition: "January 2026"
+    page: "3"
+    section: "Step 1 - Skilled Worker language requirement"
+    verbatim_excerpt: "Providing a valid language test result from an IRCC-approved testing institution, with a minimum score\nof CLB/NCLC 4. Language tests are valid for 2 years after the date of the test result; or"
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "3"
+      verbatim_excerpt: "Providing a completed PEIW-02: Workforce Job Offer Form, indicating the employer is comfortable with\nthe employee's proficiency in English and/or French to perform tasks associated with the job position\nbeing offered"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "3"
+      verbatim_excerpt: "if in an intermediate-skilled position defined by the Training, Education, Experience, and Responsibility\nclassification system as TEER category 4 or 5, to provide a valid language test result from an IRCC-approved\ntesting institution with a minimum score of CLB/NCLC 4. Language tests are valid for 2 years after the date\nof the test result;"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p004"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "4"
+      verbatim_excerpt: "provide a valid language test result from an IRCC-approved testing institution, with a minimum score of\nCLB/NCLC 4. Language tests are valid for 2 years after the date of the test result;"
 - id: pei_education
   category: education
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.meets_canadian_high_school
-  pass_if: (candidate.stream == 'skilled_worker' || candidate.stream == 'critical_worker' || candidate.stream
-    == 'international_graduate' || candidate.stream == 'intermediate_experience' || candidate.stream ==
-    'occupations_in_demand' || candidate.stream == 'express_entry') && candidate.meets_canadian_high_school
-    == true
-  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || candidate.meets_canadian_high_school
-    == false
-  missing_or_unverified: 'NEEDS_REVIEW: Canadian high school equivalency cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-PEIPNP-EDU-004
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Education Requirements
-    verbatim_excerpt: secondary school diploma (high school)
+  pass_if: >-
+    candidate.stream in ['international_graduate', 'express_entry'] ||
+    (candidate.stream == 'skilled_worker' && candidate.completed_postsecondary_two_year == true) ||
+    (candidate.stream in ['critical_worker', 'intermediate_experience', 'occupations_in_demand'] &&
+    (candidate.meets_canadian_high_school == true || candidate.completed_postsecondary_two_year == true))
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    (candidate.stream == 'skilled_worker' && candidate.completed_postsecondary_two_year == false) ||
+    (candidate.stream in ['critical_worker', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.meets_canadian_high_school == false && candidate.completed_postsecondary_two_year == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Post-secondary (Skilled Worker) or secondary school diploma (Critical Worker, Intermediate Experience, Occupations in Demand) cannot be verified. International Graduate and Express Entry have no education bullet in the guide.'
   provenance:
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Education Requirements
-    page: 3
-    verbatim: secondary school diploma (high school)
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Step 1 - Skilled Worker
+    page: 2
+    verbatim: have successfully completed a post-secondary degree or diploma (minimum two-year program);
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p002"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+    source_id: pei_workforce_application_guide_jan_2026
+    source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+    source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+    source_sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+    source_edition: "January 2026"
+    page: "2"
+    section: "Step 1 - Skilled Worker"
+    verbatim_excerpt: "have successfully completed a post‐secondary degree or diploma (minimum two-year program);"
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "3"
+      verbatim_excerpt: "have successfully completed (at minimum) a secondary school diploma (high school);"
+    - evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p004"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+      source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+      page: "4"
+      verbatim_excerpt: "have successfully completed (at minimum) a secondary school diploma (high school);"
 - id: pei_intent
   category: intent
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.intends_to_reside_in_pei
-  pass_if: (candidate.stream == 'skilled_worker' || candidate.stream == 'critical_worker' || candidate.stream
-    == 'international_graduate' || candidate.stream == 'intermediate_experience' || candidate.stream ==
-    'occupations_in_demand' || candidate.stream == 'express_entry') && candidate.intends_to_reside_in_pei
-    == true
-  fail_if: (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate',
-    'intermediate_experience', 'occupations_in_demand', 'express_entry'])) || candidate.intends_to_reside_in_pei
-    == false
-  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Prince Edward Island cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-PEIPNP-INTENT-005
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Settlement Intent
-    verbatim_excerpt: intend to reside in Prince Edward Island
+  conditional_required_fields:
+    when: candidate.stream != 'express_entry'
+    fields:
+    - candidate.intends_to_reside_in_pei
+  pass_if: >-
+    candidate.stream == 'express_entry' ||
+    (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.intends_to_reside_in_pei == true)
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand'] &&
+    candidate.intends_to_reside_in_pei == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to settle in Prince Edward Island cannot be verified. The Express Entry description prints no intent bullet.'
   provenance:
-    source_file: PEI-Workforce-Application-Guide.pdf
-    section: Settlement Intent
-    page: 17
-    verbatim: intend to reside in Prince Edward Island
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Step 1 - Skilled Worker
+    page: 3
+    verbatim: demonstrate a genuine intention to settle in PEI.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p003"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+    source_id: pei_workforce_application_guide_jan_2026
+    source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+    source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+    source_sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+    source_edition: "January 2026"
+    page: "3"
+    section: "Step 1 - Skilled Worker"
+    verbatim_excerpt: "demonstrate a genuine intention to settle in PEI."
+- id: pei_ee_profile
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.express_entry_profile_valid
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand']) ||
+    (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == true)
+  fail_if: >-
+    (candidate.stream != null && !(candidate.stream in ['skilled_worker', 'critical_worker', 'international_graduate', 'intermediate_experience', 'occupations_in_demand', 'express_entry'])) ||
+    (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == false)
+  missing_or_unverified: 'NEEDS_REVIEW: A valid federal Express Entry profile number cannot be verified.'
+  provenance:
+    source_file: PEI Workforce Application Guide (January 2026)
+    section: Introduction and Express Entry
+    page: 2
+    verbatim: 'Note: To be eligible for consideration in PEI Express Entry you must have a valid Federal Express Entry Profile Number.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:pei_workforce_application_guide_jan_2026:p002"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a07c46fd14d587822069df6530388fc529d2d6ae500df540cb26ace30dd4e3b2
+    source_id: pei_workforce_application_guide_jan_2026
+    source_file: 3d372dfb4d02de2a1f11cf9d89a4f2ec29cca051227f8604526caec217622786
+    source_url: https://www.princeedwardisland.ca/sites/default/files/publications/pei_workforce_application_guide.pdf
+    source_sha256: 94eb5b53aae77f001c02fbd36b8b26171b0f8f98da69fd80b2090f8d70fb5537
+    source_edition: "January 2026"
+    page: "2"
+    section: "Introduction"
+    verbatim_excerpt: "Note: To be eligible for consideration in PEI Express Entry you must have a valid Federal Express\nEntry Profile Number."

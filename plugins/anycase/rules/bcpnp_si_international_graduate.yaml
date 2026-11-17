@@ -7,10 +7,10 @@ program_id: "BC_PNP_SKILLS_IMMIGRATION"
 stream_id: "INTERNATIONAL_GRADUATE"
 status: "LEGACY_CLOSED"
 effective_until: "2024-11-26"
-effective_date: "2022-11-16"
-source_edition: "BC PNP Skills Immigration Program Guide & Graduate Policy Schedule"
-source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf"
-decision_scope: "Pre-screen of the eight rules defined below; PASS is not a nomination or complete program-eligibility decision."
+effective_date: "2024-09-04"
+source_edition: "BC PNP official November 25, 2024 closure notice; historical SI guide effective September 4, 2024–January 6, 2025"
+source_url: "https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-archived-news-2024-pdf"
+decision_scope: "Closed to current registrations. Historical prescreen uses the source-confirmed guide window; the November 26, 2024 intraday closure requires review rather than an invented cutoff time."
 
 schema:
   input_type: object
@@ -34,16 +34,34 @@ rules:
     eval_type: deterministic
     required_fields:
       - assessment_date
-    pass_if: "assessment_date <= '2024-11-26'"
+    pass_if: "assessment_date < '2024-11-26'"
     fail_if: "assessment_date > '2024-11-26'"
-    missing_or_unverified: "NEEDS_REVIEW: assessment_date is required to verify stream lifecycle."
-    interpretation: "The International Graduate stream was permanently closed to new registrations on November 26, 2024. Applications after this date are ineligible."
+    missing_or_unverified: "NEEDS_REVIEW: the November 26, 2024 notice closes the stream following the final invitation event, without stating its time; same-day registration cannot be decided from a date alone."
+    interpretation: "The final International Graduate invitations were issued November 26, 2024, after which the stream closed. Do not treat the whole closing day as open."
     evidence_anchor:
-      evidence_unit_id: EU-BC-SI-IG-LIFECYCLE-001
-      source_file: "BC-PNP-Skills-Immigration-Program-Guide.pdf"
-      section: "Program Updates - Graduate Streams Phased Out"
-      page: "5"
-      verbatim_excerpt: "International Graduate stream closed to new registrations"
+      evidence_unit_id: bc.bcpnp_archived_news_2024.p001.bc_pnp_archived_news_items
+      source_id: bcpnp_archived_news_2024
+      source_file: f81476dc998db2165693043a46e727cd6db299e0eb3b2d6b0484a8e1a7e19749
+      section: "November 25, 2024 — final International Graduate invitations"
+      page: "1"
+      source_sha256: d2552a1a95bc0d773eb0d62b72e2538b4eb57b5592869cbe4fd5cce49ff05372
+      verbatim_excerpt: "Following the ITA, the IG stream will close."
+
+  - id: ig_historical_source_window
+    category: stream_policy
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - assessment_date
+    pass_if: "assessment_date >= '2024-09-04' && assessment_date <= '2025-01-06'"
+    fail_if: "false"
+    missing_or_unverified: "NEEDS_REVIEW: the requested date is outside the official effective window of this historical guide; do not apply its criteria to another edition."
+    evidence_anchor:
+      evidence_unit_id: bc.bcpnp_archives_page_2026_08_26.html
+      source_id: bcpnp_archives_page_2026_08_26
+      source_file: 78d7f52ce70cb2a6fb3fa177c0434f0542996304d0f2928f4a9570566c045b9f
+      section: "Skills Immigration — Program guides"
+      verbatim_excerpt: "Skills Immigration Program Guide (From September 4, 2024 - January 6, 2025)"
 
   - id: ig_eligible_credential
     category: education

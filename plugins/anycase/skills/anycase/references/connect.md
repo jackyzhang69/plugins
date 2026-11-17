@@ -49,6 +49,21 @@ anycase doctor --json
 
 `whoami` returns only masked token metadata, never raw tokens. `doctor` checks local backend resolution and credential safety. `logout` removes the saved local credential.
 
+## Connection failures
+
+- `dns_failure`: the lookup failed. Check DNS settings and the host agent's
+  current network access before retrying. This code alone does not establish
+  a service outage or a sandbox restriction.
+- `network_permission_denied`: the operating system denied a network operation.
+  Check firewall or sandbox permissions; the host agent should request the
+  required network access before retrying.
+- `network_unreachable`: check the network connection, VPN and routing before
+  retrying. Changing DNS alone may not restore connectivity.
+
+Do not reset credentials or claim the service is down based only on these
+connection failures. If a restriction has no explicit operating-system evidence,
+the result may remain a DNS failure rather than a permission diagnosis.
+
 ## Talk to the human
 
 Plain language: “需要先登录一次免费账号” / “这台机器已经登录过，不用再贴令牌”. Do not paste full CLI JSON. Never give a terminal login command.

@@ -3,7 +3,7 @@
   "$id": "https://jackyzhang.app/schemas/lmia_profile.schema.json",
   "title": "LMIA client fact profile",
   "description": "Structural validation for LMIA pre-screen facts. Schema validity does not establish stream eligibility, source freshness, or an ESDC decision.",
-  "$comment": "CMA names are the 41 keys in rules/lmia_refusal_matrix.json (2026-07-10 to 2026-10-08). Refresh this enum when the authoritative matrix changes. Rates and wage thresholds are evaluated by the dated ruleset, not frozen into this schema.",
+  "$comment": "CMA names are the 41 keys in rules/lmia_refusal_matrix.json (rates in effect 2026-10-09 to 2027-01-07). Refresh this enum when the authoritative matrix changes. Rates and wage thresholds are evaluated by the dated ruleset, not frozen into this schema.",
   "type": "object",
   "additionalProperties": false,
   "required": ["assessment_date", "stream_id", "employer", "job_offer", "noul"],
@@ -24,7 +24,7 @@
         "on_ircc_ineligibility_list": {"type": "boolean"},
         "in_default_of_amp": {"type": "boolean"},
         "lmia_revocation_past_2_years": {"type": "boolean"},
-        "total_workforce_at_location": {"type": "integer", "minimum": 1},
+        "total_workforce_at_location": {"type": "number", "exclusiveMinimum": 0},
         "low_wage_tfw_count_at_location": {"type": "integer", "minimum": 0},
         "provides_round_trip_transportation": {"type": "boolean"},
         "ensures_affordable_housing": {"type": "boolean"},
@@ -35,7 +35,10 @@
         "supports_pr_only": {"type": "boolean"},
         "gts_category": {"enum": ["A", "B", null]},
         "designated_partner_referral": {"type": ["boolean", "null"]},
-        "has_lmbp_agreement": {"type": ["boolean", "null"]}
+        "has_lmbp_agreement": {"type": ["boolean", "null"]},
+        "is_diplomatic_mission": {"type": "boolean"},
+        "in_business_at_least_one_year": {"type": "boolean"},
+        "gts_category_a_approved_positions_this_calendar_year": {"type": "integer", "minimum": 0}
       }
     },
     "job_offer": {
@@ -51,6 +54,10 @@
         "indeterminate": {"type": "boolean"},
         "year_round": {"type": "boolean"},
         "weekly_regular_hours": {"type": "number", "minimum": 0},
+        "duration_months": {"type": ["number", "null"], "minimum": 0},
+        "gts_subset_conditions_met": {"type": "boolean"},
+        "live_in_caregiver_requirement": {"type": "boolean"},
+        "live_in_exception_documented": {"type": "boolean"},
         "regular_hourly_wage_cad": {"type": "number", "minimum": 0},
         "prevailing_wage_cad": {"type": "number", "minimum": 0},
         "work_location": {
@@ -74,19 +81,22 @@
                 "Abbotsford-Mission, BC", "Vancouver, BC", "Victoria, BC", "Nanaimo, BC", null
               ]
             },
-            "cma_unemployment_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+            "cma_unemployment_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+            "in_montreal_or_laval_economic_region": {"type": "boolean"}
           }
         },
         "recruitment": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["advertising_duration_days", "consecutive_weeks", "job_bank_used", "additional_methods_count", "targets_underrepresented_groups", "conducted_within_3_months", "recruitment_exempt"],
+          "required": ["advertising_duration_days", "consecutive_weeks", "job_bank_used", "additional_methods_count", "conducted_within_3_months"],
           "properties": {
             "advertising_duration_days": {"type": "integer", "minimum": 0},
             "consecutive_weeks": {"type": "integer", "minimum": 0},
             "job_bank_used": {"type": "boolean"},
             "additional_methods_count": {"type": "integer", "minimum": 0},
             "targets_underrepresented_groups": {"type": "boolean"},
+            "targets_youth": {"type": "boolean"},
+            "has_national_scope_method": {"type": "boolean"},
             "conducted_within_3_months": {"type": "boolean"},
             "recruitment_exempt": {"type": "boolean"}
           }
@@ -101,7 +111,10 @@
         "naics_code": {"type": "string", "pattern": "^\\d{2,6}$"},
         "is_primary_agriculture": {"type": "boolean"},
         "is_caregiver_eligible_noc": {"type": "boolean"},
-        "is_short_duration_120_days": {"type": "boolean"}
+        "is_short_duration_120_days": {"type": "boolean"},
+        "is_healthcare_institution_caregiver": {"type": "boolean"},
+        "is_seasonal_270_days": {"type": "boolean"},
+        "in_montreal_laval_exempt_list": {"type": "boolean"}
       }
     },
     "candidate": {
@@ -137,12 +150,14 @@
       "then": {
         "required": ["sector"],
         "properties": {
-          "employer": {"required": ["total_workforce_at_location", "low_wage_tfw_count_at_location", "provides_round_trip_transportation", "ensures_affordable_housing", "provides_private_health_insurance"]},
+          "sector": {"required": ["is_healthcare_institution_caregiver", "is_seasonal_270_days", "in_montreal_laval_exempt_list"]},
+          "employer": {"required": ["total_workforce_at_location", "low_wage_tfw_count_at_location", "supports_pr_only", "provides_round_trip_transportation", "ensures_affordable_housing", "provides_private_health_insurance"]},
           "job_offer": {
-            "required": ["term_days", "work_location", "recruitment"],
+            "required": ["term_days", "work_location", "recruitment", "live_in_caregiver_requirement", "live_in_exception_documented"],
             "properties": {
               "term_days": {"type": "integer", "maximum": 365},
-              "work_location": {"required": ["is_in_cma"]}
+              "work_location": {"required": ["is_in_cma", "in_montreal_or_laval_economic_region"]},
+              "recruitment": {"required": ["targets_underrepresented_groups", "targets_youth"]}
             }
           }
         }
@@ -150,15 +165,15 @@
     },
     {
       "if": {"properties": {"stream_id": {"const": "HIGH_WAGE"}}, "required": ["stream_id"]},
-      "then": {"properties": {"employer": {"required": ["has_transition_plan", "transition_plan_exempt"]}, "job_offer": {"required": ["recruitment"]}}}
+      "then": {"properties": {"employer": {"required": ["has_transition_plan", "transition_plan_exempt"]}, "job_offer": {"required": ["recruitment", "live_in_caregiver_requirement", "live_in_exception_documented"], "properties": {"recruitment": {"required": ["has_national_scope_method"]}}}}}
     },
     {
       "if": {"properties": {"stream_id": {"const": "PR_SUPPORT"}}, "required": ["stream_id"]},
-      "then": {"properties": {"job_offer": {"required": ["indeterminate", "year_round", "weekly_regular_hours"], "properties": {"indeterminate": {"const": true}, "year_round": {"const": true}, "weekly_regular_hours": {"minimum": 30}}}}}
+      "then": {"properties": {"job_offer": {"required": ["indeterminate", "year_round", "weekly_regular_hours"]}}}
     },
     {
       "if": {"properties": {"stream_id": {"const": "GLOBAL_TALENT"}}, "required": ["stream_id"]},
-      "then": {"properties": {"employer": {"required": ["gts_category", "has_lmbp_agreement"], "properties": {"gts_category": {"enum": ["A", "B"]}, "has_lmbp_agreement": {"type": "boolean"}}}}}
+      "then": {"properties": {"employer": {"required": ["gts_category", "has_lmbp_agreement"], "properties": {"gts_category": {"enum": ["A", "B"]}, "has_lmbp_agreement": {"type": "boolean"}}}, "job_offer": {"required": ["gts_subset_conditions_met"]}}}
     }
   ]
 }

@@ -6,8 +6,8 @@ display_name: Federal Skilled Trades
 status: ACTIVE
 program_id: FEDERAL_FSTP
 stream_id: FSTP
-effective_date: '2026-01-01'
-source_edition: IRPR section 87.2
+effective_date: '2026-10-16'
+source_edition: IRPR section 87.2; IRCC Federal Skilled Trades Program page and Express Entry language-test page (both modified 2026-10-16, fetched 2026-11-16)
 source_url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
 decision_scope: Deterministic Federal Skilled Trades prescreen. No points grid.
 sources:
@@ -16,6 +16,16 @@ sources:
   url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
   citation: IRPR section 87.2
   legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+- id: ircc_language_test
+  title: Express Entry — Language test results (minimum levels by program)
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
+  citation: IRCC language-test page, page date 2026-10-16; raw sha256 7803b6bd1b148e14d8dc4c259c9a937aae36f63c0b1a0bf5b876710c1d3be698 fetched 2026-11-16T17:44:24Z
+  legal_authority: Official IRCC operational guidance; unit comes from the validated unpublished K candidate 76e7a43694709466eab5600b68db7581a27b78d2dcfffc4a10b197b6f5c7ec7f (artifact 2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258).
+- id: ircc_fstp_program
+  title: Express Entry — Federal Skilled Trades Program
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-trades.html
+  citation: IRCC page modified 2026-10-16 (raw sha256 8e53d1f70d620601526de31583b4e107ec71877ca751dd94446115b5a3bafe02, fetched 2026-11-16); both cited statements are unchanged from the published VKS units in K 9e08bf06
+  legal_authority: Official IRCC guidance for the FSTP work-experience and job-offer-or-certificate requirements.
 schema:
   input_type: object
   required_top_level:
@@ -39,7 +49,7 @@ rules:
     evidence_unit_id: "federal_ee:express_entry_fstp_program:fstp.skilled_trade_work_experience"
     source_file: ec67c5dfaf038f3783bbde682b85dd3cf73d9bb551ee90a7cc48aa1e682fe65c
     section: Skilled trades work experience
-    source_id: irpr_87_2
+    source_id: ircc_fstp_program
     verbatim_excerpt: "be at least <strong>2&nbsp;years</strong> of full-time work experience (or 3,120 hours total) in a skilled trade within the 5 years before you apply"
 - id: fstp_offer_or_certificate
   category: job_offer
@@ -57,7 +67,7 @@ rules:
     evidence_unit_id: "federal_ee:express_entry_fstp_program:fstp.job_offer_or_certificate"
     source_file: ec67c5dfaf038f3783bbde682b85dd3cf73d9bb551ee90a7cc48aa1e682fe65c
     section: Job offer or certificate of qualification
-    source_id: irpr_87_2
+    source_id: ircc_fstp_program
     verbatim_excerpt: "a valid <a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/job-offer.html\">job offer of full-time employment</a> for a total period of at least 1&nbsp;year, <strong>or</strong></li>\r\n    <li>a certificate of qualification in your skilled trade issued by a Canadian provincial, territorial or federal authority"
 - id: fstp_language
   category: language
@@ -74,7 +84,8 @@ rules:
     < 4
   missing_or_unverified: 'NEEDS_REVIEW: Language scores cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-FED-FSTP-LANGUAGE-001
-    source_file: src18.html
-    section: Federal Skilled Trades Program — Language Abilities Minimum level
-    verbatim_excerpt: English Speaking and listening CLB 5 English Reading and writing CLB 4
+    evidence_unit_id: "federal_ee:express_entry_language_test_2026_10_16:language.minimum_levels_by_program"
+    source_file: "2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258"
+    section: Language requirements — Federal Skilled Trades Program minimum level
+    source_id: ircc_language_test
+    verbatim_excerpt: "English</th>\r\n                            <td>Speaking and listening </td>\r\n                            <td><strong>CLB 5</strong></td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>English</th>\r\n                            <td>Reading and writing </td>\r\n                            <td><strong>CLB 4"

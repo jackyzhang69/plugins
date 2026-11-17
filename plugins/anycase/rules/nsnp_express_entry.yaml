@@ -6,42 +6,59 @@ status: ACTIVE
 program_id: NSNP_EXPRESS_ENTRY
 stream_id: NOVA_SCOTIA_EXPRESS_ENTRY
 jurisdiction: CA-NS
-effective_date: '2026-02-18'
-source_edition: 'Nova Scotia Nominee Program Application Guide: Nova Scotia Express Entry, effective February 2026'
-source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova%20Scotia%20Express%20Entry-English.pdf
-decision_scope: Pre-screen of statutory eligibility rules for the Nova Scotia Express Entry streams.
+effective_date: '2026-09-01'
+source_edition: 'Nova Scotia: Express Entry stream page (liveinnovascotia.com/express-entry, no page date, retrieved 2026-11-16) and Nova Scotia: Express Entry Submission Guide, Nova Scotia Nominee Program (September 2026)'
+source_url: https://liveinnovascotia.com/express-entry
+decision_scope: >-
+  Pre-screen of the Skilled Work Experience in Nova Scotia route of the Nova Scotia Express Entry stream. The Physician
+  route and the Letter-of-Interest route have their own sub-criteria and are not evaluated here. No genuineness
+  probability test exists in the sources and none is evaluated. A pass is not nomination.
+sources:
+- id: ns_express_entry_stream_page
+  title: Nova Scotia Express Entry (stream page)
+  url: https://liveinnovascotia.com/express-entry
+  sha256: 902c2b2cefc5a98e835cc52f9c901e122c934cbcd8022041b0343dc31de39b35
+  retrieved_at: '2026-11-16'
+- id: ns_express_entry_guide
+  title: Nova Scotia Express Entry Submission Guide (September 2026)
+  url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova%20Scotia%20Express%20Entry-English.pdf
+  sha256: d930f385d1c6e3e94e06f8d5b0db4648dac15e61cdff603f131fb7716dc42859
+  retrieved_at: '2026-11-16'
 schema:
   input_type: object
   required_top_level:
   - assessment_date
   - candidate
-  - noul
+  - employer
   types:
     assessment_date: ISO-8601 date; application assessment date
     candidate:
       has_active_federal_ee_profile: boolean
       ee_profile_number: string pattern ^E\d{9}$
       ee_job_seeker_validation_code: string
-      age: integer 21-55
-      has_high_school_or_higher_with_eca: boolean
+      age: integer; age at assessment
+      has_canadian_high_school_credential_or_equivalent: boolean
       primary_noc_2021_code: five-digit string
       primary_noc_teer: integer 0-5
-      ns_skilled_work_experience_months_last_3_years: number >= 0.0
+      ns_skilled_work_hours_last_3_years: number; counted hours only, in Nova Scotia within the 3 years before the EOI; 1,560 hours = 12 months full-time (30 h/week) or 24 months part-time (15 h/week). Self-employment, work as a full-time student, co-op, unpaid internship and volunteer work are not counted.
       experience_gained_with_legal_authorization: boolean
-      experience_was_student_or_self_employed: boolean
+      experience_depends_on_pgwp_from_studies_outside_ns: boolean
+      employment_at_arms_length_without_ownership_or_control: boolean; false when the applicant holds any ownership interest in, or controls hiring, supervision or operations of, the employer, or the arrangement is not at arm's length
+      resides_in_canada: boolean
+      valid_nonexpired_status_document: boolean; required when resides_in_canada is true
+      on_maintained_status: boolean; required when resides_in_canada is true
+      legal_status_in_country_of_residence: boolean; used when resides_in_canada is false
       intention_to_reside_in_ns: boolean
       language_test:
-        valid_at_application: boolean
+        valid_at_application: boolean; tested within 2 years of the EOI
         listening_clb: integer
         reading_clb: integer
         writing_clb: integer
         speaking_clb: integer
-    noul:
-      proposition_id: ns_express_entry_experience_genuineness
-      probability_true: decimal in [0,1] or null
-      evidence_complete: boolean
-      evidence_refs: array of strings
-      model_version: string
+    employer:
+      ns_operating_months_at_employment_start: integer
+      meets_ns_registration_requirement: boolean; commercial business registered with the Nova Scotia Registry of Joint Stock Companies with a permanent establishment in Nova Scotia, or not-for-profit registered under the Societies Act
+      in_good_standing_with_ohs_and_labour_authorities: boolean
 evaluation:
   rule_statuses:
   - PASS
@@ -65,14 +82,14 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile number or Job Seeker Validation Code is unverified.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Federal Express Entry Profile
-    page: 6
-    verbatim: have an active profile in the IRCC Express Entry system
+    section: The expression of interest (EOI) process
+    page: 28
+    verbatim: 'You need both of these numbers to submit an EOI to the Nova Scotia: Express Entry Stream.'
   evidence_anchor:
     evidence_unit_id: ns.nsnp_express_entry.p028
     source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
     page: "28"
-    section: Federal Express Entry Profile
+    section: The expression of interest (EOI) process
     verbatim_excerpt: "You need both of these numbers to submit an EOI to the Nova\nScotia: Express Entry Stream."
 - id: nsnp_ee_age_range
   category: candidate
@@ -80,19 +97,24 @@ rules:
   eval_type: deterministic
   required_fields:
   - candidate.age
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
+  pass_if: candidate.age >= 21 && candidate.age <= 55
+  fail_if: (candidate.age != null && candidate.age < 21) || (candidate.age != null && candidate.age > 55)
   missing_or_unverified: 'NEEDS_REVIEW: Candidate age cannot be verified.'
   provenance:
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Applicant Eligibility
-    page: 6
-    verbatim: be 21 to 55 years old
+    source_file: https://liveinnovascotia.com/express-entry
+    section: Skilled Work Experience in Nova Scotia - Eligibility
+    verbatim: be 21 to 55 years old;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Applicant Eligibility
-    verbatim_excerpt: be 21 to 55 years old
+    evidence_unit_id: "atlantic_documents:ns_express_entry_stream_page:skilled_work_experience_in_ns_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: d8549be5853c4fd1aefae7f249deac1bbb4637145c01ad334c3b30a80e6a0d17
+    source_id: ns_express_entry_stream_page
+    source_file: 35a872038ba56e5e5ba68dde4d3106ada3911c53484336884f1153a050fdcb27
+    source_url: https://liveinnovascotia.com/express-entry
+    source_sha256: 902c2b2cefc5a98e835cc52f9c901e122c934cbcd8022041b0343dc31de39b35
+    source_edition: no page date; fetched 2026-11-16T18:24:16Z
+    section: SKILLED WORK EXPERIENCE IN NOVA SCOTIA - ELIGIBILITY
+    verbatim_excerpt: be 21 to 55 years old;
 - id: nsnp_ee_teer_eligibility
   category: candidate
   severity: CRITICAL_REDLINE
@@ -104,41 +126,67 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Primary NOC TEER classification is missing.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Eligible Occupations
-    page: 6
-    verbatim: work experience in Nova Scotia in a TEER 0, 1, 2, or 3 occupation; TEER 4 and 5 are strictly excluded
+    section: For Skilled Work Experience gained in Nova Scotia
+    page: 21
+    verbatim: the work experience was in a job that meets the criteria for NOC categories 0, 1, 2, or 3
   evidence_anchor:
     evidence_unit_id: ns.nsnp_express_entry.p021
     source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
     page: "21"
-    section: Eligible Occupations
+    section: For Skilled Work Experience gained in Nova Scotia
     verbatim_excerpt: "the work experience was in a job that meets the criteria for NOC\ncategories 0, 1, 2, or 3"
 - id: nsnp_ee_experience_duration_and_legality
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.ns_skilled_work_experience_months_last_3_years
+  - candidate.ns_skilled_work_hours_last_3_years
   - candidate.experience_gained_with_legal_authorization
-  - candidate.experience_was_student_or_self_employed
-  pass_if: candidate.ns_skilled_work_experience_months_last_3_years >= 12.0 && candidate.experience_gained_with_legal_authorization
-    == true && candidate.experience_was_student_or_self_employed == false
-  fail_if: candidate.ns_skilled_work_experience_months_last_3_years < 12.0 || candidate.experience_gained_with_legal_authorization
-    == false || candidate.experience_was_student_or_self_employed == true
-  missing_or_unverified: 'NEEDS_REVIEW: Nova Scotia skilled work experience documentation or legal work authorization is incomplete.'
+  - candidate.experience_depends_on_pgwp_from_studies_outside_ns
+  - candidate.employment_at_arms_length_without_ownership_or_control
+  pass_if: >-
+    candidate.ns_skilled_work_hours_last_3_years >= 1560 && candidate.experience_gained_with_legal_authorization == true &&
+    candidate.experience_depends_on_pgwp_from_studies_outside_ns == false &&
+    candidate.employment_at_arms_length_without_ownership_or_control == true
+  fail_if: >-
+    (candidate.ns_skilled_work_hours_last_3_years != null && candidate.ns_skilled_work_hours_last_3_years < 1560) ||
+    candidate.experience_gained_with_legal_authorization == false ||
+    candidate.experience_depends_on_pgwp_from_studies_outside_ns == true ||
+    candidate.employment_at_arms_length_without_ownership_or_control == false
+  missing_or_unverified: 'NEEDS_REVIEW: Nova Scotia skilled work hours, work authorization, post-graduation work permit basis or arm''s-length employment is not documented.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Work Experience Requirements
-    page: 7
-    verbatim: at least one year (1,560 hours) of full-time (or equivalent part-time) skilled work experience in Nova Scotia
-      in a TEER 0, 1, 2, or 3 occupation within the three years prior to application; gained with proper work authorization;
-      self-employment and student work experience do not count
+    section: For Skilled Work Experience gained in Nova Scotia
+    page: 21
+    verbatim: at least 12 months of full-time paid work experience—30 hours per week for 12 months (1,560 hours)
   evidence_anchor:
     evidence_unit_id: ns.nsnp_express_entry.p021
     source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
     page: "21"
-    section: Work Experience Requirements
+    section: For Skilled Work Experience gained in Nova Scotia
     verbatim_excerpt: "at least 12 months of full-time paid work experience—30 hours per\nweek for 12 months (1,560 hours)"
+    supporting_excerpts:
+    - evidence_unit_id: ns.nsnp_express_entry.p023
+      source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
+      page: "23"
+      verbatim_excerpt: the employment arrangement is not at arm’s length.
+    - evidence_unit_id: "atlantic_documents:ns_express_entry_stream_page:skilled_work_experience_in_ns_eligibility"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: d8549be5853c4fd1aefae7f249deac1bbb4637145c01ad334c3b30a80e6a0d17
+      source_file: 35a872038ba56e5e5ba68dde4d3106ada3911c53484336884f1153a050fdcb27
+      verbatim_excerpt: Applicants who are claiming work experience that was gained on a Post Graduate Work permit must have graduated from an educational institution located in Nova Scotia.
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p008"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "8"
+      verbatim_excerpt: "You must have a total of 1,560\nhours of work experience in Nova Scotia,\naccumulated within the three (3) years before you submit\nyour EOI."
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p008"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "8"
+      verbatim_excerpt: "You must have been authorized to\nwork in Canada when you gained\nyour work experience."
 - id: nsnp_ee_language_threshold
   category: candidate
   severity: CRITICAL_REDLINE
@@ -150,58 +198,174 @@ rules:
   - candidate.language_test.reading_clb
   - candidate.language_test.writing_clb
   - candidate.language_test.speaking_clb
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Official language results are missing, expired, or below threshold.'
+  pass_if: >-
+    candidate.language_test.valid_at_application == true &&
+    ((candidate.primary_noc_teer in [0, 1] && candidate.language_test.listening_clb >= 7 && candidate.language_test.reading_clb >= 7 &&
+    candidate.language_test.writing_clb >= 7 && candidate.language_test.speaking_clb >= 7) ||
+    (candidate.primary_noc_teer in [2, 3] && candidate.language_test.listening_clb >= 5 && candidate.language_test.reading_clb >= 5 &&
+    candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5))
+  fail_if: >-
+    candidate.language_test.valid_at_application == true &&
+    ((candidate.primary_noc_teer in [0, 1] && (candidate.language_test.listening_clb < 7 || candidate.language_test.reading_clb < 7 ||
+    candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb < 7)) ||
+    (candidate.primary_noc_teer in [2, 3] && (candidate.language_test.listening_clb < 5 || candidate.language_test.reading_clb < 5 ||
+    candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb < 5)))
+  missing_or_unverified: 'NEEDS_REVIEW: Language test results are missing, older than 2 years, or the TEER is outside 0-3.'
   provenance:
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Language Proficiency
-    page: 8
-    verbatim: CLB 7 for TEER 0 and 1 occupations or CLB 5 for TEER 2 and 3 occupations across all four language abilities
+    source_file: https://liveinnovascotia.com/express-entry
+    section: Skilled Work Experience in Nova Scotia - Eligibility
+    verbatim: You need CLB 7 for skilled work in the National Occupational Classification (NOC) TEER 0 and 1. You need CLB 5 for NOC TEER 2 and 3 positions;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Language Proficiency
-    verbatim_excerpt: CLB 7 for TEER 0 and 1 occupations or CLB 5 for TEER 2 and 3 occupations across all four language abilities
+    evidence_unit_id: "atlantic_documents:ns_express_entry_stream_page:skilled_work_experience_in_ns_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: d8549be5853c4fd1aefae7f249deac1bbb4637145c01ad334c3b30a80e6a0d17
+    source_id: ns_express_entry_stream_page
+    source_file: 35a872038ba56e5e5ba68dde4d3106ada3911c53484336884f1153a050fdcb27
+    source_url: https://liveinnovascotia.com/express-entry
+    source_sha256: 902c2b2cefc5a98e835cc52f9c901e122c934cbcd8022041b0343dc31de39b35
+    source_edition: no page date; fetched 2026-11-16T18:24:16Z
+    section: SKILLED WORK EXPERIENCE IN NOVA SCOTIA - ELIGIBILITY
+    verbatim_excerpt: You need CLB 7 for skilled work in the National Occupational Classification (NOC) TEER 0 and 1. You need CLB 5 for NOC TEER 2 and 3 positions;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p025"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "25"
+      verbatim_excerpt: "Warning! You must have had your language skills tested within 2 years of\nsubmitting an expression of interest to the Nova Scotia: Express Entry Stream. We\ndo NOT accept test results dated more than 2 years before the date on your\nsubmission."
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p024"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "24"
+      verbatim_excerpt: "you must submit the results of one of\nthese language tests even if your first language is English or French"
 - id: nsnp_ee_education_threshold
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.has_high_school_or_higher_with_eca
-  pass_if: candidate.has_high_school_or_higher_with_eca == true
-  fail_if: candidate.has_high_school_or_higher_with_eca == false
-  missing_or_unverified: 'NEEDS_REVIEW: Educational credential assessment (ECA) or Canadian credential documentation is missing.'
+  - candidate.has_canadian_high_school_credential_or_equivalent
+  pass_if: candidate.has_canadian_high_school_credential_or_equivalent == true
+  fail_if: candidate.has_canadian_high_school_credential_or_equivalent == false
+  missing_or_unverified: 'NEEDS_REVIEW: High school credential or its equivalent is unverified.'
   provenance:
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Education
-    page: 8
-    verbatim: have a Canadian high school credential or foreign equivalent with ECA report
+    source_file: https://liveinnovascotia.com/express-entry
+    section: Skilled Work Experience in Nova Scotia - Eligibility
+    verbatim: have a Canadian high school credential or equivalent;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
-    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Education
-    verbatim_excerpt: have a Canadian high school credential or foreign equivalent with ECA report
-- id: nsnp_ee_noul_experience_genuineness
-  category: noul
+    evidence_unit_id: "atlantic_documents:ns_express_entry_stream_page:skilled_work_experience_in_ns_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: d8549be5853c4fd1aefae7f249deac1bbb4637145c01ad334c3b30a80e6a0d17
+    source_id: ns_express_entry_stream_page
+    source_file: 35a872038ba56e5e5ba68dde4d3106ada3911c53484336884f1153a050fdcb27
+    source_url: https://liveinnovascotia.com/express-entry
+    source_sha256: 902c2b2cefc5a98e835cc52f9c901e122c934cbcd8022041b0343dc31de39b35
+    source_edition: no page date; fetched 2026-11-16T18:24:16Z
+    section: SKILLED WORK EXPERIENCE IN NOVA SCOTIA - ELIGIBILITY
+    verbatim_excerpt: have a Canadian high school credential or equivalent;
+- id: nsnp_ee_legal_status
+  category: candidate
   severity: CRITICAL_REDLINE
-  eval_type: typesafe_noul
+  eval_type: deterministic
   required_fields:
-  - noul.proposition_id
-  - noul.probability_true
-  - noul.evidence_complete
-  - noul.evidence_refs
-  precondition: noul.evidence_complete == true
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete.'
+  - candidate.resides_in_canada
+  conditional_required_fields:
+    when: candidate.resides_in_canada == true
+    fields:
+    - candidate.valid_nonexpired_status_document
+    - candidate.on_maintained_status
+  pass_if: >-
+    (candidate.resides_in_canada == true && candidate.valid_nonexpired_status_document == true && candidate.on_maintained_status == false) ||
+    (candidate.resides_in_canada == false && candidate.legal_status_in_country_of_residence == true)
+  fail_if: >-
+    (candidate.resides_in_canada == true && (candidate.valid_nonexpired_status_document == false || candidate.on_maintained_status == true)) ||
+    (candidate.resides_in_canada == false && candidate.legal_status_in_country_of_residence == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Legal status in the country of residence is unverified. Maintained status is not eligible for a Canadian resident.'
   provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Program Integrity & Authentic Employment
-    page: 11
-    verbatim: Nova Scotia skilled experience must be genuine, substantiated by T4 slips and CRA Notices of Assessment.
+    section: You must hold legal status in your country of residence
+    page: 13
+    verbatim: Applicants in maintained status, formerly referred to as implied status, are not eligible to submit an EOI.
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-EE-EXPERIENCE-005
+    evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p013"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+    source_id: nsnp_express_entry_guide_pdf
+    source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+    source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova%20Scotia%20Express%20Entry-English.pdf
+    source_sha256: d930f385d1c6e3e94e06f8d5b0db4648dac15e61cdff603f131fb7716dc42859
+    source_edition: "Nova Scotia Nominee Program (September 2026)"
+    page: "13"
+    section: "You must hold legal status in your country of residence"
+    verbatim_excerpt: "You must hold a valid and non-expired temporary resident status document on\nthe date you submit your EOI, such as a work permit or a study permit. Applicants\nin maintained status, formerly referred to as implied status, are not eligible to\nsubmit an EOI."
+- id: nsnp_ee_employer_criteria
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - employer.ns_operating_months_at_employment_start
+  - employer.meets_ns_registration_requirement
+  - employer.in_good_standing_with_ohs_and_labour_authorities
+  pass_if: >-
+    employer.ns_operating_months_at_employment_start >= 24 && employer.meets_ns_registration_requirement == true &&
+    employer.in_good_standing_with_ohs_and_labour_authorities == true
+  fail_if: >-
+    (employer.ns_operating_months_at_employment_start != null && employer.ns_operating_months_at_employment_start < 24) ||
+    employer.meets_ns_registration_requirement == false || employer.in_good_standing_with_ohs_and_labour_authorities == false
+  missing_or_unverified: 'NEEDS_REVIEW: Employer operating history, registration or labour-authority standing during the period of employment is unverified.'
+  provenance:
     source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
-    section: Program Integrity & Authentic Employment
-    verbatim_excerpt: Nova Scotia skilled experience must be genuine, substantiated by T4 slips and CRA Notices of Assessment.
+    section: Employer criteria for Skilled Work Experience gained in Nova Scotia
+    page: 22
+    verbatim: be in good standing with provincial occupational health and safety and labour authorities.
+  evidence_anchor:
+    evidence_unit_id: ns.nsnp_express_entry.p022
+    source_file: 930f960e1aeedf5920925db732c42672a7174613540dd878692dd609d7286596
+    page: "22"
+    section: Employer criteria for Skilled Work Experience gained in Nova Scotia
+    verbatim_excerpt: "be in good standing with provincial occupational health and safety\nand labour authorities."
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p021"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "21"
+      verbatim_excerpt: "The employer must have operated in Nova Scotia for at least\n2 years at the time your employment started."
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p021"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "21"
+      verbatim_excerpt: "If the employer is a commercial business, it must be registered\nwith the Nova Scotia Registry of Joint Stock Companies AND have\na permanent establishment in Nova Scotia as defined in\nCanada’s Income Tax Act."
+    - evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p021"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+      source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+      page: "21"
+      verbatim_excerpt: "If the employer is a not-for-profit organization, it must be registered\nunder the Societies Act."
+- id: nsnp_ee_intent
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intention_to_reside_in_ns
+  pass_if: candidate.intention_to_reside_in_ns == true
+  fail_if: candidate.intention_to_reside_in_ns == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to live in Nova Scotia is unverified.'
+  provenance:
+    source_file: Guide-NSNP-Nova-Scotia-Express-Entry-English.pdf
+    section: Core Criteria for All Applicants
+    page: 7
+    verbatim: You intend to live in Nova Scotia.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nsnp_express_entry_guide_pdf:p007"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 75e68c1a464c7420badb56445a2bac3b01fd93a77be1c612072eb98a396217bd
+    source_id: nsnp_express_entry_guide_pdf
+    source_file: 865a2fa9af4207d87d49eabfcab68b18b8c1c695c7c398ccc8be71f7a767bc21
+    source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Nova%20Scotia%20Express%20Entry-English.pdf
+    source_sha256: d930f385d1c6e3e94e06f8d5b0db4648dac15e61cdff603f131fb7716dc42859
+    source_edition: "Nova Scotia Nominee Program (September 2026)"
+    page: "7"
+    section: "Core Criteria for All Applicants"
+    verbatim_excerpt: "You intend to live in Nova Scotia."

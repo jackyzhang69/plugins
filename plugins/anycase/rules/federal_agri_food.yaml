@@ -4,15 +4,14 @@ jurisdiction: CA
 category: Federal agri-food
 display_name: Agri-Food Pilot
 status: "LEGACY_CLOSED"
-closure_basis: 'Agri-Food Pilot: "The Agri-Food Pilot ended on May 14, 2025. We’ll continue to process applications we accepted before this date." (unit agri.guide.after_processing_cohort)'
+closure_basis: 'The Agri-Food Pilot ended on May 14, 2025; applications accepted before that date continue to be processed.'
 program_id: FEDERAL_AGRI_FOOD
 stream_id: AGRI_FOOD
-effective_date: '2025-05-14'
+effective_date: '2023-04-27'
 effective_until: '2025-05-14'
-source_edition: Agri-Food Pilot
+source_edition: 'Ministerial Instructions 2023 and 2024, with IRCC processing guidance captured 2026-11-17'
 source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/agri-food-pilot.html
-decision_scope: Deterministic Agri-Food Pilot prescreen. No points grid. The eligible-occupation list is a supplied flag because
-  the list changes.
+decision_scope: 'Historical pre-screen of specified class criteria for accepted applications under the 2023 instructions and 2024 amendment. New applications are closed. This is not an official decision and does not assess application completeness, fees, medical requirements, or criminal and security admissibility.'
 sources:
 - id: afp
   title: Agri-Food Pilot
@@ -21,11 +20,49 @@ sources:
   legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
 schema:
   input_type: object
-  required_top_level:
-  - assessment_date
-  - candidate
+  required_top_level: [assessment_date, candidate]
   types:
     assessment_date: ISO-8601 date
+    candidate:
+      application_date: ISO-8601 date when the permanent residence application was made
+      application_accepted_before_closure: boolean
+      pending_on_2023_04_27: boolean, required when application was made before 2023-04-27
+      pending_on_2024_02_10: boolean, required when application was made before 2024-02-10
+      resided_in_canada_at_application: boolean
+      selected_domestic_route: education | job_offer; relevant only when the 2024 amendment applies and the applicant was in Canada
+      assessment_phase: application | processing | visa_issuance
+      experience_months: non-negative number of elapsed months of qualifying Canadian work within three years
+      experience_hours: non-negative number of qualifying Canadian work hours within three years
+      experience_full_time_paid_nonseasonal: boolean
+      experience_eligible_noc_naics: boolean, for an eligible occupation and industry combination under the applicable instructions
+      experience_main_duties_met: boolean
+      experience_not_self_employed: boolean
+      experience_temporary_status_and_authorization: boolean
+      experience_permit_basis: lmia_12_months | vulnerable_worker | other
+      language_clb_minimum: lowest CLB or NCLC across all four skills
+      language_test_approved: boolean
+      language_test_less_than_two_years_at_application: boolean
+      education_kind: canadian_credential | foreign_equivalent | foreign_authenticated_secondary
+      education_credential_valid: boolean
+      foreign_eca_designated_and_less_than_five_years: boolean
+      temporary_resident_status_at_application: boolean, required when residing in Canada at application
+      currently_in_canada: boolean
+      temporary_resident_status: boolean, current status during processing
+      working_in_canada_with_authorization_at_application: boolean
+      funds_sufficient_at_application: boolean, all family members under the applicable historical threshold
+      working_in_canada_with_authorization_at_finalization: boolean
+      funds_sufficient_at_finalization: boolean, all family members under the applicable historical threshold
+      intends_to_reside_outside_quebec: boolean
+    job_offer:
+      genuine: boolean
+      single_employer_eligible_with_cra_number: boolean
+      eligible_noc_naics: boolean
+      nonseasonal: boolean
+      weekly_hours: non-negative number
+      indeterminate: boolean
+      outside_quebec: boolean
+      applicable_wage_requirement_met: boolean, using the applicable collective agreement or provincial/national prevailing wage at the relevant date
+      likely_to_accept_and_able_to_perform: boolean
 reference_points_grid:
   note: The Agri-Food Pilot has no selection points grid.
 rules:
@@ -33,91 +70,156 @@ rules:
   category: stream_policy
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - assessment_date
-  pass_if: "assessment_date <= '2025-05-14'"
-  fail_if: "false"
-  missing_or_unverified: 'NEEDS_REVIEW: the Agri-Food Pilot ended on May 14, 2025 and only applications received before that date are processed; an assessment after this date cannot pass.'
-  interpretation: 'The official programme page records the closure date. Any assessment dated after May 14, 2025 must not be treated as eligible for a new application.'
+  required_fields: [assessment_date, candidate.application_date, candidate.application_accepted_before_closure]
+  pass_if: "candidate.application_date < '2025-05-14' && candidate.application_accepted_before_closure == true && assessment_date >= candidate.application_date"
+  fail_if: "candidate.application_date >= '2025-05-14' || candidate.application_accepted_before_closure == false"
+  missing_or_unverified: 'NEEDS_REVIEW: The date and acceptance of the historical application are required.'
   evidence_anchor:
-    evidence_unit_id: agri.guide.after_processing_cohort
-    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
-    section: After you apply
-    verbatim_excerpt: "<p>The Agri-Food Pilot ended on May 14, 2025. We\u2019ll continue to process applications we accepted before this date."
+    evidence_unit_id: federal_pilots:agri_food_closure:full_document_body
+    source_id: agri_food_closure
+    source_file: f59d341630bd6c656eefeead51fe838f03c87c8b8d2a5d6c50645fc7e418edd4
+    section: Pilot closure
+    verbatim_excerpt: 'The Agri-Food Pilot ended on May 14, 2025. We’ll continue to process applications we accepted before this date.'
+- id: afp_applicable_instructions
+  category: stream_policy
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [assessment_date, candidate.application_date]
+  pass_if: "assessment_date >= '2023-04-27' && (candidate.application_date >= '2023-04-27' || candidate.pending_on_2023_04_27 == true)"
+  fail_if: "false"
+  missing_or_unverified: 'NEEDS_REVIEW: Applications made before 2023-04-27 need their pending status on that date; cases outside these instructions require historical review.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_mi64:ministerial_instructions
+    source_id: agri_food_mi64
+    source_file: 677575cea57d85f810a9f43a1edf5bd8f25dbaa4a170acfcfde93aed05f6998e
+    section: Transitional provision
+    verbatim_excerpt: 'that are pending on the day on which these Instructions are given'
+- id: afp_amendment_scope
+  category: stream_policy
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [assessment_date, candidate.application_date]
+  conditional_required_fields:
+    when: "assessment_date >= '2024-02-10' && candidate.application_date < '2024-02-10'"
+    fields: [candidate.pending_on_2024_02_10]
+  pass_if: "assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true || candidate.pending_on_2024_02_10 == false)"
+  fail_if: "false"
+  missing_or_unverified: 'NEEDS_REVIEW: This pre-screen supports assessments from 2024-02-10 onward; older applications need their pending status on that date.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_mi76_instruction:ministerial_instructions
+    source_id: agri_food_mi76_instruction
+    source_file: 984abe28aba1fa3b10fd561f1b4c221ef9530bef0272e2f0575ce8d2e3e29615
+    section: Transitional provision
+    verbatim_excerpt: 'that are pending on the day on which these Instructions take effect'
 - id: afp_occupation
   category: occupation
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.eligible_occupation
-  pass_if: candidate.eligible_occupation == true
-  fail_if: candidate.eligible_occupation == false
-  missing_or_unverified: 'NEEDS_REVIEW: Eligible agri-food occupation cannot be verified.'
+  required_fields: [candidate.experience_eligible_noc_naics]
+  pass_if: "candidate.experience_eligible_noc_naics == true"
+  fail_if: "candidate.experience_eligible_noc_naics == false"
+  missing_or_unverified: 'NEEDS_REVIEW: The experience occupation and industry combination must be verified under the applicable classification.'
   evidence_anchor:
-    evidence_unit_id: agri.guide.eligibility
-    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
-    section: Eligible industries and occupations
-    source_id: afp
-    verbatim_excerpt: "from an employer whose primary business activities are in an eligible industry (NAICS)</li>\r\n  <li>for an eligible occupation (NOC)</li>\r\n  <li>for an eligible occupation (NOC) and industry (NAICS) combination as listed above"
+    evidence_unit_id: federal_pilots:agri_food_officer_selection:full_document_body
+    source_id: agri_food_officer_selection
+    source_file: 0d7abdfb3e342bd37ecdd38478968c5ca7c4f09a172621bd7ab4bc16b3dec06c
+    section: Qualifying work experience
+    verbatim_excerpt: 'in one or more eligible occupations (National Occupational Classification [NOC]) and industry (NAICS) combinations'
 - id: afp_experience
   category: experience
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.canadian_nonseasonal_months_past_3_years
-  pass_if: candidate.canadian_nonseasonal_months_past_3_years >= 12
-  fail_if: candidate.canadian_nonseasonal_months_past_3_years < 12
-  missing_or_unverified: 'NEEDS_REVIEW: Canadian non-seasonal experience cannot be verified.'
+  required_fields: [assessment_date, candidate.experience_months, candidate.experience_hours, candidate.experience_full_time_paid_nonseasonal, candidate.experience_main_duties_met, candidate.experience_not_self_employed, candidate.experience_temporary_status_and_authorization, candidate.experience_permit_basis, candidate.application_date]
+  pass_if: "candidate.experience_months >= 12 && candidate.experience_hours >= 1560 && candidate.experience_full_time_paid_nonseasonal == true && candidate.experience_main_duties_met == true && candidate.experience_not_self_employed == true && candidate.experience_temporary_status_and_authorization == true && (candidate.experience_permit_basis == 'lmia_12_months' || (candidate.experience_permit_basis == 'vulnerable_worker' && assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true)))"
+  fail_if: "(candidate.experience_months >= 0 && candidate.experience_months < 12) || (candidate.experience_hours >= 0 && candidate.experience_hours < 1560) || candidate.experience_full_time_paid_nonseasonal == false || candidate.experience_main_duties_met == false || candidate.experience_not_self_employed == false || candidate.experience_temporary_status_and_authorization == false || candidate.experience_permit_basis == 'other'"
+  missing_or_unverified: 'NEEDS_REVIEW: Qualifying work, authorization, permit basis, or 2024 transitional applicability cannot be established.'
   evidence_anchor:
-    evidence_unit_id: agri_food_checklist_0116_pdf.p03
-    source_file: 03beafbbc687a98e399a761fda99969636f50bbde6f3013f3aaf5a0de93298ec
-    page: "3"
-    section: Eligible work experience
-    source_id: afp
-    verbatim_excerpt: "at least 12 months of cumulative authorized, full-time, non-seasonal work experience in Canada"
-- id: afp_offer
-  category: job_offer
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - job_offer.nonseasonal
-  - job_offer.weekly_hours
-  pass_if: job_offer.nonseasonal == true && job_offer.weekly_hours >= 30
-  fail_if: job_offer.nonseasonal == false || job_offer.weekly_hours < 30
-  missing_or_unverified: 'NEEDS_REVIEW: Job-offer terms cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: agri.guide.eligibility
-    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
-    section: Job offer
-    source_id: afp
-    verbatim_excerpt: "full time and non-seasonal</li>\r\n  <li>indeterminate period (no end date)"
-- id: afp_language
-  category: language
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.language_clb_minimum
-  pass_if: candidate.language_clb_minimum >= 4
-  fail_if: candidate.language_clb_minimum < 4
-  missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: agri.guide.eligibility
-    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
-    section: Language testing
-    source_id: afp
-    verbatim_excerpt: "at level 4 (or above) across all language abilities"
+    evidence_unit_id: federal_pilots:agri_food_eligibility:full_document_body
+    source_id: agri_food_eligibility
+    source_file: 00a8c3f523e847c07bc1aeee21afbe5cd224b8a74b1685c9f01a46a073eca875
+    section: Work experience
+    verbatim_excerpt: 'work in the past 3 years (at least 1,560 hours)'
 - id: afp_education
   category: education
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.meets_canadian_high_school
-  pass_if: candidate.meets_canadian_high_school == true
-  fail_if: candidate.meets_canadian_high_school == false
-  missing_or_unverified: 'NEEDS_REVIEW: Education cannot be verified.'
+  required_fields: [assessment_date, candidate.application_date, candidate.resided_in_canada_at_application]
+  pass_if: "(candidate.education_credential_valid == true && (candidate.education_kind == 'canadian_credential' || (candidate.education_kind in ['foreign_equivalent', 'foreign_authenticated_secondary'] && candidate.foreign_eca_designated_and_less_than_five_years == true))) || (candidate.resided_in_canada_at_application == true && assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true) && job_offer.genuine == true && job_offer.single_employer_eligible_with_cra_number == true && job_offer.eligible_noc_naics == true && job_offer.nonseasonal == true && job_offer.weekly_hours >= 30 && job_offer.indeterminate == true && job_offer.outside_quebec == true && job_offer.applicable_wage_requirement_met == true && job_offer.likely_to_accept_and_able_to_perform == true)"
+  fail_if: "candidate.education_credential_valid == false && (candidate.resided_in_canada_at_application == false || (candidate.application_date < '2024-02-10' && candidate.pending_on_2024_02_10 == false) || (candidate.resided_in_canada_at_application == true && assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true) && (job_offer.genuine == false || job_offer.single_employer_eligible_with_cra_number == false || job_offer.eligible_noc_naics == false || job_offer.nonseasonal == false || (job_offer.weekly_hours >= 0 && job_offer.weekly_hours < 30) || job_offer.indeterminate == false || job_offer.outside_quebec == false || job_offer.applicable_wage_requirement_met == false || job_offer.likely_to_accept_and_able_to_perform == false)))"
+  missing_or_unverified: 'NEEDS_REVIEW: Education or the applicable domestic offer alternative is unresolved; foreign secondary credential assessment age may require legal review.'
   evidence_anchor:
-    evidence_unit_id: agri.guide.eligibility
-    source_file: d5f3e43b49f0654b51bc3ae4b2bc20eff653657116e9be906d7e945e472dce3e
-    section: Educational requirements
-    source_id: afp
-    verbatim_excerpt: "You must have a high-school diploma, post-secondary certificate or degree that is valid and equal to a Canadian"
+    evidence_unit_id: federal_pilots:agri_food_mi64:ministerial_instructions
+    source_id: agri_food_mi64
+    source_file: 677575cea57d85f810a9f43a1edf5bd8f25dbaa4a170acfcfde93aed05f6998e
+    section: Members of the class — education
+    verbatim_excerpt: 'even if the organization or institution has not determined that it is equivalent to a Canadian educational credential'
+- id: afp_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [assessment_date, candidate.application_date, candidate.resided_in_canada_at_application, candidate.assessment_phase]
+  pass_if: "candidate.assessment_phase in ['application', 'processing', 'visa_issuance'] && ((candidate.resided_in_canada_at_application == true && candidate.assessment_phase in ['application', 'processing'] && assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true) && candidate.education_credential_valid == true && (candidate.education_kind == 'canadian_credential' || (candidate.education_kind in ['foreign_equivalent', 'foreign_authenticated_secondary'] && candidate.foreign_eca_designated_and_less_than_five_years == true))) || (job_offer.genuine == true && job_offer.single_employer_eligible_with_cra_number == true && job_offer.eligible_noc_naics == true && job_offer.nonseasonal == true && job_offer.weekly_hours >= 30 && job_offer.indeterminate == true && job_offer.outside_quebec == true && job_offer.applicable_wage_requirement_met == true && job_offer.likely_to_accept_and_able_to_perform == true))"
+  fail_if: "(candidate.resided_in_canada_at_application == false || candidate.assessment_phase == 'visa_issuance' || (candidate.application_date < '2024-02-10' && candidate.pending_on_2024_02_10 == false) || (candidate.resided_in_canada_at_application == true && assessment_date >= '2024-02-10' && (candidate.application_date >= '2024-02-10' || candidate.pending_on_2024_02_10 == true) && candidate.education_credential_valid == false)) && (job_offer.genuine == false || job_offer.single_employer_eligible_with_cra_number == false || job_offer.eligible_noc_naics == false || job_offer.nonseasonal == false || (job_offer.weekly_hours >= 0 && job_offer.weekly_hours < 30) || job_offer.indeterminate == false || job_offer.outside_quebec == false || job_offer.applicable_wage_requirement_met == false || job_offer.likely_to_accept_and_able_to_perform == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Offer conditions, the applicable education alternative, or the visa-issuance offer requirement are unresolved.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_officer_selection:full_document_body
+    source_id: agri_food_officer_selection
+    source_file: 0d7abdfb3e342bd37ecdd38478968c5ca7c4f09a172621bd7ab4bc16b3dec06c
+    section: Job offer requirements
+    verbatim_excerpt: 'Applicants must meet all job offer requirements at the time the visa is to be issued.'
+- id: afp_language
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.language_clb_minimum, candidate.language_test_approved, candidate.language_test_less_than_two_years_at_application]
+  pass_if: "candidate.language_clb_minimum >= 4 && candidate.language_test_approved == true && candidate.language_test_less_than_two_years_at_application == true"
+  fail_if: "(candidate.language_clb_minimum >= 0 && candidate.language_clb_minimum < 4) || candidate.language_test_approved == false || candidate.language_test_less_than_two_years_at_application == false"
+  missing_or_unverified: 'NEEDS_REVIEW: All four skill levels, approved test, or age at application cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_mi64:ministerial_instructions
+    source_id: agri_food_mi64
+    source_file: 677575cea57d85f810a9f43a1edf5bd8f25dbaa4a170acfcfde93aed05f6998e
+    section: Members of the class — language
+    verbatim_excerpt: 'which must be less than two years old'
+- id: afp_status
+  category: status
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.resided_in_canada_at_application, candidate.currently_in_canada]
+  pass_if: "(candidate.resided_in_canada_at_application == false || candidate.temporary_resident_status_at_application == true) && (candidate.currently_in_canada == false || candidate.temporary_resident_status == true)"
+  fail_if: "(candidate.resided_in_canada_at_application == true && candidate.temporary_resident_status_at_application == false) || (candidate.currently_in_canada == true && candidate.temporary_resident_status == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Location and temporary resident status at application and during processing must be established separately.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_officer_selection:full_document_body
+    source_id: agri_food_officer_selection
+    source_file: 0d7abdfb3e342bd37ecdd38478968c5ca7c4f09a172621bd7ab4bc16b3dec06c
+    section: Temporary resident status
+    verbatim_excerpt: 'Applicants in Canada must have temporary resident status during the processing of their permanent residence application.'
+- id: afp_funds
+  category: settlement
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.working_in_canada_with_authorization_at_application, candidate.assessment_phase]
+  pass_if: "(candidate.working_in_canada_with_authorization_at_application == true || candidate.funds_sufficient_at_application == true) && (candidate.assessment_phase in ['application', 'processing'] || (candidate.assessment_phase == 'visa_issuance' && (candidate.working_in_canada_with_authorization_at_finalization == true || candidate.funds_sufficient_at_finalization == true)))"
+  fail_if: "(candidate.working_in_canada_with_authorization_at_application == false && candidate.funds_sufficient_at_application == false) || (candidate.assessment_phase == 'visa_issuance' && candidate.working_in_canada_with_authorization_at_finalization == false && candidate.funds_sufficient_at_finalization == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Authorized work or funds for all family must be verified at application and, where applicable, at finalization against historical thresholds.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_mi64:ministerial_instructions
+    source_id: agri_food_mi64
+    source_file: 677575cea57d85f810a9f43a1edf5bd8f25dbaa4a170acfcfde93aed05f6998e
+    section: Members of the class — funds
+    verbatim_excerpt: 'whether those family members are accompanying them or not'
+- id: afp_intended_residence
+  category: settlement
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.intends_to_reside_outside_quebec]
+  pass_if: "candidate.intends_to_reside_outside_quebec == true"
+  fail_if: "candidate.intends_to_reside_outside_quebec == false"
+  missing_or_unverified: 'NEEDS_REVIEW: Intended residence outside Quebec is not established.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:agri_food_officer_selection:full_document_body
+    source_id: agri_food_officer_selection
+    source_file: 0d7abdfb3e342bd37ecdd38478968c5ca7c4f09a172621bd7ab4bc16b3dec06c
+    section: Intent to reside outside of Quebec
+    verbatim_excerpt: 'IRCC must be satisfied that the applicant intends to reside in a province outside the province of Quebec.'

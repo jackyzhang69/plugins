@@ -6,11 +6,25 @@ status: ACTIVE
 program_id: NSNP_SKILLED_WORKER
 stream_id: SKILLED_WORKER
 jurisdiction: CA-NS
-effective_date: '2026-02-18'
-source_edition: 'Nova Scotia Nominee Program Application Guide: Skilled Worker Stream, effective February 2026'
-source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Skilled-Worker-English.pdf
-decision_scope: Pre-screen of the statutory rules defined below; PASS indicates program gate satisfaction, not nomination
-  issuance.
+effective_date: '2026-09-01'
+source_edition: 'Skilled Worker stream page (liveinnovascotia.com/skilled-worker, no page date, retrieved 2026-11-16) and Skilled Worker Stream Submission Guide, Nova Scotia Nominee Program (September 2026)'
+source_url: https://liveinnovascotia.com/skilled-worker
+decision_scope: >-
+  Pre-screen of the core Skilled Worker category (job offer in any occupation). The Construction, Physician and
+  Occupations In-Demand sub-criteria are not evaluated; Occupations In-Demand currently lists no occupations. No
+  equity/ownership percentage cap and no genuineness probability test exist in the sources and none is evaluated;
+  self-employment or control of the employer is a stated exclusion. A pass is not nomination.
+sources:
+- id: ns_skilled_worker_stream_page
+  title: Nova Scotia Skilled Worker (stream page)
+  url: https://liveinnovascotia.com/skilled-worker
+  sha256: 8a94cee5f07d5ea5185346dfe94caa3318d88fa254e4dd979ec23fa886a22988
+  retrieved_at: '2026-11-16'
+- id: ns_skilled_worker_guide
+  title: Nova Scotia Skilled Worker Stream Submission Guide (September 2026)
+  url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Skilled-Worker-English.pdf
+  sha256: f70cd959c04bc975f182b5603f2a59cd58459ab3ffa7faf07e0186edea73c3cc
+  retrieved_at: '2026-11-16'
 schema:
   input_type: object
   required_top_level:
@@ -18,55 +32,44 @@ schema:
   - candidate
   - job_offer
   - employer
-  - noul
   types:
     assessment_date: ISO-8601 date; application assessment date
     candidate:
       age: integer; applicant age on assessment_date
-      education_level: string; High School, Post-Secondary Diploma, Bachelor, Master, PhD
-      has_high_school_or_higher: boolean
-      education_credential_verified: boolean
-      ownership_max_combined_ratio: decimal in [0,1]; maximum combined equity of applicant and family
-      qualifying_work_experience_months: non-negative integer; verified paid hours
-      experience_with_ns_employer_months: non-negative integer; paid work with sponsoring employer
-      legal_status_in_canada: boolean
-      unauthorized_work_history: boolean
+      has_high_school_or_higher: boolean; high school diploma
+      qualifying_work_experience_months: number; complete calendar months of paid, job-related work in the last 5 years
+      qualifying_work_hours_last_5_years: number; paid job-related hours in the last 5 years (volunteer work and unpaid internships excluded)
+      experience_with_ns_employer_months: number; paid work with the sponsoring employer (needed for TEER 4 and 5)
+      self_employed_or_controls_employer: boolean; owns, co-owns or controls the business that employs the applicant, or the arrangement is not at arm's length
+      resides_in_canada: boolean
+      valid_nonexpired_status_document: boolean; required when resides_in_canada is true
+      on_maintained_status: boolean; required when resides_in_canada is true
+      legal_status_in_country_of_residence: boolean; used when resides_in_canada is false
+      first_language_is_english_or_french: boolean
       language_test:
-        test_type: CELPIP-General | IELTS-General-Training | PTE-Core | TEF-Canada | TCF-Canada
-        valid_at_application: boolean
+        valid_at_application: boolean; issued within 2 years of the EOI
         listening_clb: integer
         reading_clb: integer
         writing_clb: integer
         speaking_clb: integer
-      settlement_funds_cad: non-negative decimal
-      settlement_funds_required_cad: non-negative decimal
-      funds_verified_or_currently_employed_ns: boolean
+      settlement_funds_cad: number; funds in the applicant's own name
+      settlement_funds_required_cad: number; amount for the family size from the IRCC table named in the guide
       intention_to_reside_in_ns: boolean
     job_offer:
       noc_2021_code: five-digit string
-      noc_teer: integer 0-5, verified against NOC 2021
-      title: string
-      city: string
+      noc_teer: integer 0-5
       is_in_nova_scotia: boolean
       is_telework_outside_ns: boolean
-      weekly_regular_hours: non-negative decimal
-      indeterminate: boolean
+      weekly_regular_hours: number; full-time is at least 30 hours a week year-round
+      indeterminate: boolean; permanent, no end date
       seasonal: boolean
-      regular_base_hourly_cad: non-negative decimal
-      prevailing_median_hourly_cad: non-negative decimal
-      statutory_minimum_wage_cad: non-negative decimal
+      regular_base_hourly_cad: number
+      statutory_minimum_wage_cad: number
+      within_provincial_wage_range_for_occupation: boolean
     employer:
-      ns_operating_months: non-negative integer; continuous active operation in NS
-      permanent_establishment_in_ns: boolean
-      in_good_standing: boolean
-      compliance_history_verified: boolean
-      recruitment_efforts_conducted_or_exempt: boolean
-    noul:
-      proposition_id: nsnp_job_offer_genuineness
-      probability_true: decimal in [0,1] or null
-      evidence_complete: boolean
-      evidence_refs: non-empty array of strings
-      model_version: string
+      ns_operating_months: integer; continuous operation in Nova Scotia
+      in_good_standing: boolean; provincial occupational health and safety and labour authorities
+      recruitment_efforts_conducted_or_exempt: boolean; recruited before offering the job (3 advertisements in 3 publications within 6 months before the offer, public for 4 weeks in a row, one in a Canada-wide tool) with no qualified Canadian or permanent resident found
 evaluation:
   rule_statuses:
   - PASS
@@ -77,27 +80,6 @@ evaluation:
   - Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW.
   - Otherwise, verdict = PASS.
 rules:
-- id: nsnp_sw_equity_cap
-  category: candidate
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.ownership_max_combined_ratio
-  pass_if: candidate.ownership_max_combined_ratio < 0.10
-  fail_if: candidate.ownership_max_combined_ratio >= 0.10
-  missing_or_unverified: 'NEEDS_REVIEW: Candidate and family equity share in employer business cannot be verified.'
-  provenance:
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Employer Eligibility
-    page: 10
-    verbatim: Applicants and their accompanying family members cannot have an ownership stake of 10% or greater in the business
-      offering the employment.
-  evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-EMPLOYER-002
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Employer Eligibility
-    verbatim_excerpt: Applicants and their accompanying family members cannot have an ownership stake of 10% or greater in
-      the business offering the employment.
 - id: nsnp_sw_age_threshold
   category: candidate
   severity: CRITICAL_REDLINE
@@ -105,215 +87,361 @@ rules:
   required_fields:
   - candidate.age
   pass_if: candidate.age >= 21 && candidate.age <= 55
-  fail_if: candidate.age < 21 || candidate.age > 55
+  fail_if: (candidate.age != null && candidate.age < 21) || (candidate.age != null && candidate.age > 55)
   missing_or_unverified: 'NEEDS_REVIEW: Candidate age cannot be verified.'
   provenance:
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Applicant Eligibility
-    page: 6
-    verbatim: be between the ages of 21 and 55
+    source_file: https://liveinnovascotia.com/skilled-worker
+    section: Skilled Worker - Eligibility
+    verbatim: be 21 to 55 years old;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-CANDIDATE-001
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Applicant Eligibility
-    verbatim_excerpt: be between the ages of 21 and 55
+    evidence_unit_id: "atlantic_documents:ns_skilled_worker_stream_page:skilled_worker_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 15a268851177f815c03bd6c5dc4054c6a2c6894d5b0188ed7d5ed27ee1406db1
+    source_id: ns_skilled_worker_stream_page
+    source_file: 0f5a1dd5467ce0088a303621a22ab887878514c6ebe1ac977e9af22bf3fb43c9
+    source_url: https://liveinnovascotia.com/skilled-worker
+    source_sha256: 8a94cee5f07d5ea5185346dfe94caa3318d88fa254e4dd979ec23fa886a22988
+    source_edition: no page date; fetched 2026-11-16T18:24:17Z
+    section: SKILLED WORKER - ELIGIBILITY
+    verbatim_excerpt: be 21 to 55 years old;
 - id: nsnp_sw_education_threshold
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.has_high_school_or_higher
-  - candidate.education_credential_verified
-  pass_if: candidate.has_high_school_or_higher == true && candidate.education_credential_verified == true
+  pass_if: candidate.has_high_school_or_higher == true
   fail_if: candidate.has_high_school_or_higher == false
-  missing_or_unverified: 'NEEDS_REVIEW: Candidate high school credential or ECA verification is missing.'
+  missing_or_unverified: 'NEEDS_REVIEW: High school diploma is unverified.'
   provenance:
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Applicant Eligibility
-    page: 6
-    verbatim: have a high school diploma or equivalent
+    source_file: https://liveinnovascotia.com/skilled-worker
+    section: Skilled Worker - Eligibility
+    verbatim: have a high school diploma;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-CANDIDATE-001
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Applicant Eligibility
-    verbatim_excerpt: have a high school diploma or equivalent
+    evidence_unit_id: "atlantic_documents:ns_skilled_worker_stream_page:skilled_worker_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 15a268851177f815c03bd6c5dc4054c6a2c6894d5b0188ed7d5ed27ee1406db1
+    source_id: ns_skilled_worker_stream_page
+    source_file: 0f5a1dd5467ce0088a303621a22ab887878514c6ebe1ac977e9af22bf3fb43c9
+    source_url: https://liveinnovascotia.com/skilled-worker
+    source_sha256: 8a94cee5f07d5ea5185346dfe94caa3318d88fa254e4dd979ec23fa886a22988
+    source_edition: no page date; fetched 2026-11-16T18:24:17Z
+    section: SKILLED WORKER - ELIGIBILITY
+    verbatim_excerpt: have a high school diploma;
 - id: nsnp_sw_work_experience
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - job_offer.noc_teer
   - candidate.qualifying_work_experience_months
-  - candidate.experience_with_ns_employer_months
-  pass_if: (job_offer.noc_teer in [0, 1, 2, 3] && candidate.qualifying_work_experience_months >= 12) || (job_offer.noc_teer
-    in [4, 5] && candidate.experience_with_ns_employer_months >= 6)
-  fail_if: (job_offer.noc_teer in [0, 1, 2, 3] && candidate.qualifying_work_experience_months < 12) || (job_offer.noc_teer
-    in [4, 5] && candidate.experience_with_ns_employer_months < 6)
-  missing_or_unverified: 'NEEDS_REVIEW: Work experience documentation is incomplete or unverified.'
+  - candidate.qualifying_work_hours_last_5_years
+  - job_offer.noc_teer
+  conditional_required_fields:
+    when: job_offer.noc_teer in [4, 5]
+    fields:
+    - candidate.experience_with_ns_employer_months
+  pass_if: >-
+    candidate.qualifying_work_experience_months >= 12 && candidate.qualifying_work_hours_last_5_years >= 1560 &&
+    (job_offer.noc_teer in [0, 1, 2, 3] || candidate.experience_with_ns_employer_months >= 6)
+  fail_if: >-
+    (candidate.qualifying_work_experience_months != null && candidate.qualifying_work_experience_months < 12) ||
+    (candidate.qualifying_work_hours_last_5_years != null && candidate.qualifying_work_hours_last_5_years < 1560) ||
+    (job_offer.noc_teer in [4, 5] && candidate.experience_with_ns_employer_months != null && candidate.experience_with_ns_employer_months < 6)
+  missing_or_unverified: 'NEEDS_REVIEW: Paid, job-related work experience months or hours (and for TEER 4 or 5 six months with the sponsoring employer) are unverified.'
   provenance:
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Work Experience Requirements
-    page: 7
-    verbatim: have at least 1 year (1,560 hours) of continuous full-time or equivalent paid work experience related to the
-      job (for TEER 0, 1, 2, 3) or at least 6 months (780 hours) of continuous full-time paid work experience with the Nova
-      Scotia employer supporting your application (for TEER 4 or 5)
+    source_file: https://liveinnovascotia.com/skilled-worker
+    section: Skilled Worker - Eligibility
+    verbatim: have 1 year of work experience related to the job. (Workers in TEER 4 or 5 of the National Occupational Classification must already have six months’ experience with the employer.);
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-CANDIDATE-001
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Work Experience Requirements
-    verbatim_excerpt: have at least 1 year (1,560 hours) of continuous full-time or equivalent paid work experience related
-      to the job (for TEER 0, 1, 2, 3) or at least 6 months (780 hours) of continuous full-time paid work experience with
-      the Nova Scotia employer supporting your application (for TEER 4 or 5)
+    evidence_unit_id: "atlantic_documents:ns_skilled_worker_stream_page:skilled_worker_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 15a268851177f815c03bd6c5dc4054c6a2c6894d5b0188ed7d5ed27ee1406db1
+    source_id: ns_skilled_worker_stream_page
+    source_file: 0f5a1dd5467ce0088a303621a22ab887878514c6ebe1ac977e9af22bf3fb43c9
+    source_url: https://liveinnovascotia.com/skilled-worker
+    source_sha256: 8a94cee5f07d5ea5185346dfe94caa3318d88fa254e4dd979ec23fa886a22988
+    source_edition: no page date; fetched 2026-11-16T18:24:17Z
+    section: SKILLED WORKER - ELIGIBILITY
+    verbatim_excerpt: have 1 year of work experience related to the job. (Workers in TEER 4 or 5 of the National Occupational Classification must already have six months’ experience with the employer.);
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p009"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+      source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+      page: "9"
+      verbatim_excerpt: "You have worked 12 complete calendar months within the last 5\nyears and a minimum of 1,560 hours. This work must be related to\nthe job you are being offered, AND it must be paid work. It cannot include volunteer work or unpaid internships."
+    - evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p009"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+      source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+      page: "9"
+      verbatim_excerpt: "If your job offer falls under the NOC TEER category 4 or 5, you\nhave 6 months’ paid work experience with the Nova Scotia\nemployer who is offering you the job."
 - id: nsnp_sw_language_proficiency
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - job_offer.noc_teer
-  - candidate.language_test.valid_at_application
-  - candidate.language_test.listening_clb
-  - candidate.language_test.reading_clb
-  - candidate.language_test.writing_clb
-  - candidate.language_test.speaking_clb
-  pass_if: candidate.language_test.valid_at_application == true && ((job_offer.noc_teer in [0, 1, 2] && candidate.language_test.listening_clb
-    >= 5 && candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb
-    >= 5) || (job_offer.noc_teer in [3, 4, 5] && candidate.language_test.listening_clb >= 4 && candidate.language_test.reading_clb
-    >= 4 && candidate.language_test.writing_clb >= 4 && candidate.language_test.speaking_clb >= 4))
-  fail_if: candidate.language_test.valid_at_application == false || (job_offer.noc_teer in [0, 1, 2] && (candidate.language_test.listening_clb
-    < 5 || candidate.language_test.reading_clb < 5 || candidate.language_test.writing_clb < 5 || candidate.language_test.speaking_clb
-    < 5)) || (job_offer.noc_teer in [3, 4, 5] && (candidate.language_test.listening_clb < 4 || candidate.language_test.reading_clb
-    < 4 || candidate.language_test.writing_clb < 4 || candidate.language_test.speaking_clb < 4))
-  missing_or_unverified: 'NEEDS_REVIEW: Official language test report is missing, expired, or unverified.'
+  - candidate.first_language_is_english_or_french
+  conditional_required_fields:
+    when: job_offer.noc_teer in [4, 5] || candidate.first_language_is_english_or_french == false
+    fields:
+    - candidate.language_test.valid_at_application
+    - candidate.language_test.listening_clb
+    - candidate.language_test.reading_clb
+    - candidate.language_test.writing_clb
+    - candidate.language_test.speaking_clb
+  pass_if: >-
+    (job_offer.noc_teer in [0, 1, 2, 3] && (candidate.first_language_is_english_or_french == true ||
+    (candidate.language_test.valid_at_application == true && candidate.language_test.listening_clb >= 5 &&
+    candidate.language_test.reading_clb >= 5 && candidate.language_test.writing_clb >= 5 && candidate.language_test.speaking_clb >= 5))) ||
+    (job_offer.noc_teer in [4, 5] && candidate.language_test.valid_at_application == true && candidate.language_test.listening_clb >= 4 &&
+    candidate.language_test.reading_clb >= 4 && candidate.language_test.writing_clb >= 4 && candidate.language_test.speaking_clb >= 4)
+  fail_if: >-
+    (job_offer.noc_teer in [0, 1, 2, 3] && candidate.first_language_is_english_or_french == false && candidate.language_test.valid_at_application == true &&
+    ((candidate.language_test.listening_clb != null && candidate.language_test.listening_clb < 5) ||
+    (candidate.language_test.reading_clb != null && candidate.language_test.reading_clb < 5) ||
+    (candidate.language_test.writing_clb != null && candidate.language_test.writing_clb < 5) ||
+    (candidate.language_test.speaking_clb != null && candidate.language_test.speaking_clb < 5))) ||
+    (job_offer.noc_teer in [4, 5] && candidate.language_test.valid_at_application == true &&
+    ((candidate.language_test.listening_clb != null && candidate.language_test.listening_clb < 4) ||
+    (candidate.language_test.reading_clb != null && candidate.language_test.reading_clb < 4) ||
+    (candidate.language_test.writing_clb != null && candidate.language_test.writing_clb < 4) ||
+    (candidate.language_test.speaking_clb != null && candidate.language_test.speaking_clb < 4)))
+  missing_or_unverified: 'NEEDS_REVIEW: A test within 2 years is missing (mandatory for TEER 4 or 5, and for TEER 0-3 when the first language is not English or French).'
   provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Language Requirements
-    page: 8
-    verbatim: prove language ability equal to CLB 5 for TEER 0, 1, or 2, or CLB 4 for TEER 3, 4, or 5
+    section: Language test results
+    page: 30
+    verbatim: Your test results must show that you meet at least the CLB level 4 criteria
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-CANDIDATE-001
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Language Requirements
-    verbatim_excerpt: prove language ability equal to CLB 5 for TEER 0, 1, or 2, or CLB 4 for TEER 3, 4, or 5
+    evidence_unit_id: ns.nsnp_skilled_worker.p030.your_test_results_must_show_that_you
+    source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+    page: "30"
+    section: Language test results (TEER 4 and 5)
+    verbatim_excerpt: "Your test results must show that you meet at least the CLB level 4\ncriteria"
+    supporting_excerpts:
+    - evidence_unit_id: ns.nsnp_skilled_worker.p030.you_must_submit_the_results_of_one
+      source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+      page: "30"
+      verbatim_excerpt: "You must submit the results of one of these language tests even if your\nfirst language is English or French"
+    - evidence_unit_id: ns.nsnp_skilled_worker.p028.if_you_are_submitting_official_language_test
+      source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+      page: "28"
+      verbatim_excerpt: "the results must have been issued within two (2) years of the date\nyou submit your EOI."
+    - evidence_unit_id: "atlantic_documents:ns_skilled_worker_stream_page:skilled_worker_eligibility"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 15a268851177f815c03bd6c5dc4054c6a2c6894d5b0188ed7d5ed27ee1406db1
+      source_file: 0f5a1dd5467ce0088a303621a22ab887878514c6ebe1ac977e9af22bf3fb43c9
+      verbatim_excerpt: prove language ability equal to Canadian Language Benchmark (CLB) Level 5 if you are in a NOC TEER category 0, 1, 2, or 3 occupation. If your first language is English or French, that is enough proof.
 - id: nsnp_sw_job_permanence_and_hours
   category: job_offer
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - job_offer.indeterminate
-  - job_offer.seasonal
   - job_offer.weekly_regular_hours
   - job_offer.is_in_nova_scotia
   - job_offer.is_telework_outside_ns
-  pass_if: job_offer.indeterminate == true && job_offer.seasonal == false && job_offer.weekly_regular_hours >= 30.0 && job_offer.is_in_nova_scotia
-    == true && job_offer.is_telework_outside_ns == false
-  fail_if: job_offer.indeterminate == false || job_offer.seasonal == true || job_offer.weekly_regular_hours < 30.0 || job_offer.is_in_nova_scotia
-    == false || job_offer.is_telework_outside_ns == true
-  missing_or_unverified: 'NEEDS_REVIEW: Job offer permanence, hours, or work location cannot be verified.'
+  - job_offer.seasonal
+  pass_if: >-
+    job_offer.indeterminate == true && job_offer.weekly_regular_hours >= 30 && job_offer.is_in_nova_scotia == true &&
+    job_offer.is_telework_outside_ns == false && job_offer.seasonal == false
+  fail_if: >-
+    job_offer.indeterminate == false || (job_offer.weekly_regular_hours != null && job_offer.weekly_regular_hours < 30) ||
+    job_offer.is_in_nova_scotia == false || job_offer.is_telework_outside_ns == true || job_offer.seasonal == true
+  missing_or_unverified: 'NEEDS_REVIEW: Permanence, year-round hours or Nova Scotia location of the job offer is unverified.'
   provenance:
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Job Offer Criteria
-    page: 12
-    verbatim: full-time, permanent position located in Nova Scotia; full-time means at least 30 hours per week year-round;
-      indefinite term with no predetermined end date
+    source_file: https://liveinnovascotia.com/skilled-worker
+    section: Skilled Worker - Eligibility
+    verbatim: have a full-time permanent job offer from a Nova Scotia employer;
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-JOB-OFFER-003
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Job Offer Criteria
-    verbatim_excerpt: full-time, permanent position located in Nova Scotia; full-time means at least 30 hours per week year-round;
-      indefinite term with no predetermined end date
+    evidence_unit_id: "atlantic_documents:ns_skilled_worker_stream_page:skilled_worker_eligibility"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 15a268851177f815c03bd6c5dc4054c6a2c6894d5b0188ed7d5ed27ee1406db1
+    source_id: ns_skilled_worker_stream_page
+    source_file: 0f5a1dd5467ce0088a303621a22ab887878514c6ebe1ac977e9af22bf3fb43c9
+    source_url: https://liveinnovascotia.com/skilled-worker
+    source_sha256: 8a94cee5f07d5ea5185346dfe94caa3318d88fa254e4dd979ec23fa886a22988
+    source_edition: no page date; fetched 2026-11-16T18:24:17Z
+    section: SKILLED WORKER - ELIGIBILITY
+    verbatim_excerpt: have a full-time permanent job offer from a Nova Scotia employer;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p004"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+      source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+      page: "4"
+      verbatim_excerpt: "Full-time means you will work\nyear-round for at least 30 hours a week. Permanent means your job does\nNOT have an end date."
 - id: nsnp_sw_compensation_floor
   category: job_offer
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - job_offer.regular_base_hourly_cad
-  - job_offer.prevailing_median_hourly_cad
   - job_offer.statutory_minimum_wage_cad
-  pass_if: job_offer.regular_base_hourly_cad >= job_offer.statutory_minimum_wage_cad && job_offer.regular_base_hourly_cad
-    >= job_offer.prevailing_median_hourly_cad
-  fail_if: job_offer.regular_base_hourly_cad < job_offer.statutory_minimum_wage_cad || job_offer.regular_base_hourly_cad <
-    job_offer.prevailing_median_hourly_cad
-  missing_or_unverified: 'NEEDS_REVIEW: Wage rate or Job Bank prevailing wage rate is not established.'
+  - job_offer.within_provincial_wage_range_for_occupation
+  pass_if: >-
+    job_offer.regular_base_hourly_cad >= job_offer.statutory_minimum_wage_cad &&
+    job_offer.within_provincial_wage_range_for_occupation == true
+  fail_if: >-
+    (job_offer.regular_base_hourly_cad != null && job_offer.statutory_minimum_wage_cad != null &&
+    job_offer.regular_base_hourly_cad < job_offer.statutory_minimum_wage_cad) ||
+    job_offer.within_provincial_wage_range_for_occupation == false
+  missing_or_unverified: 'NEEDS_REVIEW: Wage, the provincial minimum wage or the provincial wage range for the occupation is unverified.'
   provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Compensation and Wages
-    page: 13
-    verbatim: offer wages and working conditions that meet or exceed regional industry norms (competitive wage as established
-      by Job Bank median prevailing wage) and provincial employment standards
+    section: Employer criteria
+    page: 40
+    verbatim: The employee must be paid a salary that meets provincial employment standards and the provincial wage range for the specific occupation.
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-JOB-OFFER-003
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Compensation and Wages
-    verbatim_excerpt: offer wages and working conditions that meet or exceed regional industry norms (competitive wage as
-      established by Job Bank median prevailing wage) and provincial employment standards
+    evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p040"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+    source_id: nsnp_skilled_worker_guide_pdf
+    source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+    source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Skilled-Worker-English.pdf
+    source_sha256: f70cd959c04bc975f182b5603f2a59cd58459ab3ffa7faf07e0186edea73c3cc
+    source_edition: "Nova Scotia Nominee Program (September 2026)"
+    page: "40"
+    section: "Employer criteria"
+    verbatim_excerpt: "The employee must be paid a salary that meets provincial\nemployment standards and the provincial wage range for the\nspecific occupation."
 - id: nsnp_sw_employer_standing
   category: employer
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - employer.ns_operating_months
-  - employer.permanent_establishment_in_ns
   - employer.in_good_standing
-  - employer.compliance_history_verified
-  pass_if: employer.ns_operating_months >= 24 && employer.permanent_establishment_in_ns == true && employer.in_good_standing
-    == true && employer.compliance_history_verified == true
-  fail_if: employer.ns_operating_months < 24 || employer.permanent_establishment_in_ns == false || employer.in_good_standing
-    == false || employer.compliance_history_verified == false
-  missing_or_unverified: 'NEEDS_REVIEW: Employer business documentation, operational duration, or compliance standing is unverified.'
+  - employer.recruitment_efforts_conducted_or_exempt
+  pass_if: >-
+    employer.ns_operating_months >= 24 && employer.in_good_standing == true &&
+    employer.recruitment_efforts_conducted_or_exempt == true
+  fail_if: >-
+    (employer.ns_operating_months != null && employer.ns_operating_months < 24) || employer.in_good_standing == false ||
+    employer.recruitment_efforts_conducted_or_exempt == false
+  missing_or_unverified: 'NEEDS_REVIEW: Employer operating history, labour-authority standing or pre-offer recruitment evidence is unverified.'
   provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Employer Eligibility
-    page: 10
-    verbatim: have been in continuous, active operation in Nova Scotia for at least two (2) full years immediately prior to
-      the application; be in good standing with provincial and federal employment standards
+    section: What you need to do before you offer a job (recruitment)
+    page: 41
+    verbatim: You must show that, BEFORE you offered the job to the applicant, you tried to recruit a Canadian citizen or permanent resident.
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-EMPLOYER-002
+    evidence_unit_id: ns.nsnp_skilled_worker.p041.what_you_need_to_do_before_you
+    source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+    page: "41"
+    section: What you need to do before you offer a job
+    verbatim_excerpt: "You must show that, BEFORE you offered the job to the applicant, you tried\nto recruit a Canadian citizen or permanent resident."
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p039"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+      source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+      page: "39"
+      verbatim_excerpt: "The employer must have operated in Nova Scotia for at least\n2 years."
+    - evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p040"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+      source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+      page: "40"
+      verbatim_excerpt: "You must be in good standing with provincial occupational health\nand safety and labour authorities."
+- id: nsnp_sw_self_employment_exclusion
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.self_employed_or_controls_employer
+  pass_if: candidate.self_employed_or_controls_employer == false
+  fail_if: candidate.self_employed_or_controls_employer == true
+  missing_or_unverified: 'NEEDS_REVIEW: Ownership, control and arm''s-length status of the employment is unverified.'
+  provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Employer Eligibility
-    verbatim_excerpt: have been in continuous, active operation in Nova Scotia for at least two (2) full years immediately
-      prior to the application; be in good standing with provincial and federal employment standards
+    section: Documents related to your work experience
+    page: 27
+    verbatim: Employment will not be considered valid where you hold any ownership interest in the employer's business
+  evidence_anchor:
+    evidence_unit_id: ns.nsnp_skilled_worker.p027.send_the_above_list_to_each_employer
+    source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+    page: "27"
+    section: Documents related to your work experience
+    verbatim_excerpt: "Periods of self-employment will not be counted toward the\nrequired work experience."
+    supporting_excerpts:
+    - evidence_unit_id: ns.nsnp_skilled_worker.p027.send_the_above_list_to_each_employer
+      source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+      page: "27"
+      verbatim_excerpt: you hold any ownership interest in the employer's business;
+- id: nsnp_sw_legal_status
+  category: candidate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.resides_in_canada
+  conditional_required_fields:
+    when: candidate.resides_in_canada == true
+    fields:
+    - candidate.valid_nonexpired_status_document
+    - candidate.on_maintained_status
+  pass_if: >-
+    (candidate.resides_in_canada == true && candidate.valid_nonexpired_status_document == true && candidate.on_maintained_status == false) ||
+    (candidate.resides_in_canada == false && candidate.legal_status_in_country_of_residence == true)
+  fail_if: >-
+    (candidate.resides_in_canada == true && (candidate.valid_nonexpired_status_document == false || candidate.on_maintained_status == true)) ||
+    (candidate.resides_in_canada == false && candidate.legal_status_in_country_of_residence == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Legal status in the country of residence is unverified. Maintained status is not accepted for a Canadian resident.'
+  provenance:
+    source_file: Guide-NSNP-Skilled-Worker-English.pdf
+    section: Documents related to your immigration status
+    page: 31
+    verbatim: If you currently live in Canada, include proof of your valid, and non-expired legal status document in Canada (“Maintained status” is not accepted).
+  evidence_anchor:
+    evidence_unit_id: ns.nsnp_skilled_worker.p031.if_you_currently_live_in_canada_include
+    source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
+    page: "31"
+    section: Documents related to your immigration status
+    verbatim_excerpt: "If you currently live in Canada, include proof of your valid, and\nnon-expired legal status document in Canada (“Maintained status”\nis not accepted)."
 - id: nsnp_sw_settlement_funds
   category: candidate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.funds_verified_or_currently_employed_ns
-  pass_if: candidate.funds_verified_or_currently_employed_ns == true
-  fail_if: candidate.funds_verified_or_currently_employed_ns == false
-  missing_or_unverified: 'NEEDS_REVIEW: Proof of liquid settlement funds or proof of current legal employment in NS is missing.'
+  - candidate.settlement_funds_cad
+  - candidate.settlement_funds_required_cad
+  pass_if: candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad
+  missing_or_unverified: 'NEEDS_REVIEW: Funds in the applicant''s own name are below the table amount for the family size; the guide allows a case-by-case reduction for applicants already living in Nova Scotia or with arranged employment, assessed by an officer.'
   provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Financial Resources
-    page: 9
-    verbatim: demonstrate sufficient settlement funds to successfully establish in Nova Scotia
+    section: Documents related to your move to Nova Scotia
+    page: 32
+    verbatim: These requirements may be reduced if you are already living in Nova Scotia or have arranged employment.
   evidence_anchor:
     evidence_unit_id: ns.nsnp_skilled_worker.p032.you_can_find_the_requirements_regarding_the
     source_file: 56a53a1198fd3569ac2482cde79aa2fb16cd30f2ac88d1f1084672a494165a16
     page: "32"
     section: Financial Resources
     verbatim_excerpt: "These requirements may be reduced if you are already living in Nova\nScotia or have arranged employment. In all cases, you must provide proof\nof your financial resources in your own name."
-- id: nsnp_sw_job_genuineness_noul
-  category: noul
+- id: nsnp_sw_intent
+  category: candidate
   severity: CRITICAL_REDLINE
-  eval_type: typesafe_noul
+  eval_type: deterministic
   required_fields:
-  - noul.proposition_id
-  - noul.probability_true
-  - noul.evidence_complete
-  - noul.evidence_refs
-  precondition: noul.evidence_complete == true
-  pass_if: noul.probability_true >= 0.70
-  fail_if: noul.probability_true < 0.30
-  missing_or_unverified: 'NEEDS_REVIEW: Qualitative probability is indeterminate (0.30 <= P < 0.70) or evidence is incomplete.'
+  - candidate.intention_to_reside_in_ns
+  pass_if: candidate.intention_to_reside_in_ns == true
+  fail_if: candidate.intention_to_reside_in_ns == false
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to live in Nova Scotia is unverified.'
   provenance:
     source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Program Integrity & Genuine Business Need
-    page: 14
-    verbatim: The job offer must represent a genuine, arm's length commercial need of the employer; positions created primarily
-      for immigration purposes will be refused.
+    section: Core requirements for all applicants
+    page: 8
+    verbatim: You intend to live in Nova Scotia.
   evidence_anchor:
-    evidence_unit_id: EU-NSNP-SW-EMPLOYER-002
-    source_file: Guide-NSNP-Skilled-Worker-English.pdf
-    section: Program Integrity & Genuine Business Need
-    verbatim_excerpt: The job offer must represent a genuine, arm's length commercial need of the employer; positions created
-      primarily for immigration purposes will be refused.
+    evidence_unit_id: "atlantic_documents:nsnp_skilled_worker_guide_pdf:p008"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 3fe226afea70f10bfd544ac5bbcde4126b1c279114c2393d433a43338b80a538
+    source_id: nsnp_skilled_worker_guide_pdf
+    source_file: 3003b603a778d76007b3a9a607ea3c2e929bed3745dcbc341e1e05e622c1a5d7
+    source_url: https://liveinnovascotia.com/sites/default/files/2026-02/Guide-NSNP-Skilled-Worker-English.pdf
+    source_sha256: f70cd959c04bc975f182b5603f2a59cd58459ab3ffa7faf07e0186edea73c3cc
+    source_edition: "Nova Scotia Nominee Program (September 2026)"
+    page: "8"
+    section: "Core requirements for all applicants"
+    verbatim_excerpt: "You intend to live in Nova Scotia."

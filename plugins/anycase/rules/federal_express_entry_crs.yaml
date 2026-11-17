@@ -6,8 +6,8 @@ jurisdiction: CA-FED
 category: Express Entry
 display_name: Express Entry — pool gates and CRS ranking grid
 status: ACTIVE
-effective_date: '2026-09-25'
-source_edition: Current IRPA, Express Entry Ministerial Instructions and IRCC CRS criteria checked 2026-09-25
+effective_date: '2026-11-03'
+source_edition: Express Entry Ministerial Instructions as amended by Ministerial Instructions Amending the Ministerial Instructions Respecting the Express Entry System, 2026-1 (given 2026-10-15, in force 2026-11-03; total 1270 points) and IRCC pages checked 2026-11-16; this scoring_grid is the grid in force from 2026-11-03, earlier assessment dates need the historical pinned grid
 source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html
 decision_scope: Pool prescreen using independently established FSWP/CEC/FSTP eligibility. CRS claims are
   checked against the scoring grid and supplied candidate facts; unsupported or incomplete components
@@ -37,13 +37,38 @@ sources:
 - id: ircc_crs
   title: Express Entry — Comprehensive Ranking System criteria
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html
-  citation: IRCC current CRS points grid; job-offer points removed 2025-03-25
-  legal_authority: Official points schedule under Express Entry Ministerial Instructions
+  citation: IRCC CRS criteria page modified 2026-11-03 (raw sha256 99ad64f5cbd82d2fa86e1dc881153f910c4b000762dfe26047c49b7c4cc0e2b9, fetched 2026-11-16); it restates MI s. 8, 10-15.2 and agrees with them; the Ministerial Instructions prevail over the page
+  legal_authority: Official points schedule under Express Entry Ministerial Instructions (secondary to the instructions themselves)
 - id: ircc_language
   title: Documents for Express Entry — Language test results
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
   citation: IRCC approved tests and CLB/NCLC conversion; less than two years old
   legal_authority: Official operational guidance
+- id: ircc_who_can_apply
+  title: Express Entry — Who can apply
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply.html
+  citation: IRCC page, VKS K 7e296081 capture 2026-10-31 (sha256 0672f57837...); current page modified 2026-10-16
+  legal_authority: Official IRCC guidance listing the three programs managed through Express Entry
+- id: ircc_fswp_program
+  title: Express Entry — Federal Skilled Worker Program (also states the Quebec rule shared by CEC and FSTP)
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html
+  citation: IRCC page, VKS K 7e296081 capture 2026-10-31; current page modified 2026-11-03
+  legal_authority: Official IRCC guidance; CEC and FSTP pages carry the same "outside the province of Quebec" statement
+- id: ee_mi_amendment_2026_1
+  title: Ministerial Instructions Amending the Ministerial Instructions Respecting the Express Entry System, 2026-1
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-application-management-system/amendment-2026-1.html
+  citation: 'Ministerial Instructions given 2026-10-15 under IRPA s. 10.3(1)(h), in force 2026-11-03 (s. 9); page raw sha256 cbd875b906ea542f68608c004e596ec6eb57d03d3042228994cc8e18ef6d432f (fetched 2026-11-16, fetch-log.jsonl); consolidated instructions page modified 2026-11-03 raw sha256 6e1c1b323cdac49c6f1d1a52dc48e6123e3b8db70871375c2f9ad77572a4bb53; validated unpublished K candidate 4da635d50366f6e5720c289fc16392a651fefdc18713d45b05bf7f08e327b3d9 (units amendment.operative_text, amendment.taking_effect, mi.crs_sections_8_to_34)'
+  legal_authority: Binding Ministerial Instructions (highest authority for CRS points; IRCC web pages and the high-wage list are subordinate)
+- id: ircc_high_wage_list
+  title: Express Entry high-wage occupations list
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/high-wage.html
+  citation: 'IRCC list prepared under the MI definition "list of high-wage occupations" (comes into effect 2026-11-03, page date 2026-10-16, data 2023-2025); the level that applied on the invitation date is kept if the list changes later; published VKS unit ircc_high_wage_occupations.full_document_body in K 7e296081'
+  legal_authority: List referred to by MI s. 1 and s. 15.1(8)/15.2(1); supplies the occupation level that fixes the verified band facts
+- id: ircc_crs_change_notice_2026_11_03
+  title: Express Entry — CRS criteria, change notice and new core totals
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html
+  citation: 'Current IRCC page modified 2026-11-03, raw sha256 99ad64f5cbd82d2fa86e1dc881153f910c4b000762dfe26047c49b7c4cc0e2b9 fetched 2026-11-16 ("As of November 3, 2026 ... changed how points are awarded for Canadian work experience and valid job offers"; "Labour Market Integration factor New: November 3, 2026"; core maximum 530 / 570); validated unpublished K candidate 1fc8772ff7babf78bfdc9c05392eaa2e281f6021ddd56303d9ced0b43a16b4fe'
+  legal_authority: Official points schedule; agrees with the Ministerial Instructions amendment 2026-1 (checked, no conflict) and is implemented by the scoring_grid below
 - id: ircc_eca
   title: Educational credential assessment for Express Entry
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessment.html
@@ -88,6 +113,7 @@ schema:
         speaking_clb: integer; required when present
       category_request: none | french | stem | healthcare | trade | transport | education | physicians_canadian_experience
         | senior_managers_canadian_experience | researchers_canadian_experience | skilled_military_recruits
+      category_round_requirements_met: boolean; independently reviewed against all instructions for the particular category-based invitation round, not merely the general category description
       french_test:
         approved_designated_test: boolean
         valid_within_two_years: boolean
@@ -131,13 +157,15 @@ schema:
         writing_clb: integer; required when the spouse's results are supplied
         speaking_clb: integer; required when the spouse's results are supplied
       canadian_work_years: completed qualifying years
+      canadian_high_wage_experience_band: none | verified_2x | verified_1_5x | verified_1_3x | unknown; highest band of at least one year of Canadian work experience in high-wage occupations (MI s. 15.1(8)) read from the official high-wage list in force at invitation, never from personal salary; 'none' only after verifying that no qualifying year exists, anything else unverified is 'unknown' and is never scored
+      qualifying_offer_high_wage_band: none | verified_2x | verified_1_5x | verified_1_3x | unknown; occupation level of a qualifying offer of employment under MI s. 15.2 (officer-determined genuine, full-time 30 hours, at least one year from PR visa issuance, listed employer and TEER rules), 'none' only after verifying that no qualifying offer exists; an LMIA neither creates nor increases these points
       foreign_work_years: completed qualifying years
       accompanying_spouse: boolean
       valid_trades_certificate: boolean
       valid_provincial_nomination: boolean
-      other_additional_points_applicable: boolean; true if sibling, French proficiency, or Canadian study
-        points may apply; needs full factor review
-    crs_breakdown: claimed component points, including all core, spouse, transfer and nomination fields
+      canadian_education_bonus: none | one_or_two_year | three_plus_or_graduate | unknown; verified qualifying Canadian post-secondary credential under the pinned Ministerial Instructions, not merely Canadian attendance
+      has_eligible_sibling_in_canada: boolean; verified eligible adult Canadian-citizen or permanent-resident sibling living in Canada under the pinned Ministerial Instructions
+    crs_breakdown: claimed component points, including all core (with core.labour_market_integration), spouse, transfer and additional factors (provincial_nomination, canadian_education, french_language, sibling)
     scoring_inputs: claimed core, spouse, transfer and additional subtotals
     claimed_crs_score: claimed total CRS points
 pool_gates:
@@ -226,12 +254,12 @@ category_filters:
     note: Historical agriculture/agri-food category must not be treated as currently selectable.
     source_id: ircc_categories
 scoring_grid:
-  maximum: 1200
-  formula: min(600, core_human_capital + spouse_factors + skill_transferability) + min(600, additional_points)
+  maximum: 1270
+  formula: core_human_capital + spouse_factors + skill_transferability + min(600, additional_points); each category is capped by its own maximum (MI s. 8(2)), there is no combined cap
   family_context: With spouse only when accompanying and neither a Canadian citizen nor permanent resident.
   core_human_capital:
-    maximum_without_spouse: 500
-    maximum_with_spouse: 460
+    maximum_without_spouse: 570
+    maximum_with_spouse: 530
     age:
       maximum_without_spouse: 110
       maximum_with_spouse: 100
@@ -350,28 +378,43 @@ scoring_grid:
       - 6
       cap_without_spouse: 24
       cap_with_spouse: 22
-    canadian_work_experience:
-      years:
-      - less_than_1
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5_or_more
-      points_without_spouse:
-      - 0
-      - 40
-      - 53
-      - 64
-      - 72
-      - 80
-      points_with_spouse:
-      - 0
-      - 35
-      - 46
-      - 56
-      - 63
-      - 70
+    labour_market_integration:
+      rule: MI s. 15 - greater of Canadian work experience points (s. 15.1(7) duration plus s. 15.1(8) high-wage occupation points) and qualifying offer points (s. 15.2(1)), capped by s. 15(2)
+      maximum_without_spouse: 150
+      maximum_with_spouse: 140
+      canadian_work_experience:
+        years:
+        - less_than_1
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5_or_more
+        points_without_spouse:
+        - 0
+        - 40
+        - 53
+        - 64
+        - 72
+        - 80
+        points_with_spouse:
+        - 0
+        - 35
+        - 46
+        - 56
+        - 63
+        - 70
+        high_wage_points:
+          none: 0
+          verified_2x: 70
+          verified_1_5x: 40
+          verified_1_3x: 20
+      qualifying_offer:
+        points:
+          none: 0
+          verified_2x: 100
+          verified_1_5x: 70
+          verified_1_3x: 50
   spouse_factors:
     maximum: 40
     education:
@@ -491,8 +534,7 @@ scoring_grid:
     french_nclc7_all_english_clb5_all: 50
     canadian_postsecondary_one_or_two_years: 15
     canadian_postsecondary_three_or_more_years: 30
-    arranged_employment: 0
-    note: All additional factors combined are capped at 600; no job-offer points since 2025-03-25.
+    note: All additional factors combined are capped at 600 (MI s. 8(2)(d)). The 2025-03-25 repeal of arranged-employment additional points stands (MI s. 29 repealed); job-offer points are scored inside labour_market_integration since 2026-11-03.
   source_id: ircc_crs
 evaluation:
   rule_statuses:
@@ -506,12 +548,14 @@ rules:
   category: ranking_score
   severity: CRITICAL_REDLINE
   eval_type: federal_crs_score
+  precondition: assessment_date >= '2026-11-03'
+  missing_or_unverified: 'NEEDS_REVIEW: this ruleset verifies claimed scores under Ministerial Instructions 2026-1, which took effect on 2026-11-03 (labour market integration factor, 1270 total). Claims for assessment dates before 2026-11-03 belong to the historical pinned ruleset, and a missing assessment_date, unverified high-wage band, or unverified Canadian experience cannot be scored.'
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-SCORE-001
-    source_file: src51.html
-    section: Comprehensive Ranking System (CRS) criteria
-    verbatim_excerpt: The Comprehensive Ranking System (CRS) is a points-based system that we use to assess
-      and score your profile and rank it in the Express Entry pool.
+    evidence_unit_id: federal_ee:ee_mi_amendment_2026_1:full_document_body
+    source_file: bca7bb1f2b3a6c88798dfc41ca290c488b1e1052a213872c37f393a2757385ee
+    section: Labour market integration (MI s. 15, in force 2026-11-03)
+    source_id: ee_mi_amendment_2026_1
+    verbatim_excerpt: "15 (1) The points that are to be assigned for the labour market integration factor referred to in subparagraph 8(1)(a)(iv) are the greater of"
 - id: crs_gate_pool_eligibility
   category: pool_gate
   severity: CRITICAL_REDLINE
@@ -525,11 +569,11 @@ rules:
   fail_if: candidate.program_eligibility.fswp == false && candidate.program_eligibility.cec == false &&
     candidate.program_eligibility.fstp == false
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-POOL-001
-    source_file: src21.html
+    evidence_unit_id: federal_ee:ircc_who_can_apply:full_document_body
+    source_file: 6070c517758e1adfa019fa48fdec0ee575d06e253bde4d6785c282ff4347dda4
     section: Immigration programs
-    verbatim_excerpt: 'Express Entry is an online system that we use to manage immigration applications
-      for 3 programs:'
+    source_id: ircc_who_can_apply
+    verbatim_excerpt: "Express Entry is an online system that we use to manage immigration applications for 3 programs:"
 - id: crs_gate_language_test
   category: pool_gate
   severity: CRITICAL_REDLINE
@@ -542,23 +586,45 @@ rules:
   fail_if: candidate.language_test.approved_designated_test == false || candidate.language_test.valid_within_two_years
     == false
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-LANGUAGE-001
-    source_file: src18.html
+    evidence_unit_id: federal_ee:express_entry_language_test_2026_10_16:full_document_body
+    source_file: 303425cbc0f362bb0dc21ee5996afe8daa8a906679dcddf997c2132b9dd5ecc4
     section: How long your results are valid for
-    verbatim_excerpt: 'Your test results must be less than 2 years old when you:'
+    source_id: express_entry_language_test_2026_10_16
+    verbatim_excerpt: "Your test results must be&nbsp;<strong>less than 2 years old</strong> when you:"
 - id: crs_gate_intended_residence
   category: pool_gate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.intended_province
-  pass_if: candidate.intended_province != 'quebec'
+  pass_if: candidate.intended_province in ['alberta', 'british columbia', 'manitoba', 'new brunswick',
+    'newfoundland and labrador', 'northwest territories', 'nova scotia', 'nunavut', 'ontario',
+    'prince edward island', 'saskatchewan', 'yukon']
   fail_if: candidate.intended_province == 'quebec'
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-QUEBEC-001
-    source_file: src02.html
+    evidence_unit_id: federal_ee:ircc_fswp_program:full_document_body
+    source_file: 5bd31e4f56fc1e075874ba6d77092f25fd6e8cd50ab96820a670c1fff2689173
     section: Where you can live in Canada
-    verbatim_excerpt: You must plan to live outside the province of Quebec
+    source_id: ircc_fswp_program
+    verbatim_excerpt: "You must plan to live <strong>outside the province of Quebec"
+- id: crs_category_round_requirements
+  category: category_filter
+  severity: STREAM_SPECIFIC
+  eval_type: deterministic
+  required_fields: []
+  conditional_required_fields:
+    when: candidate.category_request != null && candidate.category_request != 'none'
+    fields:
+    - candidate.category_round_requirements_met
+  pass_if: candidate.category_request == null || candidate.category_request == 'none' || candidate.category_round_requirements_met == true
+  fail_if: candidate.category_request != null && candidate.category_request != 'none' && candidate.category_round_requirements_met == false
+  missing_or_unverified: NEEDS_REVIEW — assess all instructions for the particular category-based invitation round.
+  evidence_anchor:
+    evidence_unit_id: federal_ee:ircc_categories:full_document_body
+    source_file: 02f66ac0fe32728f44e79a8e8451e7544fbbb1223eedf00baa36122efedb1695
+    section: Who's eligible for each category
+    source_id: ircc_categories
+    verbatim_excerpt: "meet all of the requirements in the instructions for that round"
 - id: crs_category_french_nclc7
   category: category_filter
   severity: STREAM_SPECIFIC
@@ -582,11 +648,11 @@ rules:
     < 7 || candidate.french_test.reading_nclc < 7 || candidate.french_test.writing_nclc < 7 || candidate.french_test.speaking_nclc
     < 7)
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-CAT-FRENCH-001
-    source_file: src05.html
+    evidence_unit_id: federal_ee:ircc_categories:full_document_body
+    source_file: 02f66ac0fe32728f44e79a8e8451e7544fbbb1223eedf00baa36122efedb1695
     section: Who’s eligible for the French-language proficiency category
-    verbatim_excerpt: have French-language test results that show a minimum score of 7 in all 4 language
-      abilities on the Niveaux de compétence linguistique canadiens
+    source_id: ircc_categories
+    verbatim_excerpt: "minimum score of 7 in all 4 language abilities"
 - id: crs_category_occupation_2026
   category: category_filter
   severity: STREAM_SPECIFIC
@@ -616,11 +682,11 @@ rules:
   missing_or_unverified: NEEDS_REVIEW — verify current round-specific NOC list and experience before treating
     occupational category as eligible.
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-CAT-OCC-001
-    source_file: src05.html
+    evidence_unit_id: federal_ee:ircc_categories:full_document_body
+    source_file: 02f66ac0fe32728f44e79a8e8451e7544fbbb1223eedf00baa36122efedb1695
     section: Who’s eligible for the healthcare and social services occupations category
-    verbatim_excerpt: have accumulated, within the past 3 years, at least 12 months of full-time work
-      experience (or an equal amount of part-time experience)
+    source_id: ircc_categories
+    verbatim_excerpt: "have accumulated, within the past 3&nbsp;years, at least 12&nbsp;months of full-time work experience (or an equal amount of part-time experience)"
 - id: crs_category_canadian_experience_2026
   category: category_filter
   severity: STREAM_SPECIFIC
@@ -646,13 +712,11 @@ rules:
     '00014', '00015']) || (candidate.category_request == 'researchers_canadian_experience' && candidate.category_occupation.noc_code
     in ['41200', '41201']))))
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-CAT-CA-EXP-001
-    source_file: src05.html
+    evidence_unit_id: federal_ee:ircc_categories:full_document_body
+    source_file: 02f66ac0fe32728f44e79a8e8451e7544fbbb1223eedf00baa36122efedb1695
     section: Who’s eligible for the physicians with Canadian work experience category
-    verbatim_excerpt: 'Who’s eligible for the physicians with Canadian work experience category To be
-      eligible, you must: have accumulated, within the past 3 years, at least 12 months of full-time work
-      experience (or an equal amount of part-time experience) —this experience does not need to be continuous
-      in a single occupation listed in the table below (no matter your primary occupation) in Canada'
+    source_id: ircc_categories
+    verbatim_excerpt: "Who’s eligible for the physicians with Canadian work experience category</h3>\r\n    <p>To be eligible, you must:</p>\r\n    <ul>\r\n\t\t<li>have accumulated, within the past 3&nbsp;years, at least 12&nbsp;months of full-time work experience (or an equal amount of part-time experience) —this experience does not need to be continuous\r\n        \t<ul>\r\n\t\t\t\t<li>in a single occupation listed in the table below (no matter your primary occupation)</li>\r\n\t\t\t\t<li><strong>in Canada</strong></li>"
 - id: crs_category_military_2026
   category: category_filter
   severity: STREAM_SPECIFIC
@@ -686,7 +750,8 @@ rules:
   missing_or_unverified: NEEDS_REVIEW — foreign credentials require a verified ECA and category eligibility
     depends on round instructions.
   evidence_anchor:
-    evidence_unit_id: EU-FED-CRS-CAT-MIL-001
-    source_file: src05.html
+    evidence_unit_id: federal_ee:ircc_categories:full_document_body
+    source_file: 02f66ac0fe32728f44e79a8e8451e7544fbbb1223eedf00baa36122efedb1695
     section: Who’s eligible for the skilled military recruits category
-    verbatim_excerpt: with a minimum of ten years of continuous service
+    source_id: ircc_categories
+    verbatim_excerpt: "with a minimum of ten years of continuous service"

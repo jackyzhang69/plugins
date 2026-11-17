@@ -6,16 +6,16 @@ display_name: MPNP Business Investor
 status: ACTIVE
 program_id: MPNP_BUSINESS
 stream_id: BUSINESS
-effective_date: '2026-01-01'
-source_edition: MPNP Entrepreneur and Farm Investor pathways
-source_url: https://immigratemanitoba.com/immigrate/business/
+effective_date: '2026-11-16'
+source_edition: Official Entrepreneur and Farm Investor pages checked 2026-11-16; observation date, not a legislative commencement date
+source_url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
 decision_scope: Deterministic prescreen for the entrepreneur and farm investor pathways.
   Ranking points stay in AnyScore.
 sources:
 - id: mpnp_biz
   title: MPNP Business Investor Stream
-  url: https://immigratemanitoba.com/immigrate/business/
-  citation: MPNP Entrepreneur and Farm Investor pathways
+  url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
+  citation: Current official Farm Investor eligibility page captured 2026-11-16; Entrepreneur rules retain their separate evidence binding
   legal_authority: Official program baseline used for the redline. Points arithmetic
     stays in AnyScore.
 schema:
@@ -25,6 +25,10 @@ schema:
   - candidate
   types:
     assessment_date: ISO-8601 date
+    candidate:
+      business_years_past_5: Verified full-time years as an active business owner or senior manager of a successful business in the last five years
+      in_winnipeg_metropolitan_region: Business location inside the official Winnipeg Metropolitan Region, not merely Winnipeg city
+      qualifying_jobs_created_or_maintained: Jobs created or maintained for Canadian citizens or permanent residents in Manitoba, excluding business owners and close relatives
 reference_points_grid:
   note: Documentation only. AnyScore owns the business ranking arithmetic.
 rules:
@@ -41,26 +45,29 @@ rules:
     - candidate.business_years_past_5
     - candidate.language_clb_minimum
     - candidate.meets_canadian_high_school
-    - candidate.in_winnipeg
+    - candidate.in_winnipeg_metropolitan_region
     - candidate.investment_cad
-    - candidate.jobs_to_create
+    - candidate.qualifying_jobs_created_or_maintained
   pass_if: candidate.stream == 'farm_investor' || (candidate.net_worth_cad >= 500000
     && candidate.business_years_past_5 >= 3 && candidate.language_clb_minimum >= 5
-    && candidate.meets_canadian_high_school == true && ((candidate.in_winnipeg ==
-    true && candidate.investment_cad >= 250000) || (candidate.in_winnipeg == false
-    && candidate.investment_cad >= 150000)) && candidate.jobs_to_create >= 1)
+    && candidate.meets_canadian_high_school == true && ((candidate.in_winnipeg_metropolitan_region ==
+    true && candidate.investment_cad >= 250000) || (candidate.in_winnipeg_metropolitan_region == false
+    && candidate.investment_cad >= 150000)) && candidate.qualifying_jobs_created_or_maintained >= 1)
   fail_if: candidate.stream == 'entrepreneur' && (candidate.net_worth_cad < 500000
     || candidate.business_years_past_5 < 3 || candidate.language_clb_minimum < 5 ||
-    candidate.meets_canadian_high_school == false || (candidate.in_winnipeg == true
-    && candidate.investment_cad < 250000) || (candidate.in_winnipeg == false && candidate.investment_cad
-    < 150000) || candidate.jobs_to_create < 1)
+    candidate.meets_canadian_high_school == false || (candidate.in_winnipeg_metropolitan_region == true
+    && candidate.investment_cad < 250000) || (candidate.in_winnipeg_metropolitan_region == false && candidate.investment_cad
+    < 150000) || candidate.qualifying_jobs_created_or_maintained < 1)
   missing_or_unverified: 'NEEDS_REVIEW: Entrepreneur pathway facts cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: bc.mpnp_ep_apply_page.html
-    source_id: mpnp_biz
-    source_file: 78c14ad80094b450e805c0d1ebaf1dc335f9abb70a4e9143b2195467e203c445
-    section: Entrepreneur Pathway eligibility
-    verbatim_excerpt: "<li><strong>Net worth:</strong> Minimum of $500,000 CAD</li>"
+    evidence_unit_id: prairies_documents:mpnp_ep_eligibility:full_document_body
+    source_id: mpnp_ep_eligibility
+    source_file: 97793e2aca241ad357ba15c9c919764ab8bc1372761bc8e397fb67800f0c0b74
+    section: 'Minimum eligibility requirements: experience, language, education, net worth, investment and jobs'
+    verbatim_excerpt: The proposed business must create or maintain at least one job for a Canadian Citizen or permanent resident in Manitoba (excluding owners of the business and/or their
+      close relatives).
+    source_sha256: 5a43dc00c83a9bc6e9f9df438d247d392f55e45552279612f5f8296ada715a84
+    source_url: https://immigratemanitoba.com/mpnp/bis/ep/eligibility/
 - id: mpnp_biz_farm
   category: pathway
   severity: CRITICAL_REDLINE
@@ -85,10 +92,13 @@ rules:
     == false)
   missing_or_unverified: 'NEEDS_REVIEW: Farm investor facts cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: EU-MPNP-BIZ-FARM-002
-    source_file: src47.html
-    section: Farm Investor Pathway eligibility
-    verbatim_excerpt: invest a minimum of $300,000 CAD
+    evidence_unit_id: prairies_documents:mpnp_fip_eligibility:full_document_body
+    source_id: mpnp_fip_eligibility
+    source_file: aedb8427db012a4f93859e48253b7ff64664f762c1d812eab2950afe14439419
+    section: Farm Business Investment
+    verbatim_excerpt: "You must invest a minimum of $300,000 CAD. You are expected to establish a farming business in rural Manitoba."
+    source_sha256: 4da7d5f045f38f9b45c61a20cf0c3a08fcb72c7a8f158a73f0c076aef8648503
+    source_url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
 
 - id: mpnp_fip_ownership_operation
   category: pathway
@@ -102,12 +112,13 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
     a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:mpnp-fip-farm-history
-    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
-    section: lines 3-16
-    verbatim_excerpt: You must have a minimum of 3 years of farm ownership and operation experience, supported
-      by verifiable documents.
-    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+    evidence_unit_id: prairies_documents:mpnp_fip_eligibility:full_document_body
+    source_id: mpnp_fip_eligibility
+    source_file: aedb8427db012a4f93859e48253b7ff64664f762c1d812eab2950afe14439419
+    section: Farm Business Experience
+    verbatim_excerpt: "<strong>Farm Business Experience</strong></td><td>You must have a minimum of 3 years of farm ownership and operation experience, supported by verifiable documents."
+    source_sha256: 4da7d5f045f38f9b45c61a20cf0c3a08fcb72c7a8f158a73f0c076aef8648503
+    source_url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
 
 - id: mpnp_fip_active_operation
   category: pathway
@@ -123,12 +134,13 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
     a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:mpnp-fip-visit-viability-operation
-    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
-    section: lines 3-16
-    verbatim_excerpt: The farm business must be in active primary agriculture production and economically
-      viable.
-    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+    evidence_unit_id: prairies_documents:mpnp_fip_eligibility:full_document_body
+    source_id: mpnp_fip_eligibility
+    source_file: aedb8427db012a4f93859e48253b7ff64664f762c1d812eab2950afe14439419
+    section: Farm Business Activities
+    verbatim_excerpt: The farm business must be in active primary agriculture production and economically viable.
+    source_sha256: 4da7d5f045f38f9b45c61a20cf0c3a08fcb72c7a8f158a73f0c076aef8648503
+    source_url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
 
 - id: mpnp_fip_adaptability_interview
   category: pathway
@@ -144,12 +156,13 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
     a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:mpnp-fip-practical-skills-interview
-    source_file: regions/prairies/sources/current/mb_fip_detailed_eligibility.txt
-    section: lines 3-16
-    verbatim_excerpt: If you are invited to attend a FIP interview, you will be required to conduct the
-      interview in either French or English.
-    source_sha256: ac6ffe765697bd7137fddaf928e234e71dd291cf207ea44ae0d6bd627ebce940
+    evidence_unit_id: prairies_documents:mpnp_fip_eligibility:full_document_body
+    source_id: mpnp_fip_eligibility
+    source_file: aedb8427db012a4f93859e48253b7ff64664f762c1d812eab2950afe14439419
+    section: Official Languages Proficiency
+    verbatim_excerpt: If you are invited to attend a FIP interview, you will be required to conduct the interview in either French or English.
+    source_sha256: 4da7d5f045f38f9b45c61a20cf0c3a08fcb72c7a8f158a73f0c076aef8648503
+    source_url: https://immigratemanitoba.com/mpnp/bis/fip/eligibility/
 
 - id: mpnp_fip_interest_submission
   category: pathway
@@ -169,8 +182,10 @@ rules:
   missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
     a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:mpnp-fip-interest-submission-gate
-    source_file: regions/prairies/sources/current/mb_fip_apply.txt
-    section: lines 3-17
+    evidence_unit_id: prairies_documents:mpnp_fip_apply:full_document_body
+    source_id: mpnp_fip_apply
+    source_file: bd1207f10caa2f436ca600dd3d28336b8dca0b1c391768563a6be282dc77b9e1
+    section: 'Steps 1–3: research, minimum criteria, forms and email submission'
     verbatim_excerpt: Please note that the business concept is not an application to the MPNP.
-    source_sha256: 711ba9f28408eb7bcbf30b1db9311e07a690020b6cd7f861850ff25bbf28c8ca
+    source_sha256: 9c94e4156c145bcf7073a33173ad652ca3e987887256bdcb91009cf833555665
+    source_url: https://immigratemanitoba.com/mpnp/bis/fip/apply/

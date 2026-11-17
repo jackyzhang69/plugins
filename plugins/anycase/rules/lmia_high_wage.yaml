@@ -6,29 +6,29 @@ display_name: "TFWP LMIA: High-Wage Stream"
 status: "ACTIVE"
 program_id: "TFWP_LMIA"
 stream_id: "HIGH_WAGE"
-effective_date: "2026-07-17"
-source_edition: "ESDC Temporary Foreign Worker Program Requirements for High-Wage Positions, July 2026 update"
+effective_date: "2026-11-10"
+source_edition: "ESDC Program requirements for the high-wage stream (page date 2026-11-10), ESDC hourly wage threshold table (page date 2026-10-07; thresholds for LMIAs received as of 2026-07-17) and ESDC Refusal to process an LMIA application (page date 2026-10-27)"
 source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html"
-decision_scope: "Pre-screen of the seven regulatory rules defined below; PASS is an assessment that program eligibility criteria are met, not an official ESDC LMIA decision."
+decision_scope: "Pre-screen of the rules defined below; PASS is an assessment that the modelled program eligibility criteria are met, not an official ESDC LMIA decision. Job Bank wages are updated each fall (next update 2026-11-18); prevailing_wage_cad must be the figure in force on the LMIA submission date."
 
 reference_points_grid:
-  note: "The high-wage stream has no selection points grid: it is a regulatory pre-screen of the seven rules below (ESDC high-wage requirements, July 2026). Scoring belongs to the permanent-residence program the worker applies under, not to the LMIA."
+  note: "The high-wage stream has no selection points grid: it is a regulatory pre-screen of the rules below (ESDC high-wage requirements, page date 2026-11-10). Scoring belongs to the permanent-residence program the worker applies under, not to the LMIA."
   source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html"
 
 schema:
   input_type: object
   required_top_level: [assessment_date, employer, job_offer, noul]
   types:
-    assessment_date: "ISO-8601 date; LMIA submission or assessment date"
+    assessment_date: "ISO-8601 date; LMIA submission date (the wage threshold table applies to LMIAs received as of 2026-07-17)"
     employer:
       business_name: string
       cra_business_number: string
       is_sex_industry: boolean
       on_ircc_ineligibility_list: boolean
       in_default_of_amp: boolean
-      lmia_revocation_past_2_years: boolean
+      lmia_revocation_past_2_years: "boolean; true when an LMIA was revoked in the past 2 years"
       has_transition_plan: boolean
-      transition_plan_exempt: boolean
+      transition_plan_exempt: "boolean; true only when a documented transition-plan exemption listed on the program requirements page applies"
       transition_plan_exemption_reason: "string or null"
     job_offer:
       province: "two-letter code in [AB, BC, MB, NB, NL, NT, NS, NU, ON, PE, QC, SK, YT]"
@@ -40,15 +40,18 @@ schema:
       regular_hourly_wage_cad: "non-negative decimal"
       prevailing_wage_cad: "non-negative decimal"
       weekly_regular_hours: "non-negative decimal"
+      live_in_caregiver_requirement: "boolean; true when the position is an in-home caregiver position in a private household (NAICS 814) under NOC 31301, 32101, 44100 or 44101 that is advertised and indicated on the LMIA application as live-in"
+      live_in_exception_kind: "none | high_medical_needs | exceptional_circumstances; identify the actual exception without medical details."
+      live_in_exception_documented: "boolean; for high_medical_needs, a physician's note certifies both the medical condition and need for live-in care, or Schedule H (EMP5600) is provided."
       recruitment:
         advertising_duration_days: "non-negative integer"
         consecutive_weeks: "non-negative integer"
-        job_bank_used: boolean
-        additional_methods_count: "non-negative integer"
-        targets_underrepresented_groups: boolean
+        job_bank_used: "boolean; false when Job Bank was not used (an alternative method needs a written rationale and is reviewed manually)"
+        additional_methods_count: "non-negative integer; additional recruitment methods consistent with the occupation, besides Job Bank"
+        has_national_scope_method: "boolean; true when at least one additional method is national in scope (searchable across Canada on a single site)"
         conducted_within_3_months: boolean
     noul:
-      proposition_id: "is_genuine_labour_shortage"
+      proposition_id: "is_genuine_and_legitimate_job_offer"
       probability_true: "decimal in [0,1] or null"
       evidence_complete: boolean
       evidence_refs: "non-empty array of stable evidence identifiers when evidence_complete is true"
@@ -69,6 +72,7 @@ evaluation:
     - "Otherwise, verdict = PASS."
   date_semantics:
     application_date: "assessment_date"
+    wage_threshold_table_effective: "2026-07-17"
   provincial_wage_thresholds_cad:
     "AB": 37.50
     "BC": 38.40
@@ -85,6 +89,22 @@ evaluation:
     "YT": 45.60
 
 rules:
+  - id: lmia_high_wage_full_time
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.weekly_regular_hours
+    pass_if: "job_offer.weekly_regular_hours >= 30"
+    fail_if: "job_offer.weekly_regular_hours >= 0 && job_offer.weekly_regular_hours < 30"
+    missing_or_unverified: "NEEDS_REVIEW: The offered weekly hours are missing or invalid."
+    interpretation: "A high-wage position must be full-time, meaning at least 30 hours per week."
+    evidence_anchor:
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
+      section: "Program requirements"
+      source_id: "high-wage-requirements"
+      verbatim_excerpt: "You must also ensure that the employment you want to offer to a temporary foreign worker is for a full-time position, which means that it has to be for a minimum of 30 hours of work per week."
   - id: lmia_employer_ineligibility
     category: employer
     severity: CRITICAL_REDLINE
@@ -93,16 +113,33 @@ rules:
       - employer.is_sex_industry
       - employer.on_ircc_ineligibility_list
       - employer.in_default_of_amp
-      - employer.lmia_revocation_past_2_years
-    pass_if: "employer.is_sex_industry == false && employer.on_ircc_ineligibility_list == false && employer.in_default_of_amp == false && employer.lmia_revocation_past_2_years == false"
-    fail_if: "employer.is_sex_industry == true || employer.on_ircc_ineligibility_list == true || employer.in_default_of_amp == true || employer.lmia_revocation_past_2_years == true"
-    missing_or_unverified: "NEEDS_REVIEW: Employer compliance status, IRCC ineligibility registry standing, or past 2-year revocation history cannot be established."
-    interpretation: "Service Canada has no legal authority to process LMIA applications from employers offering sex industry services, banned employers on IRCC registry, employers with unpaid administrative monetary penalties, or employers with an LMIA revoked in the last 2 years."
+    pass_if: "employer.is_sex_industry == false && employer.on_ircc_ineligibility_list == false && employer.in_default_of_amp == false"
+    fail_if: "employer.is_sex_industry == true || employer.on_ircc_ineligibility_list == true || employer.in_default_of_amp == true"
+    missing_or_unverified: "NEEDS_REVIEW: Employer compliance status or IRCC ineligibility registry standing cannot be established."
+    interpretation: "Regulatory authority: Service Canada cannot process LMIA applications from employers who regularly offer sex-industry services, who are on the IRCC ineligibility list (non-compliance finding, inspection ban), or who are in default of an administrative monetary penalty."
     evidence_anchor:
-      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
-      source_file: "47e6fed7e6539f0812f2dc5490b83e4d905f4c5016dac166d267ded87c6609fb"
+      evidence_unit_id: "lmia:lmia_refusal_to_process:full_document_body"
+      source_file: "6875b2693741b5745fb1fdeb9b441e062673737a30fa40bd5bb4ba4893eb8c70"
       section: "Regulatory authority and ineligibility"
-      verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
+      source_id: "lmia_refusal_to_process"
+      verbatim_excerpt: "We do not have the authority to process applications from ineligible employers for the Temporary Foreign Worker Program who:</p>\r\n<ul>\r\n  <li>regularly offer services in the sex industry (striptease, erotic dance, escort services or erotic massage)</li>\r\n  <li>are on the <a href=\"/en/immigration-refugees-citizenship/services/work-canada/employers-non-compliant.html\">Immigration, Refugees and Citizenship Canada ineligibility list</a> which includes employers who:\r\n    <ul>\r\n      <li>have been found non-compliant as result of an employer compliance review</li>\r\n      <li>have been banned from the Temporary Foreign Worker Program because non-compliance was discovered during an inspection</li>\r\n      <li>are in default of payment of an administrative monetary penalty"
+
+  - id: lmia_recent_revocation_refusal
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.lmia_revocation_past_2_years
+    pass_if: "employer.lmia_revocation_past_2_years == false"
+    missing_or_unverified: "NEEDS_REVIEW: An LMIA was revoked in the past 2 years (or revocation history is unknown). Service Canada may refuse to process the application; this is discretionary and cannot be decided automatically."
+    interpretation: "Ministerial instruction: Service Canada may refuse to process an application for any position if the employer had an application revoked in the past 2 years for providing false, misleading or inaccurate information. The source says 'may', so a revocation is routed to review, never to an automatic FAIL."
+    evidence_anchor:
+      evidence_unit_id: "lmia:lmia_refusal_to_process:full_document_body"
+      source_file: "6875b2693741b5745fb1fdeb9b441e062673737a30fa40bd5bb4ba4893eb8c70"
+      section: "Previous revocation"
+      source_id: "lmia_refusal_to_process"
+      verbatim_excerpt: "We may refuse to process your LMIA application for any position if you have had an application revoked in the past 2 years for having provided false, misleading or inaccurate information"
+
   - id: lmia_high_wage_threshold
     category: compensation
     severity: CRITICAL_REDLINE
@@ -110,15 +147,16 @@ rules:
     required_fields:
       - job_offer.province
       - job_offer.regular_hourly_wage_cad
-    pass_if: "job_offer.regular_hourly_wage_cad >= provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
-    fail_if: "job_offer.regular_hourly_wage_cad < provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
-    missing_or_unverified: "NEEDS_REVIEW: Province or offered hourly wage is missing or unverified."
-    interpretation: "The offered hourly wage must be at or above the provincial/territorial wage threshold (median wage + 20%). E.g., ON >= $36.92, BC >= $38.40, AB >= $37.50. Wages below route to Low-Wage Stream."
+    pass_if: "assessment_date >= '2026-07-17' && job_offer.regular_hourly_wage_cad >= provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
+    fail_if: "assessment_date >= '2026-07-17' && job_offer.regular_hourly_wage_cad < provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
+    missing_or_unverified: "NEEDS_REVIEW: Province, offered hourly wage or assessment_date is missing, or the LMIA was received before 2026-07-17 when a different threshold table applied (not modelled)."
+    interpretation: "For LMIAs received as of 2026-07-17 an offered wage at or above the provincial or territorial hourly wage threshold (median wage + 20%) must be applied for under the high-wage stream; a wage below it belongs to the low-wage stream. The table shipped here is the 2026-07-17 column only; earlier LMIAs are routed to review."
     evidence_anchor:
-      evidence_unit_id: "wage-thresholds.html.full_page_projection"
-      source_file: "342c5e7cb7b100c3c7cd8abc2cb825569350c8e34c6788d3fc2dcd6d4f19c8a2"
+      evidence_unit_id: "lmia:wage-thresholds:full_document_body"
+      source_file: "a7d383d063c97f7373356702beb9a8584d162afe16d735d28e4c14b00e0e71ba"
       section: "Hourly wage threshold by province or territory"
-      verbatim_excerpt: "<li><strong>at or above</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high.html\">stream for high-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html\">meet the program requirements</a> of this stream"
+      source_id: "wage-thresholds"
+      verbatim_excerpt: "If the <a href=\"#offeredwage\">offered wage</a> is:</p>\r\n<ul>\r\n  <li><strong>at or above</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high.html\">stream for high-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html\">meet the program requirements</a> of this stream</li>\r\n  <li><strong>below</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low.html\">stream for low-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html\">meet the program requirements</a> of this stream</li>\r\n</ul>\r\n<div class=\"well well-sm\">\r\n  <p><strong>Important:</strong> Offering a higher wage to temporary foreign workers isn’t sufficient to qualify under the stream for high-wage positions. Wages offered to temporary foreign workers should be similar to wages paid to Canadians and permanent residents hired for the same job and work location, and with similar skills and years of experience. Adjusting the offered wage to fit a specific program stream or to avoid a program requirement could lead to a negative LMIA decision.</p>\r\n</div>\r\n<table id=\"table1\" class=\"table table-bordered table-responsive text-right\">\r\n  <caption>\r\n  Hourly wage threshold by province or territory\r\n  </caption>\r\n  <thead>\r\n    <tr>\r\n      <th scope=\"col\"> Province/territory </th>\r\n      <th scope=\"col\"> For LMIAs received between June 27, 2025, and July 16, 2026 </th>\r\n      <th scope=\"col\"> For LMIAs received as of July 17, 2026 </th>\r\n    </tr>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Alberta </th>\r\n      <td> $36.00 </td>\r\n      <td> $37.50</td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> British Columbia </th>\r\n      <td> $36.60</td>\r\n      <td> $38.40</td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Manitoba </th>\r\n      <td> $30.16 </td>\r\n      <td> $31.33 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> New Brunswick </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.73 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Newfoundland and Labrador </th>\r\n      <td> $32.40 </td>\r\n      <td> $33.60 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Northwest Territories </th>\r\n      <td> $48.00 </td>\r\n      <td> $48.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Nova Scotia </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.96 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Nunavut </th>\r\n      <td> $42.00 </td>\r\n      <td> $45.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Ontario </th>\r\n      <td> $36.00 </td>\r\n      <td> $36.92 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Prince Edward Island </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.20 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Quebec </th>\r\n      <td> $34.62 </td>\r\n      <td> $36.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Saskatchewan </th>\r\n      <td> $33.60 </td>\r\n      <td> $34.62 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Yukon </th>\r\n      <td> $44.40 </td>\r\n      <td> $45.60"
 
   - id: lmia_prevailing_wage
     category: compensation
@@ -130,12 +168,14 @@ rules:
     pass_if: "job_offer.regular_hourly_wage_cad >= job_offer.prevailing_wage_cad"
     fail_if: "job_offer.regular_hourly_wage_cad < job_offer.prevailing_wage_cad"
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage for occupation and sub-region or offered base wage is missing."
-    interpretation: "The offered wage must equal or exceed the prevailing wage for the occupation in the sub-region on Job Bank, as well as the wage paid to current Canadian employees in the same position."
+    interpretation: "The employer must pay the prevailing wage: the highest of the median wage on Job Bank and the wage paid to current employees hired for the same job and work location with the same skills and experience."
     evidence_anchor:
-      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
-      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
       section: "Wages, working conditions and occupations"
+      source_id: "high-wage-requirements"
       verbatim_excerpt: "For the purpose of the TFW Program, you must pay the prevailing wage that is defined as the highest of either:</p>\r\n  <ul>\r\n    <li>the median wage on <a href=\"http://www.jobbank.gc.ca/wage-outlook_search-eng.do?reportOption=wage\">Job Bank</a></li>\r\n    <li>the wage that is within the wage range that you're paying your current employees hired for the same job and work location, and with the same skills and years of experience"
+
   - id: lmia_recruitment_minimum_duration
     category: recruitment
     severity: CRITICAL_REDLINE
@@ -147,30 +187,32 @@ rules:
     pass_if: "job_offer.recruitment.advertising_duration_days >= 28 && job_offer.recruitment.consecutive_weeks >= 4 && job_offer.recruitment.conducted_within_3_months == true"
     fail_if: "job_offer.recruitment.advertising_duration_days < 28 || job_offer.recruitment.consecutive_weeks < 4 || job_offer.recruitment.conducted_within_3_months == false"
     missing_or_unverified: "NEEDS_REVIEW: Recruitment advertising dates, duration, or 3-month recency window cannot be verified."
-    interpretation: "Recruitment must be conducted for at least 4 consecutive weeks (minimum 28 continuous calendar days) within the 3 months prior to submitting the LMIA application."
+    interpretation: "The job advertisement must have occurred in the 3 months before the LMIA application and run for at least 4 consecutive weeks within that period (high-wage stream; the low-wage stream requires 8)."
     evidence_anchor:
-      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
-      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
-      section: "Recruitment and advertisement"
-      verbatim_excerpt: "is for a minimum of 4 consecutive weeks within the 3 months prior to submitting an LMIA application"
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
+      section: "Job advertisement duration"
+      source_id: "high-wage-requirements"
+      verbatim_excerpt: "You must ensure that the job advertisement:</p>\r\n    <ul>\r\n      <li>has occurred in the 3 months prior to submitting the LMIA application</li>\r\n      <li>is for a minimum of 4 consecutive weeks within the 3 months prior to submitting an LMIA application"
 
-  - id: lmia_recruitment_methods_and_diversity
+  - id: lmia_recruitment_methods_national_scope
     category: recruitment
     severity: CRITICAL_REDLINE
     eval_type: deterministic
     required_fields:
       - job_offer.recruitment.job_bank_used
       - job_offer.recruitment.additional_methods_count
-      - job_offer.recruitment.targets_underrepresented_groups
-    pass_if: "job_offer.recruitment.job_bank_used == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.targets_underrepresented_groups == true"
-    fail_if: "job_offer.recruitment.job_bank_used == false || job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.targets_underrepresented_groups == false"
-    missing_or_unverified: "NEEDS_REVIEW: Proof of Job Bank posting, 2 additional recruitment methods, or underrepresented group targeting is incomplete."
-    interpretation: "Employers must advertise on Job Bank plus at least two additional national-reach recruitment methods (minimum 3 total methods). At least one method must actively target underrepresented groups (Indigenous peoples, vulnerable youth, newcomers, persons with disabilities)."
+      - job_offer.recruitment.has_national_scope_method
+    pass_if: "job_offer.recruitment.job_bank_used == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.has_national_scope_method == true"
+    fail_if: "job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.has_national_scope_method == false"
+    missing_or_unverified: "NEEDS_REVIEW: Job Bank was not used (an alternative method needs a written rationale), or the additional recruitment methods or national-scope method cannot be verified."
+    interpretation: "Before applying the employer must conduct at least 3 different recruitment activities: advertise on Job Bank (an alternative method requires a written rationale) plus at least 2 additional methods consistent with the occupation, one of which must be national in scope. The high-wage page does not require a method that targets underrepresented groups; that requirement belongs to the low-wage stream."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "high_wage_requirements.html"
-      section: "Recruitment and advertising"
-      verbatim_excerpt: "The advertisement must be posted on Job Bank and at least two additional recruitment methods... One of the methods must target underrepresented groups"
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
+      section: "Minimum recruitment requirements"
+      source_id: "high-wage-requirements"
+      verbatim_excerpt: "Before applying for an LMIA, you must conduct at least 3 different recruitment activities: </p>\r\n    <ul>\r\n      <li>you must advertise on the Government of Canada’s <a rel=\"external\" href=\"http://www.jobbank.gc.ca/intro-eng.aspx?OfferpPage=50&amp;Student=No\">Job Bank</a>. If you choose to use an alternative method, you must submit a written rationale and explanation of the alternative method</li>\r\n      <li>you must also conduct <strong>at least 2</strong> additional methods of recruitment that are consistent with the occupation (targets an audience that has the appropriate education, professional experience or skill level required for the occupation). One of the methods used must be national in scope, and easily accessed by residents of any province or territory, as people in high-wage positions are often mobile and willing to relocate for work</li>\r\n    </ul>\r\n    <p>To be national in scope, Canadians and permanent residents must have the capacity to search advertisements for work locations across Canada in a single site, as opposed to referring to individual or regional sub-sites."
 
   - id: lmia_transition_plan
     category: employer
@@ -181,15 +223,38 @@ rules:
       - employer.transition_plan_exempt
     pass_if: "employer.has_transition_plan == true || employer.transition_plan_exempt == true"
     fail_if: "employer.has_transition_plan == false && employer.transition_plan_exempt == false"
-    missing_or_unverified: "NEEDS_REVIEW: Transition plan commitments or documented grounds for statutory exemption are absent."
-    interpretation: "A Transition Plan is mandatory for High-Wage positions to recruit, retain, and train Canadians and permanent residents, unless an exemption applies (e.g. project under 120 days or PR-only support)."
+    missing_or_unverified: "NEEDS_REVIEW: Transition plan commitments or documented grounds for a listed exemption are absent."
+    interpretation: "A transition plan is mandatory for high-wage positions (including dual-intent LMIAs). Exemptions: in-home caregiver and health care provider positions in the listed NAICS/NOC groups; SAWP, agricultural stream and other primary agriculture; the first request for a Quebec facilitated-LMIA specialized occupation; limited-duration positions (1 day to 2 years, not transitionable); positions with unique skills; and positions supporting a permanent residency application only."
     evidence_anchor:
-      evidence_unit_id: "high-wage-requirements.html.full_page_projection"
-      source_file: "4850ef174de828c1129ac3eb8c5243c642d9a821efd92e73d1cea3af6beb34dd"
-      section: "Transition plan"
-      verbatim_excerpt: "A transition plan, valid for the duration of the employment of the temporary foreign worker, is a mandatory requirement to hire temporary foreign workers in high-wage positions."
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
+      section: "Transition plan and exemptions"
+      source_id: "high-wage-requirements"
+      verbatim_excerpt: "A transition plan, valid for the duration of the employment of the temporary foreign worker, is a mandatory requirement to hire temporary foreign workers in high-wage positions. It describes the activities you're agreeing to undertake to recruit, retain and train Canadians and permanent residents and to reduce your reliance on the TFW Program. If you've never completed a transition plan before, you must submit one as indicated in the appropriate section of the LMIA application form for high-wage positions.</p>\r\n  <p>If you're applying for an LMIA and have previously submitted a transition plan for the same position and work location, you must  report on the results of the commitments you’ve made in your previous transition plan (will be used to determine if the described activities had been undertaken).</p>\r\n  <p>Employers submitting a dual intent LMIA application to support a temporary foreign worker’s permanent residency will have to complete a transition plan.</p>\r\n  <section>\r\n    <h3>Transition plan exemptions </h3>\r\n    <p>The transition plan requirement doesn't apply if you're requesting:</p>\r\n    <ul class=\"lst-spcd\">\r\n      <li>in-home caregiver or health care provider positions:\r\n        <ul>\r\n          <li>private household employers (under North American Industry Classification System [NAICS] code 8141) for in-home caregiver positions under NOC codes 31301, 32101, 44100 and 44101</li>\r\n          <li>health care institutions (under 2-digit NAICS 62) for health care provider positions under NOC 31301, 32101 and 33102</li>\r\n        </ul>\r\n      </li>\r\n      <li>a position under the Seasonal Agricultural Worker Program (SAWP), the agricultural stream and other primary agriculture occupations</li>\r\n      <li>a specialized occupation that qualifies for Quebec’s facilitated LMIA process (applicable only to the first request for the same job at the same work location)</li>\r\n      <li>a position of limited duration where:\r\n        <ul>\r\n          <li>the job is time-limited in nature and the employment duration may range from 1 day to a maximum of 2 years </li>\r\n          <li>there is no reasonable expectation that you could transition the position to a Canadian or permanent resident</li>\r\n          <li>the job won't be filled after the departure of the temporary foreign worker as the position will no longer exist (for example, project-based occupations such as consultant for business management, specialized engineer for a dam construction project)</li>\r\n          <li>in some cases, repeat use of the specific position is the norm for the industry, but each employment duration is limited (for example, some film and entertainment positions, emergency repairs and warranty work)</li>\r\n        </ul>\r\n      </li>\r\n      <li>a position with unique skills: skills or traits that belong to a specific individual and aren't readily available in Canada (for example, NOC TEER 000 occupations, hiring by a foreign government)</li>\r\n      <li>a position in support of a permanent residency application only (no application for work permit)"
 
-  - id: lmia_genuine_labour_shortage
+  - id: lmia_live_in_caregiver_refusal
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.live_in_caregiver_requirement
+    conditional_required_fields:
+      when: "job_offer.live_in_caregiver_requirement == true"
+      fields:
+        - job_offer.live_in_exception_kind
+        - job_offer.live_in_exception_documented
+    pass_if: "job_offer.live_in_caregiver_requirement == false || (job_offer.live_in_exception_kind == 'high_medical_needs' && job_offer.live_in_exception_documented == true)"
+    fail_if: "job_offer.live_in_caregiver_requirement == true && job_offer.live_in_exception_kind == 'none' && job_offer.live_in_exception_documented == false"
+    missing_or_unverified: "NEEDS_REVIEW: The applicable exception or medical certification is unverified, or exceptional circumstances require Service Canada review."
+    interpretation: "A documented high-medical-needs certificate may satisfy the stated exception; an exceptional-circumstances rationale only requests a possible exemption and cannot itself establish approval."
+    evidence_anchor:
+      evidence_unit_id: "lmia:lmia_refusal_to_process:full_document_body"
+      source_file: "6875b2693741b5745fb1fdeb9b441e062673737a30fa40bd5bb4ba4893eb8c70"
+      section: "In-home caregiver positions with live-in requirements"
+      source_id: "lmia_refusal_to_process"
+      verbatim_excerpt: "In-home caregiver positions, where there is a live-in requirement, that:</p>\r\n<ul>\r\n  <li>are classified under the NAICS as a <a href=\"https://www23.statcan.gc.ca/imdb/p3VD.pl?CLV=2&amp;CPV=814&amp;CST=27012022&amp;CVD=1369848&amp;Function=getVD&amp;MLV=5&amp;TVD=1369825\" rel=\"external\">Private household (NAICS 814)</a></li>\r\n  <li>are classified under the NOC codes 31301, 32101, 44100 or 44101</li>\r\n  <li>have been advertised and indicated on the LMIA application as being sought to fill positions, where there is a live-in requirement</li>\r\n</ul>\r\n<details>\r\n  <summary>\r\n    <h4>Exceptions to this refusal to process for in-home caregiver positions</h4>\r\n  </summary>\r\n  <h5>High medical needs clients</h5>\r\n  <p>If you are seeking to hire an in-home caregiver with a mandatory live-in requirement for high medical needs clients (for example, people with disabilities, seniors, individuals with chronic or terminal illnesses), you must submit either:</p>\r\n  <ul>\r\n    <li>a physician’s note certifying both the medical condition and the need for live-in care</li>\r\n    <li><a href=\"https://catalogue.servicecanada.gc.ca/content/EForms/en/Detail.html?Form=EMP5600\">Schedule H – Medical disability, chronic or terminal illness certificate (EMP5600)"
+
+  - id: lmia_genuine_and_legitimate_job_offer
     category: qualitative
     severity: QUALITATIVE_STANDARD
     eval_type: typesafe_jev
@@ -197,13 +262,14 @@ rules:
       - noul.proposition_id
       - noul.probability_true
       - noul.evidence_complete
-    precondition: "noul.evidence_complete == true && noul.proposition_id == 'is_genuine_labour_shortage'"
+    precondition: "noul.evidence_complete == true && noul.proposition_id == 'is_genuine_and_legitimate_job_offer'"
     pass_if: "noul.probability_true >= 0.70"
     fail_if: "noul.probability_true < 0.30"
-    missing_or_unverified: "NEEDS_REVIEW: Genuine business need and labour shortage probability is borderline (0.30 <= P < 0.70) or qualitative evidence is incomplete."
-    interpretation: "ESDC officers assess whether the job vacancy is genuine, reasonable for the employer's business size and revenue, and whether an authentic labour shortage exists that cannot be satisfied by domestic workers."
+    missing_or_unverified: "NEEDS_REVIEW: Business and job-offer legitimacy probability is borderline (0.30 <= P < 0.70) or qualitative evidence is incomplete."
+    interpretation: "All employers must provide documents with the LMIA application to demonstrate that both the business and the job offer are legitimate; Service Canada assesses this qualitatively. The 0.70 / 0.30 probability thresholds are this project's review contract, not an ESDC figure."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "high_wage_requirements.html"
-      section: "Assessment criteria"
-      verbatim_excerpt: "Service Canada will assess whether the job offer is genuine and if the business has a reasonable employment need"
+      evidence_unit_id: "lmia:high-wage-requirements:full_document_body"
+      source_file: "5cb5b4db48148ffd6b4b24d1e787373130945c639aaede51a315ee47d32bb18d"
+      section: "Business legitimacy"
+      source_id: "high-wage-requirements"
+      verbatim_excerpt: "All employers applying to the TFW Program must provide documents along with their LMIA application to demonstrate that their <a href=\"/en/employment-social-development/services/foreign-workers/business-legitimacy.html\">business and job offer are legitimate"

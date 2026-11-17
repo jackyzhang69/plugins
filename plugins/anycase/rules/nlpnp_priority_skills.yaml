@@ -2,27 +2,38 @@ schema_version: 1.0.0
 catalog_id: nlpnp_priority_skills
 jurisdiction: CA-NL
 category: Newfoundland and Labrador Provincial Nominee Program
-display_name: NLPNP Priority Skills, Skilled Worker, and Express Entry Skilled Worker
+display_name: NLPNP Skilled Worker and Express Entry Skilled Worker
 status: ACTIVE
 program_id: NLPNP_PRIORITY_SKILLS
-stream_id: PRIORITY_SKILLS
-effective_date: '2026-02-01'
-source_edition: NLPNP Priority Skills questionnaire maximum 114, threshold 60, effective 2026-02-01. Skilled
-  Worker and Express Entry Skilled Worker have no provincial points total in this file.
+stream_id: SKILLED_WORKER
+effective_date: '2026-04-22'
+source_edition: >-
+  NLPNP section 4 eligibility criteria: Skilled Worker Category (no date printed) and Express Entry - Skilled Worker
+  Category (Updated April 22, 2026); Employer Criteria (Updated October 30, 2026); retrieved 2026-11-16.
 source_url: https://www.gov.nl.ca/immigration/
-decision_scope: Deterministic eligibility prescreen for NLPNP Priority Skills, Skilled Worker, and Express
-  Entry Skilled Worker. AnyScore owns the 114-point questionnaire and the federal skilled-worker grid.
-  This file compares caller-supplied totals and does not add the factors.
+decision_scope: >-
+  Deterministic eligibility prescreen for the NLPNP Skilled Worker and Express Entry Skilled Worker categories. The
+  Priority Skills questionnaire, its 114-point grid and its 60-point threshold are not evaluated: they exist only in
+  an undated 2020 guide that the current EOI model (launched February 2025, criteria page updated 2026-03-23)
+  does not publish, so the grid is historical and unsupported for current judgement. Offer duration is reviewed
+  conservatively where the applicant criteria (12 months) and Employer Criteria (2 years) differ. The Express Entry
+  points total is the caller-supplied total on the NLPNP Point Assessment Grid; this file does not add the grid factors.
 sources:
-- id: nlpnp_ps
-  title: Newfoundland and Labrador Provincial Nominee Program Priority Skills, Skilled Worker, and Express
-    Entry Skilled Worker
-  url: https://www.gov.nl.ca/immigration/
-  citation: 'Priority Skills questionnaire maximum 114 with threshold 60: language 24, education 30, experience
-    35, age 15, family 10. Skilled Worker and Express Entry have no provincial points total in this file.
-    Express Entry compares a caller-supplied federal total with 67.'
-  legal_authority: Newfoundland and Labrador Provincial Nominee Program priority skills and skilled worker
-    eligibility
+- id: nl_sw_eligibility_sec4
+  title: 4. Skilled Worker Category Eligibility Criteria
+  url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+  sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+  retrieved_at: '2026-11-16'
+- id: nl_ee_eligibility_sec4
+  title: 4. Express Entry - Skilled Worker Category Eligibility Criteria (Updated April 22, 2026)
+  url: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+  sha256: 8fcad40883d50513692148fea01a04bffbe55f96cf09f013582d723e5dd55223
+  retrieved_at: '2026-11-16'
+- id: nl_employer_criteria
+  title: Employer Criteria (Updated October 30, 2026)
+  url: https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/employers/employer-criteria/
+  sha256: e3d47b50557c2ae60b968b196500f9305c2e3ee5ca28f5bda5c66e7e6b2d0d5d
+  retrieved_at: '2026-11-16'
 schema:
   input_type: object
   required_top_level:
@@ -33,305 +44,263 @@ schema:
   types:
     assessment_date: ISO-8601 date; assessment date. Not a rule by itself.
     candidate:
-      stream: priority_skills | skilled_worker | express_entry
-      language_result_within_12_months: boolean; Priority Skills test result is under 12 months old.
-      language_result_within_2_years: boolean; Skilled Worker or Express Entry test result is under two
-        years old.
-      language_clb_minimum: integer; lowest of the four skills on one test.
-      memorial_priority_graduate: boolean; Memorial University priority graduate pathway.
-      in_demand_experience_months_past_10_years: number; in-demand experience months in the past 10 years.
-        Priority Skills floor is 12.
-      age_years: integer; Priority Skills floor is 21. This file has no upper age redline.
-      assessed_grid_points: number; points AnyScore already assessed on the 114-point Priority Skills
-        questionnaire. This file does not add the factors.
-      work_permit_basis: lmia | lmia_exempt_agreement. Express Entry offer basis.
-      related_months_past_5_years: number; Skilled Worker related months in the past 5 years. Floor is
-        12.
-      continuous_skilled_months_past_10_years: number; Express Entry continuous skilled months in the
-        past 10 years. Floor is 12.
-      express_entry_profile_valid: boolean; valid Express Entry profile.
-      assessed_fsw_points: number; caller-supplied federal skilled worker grid total. Floor is 67. This
-        file does not add that grid.
+      stream: skilled_worker | express_entry
+      age_years: integer; 21 to 59
+      meets_noc_employment_requirements: boolean; the applicant meets the NOC employment requirements (qualifications, training, skills, accreditation) for the job
+      holds_work_authorization_for_position: boolean; valid work permit or alternate federal authorization to work in the identified position
+      holds_valid_work_permit_for_position: boolean; valid work permit for the identified position, distinct from alternate authorization
+      holds_pgwp: boolean; post-graduation work permit holder (excluded from the Skilled Worker category)
+      resides_in_canada: boolean
+      permit_months_remaining_at_application: number; required when resides_in_canada is true; at least 4
+      ownership_max_combined_ratio: decimal in [0,1]; applicant's ownership share of the employing business; cannot exceed 0.10
+      has_criminal_record: boolean; the applicant or a dependent over 22
+      has_unresolved_custody_or_child_support_dispute: boolean
+      misrepresented_in_application: boolean; the applicant or the employer
+      is_in_canada_refugee_claimant: boolean
       intends_to_reside_in_nl: boolean
+      language_test_valid_for_processing: boolean; test valid for the entire NLPNP processing and the permanent residence submission
+      language_test_type: IELTS-General | CELPIP-General | PTE-Core | TEF-Canada | TCF-Canada
+      language_clb_minimum: integer; lowest of the four skills (Skilled Worker TEER 4 or 5 needs CLB 4)
+      language_meets_ee_stream_minimum: boolean; the minimum for the federal Express Entry stream on the profile is met
+      express_entry_profile_valid: boolean; accepted into the IRCC Express Entry pool
+      nlpnp_grid_points: number; caller-supplied total on the NLPNP Point Assessment Grid (Express Entry needs 67)
+      has_canadian_postsecondary_or_valid_eca: boolean; Express Entry category
+      settlement_funds_sufficient: boolean; sufficient settlement resources for the applicant and dependents
+      ability_to_settle_in_nl: boolean; ability to settle permanently in Newfoundland and Labrador
+      legal_status_in_canada: boolean; valid status when residing in Canada
+      ee_declared_experience_documented: boolean; all work experience declared in the Express Entry pool is documented
+      representative_authorized_or_not_used: boolean; no paid representative is used, or the representative is authorized
     job_offer:
-      weekly_hours: number; regular weekly hours. Floor is 30 for Skilled Worker and Express Entry.
-      is_permanent: boolean; Express Entry must be permanent. Skilled Worker applicant guidance states
-        12 months (nl_skilled_worker.txt:27); employer criteria state at least 2 years (nl_employer_criteria.raw:595);
-        unresolved, rule stays NEEDS_REVIEW.
-      duration_months: number; Skilled Worker applicant guidance states 12 months (nl_skilled_worker.txt:27);
-        employer criteria state at least 2 years (nl_employer_criteria.raw:595); unresolved, rule stays NEEDS_REVIEW.
-      hourly_wage: number; offered hourly wage.
-      prevailing_hourly_wage: number; prevailing hourly wage supplied for this job. This file compares
-        the two numbers and does not look up a wage table.
-      noc_teer: integer; Skilled Worker TEER 0-5. Express Entry TEER 0-3.
+      noc_teer: integer 0-5
+      weekly_hours: number; at least 30
+      paid_salary_or_hourly_not_commission: boolean
+      hourly_wage: number; offered hourly wage
+      prevailing_hourly_wage: number; regional prevailing wage, or provincial or national when regional data is unavailable, as assessed by OIM
+      duration_months: number; the offered duration in months
+      extension_reasonably_expected: boolean; employer-verified reasonable expectation of extension
+      other_job_requirements_met: boolean; job is in NL, any remote job is based in NL, non-seasonal, complies with employment standards and union agreements, and does not involve a labour dispute
     employer:
-      months_operating: number; months the employer has been operating. Floor is 24.
-      jva_approved: boolean; Job Vacancy Assessment is approved.
-minimums:
-  note: Documentation only. The engine evaluates the rules, not this block.
-  streams:
-  - priority_skills
-  - skilled_worker
-  - express_entry
-  priority_skills_language_clb: 5
-  priority_skills_language_max_age_months: 12
-  priority_skills_age_min: 21
-  priority_skills_points_threshold: 60
-  priority_skills_points_maximum: 114
-  priority_skills_in_demand_months: 12
-  weekly_hours: 30
-  employer_months_operating: 24
-  skilled_worker_offer_duration_months_if_not_permanent: unresolved_12_vs_24
-  skilled_worker_language_clb_teer_0_to_3: 5
-  skilled_worker_language_clb_teer_4_to_5: 4
-  express_entry_language_clb: 7
-  language_result_max_age_years_skilled: 2
-  skilled_worker_related_months_past_5_years: 12
-  express_entry_continuous_skilled_months: 12
-  express_entry_fsw_points_threshold: 67
-  skilled_worker_teer:
-  - 0
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  express_entry_teer:
-  - 0
-  - 1
-  - 2
-  - 3
-reference_points_grid:
-  note: Documentation only. The eligibility engine ignores this key. AnyScore owns the arithmetic. Priority
-    Skills compares candidate.assessed_grid_points with 60. Skilled Worker and Express Entry have no provincial
-    points total in this file. Express Entry compares candidate.assessed_fsw_points with 67.
-  priority_skills:
-    maximum: 114
-    apply_threshold: 60
-    language: 24
-    education: 30
-    experience: 35
-    age: 15
-    family: 10
-  skilled_worker:
-    provincial_points_total: none
-  express_entry:
-    provincial_points_total: none
-    federal_fsw_threshold_caller_supplied: 67
+      jva_approved: boolean
+      lmia_positive: boolean
+      months_operating: number; active business under current ownership and management in Newfoundland and Labrador
+      other_employer_requirements_met: boolean; permanent NL establishment, required local full-time employees, financial stability, legal compliance, good standing, recruitment priority and LMIA/JVA conditions are verified
+evaluation:
+  rule_statuses:
+  - PASS
+  - FAIL
+  - NEEDS_REVIEW
+  aggregate:
+  - If any CRITICAL_REDLINE rule is FAIL, verdict = FAIL.
+  - Otherwise, if any rule is NEEDS_REVIEW, verdict = NEEDS_REVIEW.
+  - Otherwise, verdict = PASS.
 rules:
-- id: nlpnp_priority_language
-  category: language
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'priority_skills'
-    fields:
-    - candidate.language_result_within_12_months
-    - candidate.language_clb_minimum
-  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
-    == 'priority_skills' && candidate.language_result_within_12_months == true && candidate.language_clb_minimum
-    >= 5)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'priority_skills' && candidate.language_result_within_12_months == false)
-    || (candidate.stream == 'priority_skills' && candidate.language_clb_minimum < 5)
-  missing_or_unverified: 'NEEDS_REVIEW: Priority Skills test age or lowest CLB cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
-    source_id: "nl_priority_skills_guide_archive_20201230"
-    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
-    section: "Eligibility Criteria"
-    page: "4"
-    verbatim_excerpt: "Must have taken an International English Language Testing System (IELTS) or Canadian English\nLanguage Proficiency Index Program (CELPIP) language test within the last twelve months and scored\nequivalent to Canadian Language Benchmark (CLB) level 5 or higher."
-  provenance:
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Language
-    page: 1
-    verbatim: language test result within 12 months
-- id: nlpnp_priority_pathway
-  category: pathway
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'priority_skills' && candidate.memorial_priority_graduate != true && (candidate.in_demand_experience_months_past_10_years
-      == null || candidate.in_demand_experience_months_past_10_years < 12)
-    fields:
-    - candidate.memorial_priority_graduate
-    - candidate.in_demand_experience_months_past_10_years
-  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
-    == 'priority_skills' && (candidate.memorial_priority_graduate == true || candidate.in_demand_experience_months_past_10_years
-    >= 12))
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'priority_skills' && candidate.memorial_priority_graduate == false && candidate.in_demand_experience_months_past_10_years
-    < 12)
-  missing_or_unverified: 'NEEDS_REVIEW: Memorial priority graduate status or in-demand experience in the
-    past 10 years cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
-    source_id: "nl_priority_skills_guide_archive_20201230"
-    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
-    section: "In-demand Work candidates"
-    page: "4"
-    verbatim_excerpt: "Must have worked in a specialized, highly skilled, high-demand occupation for at least one full year in\nthe last 10 years"
-  provenance:
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Pathway
-    page: 1
-    verbatim: 12 months of in-demand experience in the past 10 years
-- id: nlpnp_priority_age
+- id: nlpnp_age
   category: age
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'priority_skills'
-    fields:
-    - candidate.age_years
-  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
-    == 'priority_skills' && candidate.age_years >= 21)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'priority_skills' && candidate.age_years < 21)
-  missing_or_unverified: 'NEEDS_REVIEW: Priority Skills age cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
-    source_id: "nl_priority_skills_guide_archive_20201230"
-    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
-    section: "Eligibility Criteria"
-    page: "4"
-    verbatim_excerpt: "\u2022 Be at least 21 years of age;\n\u2022 Intend to live permanently in Newfoundland and Labrador"
+  - candidate.age_years
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.age_years >= 21 && candidate.age_years <= 59)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.age_years != null && candidate.age_years < 21) || (candidate.age_years != null && candidate.age_years > 59))
+  missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
   provenance:
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Age
-    page: 1
-    verbatim: at least 21 years of age
-- id: nlpnp_priority_points
-  category: points
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'priority_skills'
-    fields:
-    - candidate.assessed_grid_points
-  pass_if: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry' || (candidate.stream
-    == 'priority_skills' && candidate.assessed_grid_points >= 60)
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || (candidate.stream == 'priority_skills' && candidate.assessed_grid_points < 60)
-  missing_or_unverified: 'NEEDS_REVIEW: Assessed 114-point Priority Skills total is missing. AnyScore
-    computes that number.'
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: Be 21 to 59 years old;
   evidence_anchor:
-    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p03"
-    source_id: "nl_priority_skills_guide_archive_20201230"
-    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
-    section: "Overview"
-    page: "3"
-    verbatim_excerpt: "minimum score of 60 points will be accepted and their information will be viewable by staff and local"
-  provenance:
-    source_file: nlpnp-priority-skills.html
-    section: Priority Skills - Points
-    page: 1
-    verbatim: threshold 60
-- id: nlpnp_sw_offer
-  category: job_offer
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
-    fields:
-    - job_offer.weekly_hours
-    - employer.months_operating
-    - employer.jva_approved
-    - job_offer.hourly_wage
-    - job_offer.prevailing_hourly_wage
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Hours, employer history, Job Vacancy Assessment, wage, permanent
-    terms, duration, or Express Entry work-permit basis cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-NLPNP-SW-OFFER-005
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Job Offer
-    verbatim_excerpt: at least 30 hours a week
-  provenance:
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Job Offer
-    page: 1
-    verbatim: at least 30 hours a week
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Be 21 to 59 years old;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+      source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+      verbatim_excerpt: Be 21 to 59 years old;
 - id: nlpnp_sw_occupation
   category: occupation
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
-    fields:
-    - job_offer.noc_teer
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry TEER cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-NLPNP-SW-OCC-006
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Occupation
-    verbatim_excerpt: 12 related months in the past 5 years
+  - job_offer.noc_teer
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' && job_offer.noc_teer in [0, 1, 2, 3, 4, 5]) || (candidate.stream == 'express_entry' && job_offer.noc_teer in [0, 1, 2, 3]))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'express_entry' && job_offer.noc_teer in [4, 5])
+  missing_or_unverified: 'NEEDS_REVIEW: Stream or the TEER of the job offer cannot be verified.'
   provenance:
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Occupation
-    page: 1
-    verbatim: 12 related months in the past 5 years
+    source_file: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim: In a TEER 0, 1, 2, or 3 occupation;
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+    source_id: nl_ee_category_eligibility_criteria_sec4
+    source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+    source_url: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    source_sha256: 8fcad40883d50513692148fea01a04bffbe55f96cf09f013582d723e5dd55223
+    source_edition: Updated April 22, 2026
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: In a TEER 0, 1, 2, or 3 occupation;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: In a TEER 0, 1, 2, 3, 4 or 5 occupation;
+- id: nlpnp_sw_offer
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - job_offer.weekly_hours
+  - job_offer.paid_salary_or_hourly_not_commission
+  - job_offer.hourly_wage
+  - job_offer.prevailing_hourly_wage
+  - job_offer.duration_months
+  - job_offer.extension_reasonably_expected
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (job_offer.weekly_hours >= 30 && job_offer.paid_salary_or_hourly_not_commission == true && job_offer.hourly_wage >= job_offer.prevailing_hourly_wage && job_offer.duration_months >= 24 && job_offer.extension_reasonably_expected == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((job_offer.weekly_hours != null && job_offer.weekly_hours < 30) || job_offer.paid_salary_or_hourly_not_commission == false || (job_offer.hourly_wage != null && job_offer.prevailing_hourly_wage != null && job_offer.hourly_wage < job_offer.prevailing_hourly_wage) || (job_offer.duration_months != null && job_offer.duration_months < 12) || job_offer.extension_reasonably_expected == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Offer hours, pay, duration or extension cannot be verified, or duration is between 12 and 24 months where applicant and employer criteria differ.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: That guarantees a minimum of thirty (30) hours per week for the applicant;
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: That guarantees a minimum of thirty (30) hours per week for the applicant;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: That compensates the applicant in the form of a salary or hourly wage (not commission);
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: That is at least one (1) year (twelve (12) months) in duration with a reasonable expectation of extension at the time of NLPNP application, as verified by the employer;
+    - evidence_unit_id: "atlantic_documents:nl_employer_criteria_2026_10_30:employer_criteria"
+      source_file: a3e110a0eb8bd270c18b2a9f1a58314cac19d8410d456d7bf4c8e941a125db0c
+      verbatim_excerpt: Full-time, at least 2 years, located in NL
+- id: nlpnp_work_authorization
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' && (employer.jva_approved == true || candidate.holds_valid_work_permit_for_position == true)) || (candidate.stream == 'express_entry' && (employer.jva_approved == true || employer.lmia_positive == true || candidate.holds_work_authorization_for_position == true)))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' && employer.jva_approved == false && candidate.holds_valid_work_permit_for_position == false && candidate.holds_work_authorization_for_position == false) || (candidate.stream == 'express_entry' && employer.jva_approved == false && employer.lmia_positive == false && candidate.holds_work_authorization_for_position == false))
+  missing_or_unverified: 'NEEDS_REVIEW: JVA, valid work permit, LMIA or alternate authorization requires verification; alternate authorization without a JVA for Skilled Worker is unresolved.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim: With an employer that has a valid JVA, LMIA, OR where the applicant holds a valid work permit or alternate federal authorization to work full-time at the time of application to work in the identified position.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+    source_id: nl_ee_category_eligibility_criteria_sec4
+    source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+    source_url: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    source_sha256: 8fcad40883d50513692148fea01a04bffbe55f96cf09f013582d723e5dd55223
+    source_edition: Updated April 22, 2026
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: With an employer that has a valid JVA, LMIA, OR where the applicant holds a valid work permit or alternate federal authorization to work full-time at the time of application to work in the identified position.
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: With an employer that has a valid JVA, if the applicant does not have a valid work permit to work in the identified position;
+- id: nlpnp_employer_operating
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - employer.months_operating
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (employer.months_operating >= 24)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (employer.months_operating != null && employer.months_operating < 12)
+  missing_or_unverified: 'NEEDS_REVIEW: Employer operating history is missing, or is between 12 and 24 months where one year may be accepted only in exceptional circumstances (new business after closure or sale, innovation or export business, rural region).'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/employers/employer-criteria/
+    section: Employer Criteria - Be Established in NL
+    verbatim: for at least two (2) consecutive years. In exceptional circumstances, one (1) year may be accepted.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_employer_criteria_2026_10_30:employer_criteria"
+    source_id: nl_employer_criteria_2026_10_30
+    source_file: a3e110a0eb8bd270c18b2a9f1a58314cac19d8410d456d7bf4c8e941a125db0c
+    source_url: https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/employers/employer-criteria/
+    source_sha256: e3d47b50557c2ae60b968b196500f9305c2e3ee5ca28f5bda5c66e7e6b2d0d5d
+    source_edition: Updated October 30, 2026
+    section: Employer Criteria - Basic Employer Requirements
+    verbatim_excerpt: for at least two (2) consecutive years. In exceptional circumstances, one (1) year may be accepted.
 - id: nlpnp_sw_language
   category: language
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
+  - job_offer.noc_teer
   conditional_required_fields:
-    when: candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry'
+    when: candidate.stream == 'express_entry' || job_offer.noc_teer in [4, 5]
     fields:
-    - candidate.language_result_within_2_years
-    - candidate.language_clb_minimum
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker or Express Entry test age, lowest CLB, or TEER
-    cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-NLPNP-SW-LANG-007
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Language
-    verbatim_excerpt: under two years old
+    - candidate.language_test_valid_for_processing
+    - candidate.language_test_type
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' && job_offer.noc_teer in [0, 1, 2, 3]) || (candidate.stream == 'skilled_worker' && job_offer.noc_teer in [4, 5] && candidate.language_test_valid_for_processing == true && candidate.language_test_type in ['IELTS-General', 'CELPIP-General', 'PTE-Core', 'TEF-Canada', 'TCF-Canada'] && candidate.language_clb_minimum != null && candidate.language_clb_minimum >= 4) || (candidate.stream == 'express_entry' && candidate.language_test_valid_for_processing == true && candidate.language_test_type in ['IELTS-General', 'CELPIP-General', 'PTE-Core', 'TEF-Canada', 'TCF-Canada'] && candidate.language_meets_ee_stream_minimum == true))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.language_test_type in ['IELTS-General', 'CELPIP-General', 'PTE-Core', 'TEF-Canada', 'TCF-Canada']) && ((candidate.stream == 'skilled_worker' && job_offer.noc_teer in [4, 5] && candidate.language_test_valid_for_processing == true && candidate.language_clb_minimum != null && candidate.language_clb_minimum < 4) || (candidate.stream == 'express_entry' && candidate.language_test_valid_for_processing == true && candidate.language_meets_ee_stream_minimum == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: An accepted language test valid for the entire processing is required for Skilled Worker TEER 4 or 5 and Express Entry; other test types require review.'
   provenance:
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Language
-    page: 1
-    verbatim: under two years old
-- id: nlpnp_sw_experience
-  category: experience
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: Applicants with TEER 4 or 5 job offers must submit a valid language proficiency test in NLPNP application.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Applicants with TEER 4 or 5 job offers must submit a valid language proficiency test in NLPNP application.
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+      source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+      verbatim_excerpt: The minimum required scores on the language proficiency test depend on the specific federal Express Entry stream
+- id: nlpnp_sw_qualifications
+  category: qualifications
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
-  - candidate.stream
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Skilled Worker related months or Express Entry continuous skilled
-    months cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-NLPNP-SW-EXP-008
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Experience
-    verbatim_excerpt: 12 continuous skilled months in the past 10 years
+  - candidate.meets_noc_employment_requirements
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.meets_noc_employment_requirements == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.meets_noc_employment_requirements == false)
+  missing_or_unverified: 'NEEDS_REVIEW: NOC employment requirements for the job cannot be verified.'
   provenance:
-    source_file: nlpnp-skilled-worker.html
-    section: Skilled Worker - Experience
-    page: 1
-    verbatim: 12 continuous skilled months in the past 10 years
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: Applicants must demonstrate they meet the NOC code employment requirements
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Applicants must demonstrate they meet the NOC code employment requirements
 - id: nlpnp_ee_profile
   category: pathway
   severity: CRITICAL_REDLINE
@@ -342,21 +311,152 @@ rules:
     when: candidate.stream == 'express_entry'
     fields:
     - candidate.express_entry_profile_valid
-    - candidate.assessed_fsw_points
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Express Entry profile or the caller-supplied federal skilled worker
-    total cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-NLPNP-EE-009
-    source_file: nlpnp-express-entry.html
-    section: Express Entry Profile & FSW
-    verbatim_excerpt: assessed federal skilled worker points of at least 67
+    - candidate.nlpnp_grid_points
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'skilled_worker' || (candidate.stream == 'express_entry' && candidate.express_entry_profile_valid == true && candidate.nlpnp_grid_points != null && candidate.nlpnp_grid_points >= 67))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'express_entry' && (candidate.express_entry_profile_valid == false || (candidate.nlpnp_grid_points != null && candidate.nlpnp_grid_points < 67)))
+  missing_or_unverified: 'NEEDS_REVIEW: Express Entry pool membership or the NLPNP Point Assessment Grid total cannot be verified.'
   provenance:
-    source_file: nlpnp-express-entry.html
-    section: Express Entry Profile & FSW
-    page: 1
-    verbatim: assessed federal skilled worker points of at least 67
+    source_file: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim: Score a minimum of 67 points on the NLPNP Point Assessment Grid
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+    source_id: nl_ee_category_eligibility_criteria_sec4
+    source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+    source_url: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    source_sha256: 8fcad40883d50513692148fea01a04bffbe55f96cf09f013582d723e5dd55223
+    source_edition: Updated April 22, 2026
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Score a minimum of 67 points on the
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+      source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+      verbatim_excerpt: Be accepted into IRCC’s Express Entry pool of qualified candidates;
+- id: nlpnp_ee_education
+  category: education
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.has_canadian_postsecondary_or_valid_eca
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'skilled_worker' || (candidate.stream == 'express_entry' && candidate.has_canadian_postsecondary_or_valid_eca == true))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'express_entry' && candidate.has_canadian_postsecondary_or_valid_eca == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian post-secondary credential or a valid ECA cannot be verified.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim: Have a Canadian post-secondary degree or diploma, or a valid ECA;
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+    source_id: nl_ee_category_eligibility_criteria_sec4
+    source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+    source_url: https://www.gov.nl.ca/immigration/4-express-entry-skilled-worker-category-eligibility-criteria/
+    source_sha256: 8fcad40883d50513692148fea01a04bffbe55f96cf09f013582d723e5dd55223
+    source_edition: Updated April 22, 2026
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Have a Canadian post-secondary degree or diploma, or a valid ECA;
+- id: nlpnp_ownership_cap
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.ownership_max_combined_ratio
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.ownership_max_combined_ratio <= 0.10)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.ownership_max_combined_ratio != null && candidate.ownership_max_combined_ratio > 0.10)
+  missing_or_unverified: 'NEEDS_REVIEW: The applicant''s ownership share of the employing business cannot be established.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: the applicant’s share of ownership cannot exceed ten (10) per cent
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: the applicant’s share of ownership cannot exceed ten (10) per cent
+- id: nlpnp_status
+  category: status
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  - candidate.resides_in_canada
+  conditional_required_fields:
+    when: candidate.resides_in_canada == true
+    fields:
+    - candidate.permit_months_remaining_at_application
+    - candidate.legal_status_in_canada
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'express_entry' || (candidate.stream == 'skilled_worker' && candidate.holds_pgwp == false)) && (candidate.resides_in_canada == false || (candidate.resides_in_canada == true && candidate.legal_status_in_canada == true && candidate.permit_months_remaining_at_application != null && candidate.permit_months_remaining_at_application >= 4)))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' && candidate.holds_pgwp == true) || (candidate.resides_in_canada == true && (candidate.legal_status_in_canada == false || (candidate.permit_months_remaining_at_application != null && candidate.permit_months_remaining_at_application < 4))))
+  missing_or_unverified: 'NEEDS_REVIEW: Canadian status, permit months or Skilled Worker post-graduation work permit status cannot be verified.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: Applicants residing in Canada must have a permit with at least four (4) months remaining at time of NLPNP application.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Applicants residing in Canada must have a permit with at least four (4) months remaining at time of NLPNP application.
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: They hold a Post-Graduation Work Permit, in which case they must apply under the International Graduate category
+- id: nlpnp_exclusions
+  category: integrity
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.has_criminal_record
+  - candidate.has_unresolved_custody_or_child_support_dispute
+  - candidate.misrepresented_in_application
+  - candidate.is_in_canada_refugee_claimant
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.has_criminal_record == false && candidate.has_unresolved_custody_or_child_support_dispute == false && candidate.misrepresented_in_application == false && candidate.is_in_canada_refugee_claimant == false)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.has_criminal_record == true || candidate.has_unresolved_custody_or_child_support_dispute == true || candidate.misrepresented_in_application == true || candidate.is_in_canada_refugee_claimant == true)
+  missing_or_unverified: 'NEEDS_REVIEW: Criminal record, custody or child-support dispute, misrepresentation or refugee-claimant status is unverified.'
+  provenance:
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria (not eligible if)
+    verbatim: They are an in-Canada refugee claimant.
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: They or any of their dependent family members over the age of twenty-two (22) have a criminal record;
+    supporting_excerpts:
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: They have unresolved custody or child support disputes in Canada or another country;
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: They have intentionally misrepresented their self in the application;
+    - evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+      source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+      verbatim_excerpt: They are an in-Canada refugee claimant.
 - id: nlpnp_intent
   category: intent
   severity: CRITICAL_REDLINE
@@ -364,20 +464,111 @@ rules:
   required_fields:
   - candidate.stream
   - candidate.intends_to_reside_in_nl
-  pass_if: (candidate.stream == 'priority_skills' || candidate.stream == 'skilled_worker' || candidate.stream
-    == 'express_entry') && candidate.intends_to_reside_in_nl == true
-  fail_if: (candidate.stream != null && !(candidate.stream in ['priority_skills', 'skilled_worker', 'express_entry']))
-    || candidate.intends_to_reside_in_nl == false
-  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside in Newfoundland and Labrador cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: "nl_priority_skills_guide_archive_20201230_p04"
-    source_id: "nl_priority_skills_guide_archive_20201230"
-    source_file: "e5220d3c5cd0d4a75b2fa1e77633676780ba8efb9f09b06a251f2e6bf19da984"
-    section: "Eligibility Criteria"
-    page: "4"
-    verbatim_excerpt: "Intend to live permanently in Newfoundland and Labrador"
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && candidate.intends_to_reside_in_nl == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && ((candidate.stream == 'skilled_worker' || candidate.stream == 'express_entry') && candidate.intends_to_reside_in_nl == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to settle permanently in Newfoundland and Labrador cannot be verified, or the stream is not Skilled Worker or Express Entry.'
   provenance:
-    source_file: nlpnp-common.html
-    section: Settlement Intent
-    page: 1
-    verbatim: intend to reside in Newfoundland and Labrador
+    source_file: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim: Have the intention and ability to settle permanently in Newfoundland and Labrador with accompanying family members if applicable;
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    source_url: https://www.gov.nl.ca/immigration/4-skilled-worker-category-eligibility-criteria/
+    source_sha256: cd6417868dc7d920ce7feee8b5493b6b4e4947be5946f71e4ce768041c86f51a
+    source_edition: no date printed; fetched 2026-11-16
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Have the intention and ability to settle permanently in Newfoundland and Labrador with accompanying family members if applicable;
+- id: nlpnp_settlement_resources
+  category: settlement
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.settlement_funds_sufficient
+  - candidate.ability_to_settle_in_nl
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.settlement_funds_sufficient == true && candidate.ability_to_settle_in_nl == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.settlement_funds_sufficient == false || candidate.ability_to_settle_in_nl == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds or ability to settle cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: Have sufficient settlement funds and financial resources to successfully establish themselves and any dependents in Newfoundland and Labrador
+- id: nlpnp_other_employer_requirements
+  category: employer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - employer.other_employer_requirements_met
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (employer.other_employer_requirements_met == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (employer.other_employer_requirements_met == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Establishment, staffing, good standing, recruitment and employer compliance require verification.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_employer_criteria_2026_10_30:employer_criteria"
+    source_id: nl_employer_criteria_2026_10_30
+    source_file: a3e110a0eb8bd270c18b2a9f1a58314cac19d8410d456d7bf4c8e941a125db0c
+    section: Basic Employer Requirements
+    verbatim_excerpt: Follow Good Business Practices
+- id: nlpnp_other_job_requirements
+  category: job_offer
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - job_offer.other_job_requirements_met
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (job_offer.other_job_requirements_met == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (job_offer.other_job_requirements_met == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Location, seasonal status, employment standards and labour conditions require verification.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_employer_criteria_2026_10_30:employer_criteria"
+    source_id: nl_employer_criteria_2026_10_30
+    source_file: a3e110a0eb8bd270c18b2a9f1a58314cac19d8410d456d7bf4c8e941a125db0c
+    section: Offer a Valid Job
+    verbatim_excerpt: Not seasonal, part-time, or short-term (under 12 months)
+- id: nlpnp_ee_experience_documentation
+  category: experience
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'express_entry'
+    fields:
+    - candidate.ee_declared_experience_documented
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'skilled_worker' || (candidate.stream == 'express_entry' && candidate.ee_declared_experience_documented == true))
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.stream == 'express_entry' && candidate.ee_declared_experience_documented == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Documentation for all declared Express Entry work experience cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_ee_category_eligibility_criteria_sec4:ee_eligibility_criteria"
+    source_id: nl_ee_category_eligibility_criteria_sec4
+    source_file: 628755b6d38c42726505ec7afead4b6094c47f1dcf8c5291ad26baf1495a3e76
+    section: 4. Express Entry - Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: NLPNP Express Entry – Skilled Worker applicants must provide documentation for all work experience declared in IRCC’s Express Entry pool;
+- id: nlpnp_representative
+  category: integrity
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.representative_authorized_or_not_used
+  pass_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.representative_authorized_or_not_used == true)
+  fail_if: >-
+    (candidate.stream in ['skilled_worker', 'express_entry']) && (candidate.representative_authorized_or_not_used == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Paid representative use or authorization cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: "atlantic_documents:nl_sw_category_eligibility_criteria_sec4:sw_eligibility_criteria"
+    source_id: nl_sw_category_eligibility_criteria_sec4
+    source_file: 0875f3d545ce233a9f5299e4b3d6cc279af48303d407c573f70515496151ae95
+    section: 4. Skilled Worker Category Eligibility Criteria
+    verbatim_excerpt: If using the services of a paid third-party representative, applicant must ensure they are registered and permitted to represent them.

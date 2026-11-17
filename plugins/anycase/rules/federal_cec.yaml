@@ -101,28 +101,20 @@ rules:
     four-ability CLB/NCLC levels are needed. Mixed TEER or unverified language evidence
     requires manual review; offer TEER is irrelevant.'
   evidence_anchor:
-    evidence_unit_id: federal_ee:express_entry_language_results:cec_minimum_levels_20261029
-    source_file: 329307c08205cd71f282c5a9ae4b24cbaaad6d627c6cc00c537859d1686a7911
-    section: Canadian Experience Class — Minimum level for all 4 abilities
-    verbatim_excerpt: "<h3 class=\"mrgn-tp-sm\">Canadian Experience Class</h3>\r\n\
-      \            </summary>\r\n            <p>The skills you need will depend on\
-      \ the group your job is classified in under the&nbsp;<a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/find-national-occupation-code.html\"\
-      >National Occupational Classification system (NOC)</a>.</p>\r\n            <h4>Minimum\
-      \ level for all 4 abilities</h4>\r\n            <div class=\"table-responsive\"\
-      >\r\n                <table class=\"table\">\r\n                    <thead>\r\
-      \n                        <tr>\r\n                            <th scope=\"col\"\
-      >NOC TEER</th>\r\n                            <th scope=\"col\">English</th>\r\
-      \n                            <th scope=\"col\">French</th>\r\n            \
-      \            </tr>\r\n                    </thead>\r\n                    <tbody>\r\
-      \n                        <tr>\r\n                            <th class=\"nowrap\"\
-      >TEER 0 or 1</th>\r\n                            <td>CLB 7</td>\r\n        \
-      \                    <td>NCLC 7</td>\r\n                        </tr>\r\n  \
-      \                      <tr>\r\n                            <th class=\"nowrap\"\
-      >TEER 2 or 3</th>\r\n                            <td>CLB 5</td>\r\n        \
-      \                    <td>NCLC 5</td>\r\n                        </tr>\r\n  \
-      \                  </tbody>\r\n                </table>"
-    source_id: express_entry_language_results
-    page: ''
+    evidence_unit_id: federal_ee:express_entry_language_test_2026_10_16:language.minimum_levels_by_program
+    source_id: express_entry_language_test_2026_10_16
+    source_file: 2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258
+    source_sha256: 7803b6bd1b148e14d8dc4c259c9a937aae36f63c0b1a0bf5b876710c1d3be698
+    source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
+    section: Canadian Experience Class — minimum level for all four abilities; TEER 0/1 versus TEER 2/3
+    verbatim_excerpt: "<h3 class=\"mrgn-tp-sm\">Canadian Experience Class</h3>\r\n            </summary>\r\n            <p>The skills you need will depend on the group your job is classified\
+      \ in under the&nbsp;<a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/find-national-occupation-code.html\">National Occupational Classification system (NOC)</a>.</p>\r\
+      \n            <h4>Minimum level for all 4 abilities</h4>\r\n            <div class=\"table-responsive\">\r\n                <table class=\"table\">\r\n                    <thead>\r\
+      \n                        <tr>\r\n                            <th scope=\"col\">NOC TEER</th>\r\n                            <th scope=\"col\">English</th>\r\n                  \
+      \          <th scope=\"col\">French</th>\r\n                        </tr>\r\n                    </thead>\r\n                    <tbody>\r\n                        <tr>\r\n     \
+      \                       <th class=\"nowrap\">TEER 0 or 1</th>\r\n                            <td>CLB 7</td>\r\n                            <td>NCLC 7</td>\r\n                   \
+      \     </tr>\r\n                        <tr>\r\n                            <th class=\"nowrap\">TEER 2 or 3</th>\r\n                            <td>CLB 5</td>\r\n               \
+      \             <td>NCLC 5</td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>"
 - id: cec_quebec
   category: pathway
   severity: CRITICAL_REDLINE

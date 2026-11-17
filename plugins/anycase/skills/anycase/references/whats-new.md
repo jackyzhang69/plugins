@@ -1,3 +1,9 @@
+# What's new in 1.2.10
+
+macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.
+
+Program descriptions now report unavailable scoring without treating it as an unknown program. Federal document assessment annotations use the evaluated list's source references, and Atlantic eligibility treats TEER 2 and 3 as equal levels under IRPR 87.3(7).
+
 # What's new in 1.1.21
 
 `anycase documents` now distinguishes newer source reviews and unavailable or uncertain source baselines from the active immutable document-list pin, while source updates do not silently switch that guide.

@@ -6,10 +6,10 @@ display_name: "TFWP LMIA: Low-Wage Stream"
 status: "ACTIVE"
 program_id: "TFWP_LMIA"
 stream_id: "LOW_WAGE"
-effective_date: "2026-07-17"
-source_edition: "ESDC Temporary Foreign Worker Program Requirements for Low-Wage Positions & Ministerial Refusal Instructions, September 2024 / July 2026 update"
+effective_date: "2026-11-10"
+source_edition: "ESDC Program requirements for the low-wage stream (page date 2026-11-10), ESDC Refusal to process an LMIA application (page date 2026-10-27; CMA unemployment rates in effect 2026-10-09 to 2027-01-07), ESDC Hiring in the province of Quebec (page date 2026-07-24) and ESDC hourly wage threshold table (page date 2026-10-07)"
 source_url: "https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html"
-decision_scope: "Pre-screen of the eight regulatory and ministerial rules defined below; PASS confirms eligibility for processing and program requirements, not an official ESDC LMIA decision."
+decision_scope: "Pre-screen of the fourteen regulatory and ministerial rules defined below; PASS confirms the modelled eligibility and processing conditions are met, not an official ESDC LMIA decision. Quarterly CMA unemployment rates are modelled for LMIAs received 2026-10-09 to 2027-01-07 only; other dates are routed to review."
 
 schema:
   input_type: object
@@ -22,17 +22,21 @@ schema:
       is_sex_industry: boolean
       on_ircc_ineligibility_list: boolean
       in_default_of_amp: boolean
-      lmia_revocation_past_2_years: boolean
-      total_workforce_at_location: "positive integer"
-      low_wage_tfw_count_at_location: "positive integer; including requested position"
+      lmia_revocation_past_2_years: "boolean; true when an LMIA was revoked in the past 2 years"
+      total_workforce_at_location: "positive number; total workforce at the work location (full-time and part-time employees incl. TFWs and requested/not-yet-started TFW positions; each part-time employee counted as 0.5)"
+      low_wage_tfw_count_at_location: "positive integer; low-wage TFW positions at the location including the requested position"
+      supports_pr_only: "boolean; true when the position supports a permanent residency application only (no work permit application)"
       provides_round_trip_transportation: boolean
       ensures_affordable_housing: boolean
-      provides_private_health_insurance: boolean
+      provides_private_health_insurance: "boolean; false is routed to review because private insurance is only required in applicable provinces or territories for periods without provincial coverage"
     sector:
       naics_code: "string; e.g. '23', '311', '622', '623', '722511'"
-      is_primary_agriculture: boolean
-      is_caregiver_eligible_noc: boolean
-      is_short_duration_120_days: boolean
+      is_primary_agriculture: "boolean; true for on-farm primary agriculture positions (e.g. NOC 80020, 80021, 82030, 82031, 84120, 85100, 85101, 85103)"
+      is_caregiver_eligible_noc: "boolean; true for in-home caregiver positions in a private household under NOC 31301, 32101, 44100 or 44101"
+      is_short_duration_120_days: "boolean; true for truly temporary or highly mobile positions of generally 120 calendar days or less"
+      is_healthcare_institution_caregiver: "boolean; true for caregiving positions in healthcare institutions (NAICS 62) under NOC 31301, 32101 or 33102"
+      is_seasonal_270_days: "boolean; true for low-wage positions in seasonal industries not exceeding 270 calendar days (one-time per year, per work location)"
+      in_montreal_laval_exempt_list: "boolean; true when the occupation or sector is on the Quebec exclusion list of the temporary Montreal/Laval refusal (NAICS 111, 112, 1151, 1152, 23, 311, 3121, 6111, 62, 6244 or the listed in-home caregiver positions)"
     job_offer:
       province: "two-letter code in [AB, BC, MB, NB, NL, NT, NS, NU, ON, PE, QC, SK, YT]"
       noc_2021_code: "five-digit string"
@@ -43,21 +47,25 @@ schema:
       guaranteed_weekly_hours_verified: "boolean; true only after verifying the guaranteed hours against the offer"
       regular_hourly_wage_cad: "non-negative decimal"
       prevailing_wage_cad: "non-negative decimal"
+      live_in_caregiver_requirement: "boolean; true when the position is an in-home caregiver position in a private household (NAICS 814) under NOC 31301, 32101, 44100 or 44101 that is advertised and indicated on the LMIA application as live-in"
+      live_in_exception_documented: "boolean; true when a physician's note or Schedule H (EMP5600) certifying high medical needs, or an exceptional-circumstances rationale, is on the application; false otherwise"
       work_location:
         postal_code: string
         city: string
         is_in_cma: boolean
         cma_name: "string or null; Census Metropolitan Area name if in CMA"
-        cma_unemployment_rate: "decimal or null; quarterly official rate from StatCan/ESDC"
+        cma_unemployment_rate: "decimal or null; official rate in effect on the LMIA submission date (Statistics Canada Labour Force Survey table published by ESDC)"
+        in_montreal_or_laval_economic_region: "boolean; true when the Census of population 'Economic region' level for the work location postal code is Montreal or Laval"
       recruitment:
         advertising_duration_days: "non-negative integer"
         consecutive_weeks: "non-negative integer"
-        job_bank_used: boolean
-        additional_methods_count: "non-negative integer"
-        targets_underrepresented_groups: boolean
+        job_bank_used: "boolean; false when Job Bank was not used (an alternative method needs a written rationale and is reviewed manually)"
+        additional_methods_count: "non-negative integer; additional recruitment methods consistent with the occupation, besides Job Bank"
+        targets_underrepresented_groups: "boolean; true when each of the 2 additional methods targets a different underrepresented group (vulnerable youth, Indigenous peoples, newcomers, persons with disabilities, asylum claimants with valid work permits); a provincial/territorial Job Bank counterpart does not meet this"
+        targets_youth: "boolean; true when recruitment efforts reached and encouraged youth (ages 15-30) to apply"
         conducted_within_3_months: boolean
     noul:
-      proposition_id: "is_genuine_labour_shortage"
+      proposition_id: "is_genuine_and_legitimate_job_offer"
       probability_true: "decimal in [0,1] or null"
       evidence_complete: boolean
       evidence_refs: "non-empty array of stable evidence identifiers when evidence_complete is true"
@@ -78,7 +86,10 @@ evaluation:
     - "Otherwise, verdict = PASS."
   date_semantics:
     application_date: "assessment_date"
-    quarterly_unemployment_window: "2026-07-10 to 2026-10-08"
+    wage_threshold_table_effective: "2026-07-17"
+    quarterly_unemployment_window: "2026-10-09 to 2027-01-07"
+    quebec_montreal_laval_refusal_ends: "2026-12-31"
+    rural_temporary_measures_end: "2027-03-31"
   provincial_wage_thresholds_cad:
     "AB": 37.50
     "BC": 38.40
@@ -108,9 +119,12 @@ rules:
     missing_or_unverified: "NEEDS_REVIEW: Guaranteed weekly hours must be verified against the employment offer; missing or unverified hours cannot determine this criterion."
     interpretation: "Only the verified full-time minimum is assessed. Passing this criterion does not clear other requirements or constitute an LMIA decision."
     evidence_anchor:
-      source_file: "8b350911eaf3e0905a19a29de66412d95ca5c5fbb7583d53b0f13d84521922b6"
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
       section: "Program requirements, full-time position"
-      verbatim_excerpt: "a full-time position, which means that it has to be for a minimum of 30 hours of work per week."
+      source_id: "low-wage-requirements"
+      verbatim_excerpt: "a full-time position, which means that it has to be for a minimum of 30 hours of work per week"
+
   - id: lmia_employer_ineligibility
     category: employer
     severity: CRITICAL_REDLINE
@@ -119,16 +133,33 @@ rules:
       - employer.is_sex_industry
       - employer.on_ircc_ineligibility_list
       - employer.in_default_of_amp
-      - employer.lmia_revocation_past_2_years
-    pass_if: "employer.is_sex_industry == false && employer.on_ircc_ineligibility_list == false && employer.in_default_of_amp == false && employer.lmia_revocation_past_2_years == false"
-    fail_if: "employer.is_sex_industry == true || employer.on_ircc_ineligibility_list == true || employer.in_default_of_amp == true || employer.lmia_revocation_past_2_years == true"
-    missing_or_unverified: "NEEDS_REVIEW: Employer standing or 2-year revocation history cannot be established."
-    interpretation: "Service Canada has no legal authority to process LMIA applications from ineligible employers."
+    pass_if: "employer.is_sex_industry == false && employer.on_ircc_ineligibility_list == false && employer.in_default_of_amp == false"
+    fail_if: "employer.is_sex_industry == true || employer.on_ircc_ineligibility_list == true || employer.in_default_of_amp == true"
+    missing_or_unverified: "NEEDS_REVIEW: Employer standing cannot be established."
+    interpretation: "Regulatory authority: Service Canada cannot process LMIA applications from employers who regularly offer sex-industry services, who are on the IRCC ineligibility list (non-compliance finding, inspection ban), or who are in default of an administrative monetary penalty."
     evidence_anchor:
       evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
       source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
       section: "Regulatory authority and ineligibility"
-      verbatim_excerpt: "We do not have the authority to process applications from ineligible employers"
+      source_id: "lmia_eligibility_refusal_20261004"
+      verbatim_excerpt: "We do not have the authority to process applications from ineligible employers for the Temporary Foreign Worker Program who:</p>\r\n<ul>\r\n  <li>regularly offer services in the sex industry (striptease, erotic dance, escort services or erotic massage)</li>\r\n  <li>are on the <a href=\"/en/immigration-refugees-citizenship/services/work-canada/employers-non-compliant.html\">Immigration, Refugees and Citizenship Canada ineligibility list</a> which includes employers who:\r\n    <ul>\r\n      <li>have been found non-compliant as result of an employer compliance review</li>\r\n      <li>have been banned from the Temporary Foreign Worker Program because non-compliance was discovered during an inspection</li>\r\n      <li>are in default of payment of an administrative monetary penalty"
+
+  - id: lmia_recent_revocation_refusal
+    category: employer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - employer.lmia_revocation_past_2_years
+    pass_if: "employer.lmia_revocation_past_2_years == false"
+    missing_or_unverified: "NEEDS_REVIEW: An LMIA was revoked in the past 2 years (or revocation history is unknown). Service Canada may refuse to process the application; this is discretionary and cannot be decided automatically."
+    interpretation: "Ministerial instruction: Service Canada may refuse to process an application for any position if the employer had an application revoked in the past 2 years for providing false, misleading or inaccurate information. The source says 'may', so a revocation is routed to review, never to an automatic FAIL."
+    evidence_anchor:
+      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
+      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
+      section: "Previous revocation"
+      source_id: "lmia_eligibility_refusal_20261004"
+      verbatim_excerpt: "We may refuse to process your LMIA application for any position if you have had an application revoked in the past 2 years for having provided false, misleading or inaccurate information"
+
   - id: lmia_low_wage_threshold_gate
     category: compensation
     severity: CRITICAL_REDLINE
@@ -136,15 +167,17 @@ rules:
     required_fields:
       - job_offer.province
       - job_offer.regular_hourly_wage_cad
-    pass_if: "job_offer.regular_hourly_wage_cad < provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
-    fail_if: "job_offer.regular_hourly_wage_cad >= provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
-    missing_or_unverified: "NEEDS_REVIEW: Offered wage or province is missing."
-    interpretation: "To qualify for the Low-Wage stream, the offered hourly wage must be strictly below the applicable provincial/territorial median wage threshold (median + 20%). If at or above, application must be routed to High-Wage stream."
+    pass_if: "assessment_date >= '2026-07-17' && job_offer.regular_hourly_wage_cad < provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
+    fail_if: "assessment_date >= '2026-07-17' && job_offer.regular_hourly_wage_cad >= provincial_wage_thresholds_cad.get(job_offer.province, 999.0)"
+    missing_or_unverified: "NEEDS_REVIEW: Offered wage, province or assessment_date is missing, or the LMIA was received before 2026-07-17 when a different threshold table applied (not modelled)."
+    interpretation: "For LMIAs received as of 2026-07-17 an offered wage below the provincial or territorial hourly wage threshold (median wage + 20%) must be applied for under the low-wage stream; a wage at or above it belongs to the high-wage stream. The table shipped here is the 2026-07-17 column only; earlier LMIAs are routed to review."
     evidence_anchor:
       evidence_unit_id: "wage-thresholds.html.full_page_projection"
       source_file: "342c5e7cb7b100c3c7cd8abc2cb825569350c8e34c6788d3fc2dcd6d4f19c8a2"
       section: "Hourly wage threshold by province or territory"
-      verbatim_excerpt: "below</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low.html\">stream for low-wage positions"
+      source_id: "wage-thresholds"
+      verbatim_excerpt: "If the <a href=\"#offeredwage\">offered wage</a> is:</p>\r\n<ul>\r\n  <li><strong>at or above</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high.html\">stream for high-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/high/requirements.html\">meet the program requirements</a> of this stream</li>\r\n  <li><strong>below</strong> the provincial or territorial hourly wage threshold, you must apply under the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low.html\">stream for low-wage positions</a> and <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html\">meet the program requirements</a> of this stream</li>\r\n</ul>\r\n<div class=\"well well-sm\">\r\n  <p><strong>Important:</strong> Offering a higher wage to temporary foreign workers isn’t sufficient to qualify under the stream for high-wage positions. Wages offered to temporary foreign workers should be similar to wages paid to Canadians and permanent residents hired for the same job and work location, and with similar skills and years of experience. Adjusting the offered wage to fit a specific program stream or to avoid a program requirement could lead to a negative LMIA decision.</p>\r\n</div>\r\n<table id=\"table1\" class=\"table table-bordered table-responsive text-right\">\r\n  <caption>\r\n  Hourly wage threshold by province or territory\r\n  </caption>\r\n  <thead>\r\n    <tr>\r\n      <th scope=\"col\"> Province/territory </th>\r\n      <th scope=\"col\"> For LMIAs received between June 27, 2025, and July 16, 2026 </th>\r\n      <th scope=\"col\"> For LMIAs received as of July 17, 2026 </th>\r\n    </tr>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Alberta </th>\r\n      <td> $36.00 </td>\r\n      <td> $37.50</td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> British Columbia </th>\r\n      <td> $36.60</td>\r\n      <td> $38.40</td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Manitoba </th>\r\n      <td> $30.16 </td>\r\n      <td> $31.33 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> New Brunswick </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.73 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Newfoundland and Labrador </th>\r\n      <td> $32.40 </td>\r\n      <td> $33.60 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Northwest Territories </th>\r\n      <td> $48.00 </td>\r\n      <td> $48.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Nova Scotia </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.96 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Nunavut </th>\r\n      <td> $42.00 </td>\r\n      <td> $45.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Ontario </th>\r\n      <td> $36.00 </td>\r\n      <td> $36.92 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Prince Edward Island </th>\r\n      <td> $30.00 </td>\r\n      <td> $31.20 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Quebec </th>\r\n      <td> $34.62 </td>\r\n      <td> $36.00 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Saskatchewan </th>\r\n      <td> $33.60 </td>\r\n      <td> $34.62 </td>\r\n    </tr>\r\n    <tr>\r\n      <th class=\"text-left\" scope=\"row\"> Yukon </th>\r\n      <td> $44.40 </td>\r\n      <td> $45.60"
+
   - id: lmia_cma_unemployment_refusal_gate
     category: geographic_labour_market
     severity: CRITICAL_REDLINE
@@ -152,15 +185,53 @@ rules:
     required_fields:
       - job_offer.work_location.postal_code
       - job_offer.work_location.is_in_cma
-    pass_if: "(job_offer.work_location.is_in_cma == false) || (job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate < 6.0) || (sector.naics_code in ['23', '311', '622', '623'] || sector.is_primary_agriculture == true || sector.is_caregiver_eligible_noc == true || sector.is_short_duration_120_days == true)"
-    fail_if: "job_offer.work_location.is_in_cma == true && job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate >= 6.0 && !(sector.naics_code in ['23', '311', '622', '623'] || sector.is_primary_agriculture == true || sector.is_caregiver_eligible_noc == true || sector.is_short_duration_120_days == true)"
-    missing_or_unverified: "NEEDS_REVIEW: Postal code CMA classification or official quarterly unemployment rate is missing or unverified."
-    interpretation: "Under Ministerial Instructions effective Sept 26, 2024, Service Canada refuses to process low-wage LMIA applications in CMAs with an unemployment rate of 6.0% or higher, unless the occupation belongs to an exempt priority sector (Construction NAICS 23, Food Manufacturing NAICS 311, Hospitals NAICS 622, Nursing Homes NAICS 623, Primary Agriculture, eligible Caregiver NOCs, or short-duration positions <= 120 days). Non-CMA locations (Census Agglomerations / rural) are exempt from this refusal."
+    pass_if: "job_offer.work_location.is_in_cma == false || sector.naics_code in ['23', '311', '622', '623'] || sector.is_primary_agriculture == true || sector.is_caregiver_eligible_noc == true || sector.is_short_duration_120_days == true || employer.supports_pr_only == true || (assessment_date >= '2026-10-09' && assessment_date <= '2027-01-07' && job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate < 6.0)"
+    fail_if: "job_offer.work_location.is_in_cma == true && assessment_date >= '2026-10-09' && assessment_date <= '2027-01-07' && job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate >= 6.0 && !(sector.naics_code in ['23', '311', '622', '623'] || sector.is_primary_agriculture == true || sector.is_caregiver_eligible_noc == true || sector.is_short_duration_120_days == true || employer.supports_pr_only == true)"
+    missing_or_unverified: "NEEDS_REVIEW: Postal code CMA classification, the CMA unemployment rate, or an assessment_date inside the modelled quarterly window (2026-10-09 to 2027-01-07) is missing or unverified. The rate table is updated every 3 months (next update 2027-01-08)."
+    interpretation: "Under ministerial instructions (applications submitted as of 2024-09-26), Service Canada does not process a low-wage LMIA whose work location is in a CMA with an unemployment rate of 6% or higher at the time of submission. Exempt: primary agriculture, NAICS 23 construction, NAICS 311 food manufacturing, NAICS 622 hospitals, NAICS 623 nursing and residential care, the listed in-home caregiver NOCs (Quebec CMAs additionally need a physician's note), positions supporting permanent residency only, and short-duration positions of generally 120 days or less. Census agglomerations (not CMAs) are not affected. Rates come from rules/lmia_refusal_matrix.json (Statistics Canada LFS table published 2026-10-09)."
     evidence_anchor:
-      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
-      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
+      evidence_unit_id: "lmia_refusal_to_process.full_document_body"
+      source_file: "13a5b91518da2d0e87e552c6d34d047b1a368c083c4a0bea28d29910dd41e155"
       section: "Low-wage positions in CMAs with an unemployment rate of 6% or higher"
-      verbatim_excerpt: "Certain LMIA applications submitted as of September 26, 2024, won't be processed. Those with:</p>\r\n<ul>\r\n  <li>a wage below the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage.html\">provincial or territorial wage threshold</a>, and </li>\r\n  <li>a work location in a CMA with an unemployment rate of 6% or higher"
+      source_id: "lmia_refusal_to_process"
+      verbatim_excerpt: "Low-wage positions in CMAs with an unemployment rate of 6% or higher</h3>\r\n<p>Certain LMIA applications submitted as of September 26, 2024, won't be processed. Those with:</p>\r\n<ul>\r\n  <li>a wage below the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage.html\">provincial or territorial wage threshold</a>, and </li>\r\n  <li>a work location in a CMA with an unemployment rate of 6% or higher at the time of LMIA submission</li>\r\n</ul>\r\n<details>\r\n  <summary>\r\n    <h4>LMIA applications exempted from this refusal to process measure</h4>\r\n  </summary>\r\n  <p>Applications submitted to fill certain occupations in the following sectors and subsectors will continue to be eligible for processing:</p>\r\n  <ul>\r\n    <li>occupations under <a href=\"/en/employment-social-development/services/foreign-workers/agricultural.html\">primary agriculture</a></li>\r\n    <li>NAICS 23 – Positions in construction</li>\r\n    <li>NAICS 311 – Positions in food manufacturing</li>\r\n    <li>NAICS 622 – Positions in hospitals</li>\r\n    <li>NAICS 623 – Positions in nursing and residential care facilities</li>\r\n    <li>specific in-home caregiver positions in a private household under*:\r\n      <ul>\r\n        <li>NOC 31301 – Registered nurse or registered psychiatric nurse</li>\r\n        <li>NOC 32101 – Licensed practical nurse</li>\r\n        <li>NOC 44100 – Home childcare providers</li>\r\n        <li>NOC 44101 – Attendant for persons with disabilities, home support worker, live-in caregiver, personal care attendant<br>\r\n          *applications submitted for in-home caregiver positions in CMAs in Quebec will continue to be eligible if the position is requested to:\r\n          <ul>\r\n            <li>provide care for a person with medical needs, or </li>\r\n            <li>provide care for a person for a child in the custody of a person who can't care for them due to medical reasons </li>\r\n            <li>in both cases, the employer will have to provide a physician's note attesting to the state of health of the person with medical needs, to benefit from the exemption </li>\r\n          </ul>\r\n        </li>\r\n      </ul>\r\n    </li>\r\n    <li>positions in support of permanent residency only (no application for work permit)"
+
+  - id: lmia_lw_montreal_laval_temporary_refusal
+    category: geographic_labour_market
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.work_location.in_montreal_or_laval_economic_region
+      - sector.in_montreal_laval_exempt_list
+    pass_if: "job_offer.work_location.in_montreal_or_laval_economic_region == false || sector.in_montreal_laval_exempt_list == true || (job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate >= 6.0)"
+    fail_if: "job_offer.work_location.in_montreal_or_laval_economic_region == true && sector.in_montreal_laval_exempt_list == false && job_offer.work_location.cma_unemployment_rate != null && job_offer.work_location.cma_unemployment_rate < 6.0 && assessment_date <= '2026-12-31'"
+    missing_or_unverified: "NEEDS_REVIEW: Montreal/Laval economic-region status, the exclusion-list status, the CMA unemployment rate, or an assessment_date on or before the published end of the measure (2026-12-31) is missing or unverified."
+    interpretation: "Until 2026-12-31 Service Canada does not process low-wage LMIAs (wage below the Quebec threshold) for work locations in the economic region of Montreal (island of Montreal) or Laval, except the excluded sectors and occupations. When the Montreal CMA unemployment rate is 6% or higher the CMA rule (lmia_cma_unemployment_refusal_gate) and its exemptions decide instead, so this rule passes and defers to it. After 2026-12-31 the source gives no status, so such cases are routed to review."
+    evidence_anchor:
+      evidence_unit_id: "lmia_quebec_hiring.full_document_body"
+      source_file: "06655edc51e1b0c1be4da0c9e27c38f2893486bbbe9a1cea43e08c8c14200d16"
+      section: "Temporary refusal to process LMIA applications for low-wage positions in Montréal and in Laval"
+      source_id: "lmia_quebec_hiring"
+      verbatim_excerpt: "Until December 31, 2026, certain LMIA applications submitted for low-wage positions in the economic regions of Montréal and Laval won't be processed. This temporary refusal to process applies to LMIAs for positions:</p>\r\n  <ul>\r\n    <li>with a wage below the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage.html\">Quebec wage threshold</a>, and</li>\r\n    <li>with a work location in the economic region of Montréal (island of Montréal) or Laval"
+
+  - id: lmia_live_in_caregiver_refusal
+    category: job_offer
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.live_in_caregiver_requirement
+      - job_offer.live_in_exception_documented
+    pass_if: "job_offer.live_in_caregiver_requirement == false || job_offer.live_in_exception_documented == true"
+    fail_if: "job_offer.live_in_caregiver_requirement == true && job_offer.live_in_exception_documented == false"
+    missing_or_unverified: "NEEDS_REVIEW: Whether the position is a live-in in-home caregiver position, and whether a medical-needs or exceptional-circumstances exception is documented, cannot be established."
+    interpretation: "Service Canada will not process an LMIA for an in-home caregiver position in a private household (NAICS 814, NOC 31301, 32101, 44100 or 44101) that is advertised with a live-in requirement, unless an exception applies: a physician's note or Schedule H (EMP5600) for high medical needs clients, or a written exceptional-circumstances rationale."
+    evidence_anchor:
+      evidence_unit_id: "lmia_refusal_to_process.full_document_body"
+      source_file: "13a5b91518da2d0e87e552c6d34d047b1a368c083c4a0bea28d29910dd41e155"
+      section: "In-home caregiver positions with live-in requirements"
+      source_id: "lmia_refusal_to_process"
+      verbatim_excerpt: "In-home caregiver positions, where there is a live-in requirement, that:</p>\r\n<ul>\r\n  <li>are classified under the NAICS as a <a href=\"https://www23.statcan.gc.ca/imdb/p3VD.pl?CLV=2&amp;CPV=814&amp;CST=27012022&amp;CVD=1369848&amp;Function=getVD&amp;MLV=5&amp;TVD=1369825\" rel=\"external\">Private household (NAICS 814)</a></li>\r\n  <li>are classified under the NOC codes 31301, 32101, 44100 or 44101</li>\r\n  <li>have been advertised and indicated on the LMIA application as being sought to fill positions, where there is a live-in requirement</li>\r\n</ul>\r\n<details>\r\n  <summary>\r\n    <h4>Exceptions to this refusal to process for in-home caregiver positions</h4>\r\n  </summary>\r\n  <h5>High medical needs clients</h5>\r\n  <p>If you are seeking to hire an in-home caregiver with a mandatory live-in requirement for high medical needs clients (for example, people with disabilities, seniors, individuals with chronic or terminal illnesses), you must submit either:</p>\r\n  <ul>\r\n    <li>a physician’s note certifying both the medical condition and the need for live-in care</li>\r\n    <li><a href=\"https://catalogue.servicecanada.gc.ca/content/EForms/en/Detail.html?Form=EMP5600\">Schedule H – Medical disability, chronic or terminal illness certificate (EMP5600)"
+
   - id: lmia_workforce_proportion_cap
     category: employer_workforce
     severity: CRITICAL_REDLINE
@@ -169,15 +240,16 @@ rules:
       - employer.total_workforce_at_location
       - employer.low_wage_tfw_count_at_location
       - sector.naics_code
-    pass_if: "((sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && (employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location <= 0.200001)) || (!(sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && (employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location <= 0.100001))"
-    fail_if: "((sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && (employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location > 0.200001)) || (!(sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && (employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location > 0.100001))"
-    missing_or_unverified: "NEEDS_REVIEW: Total staff count or foreign worker count at work location cannot be established."
-    interpretation: "The proportion of low-wage temporary foreign workers at a work location is capped at 10% of the total workforce for standard sectors, and 20% for priority sectors (NAICS 23 construction, NAICS 311 food manufacturing, NAICS 622 hospitals, NAICS 623 nursing homes, and eligible caregiver NOCs)."
+    pass_if: "sector.is_primary_agriculture == true || sector.is_healthcare_institution_caregiver == true || employer.supports_pr_only == true || sector.is_short_duration_120_days == true || sector.is_seasonal_270_days == true || ((sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && ((employer.total_workforce_at_location < 10 && employer.low_wage_tfw_count_at_location <= 2) || (employer.total_workforce_at_location >= 10 && employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location <= 0.200001))) || (!(sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && ((employer.total_workforce_at_location < 10 && employer.low_wage_tfw_count_at_location <= 1) || (employer.total_workforce_at_location >= 10 && employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location <= 0.100001)))"
+    fail_if: "!(sector.is_primary_agriculture == true || sector.is_healthcare_institution_caregiver == true || employer.supports_pr_only == true || sector.is_short_duration_120_days == true || sector.is_seasonal_270_days == true) && (job_offer.work_location.is_in_cma == true || job_offer.province in ['AB', 'NU', 'ON'] || assessment_date > '2027-03-31') && (((sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && ((employer.total_workforce_at_location < 10 && employer.low_wage_tfw_count_at_location > 2) || (employer.total_workforce_at_location >= 10 && employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location > 0.200001))) || (!(sector.naics_code in ['23', '311', '622', '623'] || sector.is_caregiver_eligible_noc == true) && ((employer.total_workforce_at_location < 10 && employer.low_wage_tfw_count_at_location > 1) || (employer.total_workforce_at_location >= 10 && employer.low_wage_tfw_count_at_location / employer.total_workforce_at_location > 0.100001))))"
+    missing_or_unverified: "NEEDS_REVIEW: Workforce counts, sector exemption flags, or work-location status are missing, or the cap is exceeded for a work location outside a CMA in a province whose rural temporary measures (retained proportion and/or 15% cap, 2026-04-01 to 2027-03-31) may apply and are not modelled."
+    interpretation: "Cap on low-wage TFW positions per work location: 10% of the workforce (20% for NAICS 23, 311, 622, 623 and the listed in-home caregiver NOCs). Employers with fewer than 10 employees use a workforce size of 10, i.e. at most 1 low-wage TFW (10% cap) or 2 (20% cap); part-time employees count 0.5. No cap: on-farm primary agriculture, healthcare-institution caregiving (NAICS 62, NOC 31301/32101/33102), positions supporting permanent residency only, short-duration positions of generally 120 days or less, and seasonal-industry positions of 270 days or less. Rural employers outside CMAs in participating provinces may qualify for temporary measures (retained proportion and/or a 15% cap); AB, NU and ON do not participate, PE, SK and YT were still to be determined, so an exceeded cap outside a CMA elsewhere is routed to review until 2027-03-31."
     evidence_anchor:
-      evidence_unit_id: "lmia_employer_eligibility.refusal.full_page_projection"
-      source_file: "fc35450d1116b8d7af81a586dade27a56b073892f4ebd9a5f88ab55ce448da60"
-      section: "Positions above the cap on the proportion of low-wage positions"
-      verbatim_excerpt: "Low-wage positions above the 10% cap</h4>\r\n<p>LMIA applications won’t be processed if the proportion of low-wage positions is above the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html#h2.9\">10% of the total workforce</a> at a given  work location.</p>\r\n<h4>Low-wage positions above the 20% cap</h4>\r\n<p>For the sectors, subsectors and occupations below, LMIA applications won’t be processed if the proportion of low-wage positions is above the <a href=\"/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html#h2.9\">20% of the total workforce</a> at a given work location:"
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
+      section: "Cap on the proportion of low-wage positions"
+      source_id: "low-wage-requirements"
+      verbatim_excerpt: "There's a 10% cap on the proportion of temporary foreign workers that you can hire in low-wage positions at a specific work location. The cap is to ensure that Canadians or permanent residents are considered first for available jobs.</p>\r\n  <p>Any LMIA applications submitted that go above this cap may not be processed. For more information, visit <a href=\"/en/employment-social-development/services/foreign-workers/refusal.html\">Refusal to process an LMIA application</a>.</p>\r\n  <h3>Variation: Sectors, subsectors and occupations subject to a 20% cap</h3>\r\n  <p>For the following sectors, subsectors and occupations, the cap on the proportion of temporary foreign workers in low-wage positions that you can hire is 20%.</p>\r\n  <p>The classification code for the sectors is determined by the <a href=\"https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&amp;TVD=1369825\">North American Industry Classification System (NAICS) Canada</a>.</p>\r\n  <ul>\r\n    <li>NAICS 23 – Positions in construction</li>\r\n    <li>NAICS 311 – Positions in food manufacturing</li>\r\n    <li>NAICS 622 – Positions in hospitals</li>\r\n    <li>NAICS 623 – Positions in nursing and residential care facilities </li>\r\n    <li>specific in-home caregiver positions in a private household under:\r\n      <ul>\r\n        <li>NOC 31301 – Registered nurse or registered psychiatric nurse</li>\r\n        <li>NOC 32101 – Licensed practical nurse</li>\r\n        <li>NOC 44100 – Home childcare providers</li>\r\n        <li>NOC 44101 – Attendant for persons with disabilities, home support worker, live-in caregiver, personal care attendant</li>\r\n        <li>ESDC and IRCC are evaluating the impact of the inclusion in future measures</li>\r\n      </ul>\r\n    </li>\r\n  </ul>\r\n  <h4>Variation: Employers with fewer than 10 employees at a given work location <span class=\"label label-info\">Updated: August 18, 2026</span></h4>\r\n  <p>Employers, including private household employers, with a total workforce size of fewer than 10 employees at a given work location must complete the \"Cap for low-wage positions\" section of the LMIA application form.</p>\r\n  <p>For the purpose of calculating the cap, the total workforce size at a given work location includes:</p>\r\n  <ul>\r\n    <li>all full-time and part-time employees working at the work location, including Canadians, permanent residents, temporary foreign workers employed through the LMIA process, workers holding other types of work permits, and employees who are on leave but expected to return\r\n      <ul>\r\n        <li>A full-time employee is a worker who works, on average, 30 or more hours per week.</li>\r\n        <li>A part-time employee is a worker who works, on average, less than 30 hours per week. Each part-time employee is counted 0.5 of an employee for the purpose of the cap.</li>\r\n      </ul>\r\n    </li>\r\n    <li>vacant positions for new temporary foreign workers requested on the LMIA application</li>\r\n    <li>temporary foreign workers on previously approved LMIAs who have yet to start their employment</li>\r\n  </ul>\r\n  <p>Under this variation, the cap calculation formula uses a workforce size of 10 employees. As a result, employers may employ a maximum of:</p>\r\n  <ul>\r\n    <li>1 temporary foreign worker in a low-wage position if subject to a 10% cap, or</li>\r\n    <li>2 temporary foreign workers in low-wage positions if subject to a 20% cap</li>\r\n  </ul>\r\n  <details>\r\n    <summary>\r\n      <h4>Positions with no cap</h4>\r\n    </summary>\r\n    <p>The following positions don't have any caps on the proportion of low-wage positions:</p>\r\n    <ul>\r\n      <li>on-farm primary agriculture positions such as labourers, workers, managers, and supervisors in farming, livestock, harvesting, nurseries and greenhouses for NOC codes 80020, 80021, 82030, 82031, 84120, 85100, 85101 and 85103 </li>\r\n      <li>caregiving positions for healthcare institutions (NAICS 62) for NOC positions 31301, 32101 and 33102 </li>\r\n      <li>positions in support of permanent residency only (no application for work permit) </li>\r\n      <li>short-duration positions generally of 120 calendar days or less in duration that are:\r\n        <ul>\r\n          <li>truly temporary, meaning for a specific short-term period or singular event where the position won't be filled after the worker leaves the country, or </li>\r\n          <li>highly mobile, meaning part of a workforce that regularly crosses jurisdictional boundaries (for example, provincial or territorial and/or international)\r\n            <ul>\r\n              <li>examples of businesses that could use this exemption include travelling carnival and fair operators, technicians for proprietary equipment repair, one-time projects or events, and events of short durations</li>\r\n              <li>Service Canada will consider requests for this exemption for longer than 120 days on an exceptional basis</li>\r\n            </ul>\r\n          </li>\r\n        </ul>\r\n      </li>\r\n      <li>low-wage positions in seasonal industries that don't go beyond 270 calendar days:"
 
   - id: lmia_duration_ceiling
     category: job_offer
@@ -188,11 +260,12 @@ rules:
     pass_if: "job_offer.term_days <= 365"
     fail_if: "job_offer.term_days > 365"
     missing_or_unverified: "NEEDS_REVIEW: Employment term or contract duration is missing."
-    interpretation: "The maximum duration of employment approved under the low-wage stream is strictly capped at 1 year (365 days)."
+    interpretation: "The low-wage stream allows hiring temporary foreign workers for a maximum of 1 year (365 days); the duration must align with the employer's reasonable employment needs."
     evidence_anchor:
       evidence_unit_id: "low-wage-overview.html.full_page_projection"
       source_file: "3aa68d159d12363e5f4462c4eb6980311c290659a9b018fd890738e7b63d8141"
       section: "Duration of employment"
+      source_id: "low-wage-overview"
       verbatim_excerpt: "The program allows you to hire temporary foreign workers for a maximum of 1 year."
 
   - id: lmia_prevailing_wage
@@ -205,11 +278,12 @@ rules:
     pass_if: "job_offer.regular_hourly_wage_cad >= job_offer.prevailing_wage_cad"
     fail_if: "job_offer.regular_hourly_wage_cad < job_offer.prevailing_wage_cad"
     missing_or_unverified: "NEEDS_REVIEW: Prevailing wage on Job Bank for occupation/region or offered wage is missing."
-    interpretation: "Even in the Low-Wage stream, the offered hourly wage must equal or exceed the prevailing median wage on Job Bank for the occupation in the specific economic region."
+    interpretation: "Even in the low-wage stream the employer must pay the prevailing wage: the highest of the median wage on Job Bank and the wage paid to current employees hired for the same job and work location with the same skills and experience."
     evidence_anchor:
-      evidence_unit_id: "lmia_employer_eligibility.low_wage_requirements.full_page_projection"
-      source_file: "02b044a0f9d4c3387cf47f5138d8d3f69226e06c13655e85679a76749c56fed4"
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
       section: "Wages, working conditions and occupations"
+      source_id: "low-wage-requirements"
       verbatim_excerpt: "For the purpose of the Temporary Foreign Worker Program, you must pay the prevailing wage that is defined as the highest of either:</p>\r\n  <ul>\r\n    <li>the median wage on <a href=\"https://www.jobbank.gc.ca/trend-analysis/search-wages\">Job Bank</a></li>\r\n    <li>the wage that is within the wage range that you're paying your current employees hired for the same job and work location, and with the same skills and years of experience"
 
   - id: lmia_recruitment_minimum_duration
@@ -219,19 +293,38 @@ rules:
     required_fields:
       - job_offer.recruitment.advertising_duration_days
       - job_offer.recruitment.consecutive_weeks
-      - job_offer.recruitment.job_bank_used
-      - job_offer.recruitment.additional_methods_count
-      - job_offer.recruitment.targets_underrepresented_groups
       - job_offer.recruitment.conducted_within_3_months
-    pass_if: "job_offer.recruitment.advertising_duration_days >= 56 && job_offer.recruitment.consecutive_weeks >= 8 && job_offer.recruitment.job_bank_used == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.targets_underrepresented_groups == true && job_offer.recruitment.conducted_within_3_months == true"
-    fail_if: "job_offer.recruitment.advertising_duration_days < 56 || job_offer.recruitment.consecutive_weeks < 8 || job_offer.recruitment.job_bank_used == false || job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.targets_underrepresented_groups == false || job_offer.recruitment.conducted_within_3_months == false"
-    missing_or_unverified: "NEEDS_REVIEW: Recruitment evidence, Job Bank posting records, or diversity outreach proof is missing."
-    interpretation: "Employers must advertise on Job Bank plus 2 additional recruitment methods for at least 8 consecutive weeks (56 days) within the 3 months prior to submission, including targeted outreach to underrepresented domestic groups. High-wage recruitment remains 4 consecutive weeks and must not be used for this stream."
+    pass_if: "job_offer.recruitment.advertising_duration_days >= 56 && job_offer.recruitment.consecutive_weeks >= 8 && job_offer.recruitment.conducted_within_3_months == true"
+    fail_if: "job_offer.recruitment.advertising_duration_days < 56 || job_offer.recruitment.consecutive_weeks < 8 || job_offer.recruitment.conducted_within_3_months == false"
+    missing_or_unverified: "NEEDS_REVIEW: Recruitment advertising dates, duration, or 3-month recency window cannot be verified."
+    interpretation: "The job advertisement must have occurred in the 3 months before submitting the LMIA application and run for at least 8 consecutive weeks (56 days) within that period. The high-wage stream's 4-week minimum must not be used for this stream."
     evidence_anchor:
       evidence_unit_id: "low-wage-requirements.html.full_page_projection"
       source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
       section: "Job advertisement duration"
-      verbatim_excerpt: "is for a minimum of 8 consecutive weeks within the 3 months prior to submitting an LMIA application"
+      source_id: "low-wage-requirements"
+      verbatim_excerpt: "You must ensure that the job advertisement:</p>\r\n    <ul>\r\n      <li>has occurred in the 3 months prior to submitting the LMIA application</li>\r\n      <li>is for a minimum of 8 consecutive weeks within the 3 months prior to submitting an LMIA application"
+
+  - id: lmia_recruitment_methods_youth_and_groups
+    category: recruitment
+    severity: CRITICAL_REDLINE
+    eval_type: deterministic
+    required_fields:
+      - job_offer.recruitment.job_bank_used
+      - job_offer.recruitment.additional_methods_count
+      - job_offer.recruitment.targets_underrepresented_groups
+      - job_offer.recruitment.targets_youth
+    pass_if: "job_offer.recruitment.job_bank_used == true && job_offer.recruitment.targets_youth == true && job_offer.recruitment.additional_methods_count >= 2 && job_offer.recruitment.targets_underrepresented_groups == true"
+    fail_if: "job_offer.recruitment.targets_youth == false || job_offer.recruitment.additional_methods_count < 2 || job_offer.recruitment.targets_underrepresented_groups == false"
+    missing_or_unverified: "NEEDS_REVIEW: Job Bank was not used (an alternative method needs a written rationale), or youth targeting, the 2 additional methods, or their distinct underrepresented-group targeting cannot be verified."
+    interpretation: "Before applying the employer must advertise on Job Bank (an alternative needs a written rationale), demonstrate recruitment efforts that reach youth (ages 15-30), and conduct at least 2 additional methods consistent with the occupation, each targeting a different underrepresented group."
+    evidence_anchor:
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
+      section: "Minimum recruitment requirements"
+      source_id: "low-wage-requirements"
+      verbatim_excerpt: "You must advertise the position on the Government of Canada's <a href=\"https://www.jobbank.gc.ca/home\">Job Bank</a>. If another website or method is used instead, you must submit a written rationale and explanation.</li>\r\n      <li id=\"youth\">Target youth in recruitment<br>\r\n        You must demonstrate recruitment efforts to reach and encourage youth (ages 15-30) to apply for the job to ensure that they were provided with every opportunity to obtain employment. This can include:\r\n        <ul>\r\n          <li>posting on <a href=\"https://www.jobbank.gc.ca/home\">Job Bank</a> (youth section) and youth job boards</li>\r\n          <li>working with schools or colleges</li>\r\n          <li>participating in youth employment programs, or</li>\r\n          <li>using other platforms popular with youth</li>\r\n        </ul>\r\n      </li>\r\n      <li>Use at least 2 additional recruitment methods<br>\r\n        You must also conduct <strong>at least 2</strong> additional methods of recruitment that are consistent with the occupation (targets an audience that has the appropriate education, professional experience and or skill level required for the occupation). Each of the methods used must target a different underrepresented group, such as:\r\n        <ul>\r\n          <li>vulnerable youth</li>\r\n          <li>Indigenous peoples</li>\r\n          <li>newcomers to Canada</li>\r\n          <li>persons with disabilities, and</li>\r\n          <li>asylum claimants with valid work permits"
+
   - id: lmia_employer_obligations_transport_housing_health
     category: employer_obligations
     severity: STATUTORY_GATE
@@ -241,16 +334,17 @@ rules:
       - employer.ensures_affordable_housing
       - employer.provides_private_health_insurance
     pass_if: "employer.provides_round_trip_transportation == true && employer.ensures_affordable_housing == true && employer.provides_private_health_insurance == true"
-    fail_if: "employer.provides_round_trip_transportation == false || employer.ensures_affordable_housing == false || employer.provides_private_health_insurance == false"
-    missing_or_unverified: "NEEDS_REVIEW: Employer commitment for round-trip transportation, affordable housing, or private health insurance is missing or incomplete."
-    interpretation: "Under the Low-Wage stream, the employer is legally obligated to pay for round-trip transportation, ensure suitable and affordable housing is available (spending no more than 30% of gross pay on rent), and provide private health insurance until provincial health coverage takes effect."
+    fail_if: "employer.provides_round_trip_transportation == false || employer.ensures_affordable_housing == false"
+    missing_or_unverified: "NEEDS_REVIEW: Round-trip transportation or affordable housing commitment is missing, or private health insurance is not provided (it is only required in applicable provinces or territories, for periods without provincial coverage)."
+    interpretation: "The employer must pay the round-trip transportation costs (not recoverable from the worker), provide or ensure suitable and affordable housing (shelter costs below 30% of before-tax income), and in applicable provinces or territories obtain and pay for private emergency health insurance for any period the worker is not covered by the provincial plan. Missing health insurance is reviewed rather than failed because applicability depends on the province."
     evidence_anchor:
-      evidence_unit_id: "lmia_employer_eligibility.low_wage_requirements.full_page_projection"
-      source_file: "02b044a0f9d4c3387cf47f5138d8d3f69226e06c13655e85679a76749c56fed4"
-      section: "Transportation, housing and health care"
-      verbatim_excerpt: "You must pay for the round-trip transportation costs for temporary foreign workers to arrive at their work location in Canada at the beginning of their work period, and to return to their country of residence at the end of their work period.</p>\r\n  <p>If the temporary foreign worker finds a new employer, who was issued a positive LMIA, the new employer is responsible for the transportation costs.</p>\r\n  <p>The transportation costs mustn't be recovered from the temporary foreign workers. </p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.16\">Housing</h2>\r\n  <p>You must provide or ensure that suitable and affordable housing is available for the temporary foreign worker you'll employ. </p>\r\n  <p>For the purpose of the Temporary Foreign Worker Program, Canada Mortgage and Housing Corporation definitions are used to determine the suitability and affordability of housing:</p>\r\n  <ul>\r\n    <li>suitable housing: doesn't require any major repairs, according to residents. Major repairs include those to defective plumbing or electrical wiring, or structural repairs to walls, floors or ceilings</li>\r\n    <li>affordable housing: costs less than 30% of the temporary foreign worker's before-tax income. Shelter costs include, rent (or mortgage payment) and any payments for electricity, fuel, water and other municipal services</li>\r\n  </ul>\r\n  <p>We may ask for proof (for example, newspaper ads) that affordable housing is available.</p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.17\">Health insurance </h2>\r\n  <p>In applicable provinces or territories, you must obtain and pay for private health insurance that covers emergency medical care"
+      evidence_unit_id: "low-wage-requirements.html.full_page_projection"
+      source_file: "d3672019ba968d7fad535f7f91c32ce533d0aeca9b9a447de9a94b3c7131888d"
+      section: "Transportation, housing and health insurance"
+      source_id: "low-wage-requirements"
+      verbatim_excerpt: "You must pay for the round-trip transportation costs for temporary foreign workers to arrive at their work location in Canada at the beginning of their work period, and to return to their country of residence at the end of their work period.</p>\r\n  <p>If the temporary foreign worker finds a new employer, who was issued a positive LMIA, the new employer is responsible for the transportation costs.</p>\r\n  <p>The transportation costs mustn't be recovered from the temporary foreign workers. </p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.16\">Housing</h2>\r\n  <p>You must provide or ensure that suitable and affordable housing is available for the temporary foreign worker you'll employ. </p>\r\n  <p>For the purpose of the Temporary Foreign Worker Program, Canada Mortgage and Housing Corporation definitions are used to determine the suitability and affordability of housing:</p>\r\n  <ul>\r\n    <li>suitable housing: doesn't require any major repairs, according to residents. Major repairs include those to defective plumbing or electrical wiring, or structural repairs to walls, floors or ceilings</li>\r\n    <li>affordable housing: costs less than 30% of the temporary foreign worker's before-tax income. Shelter costs include, rent (or mortgage payment) and any payments for electricity, fuel, water and other municipal services</li>\r\n  </ul>\r\n  <p>We may ask for proof (for example, newspaper ads) that affordable housing is available.</p>\r\n</section>\r\n<section>\r\n  <h2 id=\"h2.17\">Health insurance </h2>\r\n  <p>In applicable provinces or territories, you must obtain and pay for private health insurance that covers emergency medical care, for any period during that the temporary foreign worker isn't covered by the applicable provincial or territorial health insurance system."
 
-  - id: lmia_genuine_labour_shortage
+  - id: lmia_genuine_and_legitimate_job_offer
     category: qualitative
     severity: QUALITATIVE_STANDARD
     eval_type: typesafe_jev
@@ -258,13 +352,14 @@ rules:
       - noul.proposition_id
       - noul.probability_true
       - noul.evidence_complete
-    precondition: "noul.evidence_complete == true && noul.proposition_id == 'is_genuine_labour_shortage'"
+    precondition: "noul.evidence_complete == true && noul.proposition_id == 'is_genuine_and_legitimate_job_offer'"
     pass_if: "noul.probability_true >= 0.70"
     fail_if: "noul.probability_true < 0.30"
-    missing_or_unverified: "NEEDS_REVIEW: Genuine business need and labour shortage probability is borderline (0.30 <= P < 0.70) or qualitative evidence is incomplete."
-    interpretation: "Service Canada officers assess whether the job vacancy is genuine and represents an authentic labour shortage."
+    missing_or_unverified: "NEEDS_REVIEW: Business and job-offer legitimacy probability is borderline (0.30 <= P < 0.70) or qualitative evidence is incomplete."
+    interpretation: "All employers must provide documents with the LMIA application to demonstrate that both the business and the job offer are legitimate; Service Canada assesses this qualitatively. The 0.70 / 0.30 probability thresholds are this project's review contract, not an ESDC figure."
     evidence_anchor:
-      evidence_unit_id: "EU-LMIA-005"
-      source_file: "low_wage_requirements.html"
-      section: "Assessment criteria"
-      verbatim_excerpt: "Service Canada will assess whether the job offer is genuine"
+      evidence_unit_id: "lmia_employer_eligibility.low_wage_requirements.full_page_projection"
+      source_file: "02b044a0f9d4c3387cf47f5138d8d3f69226e06c13655e85679a76749c56fed4"
+      section: "Business legitimacy"
+      source_id: "lmia_eligibility_low_wage_requirements_20261004"
+      verbatim_excerpt: "All employers applying to the Temporary Foreign Worker Program must provide documents along with their LMIA application to demonstrate that their <a href=\"/en/employment-social-development/services/foreign-workers/business-legitimacy.html\">business and job offer are legitimate"

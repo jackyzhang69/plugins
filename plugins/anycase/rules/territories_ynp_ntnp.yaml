@@ -27,25 +27,6 @@ schema:
 reference_points_grid:
   note: Documentation only. Yukon grid and NTNP ranking stay in AnyScore. No points floor in this ruleset.
 rules:
-- id: territory_age
-  category: status
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.age_years
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Age cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-TERR-AGE-001
-    source_file: ynp-ntnp-worker-baselines.html
-    section: Applicant Eligibility - Age
-    verbatim_excerpt: The candidate must be at least 18
-  provenance:
-    source_file: ynp-ntnp-worker-baselines.html
-    section: Applicant Eligibility - Age
-    page: 1
-    verbatim: The candidate must be at least 18
 - id: territory_job_offer
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -71,6 +52,17 @@ rules:
     page: "2"
     section: Job Offer Requirements
     verbatim_excerpt: "Be for a permanent full-time position (minimum 30 hours per week, year-round and no end date)"
+    supporting_excerpts:
+    - unit_status: no_published_unit
+      blocker: "Yukon handbook (raw sha256 7515d120f2d3afec2b1ae4ace37080b051690625b5ea7f9f392aa8bc217eaec9) PDF page 31 has no extractable text and is not structurally blank; the V3 validator (registered pdftotext 25.10.0 on 69) rejects the whole PDF with 'pages without extractable text; coverage is incomplete'. Publishing needs a V2 non-policy-image page-disposition manifest with a human reviewer attestation and the registered pdftoppm 25.10.0 runtime; not fabricated."
+      source_url: https://yukon.ca/sites/default/files/ecdev-yukon-nominee-program-application-handbook__2026.07.02.pdf
+      source_sha256: 7515d120f2d3afec2b1ae4ace37080b051690625b5ea7f9f392aa8bc217eaec9
+      source_edition: "Yukon Nominee Program Application handbook, updated July 2, 2026"
+      page: "11"
+      verbatim_excerpt: "The GEO must offer permanent, year-round, full-time employment. This is defined as 35-40 hours per week, and a minimum of 1,820 hours per year."
+    - unit_status: no_published_unit
+      page: "5"
+      verbatim_excerpt: "The employer offers a full-time (35-40 hours per week), year-round position to the foreign national"
   provenance:
     source_file: ynp-ntnp-worker-baselines.html
     section: Job Offer Requirements
@@ -144,9 +136,24 @@ rules:
   fail_if: (candidate.branch == 'nt_els' && job_offer.noc_teer in [0, 1, 2, 3]) || (candidate.branch in ['nt_skilled', 'nt_ee'] && job_offer.noc_teer in [4, 5])
   missing_or_unverified: 'NEEDS_REVIEW: Select NWT ELS, Skilled or Express Entry; this rule makes no Yukon branch decision.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: 2026-03-09 guidelines pp.9,18
-    verbatim_excerpt: TEER 0, 1, 2, and 3
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p012"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "12"
+    section: "Skilled Worker and Express Entry Categories - TEER categories; Entry Level and Semi-Skilled"
+    verbatim_excerpt: "The\nTEER categories applicable to the Skilled Worker and NWT Express Entry categories are NOC\nTEER 0, 1, 2 and 3."
+    supporting_excerpts:
+    - evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p021"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+      source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+      page: "21"
+      verbatim_excerpt: "TEER 4 and 5."
 - id: nwt_language_proof
   category: language
   severity: ADVISORY
@@ -163,9 +170,24 @@ rules:
     candidate.language.result_date >= calendar_months_after(assessment_date, 0 - 24) && candidate.language.result_date <= assessment_date)
   missing_or_unverified: 'NEEDS_REVIEW: One accepted test session across all four abilities; validity two years from results, no combined sessions.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.16-17,24-25
-    verbatim_excerpt: The minimum language standards must all be achieved in one testing session.
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p017"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "17"
+    section: "Language Requirements"
+    verbatim_excerpt: "The minimum language standards must all be achieved in one testing session."
+    supporting_excerpts:
+    - evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p018"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+      source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+      page: "18"
+      verbatim_excerpt: "Language tests are valid for two years\nfrom the date of the test results."
 - id: nwt_employer_and_job
   category: employer
   severity: ADVISORY
@@ -184,9 +206,17 @@ rules:
     candidate.occupational_certification_met == true)
   missing_or_unverified: 'NEEDS_REVIEW: NWT employer/location, one-year operation, WSCC, compliance, genuine aligned job, applicable wage and certification require evidence. NWT/Yukon/Alberta/Canada median fallback must be source-verified, not guessed.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.9-15,18-24
-    verbatim_excerpt: Work must take place within the NWT.
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p011"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "11"
+    section: "Employer Eligibility Criteria - work location"
+    verbatim_excerpt: "Work must take place within the NWT."
 - id: nwt_recruitment
   category: employer
   severity: ADVISORY
@@ -205,9 +235,17 @@ rules:
     employer.local_ad_end <= candidate.application_date && employer.national_ad_end <= candidate.application_date)))
   missing_or_unverified: 'NEEDS_REVIEW: Positive LMIA or source-listed local and national advertising, duration, recency and signed results; no Yukon recruitment inference.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.11-12,20-21
-    verbatim_excerpt: a minimum of 30 consecutive days (or 4 consecutive weeks)
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p021"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "21"
+    section: "Employer Recruitment Efforts - advertising"
+    verbatim_excerpt: "a minimum of 30 consecutive days (or 4 consecutive\nweeks)"
 - id: nwt_worker_status
   category: status
   severity: ADVISORY
@@ -221,9 +259,17 @@ rules:
     (candidate.work_permit_closed == false || candidate.work_permit_conditions_met == true))))
   missing_or_unverified: 'NEEDS_REVIEW: In-Canada work authorization or proven maintained status, closed permit conditions and claimant exclusion; no inferred status from a job offer.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.9,14,18,23
-    verbatim_excerpt: they must provide proof that they are on “maintained status.”
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p015"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "15"
+    section: "Nominee Applicant eligibility - status in Canada"
+    verbatim_excerpt: "they must\nprovide proof that they are on “maintained status.”"
 - id: nwt_worker_experience
   category: experience
   severity: ADVISORY
@@ -244,9 +290,17 @@ rules:
     candidate.nominating_employer_full_time_months + candidate.approved_transfer_months - candidate.extended_leave_months >= 12)))
   missing_or_unverified: 'NEEDS_REVIEW: Skilled/EE one year same/similar occupation within ten years; ELS twelve full-time months immediately before filing. Exclude extended leave time without resetting approved accrued work; abuse transfer requires NTNP evidence and approval, not merely a claim.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.15,23-24
-    verbatim_excerpt: get approval from the NTNP to transfer the experience prior to applying
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p024"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "24"
+    section: "Work Experience - transfer of experience"
+    verbatim_excerpt: "evidence to support this claim and get approval from the NTNP to transfer the experience"
 - id: nwt_express_entry_pool
   category: pathway
   severity: ADVISORY
@@ -255,9 +309,17 @@ rules:
   pass_if: candidate.branch in ['nt_els', 'nt_skilled', 'yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] || (candidate.branch == 'nt_ee' && candidate.ee_acceptance_letter == true && candidate.ee_profile_number != '' && candidate.ee_job_seeker_validation_code != '' && candidate.ee_pool_status == 'valid')
   missing_or_unverified: 'NEEDS_REVIEW: NWT EE requires IRCC acceptance letter/profile, valid job seeker code and maintained pool status, in addition to Skilled criteria.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: p.17
-    verbatim_excerpt: Maintain valid status in IRCC’s Express Entry pool throughout the application process
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p018"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "18"
+    section: "NWT Express Entry Category - IRCC pool status"
+    verbatim_excerpt: "Maintain valid status in IRCC’s Express Entry pool throughout the application\nprocess"
 - id: yukon_ordinary_intake_cohort
   category: pathway
   severity: ADVISORY
@@ -275,9 +337,27 @@ rules:
     candidate.application_date <= candidate.invitation_application_deadline)))
   missing_or_unverified: 'NEEDS_REVIEW: Ordinary 2026 EOI windows are Jan19-30 and Jul6-17 (Yukon local times). Timely invited application/nomination is not rejected because EOI is now closed. TML is separate and unresolved; do not infer its intake.'
   evidence_anchor:
-    source_file: yukon-ynp-operational-guidance-2026-07-03.pdf
-    section: EOI intakes and application pp.8-12
-    verbatim_excerpt: there will be two EOI intakes in 2026
+    evidence_unit_id: "prairies_documents:yukon_nominee_program_page_2026_intake:priorities_and_dates_2026"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: a538406afb49add0b3a661e474bae8d88c7d81530043b26908b2651f8678246e
+    source_id: yukon_nominee_program_page_2026_intake
+    source_file: b8d2c5961ed93aad49040d1478b0cd411d34671854e8fa6556e56184a4a0d04c
+    source_url: https://yukon.ca/en/yukon-nominee-program
+    source_sha256: 97be6c02ac9d86cab28b19f89b8bd4681835c9002c2c2aff0a11b55419712396
+    source_edition: "Yukon Nominee Program page, no page date, retrieved 2026-11-16"
+    section: "Priorities and dates in 2026; Significant dates"
+    verbatim_excerpt: "Employers submit an Expression of Interest (EOI) during the 2 intake periods."
+    supporting_excerpts:
+    - evidence_unit_id: "prairies_documents:yukon_nominee_program_page_2026_intake:significant_dates"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a538406afb49add0b3a661e474bae8d88c7d81530043b26908b2651f8678246e
+      source_file: b8d2c5961ed93aad49040d1478b0cd411d34671854e8fa6556e56184a4a0d04c
+      verbatim_excerpt: "January 19, 9 am to January 30, 4:30 pm"
+    - evidence_unit_id: "prairies_documents:yukon_nominee_program_page_2026_intake:significant_dates"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: a538406afb49add0b3a661e474bae8d88c7d81530043b26908b2651f8678246e
+      source_file: b8d2c5961ed93aad49040d1478b0cd411d34671854e8fa6556e56184a4a0d04c
+      verbatim_excerpt: "July 6, 9 am to July 17, 4:30 pm"
 - id: nwt_francophone_2025_dual_language
   category: language
   severity: ADVISORY
@@ -310,9 +390,30 @@ rules:
   fail_if: candidate.branch == 'nt_francophone_2025' && candidate.source_cohort == '2025-closed-historical' && (min(candidate.french.listening, candidate.french.speaking, candidate.french.reading, candidate.french.writing) < 5 || min(candidate.english.listening, candidate.english.speaking, candidate.english.reading, candidate.english.writing) < 4)
   missing_or_unverified: 'NEEDS_REVIEW: Historical 2025 French>=5 AND English>=4 in each ability, one accepted session per language. Scalar CLB4 is insufficient. Historical condition comparison only; the 2025 intake is closed and no current reopening is inferred.'
   evidence_anchor:
-    source_file: nwt-francophone-guidelines-2025-11.pdf
-    section: pp.7-8; captured Francophone page confirms 2025 intake closed
-    verbatim_excerpt: one testing session, per language
+    evidence_unit_id: "prairies_documents:nwt_francophone_guidelines_2025_11:p008"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 33ac199c9760a9ee09cdbafe41379a703e0e6b15713b78f25dad897785e9af15
+    source_id: nwt_francophone_guidelines_2025_11
+    source_file: c536b28773987f454bb90ad831c281b6863febb385801152c8f74e73db9a2771
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/2025_-_11_-_ntnp_program_guidelines_-_francophone_stream-_final.pdf
+    source_sha256: d99b94f44747b2b929f2b11aaf54df02e569509d26da2971c36394323150bb1f
+    source_edition: "NTNP Francophone Stream Program Guidelines, file dated 2025-11 (2025 intake closed)"
+    page: "8"
+    section: "Language Requirements"
+    verbatim_excerpt: "The minimum language standards must all be achieved in one testing session, per language."
+    supporting_excerpts:
+    - evidence_unit_id: "prairies_documents:nwt_francophone_guidelines_2025_11:p008"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 33ac199c9760a9ee09cdbafe41379a703e0e6b15713b78f25dad897785e9af15
+      source_file: c536b28773987f454bb90ad831c281b6863febb385801152c8f74e73db9a2771
+      page: "8"
+      verbatim_excerpt: "achieve a minimum\nlanguage standard of the Canadian Language Benchmark (CLB) Level 5 in French"
+    - evidence_unit_id: "prairies_documents:nwt_francophone_guidelines_2025_11:p008"
+      unit_status: candidate_k_validated_not_published
+      candidate_k_id: 33ac199c9760a9ee09cdbafe41379a703e0e6b15713b78f25dad897785e9af15
+      source_file: c536b28773987f454bb90ad831c281b6863febb385801152c8f74e73db9a2771
+      page: "8"
+      verbatim_excerpt: "Level 4 in English"
 - id: nwt_education_credential
   category: education
   severity: ADVISORY
@@ -321,6 +422,14 @@ rules:
   pass_if: candidate.branch in ['yt_critical', 'yt_skilled', 'yt_ee', 'nt_francophone_2025'] || (candidate.branch in ['nt_els', 'nt_skilled', 'nt_ee'] && (candidate.education_outside_canada == false || (candidate.education_outside_canada == true && candidate.eca_provider in ['WES', 'CES', 'ICAS', 'MCC', 'PEBC', 'ICES', 'IQAS'] && candidate.eca_issue_date <= assessment_date && candidate.eca_issue_date >= calendar_months_after(assessment_date, 0 - 60))))
   missing_or_unverified: 'NEEDS_REVIEW: Foreign education needs an IRCC-designated ECA valid for five years; local occupational certification remains independently required.'
   evidence_anchor:
-    source_file: nwt-employer-driven-guidelines-2026.pdf
-    section: pp.15-16,24
-    verbatim_excerpt: The validity of an ECA is five years from the date of issuance.
+    evidence_unit_id: "prairies_documents:nwt_eds_guidelines_2026_03_09:p017"
+    unit_status: candidate_k_validated_not_published
+    candidate_k_id: 24735c7658ae31851362f69843736c9aa2540613961c86ce163e82b78cdc2150
+    source_id: nwt_eds_guidelines_2026_03_09
+    source_file: 0e5ee48f9f859300e82ab0c5fe2e884b666bcf696ebbb0a86b5c471ea46c98d7
+    source_url: https://www.immigratenwt.ca/sites/immigratenwt/files/resources/ntnp_program_guidelines_-_employer_driven_stream_0.pdf
+    source_sha256: e072de6d48499f23e1f92d926197f6f462b3543d5e67426e5b6c88cf6a3532b
+    source_edition: "EFFECTIVE March 9, 2026"
+    page: "17"
+    section: "Education - Educational Credential Assessment"
+    verbatim_excerpt: "The validity of an ECA is\nfive years from the date of issuance."

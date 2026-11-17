@@ -6,18 +6,31 @@ display_name: AAIP Entrepreneur Streams
 status: ACTIVE
 program_id: AAIP_ENTREPRENEUR
 stream_id: ENTREPRENEUR
-effective_date: '2024-01-01'
-source_edition: AAIP Rural, Graduate, Foreign Graduate, and Farm streams
-source_url: https://www.alberta.ca/aaip-entrepreneur-streams
-decision_scope: Deterministic prescreen for endorsement, net worth, investment, equity,
-  and language. Entrepreneur points stay in AnyScore.
+effective_date: '2026-11-17'
+source_edition: Official AAIP stream-specific eligibility pages observed 2026-11-16 and 2026-11-17; observation date is not a statutory commencement claim.
+source_url: https://www.alberta.ca/alberta-advantage-immigration-program
+decision_scope: Source-bound partial prescreen of verified entrepreneur-stream financial, ownership, language, support and specified business facts. Stream-specific official sources control; no farm endorsement or ownership-percentage minimum is invented. Criterion PASS is not a complete nomination decision.
 sources:
-- id: aaip_ent
-  title: AAIP entrepreneur streams
-  url: https://www.alberta.ca/aaip-entrepreneur-streams
-  citation: AAIP Rural, Graduate, Foreign Graduate, and Farm streams
-  legal_authority: Official program baseline used for the redline. Points arithmetic
-    stays in AnyScore.
+- id: aaip_rural_eligibility
+  title: Rural Entrepreneur Stream eligibility
+  url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
+  citation: Official eligibility page observed 2026-11-16
+  legal_authority: Current AAIP stream-specific official requirements; exact raw bytes and validated K candidate retained.
+- id: aaip_graduate_eligibility
+  title: Graduate Entrepreneur Stream eligibility
+  url: https://www.alberta.ca/aaip-graduate-entrepreneur-stream-eligibility
+  citation: Official eligibility page observed 2026-11-16
+  legal_authority: Current AAIP stream-specific official requirements; exact raw bytes and validated K candidate retained.
+- id: aaip_foreign_graduate_eligibility
+  title: Foreign Graduate Entrepreneur Stream eligibility
+  url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+  citation: Official eligibility page observed 2026-11-16
+  legal_authority: Current AAIP stream-specific official requirements; exact raw bytes and validated K candidate retained.
+- id: aaip_farm_eligibility
+  title: Farm Stream eligibility
+  url: https://www.alberta.ca/aaip-farm-stream-eligibility
+  citation: Official eligibility page observed 2026-11-16
+  legal_authority: Current AAIP stream-specific official requirements; exact raw bytes and validated K candidate retained.
 schema:
   input_type: object
   required_top_level:
@@ -25,137 +38,311 @@ schema:
   - candidate
   types:
     assessment_date: ISO-8601 date
+    candidate:
+      stream: rural | graduate | foreign_graduate | farm
+      accessible_funds_cad: Documented, confirmed access to funds from other sources; official alternative to net worth for Farm only.
+      primary_production_equity_investment_cad: Verified equity to be invested in an Alberta primary-production farming business, not generic or passive business investment.
+      language_clb_minimum: Lowest verified CLB/NCLC across all four abilities.
+      language_result_within_2_years: Official result is less than two years old at EOI submission.
+      language_test_accepted: The result is from an official test accepted by the applicable AAIP stream.
+      fges_urban: Business is in the Calgary or Edmonton CMA; outside these CMAs is regional.
+      partners_canadian_or_pr: All co-owners other than the applicant are Canadian citizens or permanent residents.
+      farm_management_skills_verified: Farm-management skills are supported by verifiable evidence.
+      farm_business_plan_submitted: The proposed primary-production farm plan has been provided for AAIP/agriculture review; not a fabricated endorsement.
+      settlement_family_size: Number of family members, including the applicant, used for the official settlement-funds table.
+      settlement_community_population: Population of the community where the proposed business will be established.
+      settlement_table_amount_verified: The supplied settlement_funds_required_cad matches the official table for the verified family size and community population.
+      rural_management_experience_qualifies: At least three years as active owner/manager or four years as senior manager within the past ten years.
+      rural_high_school_and_eca_verified: Canadian-equivalent high-school education and applicable ECA verified.
+      rural_location_qualifies: The proposed location meets the official rural community and census requirements.
+      rural_exploratory_visit_completed: Required community exploratory visit has been completed.
+      rural_exploratory_report_submitted: Exploratory visit report has been submitted with the Business Application.
+      graduate_alberta_two_year_full_time_credential: At least two years of full-time study resulted in an eligible degree or diploma from a publicly funded Alberta institution.
+      graduate_pgwp_valid_at_eoi: IRCC post-graduation work permit was valid when the EOI was submitted.
+      graduate_business_is_eligible: Proposed business is not in the official ineligible-business list.
+      fges_business_sector_eligible: Business is in an officially eligible Foreign Graduate Entrepreneur sector.
+      fges_business_is_eligible: Proposed business is not in the official ineligible-business list.
+      fges_designated_agency_report_submitted: The designated agency business-plan assessment report was submitted with the Business Application.
+      fges_investment_source_eligible: Investment comes from an official eligible equity or financing source.
+      fges_investment_timing_eligible: Investment timing satisfies the applicable official requirements.
+      farm_no_other_active_nomination: No other active or extendable AAIP nomination.
+      farm_no_reapplication_bar: No AAIP reapplication prohibition applies at application time.
+      farm_no_removal_order: No IRCC or CBSA removal order has been issued.
+      farm_canadian_status_eligible: Canadian temporary resident status is valid if living or working in Canada.
+      farm_current_permit_category_eligible: Current permit or student category is eligible under the Farm Stream exclusions.
+      no_other_active_aaip_nomination: No other active or extendable AAIP nomination.
+      no_aaip_reapplication_bar: No AAIP reapplication prohibition applies at application time.
+      no_removal_order: No IRCC or CBSA removal order has been issued.
+      not_refugee_claimant_or_appeal: Applicant is not a refugee claimant or person in the IRCC appeal or removal process.
+      valid_canadian_status_if_present: Canadian temporary resident status is valid if living or working in Canada.
+      alberta_business_location_verified: Proposed business location is in Alberta and meets the stream-specific location requirement.
+      owner_operator_management_verified: Applicant's proposed role is active management as an owner-operator.
+      business_viability_reviewed: Credible likelihood of establishing, operating and sustaining the proposed business has been reviewed against the official economic-establishment criteria.
+      existing_business_eoi_year_verified: If applying through the existing-business route, the business operated in Alberta for at least one year immediately before EOI; otherwise this fact is not applicable.
 reference_points_grid:
   note: Documentation only. AnyScore owns the entrepreneur points.
 rules:
-- id: aaip_ent_endorsement
+- id: aaip_rural_community_support
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'rural' || candidate.stream == 'farm' || candidate.stream
-      == 'foreign_graduate'
+    when: candidate.stream == 'rural'
     fields:
     - candidate.endorsement_valid
-  pass_if: candidate.stream == 'graduate' || candidate.endorsement_valid == true
-  fail_if: candidate.stream != 'graduate' && candidate.endorsement_valid == false
-  missing_or_unverified: 'NEEDS_REVIEW: Community, agency, or agriculture endorsement
-    cannot be verified.'
+  pass_if: candidate.stream != 'rural' || (candidate.endorsement_valid == true)
+  fail_if: candidate.stream == 'rural' && (candidate.endorsement_valid == false)
+  missing_or_unverified: 'NEEDS_REVIEW: the participating-community support letter is unverified.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-ENT-ENDORSEMENT-001
-    source_file: 57394f3a0fb6b073725c440e23df0f2906b5c187792a71070d244f09752f6506
-    section: Endorsement requirements
-    source_id: aaip_ent
-    verbatim_excerpt: "Your EOI will include the following documents or forms:</p><ul><li>Foreign Graduate Entrepreneur Stream Business Plan</li><li>Pitch Deck</li><li>Letter of Recommendation from a Designated Agency"
-- id: aaip_ent_net_worth
-  category: funds
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'rural' || candidate.stream == 'farm'
-    fields:
-    - candidate.net_worth_cad
-  pass_if: candidate.stream == 'graduate' || (candidate.stream == 'rural' && candidate.net_worth_cad
-    >= 300000) || (candidate.stream == 'farm' && candidate.net_worth_cad >= 500000)
-    || (candidate.stream == 'foreign_graduate' && candidate.settlement_funds_cad >=
-    candidate.settlement_funds_required_cad)
-  fail_if: (candidate.stream == 'rural' && candidate.net_worth_cad < 300000) || (candidate.stream
-    == 'farm' && candidate.net_worth_cad < 500000) || (candidate.stream == 'foreign_graduate'
-    && candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)
-  missing_or_unverified: 'NEEDS_REVIEW: Net worth or settlement funds cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: bc.aaip_farm_document_checklist.p002
-    source_file: 92984646c7a65355da07186c0ce9fc5c9d2808eee8faf84e04bce09f3af81640
-    page: "2"
-    section: Net worth and settlement funds
-    source_id: aaip_ent
-    verbatim_excerpt: "minimum net worth of\n\uf020$500,000 in unencumbered Canadian funds"
-- id: aaip_ent_investment
-  category: funds
-  severity: CRITICAL_REDLINE
-  eval_type: deterministic
-  required_fields:
-  - candidate.stream
-  conditional_required_fields:
-    when: candidate.stream == 'rural' || candidate.stream == 'farm' || candidate.stream
-      == 'foreign_graduate'
-    fields:
-    - candidate.investment_cad
-  pass_if: candidate.stream == 'graduate' || (candidate.stream == 'rural' && candidate.investment_cad
-    >= 100000) || (candidate.stream == 'farm' && candidate.investment_cad >= 500000)
-    || (candidate.stream == 'foreign_graduate' && candidate.fges_urban == false &&
-    candidate.investment_cad >= 50000) || (candidate.stream == 'foreign_graduate'
-    && candidate.fges_urban == true && candidate.investment_cad >= 100000)
-  fail_if: (candidate.stream == 'rural' && candidate.investment_cad < 100000) || (candidate.stream
-    == 'farm' && candidate.investment_cad < 500000) || (candidate.stream == 'foreign_graduate'
-    && candidate.fges_urban == false && candidate.investment_cad < 50000) || (candidate.stream
-    == 'foreign_graduate' && candidate.fges_urban == true && candidate.investment_cad
-    < 100000)
-  missing_or_unverified: 'NEEDS_REVIEW: Investment amount or foreign-graduate location
-    cannot be verified.'
-  evidence_anchor:
-    evidence_unit_id: EU-AAIP-ENT-INVESTMENT-003
-    source_file: src04.html
-    section: Business investment floors
-    verbatim_excerpt: Minimum investment of $100,000
-- id: aaip_ent_equity
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Community support letter
+    verbatim_excerpt: Candidates must have a Community Support Letter from a participating rural Alberta community.
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
+- id: aaip_fge_agency_recommendation
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
-  - candidate.equity_ratio
-  - candidate.business_kind
-  pass_if: (candidate.stream == 'rural' && candidate.business_kind == 'new' && candidate.equity_ratio
-    >= 0.51) || (candidate.stream == 'rural' && candidate.business_kind == 'succession'
-    && candidate.equity_ratio >= 1) || ((candidate.stream == 'graduate' || candidate.stream
-    == 'farm') && candidate.equity_ratio >= 0.34) || (candidate.stream == 'foreign_graduate'
-    && candidate.fges_urban == true && candidate.equity_ratio >= 0.34) || (candidate.stream
-    == 'foreign_graduate' && candidate.fges_urban == false && candidate.equity_ratio
-    >= 0.51)
-  fail_if: (candidate.stream == 'rural' && candidate.business_kind == 'new' && candidate.equity_ratio
-    < 0.51) || (candidate.stream == 'rural' && candidate.business_kind == 'succession'
-    && candidate.equity_ratio < 1) || ((candidate.stream == 'graduate' || candidate.stream
-    == 'farm') && candidate.equity_ratio < 0.34) || (candidate.stream == 'foreign_graduate'
-    && candidate.fges_urban == true && candidate.equity_ratio < 0.34) || (candidate.stream
-    == 'foreign_graduate' && candidate.fges_urban == false && candidate.equity_ratio
-    < 0.51)
-  missing_or_unverified: 'NEEDS_REVIEW: Equity share cannot be verified.'
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.endorsement_valid
+  pass_if: candidate.stream != 'foreign_graduate' || (candidate.endorsement_valid == true)
+  fail_if: candidate.stream == 'foreign_graduate' && (candidate.endorsement_valid == false)
+  missing_or_unverified: 'NEEDS_REVIEW: the AAIP-approved agency recommendation is unverified.'
   evidence_anchor:
-    evidence_unit_id: bc.aaip_rural_apply_page.html
-    source_file: 6abcf8b1664505061221c332dab8940ec27406ef267a8ceeca7f46a6c5c7b918
-    section: Ownership equity thresholds
-    source_id: aaip_ent
-    verbatim_excerpt: "at least 51% ownership if establishing a new business or 100% ownership for business succession"
-- id: aaip_ent_language
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Letter of recommendation
+    verbatim_excerpt: Must have a letter of recommendation from an AAIP-approved designated agency.
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_farm_financial_resources
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream != 'farm' || (candidate.net_worth_cad >= 500000 || candidate.accessible_funds_cad >= 500000)
+  fail_if: candidate.stream == 'farm' && (candidate.net_worth_cad != null && candidate.accessible_funds_cad != null && candidate.net_worth_cad < 500000 && candidate.accessible_funds_cad < 500000)
+  missing_or_unverified: 'NEEDS_REVIEW: neither documented net worth nor confirmed access to equivalent funds has been established; low net worth alone does not reject the official alternative.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_farm_eligibility:full_document_body
+    source_id: aaip_farm_eligibility
+    source_file: 3449accb86df0f21ec2adb553d062e023cf2983c2f1979e1c316d381db92842c
+    section: Sufficient financial resources
+    verbatim_excerpt: Documents must be provided that show a minimum net worth of CDN $500,000, or confirmation of the ability to access a similar amount of funds from other sources.
+    source_sha256: 314558650c7db27ec6ccf9efe235454e36df78b934add5770f3e751633ce3a29
+    source_url: https://www.alberta.ca/aaip-farm-stream-eligibility
+- id: aaip_fge_settlement_funds
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.settlement_funds_cad
+    - candidate.settlement_funds_required_cad
+    - candidate.settlement_family_size
+    - candidate.settlement_community_population
+    - candidate.settlement_table_amount_verified
+  pass_if: candidate.stream != 'foreign_graduate' || (candidate.settlement_family_size >= 1 && candidate.settlement_community_population >= 0 && candidate.settlement_table_amount_verified == true && candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad)
+  fail_if: candidate.stream == 'foreign_graduate' && candidate.settlement_table_amount_verified == true && (candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)
+  missing_or_unverified: 'NEEDS_REVIEW: family size, community population, or the official table amount has not been verified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Settlement funds
+    verbatim_excerpt: Minimum settlement funds requirements will be based on the <a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110024101&amp;pickMembers%5B0%5D=2.1&amp;cubeTimeFrame.startYear=2018&amp;cubeTimeFrame.endYear=2018&amp;referencePeriods=20180101%2C20180101" target="_blank">Low Income Cut-Offs (LICOs)</a>.
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_farm_equity_investment
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'farm'
+    fields:
+    - candidate.primary_production_equity_investment_cad
+  pass_if: candidate.stream != 'farm' || (candidate.primary_production_equity_investment_cad >= 500000)
+  fail_if: candidate.stream == 'farm' && (candidate.primary_production_equity_investment_cad < 500000)
+  missing_or_unverified: 'NEEDS_REVIEW: the amount of equity invested in primary-production farming is unverified; a generic business investment is not equivalent.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_farm_eligibility:full_document_body
+    source_id: aaip_farm_eligibility
+    source_file: 3449accb86df0f21ec2adb553d062e023cf2983c2f1979e1c316d381db92842c
+    section: Primary-production equity investment
+    verbatim_excerpt: Candidates must be able to invest a minimum of CDN $500,000 of equity in a primary production farming business in Alberta.
+    source_sha256: 314558650c7db27ec6ccf9efe235454e36df78b934add5770f3e751633ce3a29
+    source_url: https://www.alberta.ca/aaip-farm-stream-eligibility
+- id: aaip_farm_management_and_plan
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'farm'
+    fields:
+    - candidate.farm_management_skills_verified
+    - candidate.farm_business_plan_submitted
+  pass_if: candidate.stream != 'farm' || (candidate.farm_management_skills_verified == true && candidate.farm_business_plan_submitted == true)
+  fail_if: candidate.stream == 'farm' && (candidate.farm_management_skills_verified == false || candidate.farm_business_plan_submitted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: farm-management evidence or the required farming business plan is missing; no generic endorsement letter is required by this source.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_farm_eligibility:full_document_body
+    source_id: aaip_farm_eligibility
+    source_file: 3449accb86df0f21ec2adb553d062e023cf2983c2f1979e1c316d381db92842c
+    section: Farm management skills and proposed business plan
+    verbatim_excerpt: Candidates must prove that they have farm management skills.
+    source_sha256: 314558650c7db27ec6ccf9efe235454e36df78b934add5770f3e751633ce3a29
+    source_url: https://www.alberta.ca/aaip-farm-stream-eligibility
+- id: aaip_fge_investment
+  category: funds
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.fges_urban
+    - candidate.investment_cad
+  pass_if: candidate.stream != 'foreign_graduate' || ((candidate.fges_urban == true && candidate.investment_cad >= 100000) || (candidate.fges_urban == false && candidate.investment_cad >= 50000))
+  fail_if: candidate.stream == 'foreign_graduate' && ((candidate.fges_urban == true && candidate.investment_cad < 100000) || (candidate.fges_urban == false && candidate.investment_cad < 50000))
+  missing_or_unverified: 'NEEDS_REVIEW: the verified CMA-based urban/regional location or qualifying investment amount is missing.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Business investment
+    verbatim_excerpt: The mandatory minimum investment for an urban centre is $100,000 while the mandatory minimum investment for a regional area is $50,000.
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_graduate_ownership
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'graduate'
+    fields:
+    - candidate.equity_ratio
+  pass_if: candidate.stream != 'graduate' || (candidate.equity_ratio >= 0.34 && (candidate.equity_ratio >= 1 || candidate.partners_canadian_or_pr == true))
+  fail_if: candidate.stream == 'graduate' && (candidate.equity_ratio < 0.34 || (candidate.equity_ratio < 1 && candidate.partners_canadian_or_pr == false))
+  missing_or_unverified: 'NEEDS_REVIEW: ownership or the status of co-owners is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_graduate_eligibility:full_document_body
+    source_id: aaip_graduate_eligibility
+    source_file: 2cd033a02d2ab12d9174ed293dee44cdb103c27eb9a7f45ef9e6423af6e69ae1
+    section: Business establishment and Canadian/PR partners
+    verbatim_excerpt: Must establish a new business or buy an existing business in Alberta with a minimum 34% ownership.
+    source_sha256: f5ba3f85f994b4723480e79f1352b98d748c2ee1bc4ec84995d0fdc4f1a5b835
+    source_url: https://www.alberta.ca/aaip-graduate-entrepreneur-stream-eligibility
+- id: aaip_fge_ownership
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.fges_urban
+    - candidate.equity_ratio
+  pass_if: candidate.stream != 'foreign_graduate' || (((candidate.fges_urban == true && candidate.equity_ratio >= 0.34) || (candidate.fges_urban == false && candidate.equity_ratio >= 0.51)) && (candidate.equity_ratio >= 1 || candidate.partners_canadian_or_pr == true))
+  fail_if: candidate.stream == 'foreign_graduate' && ((candidate.fges_urban == true && candidate.equity_ratio < 0.34) || (candidate.fges_urban == false && candidate.equity_ratio < 0.51) || (candidate.equity_ratio < 1 && candidate.partners_canadian_or_pr == false))
+  missing_or_unverified: 'NEEDS_REVIEW: CMA-based location, ownership or co-owner status is unverified; no farm ownership-percentage floor is inferred.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Business establishment and Canadian/PR partners
+    verbatim_excerpt: Must have a minimum of 34% ownership if the business is located in an urban centre or a minimum of 51% ownership if located in regional area outside <a href="https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&amp;TVD=1348193&amp;CVD=1348199&amp;CPV=825&amp;CST=01012021&amp;CLV=2&amp;MLV=3" target="_blank">Calgary</a> and <a href="https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&amp;TVD=1348193&amp;CVD=1348199&amp;CPV=835&amp;CST=01012021&amp;CLV=2&amp;MLV=3" target="_blank">Edmonton</a> Census Metropolitan Areas.
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_ent_language_rural
   category: language
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.stream
   conditional_required_fields:
-    when: candidate.stream == 'rural' || candidate.stream == 'graduate' || candidate.stream
-      == 'foreign_graduate'
+    when: candidate.stream == 'rural'
     fields:
     - candidate.language_clb_minimum
-  pass_if: candidate.stream == 'farm' || (candidate.stream == 'rural' && candidate.language_clb_minimum
-    >= 4) || (candidate.stream == 'graduate' && candidate.language_clb_minimum >=
-    7) || (candidate.stream == 'foreign_graduate' && candidate.language_clb_minimum
-    >= 5)
-  fail_if: (candidate.stream == 'rural' && candidate.language_clb_minimum < 4) ||
-    (candidate.stream == 'graduate' && candidate.language_clb_minimum < 7) || (candidate.stream
-    == 'foreign_graduate' && candidate.language_clb_minimum < 5)
-  missing_or_unverified: 'NEEDS_REVIEW: Language level cannot be verified.'
+    - candidate.language_result_within_2_years
+    - candidate.language_test_accepted
+  pass_if: candidate.stream != 'rural' || (candidate.language_clb_minimum >= 4 && candidate.language_result_within_2_years == true && candidate.language_test_accepted == true)
+  fail_if: candidate.stream == 'rural' && (candidate.language_clb_minimum < 4 || candidate.language_result_within_2_years == false || candidate.language_test_accepted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: the minimum of all four verified abilities, an accepted official test, or the under-two-year validity at EOI submission is unverified.'
   evidence_anchor:
-    evidence_unit_id: EU-AAIP-ENT-LANGUAGE-005
-    source_file: src04.html
-    section: Language CLB floors by stream
-    verbatim_excerpt: CLB) level of 4
-
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Language requirements at EOI submission
+    verbatim_excerpt: Have a minimum Canadian Language Benchmark (CLB) level of 4 for each English language skill
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
+- id: aaip_ent_language_graduate
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'graduate'
+    fields:
+    - candidate.language_clb_minimum
+    - candidate.language_result_within_2_years
+    - candidate.language_test_accepted
+  pass_if: candidate.stream != 'graduate' || (candidate.language_clb_minimum >= 7 && candidate.language_result_within_2_years == true && candidate.language_test_accepted == true)
+  fail_if: candidate.stream == 'graduate' && (candidate.language_clb_minimum < 7 || candidate.language_result_within_2_years == false || candidate.language_test_accepted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: the minimum of all four verified abilities, an accepted official test, or the under-two-year validity at EOI submission is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_graduate_eligibility:full_document_body
+    source_id: aaip_graduate_eligibility
+    source_file: 2cd033a02d2ab12d9174ed293dee44cdb103c27eb9a7f45ef9e6423af6e69ae1
+    section: Language requirements at EOI submission
+    verbatim_excerpt: Have a minimum Canadian Language Benchmark (CLB) level of 7 for each English language skill
+    source_sha256: f5ba3f85f994b4723480e79f1352b98d748c2ee1bc4ec84995d0fdc4f1a5b835
+    source_url: https://www.alberta.ca/aaip-graduate-entrepreneur-stream-eligibility
+- id: aaip_ent_language_foreign_graduate
+  category: language
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.language_clb_minimum
+    - candidate.language_result_within_2_years
+    - candidate.language_test_accepted
+  pass_if: candidate.stream != 'foreign_graduate' || (candidate.language_clb_minimum >= 5 && candidate.language_result_within_2_years == true && candidate.language_test_accepted == true)
+  fail_if: candidate.stream == 'foreign_graduate' && (candidate.language_clb_minimum < 5 || candidate.language_result_within_2_years == false || candidate.language_test_accepted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: the minimum of all four verified abilities, an accepted official test, or the under-two-year validity at EOI submission is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Language requirements at EOI submission
+    verbatim_excerpt: Minimum Canadian Language Benchmark (CLB) level of 5 for each English language skill
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
 - id: aaip_rural_personal_capital
   category: pathway
   severity: CRITICAL_REDLINE
@@ -163,20 +350,16 @@ rules:
   required_fields:
   - candidate.stream
   pass_if: (candidate.stream in ['farm', 'graduate', 'foreign_graduate']) || ((candidate.stream == 'rural') && (candidate.net_worth_cad >= 300000 && candidate.net_worth_personal_or_spousal == true && candidate.personal_spousal_equity_investment_cad >= 100000 && ((candidate.business_kind == 'new' && candidate.equity_ratio >= 0.51 && candidate.partners_canadian_or_pr == true) || (candidate.business_kind == 'succession' && candidate.equity_ratio >= 1 && candidate.complete_ownership_transfer == true))))
-  fail_if: (candidate.stream == 'rural') && (candidate.net_worth_cad < 300000 || candidate.net_worth_personal_or_spousal
-    == false || candidate.personal_spousal_equity_investment_cad < 100000 || (candidate.business_kind ==
-    'new' && (candidate.equity_ratio < 0.51 || candidate.partners_canadian_or_pr == false)) || (candidate.business_kind
-    == 'succession' && (candidate.equity_ratio < 1 || candidate.complete_ownership_transfer == false)))
-  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
-    a determination.'
+  fail_if: (candidate.stream == 'rural') && (candidate.net_worth_cad < 300000 || candidate.net_worth_personal_or_spousal == false || candidate.personal_spousal_equity_investment_cad < 100000 || (candidate.business_kind == 'new' && (candidate.equity_ratio < 0.51 || candidate.partners_canadian_or_pr == false)) || (candidate.business_kind == 'succession' && (candidate.equity_ratio < 1 || candidate.complete_ownership_transfer == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:rural-funds-investment-equity
-    source_file: regions/prairies/sources/current/ab_rural_entrepreneur_eligibility.txt
-    section: lines 45-65
-    verbatim_excerpt: Minimum investment of $100,000 from candidate’s own (and/or spouse/common-law partner)
-      equity.
-    source_sha256: 4b2e144deef9e331c6398093b5e8ec8eab8e8ba442be06ce9bc81084625c9120
-
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Personal/spousal capital, investment and ownership
+    verbatim_excerpt: Minimum investment of $100,000 from candidate’s own (and/or spouse/common-law partner) equity.
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
 - id: aaip_rural_business_jobs
   category: pathway
   severity: CRITICAL_REDLINE
@@ -184,18 +367,16 @@ rules:
   required_fields:
   - candidate.stream
   pass_if: (candidate.stream in ['farm', 'graduate', 'foreign_graduate']) || ((candidate.stream == 'rural') && (candidate.business_exclusion_assessed == false && (candidate.business_kind == 'succession' || (candidate.business_kind == 'new' && candidate.qualifying_jobs >= 1 && candidate.jobs_full_time == true && candidate.job_workers_canadian_or_pr == true && candidate.job_workers_non_relative == true && candidate.jobs_maintained_months >= 6))))
-  fail_if: (candidate.stream == 'rural') && (candidate.business_exclusion_assessed == true || (candidate.business_kind
-    == 'new' && (candidate.qualifying_jobs < 1 || candidate.jobs_full_time == false || candidate.job_workers_canadian_or_pr
-    == false || candidate.job_workers_non_relative == false || candidate.jobs_maintained_months < 6)))
-  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
-    a determination.'
+  fail_if: (candidate.stream == 'rural') && (candidate.business_exclusion_assessed == true || (candidate.business_kind == 'new' && (candidate.qualifying_jobs < 1 || candidate.jobs_full_time == false || candidate.job_workers_canadian_or_pr == false || candidate.job_workers_non_relative == false)))
+  missing_or_unverified: 'NEEDS_REVIEW: job creation or the six-month employment requirement cannot be determined at this application stage.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:rural-business-creation-exclusions
-    source_file: regions/prairies/sources/current/ab_rural_entrepreneur_eligibility.txt
-    section: lines 60-70
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Business eligibility and job creation
     verbatim_excerpt: For business succession, job creation is not required.
-    source_sha256: 4b2e144deef9e331c6398093b5e8ec8eab8e8ba442be06ce9bc81084625c9120
-
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
 - id: aaip_fge_experience_education_plan
   category: pathway
   severity: CRITICAL_REDLINE
@@ -203,18 +384,177 @@ rules:
   required_fields:
   - candidate.stream
   pass_if: (candidate.stream in ['rural', 'farm', 'graduate']) || ((candidate.stream == 'foreign_graduate') && (candidate.qualifying_full_time_business_or_incubator_months >= 6 && candidate.foreign_postsecondary_degree == true && candidate.degree_years_before_eoi >= 0 && candidate.degree_years_before_eoi <= 10 && candidate.eca_canadian_degree_equivalent == true && candidate.business_plan_projected_financials == true && candidate.pitch_minutes == 10 && candidate.pitch_slides_only == true))
-  fail_if: (candidate.stream == 'foreign_graduate') && (candidate.qualifying_full_time_business_or_incubator_months
-    < 6 || candidate.foreign_postsecondary_degree == false || candidate.degree_years_before_eoi < 0 || candidate.degree_years_before_eoi
-    > 10 || candidate.eca_canadian_degree_equivalent == false || candidate.business_plan_projected_financials
-    == false || (candidate.pitch_minutes != null && candidate.pitch_minutes != 10) || candidate.pitch_slides_only
-    == false)
-  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer
-    a determination.'
+  fail_if: (candidate.stream == 'foreign_graduate') && (candidate.qualifying_full_time_business_or_incubator_months < 6 || candidate.foreign_postsecondary_degree == false || candidate.degree_years_before_eoi < 0 || candidate.degree_years_before_eoi > 10 || candidate.eca_canadian_degree_equivalent == false || candidate.business_plan_projected_financials == false || (candidate.pitch_minutes != null && candidate.pitch_minutes != 10) || candidate.pitch_slides_only == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Source-specific facts or assessed evidence are missing; do not infer a determination.'
   evidence_anchor:
-    evidence_unit_id: prairies:detail:E:fge-experience-education-plan
-    source_file: regions/prairies/sources/current/ab_foreign_graduate_eligibility.txt
-    section: lines 22-38
-    verbatim_excerpt: Minimum of 6 months full-time work experience that can be a combination of actively
-      managing or owning the business or equivalent (equivalencies are work experience with business incubator
-      or business accelerator).
-    source_sha256: 157264e037cbb300d319cefe8fa11ea8516070ec07974ea7c8148d351870e361
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Work experience, education, business plan and pitch deck
+    verbatim_excerpt: Minimum of 6 months full-time work experience
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_ent_stream_declared
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  pass_if: candidate.stream in ['rural', 'graduate', 'foreign_graduate', 'farm']
+  fail_if: 'false'
+  missing_or_unverified: 'NEEDS_REVIEW: choose a source-defined AAIP entrepreneur stream before applying its criteria.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_program_overview:full_document_body
+    source_id: aaip_program_overview
+    source_file: 693274a49daefd897797f369656bd183470178864c826bb879671abc006bfb22
+    source_sha256: 53a43bd9ae78186ffc0c7f119a5a9114379f41d1094eda0d2cec85ae9017fb60
+    source_url: https://www.alberta.ca/alberta-advantage-immigration-program
+    section: Streams for entrepreneurs
+    verbatim_excerpt: 'AAIP has 4 streams for entrepreneurs who plan to live in Alberta and buy or start a business in the province:'
+- id: aaip_rural_application_prerequisites
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'rural'
+    fields:
+    - candidate.rural_management_experience_qualifies
+    - candidate.rural_high_school_and_eca_verified
+    - candidate.rural_location_qualifies
+    - candidate.rural_exploratory_visit_completed
+    - candidate.rural_exploratory_report_submitted
+  pass_if: candidate.stream != 'rural' || (candidate.rural_management_experience_qualifies == true && candidate.rural_high_school_and_eca_verified == true && candidate.rural_location_qualifies == true && candidate.rural_exploratory_visit_completed == true && candidate.rural_exploratory_report_submitted == true)
+  fail_if: candidate.stream == 'rural' && (candidate.rural_management_experience_qualifies == false || candidate.rural_high_school_and_eca_verified == false || candidate.rural_location_qualifies == false || candidate.rural_exploratory_visit_completed == false || candidate.rural_exploratory_report_submitted == false)
+  missing_or_unverified: 'NEEDS_REVIEW: rural experience, education and ECA, location, exploratory visit or report is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Requirements for the Rural Entrepreneur Stream
+    verbatim_excerpt: Have either a minimum 3 years of experience as an active business owner/manager or a minimum of 4 years of experience as a senior manager within the past 10 years.
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
+- id: aaip_graduate_application_prerequisites
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'graduate'
+    fields:
+    - candidate.graduate_alberta_two_year_full_time_credential
+    - candidate.graduate_pgwp_valid_at_eoi
+    - candidate.graduate_business_is_eligible
+  pass_if: candidate.stream != 'graduate' || (candidate.graduate_alberta_two_year_full_time_credential == true && candidate.graduate_pgwp_valid_at_eoi == true && candidate.graduate_business_is_eligible == true)
+  fail_if: candidate.stream == 'graduate' && (candidate.graduate_alberta_two_year_full_time_credential == false || candidate.graduate_pgwp_valid_at_eoi == false || candidate.graduate_business_is_eligible == false)
+  missing_or_unverified: 'NEEDS_REVIEW: Alberta credential, EOI-date PGWP or proposed business eligibility is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_graduate_eligibility:full_document_body
+    source_id: aaip_graduate_eligibility
+    source_file: 2cd033a02d2ab12d9174ed293dee44cdb103c27eb9a7f45ef9e6423af6e69ae1
+    section: Education
+    verbatim_excerpt: Have completed at least two years of full-time education, resulting in a degree or diploma from an Alberta Advanced Education
+    source_sha256: f5ba3f85f994b4723480e79f1352b98d748c2ee1bc4ec84995d0fdc4f1a5b835
+    source_url: https://www.alberta.ca/aaip-graduate-entrepreneur-stream-eligibility
+- id: aaip_foreign_graduate_application_prerequisites
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'foreign_graduate'
+    fields:
+    - candidate.fges_business_sector_eligible
+    - candidate.fges_business_is_eligible
+    - candidate.fges_designated_agency_report_submitted
+    - candidate.fges_investment_source_eligible
+    - candidate.fges_investment_timing_eligible
+  pass_if: candidate.stream != 'foreign_graduate' || (candidate.fges_business_sector_eligible == true && candidate.fges_business_is_eligible == true && candidate.fges_designated_agency_report_submitted == true && candidate.fges_investment_source_eligible == true && candidate.fges_investment_timing_eligible == true)
+  fail_if: candidate.stream == 'foreign_graduate' && (candidate.fges_business_sector_eligible == false || candidate.fges_business_is_eligible == false || candidate.fges_designated_agency_report_submitted == false || candidate.fges_investment_source_eligible == false || candidate.fges_investment_timing_eligible == false)
+  missing_or_unverified: 'NEEDS_REVIEW: eligible sector, business, agency report, investment source or timing is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_foreign_graduate_eligibility:full_document_body
+    source_id: aaip_foreign_graduate_eligibility
+    source_file: 25c24b20715a20ffb801a70e718f76b7ce69bf9abfdc5b26bcef1b8f391c53c8
+    section: Designated agency report
+    verbatim_excerpt: Foreign graduates must submit this report with their Foreign Graduate Entrepreneur Stream Business Application.
+    source_sha256: 98244deaef9326b891362619e3951f845c1a588ba228fabd1c6119bc7e834ec0
+    source_url: https://www.alberta.ca/aaip-foreign-graduate-entrepreneur-stream-eligibility
+- id: aaip_farm_application_ineligibility
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream == 'farm'
+    fields:
+    - candidate.farm_no_other_active_nomination
+    - candidate.farm_no_reapplication_bar
+    - candidate.farm_no_removal_order
+    - candidate.farm_canadian_status_eligible
+    - candidate.farm_current_permit_category_eligible
+  pass_if: candidate.stream != 'farm' || (candidate.farm_no_other_active_nomination == true && candidate.farm_no_reapplication_bar == true && candidate.farm_no_removal_order == true && candidate.farm_canadian_status_eligible == true && candidate.farm_current_permit_category_eligible == true)
+  fail_if: candidate.stream == 'farm' && (candidate.farm_no_other_active_nomination == false || candidate.farm_no_reapplication_bar == false || candidate.farm_no_removal_order == false || candidate.farm_canadian_status_eligible == false || candidate.farm_current_permit_category_eligible == false)
+  missing_or_unverified: 'NEEDS_REVIEW: nomination, reapplication, removal, Canadian status or permit-category restrictions are unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_farm_eligibility:full_document_body
+    source_id: aaip_farm_eligibility
+    source_file: 3449accb86df0f21ec2adb553d062e023cf2983c2f1979e1c316d381db92842c
+    section: Ineligibility
+    verbatim_excerpt: Candidates are only eligible for one AAIP Nomination Certificate.
+    source_sha256: 314558650c7db27ec6ccf9efe235454e36df78b934add5770f3e751633ce3a29
+    source_url: https://www.alberta.ca/aaip-farm-stream-eligibility
+- id: aaip_non_farm_applicant_ineligibility
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream in ['rural', 'graduate', 'foreign_graduate']
+    fields:
+    - candidate.no_other_active_aaip_nomination
+    - candidate.no_aaip_reapplication_bar
+    - candidate.no_removal_order
+    - candidate.not_refugee_claimant_or_appeal
+    - candidate.valid_canadian_status_if_present
+  pass_if: candidate.stream == 'farm' || (candidate.no_other_active_aaip_nomination == true && candidate.no_aaip_reapplication_bar == true && candidate.no_removal_order == true && candidate.not_refugee_claimant_or_appeal == true && candidate.valid_canadian_status_if_present == true)
+  fail_if: candidate.stream in ['rural', 'graduate', 'foreign_graduate'] && (candidate.no_other_active_aaip_nomination == false || candidate.no_aaip_reapplication_bar == false || candidate.no_removal_order == false || candidate.not_refugee_claimant_or_appeal == false || candidate.valid_canadian_status_if_present == false)
+  missing_or_unverified: 'NEEDS_REVIEW: nomination, reapplication, removal, refugee or Canadian-status restrictions are unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Ineligibility
+    verbatim_excerpt: Candidates are only eligible for one AAIP Nomination Certificate
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility
+- id: aaip_non_farm_economic_establishment
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.stream
+  conditional_required_fields:
+    when: candidate.stream in ['rural', 'graduate', 'foreign_graduate']
+    fields:
+    - candidate.alberta_business_location_verified
+    - candidate.owner_operator_management_verified
+    - candidate.business_viability_reviewed
+    - candidate.existing_business_eoi_year_verified
+  pass_if: candidate.stream == 'farm' || (candidate.alberta_business_location_verified == true && candidate.owner_operator_management_verified == true && candidate.business_viability_reviewed == true && candidate.existing_business_eoi_year_verified == true)
+  fail_if: candidate.stream in ['rural', 'graduate', 'foreign_graduate'] && (candidate.alberta_business_location_verified == false || candidate.owner_operator_management_verified == false || candidate.existing_business_eoi_year_verified == false)
+  missing_or_unverified: 'NEEDS_REVIEW: business location, active owner-management, economic-establishment assessment or existing-business EOI timing is unverified.'
+  evidence_anchor:
+    evidence_unit_id: aaip:aaip_rural_eligibility:full_document_body
+    source_id: aaip_rural_eligibility
+    source_file: 3518e457dbd0de6beb5c1c1a450a4f98455ee241dc73ec0781ccf65107757867
+    section: Economic establishment
+    verbatim_excerpt: actively manage, operate and sustain a viable business in Alberta as an owner-operator
+    source_sha256: fbd798a2080e82f885ef35a33882fe8b506427b5f0fd3fa4d77d4676f610eb97
+    source_url: https://www.alberta.ca/aaip-rural-entrepreneur-stream-eligibility

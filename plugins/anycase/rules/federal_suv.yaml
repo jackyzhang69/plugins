@@ -3,120 +3,177 @@ catalog_id: federal_suv
 jurisdiction: CA
 category: Federal startup visa
 display_name: Start-up Visa
-status: ACTIVE
+status: PAUSED
 program_id: FEDERAL_SUV
 stream_id: SUV
-effective_date: '2026-01-01'
-source_edition: IRPR start-up business class
+effective_date: '2024-04-30'
+source_edition: IRPR and Ministerial Instructions 72 and 90
 source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html
-decision_scope: Deterministic Start-up Visa prescreen. No points grid.
+decision_scope: Historical application and processing pre-screen only; registration is not assessed. This is not an official decision and excludes completeness, fees, medical and criminal/security admissibility. Historical law, designated-entity status, approved language test and funds threshold must be verified for the relevant dates.
 sources:
 - id: irpr_suv
-  title: Start-up Visa Program
-  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html
-  citation: IRPR start-up business class
-  legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
+  title: Start-up Business Class
+  url: https://laws-lois.justice.gc.ca/eng/regulations/SOR-2002-227/page-16.html
+  citation: IRPR sections 98.01 to 98.06
+  legal_authority: Federal regulations and applicable Ministerial Instructions.
 schema:
   input_type: object
-  required_top_level:
-  - assessment_date
-  - candidate
+  required_top_level: [assessment_date, application_date, application_received_date, assessment_stage, candidate]
   types:
-    assessment_date: ISO-8601 date
+    assessment_date: ISO-8601 evaluation date
+    application_date: ISO-8601 date the application was made
+    application_received_date: ISO-8601 date IRCC received that application
+    assessment_stage: historical_pr_application_submission | after_submission_processing; other stages are not assessed
+    candidate.historical_legal_basis_verified: boolean; dated legal applicability for the original application has been reviewed
+    candidate.applicant_count: integer; total original applicants for the same business, including any who subsequently withdrew
+    candidate.proposal_assessment_fee_charged: boolean; the entity that made the commitment charged a fee to review or assess the business proposal or business
+    candidate.letter_of_support_valid: boolean; support verified for the original application
 reference_points_grid:
   note: The Start-up Visa has no selection points grid.
 rules:
+- id: suv_lifecycle
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [assessment_date, application_date, application_received_date, assessment_stage, candidate.application_accepted_for_processing]
+  pass_if: "assessment_stage in ['historical_pr_application_submission', 'after_submission_processing'] && application_date <= application_received_date && application_received_date <= assessment_date && candidate.application_accepted_for_processing == true"
+  fail_if: "false"
+  missing_or_unverified: 'NEEDS_REVIEW: Only historical application and subsequent processing are assessed; this paused program requires an application confirmed accepted for processing.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:suv_policy_eligibility:full_document_body
+    source_id: suv_policy_eligibility
+    source_file: e118427a1ec3eae7e1bab973b934042817303411819c6d431e36eddd67fbf20c
+    section: Program pause
+    verbatim_excerpt: 'The Start-Up Visa Program was paused on June&nbsp;30, 2026.'
+- id: suv_intake
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [application_date, application_received_date, candidate.historical_legal_basis_verified]
+  conditional_required_fields:
+    when: "application_date >= '2026-01-01' && application_date <= '2026-06-30'"
+    fields: [candidate.commitment_received_before_2026_est, candidate.cap_2025_2026_not_exceeded, candidate.all_team_applications_received_within_six_months, candidate.first_commitment_and_lockin_conditions_met]
+  pass_if: "candidate.historical_legal_basis_verified == true && ((application_date < '2026-01-01' && candidate.pre_2026_intake_conditions_verified == true) || (application_date >= '2026-01-01' && application_date <= '2026-06-30' && application_received_date <= '2026-06-30' && candidate.commitment_received_before_2026_est == true && candidate.cap_2025_2026_not_exceeded == true && candidate.all_team_applications_received_within_six_months == true && candidate.first_commitment_and_lockin_conditions_met == true))"
+  fail_if: "candidate.historical_legal_basis_verified == true && application_date >= '2026-01-01' && (application_date > '2026-06-30' || candidate.commitment_received_before_2026_est == false || candidate.cap_2025_2026_not_exceeded == false || candidate.all_team_applications_received_within_six_months == false || candidate.first_commitment_and_lockin_conditions_met == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify the dated applicable intake instructions, cap, original commitment and every associated application; receipt, application and acceptance dates are distinct.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:suv_policy_mi90_gazette:ministerial_instructions
+    source_id: suv_policy_mi90_gazette
+    source_file: 09f2976b55375b31aa0c46a73bdb94bb3e08f822cf786cce7fe144e944c62610
+    section: 2026 intake exception
+    verbatim_excerpt: 'all applications associated with the commitment have been received'
 - id: suv_support
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.letter_of_support_valid
-  pass_if: candidate.letter_of_support_valid == true
-  fail_if: candidate.letter_of_support_valid == false
-  missing_or_unverified: 'NEEDS_REVIEW: Designated-organization letter of support cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified, candidate.letter_of_support_valid, candidate.designation_valid_at_commitment, candidate.designation_valid_at_application, candidate.commitment_less_than_six_months_at_application]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.letter_of_support_valid == true && candidate.designation_valid_at_commitment == true && candidate.designation_valid_at_application == true && candidate.commitment_less_than_six_months_at_application == true"
+  fail_if: "candidate.historical_legal_basis_verified == true && (candidate.letter_of_support_valid == false || candidate.designation_valid_at_commitment == false || candidate.designation_valid_at_application == false || candidate.commitment_less_than_six_months_at_application == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify support, designation at commitment and application, and commitment age against dated records.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Letter of support
-    source_id: irpr_suv
-    verbatim_excerpt: "have received a Letter of Support from a designated entity"
+    evidence_unit_id: federal_pilots:suv_policy_irpr_page16:full_document_body
+    source_id: suv_policy_irpr_page16
+    source_file: 996691ead5c433037500061bb2b3e50ae719295f6714bcd07a3a9c3c05013072
+    section: IRPR 98.01(2)(a)
+    verbatim_excerpt: 'less than six months old on the date'
+- id: suv_commitment
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.historical_legal_basis_verified, candidate.commitment_form_acceptable, candidate.commitment_signer_authorized, candidate.proposal_assessment_fee_charged]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.commitment_form_acceptable == true && candidate.commitment_signer_authorized == true && candidate.proposal_assessment_fee_charged == false && ((candidate.designated_venture_investment_cad >= 200000 && candidate.venture_equity_investment_verified == true) || (candidate.designated_angel_investment_cad >= 75000 && candidate.angel_equity_investment_verified == true) || candidate.designated_incubator_accepted == true)"
+  fail_if: "candidate.historical_legal_basis_verified == true && (candidate.commitment_form_acceptable == false || candidate.commitment_signer_authorized == false || candidate.proposal_assessment_fee_charged == true || (candidate.designated_support_inventory_complete == true && candidate.designated_venture_investment_cad >= 0 && candidate.designated_venture_investment_cad < 200000 && candidate.designated_angel_investment_cad >= 0 && candidate.designated_angel_investment_cad < 75000 && candidate.designated_incubator_accepted == false && (candidate.designated_venture_investment_cad == 0 || candidate.designated_angel_investment_cad == 0)))"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify commitment form, signing authority, prohibited assessment fee, qualifying equity investment and each designated support route; mixed investment below individual thresholds needs legal review.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:suv_policy_irpr_page16:full_document_body
+    source_id: suv_policy_irpr_page16
+    source_file: 996691ead5c433037500061bb2b3e50ae719295f6714bcd07a3a9c3c05013072
+    section: IRPR 98.04 and 98.05
+    verbatim_excerpt: 'charges a fee to review and assess the business proposal'
 - id: suv_language
   category: language
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.language_clb_minimum
-  pass_if: candidate.language_clb_minimum >= 5
-  fail_if: candidate.language_clb_minimum < 5
-  missing_or_unverified: 'NEEDS_REVIEW: Language cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified, candidate.language_test_approved_at_application, candidate.language_test_less_than_two_years_at_application, candidate.listening_clb, candidate.reading_clb, candidate.writing_clb, candidate.speaking_clb]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.language_test_approved_at_application == true && candidate.language_test_less_than_two_years_at_application == true && min(candidate.listening_clb, candidate.reading_clb, candidate.writing_clb, candidate.speaking_clb) >= 5"
+  fail_if: "candidate.historical_legal_basis_verified == true && (candidate.language_test_approved_at_application == false || candidate.language_test_less_than_two_years_at_application == false || min(candidate.listening_clb, candidate.reading_clb, candidate.writing_clb, candidate.speaking_clb) < 5)"
+  missing_or_unverified: 'NEEDS_REVIEW: Each language skill, historical test approval and age at application need dated evidence.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Language testing
-    source_id: irpr_suv
-    verbatim_excerpt: "level of proficiency of <strong>at least benchmark level 5</strong>"
+    evidence_unit_id: federal_pilots:suv_policy_eligibility:full_document_body
+    source_id: suv_policy_eligibility
+    source_file: e118427a1ec3eae7e1bab973b934042817303411819c6d431e36eddd67fbf20c
+    section: Language requirements
+    verbatim_excerpt: 'Canadian Language Benchmark 5'
 - id: suv_ownership
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.ownership_ratio
-  - candidate.owner_count
-  - candidate.combined_control_ratio
-  pass_if: "candidate.stream == '__source_threshold_missing__'"
-  fail_if: "candidate.stream == '__source_threshold_missing__'"
-  missing_or_unverified: 'NEEDS_REVIEW: Ownership or control cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified, candidate.applicant_voting_rights_ratio_at_commitment, candidate.qualified_participants_voting_rights_ratio_at_commitment, candidate.applicant_count]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.applicant_voting_rights_ratio_at_commitment >= 0.10 && candidate.qualified_participants_voting_rights_ratio_at_commitment > 0.50 && candidate.applicant_count >= 1 && candidate.applicant_count <= 5"
+  fail_if: "candidate.historical_legal_basis_verified == true && ((candidate.applicant_voting_rights_ratio_at_commitment >= 0 && candidate.applicant_voting_rights_ratio_at_commitment < 0.10) || (candidate.qualified_participants_voting_rights_ratio_at_commitment >= 0 && candidate.qualified_participants_voting_rights_ratio_at_commitment <= 0.50) || candidate.applicant_count > 5)"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify voting rights at commitment; qualified participants include applicable applicants, designated entities and previously issued visa holders for the same business.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Have a qualifying business
-    source_id: irpr_suv
-    verbatim_excerpt: "Each applicant holds 10% or more of the voting rights attached to all shares of the corporation outstanding at that time"
+    evidence_unit_id: federal_pilots:suv_policy_eligibility:full_document_body
+    source_id: suv_policy_eligibility
+    source_file: e118427a1ec3eae7e1bab973b934042817303411819c6d431e36eddd67fbf20c
+    section: Qualifying business
+    verbatim_excerpt: 'each applicant must hold 10% or more of the total'
+- id: suv_essential_applicant
+  category: pathway
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields: [candidate.historical_legal_basis_verified, candidate.applicant_count]
+  conditional_required_fields:
+    when: "candidate.applicant_count > 1"
+    fields: [candidate.essential_applicant_rule_applies]
+  pass_if: "candidate.historical_legal_basis_verified == true && (candidate.applicant_count == 1 || (candidate.applicant_count > 1 && (candidate.essential_applicant_rule_applies == false || (candidate.essential_applicant_rule_applies == true && candidate.other_essential_applicant_refused_or_withdrew == false))))"
+  fail_if: "candidate.historical_legal_basis_verified == true && candidate.applicant_count > 1 && candidate.essential_applicant_rule_applies == true && candidate.other_essential_applicant_refused_or_withdrew == true"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify whether the dated essential-applicant rule applies and whether another essential applicant was refused or withdrew.'
+  evidence_anchor:
+    evidence_unit_id: federal_pilots:suv_policy_irpr_20251125:startup_business_class
+    source_id: suv_policy_irpr_20251125
+    source_file: bb0b4b43a5247cb1f2faae4700bb3586455ff7284b98aec6c137419dfd920171
+    section: IRPR 98.08(2), historical version
+    verbatim_excerpt: 'the other applicants must be considered not to have met the requirements'
 - id: suv_business
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.incorporated_in_canada
-  - candidate.business_operating
-  pass_if: candidate.incorporated_in_canada == true && candidate.business_operating == true
-  fail_if: candidate.incorporated_in_canada == false || candidate.business_operating == false
-  missing_or_unverified: 'NEEDS_REVIEW: Canadian incorporation or active operation cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified]
+  pass_if: "candidate.historical_legal_basis_verified == true && ((candidate.incorporated_in_canada == true && candidate.active_ongoing_management_in_canada == true && candidate.essential_operations_in_canada == true) || candidate.intends_to_meet_business_conditions_after_visa == true)"
+  fail_if: "candidate.historical_legal_basis_verified == true && candidate.intends_to_meet_business_conditions_after_visa == false && (candidate.incorporated_in_canada == false || candidate.active_ongoing_management_in_canada == false || candidate.essential_operations_in_canada == false)"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify the actual qualifying-business conditions or the statutory intention to meet them after visa issuance.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Have a qualifying business
-    source_id: irpr_suv
-    verbatim_excerpt: "incorporated in and carrying on business in Canada"
+    evidence_unit_id: federal_pilots:suv_policy_irpr_page16:full_document_body
+    source_id: suv_policy_irpr_page16
+    source_file: 996691ead5c433037500061bb2b3e50ae719295f6714bcd07a3a9c3c05013072
+    section: IRPR 98.06(2)
+    verbatim_excerpt: 'is nevertheless a qualifying business if'
 - id: suv_funds
   category: funds
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.settlement_funds_cad
-  - candidate.settlement_funds_required_cad
-  pass_if: candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad
-  fail_if: candidate.settlement_funds_cad < candidate.settlement_funds_required_cad
-  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified, candidate.family_size, candidate.settlement_funds_cad, candidate.settlement_funds_required_cad, candidate.funds_threshold_verified_for_application_date, candidate.funds_transferable_unencumbered_excluding_designated_investment]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.family_size >= 1 && candidate.funds_threshold_verified_for_application_date == true && candidate.funds_transferable_unencumbered_excluding_designated_investment == true && candidate.settlement_funds_cad >= candidate.settlement_funds_required_cad"
+  fail_if: "candidate.historical_legal_basis_verified == true && candidate.funds_threshold_verified_for_application_date == true && (candidate.funds_transferable_unencumbered_excluding_designated_investment == false || candidate.settlement_funds_cad < candidate.settlement_funds_required_cad)"
+  missing_or_unverified: 'NEEDS_REVIEW: Verify family size, applicable historical threshold and available unencumbered funds excluding designated-entity investment.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Bring enough money to settle
-    source_id: irpr_suv
-    verbatim_excerpt: "have sufficient settlement funds (transferable and available funds, free of debts or other obligations"
+    evidence_unit_id: federal_pilots:suv_policy_irpr_page16:full_document_body
+    source_id: suv_policy_irpr_page16
+    source_file: 996691ead5c433037500061bb2b3e50ae719295f6714bcd07a3a9c3c05013072
+    section: IRPR 98.01(2)(c)
+    verbatim_excerpt: 'transferable and available funds'
 - id: suv_quebec
   category: pathway
   severity: CRITICAL_REDLINE
   eval_type: deterministic
-  required_fields:
-  - candidate.intends_to_reside_outside_quebec
-  pass_if: candidate.intends_to_reside_outside_quebec == true
-  fail_if: candidate.intends_to_reside_outside_quebec == false
-  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot be verified.'
+  required_fields: [candidate.historical_legal_basis_verified, candidate.intends_to_reside_outside_quebec]
+  pass_if: "candidate.historical_legal_basis_verified == true && candidate.intends_to_reside_outside_quebec == true"
+  fail_if: "candidate.historical_legal_basis_verified == true && candidate.intends_to_reside_outside_quebec == false"
+  missing_or_unverified: 'NEEDS_REVIEW: The intended province of residence must be verified.'
   evidence_anchor:
-    evidence_unit_id: suv.guide.before
-    source_file: 57c7b24483802b5ca417e54e5235813b90ccb398436ba67d26fb79f6d5bd0d9e
-    section: Program scope
-    source_id: irpr_suv
-    verbatim_excerpt: "You cannot apply under the Start-up Business Class if you intend to reside in Quebec."
+    evidence_unit_id: federal_pilots:suv_policy_irpr_page16:full_document_body
+    source_id: suv_policy_irpr_page16
+    source_file: 996691ead5c433037500061bb2b3e50ae719295f6714bcd07a3a9c3c05013072
+    section: IRPR 98.01(1)
+    verbatim_excerpt: 'intend to reside in a province other than Quebec'
