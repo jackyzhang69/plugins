@@ -1,3 +1,9 @@
+# What's new in 1.2.11
+
+macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.
+
+Atlantic Immigration Program checks now follow IRPR 87.3 more closely: work TEER comes from the NOC 2021 code, settlement funds are measured on the PR application date, and work authorization or exactly half-time language study stay unresolved instead of guessed. A missing fact inside a minimum, or a blank text answer, is now reported as unknown, and semantic rule reasons name the proposition that was tested.
+
 # What's new in 1.2.10
 
 macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.
