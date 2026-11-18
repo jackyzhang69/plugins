@@ -91,7 +91,7 @@ Hard rules:
 3. **For new cases from external files, use `import`, not ad hoc cloning.** Ask FormBro for the contract/schema with `formbro import contract`, generate JSON locally, run `import apply-json --dry-run`, then rerun without `--dry-run` only when valid.
 4. **For existing entities, use `extract` / `validate` / `patch`.** Do not use the new-case import path to mutate an existing applicant/application/employer.
 5. **Never guess program keys, entity types, or command flags.** Use `programs list`, `programs describe`, `programs schema`, and `--help`. Current flags use `--program-key`, not legacy `--program`.
-6. **`validate` passing alone is NOT "ready to submit" for automated webform filling.** `validate by-id` / `validate person` checks the SAVED DATA MODEL only (schema + business rules) — it never touches the government-portal adapter. `webform preflight` is the only check that dry-runs that adapter/transform layer against real data. Before telling a user or agent a case is fill-ready, both must return clean — or call `webform start` without `--confirmed` (dry run), which already chains `validate` → `preflight` → compute-actions internally before opening a browser. Never report "ready to submit" / "fill-ready" off a single one of these checks.
+6. **`validate` passing alone is NOT "ready to submit" for automated webform filling.** `validate by-id` / `validate person` checks the SAVED DATA MODEL only (schema + business rules) — it never touches the government-portal adapter. `webform preflight` is the only check that dry-runs that adapter/transform layer against real data. Before telling a user or agent a case is fill-ready, both must return clean. `webform start` without `--confirmed` is NOT a readiness check: it returns a static dry-run envelope with no backend call; with `--confirmed` it runs compute-actions (backend cascade preflight) and then opens the browser. Never report "ready to submit" / "fill-ready" off a single one of these checks.
 
 ## Agent quick router — TOP 20 LINES (read this first)
 
@@ -102,12 +102,13 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "create/import a case from Excel/Word/PDF/files" | `formbro import contract --program-key <key>` -> local agent parses files to JSON -> `formbro import apply-json --program-key <key> --json '<json>' --dry-run` -> rerun without `--dry-run` |
 | "patch this existing case/person from a file" | `formbro extract contract --program-key <key> --entity-type <T>` -> local agent parses file to JSON -> validate -> `formbro extract apply-json ...` or `persons/applications/employers patch` |
 | "fill the webform for `<person>`" | `formbro webform start --query "<person>" --program-key <key> --confirmed` (v1.5.1+ unified; --query OR --app-id) |
+| "update / overwrite an existing PR portal case by Case ID" | `formbro webform start --app-id <id> --program-key <key> --case-id <7 digits> --form 0008\|5406\|5669\|5562 --confirmed` (one form per run; see references/webform.md) |
 | "invite Job Bank candidates for posting `<id>`" | `formbro webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2\|4 [--max-invites 3] --confirmed` |
 | "fill PDF / IMM forms for `<person>`'s case" | `formbro fill --app-id <id> --forms IMM…,IMM…` (see references/fill.md) |
 | "find / look up `<person>`" | `formbro find "<person>" --include applications --limit 10` |
 | "list ALL cases / inventory / audit sweep" | `formbro applications inventory [--program-key <key>]` (v1.5.0+; returns every status incl. empty) |
 | "list my active workbench" | `formbro applications list [--program-key <key>]` (dashboard semantics: only active statuses) |
-| "is this case ready to submit" (for webform fill) | BOTH `formbro validate by-id --entity-type <T> --entity-id <id>` AND `formbro webform preflight --app-id <id> --program-key <key>` must be clean (Rule 6) — or `webform start` without `--confirmed` for a dry run that chains both |
+| "is this case ready to submit" (for webform fill) | BOTH `formbro validate by-id --entity-type <T> --entity-id <id>` AND `formbro webform preflight --app-id <id> --program-key <key>` must be clean (Rule 6). `webform start` without `--confirmed` is only a static dry-run envelope (no backend call, no validation) — do not use it as a readiness check |
 | "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |

@@ -73,8 +73,9 @@ Under 90 s with no socket, just **wait** — it's the one-time unpack.
 |---|---|
 | "fill the webform for <person>" | `webform start --query <name> --program-key <key> --confirmed` |
 | "fill the webform for application <id>" | `webform start --app-id <id> --program-key <key> --confirmed` |
+| "update / overwrite existing PR portal case <case id>" | `webform start --app-id <id> --program-key <pr key> --case-id <7 digits> --form 0008\|5406\|5669\|5562 --confirmed` — see **Update an existing PR case** |
 | "invite Job Bank candidates for posting <id>" | `webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2|4 [--max-invites 3] --confirmed` — `<rcic_id>` comes from `formbro rcic list` (account-level RCIC profile id, NOT the CICC number / user id / email) |
-| "is this case ready to fill?" | dry-run: `webform start --app-id <id> --program-key <key>` (no --confirmed) → returns dry-run envelope listing the would_do steps |
+| "is this case ready to fill?" | `validate by-id --entity-type <T> --entity-id <id>` AND `webform preflight --app-id <id> --program-key <key>` (see Sequencing rule 3). `webform start` without `--confirmed` is a static dry-run envelope: it makes NO backend call and validates nothing. |
 | "can my machine even run webform fills?" | `webform runtime-check` |
 | "what's the status of the last fill on case X" | `webform status` — but see **Status truth model** below |
 | "resolve a name to an application id" | `applications resolve --query <name> --program-key <key>` (or just use `webform start --query` directly) |
@@ -100,13 +101,24 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
 
 1. **First time on a machine:** run `runtime-check`. If Chromium hasn't been fetched yet, the bundled worker downloads it (~336 MB once, into `~/.formbro/runtime/chromium-<rev>/`). Subsequent calls reuse the cache.
 2. **For a normal fill:** call `webform start --query ...` or `webform start --app-id ...` directly after confirmation. `start` already performs resolve, validation, preflight, compute-actions, and only then opens the browser.
-3. **Use standalone `preflight` only for inspection/debugging:** run it when the user asks "is this ready to fill?" or when a previous `start` returned a structured blocking error. **`preflight` alone confirms portal-fill mechanics only — it is NOT a substitute for `validate`** (see `the formbro router` Rule 6): a case can pass `preflight` and still fail `validate`'s data-model/business-rule checks. Before telling a user or agent a case is fully ready, run BOTH `validate` and `preflight`, or just use `start` without `--confirmed`, which already chains `validate` → `preflight` → compute-actions internally. Do not add a mandatory extra `preflight` call in front of every `start`; that duplicates work.
+3. **Use standalone `preflight` only for inspection/debugging:** run it when the user asks "is this ready to fill?" or when a previous `start` returned a structured blocking error. **`preflight` alone confirms portal-fill mechanics only — it is NOT a substitute for `validate`** (see `the formbro router` Rule 6): a case can pass `preflight` and still fail `validate`'s data-model/business-rule checks. Before telling a user or agent a case is fully ready, run BOTH `validate` and `preflight`. Do NOT use `start` without `--confirmed` for this: it returns a static dry-run envelope and checks nothing. `start --confirmed` itself runs the backend compute-actions preflight (application + applicant + RCIC cascade) before opening the browser; do not add a mandatory extra `preflight` call in front of every `start`.
 4. **Confirm before `start`:** `webform start` opens a browser, navigates to IRCC, and **types into a real portal session**. Confirm with the user once.
 5. **Headless default depends on who's driving:**
    - **Interactive user, first fill of a new program** → `--headless false` (visible Chromium so the user can watch).
    - **Agent-driven / unattended / repeat fills** → `--headless true` (no browser window, no user observing). This is the safe default for AI agents that are running tasks without a human at the keyboard.
    - You may always override by asking the user. When in doubt for an unattended run, choose `--headless true` — completion semantics are identical, just no visible window.
-6. If a fill is killed mid-run, `webform start` with the same `--app-id` resumes from the last persisted step — no need to start over.
+6. If a fill is killed mid-run, nothing is resumed: re-running `webform start` starts a fresh fill. For PR non-renewal a re-run without `--case-id` creates another NEW portal application, so check the IRCC portal first and use `--case-id` + `--form` (below) to overwrite an existing case instead.
+
+## Update an existing PR case (overwrite by Case ID)
+
+Same rule as FormBro Desktop's pre-fill dialog. PR programs `general`, `express-entry`, `caregiver`, `spouse-sponsorship`, `parent-sponsorship`:
+
+- No `--case-id`, no `--form` → creates a NEW portal application and fills all forms.
+- `--case-id <7 digits> --form <0008|5406|5669|5562>` → opens that existing portal case and re-fills ONLY that form, overwriting its current answers. Success JSON carries `updated_form` and `case_id`.
+- `--case-id` without `--form` is refused (`invalid_argument`) — it would otherwise create a duplicate application.
+- To overwrite a whole case, run the command four times, serially, once per form in this order: `0008`, `5406`, `5669`, `5562`. Stop at the first failure and report it.
+- The Case ID is the 7-digit number in the portal URL `.../application/case/<id>`. Never guess it; ask the user.
+- PR `renewal` is different: `--case-id` alone is forwarded to the renewal flow; `--form` is not accepted. TR and LMIA do not accept `--form`.
 
 ## Bundled worker daemon (v1.3.0+)
 
@@ -144,7 +156,7 @@ LMIA webform fills still go through `webform start` with `--program-key hws|lws|
 <formbro> webform preflight  --app-id <id> --program-key <key>
 <formbro> webform status     --app-id <id> --program-key <key>       # BACKEND-persisted; see truth model
 <formbro> webform start      --app-id <id> --program-key <key> \
-                             [--case-id <id>] \
+                             [--case-id <7 digits> --form 0008|5406|5669|5562] \
                              --confirmed \
                              [--headless false] \
                              [--print-pages true]                 # default true; see Page Record
