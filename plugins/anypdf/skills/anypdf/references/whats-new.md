@@ -1,3 +1,7 @@
+# AnyPDF — what changed in 0.7.34
+
+`anypdf read` now reads filled and blank text PDFs whose pages carry dotted answer lines, checkbox symbols or small decorative marks, instead of reporting them as scanned. Genuinely scanned or image-only pages still tell you to look at the original.
+
 # AnyPDF — what changed in 0.7.33
 
 This unreleased candidate adds advisory warnings (`date_before_today_source_rule`) when entered dates fall before the source form's expected future or today-or-later date rules.
