@@ -1,3 +1,9 @@
+# What's new in 1.2.12
+
+macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.
+
+Atlantic Immigration Program checks: a study program delivered exactly half by distance learning is now reported as not meeting the in-person requirement (IRPR 87.3(5)(a)(iii) and IRCC agree on this), instead of unresolved. Exactly half-time language study stays unresolved because the regulation and IRCC's page word the threshold differently.
+
 # What's new in 1.2.11
 
 macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.
