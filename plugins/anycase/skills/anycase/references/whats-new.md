@@ -1,3 +1,9 @@
+# What's new in 1.3.0
+
+Scoring now requires an internet connection and AnyCase sign-in to fetch
+published scoring rules. Applicant inputs are still evaluated on your device,
+and `score diff` works offline.
+
 # What's new in 1.2.13
 
 AnyCase now reports basic usage for program, eligibility, document-list, and scoring commands: the operation, public program or policy identifier when applicable, and success or failure. Applicant profiles, documents, and file paths are not included. Local eligibility and local document-list evaluations do not report usage.
