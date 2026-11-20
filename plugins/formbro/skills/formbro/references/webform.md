@@ -79,7 +79,7 @@ Under 90 s with no socket, just **wait** — it's the one-time unpack.
 |---|---|
 | "fill the webform for <person>" | `webform start --query <name> --program-key <key> --confirmed` |
 | "fill the webform for application <id>" | `webform start --app-id <id> --program-key <key> --confirmed` |
-| "update / overwrite existing PR portal case <case id>" | `webform start --app-id <id> --program-key <pr key> --case-id <7 digits> [--form 0008\|5406\|5669\|5562] --confirmed` — see **PR portal cases** |
+| "update / overwrite existing PR portal case <case id>" | `webform start --app-id <id> --program-key <pr key> --case-id <6 or 7 digits> [--form 0008\|5406\|5669\|5562] --confirmed` — see **PR portal cases** |
 | "create a brand-new PR portal application (another IRCC email)" | `webform start --app-id <id> --program-key <pr key> --new --confirmed` |
 | "invite Job Bank candidates for posting <id>" | `webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2|4 [--max-invites 3] --confirmed` — `<rcic_id>` comes from `formbro rcic list` (account-level RCIC profile id, NOT the CICC number / user id / email) |
 | "is this case ready to fill?" | `validate by-id --entity-type <T> --entity-id <id>` AND `webform preflight --app-id <id> --program-key <key>` (see Sequencing rule 3). `webform start` without `--confirmed` is a static dry-run envelope: it makes NO backend call and validates nothing. |
@@ -114,7 +114,7 @@ This is a known limitation of the `cli-rs` thin client; documenting it, not sile
    - **Interactive user, first fill of a new program** → `--headless false` (visible Chromium so the user can watch).
    - **Agent-driven / unattended / repeat fills** → `--headless true` (no browser window, no user observing). This is the safe default for AI agents that are running tasks without a human at the keyboard.
    - You may always override by asking the user. When in doubt for an unattended run, choose `--headless true` — completion semantics are identical, just no visible window.
-6. A fill killed mid-run is not resumed inside the run, but the portal case id is usually not lost: a **desktop** run links the created case id live (a `portal_case` progress event, seconds after the portal application is created), and re-running the same `webform start` continues the linked case (all forms) without creating another application or sending another IRCC email. A **CLI** run that is killed mid-fill (or whose daemon crashes) can leave a created case unlinked: look up the 7-digit case id in the IRCC portal or in the client's IRCC email, then re-run with `--case-id <id>`. Nothing is auto-created; only `--new` creates a second application. If a run died before the portal case existed, nothing is linked and the next run creates it (check the IRCC portal first). If a linked case no longer opens (deleted or submitted), the run fails fast with a `hint` — re-run with `--new` only if the user accepts another IRCC email.
+6. A fill killed mid-run is not resumed inside the run, but the portal case id is usually not lost: a **desktop** run links the created case id live (a `portal_case` progress event, seconds after the portal application is created), and re-running the same `webform start` continues the linked case (all forms) without creating another application or sending another IRCC email. A **CLI** run that is killed mid-fill (or whose daemon crashes) can leave a created case unlinked: look up the case id in the IRCC portal or in the client's IRCC email, then re-run with `--case-id <id>`. Nothing is auto-created; only `--new` creates a second application. If a run died before the portal case existed, nothing is linked and the next run creates it (check the IRCC portal first). If a linked case no longer opens (deleted or submitted), the run fails fast with a `hint` — re-run with `--new` only if the user accepts another IRCC email.
 
 ## PR portal cases: continue the linked case, or create a new one
 
@@ -122,12 +122,12 @@ Same rule as FormBro Desktop's pre-fill dialog. PR programs `general`, `express-
 
 - **First run** (no linked case) creates the portal application and links its case id to the FormBro application — also when that run fails after the portal case was created (the result then carries `case_id` and `case_linked`). IRCC emails the client once, at creation.
 - **Later runs without `--case-id`** continue the linked case (all forms) and send **no** new IRCC email. The result carries `portal_case` (`mode` = `new` | `resume` | `update`, plus `case_id`).
-- `--case-id <7 digits>` alone → continues that case and re-fills all forms.
-- `--case-id <7 digits> --form <0008|5406|5669|5562>` → opens that existing portal case and re-fills ONLY that form, overwriting its current answers. Success JSON carries `updated_form` and `case_id`. (Not for `renewal`; TR and LMIA do not accept `--form`.)
+- `--case-id <6 or 7 digits>` alone → continues that case and re-fills all forms.
+- `--case-id <6 or 7 digits> --form <0008|5406|5669|5562>` → opens that existing portal case and re-fills ONLY that form, overwriting its current answers. Success JSON carries `updated_form` and `case_id`. (Not for `renewal`; TR and LMIA do not accept `--form`.)
 - `--new` → forces a NEW portal application even when a case is linked (the client receives another IRCC email). It is the only way to create a second application, and cannot be combined with `--case-id` / `--form`. PR only.
 - PR `renewal` follows the same linked-case rule: `--case-id` (or the linked case) resumes the renewal case; `--new` starts a fresh one.
 - If the server cannot continue a case yet, `--case-id` without `--form` returns `portal_case_resume_unsupported` and fills nothing; use `--form`, or upgrade the backend.
-- The Case ID is the 7-digit number in the portal URL `.../application/case/<id>`. Never guess it; ask the user.
+- The Case ID is the 6- or 7-digit number in the portal URL `.../application/case/<id>`. Never guess it; ask the user.
 
 ## Bundled worker daemon (v1.3.0+)
 
@@ -165,7 +165,7 @@ LMIA webform fills still go through `webform start` with `--program-key hws|lws|
 <formbro> webform preflight  --app-id <id> --program-key <key>
 <formbro> webform status     --app-id <id> --program-key <key>       # BACKEND-persisted; see truth model
 <formbro> webform start      --app-id <id> --program-key <key> \
-                             [--case-id <7 digits> [--form 0008|5406|5669|5562] | --new] \
+                             [--case-id <id> [--form 0008|5406|5669|5562] | --new] \
                              --confirmed \
                              [--headless false] \
                              [--print-pages true]                 # default true; see Page Record

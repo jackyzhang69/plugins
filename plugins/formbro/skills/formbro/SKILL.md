@@ -102,7 +102,7 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "create/import a case from Excel/Word/PDF/files" | `formbro import contract --program-key <key>` -> local agent parses files to JSON -> `formbro import apply-json --program-key <key> --json '<json>' --dry-run` -> rerun without `--dry-run` |
 | "patch this existing case/person from a file" | `formbro extract contract --program-key <key> --entity-type <T>` -> local agent parses file to JSON -> validate -> `formbro extract apply-json ...` or `persons/applications/employers patch` |
 | "fill the webform for `<person>`" | `formbro webform start --query "<person>" --program-key <key> --confirmed` (v1.5.1+ unified; --query OR --app-id) |
-| "update / overwrite an existing PR portal case by Case ID" | `formbro webform start --app-id <id> --program-key <key> --case-id <7 digits> --form 0008\|5406\|5669\|5562 --confirmed` (one form per run; see references/webform.md) |
+| "update / overwrite an existing PR portal case by Case ID" | `formbro webform start --app-id <id> --program-key <key> --case-id <6 or 7 digits> --form 0008\|5406\|5669\|5562 --confirmed` (one form per run; see references/webform.md) |
 | "invite Job Bank candidates for posting `<id>`" | `formbro webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2\|4 [--max-invites 3] --confirmed` |
 | "fill PDF / IMM forms for `<person>`'s case" | `formbro fill --app-id <id> --forms IMM…,IMM…` (see references/fill.md) |
 | "find / look up `<person>`" | `formbro find "<person>" --include applications --limit 10` |

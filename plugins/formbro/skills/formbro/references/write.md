@@ -118,6 +118,7 @@ Do **not** send a whole array in `--data` just to update one field. Arrays are a
 | "import / create applicant + application from user file(s)" | `<formbro> import contract --program-key <key>` then local agent reads files directly, generates `{ "applicant": {...}, "application": {...} }`, runs `<formbro> import apply-json --program-key <key> --json '<json>' --dry-run`, then reruns without `--dry-run` if valid |
 | "extract/patch data into an existing entity" | `<formbro> extract contract --program-key <key> --entity-type <T>` then local agent generates JSON and calls `<formbro> extract apply-json --target-entity-id <id> --target-entity-type <applicant|application|employer> --json '<json>' [--program-key <key>]` |
 | "fill the IMM0008 / IMM5257 PDF for this case" | **Use `references/fill.md` skill** — call `<formbro> fill --app-id <id> --forms IMM0008,IMM5406 -o ./out/`. Do NOT call `export pdf` for agent purposes; `export pdf` is TR-route-only in cli and doesn't auto-detect category. |
+| "export this saved General PR / Express Entry application as Excel" | `<formbro> export entity --entity-type pr-general-application --entity-id <app-id> --output app.xlsx` (on a backend that supports this entity type; no Portal password is exported) |
 | "export this applicant / application as Excel with data" | Discover `--form-id` with `<formbro> programs schema <key> --role <role>`. Get JSON (`applicants get` / `applications get` / `employers get`), then `<formbro> export data --form-id <FORM> --data '<json>' --output app.xlsx` |
 | "export a blank Excel" | `<formbro> export template --form-id <FORM> --output template.xlsx` with `<FORM>` from live `programs schema` |
 | "export this applicant / application as JSON" | `<formbro> applicants get <id>` / `applications get <id>` / `employers get <id>` and write the JSON to the output file |
@@ -136,7 +137,7 @@ LMIA: `hws`, `lws`, `ee`
 Do not invent slugs and do not reuse a remembered form list.
 
 - `validate by-id` and `extract *`: `--entity-type` is the form id from `<formbro> programs schema <program-key> --role <role>`.
-- Excel / JSON export: do **not** pass that form id to `export entity` (live CLI returns `400 Unknown entity type`). Take `--form-id` from the same live `programs schema` output and use `export data` / `export template` as below.
+- Excel export: use `export entity --entity-type pr-general-application` for saved General PR / Express Entry applications. For other program form IDs, use `export data` / `export template` with `--form-id` from `programs schema`.
 
 ### `forms` (for PDF generation — see `references/fill.md` for the agent path)
 TR: `IMM5257`, `IMM5645`, `IMM5708`, `IMM5709`, `IMM5710`, `IMM1294`, `IMM1295` (subset varies by program)
