@@ -1,3 +1,9 @@
+# What's new in 1.2.13
+
+AnyCase now reports basic usage for program, eligibility, document-list, and scoring commands: the operation, public program or policy identifier when applicable, and success or failure. Applicant profiles, documents, and file paths are not included. Local eligibility and local document-list evaluations do not report usage.
+
+macOS and Windows packages remain unsigned and not notarized.
+
 # What's new in 1.2.12
 
 macOS and Windows packages are unsigned and not notarized. Your operating system may show a security warning during installation.

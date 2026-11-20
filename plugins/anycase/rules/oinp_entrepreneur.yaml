@@ -3,15 +3,16 @@
 "jurisdiction": "CA-ON"
 "category": "OINP entrepreneur"
 "display_name": "OINP Entrepreneur Stream"
-"status": "ACTIVE"
+"status": "LEGACY_CLOSED"
+"closure_basis": "Ontario e-Laws: O. Reg. 421/17 no longer provides an Entrepreneur EOI route, and O. Reg. 422/17 ss. 2.1 and 3 list only the current nomination categories and preserve transition treatment for earlier applications."
 "program_id": "OINP_ENTREPRENEUR"
 "stream_id": "ENTREPRENEUR"
 "effective_date": "2021-04-29"
 "source_edition": "OINP Entrepreneur Stream guide"
 "source_url": "https://www.ontario.ca/page/oinp-entrepreneur-stream"
 "decision_scope": >-
-  Deterministic entrepreneur prescreen for experience, net worth, investment, jobs, and business-plan
-  submission under O. Reg. 422/17 s. 13. EOI grid stays in AnyScore.
+  Historical prescreen only. Ontario no longer accepts new Entrepreneur EOIs or applications.
+  For an existing case, confirm the applicable historical rules; these results are not a current intake decision.
 "sources":
 - "id": "oinp_ent"
   "title": "OINP Entrepreneur Stream"
