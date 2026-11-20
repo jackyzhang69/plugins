@@ -1,6 +1,6 @@
 {
   "name": "dsh-anyweb",
-  "version": "0.2.26",
+  "version": "0.2.28",
   "description": "anyweb for DeepSeek Harness: Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.",
   "license": "Proprietary",
   "author": {

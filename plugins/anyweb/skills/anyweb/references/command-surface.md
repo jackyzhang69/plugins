@@ -26,4 +26,4 @@ machine. An active fill that still needs a password, email code, or security
 answer continues through MCP `task_resume`, not with those save commands
 and not by shelling CLI `task status` / `task resume` as a host loop. For the
 ordinary Express Entry user, use site `ircc-ee-profile` and role `default`.
-Compile `local_inputs` from `anyweb-catalog requirements --pin` before `task start`.
+Start the task to receive `needs`, compile `local_inputs` from their `fact_ref` values, then start again.

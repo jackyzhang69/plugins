@@ -124,7 +124,7 @@ jobs:
                 draft_id="$(gh api --method POST "repos/$GITHUB_REPOSITORY/releases" \
                   -f tag_name="$RELEASE_TAG" -F draft=true -F prerelease=false \
                   -f name="AnyWeb ${RELEASE_TAG#anyweb-v}" \
-                  -f body="AnyWeb ${RELEASE_TAG#anyweb-v} runtime assets. macOS is signed and notarized; Linux is checksummed and unsigned; see runtime-manifest.json for the Windows signing state." \
+                  -f body="AnyWeb ${RELEASE_TAG#anyweb-v} runtime assets. Linux is checksummed and unsigned; see runtime-manifest.json for the macOS and Windows signing state." \
                   --jq .id)" ;;
               *" "*) echo "more than one draft for $RELEASE_TAG: $existing" >&2; exit 1 ;;
               *) draft_id="$existing" ;;

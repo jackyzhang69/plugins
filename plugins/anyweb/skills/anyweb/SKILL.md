@@ -47,11 +47,12 @@ homework. Run the intended ordinary command first; when stdout is
 the product reports `ready`, then resume the sealed request. If `status` is
 `blocked`, say the `say_to_user` sentence. Do not paste JSON into chat.
 
-Ask for the applicant's information files first. Run
-`anyweb-catalog requirements --pin` and compile one
-complete `local_inputs` object keyed by that response's `fact_ref` values, then
-start the task so the product can preflight **before Chrome opens**. Prefer one
+Ask for the applicant's information files first. Start the task to receive
+its `needs`, then compile `local_inputs` using their `fact_ref` values and
+start again so the product can preflight **before Chrome opens**. Prefer one
 batch of known facts from the files; ask once for what the files cannot supply.
+Before login, AnyWeb requires the facts needed by every observable branch.
+For Express Entry, this includes eligibility answers even when continuing an existing draft.
 If the result says the JSON does not match the schema (`obtain=host_self_correct`),
 fix the JSON yourself from the files and resume — do not stop silent, and do not
 ask the human to redo work the files already contain. If facts or the published

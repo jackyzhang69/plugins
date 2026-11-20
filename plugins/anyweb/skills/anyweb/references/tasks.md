@@ -15,14 +15,15 @@ security questions, clicks, and filling are executor work.
 1. Collect the user's information files first (spreadsheet, PDF, Word, or
    other applicant records). If those files are not in the conversation yet,
    ask for the files. Do not start Chrome to go fishing.
-2. Run the installed `anyweb-catalog requirements --pin <task pin>`. That
-   response is the production authority for the published release. This plugin
-   does not carry a site catalog or a fact schema. Compile one complete `local_inputs` object keyed by each
-   field's `fact_ref`. Use only values the files actually support. Dates may
-   be `YYYY-MM-DD` or `{year,month,day}`. Education and work history may be
-   arrays of objects. Do not invent answers, do not copy example placeholder
-   keys, and do not use private site field names as keys.
-3. Start the task with that object. The product preflights without opening Chrome.
+2. Start the task to receive its `needs`. Compile one `local_inputs` object
+   keyed by the returned `fact_ref` values. Use only values the files support.
+   Dates may be `YYYY-MM-DD` or `{year,month,day}`. Education and work history
+   may be arrays of objects: each object is keyed by the member `fact_ref`
+   values listed under that field's `row_collection` in `compile_schema`, one
+   key per member and no other keys. Do not invent answers or copy placeholder keys.
+   A label marked `(spouse form)` asks about the spouse or partner; an unmarked
+   label asks about the principal applicant.
+3. Start the task again with that object. The product preflights without opening Chrome.
    Treat preflight outcomes in product language: wrong/incomplete pack → fix pack
    or ask once for missing facts; business end state → explain and stop (not a
    successful fill); graph insufficient → stop this fill (repair is a separate
@@ -37,7 +38,13 @@ security questions, clicks, and filling are executor work.
    `runtime_active` is false, Chrome is still closed: ask once for what the
    files cannot supply, then resume. Batch known asks; do not re-ask facts
    already supplied from the files.
-6. When the pack is ready, the executor uses the Portal identity in
+   A need with `optional: true` is shown by the website but not required: answer
+   it with the value from the files, or with JSON `null` when the files do not
+   have it (never invent one). `null` is recorded as declined, is never filled,
+   and the need does not return; a need without `optional` cannot be `null`.
+   A `host_self_correct` need for a value hidden by another answer is fixed by
+   sending `null` for that field or by correcting the answer it names.
+6. For a task that needs website sign-in, the executor uses the Portal identity in
    `~/.jackyzhang.app/token/user.json` to look up the saved website login
    and security answers for this user. If a login is missing, ask for a
    local file and save it; if the human already pasted the secret in chat,
@@ -94,11 +101,59 @@ boundary:
 }
 ```
 
+For BC PNP public registration, use `site="bcpnp-register"` and
+`task="fill-to-pre-register"`. No website sign-in is needed. The runtime fills
+and checks the supported form fields but does not enter a user ID, password,
+security answers, or consent. It checks the unsaved form before Register.
+With `after_fill="review"`, the page remains open for inspection; end the task
+or close the page after checking it. Do not click Register.
+Leaving the page does not mean it was submitted. If the browser cannot close,
+the task reports that cleanup failed.
+
 Put every bound fact in `local_inputs` before start. Keys must be the
 schema `fact_ref` values. Do not copy an empty object. If files are missing
 or the first compile still has gaps, start anyway only after collecting the
 files you have; the product reports the remaining `needs` without opening Chrome. Empty
 `local_inputs` is only for a file-less probe.
+
+## Expected `task start` input shape and rejection details
+
+The stdin JSON accepts exactly these fields; anything else is rejected
+without opening Chrome:
+
+```json
+{
+  "request": {
+    "request_ref": "a caller-generated stable id",
+    "site": "ircc-apr | ircc-ee-profile | bcpnp-register",
+    "task": "first-reversible-page | fill-to-pre-submit | fill-to-pre-register",
+    "register_submit": false,
+    "after_fill": "complete"
+  },
+  "local_inputs": {
+    "input:<64-hex from the live requirements response>": "value from the files"
+  }
+}
+```
+
+`site` and `task` are accepted only in the pairs above.
+`register_submit` (boolean, default false) and `after_fill`
+(`complete`, `review`, or `submit`) are optional. `local_inputs` holds at
+most 512 entries; each value is a string, number, boolean, date
+(`YYYY-MM-DD` or `{year,month,day}`), or an array/object of those up to six
+levels deep.
+
+When the input does not match this shape, the start fails before Chrome
+opens. The CLI itself rejects, with a plain message: an unknown top-level
+stdin field (`stdin invalid`), an unsupported `site` value (`task request
+site is invalid`), a non-boolean `register_submit`, an out-of-range
+`after_fill`, or a `local_inputs` entry that is out of bounds (`local
+inputs invalid`). The `site`/`task` pair and the remaining `request`
+contents are checked by the product service at issue time; those failures
+surface as generic blocked outcomes (`unsupported` or `invalid_request`)
+without field-level detail. Rejections never open the browser and never
+record a fill; the service may log a failed-attempt diagnostic for
+support.
 
 Task JSON that the host should read is `result` with
 `kind=anyweb_host_task_notice`. Translate `status` and `user_message`. Use
@@ -118,7 +173,23 @@ When `status` is `human_required` and `needs` has one or more items with
 3. For the remaining items, fill every value from the files already
    collected. Ask the human once for what those files still do not contain.
    If `accepted_values` or `value_type` is present, keep the answer inside
-   that shape.
+   that shape. For a select, `accepted_values` are the option names the site
+   shows (such as a country or Yes/No): answer with that name as a JSON
+   string, never a code. Write numbers such as a year or day as strings too.
+   A long list (an occupation as `21232 - Software developers and
+   programmers`, a city of the province already answered) is offered whole:
+   copy the one entry that names the person's value exactly, never a bare
+   code such as `NOC21232` and never a city of another province.
+   A language test score is a select with one list per test taken: a field in
+   `compile_schema` whose options depend on another answer lists
+   `keyed_accepted_values` (the test-type answer picks the list). Answer the
+   score as a string from the list of the test the person took, as written
+   (`"9"`, `"8.5"`, `"89-90"`), never a number and never another test's value.
+   Row cells follow the same rule: a row member in `compile_schema` lists its
+   `accepted_values` (a member whose list depends on another member, such as
+   a city by province, lists `keyed_accepted_values` by key value), and a
+   `host_self_correct` need for a row cell names the row (`row_index`, from 0)
+   and the member, with the accepted values for that row.
 4. Send every collected `fact_ref` through MCP `task_resume` as
    `fact_ref → secret_ref` file paths. Do not paste secrets into the tool
    call or chat.
@@ -174,8 +245,11 @@ loop. Report only the plain-language state and next action. Cancellation
 closes the task runtime but does not delete the user's saved local browser
 profile.
 
-To delete the current Portal user's reusable EE answers for this site, obtain
-explicit user confirmation and send this object through protected stdin to `task
+An Express Entry run uses only the facts sent for that run (the start inputs and
+the resumes of that task). Answers given for another applicant or an earlier
+run are never reused; ask for every missing fact again. To delete answers that
+an earlier version stored for this Portal user and site, obtain explicit user
+confirmation and send this object through protected stdin to `task
 forget-answers --input-stdin --json`:
 
 ```json
