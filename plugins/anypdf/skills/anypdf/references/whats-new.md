@@ -1,3 +1,9 @@
+# AnyPDF — what changed in 0.7.36
+
+New readiness rules and issue codes can now ship from the service without
+requiring a client update, and the client advertises `issues-v2` capabilities so
+older clients remain compatible.
+
 # AnyPDF — what changed in 0.7.35
 
 AnyPDF now flags unsupported characters before filling affected IRCC forms and
