@@ -1,3 +1,8 @@
+# AnyPDF — what changed in 0.7.35
+
+AnyPDF now flags unsupported characters before filling affected IRCC forms and
+shows which field to correct.
+
 # AnyPDF — what changed in 0.7.34
 
 `anypdf read` now reads filled and blank text PDFs whose pages carry dotted answer lines, checkbox symbols or small decorative marks, instead of reporting them as scanned. Genuinely scanned or image-only pages still tell you to look at the original.
