@@ -5,6 +5,10 @@ title, and description. Remove credentials, client data, website values, local
 paths, and screenshots. Show the full draft and wait for the user's explicit
 approval.
 
+When a task result lists places the website program does not cover, use
+that result message as the description draft; it already leaves the
+applicant's answers out.
+
 Only after approval run `anyweb feedback create --type <type> --title <title>
 --description <description> --user-confirmed --json`. Never infer confirmation.
 Use `feedback list`, `feedback status --id <id>`, `feedback inbox`, and

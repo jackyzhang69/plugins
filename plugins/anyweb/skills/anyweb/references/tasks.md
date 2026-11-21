@@ -198,6 +198,15 @@ When `status` is `human_required` and `needs` has one or more items with
    that new list the same way: files first, self-correct first, one ask, one
    resume.
 
+When `status` is `failed`, `runtime_active` is false, and `user_message`
+lists places the website program does not cover, Chrome never opened and
+nothing was written. The product reports where it stopped by itself:
+which questions and why, never the answers. Tell the human which questions
+are affected. If they want a confirmed delivery or want to add detail, offer
+[Tell Jacky](tell-jacky.md) with that message as the draft, add nothing
+from the applicant's answers, and wait for approval. Do not change answers
+to get past it.
+
 Do not put field values, passwords, answers, tokens, cookies, or page text in
 argv, environment variables, logs, feedback, or chat summaries. Use redirected
 `--input-stdin` only for typed data the user has explicitly entrusted to the
