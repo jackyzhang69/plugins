@@ -1,3 +1,8 @@
+# What's new in 1.3.1
+
+The installation check now verifies offline commands before sign-in and
+skips online checks until you sign in.
+
 # What's new in 1.3.0
 
 Scoring now requires an internet connection and AnyCase sign-in to fetch

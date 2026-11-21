@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.3.1",
   "configHome": {
     "darwin": "${HOME}/.jackyzhang.app/anycase",
     "linux": "${HOME}/.jackyzhang.app/anycase",
@@ -8,20 +8,20 @@
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anycase",
-      "sha256": "d5ac2d17fd54931d6cc61f8e9a7e4ffb8a5cedd8e9b1a66016fda59bbfd9fcb7",
+      "sha256": "c041862e4c23de57bb66ceb301e19f21a7835b323dbd8a6b36d84da5ba634bcf",
       "size": 8582144
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anycase.exe",
-      "sha256": "54f3af819cf1fff478d50913b0f4819698b3c265f92e1f6f59a98bca86950ee1",
+      "sha256": "41773d8e24dbb825fe425f98a39b18dc4893e0e15c37fa52dcbcebde8256d82f",
       "size": 10789888
     },
     "linux-x64": {
       "entrypoint": "bin/linux-x64/anycase",
-      "sha256": "a2435a7772d0d0dc2674f236d8060ec8f2e9cea5ba1d8861ea6c7cffe6a44633",
-      "size": 11239432
+      "sha256": "2215703329db96e668e920879ce04423ae8de483731a11ca6d244a5ea89c99c3",
+      "size": 11239368
     }
   },
-  "release_tag": "anycase-v1.3.0",
-  "source_sha": "fad97fc0671d6a3c568b71e1f941a31753f08a20"
+  "release_tag": "anycase-v1.3.1",
+  "source_sha": "b405d4ac3c607666ff74e5e189fc162c0f8d0a54"
 }
