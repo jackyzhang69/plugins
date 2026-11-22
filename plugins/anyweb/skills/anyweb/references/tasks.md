@@ -110,6 +110,34 @@ or close the page after checking it. Do not click Register.
 Leaving the page does not mean it was submitted. If the browser cannot close,
 the task reports that cleanup failed.
 
+For a PR application on the IRCC Permanent Residence Portal, use
+`site="ircc-pr-portal"` and `task="fill-to-pre-submit"`. This task continues an
+application that already exists on the representative's PR Portal account; it
+never creates a new application. The portal case number is a required fact in
+`local_inputs`, like any other fact the product's compile schema returns. The
+portal username and password are not facts: store them once with
+`hosted-account set --site ircc-pr-portal --role default` and never put them in
+the fact pack. The executor signs in, fills IMM 0008, IMM 5406, IMM 5669 and
+IMM 5562 with Save and continue, and stops before submission. Verified so far
+for one family shape only: a principal applicant with one accompanying
+common-law partner. Before it opens the application, the product checks on
+the dashboard that the row for that case number shows the applicant's family
+and given name; on any mismatch, a missing row, or missing names it stops
+without writing. The applicant's names are therefore required facts.
+
+For a PR card renewal (`task="prc-fill-to-pre-submit"`) or Permanent Resident
+Travel Document (`task="prtd-fill-to-pre-submit"`) on `site="ircc-pr-portal"`,
+the stored portal login is the same one used for PR General
+(`hosted-account set --site ircc-pr-portal --role default`). Set
+`dashboard.action` to `"new_prc"` to create a new application — creating a new
+application can never be deleted, so use `"new_prc"` only after the user
+explicitly confirms, and never twice for one client — or `"view"` to continue an
+existing application, with `prc.case_id` set to the number at the end of that
+application's address in the portal. The client's given and family name are
+required, and the product checks them against the dashboard row before it opens
+an existing application. Urgent processing is not supported because it requires
+an upload, and the product does not report the new application's number.
+
 Put every bound fact in `local_inputs` before start. Keys must be the
 schema `fact_ref` values. Do not copy an empty object. If files are missing
 or the first compile still has gaps, start anyway only after collecting the
@@ -125,7 +153,7 @@ without opening Chrome:
 {
   "request": {
     "request_ref": "a caller-generated stable id",
-    "site": "ircc-apr | ircc-ee-profile | bcpnp-register",
+    "site": "ircc-apr | ircc-ee-profile | bcpnp-register | ircc-pr-portal",
     "task": "first-reversible-page | fill-to-pre-submit | fill-to-pre-register",
     "register_submit": false,
     "after_fill": "complete"
