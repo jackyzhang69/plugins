@@ -4,7 +4,7 @@
 
 - Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only; `credential_kind=user`, `slot=user`).
 - **One Portal user token for the whole platform.** FormBro, AnyChat, AnyPDF, AnyWeb, EasyBooks, AnyDoc, and AnyCase share this file. If it already exists from any official plugin, do **not** ask the human to log in again and do **not** say AnyCase needs a different Portal token.
-- AnyCase is **exchange mode**: the CLI calls `POST /v1/token/exchange` with `aud=anycase` and keeps a short-lived JWT in memory. Raw `jz_` is not a product bearer. AnyScore is a separate product.
+- AnyCase is **exchange mode**: the CLI calls `POST /v1/token/exchange` with `aud=anycase` and keeps a short-lived JWT in memory. Raw `jz_` is not a product bearer.
 - Never print or log the raw token. Confirm with `anycase doctor --json` or a masked `anycase whoami --json`.
 - Do not create a product-local durable token file. Runtime stays under `~/.jackyzhang.app/anycase/`.
 

@@ -57,6 +57,7 @@ When you ran something, send the outcome:
 ```bash
 "$ANYCASE_BIN" pair result --ok --json
 "$ANYCASE_BIN" pair result --error "short product reason" --json
+"$ANYCASE_BIN" pair result --ok --envelope-json <path or -> --json   # optionally attach the resulting product envelope
 ```
 
 ## Trust boundary

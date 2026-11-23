@@ -1,0 +1,659 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anycase",
+  "version": "1.3.2",
+  "capabilities": [
+    {
+      "goal": "Save a platform token from standard input to connect AnyCase.",
+      "command": [
+        "anycase",
+        "login"
+      ],
+      "flags": [
+        "--token-stdin",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Remove the saved local credential.",
+      "command": [
+        "anycase",
+        "logout"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check masked sign-in status.",
+      "command": [
+        "anycase",
+        "whoami"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check installation, sign-in, and backend, or repair the installation copy.",
+      "command": [
+        "anycase",
+        "doctor"
+      ],
+      "flags": [
+        "--repair-install",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Print the available command list.",
+      "command": [
+        "anycase",
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Send user-confirmed feedback to Jacky.",
+      "command": [
+        "anycase",
+        "feedback"
+      ],
+      "flags": [
+        "--type",
+        "--title",
+        "--description",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search Canadian immigration court and tribunal decisions for legal ratios and case details.",
+      "command": [
+        "anycase",
+        "caselaw"
+      ],
+      "flags": [
+        "--court",
+        "--since",
+        "--until",
+        "--mode",
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search IRCC Help Centre question-and-answer guidance.",
+      "command": [
+        "anycase",
+        "policy"
+      ],
+      "flags": [
+        "--lang",
+        "--mode",
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search IRCC Program Delivery Instructions and operational manuals.",
+      "command": [
+        "anycase",
+        "manual"
+      ],
+      "flags": [
+        "--policy-code",
+        "--mode",
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search provincial nominee program guides, stream requirements, and points grids.",
+      "command": [
+        "anycase",
+        "pnp"
+      ],
+      "flags": [
+        "--province",
+        "--stream",
+        "--mode",
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search synthesized practitioner field notes about immigration workflows.",
+      "command": [
+        "anycase",
+        "notes"
+      ],
+      "flags": [
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Search the user's privately confirmed knowledge.",
+      "command": [
+        "anycase",
+        "knowledge"
+      ],
+      "flags": [
+        "--top",
+        "--questions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show what knowledge AnyCase currently covers.",
+      "command": [
+        "anycase",
+        "coverage"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Run a structured research or CLB query using a selected action.",
+      "command": [
+        "anycase",
+        "query"
+      ],
+      "flags": [
+        "--action",
+        "--input",
+        "--top",
+        "--lang",
+        "--policy-code",
+        "--province",
+        "--stream",
+        "--mode",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Convert language test scores into Canadian Language Benchmark levels.",
+      "command": [
+        "anycase",
+        "clb"
+      ],
+      "flags": [
+        "--test",
+        "--listening",
+        "-l",
+        "--reading",
+        "-r",
+        "--writing",
+        "-w",
+        "--speaking",
+        "-s",
+        "--skill",
+        "--score",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List supported immigration programs, optionally filtered by jurisdiction or category.",
+      "command": [
+        "anycase",
+        "programs",
+        "list"
+      ],
+      "flags": [
+        "--jurisdiction",
+        "--category",
+        "--format",
+        "--json"
+      ]
+    },
+    {
+      "goal": "View a program's requirements and metadata.",
+      "command": [
+        "anycase",
+        "programs",
+        "describe"
+      ],
+      "flags": [
+        "--format",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Run a three-state eligibility pre-screen against a program or local ruleset.",
+      "command": [
+        "anycase",
+        "check-eligibility"
+      ],
+      "flags": [
+        "--profile",
+        "--program",
+        "--rules",
+        "--policy-revision",
+        "--format",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List published document lists for immigration pathways.",
+      "command": [
+        "anycase",
+        "documents",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Resolve the active document-list pin for a pathway and stage.",
+      "command": [
+        "anycase",
+        "documents",
+        "resolve"
+      ],
+      "flags": [
+        "--pathway-id",
+        "--document-list-id",
+        "--stage",
+        "--channel",
+        "--program-release-id",
+        "--revision-id",
+        "--payload-sha256",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Evaluate a document list against local facts for a specified date.",
+      "command": [
+        "anycase",
+        "documents",
+        "evaluate"
+      ],
+      "flags": [
+        "--pathway-id",
+        "--document-list-id",
+        "--stage",
+        "--channel",
+        "--program-release-id",
+        "--revision-id",
+        "--payload-sha256",
+        "--local-payload",
+        "--facts",
+        "--as-of",
+        "--jurisdiction",
+        "--locale",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List published scoring grids, optionally filtered by change date or revision.",
+      "command": [
+        "anycase",
+        "score",
+        "policies"
+      ],
+      "flags": [
+        "--changed-since",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show the input fields required by a scoring grid.",
+      "command": [
+        "anycase",
+        "score",
+        "inputs"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Evaluate an applicant's inputs against a scoring grid.",
+      "command": [
+        "anycase",
+        "score",
+        "evaluate"
+      ],
+      "flags": [
+        "--policy",
+        "--inputs",
+        "--as-of",
+        "--resume",
+        "--revision",
+        "--payload-sha256",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Score and rank grids fully covered by the supplied inputs.",
+      "command": [
+        "anycase",
+        "score",
+        "rank"
+      ],
+      "flags": [
+        "--inputs",
+        "--as-of",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Re-score a grid after applying supplied changes to applicant fields.",
+      "command": [
+        "anycase",
+        "score",
+        "whatif"
+      ],
+      "flags": [
+        "--policy",
+        "--inputs",
+        "--changes",
+        "--as-of",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Compare two previously saved scoring results offline.",
+      "command": [
+        "anycase",
+        "score",
+        "diff"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Create a local case file from a program and template.",
+      "command": [
+        "anycase",
+        "case",
+        "init"
+      ],
+      "flags": [
+        "--program",
+        "--template",
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Print a local case document.",
+      "command": [
+        "anycase",
+        "case",
+        "show"
+      ],
+      "flags": [
+        "--case-dir",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Record or merge answers in a local case file.",
+      "command": [
+        "anycase",
+        "case",
+        "update"
+      ],
+      "flags": [
+        "--case-dir",
+        "--set",
+        "--intent",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Derive a local case task pack and list unanswered items.",
+      "command": [
+        "anycase",
+        "case",
+        "derive"
+      ],
+      "flags": [
+        "--case-dir",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Emit a local case task package for downstream tools.",
+      "command": [
+        "anycase",
+        "case",
+        "plan"
+      ],
+      "flags": [
+        "--case-dir",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Apply the PostgreSQL case-store schema.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "migrate"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Seed the PostgreSQL case store with built-in templates and engine configuration.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "seed"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "List cases stored in PostgreSQL.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show engine targets for a template in the PostgreSQL case store.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "targets"
+      ],
+      "flags": [
+        "--template",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Print a case stored in PostgreSQL.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "show"
+      ],
+      "flags": [
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Create a PostgreSQL case from a program and template.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "init"
+      ],
+      "flags": [
+        "--program",
+        "--template",
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Derive a PostgreSQL case task pack and list unanswered items.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "derive"
+      ],
+      "flags": [
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Emit a PostgreSQL case task package for downstream tools.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "plan"
+      ],
+      "flags": [
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Record or merge answers in a PostgreSQL case, optionally checking its expected revision.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "update"
+      ],
+      "flags": [
+        "--case-id",
+        "--set",
+        "--intent",
+        "--expect-revision",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Delete a PostgreSQL case and its children.",
+      "command": [
+        "anycase",
+        "case",
+        "db",
+        "delete"
+      ],
+      "flags": [
+        "--case-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Join a time-limited connection with Jacky's assistant after user confirmation.",
+      "command": [
+        "anycase",
+        "pair",
+        "join"
+      ],
+      "flags": [
+        "--code",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check whether a pair-session connection is open.",
+      "command": [
+        "anycase",
+        "pair",
+        "status"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Retrieve unread instructions from Jacky's assistant.",
+      "command": [
+        "anycase",
+        "pair",
+        "inbox"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Mark a pair-session instruction as read.",
+      "command": [
+        "anycase",
+        "pair",
+        "read"
+      ],
+      "flags": [
+        "--message-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Send a product-status envelope in a pair session.",
+      "command": [
+        "anycase",
+        "pair",
+        "snapshot"
+      ],
+      "flags": [
+        "--envelope-json",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Report a requested action's success or failure in a pair session.",
+      "command": [
+        "anycase",
+        "pair",
+        "result"
+      ],
+      "flags": [
+        "--ok",
+        "--error",
+        "--envelope-json",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Close a pair session.",
+      "command": [
+        "anycase",
+        "pair",
+        "close"
+      ],
+      "flags": [
+        "--reason",
+        "--json"
+      ]
+    }
+  ],
+  "unclear": []
+}

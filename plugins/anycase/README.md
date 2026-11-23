@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anycase
 
-Version `1.3.1`.
+Version `1.3.2`.
 
 Canadian Immigration Intelligence via the anycase router: Federal Court precedents, IRCC policy & Q&A, and CLB statutory calculators.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/anycase/SKILL.md`](skills/anycase/SKILL.md) first. Connect and product verbs are defined there and under `skills/anycase/references/`.
 

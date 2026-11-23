@@ -1,3 +1,11 @@
+# What's new in 1.3.2
+
+AnyCase now checks quietly, at most once a day, whether a newer version is available and tells you once; it never interrupts your work.
+When your assistant installs a newer version, AnyCase now replaces the old copy and removes the older leftovers automatically.
+The installation repair step does the same cleanup by hand if something was left behind.
+Your sign-in, settings and case files are never touched by an update.
+The plugin guide now describes every command, including scoring and local case files.
+
 # What's new in 1.3.1
 
 The installation check now verifies offline commands before sign-in and

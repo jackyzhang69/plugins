@@ -14,9 +14,9 @@ bundled document.
 Write the this-question questions file first: [questions](questions.md). Then search.
 
 ```bash
-anycase pnp "<query>" --province <bc|on|ab|sk|mb|ns|nb|nl|pe|yt|nt> --mode <keyword|semantic|hybrid> --top <1-10> --questions <path>
-anycase pnp "<query>" --province bc --stream tech --top 5
-anycase query --action pnp --input "<query>"
+anycase pnp "<query>" [--province <bc|on|ab|sk|mb|ns|nb|nl|pe|yt|nt>] [--stream <name>] [--mode <keyword|semantic|hybrid>] [--top <1-20>] --questions <path>
+anycase pnp "<query>" --province bc --stream tech --top 5 --questions <path>
+anycase query --action pnp [--input "<query>"] [--top <n>] [--province <code>] [--stream <name>] [--mode <mode>]
 ```
 
 Closed shapes only:
@@ -25,7 +25,9 @@ Closed shapes only:
 - `--top` is a bounded integer (1-20). Default `5`.
 - `--province` is optional: `bc`, `on`, `ab`, `sk`, `mb`, `ns`, `nb`, `nl`, `pe`, `yt`, `nt`.
 - `--stream` is optional: e.g. `tech`, `skills`, `healthcare`, `international-graduate`.
-- `--questions` is a JSON file for **this** user question. Write it first from [questions](questions.md).
+- `--questions` is a JSON file for **this** user question. Write it first from [questions](questions.md). Omit only if you cannot write the file.
+
+The examples below leave out `--questions <path>` for brevity; always add it.
 
 ```bash
 anycase pnp "minimum income requirements" --province bc --mode hybrid --top 5

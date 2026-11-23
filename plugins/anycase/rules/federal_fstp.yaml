@@ -6,26 +6,56 @@ display_name: Federal Skilled Trades
 status: ACTIVE
 program_id: FEDERAL_FSTP
 stream_id: FSTP
-effective_date: '2026-10-16'
-source_edition: IRPR section 87.2; IRCC Federal Skilled Trades Program page and Express Entry language-test page (both modified 2026-10-16, fetched 2026-11-16)
+effective_date: '2026-11-03'
+source_edition: IRPR section 87.2; Temporary Public Policy exempting LMIA for FSTP job offers (effective
+  2026-11-03; officer assesses genuineness); IRCC FSTP, job-offer, and language-test pages checked 2026-11-22.
 source_url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
-decision_scope: Deterministic Federal Skilled Trades prescreen. No points grid.
+decision_scope: Deterministic Federal Skilled Trades prescreen covering skilled-trade experience,
+  qualifying job offer or certificate of qualification, language minimums, intended residence outside
+  Quebec, and settlement funds (with work-authorization plus valid-job-offer exemption). No points grid.
 sources:
 - id: irpr_87_2
   title: IRPR s. 87.2 Federal Skilled Trades
   url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.2.html
   citation: IRPR section 87.2
   legal_authority: Official program baseline used for the redline. Points arithmetic stays in AnyScore.
-- id: ircc_language_test
+- id: express_entry_language_results
   title: Express Entry — Language test results (minimum levels by program)
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
-  citation: IRCC language-test page, page date 2026-10-16; raw sha256 7803b6bd1b148e14d8dc4c259c9a937aae36f63c0b1a0bf5b876710c1d3be698 fetched 2026-11-16T17:44:24Z
-  legal_authority: Official IRCC operational guidance; unit comes from the validated unpublished K candidate 76e7a43694709466eab5600b68db7581a27b78d2dcfffc4a10b197b6f5c7ec7f (artifact 2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258).
-- id: ircc_fstp_program
+  citation: IRCC language-test page (captured 2026-11-22; K unit federal_ee:express_entry_language_results:full_document_body)
+  legal_authority: Official IRCC operational guidance.
+- id: express_entry_fstp_program
   title: Express Entry — Federal Skilled Trades Program
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-trades.html
-  citation: IRCC page modified 2026-10-16 (raw sha256 8e53d1f70d620601526de31583b4e107ec71877ca751dd94446115b5a3bafe02, fetched 2026-11-16); both cited statements are unchanged from the published VKS units in K 9e08bf06
-  legal_authority: Official IRCC guidance for the FSTP work-experience and job-offer-or-certificate requirements.
+  citation: IRCC FSTP program page (captured 2026-11-22; K unit federal_ee:express_entry_fstp_program:full_document_body)
+  legal_authority: Official IRCC guidance for FSTP work experience, job offer or certificate of qualification,
+    intended residence outside Quebec, and proof of funds.
+- id: express_entry_proof_of_funds
+  title: Documents for Express Entry — Proof of funds
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html
+  citation: IRCC proof-of-funds table updated 2025-07-07 (captured 2026-11-22; K unit federal_ee:express_entry_proof_of_funds:full_document_body)
+  legal_authority: Published half-LICO amounts and work-authorization plus valid-job-offer exemption.
+- id: ircc_public_policy_exempt_lmia
+  title: Temporary public policy to exempt Labour Market Impact Assessments and related requirements for
+    qualifying job offers for eligibility under Express Entry
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/public-policies/exempt-lmia-express-entry.html
+  citation: 'IRPA s. 25.2 temporary public policy effective 2026-11-03: Part 1 exempts LMIA/work-permit
+    requirements in IRPR ss. 82(2) and 83(1)(e) for FSWP; Part 2 exempts LMIA/work-permit requirements
+    in IRPR s. 87.2(3)(d) for FSTP; officer assesses genuineness (captured 2026-11-22)'
+  legal_authority: Temporary public policy under IRPA s. 25.2
+- id: ircc_job_offer
+  title: Express Entry — Valid job offers
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/job-offer.html
+  citation: 'IRCC job-offer guidance updated 2026-11-18: no LMIA required from 2026-11-03 (profile uses
+    placeholder LMIA Yes / 00000 / 2026-01-01 to 2029-01-01); officer assesses genuineness; up to 2 employers
+    for FSTP (captured 2026-11-22)'
+  legal_authority: Official IRCC operational guidance
+- id: ircc_changes_2026
+  title: 2026 changes to the Express Entry system
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/changes.html
+  citation: IRCC Express Entry changes summary updated 2026-11-18 covering 2026-11-03 and 2026-11-17 changes
+    (captured 2026-11-22)
+  legal_authority: Official IRCC operational summary
 schema:
   input_type: object
   required_top_level:
@@ -33,6 +63,24 @@ schema:
   - candidate
   types:
     assessment_date: ISO-8601 date
+    candidate:
+      trade_months_past_5_years: Verified full-time-equivalent skilled trade work months in the 5 years
+        before application (24 months = 3,120 hours).
+      has_qualifying_job_offer: Verified full-time job offer for at least 1 year from up to 2 employers
+        in an eligible trade NOC; from 2026-11-03 no LMIA is required (officer assesses genuineness; online
+        profile uses placeholder LMIA Yes / 00000). Leave null/absent if genuineness is unverified.
+      has_certificate_of_qualification: Certificate of qualification in the skilled trade issued by a
+        Canadian provincial, territorial, or federal authority.
+      speaking_clb: CLB/NCLC speaking score
+      listening_clb: CLB/NCLC listening score
+      reading_clb: CLB/NCLC reading score
+      writing_clb: CLB/NCLC writing score
+      intended_province: lowercase Canadian province or territory name (must be outside Quebec)
+      authorized_to_work_in_canada: boolean; currently authorized to legally work in Canada
+      family_size: integer >= 1, includes non-accompanying spouse and dependent children
+    funds:
+      available_cad: number; transferable, available and unencumbered settlement funds in CAD
+      evidence_verified: boolean; settlement funds evidence verified
 reference_points_grid:
   note: The Federal Skilled Trades class has no selection points grid.
 rules:
@@ -46,11 +94,11 @@ rules:
   fail_if: candidate.trade_months_past_5_years < 24
   missing_or_unverified: 'NEEDS_REVIEW: Skilled-trade experience cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fstp_program:fstp.skilled_trade_work_experience"
-    source_file: ec67c5dfaf038f3783bbde682b85dd3cf73d9bb551ee90a7cc48aa1e682fe65c
+    evidence_unit_id: federal_ee:express_entry_fstp_program:full_document_body
+    source_id: express_entry_fstp_program
+    source_file: 09c2d12f4b8c1c3c646d2dbf4d8173ef5211fa8157746c551aa00a9451ed5d53
     section: Skilled trades work experience
-    source_id: ircc_fstp_program
-    verbatim_excerpt: "be at least <strong>2&nbsp;years</strong> of full-time work experience (or 3,120 hours total) in a skilled trade within the 5 years before you apply"
+    verbatim_excerpt: be at least <strong>2&nbsp;years</strong> of full-time work experience
 - id: fstp_offer_or_certificate
   category: job_offer
   severity: CRITICAL_REDLINE
@@ -62,13 +110,14 @@ rules:
     true
   fail_if: candidate.has_qualifying_job_offer == false && candidate.has_certificate_of_qualification ==
     false
-  missing_or_unverified: 'NEEDS_REVIEW: Job offer or certificate of qualification cannot be verified.'
+  missing_or_unverified: 'NEEDS_REVIEW: Job offer (including genuineness assessment without LMIA from
+    2026-11-03) or certificate of qualification cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fstp_program:fstp.job_offer_or_certificate"
-    source_file: ec67c5dfaf038f3783bbde682b85dd3cf73d9bb551ee90a7cc48aa1e682fe65c
-    section: Job offer or certificate of qualification
-    source_id: ircc_fstp_program
-    verbatim_excerpt: "a valid <a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/job-offer.html\">job offer of full-time employment</a> for a total period of at least 1&nbsp;year, <strong>or</strong></li>\r\n    <li>a certificate of qualification in your skilled trade issued by a Canadian provincial, territorial or federal authority"
+    evidence_unit_id: federal_ee:ircc_job_offer:full_document_body
+    source_id: ircc_job_offer
+    source_file: 6327974a64386fb5a813e2ae45104273d898b5490b1e58a5020df52996f0120a
+    section: Valid job offers — no LMIA required from 2026-11-03 (up to 2 employers for FSTP)
+    verbatim_excerpt: "Labour Market Impact Assessment (LMIA) for a job offer to qualify.</li>\r\n        <li>Having an LMIA won’t give you more Comprehensive Ranking System points"
 - id: fstp_language
   category: language
   severity: CRITICAL_REDLINE
@@ -84,8 +133,62 @@ rules:
     < 4
   missing_or_unverified: 'NEEDS_REVIEW: Language scores cannot be verified.'
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_language_test_2026_10_16:language.minimum_levels_by_program"
-    source_file: "2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258"
+    evidence_unit_id: federal_ee:express_entry_language_results:full_document_body
+    source_id: express_entry_language_results
+    source_file: 07ba664e866fd5a3dc46874e1a77f55b308009f4bd74a6165b0e238b77af3a1e
     section: Language requirements — Federal Skilled Trades Program minimum level
-    source_id: ircc_language_test
-    verbatim_excerpt: "English</th>\r\n                            <td>Speaking and listening </td>\r\n                            <td><strong>CLB 5</strong></td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>English</th>\r\n                            <td>Reading and writing </td>\r\n                            <td><strong>CLB 4"
+    verbatim_excerpt: "<td>Speaking and listening </td>\r\n                            <td><strong>CLB 5</strong></td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>English</th>\r\n                            <td>Reading and writing </td>\r\n                            <td><strong>CLB 4</strong></td>"
+- id: fstp_intended_residence
+  category: statutory_gate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.intended_province
+  pass_if: candidate.intended_province in ['alberta', 'british columbia', 'manitoba', 'new brunswick',
+    'newfoundland and labrador', 'northwest territories', 'nova scotia', 'nunavut', 'ontario', 'prince
+    edward island', 'saskatchewan', 'yukon']
+  fail_if: candidate.intended_province == 'quebec'
+  missing_or_unverified: 'NEEDS_REVIEW: Intended province of residence outside Quebec cannot be verified.'
+  evidence_anchor:
+    evidence_unit_id: federal_ee:express_entry_fstp_program:full_document_body
+    source_id: express_entry_fstp_program
+    source_file: 09c2d12f4b8c1c3c646d2dbf4d8173ef5211fa8157746c551aa00a9451ed5d53
+    section: Where you can live in Canada
+    verbatim_excerpt: You must plan to live <strong>outside the province of Quebec</strong>. The province
+      of Quebec selects its own skilled workers.
+- id: fstp_settlement_funds
+  category: statutory_gate
+  severity: CRITICAL_REDLINE
+  eval_type: deterministic
+  required_fields:
+  - candidate.authorized_to_work_in_canada
+  - candidate.has_qualifying_job_offer
+  conditional_required_fields:
+    when: '!(candidate.authorized_to_work_in_canada == true && candidate.has_qualifying_job_offer == true)'
+    fields:
+    - candidate.family_size
+    - funds.available_cad
+    - funds.evidence_verified
+  pass_if: (candidate.authorized_to_work_in_canada == true && candidate.has_qualifying_job_offer == true)
+    || (funds.evidence_verified == true && ((candidate.family_size == 1 && funds.available_cad >= 15263)
+    || (candidate.family_size == 2 && funds.available_cad >= 19001) || (candidate.family_size == 3 &&
+    funds.available_cad >= 23360) || (candidate.family_size == 4 && funds.available_cad >= 28362) || (candidate.family_size
+    == 5 && funds.available_cad >= 32168) || (candidate.family_size == 6 && funds.available_cad >= 36280)
+    || (candidate.family_size == 7 && funds.available_cad >= 40392) || (candidate.family_size > 7 && funds.available_cad
+    >= 40392 + (candidate.family_size - 7) * 4112)))
+  fail_if: '!(candidate.authorized_to_work_in_canada == true && candidate.has_qualifying_job_offer ==
+    true) && funds.evidence_verified == true && ((candidate.family_size == 1 && funds.available_cad <
+    15263) || (candidate.family_size == 2 && funds.available_cad < 19001) || (candidate.family_size ==
+    3 && funds.available_cad < 23360) || (candidate.family_size == 4 && funds.available_cad < 28362) ||
+    (candidate.family_size == 5 && funds.available_cad < 32168) || (candidate.family_size == 6 && funds.available_cad
+    < 36280) || (candidate.family_size == 7 && funds.available_cad < 40392) || (candidate.family_size
+    > 7 && funds.available_cad < 40392 + (candidate.family_size - 7) * 4112))'
+  missing_or_unverified: 'NEEDS_REVIEW: Settlement funds evidence, work-authorization plus valid-job-offer
+    exemption, or family-size threshold is unverified.'
+  evidence_anchor:
+    evidence_unit_id: federal_ee:express_entry_proof_of_funds:full_document_body
+    source_id: express_entry_proof_of_funds
+    source_file: b16e319f0d3041193f14d06bd979e2a8037531b4d2e05f37bcde1e9deb03b238
+    section: Proof of funds — who does not need proof of funds (and half-LICO table updated 2025-07-07)
+    verbatim_excerpt: you’re authorized to work in Canada <strong>and</strong> you have a <a href="/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/job-offer.html">valid
+      job offer</a>, even if you apply under the Federal Skilled Worker Program or the

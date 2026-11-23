@@ -9,8 +9,8 @@ Write the this-question questions file first: [questions](questions.md). Then se
 ## Commands
 
 ```bash
-anycase knowledge "<query>" --top <1-10> --questions <path>
-anycase query --action knowledge --input "<query>"
+anycase knowledge "<query>" [--top <1-10>] --questions <path>
+anycase query --action knowledge [--input "<query>"] [--top <n>]
 ```
 
 Closed shapes only:
@@ -18,6 +18,8 @@ Closed shapes only:
 - `--top` is a bounded integer. Default 5.
 - `--questions` is a JSON file for **this** user question. Write it first from [questions](questions.md). Omit only if you cannot write the file.
 - Do not pass a mode, court, language, or free-form filter.
+
+The example below leaves out `--questions <path>` for brevity; always add it.
 
 ```bash
 anycase knowledge "GIC funds folder" --top 5

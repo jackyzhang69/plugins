@@ -6,8 +6,12 @@ jurisdiction: CA-FED
 category: Federal Skilled Worker
 display_name: Federal Skilled Worker Program — minimum requirements and 67-point selection
 status: ACTIVE
-effective_date: '2026-09-25'
-source_edition: IRPA and IRPR consolidated text; IRCC FSWP and proof-of-funds pages checked 2026-09-25
+effective_date: '2026-11-17'
+source_edition: IRPA and IRPR consolidated text; Temporary Public Policy exempting LMIA for Express Entry
+  job offers (effective 2026-11-03; officer assesses genuineness); Temporary Public Policy to remove barriers
+  for researchers under Express Entry (signed and effective 2026-11-17; NOC 41200 stipend/grant/bursary/scholarship
+  remuneration paid by a Canadian institution/entity in Canada within 3 years before application for candidates
+  invited on or after 2026-11-17); IRCC pages checked 2026-11-22.
 source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html
 decision_scope: Deterministic prescreen of statutory gates and six selection factors. Points are calculated
   from candidate facts against scoring_grid and compared with each claimed factor before a selection score
@@ -21,28 +25,80 @@ sources:
 - id: irpr_75_83
   title: Immigration and Refugee Protection Regulations — Federal Skilled Workers
   url: https://laws-lois.justice.gc.ca/eng/regulations/SOR-2002-227/FullText.html
-  citation: IRPR ss. 75–83, especially R75(1), R75(2)(a)–(e), R76(1)(a)–(b), R78–R83
+  citation: IRPR ss. 73(2), 75–83, especially R75(1), R75(2)(a)–(e), R76(1)(a)–(b), R78–R83
   legal_authority: Federal regulation — minimum criteria, selection factors, funds and arranged employment
-- id: ircc_fswp
+- id: express_entry_fswp_program
   title: Express Entry — Federal Skilled Worker Program
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html
-  citation: IRCC program delivery instructions — minimum requirements and selection factors
+  citation: IRCC program delivery instructions — minimum requirements and selection factors (captured
+    2026-11-22; K unit federal_ee:express_entry_fswp_program:full_document_body)
   legal_authority: Official operational guidance; subordinate to IRPA and IRPR
-- id: ircc_funds
+- id: express_entry_proof_of_funds
   title: Documents for Express Entry — Proof of funds
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html
-  citation: IRCC proof-of-funds table, updated 2025-07-07
+  citation: IRCC proof-of-funds table, updated 2025-07-07 (captured 2026-11-22; K unit federal_ee:express_entry_proof_of_funds:full_document_body)
   legal_authority: Published half-LICO amounts and proof requirements under IRPR R76(1)(b)
-- id: ircc_language
+- id: express_entry_language_results
   title: Documents for Express Entry — Language test results
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
-  citation: IRCC designated tests, CLB/NCLC conversion and two-year validity
+  citation: IRCC designated tests, CLB/NCLC conversion and two-year validity (captured 2026-11-22; K unit
+    federal_ee:express_entry_language_results:full_document_body)
   legal_authority: Official operational guidance under IRPR R74 and R75(2)(d)
-- id: ircc_eca
+- id: express_entry_education_assessment
   title: Educational credential assessment for Express Entry
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessment.html
-  citation: IRCC ECA equivalency schedule and designated organizations
+  citation: IRCC ECA equivalency schedule and designated organizations (captured 2026-11-22; K unit federal_ee:express_entry_education_assessment:full_document_body)
   legal_authority: Official operational guidance under IRPR R75(2)(e) and R78
+- id: ircc_public_policy_exempt_lmia
+  title: Temporary public policy to exempt Labour Market Impact Assessments and related requirements for
+    qualifying job offers for eligibility under Express Entry
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/public-policies/exempt-lmia-express-entry.html
+  citation: 'IRPA s. 25.2 temporary public policy effective 2026-11-03: Part 1 exempts LMIA/work-permit
+    requirements in IRPR ss. 82(2) and 83(1)(e) for FSWP; Part 2 exempts LMIA/work-permit requirements
+    in IRPR s. 87.2(3)(d) for FSTP; officer assesses genuineness (captured 2026-11-22)'
+  legal_authority: Temporary public policy under IRPA s. 25.2
+- id: ircc_public_policy_researchers_2026_11_17
+  title: Temporary public policy to remove barriers for researchers under Express Entry
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/public-policies/remove-barriers-researchers-express-entry.html
+  citation: 'IRPA s. 25.2 temporary public policy signed and effective 2026-11-17 (captured 2026-11-22;
+    K unit federal_ee:ircc_public_policy_researchers_2026_11_17:full_document_body, artifact 8f034cb57466d32e6f6a8699226994229e0246e2aebb13f4d27b6e28dd7130f1):
+    exempts IRPR paragraphs 75(2)(a), (b), and (c) (FSW membership criteria, including continuity),
+    IRPR paragraphs 87.1(2)(a), (b), (c), and (e) (CEC membership criteria), and IRPA s. 11.2(1)(a)
+    (with respect to those exempted FSW/CEC criteria) when the foreign national was invited to apply
+    on or after 2026-11-17, acquired in Canada within the 3 years before PR application receipt at
+    least 1 year of full-time-equivalent NOC 41200 work experience (which may include stipends or
+    other non-wage monetary compensation paid by a Canadian entity), and performed the lead statement
+    and a substantial number of main duties.'
+  legal_authority: Temporary public policy under IRPA s. 25.2
+- id: ircc_job_offer
+  title: Express Entry — Valid job offers
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/job-offer.html
+  citation: 'IRCC job-offer guidance updated 2026-11-18: no LMIA required from 2026-11-03 (profile uses
+    placeholder LMIA Yes / 00000 / 2026-01-01 to 2029-01-01); officer assesses genuineness; NOC 41200
+    non-wage remuneration recognized from 2026-11-17 (captured 2026-11-22)'
+  legal_authority: Official IRCC operational guidance
+- id: ee_mi_amendment_2026_2
+  title: Ministerial Instructions Amending the Ministerial Instructions Respecting the Express Entry System,
+    2026-2
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-application-management-system/amendment-2026-2.html
+  citation: Ministerial Instructions given and effective 2026-11-17 under IRPA s. 10.3(1)(h); amends ss.
+    15.1(2), 15.2(2), and 19(4) for NOC 41200 non-wage monetary remuneration from a Canadian entity (captured
+    2026-11-22)
+  legal_authority: Binding Ministerial Instructions
+- id: ircc_researcher_notice_2026_11_18
+  title: Notice – Express Entry updates make it easier for top researchers to continue contributing to
+    Canada's innovation ecosystem
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/express-entry-updates-top-researchers-continue-contributing-canada-innovation-ecosystem.html
+  citation: 'IRCC Notice published 2026-11-18 (effective 2026-11-17): NOC 41200 stipends/grants/bursaries/scholarships
+    recognized for CEC, FSWP, and CRS; NOC 41201 no longer eligible for Researchers category (captured
+    2026-11-22)'
+  legal_authority: Official IRCC public notice
+- id: ircc_changes_2026
+  title: 2026 changes to the Express Entry system
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/changes.html
+  citation: IRCC Express Entry changes summary updated 2026-11-18 covering 2026-11-03 and 2026-11-17 changes
+    (captured 2026-11-22)
+  legal_authority: Official IRCC operational summary
 schema:
   input_type: object
   required_top_level:
@@ -57,7 +113,21 @@ schema:
       primary_occupation_teer: integer 0–5 verified against NOC 2021
       primary_occupation_duties_met: boolean; lead statement and substantial main duties including essential
         duties
-      experience_paid: boolean
+      experience_paid: boolean (or null when unverified); paid by wages or commission under IRPR s. 73(2).
+        Stipend-, grant-, bursary- or scholarship-paid NOC 41200 work counts ONLY under the 2026-11-17
+        Temporary Public Policy for researchers (K unit federal_ee:ircc_public_policy_researchers_2026_11_17:full_document_body)
+        when paid by a Canadian institution/entity AND the candidate has at least 1 year of full-time-equivalent
+        NOC 41200 work in Canada within the 3 years before PR application receipt AND is invited to apply on
+        or after 2026-11-17; otherwise false, or null (NEEDS_REVIEW) when the payer, the 3-year window or
+        the invitation date is unverified.
+      researcher_public_policy_met: "optional boolean (or null when unverified); true ONLY when all conditions
+        of the 2026-11-17 Temporary Public Policy for researchers (K unit federal_ee:ircc_public_policy_researchers_2026_11_17:full_document_body)
+        are verified: invited to apply on or after 2026-11-17, acquired in Canada within the 3 years before
+        PR application receipt at least 1 year of full-time (or equivalent part-time) NOC 41200 work experience
+        (with any non-wage remuneration such as a stipend, grant, bursary or scholarship paid by a Canadian
+        institution/entity), and performed the lead statement and a substantial number of main duties; false
+        when the candidate does not meet these conditions. When true, satisfies fswp_gate_continuous_experience
+        (exempts IRPR paragraphs 75(2)(a), (b), and (c), including continuity)."
       experience_continuous_months: number; uninterrupted calendar months in same primary NOC
       experience_counted_hours: number; qualifying hours with no more than 30 hours per week credited
       experience_last_10_years: boolean
@@ -74,8 +144,15 @@ schema:
       selection_experience_qualifying_months: qualifying skilled-work FTE months, including the continuous
         primary-occupation period
       age_years: age at application
-      arranged_employment_r82_verified: boolean
-      adaptability_claims: list of verified R83 factors; each factor at most once
+      arranged_employment_r82_verified: boolean; verified under IRPR R82 or the 2026-11-03 LMIA-exemption
+        public policy (no LMIA required; officer assesses employer/offer genuineness; NOC 41200 non-wage
+        remuneration recognized from 2026-11-17)
+      adaptability_claims: "list of verified IRPR R83 factors (each at most once): spouse_clb5_all_four
+        (legacy/client-compatible identifier awarded when the accompanying spouse or common-law partner
+        has CLB/NCLC 4 or higher in all 4 language abilities on an approved test less than 2 years old,
+        IRPR s. 83(1)(a)), candidate_past_study_in_canada, spouse_past_study_in_canada, candidate_past_work_in_canada,
+        spouse_past_work_in_canada, arranged_employment_bonus (requires awarded R82/public-policy points),
+        eligible_relative_in_canada"
       education:
         canadian_secondary_or_higher: boolean
         foreign_secondary_or_higher: boolean
@@ -83,7 +160,9 @@ schema:
         eca_valid_within_five_years: boolean
       family_size: integer >= 1, includes non-accompanying spouse and dependent children
       authorized_to_work_in_canada: boolean
-      valid_arranged_employment: boolean; verified against IRPR R82
+      valid_arranged_employment: boolean; verified under IRPR R82 or the 2026-11-03 LMIA-exemption public
+        policy (no LMIA required; officer assesses genuineness; online profile still uses placeholder
+        LMIA Yes / 00000)
     funds:
       available_cad: number; transferable, available and unencumbered
       evidence_verified: boolean
@@ -126,9 +205,9 @@ minimums:
       7: 40392
     each_additional_member_above_7: 4112
     exception: authorized_to_work_in_canada AND valid_arranged_employment
-    source_id: ircc_funds
+    source_id: express_entry_proof_of_funds
 language_benchmark_conversion:
-  source_id: ircc_language
+  source_id: express_entry_language_results
   ability_order:
   - speaking
   - listening
@@ -192,7 +271,7 @@ language_benchmark_conversion:
     - 453
     - 10
 eca_schedule:
-  source_id: ircc_eca
+  source_id: express_entry_education_assessment
   validity: less_than_five_years_at_profile_and_application
   designated_general_organizations:
   - Comparative Education Service, University of Toronto
@@ -231,7 +310,7 @@ scoring_grid:
       maximum: 4
       minimum_clb_each_ability: 5
       points_if_all_four_meet_minimum: 4
-    source_id: ircc_fswp
+    source_id: express_entry_fswp_program
   education:
     maximum: 25
     points:
@@ -250,7 +329,7 @@ scoring_grid:
       2-3: 11
       4-5: 13
       6+: 15
-    source_id: ircc_fswp
+    source_id: express_entry_fswp_program
   age:
     maximum: 12
     points:
@@ -277,7 +356,8 @@ scoring_grid:
     - 1
     - 2
     - 3
-    condition: IRPR R82 verified; CRS job-offer-point removal does not remove this FSWP factor
+    condition: Verified under IRPR R82 or 2026-11-03 LMIA-exemption public policy (no LMIA required; officer
+      assesses genuineness; NOC 41200 non-wage remuneration recognized from 2026-11-17)
     source_id: irpr_75_83
   adaptability:
     maximum: 10
@@ -290,8 +370,12 @@ scoring_grid:
       spouse_past_work: 5
       arranged_employment_bonus: 5
       eligible_relative_in_canada: 5
+    spouse_language_condition: Grid key spouse_language_clb5_all_four (and claim identifier spouse_clb5_all_four,
+      retained for compatibility with released AnyCase clients) is awarded when the accompanying spouse
+      or common-law partner has CLB/NCLC 4 or higher in all 4 language abilities on an approved test less
+      than 2 years old (IRPR s. 83(1)(a)).
     arranged_employment_bonus_condition: Award only if 10 arranged employment points were awarded under
-      IRPR R82(2); IRPR R83(1)(e).
+      IRPR R82(2) or the 2026-11-03 LMIA-exemption public policy (IRPR R83(1)(e) exemption).
     source_id: irpr_75_83
 evaluation:
   rule_statuses:
@@ -312,18 +396,25 @@ rules:
   - candidate.experience_continuous_months
   - candidate.experience_counted_hours
   - candidate.experience_last_10_years
-  pass_if: candidate.primary_occupation_teer in [0, 1, 2, 3] && candidate.primary_occupation_duties_met
+  pass_if: (candidate.primary_occupation_teer in [0, 1, 2, 3] && candidate.primary_occupation_duties_met
     == true && candidate.experience_paid == true && candidate.experience_continuous_months >= 12 && candidate.experience_counted_hours
-    >= 1560 && candidate.experience_last_10_years == true
-  fail_if: candidate.primary_occupation_teer in [4, 5] || candidate.primary_occupation_duties_met == false
+    >= 1560 && candidate.experience_last_10_years == true) || candidate.researcher_public_policy_met == true
+  fail_if: (candidate.primary_occupation_teer in [4, 5] || candidate.primary_occupation_duties_met == false
     || candidate.experience_paid == false || candidate.experience_continuous_months < 12 || candidate.experience_counted_hours
-    < 1560 || candidate.experience_last_10_years == false
+    < 1560 || candidate.experience_last_10_years == false) && !(candidate.researcher_public_policy_met == true)
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:eligibility.work_experience"
-    source_id: ircc_fswp
-    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
     section: Skilled work experience
-    verbatim_excerpt: "<label for=\"elig6\">be at least <strong>1 year of continuous work</strong> or 1,560 hours total (30 hours"
+    verbatim_excerpt: be at least <strong>1 year of continuous work</strong> or 1,560 hours total
+  secondary_evidence_anchors:
+  - evidence_unit_id: federal_ee:ircc_public_policy_researchers_2026_11_17:full_document_body
+    source_id: ircc_public_policy_researchers_2026_11_17
+    source_file: 8f034cb57466d32e6f6a8699226994229e0246e2aebb13f4d27b6e28dd7130f1
+    section: Conditions (eligibility requirements) — NOC 41200 non-wage remuneration within 3 years (exempts IRPR 75(2)(a)–(c))
+    verbatim_excerpt: Has acquired in Canada, within the three years before the date on which their application
+      for permanent residence is received, one year of full-time work experience
 - id: fswp_gate_language_clb7
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -342,11 +433,11 @@ rules:
     == false || candidate.language_test.listening_clb < 7 || candidate.language_test.reading_clb < 7 ||
     candidate.language_test.writing_clb < 7 || candidate.language_test.speaking_clb < 7
   evidence_anchor:
-    evidence_unit_id: federal_ee:express_entry_language_results:language.fswp.tests_and_validity
-    source_id: ircc_language
-    source_file: "971b0c655e309b3d7c4ced420e04e6b9dbed6f15d9643dc5679c927557b2e5fb"
+    evidence_unit_id: federal_ee:express_entry_language_results:full_document_body
+    source_id: express_entry_language_results
+    source_file: 6ce1925b2d3efb4da6c35691195c7575c52f0d24f9503bee2e54ff00997d31a3
     section: Federal Skilled Worker Program — First official language
-    verbatim_excerpt: "First official language</h4>\r\n            <div class=\"table-responsive\">\r\n                <table class=\"table\">\r\n                    <thead>\r\n                        <tr>\r\n                            <th scope=\"col\">Language</th>\r\n                            <th scope=\"col\">Minimum level for all 4 abilities</th>\r\n                        </tr>\r\n                    </thead>\r\n                    <tbody>\r\n                        <tr>\r\n                            <th>English</th>\r\n                            <td>CLB 7</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>French</th>\r\n                            <td>NCLC7"
+    verbatim_excerpt: "<th>English</th>\r\n                            <td>CLB 7</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <th>French</th>\r\n                            <td>NCLC7</td>"
 - id: fswp_gate_education_credential
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -366,11 +457,11 @@ rules:
     == false || candidate.education.eca_designated == false || candidate.education.eca_valid_within_five_years
     == false)
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_education_assessment:education.fswp_foreign_eca"
-    source_file: 8fa09a2725649e70223cbfe02c5ec4cb9330e118fce6f5488a8e393d85e3ccb2
+    evidence_unit_id: federal_ee:express_entry_education_assessment:full_document_body
+    source_id: express_entry_education_assessment
+    source_file: 5d4deedbba59bec5173cef9428f08a3a50e0352f48841ccbbb74a2ee09d2a617
     section: Education
-    source_id: ircc_eca
-    verbatim_excerpt: "If you completed your education <strong>outside Canada</strong>, you need an Educational credential assessment (ECA)\r\n    to:</p>\r\n<ul>\r\n    <li>be eligible as the principal applicant for Federal Skilled Workers Program (Express Entry)"
+    verbatim_excerpt: If you completed your education <strong>outside Canada</strong>
 - id: fswp_gate_settlement_funds
   category: statutory_gate
   severity: CRITICAL_REDLINE
@@ -401,98 +492,104 @@ rules:
     > 7 && funds.available_cad < 40392 + (candidate.family_size - 7) * 4112))'
   missing_or_unverified: NEEDS_REVIEW — funds evidence, exemption or family-size calculation is unverified.
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_proof_of_funds:funds.minimum_amounts_2025"
-    source_id: ircc_funds
-    source_file: ac73b9ce66b4740551aa4a34486dfe738cfd184abe1c376e4c7538d319e9e08d
+    evidence_unit_id: federal_ee:express_entry_proof_of_funds:full_document_body
+    source_id: express_entry_proof_of_funds
+    source_file: d9693b673e77a287d73e4c00f9b6344ab0ab7021fad6e7785341b79b0b9398fe
     section: How much money you need
-    verbatim_excerpt: "<th class=\"text-center\" scope=\"row\">1</th>\r\n                <td class=\"text-center\">$15,263</td>\r\n            </tr>"
+    verbatim_excerpt: "$15,263</td>\r\n            </tr>\r\n            <tr>\r\n                <th"
 - id: fswp_gate_intended_residence
   category: statutory_gate
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields:
   - candidate.intended_province
-  pass_if: candidate.intended_province != 'quebec'
+  pass_if: candidate.intended_province in ['alberta', 'british columbia', 'manitoba', 'new brunswick',
+    'newfoundland and labrador', 'northwest territories', 'nova scotia', 'nunavut', 'ontario', 'prince
+    edward island', 'saskatchewan', 'yukon']
   fail_if: candidate.intended_province == 'quebec'
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:eligibility.intended_residence"
-    source_id: ircc_fswp
-    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
     section: Where you can live in Canada
-    verbatim_excerpt: "<p>You must plan to live <strong>outside the province of Quebec</strong>."
+    verbatim_excerpt: You must plan to live <strong>outside the province of Quebec</strong>
 - id: fswp_gate_selection_score
   category: statutory_gate
   severity: CRITICAL_REDLINE
   eval_type: federal_score_total
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
-    source_id: ircc_fswp
-    source_file: a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
     section: Selection factors
-    verbatim_excerpt: "<li>If you score <strong>67&nbsp;points or higher</strong>, you may qualify for the Federal Skilled Worker Program."
+    verbatim_excerpt: 67&nbsp;points or higher</strong>, you may qualify for the Federal Skilled Worker
+      Program
 - id: fswp_score_language
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: language
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_language"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Language skills (maximum 28 points)"
-    verbatim_excerpt: "<h3>Language skills (maximum 28 points)</h3>\r\n    </summary>"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Language skills (maximum 28 points)
+    verbatim_excerpt: Check the table below and add the points that match your skill level.
 - id: fswp_score_education
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: education
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Education (maximum 25 points)"
-    verbatim_excerpt: "<summary>\r\n        <h3>Education (maximum 25 points)</h3>\r\n    </summary>"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Education (maximum 25 points)
+    verbatim_excerpt: You <strong>must</strong> include your Canadian credential or your foreign credential
+      and Educational Credential
 - id: fswp_score_experience
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: experience
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_work_experience"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Skilled work experience (maximum 15 points)"
-    verbatim_excerpt: "<h3>Skilled work experience (maximum 15 points)</h3>"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Skilled work experience (maximum 15 points)
+    verbatim_excerpt: Use this chart to find the number of points based on your number of years of skilled
+      work experience.
 - id: fswp_score_age
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: age
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.minimum_score"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Age (maximum 12 points)"
-    verbatim_excerpt: "<summary>\r\n        <h3>Age (maximum 12 points)</h3>\r\n    </summary>"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Age (maximum 12 points)
+    verbatim_excerpt: You’ll get points based on your age on the day we get your application.
 - id: fswp_score_arranged_employment
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: arranged_employment
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_arranged_employment"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Arranged employment in Canada (maximum 10 points)"
-    verbatim_excerpt: "Arranged employment in Canada (maximum 10 points)"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Arranged employment in Canada (maximum 10 points; no LMIA required from 2026-11-03)
+    verbatim_excerpt: You can get points if you have a job offer of <strong>at least 1&nbsp;year</strong>
+      from a single Canadian employer.
 - id: fswp_score_adaptability
   category: selection_factor
   severity: CRITICAL_REDLINE
   eval_type: federal_score_factor
   factor: adaptability
   evidence_anchor:
-    evidence_unit_id: "federal_ee:express_entry_fswp_program:selection.factor_adaptability"
-    source_id: ircc_fswp
-    source_file: "a8978d8006b80ac96ab68775af7d04ed073d61d2be28a1c553c0c6c68347b393"
-    section: "Adaptability (maximum 10 points)"
-    verbatim_excerpt: "<h3>Adaptability (maximum 10 points)</h3>\r\n    </summary>"
+    evidence_unit_id: federal_ee:express_entry_fswp_program:full_document_body
+    source_id: express_entry_fswp_program
+    source_file: abecef79e6f84ed8837a54e1ee54388628e0c91616fdc4e210a6ba5179b2ed74
+    section: Adaptability (maximum 10 points; spouse language CLB/NCLC 4+ in all 4 abilities per IRPR s. 83(1)(a))
+    verbatim_excerpt: "Your spouse or common-law partner has a language level in either English or French at <a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html#requirements\">CLB&nbsp;4\r\n              level</a> or higher in all 4&nbsp;language abilities"

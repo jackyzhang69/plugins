@@ -3,6 +3,9 @@
 Detail for each research surface. Host agents route by user intent; never lead
 with this catalog on install.
 
+Every command of this version, with its arguments, is listed in the router
+`SKILL.md`; this file only details the research and CLB surfaces below.
+
 ## Case law precedent retrieval (`caselaw`)
 
 Queries authoritative Canadian immigration decisions: Federal Court, Federal
@@ -54,15 +57,15 @@ TCF Canada) to official Canadian Language Benchmarks (CLB). Playbook:
 ## Tool execution templates
 
 ```bash
-anycase caselaw "<query>" --mode hybrid --top 3
-anycase policy "<query>" --lang en --top 5
-anycase manual "<query>" --mode hybrid --top 5
-anycase pnp "<query>" --province bc --mode hybrid --top 5
+anycase caselaw "<query>" [--court <fc|fca|irb|scc>] [--since <YYYY-MM-DD>] [--until <YYYY-MM-DD>] [--mode <keyword|semantic|hybrid>] [--top <1-5>] --questions <path>
+anycase policy "<query>" [--lang <en|zh>] [--mode <keyword|semantic|hybrid>] [--top <1-10>] --questions <path>
+anycase manual "<query>" [--policy-code <code>] [--mode <keyword|semantic|hybrid>] [--top <1-10>] --questions <path>
+anycase pnp "<query>" [--province <code>] [--stream <name>] [--mode <keyword|semantic|hybrid>] [--top <1-20>] --questions <path>
 anycase coverage
-anycase notes "<query>" --top 3
-anycase knowledge "<query>" --top 5
-anycase clb --test ielts -l <listening> -r <reading> -w <writing> -s <speaking>
-anycase query --action [caselaw|policy|notes|knowledge|clb|manual|pnp|coverage] --input "<query_or_json>"
+anycase notes "<query>" [--top <1-5>] --questions <path>
+anycase knowledge "<query>" [--top <1-10>] --questions <path>
+anycase clb [--test <ielts|celpip|pte|tef|tcf>] [--listening (-l) <n>] [--reading (-r) <n>] [--writing (-w) <n>] [--speaking (-s) <n>]
+anycase query --action <caselaw|policy|notes|knowledge|clb|manual|pnp|coverage> [--input "<query or JSON>"] [--top <n>] [--lang <code>] [--policy-code <code>] [--province <code>] [--stream <name>] [--mode <keyword|semantic|hybrid>]
 ```
 
 ## Legal synthesis rules

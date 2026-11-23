@@ -1,7 +1,7 @@
 # Questions JSON for a search
 
-Before every search — case law, Help Centre, manuals, practitioner notes, or
-private notes — write JSON for **this user question**. Use your own reading of
+Before every search — case law, Help Centre, manuals, provincial nominee
+guides, practitioner notes, or private notes — write JSON for **this user question**. Use your own reading of
 what they asked. We only give the shape and the job. You fill six fields.
 
 Job: search returns candidates. Request criteria in this JSON are applied to
@@ -64,6 +64,5 @@ pad a requested count with near-misses. If the search says candidates were
 not checked against the request criteria, say so, and still do not infer
 missing facts from an excerpt.
 
-Pass `--questions <path>` on `caselaw`, `policy`, `manual`, `notes`, or
-`knowledge` when the live `commands --json` lists that flag. If it does not,
-search without it.
+Pass `--questions <path>` on every `caselaw`, `policy`, `manual`, `pnp`, `notes`
+and `knowledge` search. Omit it only if you cannot write the file.

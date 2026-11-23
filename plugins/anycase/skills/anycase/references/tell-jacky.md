@@ -7,7 +7,7 @@ Submits feedback directly to Jacky's unified product feedback inbox via `anycase
 ## Command
 
 ```bash
-anycase feedback --type <feature-request|bug-report|knowledge-tip> --title "<short summary>" --description "<details>" --user-confirmed
+anycase feedback [--type <feature-request|bug-report|knowledge-tip>] --title "<short summary>" --description "<details>" --user-confirmed
 ```
 
 ## Mandatory Draft Confirmation & Confidentiality Rules

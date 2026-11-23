@@ -6,26 +6,46 @@ display_name: Canadian Experience Class
 status: ACTIVE
 program_id: FEDERAL_CEC
 stream_id: CEC
-effective_date: '2026-10-29'
-source_edition: Official criteria as observed on 2026-10-29; not a statutory commencement-date
-  claim.
+effective_date: '2026-11-17'
+source_edition: Official CEC criteria observed 2026-11-22 including 2026-11-17/18 update recognizing NOC
+  41200 Canadian work experience paid by a Canadian entity through stipends, grants, bursaries, or scholarships.
 source_url: https://laws-lois.justice.gc.ca/eng/regulations/sor-2002-227/section-87.1.html
-decision_scope: Partial first-official-language CEC prescreen using verified qualifying-experience
-  facts, never offer TEER. Additional source requirements remain an executable manual-review
-  gate; no complete eligibility PASS is asserted.
+decision_scope: Partial first-official-language CEC prescreen using verified qualifying-experience facts,
+  never offer TEER. Additional source requirements remain an executable manual-review gate; no complete
+  eligibility PASS is asserted.
 sources:
 - id: express_entry_cec_program
   title: express_entry_cec_program
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/canadian-experience-class.html
   citation: Official source as observed 2026-09-29
-  legal_authority: IRCC official program or language requirements; captured provenance
-    is in the K manifest.
+  legal_authority: IRCC official program or language requirements; captured provenance is in the K manifest.
 - id: express_entry_language_results
   title: express_entry_language_results
   url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
   citation: Official source as observed 2026-10-29
-  legal_authority: IRCC official program or language requirements; captured provenance
-    is in the K manifest.
+  legal_authority: IRCC official program or language requirements; captured provenance is in the K manifest.
+- id: ee_mi_amendment_2026_2
+  title: Ministerial Instructions Amending the Ministerial Instructions Respecting the Express Entry System,
+    2026-2
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-application-management-system/amendment-2026-2.html
+  citation: Ministerial Instructions given and effective 2026-11-17 under IRPA s. 10.3(1)(h); amends ss.
+    15.1(2), 15.2(2), and 19(4) for NOC 41200 non-wage monetary remuneration from a Canadian entity (captured
+    2026-11-22)
+  legal_authority: Binding Ministerial Instructions
+- id: ircc_researcher_notice_2026_11_18
+  title: Notice – Express Entry updates make it easier for top researchers to continue contributing to
+    Canada's innovation ecosystem
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/express-entry-updates-top-researchers-continue-contributing-canada-innovation-ecosystem.html
+  citation: 'IRCC Notice published 2026-11-18 (effective 2026-11-17): NOC 41200 stipends/grants/bursaries/scholarships
+    recognized for CEC, FSWP, and CRS; NOC 41201 no longer eligible for Researchers category (captured
+    2026-11-22)'
+  legal_authority: Official IRCC public notice
+- id: ircc_changes_2026
+  title: 2026 changes to the Express Entry system
+  url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/changes.html
+  citation: IRCC Express Entry changes summary updated 2026-11-18 covering 2026-11-03 and 2026-11-17 changes
+    (captured 2026-11-22)
+  legal_authority: Official IRCC operational summary
 schema:
   input_type: object
   required_top_level:
@@ -34,26 +54,24 @@ schema:
   types:
     assessment_date: ISO-8601 date
     candidate:
-      cec_counted_work_noc_teer: 'TEER of the work whose months are counted toward
-        this CEC claim: integer 0-5 only when one unambiguous tier is verified; mixed,
-        unverified, null or absent otherwise. Never derive from offer TEER or a primary
-        NOC selected for another purpose.'
-      canadian_skilled_months_past_3_years: 'Verified full-time-equivalent qualifying
-        months in the three years before application: 12 means 1,560 hours, with at
-        most 30 hours counted per week. If potentially qualifying physician time is
-        excluded, self-employment requires review.'
-      work_authorized: Whether the counted qualifying work was legally authorized;
-        not unrelated employment.
-      gained_as_full_time_student: Whether the counted qualifying work was gained
-        while studying full-time; not unrelated periods.
-      self_employed_work: Whether potentially counted work includes self-employment;
-        physician-policy applicability remains manual.
-      language_clb_minimum: 'Minimum benchmark level across all four abilities of
-        the selected first-official-language test: CLB for English or NCLC for French,
-        not raw test scores and not the lower score of an unselected language. Approved-test
-        and validity evidence remain manual.'
-      intends_to_reside_outside_quebec: Verified intent to live outside Quebec; experience
-        in Quebec itself is not excluded.
+      cec_counted_work_noc_teer: 'TEER of the work whose months are counted toward this CEC claim: integer
+        0-5 only when one unambiguous tier is verified; mixed, unverified, null or absent otherwise. Never
+        derive from offer TEER or a primary NOC selected for another purpose.'
+      canadian_skilled_months_past_3_years: 'Verified full-time-equivalent qualifying months in the three
+        years before application: 12 means 1,560 hours, with at most 30 hours counted per week. From 2026-11-17,
+        Canadian work experience in NOC 41200 paid by a Canadian entity through a stipend, grant, bursary,
+        or scholarship counts as paid work. If potentially qualifying physician time is excluded, self-employment
+        requires review.'
+      work_authorized: Whether the counted qualifying work was legally authorized; not unrelated employment.
+      gained_as_full_time_student: Whether the counted qualifying work was gained while studying full-time;
+        not unrelated periods.
+      self_employed_work: Whether potentially counted work includes self-employment; physician-policy
+        applicability remains manual.
+      language_clb_minimum: 'Minimum benchmark level across all four abilities of the selected first-official-language
+        test: CLB for English or NCLC for French, not raw test scores and not the lower score of an unselected
+        language. Approved-test and validity evidence remain manual.'
+      intends_to_reside_outside_quebec: Verified intent to live outside Quebec; experience in Quebec itself
+        is not excluded.
 reference_points_grid:
   note: The Canadian Experience Class has no selection points grid.
 rules:
@@ -67,23 +85,20 @@ rules:
   - candidate.gained_as_full_time_student
   - candidate.self_employed_work
   - candidate.cec_counted_work_noc_teer
-  pass_if: candidate.canadian_skilled_months_past_3_years >= 12 && candidate.work_authorized
-    == true && candidate.gained_as_full_time_student == false && candidate.self_employed_work
-    == false && candidate.cec_counted_work_noc_teer in [0, 1, 2, 3]
-  fail_if: candidate.work_authorized == false || candidate.gained_as_full_time_student
-    == true || candidate.cec_counted_work_noc_teer in [4, 5] || (candidate.canadian_skilled_months_past_3_years
-    < 12 && candidate.self_employed_work == false)
-  missing_or_unverified: 'NEEDS_REVIEW: qualifying work TEER or counted experience
-    is unverified, mixed-TEER work is unresolved, or physician self-employment may
-    qualify. Offer TEER is never a proxy.'
+  pass_if: candidate.canadian_skilled_months_past_3_years >= 12 && candidate.work_authorized == true &&
+    candidate.gained_as_full_time_student == false && candidate.self_employed_work == false && candidate.cec_counted_work_noc_teer
+    in [0, 1, 2, 3]
+  fail_if: candidate.work_authorized == false || candidate.gained_as_full_time_student == true || candidate.cec_counted_work_noc_teer
+    in [4, 5] || (candidate.canadian_skilled_months_past_3_years < 12 && candidate.self_employed_work
+    == false)
+  missing_or_unverified: 'NEEDS_REVIEW: qualifying work TEER or counted experience is unverified, mixed-TEER
+    work is unresolved, or physician self-employment may qualify. Offer TEER is never a proxy.'
   evidence_anchor:
     evidence_unit_id: federal_ee:express_entry_cec_program:full_document_body
-    source_file: 663dfab02c129a31500745b807b821be3345fa336e2fdab83b7cbf8b2f4971db
-    section: Skilled work experience
-    verbatim_excerpt: total at least <strong>1 year of work</strong> or 1,560 hours
-      total (30 hours per week) in the 3 years before you apply
     source_id: express_entry_cec_program
-    page: ''
+    source_file: 5ed84020dee8fb3dc73637b851363082a17f910169cfead49a3e041b2ccada74
+    section: Skilled work experience
+    verbatim_excerpt: total at least <strong>1 year of work</strong> or 1,560 hours total
 - id: cec_language
   category: language
   severity: CRITICAL_REDLINE
@@ -91,30 +106,19 @@ rules:
   required_fields:
   - candidate.cec_counted_work_noc_teer
   - candidate.language_clb_minimum
-  pass_if: (candidate.cec_counted_work_noc_teer in [0, 1] && candidate.language_clb_minimum
-    >= 7) || (candidate.cec_counted_work_noc_teer in [2, 3] && candidate.language_clb_minimum
-    >= 5)
-  fail_if: (candidate.cec_counted_work_noc_teer in [0, 1] && candidate.language_clb_minimum
-    < 7) || (candidate.cec_counted_work_noc_teer in [2, 3] && candidate.language_clb_minimum
-    < 5)
+  pass_if: (candidate.cec_counted_work_noc_teer in [0, 1] && candidate.language_clb_minimum >= 7) || (candidate.cec_counted_work_noc_teer
+    in [2, 3] && candidate.language_clb_minimum >= 5)
+  fail_if: (candidate.cec_counted_work_noc_teer in [0, 1] && candidate.language_clb_minimum < 7) || (candidate.cec_counted_work_noc_teer
+    in [2, 3] && candidate.language_clb_minimum < 5)
   missing_or_unverified: 'NEEDS_REVIEW: verified counted-work TEER and selected first-official-language
-    four-ability CLB/NCLC levels are needed. Mixed TEER or unverified language evidence
-    requires manual review; offer TEER is irrelevant.'
+    four-ability CLB/NCLC levels are needed. Mixed TEER or unverified language evidence requires manual
+    review; offer TEER is irrelevant.'
   evidence_anchor:
-    evidence_unit_id: federal_ee:express_entry_language_test_2026_10_16:language.minimum_levels_by_program
-    source_id: express_entry_language_test_2026_10_16
-    source_file: 2758fe28773c50984356ced6b76c729f4e01d523d517f4485e853cbe35fea258
-    source_sha256: 7803b6bd1b148e14d8dc4c259c9a937aae36f63c0b1a0bf5b876710c1d3be698
-    source_url: https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test.html
+    evidence_unit_id: federal_ee:express_entry_language_results:full_document_body
+    source_id: express_entry_language_results
+    source_file: ce53add9d0620e94a1cc7c2e4c08b707db65e39cd26adf3f5bc6d26e052e257b
     section: Canadian Experience Class — minimum level for all four abilities; TEER 0/1 versus TEER 2/3
-    verbatim_excerpt: "<h3 class=\"mrgn-tp-sm\">Canadian Experience Class</h3>\r\n            </summary>\r\n            <p>The skills you need will depend on the group your job is classified\
-      \ in under the&nbsp;<a href=\"/en/immigration-refugees-citizenship/services/immigrate-canada/find-national-occupation-code.html\">National Occupational Classification system (NOC)</a>.</p>\r\
-      \n            <h4>Minimum level for all 4 abilities</h4>\r\n            <div class=\"table-responsive\">\r\n                <table class=\"table\">\r\n                    <thead>\r\
-      \n                        <tr>\r\n                            <th scope=\"col\">NOC TEER</th>\r\n                            <th scope=\"col\">English</th>\r\n                  \
-      \          <th scope=\"col\">French</th>\r\n                        </tr>\r\n                    </thead>\r\n                    <tbody>\r\n                        <tr>\r\n     \
-      \                       <th class=\"nowrap\">TEER 0 or 1</th>\r\n                            <td>CLB 7</td>\r\n                            <td>NCLC 7</td>\r\n                   \
-      \     </tr>\r\n                        <tr>\r\n                            <th class=\"nowrap\">TEER 2 or 3</th>\r\n                            <td>CLB 5</td>\r\n               \
-      \             <td>NCLC 5</td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>"
+    verbatim_excerpt: "Canadian Experience Class</h3>\r\n            </summary>\r\n            <p"
 - id: cec_quebec
   category: pathway
   severity: CRITICAL_REDLINE
@@ -123,27 +127,25 @@ rules:
   - candidate.intends_to_reside_outside_quebec
   pass_if: candidate.intends_to_reside_outside_quebec == true
   fail_if: candidate.intends_to_reside_outside_quebec == false
-  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot
-    be verified.'
+  missing_or_unverified: 'NEEDS_REVIEW: Intention to reside outside Quebec cannot be verified.'
   evidence_anchor:
     evidence_unit_id: federal_ee:express_entry_cec_program:full_document_body
-    source_file: 663dfab02c129a31500745b807b821be3345fa336e2fdab83b7cbf8b2f4971db
-    section: Where you can live in Canada
-    verbatim_excerpt: You must plan to live <strong>outside the province of Quebec
     source_id: express_entry_cec_program
-    page: ''
+    source_file: 5ed84020dee8fb3dc73637b851363082a17f910169cfead49a3e041b2ccada74
+    section: Where you can live in Canada
+    verbatim_excerpt: You must plan to live <strong>outside the province of Quebec</strong>
 - id: cec_additional_source_requirements_manual
   category: manual_source_coverage
   severity: CRITICAL_REDLINE
   eval_type: deterministic
   required_fields: []
-  missing_or_unverified: 'NEEDS_REVIEW: paid work, status/physical presence, NOC duties,
-    test validity/language, admissibility, application-date window and physician-policy/mixed-TEER
-    conditions require manual verification; see partial criteria.'
+  missing_or_unverified: 'NEEDS_REVIEW: paid work (including NOC 41200 stipend/grant/bursary/scholarship
+    verification from 2026-11-17), status/physical presence, NOC duties, test validity/language, admissibility,
+    application-date window and physician-policy/mixed-TEER conditions require manual verification; see
+    partial criteria.'
   evidence_anchor:
     evidence_unit_id: federal_ee:express_entry_cec_program:full_document_body
     source_id: express_entry_cec_program
-    source_file: 663dfab02c129a31500745b807b821be3345fa336e2fdab83b7cbf8b2f4971db
+    source_file: 5ed84020dee8fb3dc73637b851363082a17f910169cfead49a3e041b2ccada74
     section: Qualifying work and additional CEC requirements
-    page: ''
-    verbatim_excerpt: you were a volunteer or an unpaid intern
+    verbatim_excerpt: "you were a volunteer or an unpaid intern</li>\r\n    <li><a href=\"https:"
