@@ -1,7 +1,7 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "anychat",
-  "version": "0.1.106",
+  "version": "0.1.107",
   "capabilities": [
     {
       "goal": "Sign in, sign out, check the current account, and inspect or repair local setup readiness.",

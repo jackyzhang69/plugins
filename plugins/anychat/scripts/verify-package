@@ -200,6 +200,13 @@ if bin_root.exists():
             actual_bin_files.add(rel)
         elif not path.is_dir():
             errors.append(f"unsafe special entry in bin tree: {rel}")
+# Programs must ship executable. Artifact transfer strips the mode, and a
+# non-executable linux-x64 binary in the marketplace gives "Permission denied".
+for rel in sorted(actual_bin_files):
+    if rel.endswith((".exe", ".sha256", ".dll")):
+        continue
+    if not (root / rel).stat().st_mode & 0o111:
+        errors.append(f"{rel} is not executable")
 extra_bin = sorted(actual_bin_files - expected_bin_files)
 missing_bin = sorted(expected_bin_files - actual_bin_files)
 if extra_bin:

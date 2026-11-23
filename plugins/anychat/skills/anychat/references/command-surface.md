@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anychat command reference
 
-Generated from `anychat commands --json` (version `0.1.106`). Every public command is listed.
+Generated from `anychat commands --json` (version `0.1.107`). Every public command is listed.
 
 ## `anychat login`
 
