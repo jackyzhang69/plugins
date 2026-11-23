@@ -1,7 +1,7 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "anymail",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "capabilities": [
     {
       "goal": "Print the installed AnyMail version.",

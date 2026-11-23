@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anymail command reference
 
-Generated from `anymail commands --json` (version `0.1.14`). Every public command is listed.
+Generated from `anymail commands --json` (version `0.1.15`). Every public command is listed.
 
 ## `anymail version`
 
