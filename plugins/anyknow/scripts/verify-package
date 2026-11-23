@@ -23,6 +23,8 @@ expected_files = {
     "cordis.patch.yml",
     "index.js",
     "skills/anyknow/SKILL.md",
+    "skills/anyknow/references/cold-read.json",
+    "skills/anyknow/references/command-surface.md",
     "skills/anyknow/references/connect.md",
     "skills/anyknow/references/get-started.md",
     "skills/anyknow/references/intake.md",
@@ -32,6 +34,7 @@ expected_files = {
     "skills/anyknow/references/read.md",
     "skills/anyknow/references/tell-jacky.md",
     "skills/anyknow/references/triggers.md",
+    "skills/anyknow/references/whats-new.md",
     "scripts/verify-package",
     "scripts/verify-install",
     "scripts/verify-release-assets",
@@ -155,7 +158,7 @@ if native is not None and native.is_file():
     except Exception as exc:
         errors.append(f"native commands --json is invalid: {exc}")
     else:
-        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v1":
+        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v2":
             errors.append("native command manifest schema mismatch")
         if command_manifest.get("bin") != "anyknow" or command_manifest.get("version") != version:
             errors.append("native command manifest identity/version mismatch")

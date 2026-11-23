@@ -1,0 +1,299 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anyknow",
+  "version": "0.1.22",
+  "capabilities": [
+    {
+      "goal": "Check login, configuration, and service readiness.",
+      "command": [
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Connect the shared Jacky Zhang login using a token supplied on standard input.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin"
+      ]
+    },
+    {
+      "goal": "Disconnect the shared login.",
+      "command": [
+        "logout"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Show the connected account with its subject masked.",
+      "command": [
+        "whoami"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List devices bound to the account.",
+      "command": [
+        "devices"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Release a bound device seat.",
+      "command": [
+        "unbind"
+      ],
+      "flags": [
+        "--id"
+      ]
+    },
+    {
+      "goal": "Prepare a local preview of a knowledge change without saving it.",
+      "command": [
+        "prepare"
+      ],
+      "flags": [
+        "--input",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Save the exact prepared knowledge change the user confirmed.",
+      "command": [
+        "commit"
+      ],
+      "flags": [
+        "--input",
+        "--confirm-sha256"
+      ]
+    },
+    {
+      "goal": "Prepare a local preview of restoring a complete exchange snapshot.",
+      "command": [
+        "prepare-import"
+      ],
+      "flags": [
+        "--input",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Restore the exact prepared exchange snapshot the user confirmed.",
+      "command": [
+        "commit-import"
+      ],
+      "flags": [
+        "--input",
+        "--confirm-sha256"
+      ]
+    },
+    {
+      "goal": "Search saved knowledge for items relevant to a question.",
+      "command": [
+        "search"
+      ],
+      "flags": [
+        "--input"
+      ]
+    },
+    {
+      "goal": "Browse saved knowledge.",
+      "command": [
+        "browse"
+      ],
+      "flags": [
+        "--input"
+      ]
+    },
+    {
+      "goal": "List knowledge topics.",
+      "command": [
+        "topics"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Read a saved knowledge item.",
+      "command": [
+        "get"
+      ],
+      "flags": [
+        "--asset-id"
+      ]
+    },
+    {
+      "goal": "Read an item's version history.",
+      "command": [
+        "versions"
+      ],
+      "flags": [
+        "--asset-id"
+      ]
+    },
+    {
+      "goal": "Read an item's direct relationships.",
+      "command": [
+        "links"
+      ],
+      "flags": [
+        "--asset-id",
+        "--limit",
+        "--offset"
+      ]
+    },
+    {
+      "goal": "Read the receipt for an earlier save operation.",
+      "command": [
+        "operation"
+      ],
+      "flags": [
+        "--operation-id"
+      ]
+    },
+    {
+      "goal": "Export saved knowledge to a new local file.",
+      "command": [
+        "export"
+      ],
+      "flags": [
+        "--input",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Record that saved knowledge was reused.",
+      "command": [
+        "record-reuse"
+      ],
+      "flags": [
+        "--operation-id"
+      ]
+    },
+    {
+      "goal": "Preview a feedback report for Jacky and, with confirmation, send it.",
+      "command": [
+        "feedback"
+      ],
+      "flags": [
+        "--input",
+        "--user-confirmed"
+      ]
+    },
+    {
+      "goal": "List product feedback submitted from the account.",
+      "command": [
+        "feedback-list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Read the current status of a feedback report.",
+      "command": [
+        "feedback-status"
+      ],
+      "flags": [
+        "--id"
+      ]
+    },
+    {
+      "goal": "Request approval to open a support session.",
+      "command": [
+        "pair",
+        "request"
+      ],
+      "flags": [
+        "--request-key",
+        "--user-confirmed"
+      ]
+    },
+    {
+      "goal": "Check a support-session request until it is approved, expired, or cancelled.",
+      "command": [
+        "pair",
+        "request-status"
+      ],
+      "flags": [
+        "--request-id",
+        "--wait-seconds"
+      ]
+    },
+    {
+      "goal": "Check the status of a support session.",
+      "command": [
+        "pair",
+        "status"
+      ],
+      "flags": [
+        "--session-id"
+      ]
+    },
+    {
+      "goal": "Send a message in a support session, optionally replying to a task.",
+      "command": [
+        "pair",
+        "send"
+      ],
+      "flags": [
+        "--session-id",
+        "--message-file",
+        "--idempotency-key",
+        "--phase",
+        "--reply-to"
+      ]
+    },
+    {
+      "goal": "Receive updates in a support session.",
+      "command": [
+        "pair",
+        "receive"
+      ],
+      "flags": [
+        "--session-id",
+        "--timeout-seconds"
+      ]
+    },
+    {
+      "goal": "Acknowledge a handled support-session update.",
+      "command": [
+        "pair",
+        "ack"
+      ],
+      "flags": [
+        "--session-id",
+        "--ack-ref"
+      ]
+    },
+    {
+      "goal": "Close a support session with a reason.",
+      "command": [
+        "pair",
+        "close"
+      ],
+      "flags": [
+        "--session-id",
+        "--reason"
+      ]
+    },
+    {
+      "goal": "Repair installation after an update so this package is the only installed copy.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--repair-install"
+      ]
+    },
+    {
+      "goal": "Print the available command surface as JSON.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    }
+  ],
+  "unclear": []
+}

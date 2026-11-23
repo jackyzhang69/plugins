@@ -71,10 +71,10 @@
         "name": "Jacky Zhang"
       },
       "category": "productivity",
-      "description": "Private personal knowledge with confirmed changes, search, browsing, and portable export.",
+      "description": "Private knowledge preparation, confirmed storage, search, browsing, export, feedback, and support pairing.",
       "name": "anyknow",
       "source": "./plugins/anyknow",
-      "version": "0.1.20"
+      "version": "0.1.22"
     },
     {
       "author": {
