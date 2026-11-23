@@ -1,0 +1,771 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "formbro",
+  "version": "1.9.11",
+  "capabilities": [
+    {
+      "goal": "Connect the CLI to the user's account using a token supplied through stdin.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin"
+      ]
+    },
+    {
+      "goal": "Show the account associated with the current credentials.",
+      "command": [
+        "whoami"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Check whether the backend is reachable.",
+      "command": [
+        "health"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Inspect CLI version, runtime readiness, backend status, and optionally upgrades or installation repair.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--json",
+        "--no-fetch",
+        "--fetch",
+        "--check-upgrade",
+        "--repair-install"
+      ]
+    },
+    {
+      "goal": "Print the CLI's public commands and arguments as JSON.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "List supported immigration programs.",
+      "command": [
+        "programs",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Show details for a program.",
+      "command": [
+        "programs",
+        "describe"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Show a program's schema for a role.",
+      "command": [
+        "programs",
+        "schema"
+      ],
+      "flags": [
+        "--role"
+      ]
+    },
+    {
+      "goal": "Search people, companies, and optionally related applications or documents.",
+      "command": [
+        "find"
+      ],
+      "flags": [
+        "--program-key",
+        "--include",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "List or retrieve applicant records.",
+      "command": [
+        "applicants",
+        "list"
+      ],
+      "flags": [
+        "--search",
+        "--program-key",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Retrieve an applicant record by ID.",
+      "command": [
+        "applicants",
+        "get"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Create an applicant record.",
+      "command": [
+        "persons",
+        "create"
+      ],
+      "flags": [
+        "--program-key",
+        "--role"
+      ]
+    },
+    {
+      "goal": "Edit a person record.",
+      "command": [
+        "persons",
+        "patch"
+      ],
+      "flags": [
+        "--program-key",
+        "--data",
+        "--set",
+        "--expected-version"
+      ]
+    },
+    {
+      "goal": "Edit or delete an applicant record.",
+      "command": [
+        "applicants",
+        "patch"
+      ],
+      "flags": [
+        "--data",
+        "--expected-version"
+      ]
+    },
+    {
+      "goal": "Delete an applicant record.",
+      "command": [
+        "applicants",
+        "delete"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List active applications or inventory applications across all statuses.",
+      "command": [
+        "applications",
+        "list"
+      ],
+      "flags": [
+        "--status",
+        "--program-key",
+        "--limit",
+        "--offset"
+      ]
+    },
+    {
+      "goal": "Search application inventory across statuses.",
+      "command": [
+        "applications",
+        "inventory"
+      ],
+      "flags": [
+        "--program-key",
+        "--limit",
+        "--query"
+      ]
+    },
+    {
+      "goal": "List applications by status, optionally filtered by time in that status.",
+      "command": [
+        "applications",
+        "by-status"
+      ],
+      "flags": [
+        "--program-key",
+        "--days-in-status",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Retrieve an application record by ID.",
+      "command": [
+        "applications",
+        "get"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Read an application's backend-persisted status.",
+      "command": [
+        "applications",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List people attached to an application.",
+      "command": [
+        "applications",
+        "persons"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List documents associated with an application.",
+      "command": [
+        "applications",
+        "documents"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Resolve a search query to an application ID or report ambiguous/no matches.",
+      "command": [
+        "applications",
+        "resolve"
+      ],
+      "flags": [
+        "--query",
+        "--program-key"
+      ]
+    },
+    {
+      "goal": "Create an application, optionally for an applicant.",
+      "command": [
+        "applications",
+        "start"
+      ],
+      "flags": [
+        "--program-key",
+        "--applicant-id"
+      ]
+    },
+    {
+      "goal": "Attach a person to an application in a role.",
+      "command": [
+        "applications",
+        "attach"
+      ],
+      "flags": [
+        "--app-id",
+        "--role",
+        "--person-id"
+      ]
+    },
+    {
+      "goal": "Replace the person assigned to an application role.",
+      "command": [
+        "applications",
+        "replace-person"
+      ],
+      "flags": [
+        "--app-id",
+        "--role",
+        "--person-id"
+      ]
+    },
+    {
+      "goal": "Remove a person from an application role.",
+      "command": [
+        "applications",
+        "remove-person"
+      ],
+      "flags": [
+        "--app-id",
+        "--role",
+        "--person-id"
+      ]
+    },
+    {
+      "goal": "Change an application's status.",
+      "command": [
+        "applications",
+        "set-status"
+      ],
+      "flags": [
+        "--app-id",
+        "--program-key",
+        "--status",
+        "--expected-version"
+      ]
+    },
+    {
+      "goal": "Edit application data.",
+      "command": [
+        "applications",
+        "patch"
+      ],
+      "flags": [
+        "--program-key",
+        "--data",
+        "--set",
+        "--expected-version"
+      ]
+    },
+    {
+      "goal": "List or retrieve LMIA employer records.",
+      "command": [
+        "employers",
+        "list"
+      ],
+      "flags": [
+        "--search",
+        "--stream",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Retrieve an employer record by ID.",
+      "command": [
+        "employers",
+        "get"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Create an LMIA employer record.",
+      "command": [
+        "employers",
+        "create"
+      ],
+      "flags": [
+        "--company-name"
+      ]
+    },
+    {
+      "goal": "Edit an employer record.",
+      "command": [
+        "employers",
+        "patch"
+      ],
+      "flags": [
+        "--data"
+      ]
+    },
+    {
+      "goal": "Delete an employer record.",
+      "command": [
+        "employers",
+        "delete"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List account-level RCIC profile summaries, without credentials.",
+      "command": [
+        "rcic",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Read the account's audit trail.",
+      "command": [
+        "audit",
+        "my"
+      ],
+      "flags": [
+        "--from",
+        "--to",
+        "--action",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Get the contract/schema for creating a new case from locally parsed files.",
+      "command": [
+        "import",
+        "contract"
+      ],
+      "flags": [
+        "--program-key",
+        "--target"
+      ]
+    },
+    {
+      "goal": "Create a new case from JSON, optionally validating without saving.",
+      "command": [
+        "import",
+        "apply-json"
+      ],
+      "flags": [
+        "--program-key",
+        "--json",
+        "--target",
+        "--dry-run"
+      ]
+    },
+    {
+      "goal": "Get an extraction contract for an existing entity.",
+      "command": [
+        "extract",
+        "contract"
+      ],
+      "flags": [
+        "--program-key",
+        "--entity-type",
+        "--sub-object-type"
+      ]
+    },
+    {
+      "goal": "Extract structured data from text for an entity.",
+      "command": [
+        "extract",
+        "text"
+      ],
+      "flags": [
+        "--text",
+        "--entity-type",
+        "--program-key",
+        "--entity-id",
+        "--model"
+      ]
+    },
+    {
+      "goal": "Apply extracted JSON to an existing entity.",
+      "command": [
+        "extract",
+        "apply-json"
+      ],
+      "flags": [
+        "--target-entity-id",
+        "--target-entity-type",
+        "--json",
+        "--program-key",
+        "--expected-version"
+      ]
+    },
+    {
+      "goal": "Check the status of an extraction task.",
+      "command": [
+        "extract",
+        "task-status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List extraction models.",
+      "command": [
+        "extract",
+        "models"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List supported extraction formats.",
+      "command": [
+        "extract",
+        "formats"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Clear the extraction cache.",
+      "command": [
+        "extract",
+        "clear-cache"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Validate supplied data without saving it.",
+      "command": [
+        "validate",
+        "data"
+      ],
+      "flags": [
+        "--entity-type",
+        "--data",
+        "--tab"
+      ]
+    },
+    {
+      "goal": "Validate a saved entity by ID.",
+      "command": [
+        "validate",
+        "by-id"
+      ],
+      "flags": [
+        "--entity-type",
+        "--entity-id",
+        "--tab"
+      ]
+    },
+    {
+      "goal": "Validate a person for a program and role.",
+      "command": [
+        "validate",
+        "person"
+      ],
+      "flags": [
+        "--person-id",
+        "--program-key",
+        "--role"
+      ]
+    },
+    {
+      "goal": "Validate whether an operation is allowed for an entity.",
+      "command": [
+        "validate",
+        "operation"
+      ],
+      "flags": [
+        "--operation",
+        "--entity-type",
+        "--entity-id",
+        "--entity-data"
+      ]
+    },
+    {
+      "goal": "Append a note to an applicant, application, or employer.",
+      "command": [
+        "notes",
+        "add"
+      ],
+      "flags": [
+        "--entity-id",
+        "--entity-type",
+        "--program-key",
+        "--note"
+      ]
+    },
+    {
+      "goal": "List document upload slots for an entity.",
+      "command": [
+        "uploads",
+        "slots"
+      ],
+      "flags": [
+        "--entity-type",
+        "--entity-id"
+      ]
+    },
+    {
+      "goal": "Fill supported IMM PDFs for a saved application and save them locally.",
+      "command": [
+        "fill"
+      ],
+      "flags": [
+        "--app-id",
+        "--forms",
+        "--output",
+        "--program-key"
+      ]
+    },
+    {
+      "goal": "Export a saved entity to Excel.",
+      "command": [
+        "export",
+        "entity"
+      ],
+      "flags": [
+        "--entity-type",
+        "--entity-id",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Export supplied JSON data to Excel.",
+      "command": [
+        "export",
+        "data"
+      ],
+      "flags": [
+        "--form-id",
+        "--data",
+        "--output",
+        "--program-key",
+        "--language"
+      ]
+    },
+    {
+      "goal": "Export a blank Excel template.",
+      "command": [
+        "export",
+        "template"
+      ],
+      "flags": [
+        "--form-id",
+        "--output",
+        "--language"
+      ]
+    },
+    {
+      "goal": "Generate a legacy PDF export from an application.",
+      "command": [
+        "export",
+        "pdf"
+      ],
+      "flags": [
+        "--program-key",
+        "--app-id",
+        "--forms",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Check whether PDF export is supported for an application.",
+      "command": [
+        "export",
+        "pdf-check"
+      ],
+      "flags": [
+        "--program-key",
+        "--app-id",
+        "--forms"
+      ]
+    },
+    {
+      "goal": "Generate an extension bundle for an application.",
+      "command": [
+        "export",
+        "extension"
+      ],
+      "flags": [
+        "--program-key",
+        "--app-id"
+      ]
+    },
+    {
+      "goal": "Submit a bug report, feature request, or knowledge tip.",
+      "command": [
+        "feedback",
+        "create"
+      ],
+      "flags": [
+        "--type",
+        "--title",
+        "--description",
+        "--url",
+        "--application-id",
+        "--context-json",
+        "--image"
+      ]
+    },
+    {
+      "goal": "Check whether the machine's webform runtime is ready.",
+      "command": [
+        "webform",
+        "runtime-check"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Dry-run the portal adapter for an application.",
+      "command": [
+        "webform",
+        "preflight"
+      ],
+      "flags": [
+        "--app-id",
+        "--program-key"
+      ]
+    },
+    {
+      "goal": "Fill an IRCC or Service Canada portal form locally without submitting it.",
+      "command": [
+        "webform",
+        "start"
+      ],
+      "flags": [
+        "--app-id",
+        "--query",
+        "--program-key",
+        "--case-id",
+        "--form",
+        "--new",
+        "--confirmed",
+        "--headless",
+        "--print-pages",
+        "--debug-events"
+      ]
+    },
+    {
+      "goal": "Invite Job Bank candidates for a posting.",
+      "command": [
+        "webform",
+        "jobbank-invite"
+      ],
+      "flags": [
+        "--job-post-id",
+        "--rcic-id",
+        "--minimum-stars",
+        "--max-invites",
+        "--confirmed",
+        "--headless"
+      ]
+    },
+    {
+      "goal": "Read backend-persisted status of a webform run.",
+      "command": [
+        "webform",
+        "status"
+      ],
+      "flags": [
+        "--app-id",
+        "--program-key"
+      ]
+    },
+    {
+      "goal": "Start the local webform worker daemon.",
+      "command": [
+        "webform",
+        "daemon",
+        "start"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Stop the local webform worker daemon.",
+      "command": [
+        "webform",
+        "daemon",
+        "stop"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Inspect local webform worker daemon status.",
+      "command": [
+        "webform",
+        "daemon",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Restart the local webform worker daemon.",
+      "command": [
+        "webform",
+        "daemon",
+        "restart"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Remove non-current Chromium revisions from the local runtime cache.",
+      "command": [
+        "webform",
+        "daemon",
+        "prune-chromium"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Bundle vendor PDF files for plugin maintenance.",
+      "command": [
+        "pdf",
+        "bundle"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Verify vendor PDF files for plugin maintenance.",
+      "command": [
+        "pdf",
+        "verify"
+      ],
+      "flags": []
+    }
+  ],
+  "unclear": []
+}

@@ -88,7 +88,7 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
    - `cache.stale == false`: cache is current. Proceed silently.
    - `cache.stale == true`: tell the user verbatim:
 
-     > Your FormBro plugin cache is stale: running version `<cache.version>` from `<cache.location>` cache, latest available `<cache.latest_available>`. Refresh via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before proceeding, or this session may hit known-fixed bugs (Bun JIT OOM on Apple Silicon, action schema mismatch, etc.).
+     > Your FormBro plugin cache is stale: running version `<cache.version>` from `<cache.location>` cache, latest available `<cache.latest_available>`. I can refresh it now (your login and settings are kept), or this session may hit known-fixed bugs (Bun JIT OOM on Apple Silicon, action schema mismatch, etc.).
      >
      > If you want to proceed anyway: say so explicitly and I'll continue.
 
@@ -99,9 +99,9 @@ Persists the user's FormBro API token through the bundled `formbro` CLI so that 
 
    - `upgrade.upgrade_available == true`: tell the user verbatim:
 
-     > A newer FormBro plugin version (`<upgrade.latest>`) is available; you're on `<upgrade.current>`. New releases often ship bug fixes for issues you might hit. Recommend upgrading via your plugin manager (codex: re-sync `jacky-plugins`; claude: reinstall the plugin) before continuing. Want to upgrade now, or proceed anyway?
+     > A newer FormBro plugin version (`<upgrade.latest>`) is available; you're on `<upgrade.current>`. New releases often ship bug fixes for issues you might hit. Want me to update it now, or continue with the current version?
 
-     If user says proceed: continue.
+     If user says update (either case above): follow the router's **Updates** section. If user says proceed: continue.
    - `upgrade.checked == false`: log "upgrade check failed (reason); proceeding with current version" and continue silently — don't bother the user with network errors.
 
    This check is cheap (single local filesystem scan; no network IO because of `--no-fetch`) and saves the user from chasing already-fixed bugs across the rest of the session. Do not skip it.

@@ -45,6 +45,12 @@ Playbooks: [connect](references/connect.md), [read](references/read.md),
 [write](references/write.md), [fill](references/fill.md),
 [webform](references/webform.md), [tell-jacky](references/tell-jacky.md).
 
+`formbro commands --json` prints every public command with its arguments as JSON; use it whenever you need the exact current list. `formbro health` takes no arguments and returns the backend's health status as JSON.
+
+## Updates
+
+`formbro` may print one stderr line with schema `jz.plugin.update_notice.v1`. It never blocks a command. Finish what the user asked first, then tell them once, in plain words, that a newer version is available and ask whether to update now. On yes: refresh this plugin through the host (Claude Code: `claude plugin marketplace update jacky-plugins`, then `claude plugin update formbro@jacky-plugins`; Codex: `codex plugin marketplace upgrade jacky-plugins`, then `codex plugin add formbro@jacky-plugins`; other hosts: attach the new `plugins/formbro/` tree). Then run `doctor --repair-install` with the binary from the **new** package, not the folder this session started from (Claude Code: `~/.claude/plugins/cache/jacky-plugins/formbro/<latest>/bin/<platform>/formbro`; Codex: `~/.codex/plugins/cache/jacky-plugins/formbro/<latest>/bin/<platform>/formbro`; `<latest>` is the notice's `latest` value or the highest version folder present; `<platform>` is `darwin-arm64`, `linux-x64` or `win32-x64`). Read `references/whats-new.md` from that folder and tell the user in one or two sentences what changed and that the host loads it fully after a restart. For the rest of this session use that folder for every command and reference; the old version folder is gone. On no: do not ask again in this session.
+
 ## Shared platform token (host agent — mandatory)
 
 - Canonical durable user credential: `~/.jackyzhang.app/token/user.json` (`jz_` only).
@@ -106,21 +112,23 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "invite Job Bank candidates for posting `<id>`" | `formbro webform jobbank-invite --job-post-id <id> --rcic-id <rcic_id> --minimum-stars 2\|4 [--max-invites 3] --confirmed` |
 | "fill PDF / IMM forms for `<person>`'s case" | `formbro fill --app-id <id> --forms IMM…,IMM…` (see references/fill.md) |
 | "find / look up `<person>`" | `formbro find "<person>" --include applications --limit 10` |
-| "list ALL cases / inventory / audit sweep" | `formbro applications inventory [--program-key <key>]` (v1.5.0+; returns every status incl. empty) |
+| "list ALL cases / inventory / audit sweep" | `formbro applications inventory [--program-key <key>] [--limit <n>] [--query <text>]` (returns every status incl. empty; default limit 200, default query matches everyone) |
 | "list my active workbench" | `formbro applications list [--program-key <key>]` (dashboard semantics: only active statuses) |
 | "is this case ready to submit" (for webform fill) | BOTH `formbro validate by-id --entity-type <T> --entity-id <id>` AND `formbro webform preflight --app-id <id> --program-key <key>` must be clean (Rule 6). `webform start` without `--confirmed` is only a static dry-run envelope (no backend call, no validation) — do not use it as a readiness check |
 | "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
-| "list my RCIC profiles / what is my rcic_id" | `formbro rcic list` (returns id, names, rcic_number, company) |
+| "list my RCIC profiles / what RCIC is linked to this case?" | `formbro rcic list` returns profile summaries; `formbro applications get <application-id>` shows the case's linked `case.rcic_id`. Neither returns portal credentials. |
+| "view/edit RCIC details or portal credentials" | Open the profile in FormBro → Settings → RCIC as its owner. The CLI has no RCIC detail or credential command; do not try to fetch credentials separately for webform filling. |
 | "plugin out of date?" | `formbro doctor --check-upgrade` |
+| "update the plugin / install it cleanly / remove old copies" | Follow the Updates section: refresh through the host, then `formbro doctor --repair-install` from the new package. Login and settings are kept; the old tree is deleted. |
 | "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>" [--application-id "<exact application id>"]` — `--application-id` is mandatory for bug reports; **always confirm the draft with the user first** (see [tell-jacky](references/tell-jacky.md)) |
 
 Two semantic distinctions to NEVER conflate:
 - `applications list` = consultant's active workbench (dashboard scope; filters by active status)
 - `applications inventory` = every application in the account regardless of state (audit / batch / debugging)
 
-`case.rcic_id` note: the value backend validation expects is the id of an **account-level RCIC profile** — discover it with `formbro rcic list` (created in the web app under Settings → RCIC, or via `POST /api/rcic`). Link it to an application with `formbro applications patch <application-id> --set case.rcic_id=<rcic-id>`. `persons create` does NOT create RCIC profiles (they are credential-bearing account records, not application persons).
+`case.rcic_id` links an application to an **account-level RCIC profile**, not to an application person. To link a profile, use the `id` from `formbro rcic list`, then `formbro applications patch <application-id> --set case.rcic_id=<rcic-id>`. Create or edit the profile in FormBro → Settings → RCIC, not with `persons create`. Access to an application or its linked ID does not grant access to the profile's portal credentials.
 
 Routing detail below is supplementary — start with this 20-line table.
 
@@ -131,7 +139,7 @@ The plugin ships a Rust CLI binary that is NOT placed on `PATH` automatically by
 **Resolution order (use the first that resolves to an existing executable):**
 
 1. **`$FORMBRO_BIN`** — explicit override. Honor if set.
-2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches a bundled OS/arch. Current public marketplace bundles ship `darwin-arm64` and `win32-x64`.
+2. **Codex plugin cache** — `$HOME/.codex/plugins/cache/jacky-plugins/formbro/<version>/bin/<platform>/formbro` where `<version>` is the highest version dir present and `<platform>` matches a bundled OS/arch. Current public marketplace bundles ship `darwin-arm64`, `win32-x64` and `linux-x64`.
 3. **Claude Code plugin dir** — `$CLAUDE_PLUGIN_ROOT/bin/<platform>/formbro` (Claude Code sets `CLAUDE_PLUGIN_ROOT` when invoking a plugin's skill).
 4. **`which formbro`** — if the user has installed it on PATH manually.
 
@@ -149,10 +157,11 @@ if [ -n "$_formbro_override" ] && [ -x "$_formbro_override" ]; then
 fi
 
 # Detect bundled platform → cache subdir name used by both codex and claude.
-# Current public POSIX bundle includes darwin-arm64 only; Windows agents use
-# the PowerShell resolver below for win32-x64.
+# Current public POSIX bundles include darwin-arm64 and linux-x64; Windows agents
+# use the PowerShell resolver below for win32-x64.
 case "$(uname -s)-$(uname -m)" in
   Darwin-arm64)  PLAT=darwin-arm64 ;;
+  Linux-x86_64)  PLAT=linux-x64 ;;
   *) PLAT="" ;;
 esac
 
@@ -185,7 +194,7 @@ for _p in "${_cand_paths[@]}"; do
 done
 
 if [ -z "$FORMBRO_BIN" ]; then
-  echo "FormBro CLI not found on this host. Current public bundles support darwin-arm64 (and win32-x64 via PowerShell). Install a platform-specific CLI and set FORMBRO_BIN if needed." >&2
+  echo "FormBro CLI not found on this host. Current public bundles support darwin-arm64, linux-x64 and win32-x64 (via PowerShell). Install a platform-specific CLI and set FORMBRO_BIN if needed." >&2
   return 1 2>/dev/null || exit 1
 fi
 export FORMBRO_BIN
@@ -258,25 +267,56 @@ Import boundary rule:
 - Always run `import apply-json --dry-run` before saving. If validation fails, fix the JSON locally and dry-run again.
 - `extract` is lower-level and should only patch an existing entity or inspect extraction contracts.
 
-## 1.2 Complete CLI surface by responsibility
+## 1.2 Complete CLI surface, one line per command
 
-This is the full agent-facing command surface. Prefer the quick router above; use this table when a user asks for a less common operation.
+This is every public command. Prefer the quick router above; use this list when a user asks for a less common operation. `formbro commands --json` prints the same list with every argument and is the runtime truth when this document and the binary disagree.
 
-| Responsibility | Commands |
-|---|---|
-| Connect / health | `login`, `whoami`, `health`, `doctor` |
-| Program metadata | `programs list`, `programs describe`, `programs schema` |
-| Search / read | `find`, `applicants list/get`, `applications list/inventory/by-status/get/status/persons/documents/resolve`, `employers list/get`, `audit my` |
-| New-case import from files | `import contract`, `import apply-json` |
-| Existing-entity extraction / patch intake | `extract contract`, `extract text`, `extract apply-json`, `extract task-status`, `extract models`, `extract formats`, `extract clear-cache` |
-| Validation | `validate data`, `validate by-id`, `validate person`, `validate operation` |
-| Mutations | `persons create/patch`, `applicants patch/delete`, `applications start/attach/replace-person/remove-person/set-status/patch`, `employers create/patch/delete`, `notes add` |
-| File slots / output | `uploads slots`, `export entity/data/template/pdf/pdf-check/extension`, `fill` |
-| Feedback ("Tell Jacky") | `feedback create` (feature request / bug report / knowledge tip, optional images) — see [tell-jacky](references/tell-jacky.md) |
-| Local portal automation | `webform runtime-check/preflight/start/jobbank-invite/status`, `webform daemon start/stop/status/restart/prune-chromium` |
-| Plugin/vendor maintenance | `pdf bundle`, `pdf verify` |
+**Connect and health**
+- `formbro login --token-stdin` — saves the Portal token read from stdin.
+- `formbro whoami` — shows the account the token belongs to.
+- `formbro health` — takes no arguments; reports whether the backend is reachable.
+- `formbro doctor` — reports version, runtime readiness and a live backend check (`--json`, `--no-fetch`, `--fetch`, `--check-upgrade`); `formbro doctor --repair-install` instead reinstalls this package as the only installed copy.
+- `formbro commands --json` — prints this CLI's complete public command list as JSON.
 
-Treat `main.rs` + `<formbro> --help` as the runtime truth when docs and code drift.
+**Programs, search and reading**
+- `formbro programs list`, `formbro programs describe <program-key>`, `formbro programs schema <program-key> --role <role>` — program metadata and field schemas.
+- `formbro find <query>` — free-text search (`--program-key`, `--include`, `--limit`).
+- `formbro applicants list`, `formbro applicants get <id>` — read applicants.
+- `formbro applications list` (active workbench), `formbro applications inventory` (every status; `--program-key`, `--limit`, `--query`), `formbro applications by-status <status>`, `formbro applications get <id>`, `formbro applications status <id>`, `formbro applications persons <id>`, `formbro applications documents <id>`, `formbro applications resolve --query <text> --program-key <key>` — read applications.
+- `formbro employers list`, `formbro employers get <id>` — read LMIA employers.
+- `formbro rcic list` — account RCIC profile summaries (id, names, number, company); never portal credentials.
+- `formbro audit my` — the account's own audit trail.
+
+**Intake from files and text**
+- `formbro import contract`, `formbro import apply-json` — create a new case from files (`--dry-run` validates only).
+- `formbro extract contract`, `formbro extract text`, `formbro extract apply-json` — fill an existing entity from agent-written JSON or text.
+- `formbro extract task-status <task-id>`, `formbro extract models`, `formbro extract formats`, `formbro extract clear-cache` — extraction task, model, format and cache helpers.
+
+**Validation**
+- `formbro validate data`, `formbro validate by-id`, `formbro validate person`, `formbro validate operation` — check data without saving it.
+
+**Changes**
+- `formbro persons create`, `formbro persons patch <id>` — create or edit a person.
+- `formbro applicants patch <id>`, `formbro applicants delete <id>` — edit or delete an applicant.
+- `formbro applications start`, `formbro applications attach`, `formbro applications replace-person`, `formbro applications remove-person`, `formbro applications set-status`, `formbro applications patch <id>` — create, staff, re-status or edit an application.
+- `formbro employers create`, `formbro employers patch <id>`, `formbro employers delete <id>` — manage LMIA employers.
+- `formbro notes add` — append a note to an applicant, application or employer.
+
+**Files and PDFs**
+- `formbro uploads slots` — document upload slots of a record.
+- `formbro fill` — the agent's PDF command: filled IMM PDFs for an application.
+- `formbro export entity`, `formbro export data`, `formbro export template` — Excel exports.
+- `formbro export pdf`, `formbro export pdf-check`, `formbro export extension` — legacy PDF transport, PDF support probe, browser-extension bundle. Use `export pdf` only when the user explicitly asks for a raw-data PDF preview or a synchronous batch; every ordinary PDF request goes to `fill`.
+
+**Feedback**
+- `formbro feedback create` — send a feature request, bug report or knowledge tip; see [tell-jacky](references/tell-jacky.md).
+
+**Local web-form automation**
+- `formbro webform runtime-check`, `formbro webform preflight`, `formbro webform start`, `formbro webform jobbank-invite`, `formbro webform status` — check, run and read local portal fills. `webform start` takes `--app-id` or `--query`, `--program-key` and `--confirmed`, plus optional `--case-id`, `--form`, `--new`, `--headless`, `--print-pages` and `--debug-events`.
+- `formbro webform daemon start`, `formbro webform daemon stop`, `formbro webform daemon status`, `formbro webform daemon restart`, `formbro webform daemon prune-chromium` — manage the local worker daemon.
+
+**Plugin maintenance (developer only)**
+- `formbro pdf bundle`, `formbro pdf verify` — vendor PDF file maintenance; never for a user's PDF request.
 
 ## 2. Program key cheat-sheet (do not guess)
 

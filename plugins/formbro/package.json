@@ -1,6 +1,6 @@
 {
   "name": "dsh-formbro",
-  "version": "1.9.10",
+  "version": "1.9.11",
   "description": "FormBro for DeepSeek Harness: Canadian immigration form automation and guided web-form filling through the bundled FormBro CLI.",
   "license": "MIT",
   "author": {

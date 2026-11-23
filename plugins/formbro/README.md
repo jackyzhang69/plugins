@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # formbro
 
-Version `1.9.10`.
+Version `1.9.11`.
 
 Canadian immigration form automation via the bundled FormBro CLI: import cases from external files through JSON contracts, read/write entities, validate, fill IMM PDFs, and drive local webform fills.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/formbro/SKILL.md`](skills/formbro/SKILL.md) first. Connect and product verbs are defined there and under `skills/formbro/references/`.
 

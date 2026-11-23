@@ -191,6 +191,8 @@ pages, partial }`; on a failed fill the same object rides on the error payload
 
 `--rcic-id` / `case.rcic_id` value source: `formbro rcic list` returns the account's RCIC profiles; use the listed `id`. RCIC profiles are account-level (web: Settings → RCIC) — `persons create` cannot make them, and backend validation rejects anything that is not the profile id (no CICC number, portal UUID, user id, or email).
 
+`webform start` uses the linked profile's saved credentials when the selected portal requires them. Do not ask the user to paste a portal password or fetch it separately. If credentials are missing, have the profile owner update them in FormBro → Settings → RCIC, then retry.
+
 ## What this skill does NOT do
 
 - Does not click the final IRCC submit button. Ever.
