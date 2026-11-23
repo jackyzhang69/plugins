@@ -91,16 +91,6 @@
         "name": "Jacky Zhang"
       },
       "category": "productivity",
-      "description": "Canadian immigration points-grid scoring via the bundled AnyScore CLI. Deterministic policy YAML; optional server /map. macOS Apple Silicon and Windows x64.",
-      "name": "anyscore",
-      "source": "./plugins/anyscore",
-      "version": "0.2.4"
-    },
-    {
-      "author": {
-        "name": "Jacky Zhang"
-      },
-      "category": "productivity",
       "description": "Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.",
       "name": "anywrite",
       "source": "./plugins/anywrite",
