@@ -287,6 +287,14 @@ $ANYPDF knowledge remove --id <rule-id>
 Never upload source PDFs, identity documents, or filled evidence as part of a
 registered fill. Keep stdout JSON intact and report typed stderr errors.
 
+## Continuing after a needs-agent response
+
+When an ordinary command returns `jz.plugin.envelope.v1` with
+`status=needs_agent`, complete its requested agent step and pipe that exact JSON
+object to `anypdf resume --envelope-stdin`. Never reconstruct the original
+arguments: the client resumes its sealed private request, including after a
+login and from a different working directory.
+
 ## Recovery before escalation
 
 Use `fill readiness` before submitting. Keep its typed recovery details between

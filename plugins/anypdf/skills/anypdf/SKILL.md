@@ -105,6 +105,44 @@ Users may request a missing form either way. Do not collapse one into the other.
 Playbooks: [connect](references/connect.md), [fill](references/fill.md),
 [intake](references/intake.md), [tell-jacky](references/tell-jacky.md).
 
+## Every command, one line each
+
+Run each entry below as `$ANYPDF <command words and flags>` (see
+[connect](references/connect.md) for `$ANYPDF`); the entries show only the
+command words and their key flags. Every command prints JSON except `read`.
+Ask the live client for every argument of every command: `"$ANYPDF" commands --json`.
+
+- `login --token-stdin` saves the access key piped on stdin, after proving it works.
+- `whoami` shows which account this machine is signed in as.
+- `logout` removes the saved access key from this machine.
+- `doctor` checks, offline, that this machine is set up; `doctor --repair-install` installs this package as the only copy.
+- `read --input <absolute path> --mode content|structure` turns a local Office or PDF file into Markdown without uploading it.
+- `forms catalog` lists the forms available now; `forms resolve --query <text>` finds a form by name or number.
+- `forms schema --form-id <id>` shows what a form asks for, with its schema version and guidance.
+- `validate --form-id <id> --input <answers.json>` checks answers before anything is filled; add `--resolve-choice <field>` for choice fields.
+- `complete start --form-id <id> --input <answers.json>` returns a short form for the missing answers.
+- `complete apply --session-id <id> --values <values.json>` hands back what was typed in chat.
+- `complete result --session-id <id> --wait <seconds>` collects what was sent from the browser page.
+- `fill readiness --form-id <id> --input <answers.json>` checks whether answers can be filled now without creating a job.
+- `fill submit --form-id <id> --input <answers.json> --idempotency-key <key>` asks for the filled PDF; `--flatten` adds a static viewing copy, `--allow-incomplete` fills with confirmed blanks.
+- `fill status --job-id <id>` checks whether the fill is ready.
+- `fill download --job-id <id> --output <absolute path>` saves the PDF; `--flatten` saves the static viewing copy.
+- `signatures create --job-id <id> --input <context.json>` starts signing a completed IMM5476.
+- `signatures status --session-id <id>` checks a signing session.
+- `signatures add-asset --session-id <id> --image <path>` uploads a signature image.
+- `signatures assign --session-id <id> --input <assignment.json>` matches an image to a signer and date.
+- `signatures preview --session-id <id> --expected-version <n>` shows every signer, image and date for the human to approve.
+- `signatures confirm --session-id <id> --input <confirmation.json> --user-confirmed` signs after the human approved the preview.
+- `signatures download --session-id <id> --output <absolute path>` saves the signed PDF.
+- `intake submit --pdf <file.pdf> --idempotency-key <key>` sends an issuing-authority official blank PDF so a missing form can be recognised.
+- `knowledge list --scope target|global` shows saved filling rules.
+- `knowledge add --rule <text>` saves one filling rule.
+- `knowledge remove --id <id>` deletes one filling rule.
+- `feedback submit --report <report.json>` sends a Tell Jacky note.
+- `feedback status --report-id <id>` checks on a note that was sent.
+- `resume --envelope-stdin` continues the saved request behind a `needs_agent` response piped on stdin.
+- `commands` prints this command surface as JSON.
+
 ## Live CLI discovery (fail-closed)
 
 Ask the live CLI, never from memory of an older release. Volatile form catalogs
@@ -113,9 +151,6 @@ are not dumped here.
 ```bash
 "$ANYPDF" commands --json
 ```
-
-Command path reference (not for first-session orientation):
-[references/command-surface.md](references/command-surface.md).
 
 After a marketplace install or update, [connect](references/connect.md) repairs from this
 package into `~/.jackyzhang.app/plugins/anypdf/current`. Later agent commands
@@ -126,3 +161,7 @@ use `$ANYPDF` at that `current` binary, not whichever `anypdf` is first on PATH.
 Keep typed recovery details between tools and explain the next choice in plain
 language. Follow the bounded recovery procedure in [fill](references/fill.md) before
 suggesting [tell-jacky](references/tell-jacky.md). Never send feedback automatically.
+
+## Updates
+
+`anypdf` may print one stderr line with schema `jz.plugin.update_notice.v1`. It never blocks a command. Finish what the user asked first, then tell them once, in plain words, that a newer version is available and ask whether to update now. On yes: refresh this plugin through the host (Claude Code: `claude plugin marketplace update jacky-plugins`, then `claude plugin update anypdf@jacky-plugins`; Codex: `codex plugin marketplace upgrade jacky-plugins`, then `codex plugin add anypdf@jacky-plugins`; other hosts: attach the new `plugins/anypdf/` tree). Then run `doctor --repair-install` with the binary from the **new** package, not the folder this session started from (Claude Code: `~/.claude/plugins/cache/jacky-plugins/anypdf/<latest>/bin/<platform>/anypdf`; Codex: `~/.codex/plugins/cache/jacky-plugins/anypdf/<latest>/bin/<platform>/anypdf`; `<latest>` is the notice's `latest` value or the highest version folder present; `<platform>` is `darwin-arm64`, `linux-x64` or `win32-x64`). Read `references/whats-new.md` from that folder and tell the user in one or two sentences what changed and that the host loads it fully after a restart. For the rest of this session use that folder for every command and reference; the old version folder is gone. On no: do not ask again in this session.
