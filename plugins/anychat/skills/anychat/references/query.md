@@ -1,9 +1,5 @@
 # AnyChat query
 
-## Advisory marketplace check
-
-On first AnyChat use in each host-agent session, run `"$ANYCHAT_BIN" doctor --check-upgrade --json` before the requested action. If `upgrade.status` is `update_available`, briefly recommend updating, then continue normally. Never auto-update, never block the user, and continue silently when the check is unavailable. Run this once per session load, not before every command. An explicit update uses `"$ANYCHAT_BIN" update --json`; never refresh a Git marketplace for AnyChat alone.
-
 Resolve `$ANYCHAT_BIN` via the product router §B.
 
 ## Retrieval playbook
@@ -24,14 +20,14 @@ Use this order for research queries:
 Discover the live flag from `"$ANYCHAT_BIN" commands --json` / help. Do not
 invent flags that the current install does not list.
 
-Default search stays on this computer and returns time-ordered matches. Prefer
-the product’s answer-ranking option on **global keyword search** only when the
-user needs a **substantive conclusion** and ordinary keyword results are
-dominated by acknowledgements or in-progress chatter. Ranking may send a small
-set of candidate excerpts to an external ranking service for that one request;
-do not use it for chronology dumps, exports, scoped friend/group queries, or
-when coverage still needs another local page first. Do not ask the human to
-name or configure ranking.
+Default search stays on this computer and returns time-ordered matches. Use
+`--rerank` only after the user explicitly allows remote answerhood judgment for
+this request, and only on **global keyword search** when ordinary results are
+dominated by acknowledgements or in-progress chatter. Ranking may send up to 12
+candidate excerpts to an external ranking service. Do not use it for chronology
+dumps, exports, scoped friend/group queries, or when coverage still needs
+another local page first. Never add `--rerank` based only on an inferred need;
+do not ask the human to configure a provider or key.
 
 ## Run the user's request first
 

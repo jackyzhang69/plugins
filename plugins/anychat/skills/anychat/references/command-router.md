@@ -1,16 +1,16 @@
 # Command router and CLI paths (coverage reference)
 
-Not for first-session orientation. Host agents discover the live surface via
-`"$ANYCHAT_BIN" commands --json`. Use this table after intent routing — never
-as the first user-visible answer.
+Not for first-session orientation. The capability list in `SKILL.md` is the full
+command surface for this version; `"$ANYCHAT_BIN" commands --json` confirms it.
+Use this table after intent routing — never as the first user-visible answer.
 
 ## Agent quick router
 
 | User intent | Command / playbook |
 |-------------|-----------------|
-| "what can anychat do / how do I use it" | Live `commands --json` translated; if not logged in → [connect](connect.md) |
+| "what can anychat do / how do I use it" | Capability list in `SKILL.md`, translated; if not logged in → [connect](connect.md) |
 | Connect / token | [connect](connect.md) → `login --token-stdin --accept-personal-use` (pipe token; never put secret on argv) |
-| Health / which platform | `doctor [--json]` · check: `doctor --check-upgrade` · explicit update: `update --json` · `status` · `whoami` · `logout` |
+| Health / which platform | `doctor [--json]` · repair the install from a newly installed package: `doctor --repair-install` · explicit update: `update --json` · `status` · `whoami` · `logout` |
 | 开通本机档案 | [setup](setup.md) → `"$ANYCHAT_BIN" provision --json`. Speak `say_to_user`. If `needs_agent`, satisfy typed `needs` and supply stdin; if `needs_human`, wait, then run `continue_args`. After install guidance, continue only when package / installed / running versions agree. Remaining message parts after partial readiness: `provision --json --complete-remaining` (doctor `complete_remaining.continue_args`). Never old first-run verbs. Never offer Tell Jacky unless `blocked` and `offer_tell_jacky`, except a failed remaining-parts scan may offer it as optional diagnostics while the archive stays usable. |
 | **Someone already linked** ("chat with X", "what did X say") | **Check `identity list` first**, then `search --person "X" --all-sources --format json` — one command, every platform they are linked on. Never make them re-link. [query](query.md) |
 | Chat with friend only | `query --mode friend --target "…" --days 30` |
@@ -54,9 +54,9 @@ as the first user-visible answer.
 
 ## Advisory session checks (host-only)
 
-On first AnyChat use per session: `"$ANYCHAT_BIN" doctor --check-upgrade --json` — if
-`update_available`, recommend updating briefly, then continue. Never auto-update or
-block. Explicit human update request: `"$ANYCHAT_BIN" update --json`.
+Update notices arrive on their own as one stderr line (see **Updates** in the
+router); never run a separate upgrade check. Explicit human update request:
+`"$ANYCHAT_BIN" update --json`.
 
 On first authenticated action per session: `"$ANYCHAT_BIN" feedback inbox --json` —
 show unread replies, then `feedback read --update-id <id>` after display. Best-effort;

@@ -7,4 +7,5 @@ case "$(uname -s)" in
   *) printf '{}\n'; exit 0 ;;
 esac
 [[ -f "$PAIR_HOOK_BIN" ]] || { printf '{}\n'; exit 0; }
-exec "$PAIR_HOOK_BIN" pair host-hook
+# Hooks run with no agent reading stderr: never spend the daily update notice here.
+JZ_PLUGIN_UPDATE_CHECK=off exec "$PAIR_HOOK_BIN" pair host-hook

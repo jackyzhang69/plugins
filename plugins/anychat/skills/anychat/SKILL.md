@@ -15,8 +15,9 @@ description: >-
   connect with Jacky, join code from Jacky, request live support,
   same person across apps, iMessage, Telegram, other local chats,
   evidence pack, proof of what was said.
-  One discovery file: playbooks in references/. Ask the live CLI
-  (`anychat commands --json`), never from memory of an older release.
+  One discovery file: playbooks in references/. The capability list below is
+  the full command surface for this version; `anychat commands --json` confirms
+  it. Ask the live CLI only for volatile catalogs (friend and group lists, messages).
 when_to_use: |-
   Load on plugin start; reload whenever a user asks anything anychat-related.
   Trigger phrases: "search my chats", "chat with X", "group Y",
@@ -40,7 +41,7 @@ when_to_use: |-
   "cloud assistant", "use my chats in a cloud agent",
   "聊到 Muse / 云端助手", "在云端助手里查聊天".
   Bare "@anychat" / "what can anychat do" / "how do I use anychat":
-  if not logged in, follow references/connect.md; otherwise answer from live CLI.
+  if not logged in, follow references/connect.md; otherwise answer from the capability list.
 ---
 
 # AnyChat plugin — agent consumption contract
@@ -71,14 +72,20 @@ voice into Chinese or any other text; that is intentional. When the human wants
 a transcript, this host agent downloads the WAV and transcribes it locally. Do
 not treat missing speech-to-text as a product gap.
 
+## Updates
+
+`anychat` may print one stderr line with schema `jz.plugin.update_notice.v1`. It never blocks a command. Finish what the user asked first, then tell them once, in plain words, that a newer version is available and ask whether to update now. On yes: refresh this plugin through the host (Claude Code: `claude plugin marketplace update jacky-plugins`, then `claude plugin update anychat@jacky-plugins`; Codex: `codex plugin marketplace upgrade jacky-plugins`, then `codex plugin add anychat@jacky-plugins`; other hosts: attach the new `plugins/anychat/` tree). Then run `doctor --repair-install` with the binary from the **new** package, not the folder this session started from (Claude Code: `~/.claude/plugins/cache/jacky-plugins/anychat/<latest>/bin/<platform>/anychat`; Codex: `~/.codex/plugins/cache/jacky-plugins/anychat/<latest>/bin/<platform>/anychat`; `<latest>` is the notice's `latest` value or the highest version folder present; `<platform>` is `darwin-arm64`, `linux-x64` or `win32-x64`). Read `references/whats-new.md` from that folder and tell the user in one or two sentences what changed and that the host loads it fully after a restart. For the rest of this session use that folder for every command and reference; the old version folder is gone. On no: do not ask again in this session.
+
 ## Before first use — platform prerequisites
 
 Check these once, before the first real request. They are the difference between
 "AnyChat is broken" and a two-minute fix.
 
-- **Update first.** `"$ANYCHAT_BIN" update --json`, then
-  `"$ANYCHAT_BIN" doctor --json`. Releases from 0.1.99 also refresh a stale local
-  authorization cache, so an upgrade is never left showing "expired".
+- **Check first.** `"$ANYCHAT_BIN" doctor --json`. When a newer version exists the
+  CLI prints a notice; follow **Updates** above, and `"$ANYCHAT_BIN" update --json`
+  installs the official package once the human agrees. Releases from 0.1.99 also
+  refresh a stale local authorization cache, so an upgrade is never left showing
+  "expired".
 - **macOS: Full Disk Access belongs to the app that runs this agent, not to
   AnyChat.** macOS credits the archive read to the host app that launched the
   CLI. System Settings → Privacy & Security → Full Disk Access → add that host
@@ -104,23 +111,46 @@ guessing:
 
 ## When the user asks "what can you do?"
 
-Do not answer from a frozen command list. Run the live client and translate
-`commands --json` into short product bullets (search, export, follow topics,
-link identities, download voice, iMessage and Telegram, evidence packs, live
-support with Jacky, Tell Jacky). If they ask to transcribe this voice or turn
-voice into Chinese text, download the audio and transcribe it here; do not wait
-for AnyChat to convert speech. If not logged in, run [connect](references/connect.md)
+Answer from the capability list below, which is the full command surface for
+this version, and translate it into short product bullets (search, export,
+follow topics, link identities, download voice, iMessage and Telegram, evidence
+packs, live support with Jacky, Tell Jacky). `"$ANYCHAT_BIN" commands --json`
+confirms the list. If they ask to transcribe this voice or turn voice into
+Chinese text, download the audio and transcribe it here; do not wait for
+AnyChat to convert speech. If not logged in, run [connect](references/connect.md)
 first.
 
-```bash
-"$ANYCHAT_BIN" commands --json
-```
+## Capability list — every public command
+
+One line per command with its key flags and stdin format; every command is listed here, so this list is the full surface.
+
+- `login` saves the Portal token (`--token-stdin` reads the raw token as one line on stdin; `--accept-personal-use`); `logout` removes it; `whoami` shows who is signed in.
+- `doctor` reports readiness and next steps (`--json`); `doctor --repair-setup` fixes stale setup state; `doctor --repair-install` makes the package this binary belongs to the only installed copy; `status` is the short setup summary.
+- `update` installs the official newer package after the human agrees (`--json`).
+- `provision` is the single setup flow (`--json`, `--resign-consent`, `--restore-app`, `--supply-stdin` reads one JSON object of typed host-agent facts on stdin, `--complete-remaining`); `resume` continues the original request after setup (`--token-stdin` reads the opaque `resume_token` as one line on stdin).
+- `stage` writes a bounded snapshot for a cloud assistant (`--days`, `--clear`, `--json`).
+- `friends list` lists friends (`--query`, `--type`, `--limit`); `groups list` lists groups (`--query`, `--limit`); `groups members` lists one group's members (`--query`, `--limit`); `contacts card` shows one contact's profile card (`--query`); `resolve` turns an ambiguous name into typed candidates (`--query`); `sessions` lists recent chat sessions (`--limit`); `recents` lists recently used targets (`--limit`).
+- `query` reads messages in one scope or one source (`--mode`, `--target`, `--group`, `--person`, `--keyword`, `--days`, `--limit`, `--context`, `--format`, `--source`, `--all-sources`).
+- `search` finds a keyword or a linked person across all conversations (`--keyword`, `--person`, `--days`, `--limit`, `--format`, `--all-sources`).
+- `export` writes a transcript file for one scope (`--mode`, `--target`, `--group`, `--days`, `--limit`, `--format`, `--output`).
+- `media list` lists attachments in one scope (`--mode`, `--target`, `--group`, `--type`, `--days`, `--limit`); `media download` saves one attachment by id (`--id`, `--output`); `media download-all` saves every attachment matching a scope, never by id (`--mode`, `--target`, `--group`, `--type`, `--days`, `--limit`, `--output`).
+- `evidence create` builds a local evidence bundle (`--output`, `--keyword`, `--days`, `--source`, `--all-sources`); `evidence verify` checks one (`--bundle`).
+- `feedback preview` shows the exact draft and sends nothing (`--type`, `--title`, `--description`); `feedback create` sends it after the human confirms (`--type`, `--user-confirmed`, `--confirmation-binding`); `feedback inbox` shows unread replies (`--limit`); `feedback read` marks one reply read (`--update-id`); `feedback status` shows one feedback's delivery (`--id`); `feedback list` lists sent feedback (`--limit`).
+- `pair request` asks for a live support connection (`--user-confirmed`, `--request-key`, `--greeting-file`, `--timeout-seconds`); `pair join` joins with the code from Jacky's assistant (`--code`, `--user-confirmed`); `pair status` shows whether a connection is open.
+- `pair send` sends one message (`--message-file`, `--idempotency-key`, `--phase`, `--reply-to`); `pair receive` waits for one peer message (`--timeout-seconds`); `pair next` optionally sends a reply, optionally acknowledges a message, then waits for the next peer message (`--message-file`, `--idempotency-key`, `--ack-message-id`, `--reply-to`, `--phase`, `--timeout-seconds`).
+- `pair ack` acknowledges a handled peer message (`--message-id`); `pair inbox` lists unread instructions; `pair read` marks one instruction read (`--message-id`); `pair snapshot` sends the current product envelope (`--reply-to`, `--idempotency-key`, `--envelope-json`); `pair result` reports an action's outcome (`--ok`, `--error`, `--summary`, `--reply-to`, `--idempotency-key`, `--envelope-json`); `pair close` ends the connection (`--reason`).
+- `alias set` saves a nickname for a query (`<NAME>`, `--mode`, `--target`, `--group`); `alias list` lists nicknames; `alias rm` deletes one (`<NAME>`).
+- `sources detect` finds which local chat sources are present (`--json`); `sources list` lists registered sources with status and next actions (`--json`); `sources status` reports status for all sources or one (`<SOURCE>`, optional); `sources connect` prepares one source (`<SOURCE>`, required); `sources sync` runs an incremental sync for one source (`<SOURCE>`, required); `sources remove` drops a runtime-registered source from this session only (`<SOURCE>`, required).
+- `identity list` and `identity suggest` show the cross-app person graph and candidates; `identity link` previews or writes a link (`--person-label`, `--source`, `--raw-id`, `--confirm`); `identity confirm` and `identity unlink` act on one account (`--source`, `--raw-id`); `identity reset` clears all links (`--yes`).
+- `topic save` follows a person or conversation for new messages (`--name`, `--person`, `--conversation`, `--keyword`, `--source`); `topic list` lists topics; `topic show` and `topic check` act on one topic (`--topic-id`); `topic rm` deletes one (`--topic-id`, `--yes`).
+- `notes save` keeps confirmed claims for a topic (`--topic-id`, `--name`, `--claim`, `--draft`, `--yes`); `notes list` lists notes; `notes show` and `notes touch` act on one note (`--note-id`); `notes rm` deletes one (`--note-id`, `--yes`).
+- `commands` prints this surface as JSON (`--json`).
 
 ## Agent router — intents
 
 | User intent | Host does | Human may be asked |
 |---|---|---|
-| "what can anychat do / how do I use it" | Live `"$ANYCHAT_BIN" commands --json`; translate to product language | Connect once if not logged in ([connect](references/connect.md)) |
+| "what can anychat do / how do I use it" | Answer from the capability list; `"$ANYCHAT_BIN" commands --json` confirms it; translate to product language | Connect once if not logged in ([connect](references/connect.md)) |
 | search my chats / chat with X / group Y / what did X say in groups / search all chats for keyword / cross-platform chat history | [query](references/query.md): resolve ambiguous names first; prefer linked-identity search across sources | Disambiguate person vs group; confirm scope when ambiguous |
 | export messages / save group transcript / export that PDF | [export](references/export.md) | Output location preference when needed |
 | download images / list voice messages / download voice messages / transcribe this voice | [media](references/media.md); host agent transcribes the WAV | Which conversation when ambiguous |
@@ -142,15 +172,17 @@ Playbooks: [connect](references/connect.md), [setup](references/setup.md),
 Command router and CLI paths (not for first-session orientation):
 [references/command-router.md](references/command-router.md).
 
-## Live CLI discovery (fail-closed)
+## Command surface check (fail-closed)
 
 ```bash
 "$ANYCHAT_BIN" commands --json
 ```
 
-Volatile catalogs (friend/group lists, live messages) are **not** in that dump.
+Confirms the capability list above for the installed binary; a command missing
+from the dump is not available. Volatile catalogs (friend/group lists, live
+messages) are **not** in that dump; ask the live CLI for those.
 
-Session-start advisory checks (upgrade hint, feedback inbox) are host-only —
+Session-start advisory check (feedback inbox) is host-only —
 see [command-router](references/command-router.md). Never block the user's
 request on advisory failure.
 

@@ -34,14 +34,15 @@ If the human pasted the value into chat, warn once that a local file is safer
 next time, then continue immediately. Never refuse a valid current request just
 because the safer delivery method was not used.
 
-## Advisory update check
+## Updating
 
-On first AnyChat use in a host-agent session, `doctor --check-upgrade --json`
-may provide an advisory update. Recommend it briefly, do not block the request,
-and never auto-update. When the human explicitly asks to update, run
-`"$ANYCHAT_BIN" update --json`, switch to its validated `active_bin`, and verify
-the version after reading its returned `active_skill` completely. Do not refresh
-or clone a Git marketplace for an AnyChat-only update.
+A newer version shows up as a one-line notice (see **Updates** in the router).
+It never blocks the request. Update only after the human agrees: refresh through
+the host and run `doctor --repair-install` from the new package, as the router
+describes. When the host cannot refresh the plugin, `"$ANYCHAT_BIN" update --json`
+installs the official package; switch to its validated `active_bin` and read its
+returned `active_skill` completely. Never refresh or clone a Git marketplace for
+an AnyChat-only update.
 
 ## Talk to the human
 

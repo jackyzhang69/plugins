@@ -1,0 +1,745 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anychat",
+  "version": "0.1.106",
+  "capabilities": [
+    {
+      "goal": "Sign in, sign out, check the current account, and inspect or repair local setup readiness.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin",
+        "--accept-personal-use"
+      ]
+    },
+    {
+      "goal": "Remove the saved account login.",
+      "command": [
+        "logout"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "See which account is signed in.",
+      "command": [
+        "whoami"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check readiness and repair setup or installation issues.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--json",
+        "--repair-setup",
+        "--repair-install"
+      ]
+    },
+    {
+      "goal": "See a brief local setup summary.",
+      "command": [
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Install the official newer AnyChat package.",
+      "command": [
+        "update"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Set up or continue opening the local chat archive.",
+      "command": [
+        "provision"
+      ],
+      "flags": [
+        "--json",
+        "--resign-consent",
+        "--restore-app",
+        "--supply-stdin",
+        "--complete-remaining"
+      ]
+    },
+    {
+      "goal": "Resume the original request after setup.",
+      "command": [
+        "resume"
+      ],
+      "flags": [
+        "--token-stdin"
+      ]
+    },
+    {
+      "goal": "Create or clear a bounded chat snapshot for a cloud assistant.",
+      "command": [
+        "stage"
+      ],
+      "flags": [
+        "--days",
+        "--clear",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List friends, groups, group members, contact cards, recent sessions, and recently used targets.",
+      "command": [
+        "friends",
+        "list"
+      ],
+      "flags": [
+        "--query",
+        "--type",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Find groups by name or query.",
+      "command": [
+        "groups",
+        "list"
+      ],
+      "flags": [
+        "--query",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "List members of a group.",
+      "command": [
+        "groups",
+        "members"
+      ],
+      "flags": [
+        "--query",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "View a contact’s profile card.",
+      "command": [
+        "contacts",
+        "card"
+      ],
+      "flags": [
+        "--query"
+      ]
+    },
+    {
+      "goal": "Disambiguate a name by showing typed candidates.",
+      "command": [
+        "resolve"
+      ],
+      "flags": [
+        "--query"
+      ]
+    },
+    {
+      "goal": "List recent chat sessions.",
+      "command": [
+        "sessions"
+      ],
+      "flags": [
+        "--limit"
+      ]
+    },
+    {
+      "goal": "List recently used targets.",
+      "command": [
+        "recents"
+      ],
+      "flags": [
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Read messages in a selected chat scope or local source.",
+      "command": [
+        "query"
+      ],
+      "flags": [
+        "--mode",
+        "--target",
+        "--group",
+        "--person",
+        "--keyword",
+        "--days",
+        "--limit",
+        "--context",
+        "--format",
+        "--source",
+        "--all-sources"
+      ]
+    },
+    {
+      "goal": "Search conversations by keyword or linked person.",
+      "command": [
+        "search"
+      ],
+      "flags": [
+        "--keyword",
+        "--person",
+        "--days",
+        "--limit",
+        "--format",
+        "--all-sources"
+      ]
+    },
+    {
+      "goal": "Export a transcript for a selected scope.",
+      "command": [
+        "export"
+      ],
+      "flags": [
+        "--mode",
+        "--target",
+        "--group",
+        "--days",
+        "--limit",
+        "--format",
+        "--output"
+      ]
+    },
+    {
+      "goal": "List attachments in a selected chat scope.",
+      "command": [
+        "media",
+        "list"
+      ],
+      "flags": [
+        "--mode",
+        "--target",
+        "--group",
+        "--type",
+        "--days",
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Download one attachment by its ID.",
+      "command": [
+        "media",
+        "download"
+      ],
+      "flags": [
+        "--id",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Download all attachments matching a scope.",
+      "command": [
+        "media",
+        "download-all"
+      ],
+      "flags": [
+        "--mode",
+        "--target",
+        "--group",
+        "--type",
+        "--days",
+        "--limit",
+        "--output"
+      ]
+    },
+    {
+      "goal": "Create a local evidence bundle from chat search results.",
+      "command": [
+        "evidence",
+        "create"
+      ],
+      "flags": [
+        "--output",
+        "--keyword",
+        "--days",
+        "--source",
+        "--all-sources"
+      ]
+    },
+    {
+      "goal": "Verify an evidence bundle.",
+      "command": [
+        "evidence",
+        "verify"
+      ],
+      "flags": [
+        "--bundle"
+      ]
+    },
+    {
+      "goal": "Preview a feedback draft without sending it.",
+      "command": [
+        "feedback",
+        "preview"
+      ],
+      "flags": [
+        "--type",
+        "--title",
+        "--description"
+      ]
+    },
+    {
+      "goal": "Send feedback after the user confirms the exact draft.",
+      "command": [
+        "feedback",
+        "create"
+      ],
+      "flags": [
+        "--type",
+        "--user-confirmed",
+        "--confirmation-binding"
+      ]
+    },
+    {
+      "goal": "Show unread feedback replies.",
+      "command": [
+        "feedback",
+        "inbox"
+      ],
+      "flags": [
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Mark a feedback reply as read.",
+      "command": [
+        "feedback",
+        "read"
+      ],
+      "flags": [
+        "--update-id"
+      ]
+    },
+    {
+      "goal": "Check delivery status for submitted feedback.",
+      "command": [
+        "feedback",
+        "status"
+      ],
+      "flags": [
+        "--id"
+      ]
+    },
+    {
+      "goal": "List submitted feedback.",
+      "command": [
+        "feedback",
+        "list"
+      ],
+      "flags": [
+        "--limit"
+      ]
+    },
+    {
+      "goal": "Request a live support connection.",
+      "command": [
+        "pair",
+        "request"
+      ],
+      "flags": [
+        "--user-confirmed",
+        "--request-key",
+        "--greeting-file",
+        "--timeout-seconds"
+      ]
+    },
+    {
+      "goal": "Join an existing live support connection using its code.",
+      "command": [
+        "pair",
+        "join"
+      ],
+      "flags": [
+        "--code",
+        "--user-confirmed"
+      ]
+    },
+    {
+      "goal": "Check whether a live support connection is open.",
+      "command": [
+        "pair",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Send a support message.",
+      "command": [
+        "pair",
+        "send"
+      ],
+      "flags": [
+        "--message-file",
+        "--idempotency-key",
+        "--phase",
+        "--reply-to"
+      ]
+    },
+    {
+      "goal": "Wait for one support message.",
+      "command": [
+        "pair",
+        "receive"
+      ],
+      "flags": [
+        "--timeout-seconds"
+      ]
+    },
+    {
+      "goal": "Optionally send or acknowledge a message, then wait for the next support message.",
+      "command": [
+        "pair",
+        "next"
+      ],
+      "flags": [
+        "--message-file",
+        "--idempotency-key",
+        "--ack-message-id",
+        "--reply-to",
+        "--phase",
+        "--timeout-seconds"
+      ]
+    },
+    {
+      "goal": "Acknowledge a handled support message.",
+      "command": [
+        "pair",
+        "ack"
+      ],
+      "flags": [
+        "--message-id"
+      ]
+    },
+    {
+      "goal": "List unread support instructions.",
+      "command": [
+        "pair",
+        "inbox"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Mark a support instruction as read.",
+      "command": [
+        "pair",
+        "read"
+      ],
+      "flags": [
+        "--message-id"
+      ]
+    },
+    {
+      "goal": "Send a structured product-status snapshot to support.",
+      "command": [
+        "pair",
+        "snapshot"
+      ],
+      "flags": [
+        "--reply-to",
+        "--idempotency-key",
+        "--envelope-json"
+      ]
+    },
+    {
+      "goal": "Report the outcome of an action to support.",
+      "command": [
+        "pair",
+        "result"
+      ],
+      "flags": [
+        "--ok",
+        "--error",
+        "--summary",
+        "--reply-to",
+        "--idempotency-key",
+        "--envelope-json"
+      ]
+    },
+    {
+      "goal": "End a live support connection.",
+      "command": [
+        "pair",
+        "close"
+      ],
+      "flags": [
+        "--reason"
+      ]
+    },
+    {
+      "goal": "Save a nickname for a query target.",
+      "command": [
+        "alias",
+        "set"
+      ],
+      "flags": [
+        "<NAME>",
+        "--mode",
+        "--target",
+        "--group"
+      ]
+    },
+    {
+      "goal": "List saved nicknames.",
+      "command": [
+        "alias",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Delete a saved nickname.",
+      "command": [
+        "alias",
+        "rm"
+      ],
+      "flags": [
+        "<NAME>"
+      ]
+    },
+    {
+      "goal": "Detect which supported local chat sources are present.",
+      "command": [
+        "sources",
+        "detect"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "List registered sources and their status or next actions.",
+      "command": [
+        "sources",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check status for all sources or one source.",
+      "command": [
+        "sources",
+        "status"
+      ],
+      "flags": [
+        "<SOURCE>"
+      ]
+    },
+    {
+      "goal": "Prepare a local chat source for use.",
+      "command": [
+        "sources",
+        "connect"
+      ],
+      "flags": [
+        "<SOURCE>"
+      ]
+    },
+    {
+      "goal": "Run an incremental sync for a local chat source.",
+      "command": [
+        "sources",
+        "sync"
+      ],
+      "flags": [
+        "<SOURCE>"
+      ]
+    },
+    {
+      "goal": "Remove a runtime-registered source from the current session.",
+      "command": [
+        "sources",
+        "remove"
+      ],
+      "flags": [
+        "<SOURCE>"
+      ]
+    },
+    {
+      "goal": "View the cross-app identity graph and suggested candidates.",
+      "command": [
+        "identity",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "View candidates for linking identities across apps.",
+      "command": [
+        "identity",
+        "suggest"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Preview or create a cross-app identity link.",
+      "command": [
+        "identity",
+        "link"
+      ],
+      "flags": [
+        "--person-label",
+        "--source",
+        "--raw-id",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "Confirm an account already listed as unconfirmed.",
+      "command": [
+        "identity",
+        "confirm"
+      ],
+      "flags": [
+        "--source",
+        "--raw-id"
+      ]
+    },
+    {
+      "goal": "Stop including an account in future linked-person searches.",
+      "command": [
+        "identity",
+        "unlink"
+      ],
+      "flags": [
+        "--source",
+        "--raw-id"
+      ]
+    },
+    {
+      "goal": "Clear all cross-app identity links.",
+      "command": [
+        "identity",
+        "reset"
+      ],
+      "flags": [
+        "--yes"
+      ]
+    },
+    {
+      "goal": "Follow a person or conversation for new messages.",
+      "command": [
+        "topic",
+        "save"
+      ],
+      "flags": [
+        "--name",
+        "--person",
+        "--conversation",
+        "--keyword",
+        "--source"
+      ]
+    },
+    {
+      "goal": "List followed topics.",
+      "command": [
+        "topic",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "View one followed topic.",
+      "command": [
+        "topic",
+        "show"
+      ],
+      "flags": [
+        "--topic-id"
+      ]
+    },
+    {
+      "goal": "Check one topic for new-message counts.",
+      "command": [
+        "topic",
+        "check"
+      ],
+      "flags": [
+        "--topic-id"
+      ]
+    },
+    {
+      "goal": "Delete a followed topic.",
+      "command": [
+        "topic",
+        "rm"
+      ],
+      "flags": [
+        "--topic-id",
+        "--yes"
+      ]
+    },
+    {
+      "goal": "Save confirmed claims as notes for a topic.",
+      "command": [
+        "notes",
+        "save"
+      ],
+      "flags": [
+        "--topic-id",
+        "--name",
+        "--claim",
+        "--draft",
+        "--yes"
+      ]
+    },
+    {
+      "goal": "List saved notes.",
+      "command": [
+        "notes",
+        "list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "View one saved note.",
+      "command": [
+        "notes",
+        "show"
+      ],
+      "flags": [
+        "--note-id"
+      ]
+    },
+    {
+      "goal": "Mark a saved note as touched.",
+      "command": [
+        "notes",
+        "touch"
+      ],
+      "flags": [
+        "--note-id"
+      ]
+    },
+    {
+      "goal": "Delete a saved note.",
+      "command": [
+        "notes",
+        "rm"
+      ],
+      "flags": [
+        "--note-id",
+        "--yes"
+      ]
+    },
+    {
+      "goal": "Print the available command surface as JSON.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    }
+  ],
+  "unclear": []
+}
