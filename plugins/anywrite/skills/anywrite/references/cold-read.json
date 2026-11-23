@@ -1,0 +1,246 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anywrite",
+  "version": "0.1.9",
+  "capabilities": [
+    {
+      "goal": "Check whether AnyWrite is ready to use, including sign-in, computer approval, service availability, and saved format.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--json",
+        "--repair-install"
+      ]
+    },
+    {
+      "goal": "Connect the shared Jacky Zhang login using a token piped through standard input.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Disconnect the shared login.",
+      "command": [
+        "logout"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "See the connected account with its subject masked.",
+      "command": [
+        "whoami"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Find saved writing methods by scope or query, optionally including archived methods and paging through results.",
+      "command": [
+        "definitions",
+        "search"
+      ],
+      "flags": [
+        "--scope-file",
+        "--query",
+        "--include-archived",
+        "--limit",
+        "--cursor",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Read a saved method, optionally at a specified revision.",
+      "command": [
+        "definitions",
+        "show"
+      ],
+      "flags": [
+        "--id",
+        "--revision",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check a local method draft without contacting the service or saving it.",
+      "command": [
+        "definitions",
+        "validate"
+      ],
+      "flags": [
+        "--file",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Create a saved method from a confirmed draft.",
+      "command": [
+        "definitions",
+        "save"
+      ],
+      "flags": [
+        "--file",
+        "--confirmed",
+        "--confirm-hash",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Add a confirmed new revision to an existing method.",
+      "command": [
+        "definitions",
+        "replace"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--file",
+        "--confirmed",
+        "--confirm-hash",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Export a method and all its revisions to a file or standard output.",
+      "command": [
+        "definitions",
+        "export"
+      ],
+      "flags": [
+        "--id",
+        "--output",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Archive a method so it is hidden from ordinary searches.",
+      "command": [
+        "definitions",
+        "archive"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Restore an archived method.",
+      "command": [
+        "definitions",
+        "restore"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Permanently delete a method and all its revisions.",
+      "command": [
+        "definitions",
+        "forget"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--confirm-id",
+        "--confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check what the service recorded for an earlier write operation.",
+      "command": [
+        "operations",
+        "show"
+      ],
+      "flags": [
+        "--key",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Preview feedback for Jacky, or send it after confirmation.",
+      "command": [
+        "feedback"
+      ],
+      "flags": [
+        "--input",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List previously submitted feedback.",
+      "command": [
+        "feedback-list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Read the receipt for a feedback report.",
+      "command": [
+        "feedback-status"
+      ],
+      "flags": [
+        "--id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check whether this computer is approved for the account.",
+      "command": [
+        "device",
+        "status"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Remove this computer's approval and free its account slot.",
+      "command": [
+        "device",
+        "remove-this"
+      ],
+      "flags": [
+        "--confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Reset this computer's identity and re-approve it when needed.",
+      "command": [
+        "device",
+        "reset-key"
+      ],
+      "flags": [
+        "--confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List the commands supported by this build.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    }
+  ],
+  "unclear": []
+}

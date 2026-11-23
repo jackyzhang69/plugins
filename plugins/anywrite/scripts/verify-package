@@ -23,12 +23,15 @@ expected_files = {
     "cordis.patch.yml",
     "index.js",
     "skills/anywrite/SKILL.md",
+    "skills/anywrite/references/cold-read.json",
+    "skills/anywrite/references/command-surface.md",
     "skills/anywrite/references/connect.md",
     "skills/anywrite/references/get-started.md",
     "skills/anywrite/references/models.md",
     "skills/anywrite/references/teach.md",
     "skills/anywrite/references/tone.md",
     "skills/anywrite/references/triggers.md",
+    "skills/anywrite/references/whats-new.md",
     "skills/anywrite/references/write.md",
     "scripts/verify-package",
     "scripts/verify-install",
@@ -173,7 +176,7 @@ if staged and native is not None and native.is_file():
     except Exception as exc:
         errors.append(f"native commands --json is invalid: {exc}")
     else:
-        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v1":
+        if commands.returncode or command_manifest.get("schema") != "plugin-cli-commands-v2":
             errors.append("native command manifest schema mismatch")
         if command_manifest.get("bin") != "anywrite" or command_manifest.get("version") != version:
             errors.append("native command manifest identity/version mismatch")

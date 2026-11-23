@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anywrite
 
-Version `0.1.8`.
+Version `0.1.9`.
 
 Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/anywrite/SKILL.md`](skills/anywrite/SKILL.md) first. Connect and product verbs are defined there and under `skills/anywrite/references/`.
 
