@@ -1,29 +1,29 @@
 {
   "schema_version": "3",
-  "version": "0.1.12",
-  "source_sha": "7dcc62a572fa6663a339668eac616b41ef1367d2",
+  "version": "0.1.14",
+  "source_sha": "dc66a73d59b9dd1c2ca41c9d031c52f3ae5a1472",
   "platforms": {
     "darwin-arm64": {
       "entrypoint": "bin/darwin-arm64/anymail",
       "checksum": "bin/darwin-arm64/anymail.sha256",
-      "sha256": "163b8f3a46ffe5ffd82ea8732e6b1768d5451289b241dce6bb8433e47cc7424d",
-      "size_bytes": 10382592,
-      "signing": "signed_same_team_hardened_runtime"
+      "sha256": "27244bb543dd539ae8b54f102fa7ab7a15bff74a363e76b95e76e69d59a8ab9c",
+      "size_bytes": 12132016,
+      "signing": "unsigned"
     },
     "win32-x64": {
       "entrypoint": "bin/win32-x64/anymail.exe",
       "checksum": "bin/win32-x64/anymail.exe.sha256",
-      "sha256": "22ea9155412b0585d8af8467913570d6e6b5c6e1b6344988ff1bbc95be083c4f",
-      "size_bytes": 12262912,
+      "sha256": "7a6700c25fe64aba848cfc50b781d7ceca467229e43a6146b370ea5cd874ed52",
+      "size_bytes": 14313472,
       "signing": "unsigned"
     },
     "linux-x64": {
       "entrypoint": "bin/linux-x64/anymail",
       "checksum": "bin/linux-x64/anymail.sha256",
-      "sha256": "6e997cca62853569c419ad2a9fa5192418a0888a82ca17be64125b3c83b4fd4d",
-      "size_bytes": 10179040,
+      "sha256": "569556020df6d62660b039ec5449dd64085828923a76e2bcca7031996e7d27f6",
+      "size_bytes": 10980680,
       "signing": "unsigned"
     }
   },
-  "notarization": "accepted"
+  "notarization": "waived"
 }

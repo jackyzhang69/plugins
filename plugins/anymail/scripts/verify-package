@@ -16,4 +16,14 @@ test "$refs_skill" = "0" || {
   echo "verify-package: references must not contain SKILL.md" >&2
   exit 1
 }
+if [ -f "$ROOT/bin/linux-x64/anymail" ]; then
+  python3 - "$ROOT/bin/linux-x64/anymail" <<'PY'
+import pathlib, struct, sys
+data = pathlib.Path(sys.argv[1]).read_bytes()
+if data[:4] != b"\x7fELF" or len(data) < 20 or data[4] != 2 or data[5] != 1:
+    sys.exit("verify-package: linux-x64 anymail is not a 64-bit little-endian ELF file")
+if struct.unpack_from("<H", data, 18)[0] != 0x3E:
+    sys.exit("verify-package: linux-x64 anymail is not x86-64 ELF")
+PY
+fi
 echo "verify-package: ok"

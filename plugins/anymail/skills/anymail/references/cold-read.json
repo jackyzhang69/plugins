@@ -1,0 +1,1045 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anymail",
+  "version": "0.1.14",
+  "capabilities": [
+    {
+      "goal": "Print the installed AnyMail version.",
+      "command": [
+        "version"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show the live command surface and capabilities.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check installation and runtime state, or repair the canonical installation.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--repair-install",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Save the shared Portal credential from stdin, optionally replacing an existing credential.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin",
+        "--force",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Clear the saved Portal credential.",
+      "command": [
+        "logout"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show the masked Portal identity.",
+      "command": [
+        "whoami"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Preview a feedback report, then submit it after the user approves the exact draft.",
+      "command": [
+        "feedback",
+        "create"
+      ],
+      "flags": [
+        "--type",
+        "--title",
+        "--description",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List feedback reports that have been sent.",
+      "command": [
+        "feedback",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show the status of one feedback report.",
+      "command": [
+        "feedback",
+        "status"
+      ],
+      "flags": [
+        "--id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List unread updates from Jacky.",
+      "command": [
+        "feedback",
+        "inbox"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Mark one Jacky update as read.",
+      "command": [
+        "feedback",
+        "read"
+      ],
+      "flags": [
+        "--update-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List local mailbox accounts without contacting providers.",
+      "command": [
+        "account",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show the status of one local mailbox account.",
+      "command": [
+        "account",
+        "status"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check what a standard IMAP/SMTP mailbox would use without changing anything or needing credentials.",
+      "command": [
+        "account",
+        "discover"
+      ],
+      "flags": [
+        "--email",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Attempt to open a standard IMAP/SMTP mailbox; published builds reject this command.",
+      "command": [
+        "account",
+        "open"
+      ],
+      "flags": [
+        "--email",
+        "--credential-kind",
+        "--account-id",
+        "--read-login",
+        "--send-login",
+        "--from",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Open a Gmail account through browser OAuth.",
+      "command": [
+        "account",
+        "open-google"
+      ],
+      "flags": [
+        "--account-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Open a Microsoft mail account through browser OAuth.",
+      "command": [
+        "account",
+        "open-microsoft"
+      ],
+      "flags": [
+        "--account-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Grant an existing Gmail account send permission.",
+      "command": [
+        "account",
+        "upgrade-google-send"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Grant an existing Gmail account label and cloud-draft permission.",
+      "command": [
+        "account",
+        "upgrade-google-modify"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Grant an existing Gmail account filter and vacation-setting permission.",
+      "command": [
+        "account",
+        "upgrade-google-settings-basic"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Grant an existing Microsoft account send permission.",
+      "command": [
+        "account",
+        "upgrade-microsoft-send"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Grant an existing Microsoft account folder and cloud-draft permission.",
+      "command": [
+        "account",
+        "upgrade-microsoft-readwrite"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Refresh an existing Gmail account's authorization.",
+      "command": [
+        "account",
+        "reauthorize-google"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Refresh an existing Microsoft account's authorization.",
+      "command": [
+        "account",
+        "reauthorize-microsoft"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Replace credentials for an existing standard mailbox using two lines from stdin.",
+      "command": [
+        "account",
+        "reauthorize-imap"
+      ],
+      "flags": [
+        "--account",
+        "--credential-kind",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Revoke Gmail access and delete the account's local credentials.",
+      "command": [
+        "account",
+        "revoke-google"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Revoke Microsoft access and delete the account's local credentials.",
+      "command": [
+        "account",
+        "revoke-microsoft"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Remove a standard mailbox account locally.",
+      "command": [
+        "account",
+        "remove"
+      ],
+      "flags": [
+        "--account",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List folders in a standard mailbox.",
+      "command": [
+        "mail",
+        "mailboxes"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Search mail through the typed request envelope, with optional single-account or all-ready-account coverage.",
+      "command": [
+        "mail",
+        "search-intent"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Search a mailbox folder using a filter and paginated results.",
+      "command": [
+        "mail",
+        "search"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--filter",
+        "--query",
+        "--page-token",
+        "--page-size"
+      ]
+    },
+    {
+      "goal": "List or read Gmail conversation threads through the typed request envelope.",
+      "command": [
+        "mail",
+        "thread-intent"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List Gmail threads at the low level, optionally including Spam and Trash.",
+      "command": [
+        "mail",
+        "thread-search"
+      ],
+      "flags": [
+        "--account",
+        "--query",
+        "--label",
+        "--page-token",
+        "--page-size",
+        "--include-spam-trash"
+      ]
+    },
+    {
+      "goal": "Read one Gmail thread with a selected format and headers.",
+      "command": [
+        "mail",
+        "thread-get"
+      ],
+      "flags": [
+        "--account",
+        "--thread-id",
+        "--format",
+        "--header"
+      ]
+    },
+    {
+      "goal": "Check incremental Gmail changes using a locally maintained cursor, optionally reseeding it.",
+      "command": [
+        "mail",
+        "history-intent"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "List Gmail history changes from a supplied history ID, with optional type and label filters.",
+      "command": [
+        "mail",
+        "history-list"
+      ],
+      "flags": [
+        "--account",
+        "--start-history-id",
+        "--label-id",
+        "--history-type",
+        "--page-token",
+        "--page-size"
+      ]
+    },
+    {
+      "goal": "Read the Gmail profile and current history ID.",
+      "command": [
+        "mail",
+        "profile-get"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Read one message by message ID or by mailbox, UID validity, and UID.",
+      "command": [
+        "mail",
+        "fetch"
+      ],
+      "flags": [
+        "--account",
+        "--message-id",
+        "--mailbox",
+        "--uid-validity",
+        "--uid"
+      ]
+    },
+    {
+      "goal": "Download one attachment from a message.",
+      "command": [
+        "mail",
+        "attachment"
+      ],
+      "flags": [
+        "--account",
+        "--index",
+        "--message-id",
+        "--mailbox",
+        "--uid-validity",
+        "--uid"
+      ]
+    },
+    {
+      "goal": "Export one message as raw MIME.",
+      "command": [
+        "mail",
+        "export"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid"
+      ]
+    },
+    {
+      "goal": "Import raw MIME from stdin as a local draft.",
+      "command": [
+        "mail",
+        "import"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "List confirmed sender and domain pin/quiet rules.",
+      "command": [
+        "mail",
+        "handling-list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Preview a pin or quiet rule, then save it after approval of the exact wording.",
+      "command": [
+        "mail",
+        "handling-remember"
+      ],
+      "flags": [
+        "--user-confirmed"
+      ]
+    },
+    {
+      "goal": "Forget a confirmed pin or quiet rule.",
+      "command": [
+        "mail",
+        "handling-forget"
+      ],
+      "flags": [
+        "--rule-id",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "List saved remember-me instructions.",
+      "command": [
+        "mail",
+        "memory-list"
+      ],
+      "flags": []
+    },
+    {
+      "goal": "Preview a short mail instruction, then save it after approval of the exact wording.",
+      "command": [
+        "mail",
+        "memory-remember"
+      ],
+      "flags": [
+        "--user-confirmed"
+      ]
+    },
+    {
+      "goal": "Forget a saved remember-me instruction.",
+      "command": [
+        "mail",
+        "memory-forget"
+      ],
+      "flags": [
+        "--memory-id",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "Create a local draft from JSON on stdin.",
+      "command": [
+        "mail",
+        "draft",
+        "create"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Create a reply draft for a message.",
+      "command": [
+        "mail",
+        "draft",
+        "reply"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--reply-all"
+      ]
+    },
+    {
+      "goal": "Create a forward draft for a message.",
+      "command": [
+        "mail",
+        "draft",
+        "forward"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid"
+      ]
+    },
+    {
+      "goal": "Show a draft and its frozen preview.",
+      "command": [
+        "mail",
+        "draft",
+        "read"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id"
+      ]
+    },
+    {
+      "goal": "Replace a draft using JSON on stdin and an expected revision.",
+      "command": [
+        "mail",
+        "draft",
+        "update"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id",
+        "--expected-revision"
+      ]
+    },
+    {
+      "goal": "Add an attachment to a draft using JSON on stdin.",
+      "command": [
+        "mail",
+        "draft",
+        "attach"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id",
+        "--expected-revision"
+      ]
+    },
+    {
+      "goal": "Remove an attachment from a draft.",
+      "command": [
+        "mail",
+        "draft",
+        "detach"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id",
+        "--expected-revision",
+        "--attachment-id"
+      ]
+    },
+    {
+      "goal": "Delete a draft using an expected revision.",
+      "command": [
+        "mail",
+        "draft",
+        "delete"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id",
+        "--expected-revision"
+      ]
+    },
+    {
+      "goal": "Freeze a draft and return its exact preview and one-time send challenge.",
+      "command": [
+        "mail",
+        "draft",
+        "prepare"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id"
+      ]
+    },
+    {
+      "goal": "Send a prepared draft once using its one-time challenge token from stdin.",
+      "command": [
+        "mail",
+        "draft",
+        "confirm-send"
+      ],
+      "flags": [
+        "--operation-id"
+      ]
+    },
+    {
+      "goal": "Resume dispatch of an already confirmed send that has not started dispatching.",
+      "command": [
+        "mail",
+        "draft",
+        "dispatch-confirmed"
+      ],
+      "flags": [
+        "--operation-id"
+      ]
+    },
+    {
+      "goal": "Show the state of one send operation.",
+      "command": [
+        "mail",
+        "draft",
+        "status"
+      ],
+      "flags": [
+        "--operation-id"
+      ]
+    },
+    {
+      "goal": "Upload a local draft to the provider's drafts folder.",
+      "command": [
+        "mail",
+        "draft",
+        "push-cloud"
+      ],
+      "flags": [
+        "--account",
+        "--draft-id",
+        "--mailbox"
+      ]
+    },
+    {
+      "goal": "List Gmail cloud drafts.",
+      "command": [
+        "mail",
+        "draft",
+        "cloud-list"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Delete a Gmail cloud draft.",
+      "command": [
+        "mail",
+        "draft",
+        "cloud-delete"
+      ],
+      "flags": [
+        "--account",
+        "--cloud-draft-id"
+      ]
+    },
+    {
+      "goal": "Show the local signature for an account.",
+      "command": [
+        "mail",
+        "signature-get"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Set the local signature from UTF-8 text on stdin.",
+      "command": [
+        "mail",
+        "signature-set"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Clear the local signature for an account.",
+      "command": [
+        "mail",
+        "signature-clear"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Add, remove, or replace flags on a message.",
+      "command": [
+        "mail",
+        "flag"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--op",
+        "--flag"
+      ]
+    },
+    {
+      "goal": "Move a message to another folder.",
+      "command": [
+        "mail",
+        "move"
+      ],
+      "flags": [
+        "--account",
+        "--to",
+        "--message-id",
+        "--mailbox",
+        "--uid-validity",
+        "--uid"
+      ]
+    },
+    {
+      "goal": "Copy a message to another folder.",
+      "command": [
+        "mail",
+        "copy"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--to"
+      ]
+    },
+    {
+      "goal": "Archive a Gmail or Microsoft message.",
+      "command": [
+        "mail",
+        "archive"
+      ],
+      "flags": [
+        "--account",
+        "--message-id"
+      ]
+    },
+    {
+      "goal": "Move a Gmail or Microsoft message to Junk.",
+      "command": [
+        "mail",
+        "junk"
+      ],
+      "flags": [
+        "--account",
+        "--message-id"
+      ]
+    },
+    {
+      "goal": "Move a message to Trash.",
+      "command": [
+        "mail",
+        "trash"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--to"
+      ]
+    },
+    {
+      "goal": "Move multiple messages to Trash.",
+      "command": [
+        "mail",
+        "batch-trash"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--to"
+      ]
+    },
+    {
+      "goal": "Move a message out of Trash, defaulting to INBOX.",
+      "command": [
+        "mail",
+        "restore"
+      ],
+      "flags": [
+        "--account",
+        "--uid-validity",
+        "--uid",
+        "--mailbox",
+        "--to"
+      ]
+    },
+    {
+      "goal": "Permanently delete a message with the required confirmation phrase.",
+      "command": [
+        "mail",
+        "permanently-delete"
+      ],
+      "flags": [
+        "--account",
+        "--mailbox",
+        "--uid-validity",
+        "--uid",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "List Gmail labels.",
+      "command": [
+        "mail",
+        "labels"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Show one Gmail label.",
+      "command": [
+        "mail",
+        "label-get"
+      ],
+      "flags": [
+        "--account",
+        "--label-id"
+      ]
+    },
+    {
+      "goal": "Create a Gmail label.",
+      "command": [
+        "mail",
+        "label-create"
+      ],
+      "flags": [
+        "--account",
+        "--name"
+      ]
+    },
+    {
+      "goal": "Rename a Gmail label.",
+      "command": [
+        "mail",
+        "label-update"
+      ],
+      "flags": [
+        "--account",
+        "--label-id",
+        "--name"
+      ]
+    },
+    {
+      "goal": "Delete a Gmail label with the required confirmation phrase.",
+      "command": [
+        "mail",
+        "label-delete"
+      ],
+      "flags": [
+        "--account",
+        "--label-id",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "Add or remove labels on a Gmail message.",
+      "command": [
+        "mail",
+        "label-modify"
+      ],
+      "flags": [
+        "--account",
+        "--message-id",
+        "--add",
+        "--remove"
+      ]
+    },
+    {
+      "goal": "List Gmail filters.",
+      "command": [
+        "mail",
+        "filters"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Show one Gmail filter.",
+      "command": [
+        "mail",
+        "filter-get"
+      ],
+      "flags": [
+        "--account",
+        "--filter-id"
+      ]
+    },
+    {
+      "goal": "Create a Gmail filter.",
+      "command": [
+        "mail",
+        "filter-create"
+      ],
+      "flags": [
+        "--account",
+        "--subject",
+        "--query",
+        "--add-label"
+      ]
+    },
+    {
+      "goal": "Delete a Gmail filter with the required confirmation phrase.",
+      "command": [
+        "mail",
+        "filter-delete"
+      ],
+      "flags": [
+        "--account",
+        "--filter-id",
+        "--confirm"
+      ]
+    },
+    {
+      "goal": "Show Gmail vacation auto-reply settings.",
+      "command": [
+        "mail",
+        "vacation-get"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Change Gmail vacation auto-reply settings using JSON on stdin.",
+      "command": [
+        "mail",
+        "vacation-set"
+      ],
+      "flags": [
+        "--account"
+      ]
+    },
+    {
+      "goal": "Create a Microsoft mail folder.",
+      "command": [
+        "mail",
+        "folder-create"
+      ],
+      "flags": [
+        "--account",
+        "--name"
+      ]
+    },
+    {
+      "goal": "Rename a Microsoft mail folder.",
+      "command": [
+        "mail",
+        "folder-rename"
+      ],
+      "flags": [
+        "--account",
+        "--folder-id",
+        "--name"
+      ]
+    },
+    {
+      "goal": "Move a Microsoft mail folder under another parent.",
+      "command": [
+        "mail",
+        "folder-move"
+      ],
+      "flags": [
+        "--account",
+        "--folder-id",
+        "--destination-id"
+      ]
+    },
+    {
+      "goal": "Delete a Microsoft mail folder with the required confirmation phrase.",
+      "command": [
+        "mail",
+        "folder-delete"
+      ],
+      "flags": [
+        "--account",
+        "--folder-id",
+        "--confirm"
+      ]
+    }
+  ],
+  "unclear": []
+}

@@ -1,7 +1,7 @@
 # Open a mailbox account
 
-AnyMail opens official Google/Microsoft OAuth accounts and standard
-IMAP/SMTP password or app-password accounts discovered automatically.
+AnyMail opens official Google and Microsoft OAuth accounts. A standard IMAP/SMTP
+mailbox cannot be opened in the published plugin (see step 4).
 
 ## Agent steps
 
@@ -18,16 +18,12 @@ anymail account open-google --json
 anymail account open-microsoft --json
 ```
 
-4. If the user wants a standard provider (for example Fastmail, or another
-   discovered IMAP/SMTP pair):
-
-```bash
-anymail account discover --email USER@EXAMPLE --json
-anymail account open --email USER@EXAMPLE --json
-```
-
-When discovery requires an app password / authorize-code, follow
-[app-password](app-password.md).
+4. If the user wants a standard IMAP/SMTP provider (for example Fastmail),
+   it cannot be opened in the published plugin. `account discover` is
+   read-only and may be used to check the address; `account open` never
+   accepts a password and always stops with an error in a shipped build. Follow
+   [app-password](app-password.md), tell the user plainly, and offer Gmail or
+   Outlook.
 
 5. Send capability for OAuth accounts is separate. Only when the user clearly
    wants to send:
@@ -167,3 +163,43 @@ If `account upgrade-google-send` opens Google and the human sees
   the warning.
 - If they cancel, the CLI reports that Google did not grant access and
   repeats the same send-scope note. Retry only if they still want send.
+
+## Install status and repair
+
+The diagnostic report covers three separate facts. Do not treat an absent
+canonical install as a broken CLI.
+
+- `common.install_home` is only the canonical `plugins/anymail/current`
+  package tree (`scope: "canonical_install"`, `is_runtime_home: false`).
+  `cli_usable_when_absent: true` means a plugin-cache or other verified
+  CLI can still open and inspect accounts when `present` is false. The
+  cached CLI does not make `present` true. `running_version` is the CLI
+  that produced the report; `aligned` is true only when that version
+  matches the installed package. A cached CLI that is newer or older than
+  the canonical install does not make `aligned` true.
+- `common.runtime_home` is the plugin runtime directory for account and
+  journal state. It is not the package install tree.
+- `common.running_cli` reports this process: `usable`,
+  `canonical_install_required: false`, and `origin` of
+  `canonical_install`, `plugin_cache`, or `other`.
+
+When `install_home.present` is false or `install_home.aligned` is false
+and the operator wants the canonical package tree, run the current
+verified package binary with `doctor --repair-install`. The repair
+validates the package containing that binary, installs it at the
+canonical path, and removes every older package tree, older version
+directory and older host-cache copy; no previous-version backup is kept.
+Accounts, drafts, the Portal sign-in and settings are never removed. The
+result lists `removed`, `leftover` and `pending_cleanup`; a non-empty
+`leftover` means some old path could not be deleted and the command
+exits with an error so a later repair can retry.
+
+## Platform limits
+
+The account journal location is implemented only on macOS and Windows. On the
+Linux client, commands that need local account or draft state stop with
+"local account authority is unavailable" (for example the account list and
+status commands) or "state directory unavailable" (mail commands such as draft
+read), and `account open` stops with "account state storage is unavailable".
+Say in everyday words that mail features are not available on Linux in this
+release.

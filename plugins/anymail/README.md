@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anymail
 
-Version `0.1.12`.
+Version `0.1.14`.
 
 Agent-native Gmail and Microsoft mail client. Load the anymail router; ask the live CLI, never invent providers or secrets.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/anymail/SKILL.md`](skills/anymail/SKILL.md) first. Connect and product verbs are defined there and under `skills/anymail/references/`.
 

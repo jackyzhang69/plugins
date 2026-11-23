@@ -1,3 +1,3 @@
-# AnyMail — what changed in 0.1.12
+# AnyMail — what changed in 0.1.14
 
-Release clients now strip debug symbols and remap home, workspace, and cargo registry paths at build time, so shipped binaries no longer expose product symbol names or readable source/build paths. The Windows client stays unsigned by owner waiver; macOS stays signed and notarized.
+Installing or updating AnyMail leaves only the current version on your computer. The previous copy is no longer kept, and your sign-in, mailboxes and drafts are untouched. AnyMail can now tell your assistant when a newer version is available. The reminder comes at most once a day, never delays your mail work, and nothing is installed until you agree.

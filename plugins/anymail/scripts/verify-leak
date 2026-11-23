@@ -22,6 +22,7 @@ allowed_exact=(
   skills/anymail/references/tell-jacky.md
   skills/anymail/references/whats-new.md
   skills/anymail/references/triggers.md
+  skills/anymail/references/cold-read.json
   scripts/verify-package
   scripts/verify-install
   scripts/verify-release-assets
@@ -30,6 +31,8 @@ allowed_exact=(
   bin/darwin-arm64/anymail.sha256
   bin/win32-x64/anymail.exe
   bin/win32-x64/anymail.exe.sha256
+  bin/linux-x64/anymail
+  bin/linux-x64/anymail.sha256
 )
 
 cd "$ROOT"
@@ -97,7 +100,7 @@ for pattern in "${deny_patterns[@]}"; do
   fi
 done
 
-for bin in bin/darwin-arm64/anymail bin/win32-x64/anymail.exe; do
+for bin in bin/darwin-arm64/anymail bin/win32-x64/anymail.exe bin/linux-x64/anymail; do
   if command -v strings >/dev/null 2>&1; then
     if strings "$bin" | grep -E -e 'local-envs' -e 'BEGIN PRIVATE KEY' -e 'platform-vault/secrets' >/tmp/anymail-bin-leak.txt; then
       echo "verify-leak: binary string denylist hit in $bin" >&2
