@@ -1,3 +1,3 @@
-# What's new in this version
+# What's new in AnyDoc 0.3.18
 
-Guide comparisons now stay bound to the exact official revision, local facts, private checklist and mappings. When the guide changes, AnyDoc shows the fresh differences for your review while previously approved plans keep their original source pin. Your case files and facts remain on this computer.
+Installing or updating AnyDoc now leaves exactly one copy on your computer: the old version and any leftover folders are removed, while your login and saved settings stay. AnyDoc may show one short update notice when a newer version is available, and it never slows down or changes your work. The built-in list of what AnyDoc can do now describes every action and option in plain words, so your agent always knows the full picture. Guide comparisons stay bound to the exact official revision, your local facts and your private checklist. When a guide changes, AnyDoc shows the fresh differences for your review while previously approved plans keep their original source pin. Your case files and facts remain on this computer.

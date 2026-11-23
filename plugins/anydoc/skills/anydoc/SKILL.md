@@ -83,8 +83,35 @@ Ask the live CLI, never from memory of an older release:
 "$ANYDOC_BIN" commands --json
 ```
 
-Command path reference (not for first-session orientation):
-[references/command-surface.md](references/command-surface.md).
+Every public command, with its key flags. All of them accept `--json`; stdout is
+always JSON. For every argument of every command, ask the live CLI with
+`commands --json`.
+
+- `doctor` — local health report, no login. `doctor --repair-install` installs this package as the one current copy (see Updates).
+- `inspect --input <folder>` — mechanical facts for every file under a client folder; `--detail-level summary` is the only level this version supports.
+- `render-page --input <pdf> --page <n> --output <new.png>` — higher-resolution PNG preview of one PDF page; `--max-dimension` sets the longest edge.
+- `extract-existing-text --input <pdf>` — the text layer a PDF already has, never OCR; `--page` picks one page, `--max-chars` caps the output.
+- `plan validate --plan <file> --input <folder>` — check a Plan v4 and name any bad field path.
+- `plan show --plan <file> --input <folder>` — reviewable preview of the plan and its approval hash.
+- `plan approve --plan <file> --receipt <new file> --input <folder>` — record the user's yes as a receipt bound to that exact plan.
+- `assemble --input <folder> --plan <file> --receipt <file>` — write the approved outputs as a new `anydoc-output/vNNN` snapshot.
+- `verify --input <folder> --plan <file> --receipt <file>` — mechanically check the written outputs against the plan.
+- `resume --input <folder>` — finish an interrupted assemble from its journal.
+- `clean --input <folder>` — delete scratch, staging and journal files only.
+- `login --token-stdin` — save the Portal token read from stdin; `--force` replaces an existing valid one.
+- `logout` — clear the local login. `whoami` — check the login and show a masked identity.
+- `guides list [--pathway-id <id> --stage <stage> --channel <channel>]` — bundled conventions, or scoped public guide revisions.
+- `guides show [--id <id>] [--pathway-id <id> --stage <stage>]` — one bundled convention or the current public revision.
+- `guides revision --pathway-id <id> --stage <stage> --document-list-id <id> --program-release-id <id> --document-list-revision-id <id> --payload-sha256 <hash>` — one exactly pinned public revision.
+- `guides evaluate --facts <file> --as-of <date>` with the pathway, stage and pin flags — compare a pinned guide with local facts; choose `--case-type` with `--bindings`, `--private-list-model` with `--bindings`, or `--public-only-confirmed`; `--decisions` supplies dispositions.
+- `models list` — saved private models. `models show --id <id>` — one model. `models resolve --case-type <type>` — find the model for a case type (`model_absent` when none).
+- `models validate --model <draft>` — check a draft locally. `models save --model <draft> --user-confirmed [--idempotency-key <key>]` — create a model. `models replace --id <id> --expected-revision <n> --model <draft> --user-confirmed` — new revision. `models forget --id <id> --expected-revision <n> --user-confirmed` — delete. `models export --id <id> --output <new file>` — write the full record locally.
+- `feedback create --type <kind> --title <t> --description <d> --user-confirmed` — Tell Jacky; `feedback list` and `feedback status --id <id>` track items; `feedback inbox` and `feedback read --update-id <id>` handle replies.
+- `pair join --code <code> --user-confirmed` — join Jacky's assistant; `pair status`, `pair snapshot --envelope-json <file>`, `pair inbox`, `pair read --message-id <id>`, `pair result --ok [--error <text>]` and `pair close [--reason <text>]` run the session.
+- `commands --json` — the live command surface.
+- `photos` — a real command that exists in this CLI but is reserved: calling it returns `not_implemented` with exit code 3. Photo sheets are made by the `render_photo_document` plan action instead.
+- `office-preview` — a real command that exists in this CLI but is reserved: calling it returns `not_implemented` with exit code 3.
+- `guide-feedback` — a real command that exists in this CLI but is reserved: calling it returns `not_implemented` with exit code 3.
 
 Resolve the binary once per session, then export `ANYDOC_BIN`:
 
@@ -119,3 +146,7 @@ Full assemble workflow, Teach Me, plan actions, and honesty table:
 - `guides evaluate` requires local facts and an explicit `--as-of` date. Use `--jurisdiction` or `--locale` when the pinned scope requires them; an omitted restricted dimension stays `context_incomplete`. Select exactly one path: `--case-type` plus local `--bindings` for an available saved private model; `--private-list-model` plus local bindings for an unsaved private list; or `--public-only-confirmed` for public-only use. `--decisions` supplies local dispositions for listed differences. These local files never go to the service.
 - For `pilot_partial` or incomplete/unknown evaluated scope, public-only planning also requires `--partial-scope-acknowledged`. Comparison keeps the chosen private authority; public-only use is a separate opt-in. The result keeps the exact pin, facts digest, evaluation, source pins, and comparison decisions for a Plan v4. A separate `plan approve` is still required before assembly; source-pending and official-pending remain distinct.
 - A Plan v4 may carry a local `official_case_specific` checklist overlay. Treat its typed slots and additional requests as local unresolved prompts (`case_specific_pending`), separate from official guide facts and status. Unknown never means `not_applicable`; the overlay does not prove AnyDoc accessed an account and is not uploaded. Its source hash is approval-bound, so a changed file requires a newly reviewed plan.
+
+## Updates
+
+`anydoc` may print one stderr line with schema `jz.plugin.update_notice.v1`. It never blocks a command. Finish what the user asked first, then tell them once, in plain words, that a newer version is available and ask whether to update now. On yes: refresh this plugin through the host (Claude Code: `claude plugin marketplace update jacky-plugins`, then `claude plugin update anydoc@jacky-plugins`; Codex: `codex plugin marketplace upgrade jacky-plugins`, then `codex plugin add anydoc@jacky-plugins`; other hosts: attach the new `plugins/anydoc/` tree). Then run `doctor --repair-install` with the binary from the **new** package, not the folder this session started from (Claude Code: `~/.claude/plugins/cache/jacky-plugins/anydoc/<latest>/bin/<platform>/anydoc`; Codex: `~/.codex/plugins/cache/jacky-plugins/anydoc/<latest>/bin/<platform>/anydoc`; `<latest>` is the notice's `latest` value or the highest version folder present; `<platform>` is `darwin-arm64`, `linux-x64` or `win32-x64`). Read `references/whats-new.md` from that folder and tell the user in one or two sentences what changed and that the host loads it fully after a restart. For the rest of this session use that folder for every command and reference; the old version folder is gone. On no: do not ask again in this session.

@@ -250,6 +250,12 @@ if pdfium_packaged:
     waiver_valid = isinstance(waiver, str) and waiver.startswith(
         "azure_trusted_signing_unavailable_owner_waiver"
     )
+    # Desktop signing waived (owner, 2026-11-21): a fully unsigned release names
+    # both waivers; a development package may carry neither.
+    mac_waiver = release.get("macos_signing_waiver")
+    mac_waiver_valid = isinstance(mac_waiver, str) and mac_waiver.startswith(
+        "apple_notarization_unavailable_owner_waiver"
+    )
     fully_unsigned = set(signing_by_platform) == set(ALLOWED) and set(
         signing_by_platform.values()
     ) == {"unsigned"}
@@ -267,10 +273,21 @@ if pdfium_packaged:
             )
         if notarization != "accepted":
             errors.append("Windows signing waiver requires macOS notarization=accepted")
-    if fully_unsigned and notarization != "not_done":
-        errors.append("unsigned development package requires notarization=not_done")
-    if waiver is not None and not windows_signing_waived:
-        errors.append("windows_signing_waiver is only valid for a Windows-unsigned macOS-signed package")
+    if fully_unsigned:
+        if notarization != "not_done":
+            errors.append("unsigned package requires notarization=not_done")
+        if (waiver is not None or mac_waiver is not None) and not (
+            waiver_valid and mac_waiver_valid
+        ):
+            errors.append(
+                "unsigned package must name both binary.release.macos_signing_waiver "
+                "and binary.release.windows_signing_waiver, or neither"
+            )
+    else:
+        if mac_waiver is not None:
+            errors.append("macos_signing_waiver is only valid for a macOS-unsigned package")
+        if waiver is not None and not windows_signing_waived:
+            errors.append("windows_signing_waiver is only valid for a Windows-unsigned package")
 elif notarization == "accepted":
     errors.append("notarization=accepted requires packaged Pdfium and signed platform artifacts")
 

@@ -1,3 +1,18 @@
+# AnyDoc 0.3.18
+
+- AnyDoc 0.3.17 was never published: its release stopped when the Windows
+  build step ran past its time limit. 0.3.18 ships the same changes listed
+  under 0.3.17 below, with a longer limit.
+
+# AnyDoc 0.3.17
+
+- Installing or updating now leaves exactly one copy of AnyDoc: the previous
+  version, stale folders and older copies in the host plugin cache are removed.
+  Login and saved settings are kept.
+- AnyDoc may print one short update notice on stderr when a newer version is
+  published. It never delays or changes a command.
+- `anydoc commands --json` now describes every command and option.
+
 # AnyDoc 0.3.16
 
 - AnyDoc 0.3.15 was never published: its release stopped at the final

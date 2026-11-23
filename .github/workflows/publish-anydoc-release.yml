@@ -40,13 +40,25 @@ jobs:
           release = manifest["binary"]["release"]
           if release.get("tag") != tag:
               raise SystemExit("marketplace tag does not match the AnyDoc manifest")
-          if release.get("notarization") != "accepted":
-              raise SystemExit("AnyDoc macOS payload is not notarized")
           mac = manifest["binary"]["platforms"]["darwin-arm64"]
-          if mac.get("signing") != "signed_same_team_hardened_runtime" or mac.get(
-              "pdfium", {}
-          ).get("signing") != "signed_same_team_hardened_runtime":
+          mac_signing = mac.get("signing")
+          mac_waiver = release.get("macos_signing_waiver")
+          mac_waived = (
+              mac_signing == "unsigned"
+              and release.get("notarization") == "not_done"
+              and isinstance(mac_waiver, str)
+              and mac_waiver.startswith(
+                  "apple_notarization_unavailable_owner_waiver"
+              )
+          )
+          mac_signed = (
+              mac_signing == "signed_same_team_hardened_runtime"
+              and release.get("notarization") == "accepted"
+          )
+          if not (mac_signed or mac_waived):
               raise SystemExit("AnyDoc darwin-arm64 signing claim is incomplete")
+          if mac.get("pdfium", {}).get("signing") != mac_signing:
+              raise SystemExit("AnyDoc darwin-arm64 Pdfium signing claim is incomplete")
           win = manifest["binary"]["platforms"]["win32-x64"]
           win_signing = win.get("signing")
           waiver = release.get("windows_signing_waiver")

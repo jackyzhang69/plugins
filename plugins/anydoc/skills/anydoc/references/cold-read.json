@@ -1,0 +1,498 @@
+{
+  "schema": "jz.plugin.cold_read.v1",
+  "plugin_id": "anydoc",
+  "version": "0.3.18",
+  "capabilities": [
+    {
+      "goal": "Discover the live command surface and its options.",
+      "command": [
+        "commands"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check local health and optionally repair the installation.",
+      "command": [
+        "doctor"
+      ],
+      "flags": [
+        "--json",
+        "--repair-install"
+      ]
+    },
+    {
+      "goal": "Inspect files in a client folder and collect supported mechanical facts.",
+      "command": [
+        "inspect"
+      ],
+      "flags": [
+        "--input",
+        "--detail-level",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Render a higher-resolution preview of a PDF page.",
+      "command": [
+        "render-page"
+      ],
+      "flags": [
+        "--input",
+        "--page",
+        "--output",
+        "--max-dimension",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Extract text already present in a PDF, without OCR.",
+      "command": [
+        "extract-existing-text"
+      ],
+      "flags": [
+        "--input",
+        "--page",
+        "--max-chars",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Validate an assembly plan and report invalid field paths.",
+      "command": [
+        "plan",
+        "validate"
+      ],
+      "flags": [
+        "--plan",
+        "--input",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show a reviewable plan preview and its approval hash.",
+      "command": [
+        "plan",
+        "show"
+      ],
+      "flags": [
+        "--plan",
+        "--input",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Record approval of a specific assembly plan.",
+      "command": [
+        "plan",
+        "approve"
+      ],
+      "flags": [
+        "--plan",
+        "--receipt",
+        "--input",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Assemble approved outputs as a new versioned snapshot.",
+      "command": [
+        "assemble"
+      ],
+      "flags": [
+        "--input",
+        "--plan",
+        "--receipt",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check assembled outputs against the approved plan.",
+      "command": [
+        "verify"
+      ],
+      "flags": [
+        "--input",
+        "--plan",
+        "--receipt",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Resume an interrupted assembly from its journal.",
+      "command": [
+        "resume"
+      ],
+      "flags": [
+        "--input",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Remove scratch, staging, and journal files from the input folder.",
+      "command": [
+        "clean"
+      ],
+      "flags": [
+        "--input",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Save a Portal token supplied through standard input.",
+      "command": [
+        "login"
+      ],
+      "flags": [
+        "--token-stdin",
+        "--force",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Clear the local login.",
+      "command": [
+        "logout"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check login status and show a masked identity.",
+      "command": [
+        "whoami"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "List bundled conventions or scoped public guide revisions.",
+      "command": [
+        "guides",
+        "list"
+      ],
+      "flags": [
+        "--pathway-id",
+        "--stage",
+        "--channel",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show a bundled convention or current public guide revision.",
+      "command": [
+        "guides",
+        "show"
+      ],
+      "flags": [
+        "--id",
+        "--pathway-id",
+        "--stage",
+        "--channel",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Fetch one exactly pinned public guide revision.",
+      "command": [
+        "guides",
+        "revision"
+      ],
+      "flags": [
+        "--pathway-id",
+        "--stage",
+        "--document-list-id",
+        "--program-release-id",
+        "--document-list-revision-id",
+        "--payload-sha256",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Compare a pinned public guide with local facts and selected local dispositions.",
+      "command": [
+        "guides",
+        "evaluate"
+      ],
+      "flags": [
+        "--facts",
+        "--as-of",
+        "--pathway-id",
+        "--stage",
+        "--channel",
+        "--document-list-id",
+        "--program-release-id",
+        "--document-list-revision-id",
+        "--payload-sha256",
+        "--jurisdiction",
+        "--locale",
+        "--case-type",
+        "--bindings",
+        "--private-list-model",
+        "--public-only-confirmed",
+        "--partial-scope-acknowledged",
+        "--decisions",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List saved private packing models.",
+      "command": [
+        "models",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Show one saved private packing model.",
+      "command": [
+        "models",
+        "show"
+      ],
+      "flags": [
+        "--id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Resolve the saved model for a case type.",
+      "command": [
+        "models",
+        "resolve"
+      ],
+      "flags": [
+        "--case-type",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Validate a local model draft.",
+      "command": [
+        "models",
+        "validate"
+      ],
+      "flags": [
+        "--model",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Save a confirmed model draft.",
+      "command": [
+        "models",
+        "save"
+      ],
+      "flags": [
+        "--model",
+        "--user-confirmed",
+        "--idempotency-key",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Replace a saved model with a confirmed draft at an expected revision.",
+      "command": [
+        "models",
+        "replace"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--model",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Forget a saved model at an expected revision.",
+      "command": [
+        "models",
+        "forget"
+      ],
+      "flags": [
+        "--id",
+        "--expected-revision",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Export a saved model record to a local file.",
+      "command": [
+        "models",
+        "export"
+      ],
+      "flags": [
+        "--id",
+        "--output",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Submit a confirmed bug report, feature request, or knowledge tip to Jacky.",
+      "command": [
+        "feedback",
+        "create"
+      ],
+      "flags": [
+        "--type",
+        "--title",
+        "--description",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "List submitted feedback items.",
+      "command": [
+        "feedback",
+        "list"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check the status of a feedback item.",
+      "command": [
+        "feedback",
+        "status"
+      ],
+      "flags": [
+        "--id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check for feedback replies.",
+      "command": [
+        "feedback",
+        "inbox"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Read and mark a feedback reply.",
+      "command": [
+        "feedback",
+        "read"
+      ],
+      "flags": [
+        "--update-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Join a time-limited support session with Jacky's assistant.",
+      "command": [
+        "pair",
+        "join"
+      ],
+      "flags": [
+        "--code",
+        "--user-confirmed",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check the support session status.",
+      "command": [
+        "pair",
+        "status"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Send an inspect or assemble status envelope during a support session.",
+      "command": [
+        "pair",
+        "snapshot"
+      ],
+      "flags": [
+        "--envelope-json",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Check for support-session messages.",
+      "command": [
+        "pair",
+        "inbox"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Read and mark a support-session message.",
+      "command": [
+        "pair",
+        "read"
+      ],
+      "flags": [
+        "--message-id",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Report a successful or failed action to the support session.",
+      "command": [
+        "pair",
+        "result"
+      ],
+      "flags": [
+        "--ok",
+        "--error",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Close the support session.",
+      "command": [
+        "pair",
+        "close"
+      ],
+      "flags": [
+        "--reason",
+        "--json"
+      ]
+    },
+    {
+      "goal": "Attempt the reserved photo command.",
+      "command": [
+        "photos"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Attempt the reserved office-preview command.",
+      "command": [
+        "office-preview"
+      ],
+      "flags": [
+        "--json"
+      ]
+    },
+    {
+      "goal": "Attempt the reserved guide-feedback command.",
+      "command": [
+        "guide-feedback"
+      ],
+      "flags": [
+        "--json"
+      ]
+    }
+  ],
+  "unclear": []
+}
