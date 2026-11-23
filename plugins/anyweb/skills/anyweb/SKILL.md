@@ -68,8 +68,9 @@ questions, and fills.
 
 ## When the user asks "what can you do?"
 
-Do not answer from a frozen command list in this file. Run the live client and
-translate `commands --json` into product language:
+Do not answer from memory of an older release. The command list below only says
+how to run each command; run the live client and translate `commands --json`
+into product language:
 
 ```bash
 "$ANYWEB_BIN" commands --json
@@ -99,6 +100,46 @@ Playbooks: [connect](references/connect.md), [saved login](references/hosted-con
 [Tell Jacky](references/tell-jacky.md), and
 [pair-session](references/pair-session.md).
 
+## Every command, one line each
+
+Run each entry below as `"$ANYWEB_BIN" <command words and flags>`; the entries
+show only the command words and their key flags. Every command prints JSON.
+Ask the live client for every argument of every command: `"$ANYWEB_BIN" commands --json`.
+
+- `doctor` checks this computer's AnyWeb setup; `doctor --repair-install` installs this package as the only copy.
+- `login --token-stdin` saves the shared Portal token piped on stdin; add `--force` to replace one that is already saved.
+- `logout` removes the saved Portal token from this computer.
+- `whoami` shows which account this computer is signed in as, with the token masked.
+- `repair claims` lists this account's website-repair requests with their queue status.
+- `hosted-account set --site <site> --role <role> --credentials-stdin --hosted-custody-confirmed` saves a website login read from stdin.
+- `hosted-account status --site <site> --role <role>` shows whether a login is saved for that site and role.
+- `hosted-account forget --site <site> --role <role> --user-confirmed` deletes a saved login.
+- `hosted-security-answer set --challenge-ref <ref> --answer-stdin` saves a security answer the website just accepted.
+- `hosted-security-answer status --site <site> --role <role>` shows masked counts of saved security answers.
+- `hosted-security-answer forget --site <site> --role <role> --user-confirmed` deletes saved security answers.
+- `task start --request-stdin` starts a fill from the request on stdin and returns what is still needed, then runs the preflight and the fill.
+- `task status --task-ref <ref>` shows the state of one task (hosts normally use the MCP step-status tool).
+- `task resume --task-ref <ref> --input-stdin` gives a waiting task the facts it asked for; `--action request_passcode_resend --expected-passcode-epoch <n>` asks for the email code to be resent instead.
+- `task cancel --task-ref <ref>` cancels a task and closes its runtime.
+- `task result --task-ref <ref>` prints the final result of a finished task.
+- `task forget-answers --input-stdin` deletes the answers an earlier version stored for this user and site.
+- `runtime doctor` checks whether the signed local runtime is installed and verified.
+- `runtime install` downloads and verifies the runtime declared by this package.
+- `feedback create --type feature-request|bug-report --title <title> --description <text> --user-confirmed` sends Tell Jacky feedback the user approved.
+- `feedback list` lists the feedback sent from this computer.
+- `feedback status --id <id>` shows the status of one piece of feedback.
+- `feedback inbox` shows unread replies and updates.
+- `feedback read --update-id <id>` marks one reply or update as read.
+- `pair join --code <code> --user-confirmed` joins a pair session with Jacky's assistant.
+- `pair status` shows whether a connection is open.
+- `pair snapshot --envelope-json <path>` sends the current product status.
+- `pair inbox` shows unread instructions from Jacky's assistant.
+- `pair read --message-id <id>` marks one instruction read after it was shown.
+- `pair result --ok` sends the outcome of a requested action; add `--error <reason>` when it failed.
+- `pair close` ends the connection.
+- `mcp serve` runs the MCP stdio server for the host's step-status, resume and saved-login cache loop.
+- `commands` prints this command surface as JSON.
+
 ## Live CLI discovery (fail-closed)
 
 Ask the live CLI, never from memory of an older release:
@@ -107,8 +148,6 @@ Ask the live CLI, never from memory of an older release:
 "$ANYWEB_BIN" commands --json
 ```
 
-Command path reference (not for first-session orientation):
-[references/command-surface.md](references/command-surface.md).
 The host loop for step status, resume, and saved-login cache is MCP:
 `codex mcp add anyweb -- anyweb mcp serve`. Use `step_status`,
 `task_resume`, and `credential_cache_*`. Do not shell `task status` /
@@ -134,3 +173,7 @@ Chrome on this computer. A saved login is only for reuse on this computer and
 never exposes the stored password or answer in chat. Never expose repair refs
 as website content, and never treat `repair_available` as permission to submit,
 sign, pay, upload, send, withdraw, delete, or make a final declaration.
+
+## Updates
+
+`anyweb` may print one stderr line with schema `jz.plugin.update_notice.v1`. It never blocks a command. Finish what the user asked first, then tell them once, in plain words, that a newer version is available and ask whether to update now. On yes: refresh this plugin through the host (Claude Code: `claude plugin marketplace update jacky-plugins`, then `claude plugin update anyweb@jacky-plugins`; Codex: `codex plugin marketplace upgrade jacky-plugins`, then `codex plugin add anyweb@jacky-plugins`; other hosts: attach the new `plugins/anyweb/` tree). Then run `doctor --repair-install` with the binary from the **new** package, not the folder this session started from (Claude Code: `~/.claude/plugins/cache/jacky-plugins/anyweb/<latest>/bin/<platform>/anyweb`; Codex: `~/.codex/plugins/cache/jacky-plugins/anyweb/<latest>/bin/<platform>/anyweb`; `<latest>` is the notice's `latest` value or the highest version folder present; `<platform>` is `darwin-arm64`, `linux-x64` or `win32-x64`). Read `references/whats-new.md` from that folder and tell the user in one or two sentences what changed and that the host loads it fully after a restart. For the rest of this session use that folder for every command and reference; the old version folder is gone. On no: do not ask again in this session.

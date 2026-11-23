@@ -1,9 +1,3 @@
-# AnyWeb — what changed in this version
+# AnyWeb — what changed in 0.2.31
 
-Version `0.2.30` fills a supported Express Entry profile up to the last review before submission, fills a PR General application on the PR Portal, and can also fill and check supported BC PNP registration fields before Register, without saving or creating an account. No task submits the form. Your system may ask you to confirm this build.
-
-- The PR Portal now also renews a PR card (`prc-fill-to-pre-submit`) and fills a Permanent Resident Travel Document application (`prtd-fill-to-pre-submit`), up to the point where the form is ready to submit.
-- It continues an existing application only after the client's name on the dashboard matches, or creates a new one when you confirm; a new PR card or travel-document application can never be deleted.
-- Urgent processing is not supported, because it needs a document upload.
-
-Email codes still pause so you can give them to this assistant, and a step that cannot run is reported as not done; feedback counts as delivered only when the service confirms receipt, and an available repair is not permission to submit.
+Updating AnyWeb now leaves a single clean copy behind: the old version, its leftovers and old downloaded runtime files are removed. Your login, saved website logins and settings are kept. AnyWeb also checks once a day, quietly, whether a newer version exists. If one does, your assistant mentions it after finishing your request and updates only when you agree. Filling a supported profile or portal application works exactly as before, and nothing is ever submitted for you. The command guide your assistant reads is now generated from the program itself, so it always matches what AnyWeb can do.

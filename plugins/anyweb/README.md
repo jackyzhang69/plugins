@@ -1,11 +1,11 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anyweb
 
-Version `0.2.30`.
+Version `0.2.31`.
 
 Fill a supported Express Entry profile on this computer up to the last review before submit, and optionally save a website login for reuse here.
 
-Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`).
+Platforms: macOS Apple Silicon (`darwin-arm64`), Windows x64 (`win32-x64`), Linux x64 (`linux-x64`).
 
 Load [`skills/anyweb/SKILL.md`](skills/anyweb/SKILL.md) first. Connect and product verbs are defined there and under `skills/anyweb/references/`.
 
