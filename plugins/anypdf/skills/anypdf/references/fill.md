@@ -137,16 +137,14 @@ tools unless the user asks for technical detail. Never show credentials.
      --idempotency-key <stable-key>
    ```
 
-   Default fill stays the interactive PDF. Add `--flatten` only when the user
-   wants a second static copy so Preview or a browser can see the pages. Never
-   treat `--flatten` as IRCC upload, submission-ready, or a replacement for the
-   interactive filled PDF.
+   The result is the interactive filled PDF. AnyPDF makes no static or
+   flattened viewing copy; open the PDF in Adobe Acrobat or Adobe Reader.
 
    Unsigned IMM5476 stays interactive. To add supplied signature images and
    obtain a signed page-image PDF, follow [Sign a completed IMM5476](#sign-a-completed-imm5476)
    after the fill succeeds. Every connected user can sign their own fill;
    this does not require an administrator. Do not manufacture the signed copy
-   with a local rasterizer or `--flatten`. It is not an IRCC submission.
+   with a local rasterizer. It is not an IRCC submission.
 
    Saved memory is not consent, a warning acknowledgement, or submit
    authorization. Obtain those confirmations in the current run even when a
@@ -191,20 +189,9 @@ tools unless the user asks for technical detail. Never show credentials.
    that does not mean the fill failed. Official IRCC PDFs often keep values
    in form fields that only Adobe Acrobat draws. Tell the user to open the
    same downloaded file in Adobe Acrobat. Do not say the PDF is empty.
-   If they still need those pages visible outside Adobe, and they asked for
-   that viewing copy, submit with `--flatten` and also download the extra
-   static file:
-
-   ```bash
-   $ANYPDF fill download --job-id <job_id> --flatten \
-     --output /absolute/form-static-view.pdf
-   ```
-
-   That extra file is only so non-Adobe apps can see the pages. It is not
-   an IRCC upload, not submission-ready, and not a replacement for the
-   interactive filled PDF. Keep the ordinary download as the job result.
-   This `--flatten` viewing copy is for unsigned fills. A signed IMM5476
-   download is already the static copy AnyPDF made; do not rasterize it.
+   Do not make a static copy with a local rasterizer or screenshot tool;
+   AnyPDF does not offer one. A signed IMM5476 download is already the
+   static copy AnyPDF made; do not rasterize it.
 
 ## Complete missing answers
 

@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anypdf command reference
 
-Generated from `anypdf commands --json` (version `0.7.37`). Every public command is listed.
+Generated from `anypdf commands --json` (version `0.7.38`). Every public command is listed.
 
 ## Global options
 
@@ -127,7 +127,7 @@ Collect the completed answers sent from the browser page; returns them (or the s
 
 Ask for a filled PDF; creates one fill job (repeating the same idempotency key creates nothing new) and returns its job id or the reasons it cannot be filled yet.
 
-By default the job produces the interactive filled PDF. `--flatten` also asks for a static viewing PDF; it is not for IRCC upload and does not replace the interactive PDF. To fill with some answers intentionally missing, add `--allow-incomplete` together with either the `--validation-id`, `--warnings-hash`, `--data-hash` and `--intentionally-missing` values from `validate`, or one `--confirmation-handle`.
+The job produces the interactive filled PDF. To fill with some answers intentionally missing, add `--allow-incomplete` together with either the `--validation-id`, `--warnings-hash`, `--data-hash` and `--intentionally-missing` values from `validate`, or one `--confirmation-handle`.
 
 | Argument | Kind | Required | Values | Meaning |
 |---|---|---|---|---|
@@ -137,7 +137,6 @@ By default the job produces the interactive filled PDF. `--flatten` also asks fo
 | `--schema-version` | option | no |  | Schema version the answers were written for, as returned by `forms schema`. |
 | `--version` | option | no |  | Form version; defaults to the current published version. |
 | `--locale` | option | no |  | Locale of the form text to use. |
-| `--flatten` | flag | no |  | Also produce a static viewing PDF so Preview or a browser can show the pages. |
 | `--allow-incomplete` | flag | no |  | Fill although some answers are intentionally missing; needs the confirmation values below. |
 | `--validation-id` | option | no |  | Validation id from `validate`; used with `--allow-incomplete`. |
 | `--warnings-hash` | option | no |  | Warnings hash from `validate`; used with `--allow-incomplete`. |
@@ -171,13 +170,12 @@ Check whether a fill is ready; returns the job state and changes nothing.
 
 Save the finished PDF of a completed fill to a file on this machine; returns the saved path, size and checksum.
 
-The default is the interactive filled PDF; `--flatten` saves the extra static viewing copy instead.
+The file is the interactive filled PDF; open it in Adobe Acrobat or Adobe Reader.
 
 | Argument | Kind | Required | Values | Meaning |
 |---|---|---|---|---|
 | `--job-id` | option | yes |  | Fill job id returned by `fill submit`. |
 | `--output` | option | yes |  | Absolute path of the file to write. |
-| `--flatten` | flag | no |  | Save the static viewing copy instead of the interactive filled PDF. |
 
 ## `anypdf signatures create`
 

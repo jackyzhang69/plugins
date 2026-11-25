@@ -1,3 +1,3 @@
-# AnyPDF — what changed in 0.7.37
+# AnyPDF — what changed in 0.7.38
 
-Updating AnyPDF now leaves a single clean copy behind: the old version and everything it left over are removed. Your login, saved rules and settings are kept. AnyPDF also checks once a day, quietly, whether a newer version exists. If one does, your agent mentions it after finishing your request and updates only when you agree. Filling, signing and intake work exactly as before. The command guide your agent reads is now generated from the program itself, so it always matches what AnyPDF can do.
+A fill now always gives you one thing: the interactive filled PDF. Open it in Adobe Acrobat or Adobe Reader. The extra static viewing copy is gone; asking for one could fail the whole fill, so AnyPDF no longer offers it. On an older version, a fill that asked for the static copy now succeeds; download the normal filled PDF. Filling, signing and intake otherwise work exactly as before.

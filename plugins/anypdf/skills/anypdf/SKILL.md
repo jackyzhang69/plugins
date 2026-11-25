@@ -124,9 +124,9 @@ Ask the live client for every argument of every command: `"$ANYPDF" commands --j
 - `complete apply --session-id <id> --values <values.json>` hands back what was typed in chat.
 - `complete result --session-id <id> --wait <seconds>` collects what was sent from the browser page.
 - `fill readiness --form-id <id> --input <answers.json>` checks whether answers can be filled now without creating a job.
-- `fill submit --form-id <id> --input <answers.json> --idempotency-key <key>` asks for the filled PDF; `--flatten` adds a static viewing copy, `--allow-incomplete` fills with confirmed blanks.
+- `fill submit --form-id <id> --input <answers.json> --idempotency-key <key>` asks for the interactive filled PDF; `--allow-incomplete` fills with confirmed blanks.
 - `fill status --job-id <id>` checks whether the fill is ready.
-- `fill download --job-id <id> --output <absolute path>` saves the PDF; `--flatten` saves the static viewing copy.
+- `fill download --job-id <id> --output <absolute path>` saves the interactive filled PDF; open it in Adobe Acrobat or Adobe Reader.
 - `signatures create --job-id <id> --input <context.json>` starts signing a completed IMM5476.
 - `signatures status --session-id <id>` checks a signing session.
 - `signatures add-asset --session-id <id> --image <path>` uploads a signature image.
