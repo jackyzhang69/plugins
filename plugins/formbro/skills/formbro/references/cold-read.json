@@ -1,7 +1,7 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "formbro",
-  "version": "1.9.11",
+  "version": "1.9.13",
   "capabilities": [
     {
       "goal": "Connect the CLI to the user's account using a token supplied through stdin.",
@@ -350,7 +350,7 @@
       "flags": []
     },
     {
-      "goal": "List account-level RCIC profile summaries, without credentials.",
+      "goal": "List account-level RCIC profiles with their saved portal usernames, passwords and security questions.",
       "command": [
         "rcic",
         "list"

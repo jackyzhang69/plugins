@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # formbro command reference
 
-Generated from `formbro commands --json` (version `1.9.11`). Every public command is listed.
+Generated from `formbro commands --json` (version `1.9.13`). Every public command is listed.
 
 ## Global options
 
@@ -503,7 +503,7 @@ Change fields on a person and return the updated record
 
 ## `formbro rcic list`
 
-List the account's RCIC profiles; returns id, names, RCIC number and company only, never portal credentials. The listed `id` is the value backend validation expects for `case.rcic_id` on an application (e.g. PR webform fills)
+List the account's RCIC profiles with their saved portal credentials (usernames, passwords, security Q&As) for logging in to IRCC portals. The listed `id` is the value backend validation expects for `case.rcic_id` on an application (e.g. PR webform fills)
 
 No arguments.
 

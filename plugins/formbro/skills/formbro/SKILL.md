@@ -118,8 +118,8 @@ User said this → call this exact command (binary resolution: §B; full router 
 | "is my plugin healthy / which backend am I on / token still valid" | `formbro doctor --json` (live whoami + backend round-trip) |
 | "can my machine even run a fill" | `formbro webform runtime-check` |
 | "the daemon is acting weird" | `formbro webform daemon status` → `daemon restart` |
-| "list my RCIC profiles / what RCIC is linked to this case?" | `formbro rcic list` returns profile summaries; `formbro applications get <application-id>` shows the case's linked `case.rcic_id`. Neither returns portal credentials. |
-| "view/edit RCIC details or portal credentials" | Open the profile in FormBro → Settings → RCIC as its owner. The CLI has no RCIC detail or credential command; do not try to fetch credentials separately for webform filling. |
+| "list my RCIC profiles / what RCIC is linked to this case?" | `formbro rcic list` returns each profile with its saved portal credentials; `formbro applications get <application-id>` shows the case's linked `case.rcic_id`. |
+| "get the portal login (PR / TR / REP / LMIA) for an RCIC" | `formbro rcic list` → the profile's `credentials.<portal>.username` / `.password` (and security Q&As). Give them to the user or the filling tool that logs in; do not echo them into logs, notes or feedback. Edit them in FormBro → Settings → RCIC. |
 | "plugin out of date?" | `formbro doctor --check-upgrade` |
 | "update the plugin / install it cleanly / remove old copies" | Follow the Updates section: refresh through the host, then `formbro doctor --repair-install` from the new package. Login and settings are kept; the old tree is deleted. |
 | "tell Jacky about this bug/feature/tip" | `formbro feedback create --type bug-report\|feature-request\|knowledge-tip --title "<t>" --description "<d>" [--application-id "<exact application id>"]` — `--application-id` is mandatory for bug reports; **always confirm the draft with the user first** (see [tell-jacky](references/tell-jacky.md)) |
@@ -128,7 +128,7 @@ Two semantic distinctions to NEVER conflate:
 - `applications list` = consultant's active workbench (dashboard scope; filters by active status)
 - `applications inventory` = every application in the account regardless of state (audit / batch / debugging)
 
-`case.rcic_id` links an application to an **account-level RCIC profile**, not to an application person. To link a profile, use the `id` from `formbro rcic list`, then `formbro applications patch <application-id> --set case.rcic_id=<rcic-id>`. Create or edit the profile in FormBro → Settings → RCIC, not with `persons create`. Access to an application or its linked ID does not grant access to the profile's portal credentials.
+`case.rcic_id` links an application to an **account-level RCIC profile**, not to an application person. To link a profile, use the `id` from `formbro rcic list`, then `formbro applications patch <application-id> --set case.rcic_id=<rcic-id>`. Create or edit the profile in FormBro → Settings → RCIC, not with `persons create`. Portal credentials are returned only to the profile's owner account.
 
 Routing detail below is supplementary — start with this 20-line table.
 
@@ -284,7 +284,7 @@ This is every public command. Prefer the quick router above; use this list when 
 - `formbro applicants list`, `formbro applicants get <id>` — read applicants.
 - `formbro applications list` (active workbench), `formbro applications inventory` (every status; `--program-key`, `--limit`, `--query`), `formbro applications by-status <status>`, `formbro applications get <id>`, `formbro applications status <id>`, `formbro applications persons <id>`, `formbro applications documents <id>`, `formbro applications resolve --query <text> --program-key <key>` — read applications.
 - `formbro employers list`, `formbro employers get <id>` — read LMIA employers.
-- `formbro rcic list` — account RCIC profile summaries (id, names, number, company); never portal credentials.
+- `formbro rcic list` — account RCIC profiles (id, names, number, company) with their saved portal credentials.
 - `formbro audit my` — the account's own audit trail.
 
 **Intake from files and text**
