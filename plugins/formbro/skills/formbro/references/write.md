@@ -62,7 +62,10 @@ New-case rule: use `import`. Existing-entity rule: use `extract`, `validate`, an
 # Agent reads user files locally and generates JSON matching the returned schema.
 <formbro> import apply-json --program-key <key> --json '<json>' [--target new-case] --dry-run
 <formbro> import apply-json --program-key <key> --json '<json>' [--target new-case]
+<formbro> import apply-json --program-key <key> --json '<json>' --allow-incomplete   # partial draft: saves now, lists what is still missing
 ```
+
+Partial drafts: when the user only has part of the information, leave unknown fields null (arrays empty) and commit with --allow-incomplete; export the saved record to Excel for the client to complete. Values left in Chinese/Japanese/Korean are rejected under validation.language: translate them into English first (native_* name fields and case.case_name may stay in the original script).
 
 If the imported case has related people that the import contract cannot save in one pass, create and attach them through CLI mutations only:
 

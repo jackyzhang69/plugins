@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # formbro command reference
 
-Generated from `formbro commands --json` (version `1.9.13`). Every public command is listed.
+Generated from `formbro commands --json` (version `1.9.14`). Every public command is listed.
 
 ## Global options
 
@@ -409,6 +409,7 @@ Validate and optionally save local-agent generated import JSON
 | `--target` | option | no |  | What the import creates; the default is a new case |
 | `--json` | option | yes |  | Agent-written import JSON |
 | `--dry-run` | flag | no |  | Validate only and save nothing |
+| `--allow-incomplete` | flag | no |  | Save the case even when required information is still missing; the result lists what is missing |
 
 ## `formbro export entity`
 

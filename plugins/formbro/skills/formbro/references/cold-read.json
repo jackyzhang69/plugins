@@ -1,7 +1,7 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "formbro",
-  "version": "1.9.13",
+  "version": "1.9.14",
   "capabilities": [
     {
       "goal": "Connect the CLI to the user's account using a token supplied through stdin.",
@@ -391,7 +391,8 @@
         "--program-key",
         "--json",
         "--target",
-        "--dry-run"
+        "--dry-run",
+        "--allow-incomplete"
       ]
     },
     {
