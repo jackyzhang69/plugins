@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anyweb command reference
 
-Generated from `anyweb commands --json` (version `0.2.31`). Every public command is listed.
+Generated from `anyweb commands --json` (version `0.2.32`). Every public command is listed.
 
 ## `anyweb doctor`
 

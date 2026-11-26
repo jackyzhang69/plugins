@@ -1,27 +1,27 @@
 {
   "schema_version": 1,
-  "version": "0.2.31",
-  "source_sha": "bf7bbd84c7d59321cb00cb4c7bfb653cebc40f33",
+  "version": "0.2.32",
+  "source_sha": "91de3d0cde3b9d57cdbc916ae218cd5819255669",
   "product": "anyweb",
   "binary": {
     "name": "anyweb",
-    "version": "0.2.31",
+    "version": "0.2.32",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anyweb",
-        "sha256": "58b2e37b99fd05e5cc012563a5d1177094d7dbeffc66b6a2b329edf788308d17",
+        "sha256": "4e12ca9b4acfd1f90d98f84893be170743e0688e32edf7212f3f428c603e73d8",
         "size": 4500560,
         "signing": "owner_waived_adhoc_only"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anyweb.exe",
-        "sha256": "ae1922bfd421a024ccd904643a95eac5f0bca4c32db6eae3e0a9552a61c0d260",
+        "sha256": "14169737eaa7a41764bfe5a98b4bc6fec99ff34fc7c58d1f2ad30b940fb132f4",
         "size": 6096896,
         "signing": "owner_waived_authenticode"
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/anyweb",
-        "sha256": "1ff824df08341ee0082adb5748a2ade5c27b926a6878fc129ed77f6ee68b3fdc",
+        "sha256": "fe86e361f95a1ed7625c1d212b24aeac00d7b7452dce3fb48f795ed2799b7d16",
         "size": 5602952,
         "signing": "unsigned"
       }
@@ -36,34 +36,34 @@
       "marketplace": "claimed",
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anyweb-v0.2.31",
-      "source_commit": "bf7bbd84c7d59321cb00cb4c7bfb653cebc40f33",
+      "tag": "anyweb-v0.2.32",
+      "source_commit": "91de3d0cde3b9d57cdbc916ae218cd5819255669",
       "notarization": "waived_not_notarized"
     }
   },
   "runtime": {
     "name": "anyweb-runtime",
-    "version": "0.2.31",
+    "version": "0.2.32",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "runtime/darwin-arm64/anyweb-runtime",
         "asset": "anyweb-runtime",
-        "sha256": "864c8f72cd8eb63a82be900bf185395510208309aacec4bc82cd76e29d73ac12",
+        "sha256": "27ac9e883b5e598163210bb0f74c60b2dca5aa2b4d72dbf8050ce702c7daab4b",
         "size": 93763488,
         "signing": "owner_waived_adhoc_only"
       },
       "win32-x64": {
         "entrypoint": "runtime/win32-x64/anyweb-runtime.exe",
         "asset": "anyweb-runtime.exe",
-        "sha256": "523a2dcd7ca94aa45df17a63aced035190acae63759b13db47b2aa1803009612",
-        "size": 120384000,
+        "sha256": "c1a2cc99527266c46594a85ddd7bb4cbbfa148858bb46e96a3384e077ee62376",
+        "size": 120388608,
         "signing": "owner_waived_authenticode"
       },
       "linux-x64": {
         "entrypoint": "runtime/linux-x64/anyweb-runtime",
         "asset": "anyweb-runtime-linux-x64",
-        "sha256": "36f1ab69380c0ec7d48966e9a6b5cd782944f569d94cc7dfd366a573fdc74dd4",
-        "size": 114235568,
+        "sha256": "e55ee77f9696ba303cd13e06dc79b72302da391729b719a499c4ae7452e3b60a",
+        "size": 114239664,
         "signing": "unsigned"
       }
     },
@@ -77,17 +77,17 @@
   "platforms": {
     "darwin-arm64": {
       "path": "bin/darwin-arm64/anyweb",
-      "sha256": "58b2e37b99fd05e5cc012563a5d1177094d7dbeffc66b6a2b329edf788308d17",
+      "sha256": "4e12ca9b4acfd1f90d98f84893be170743e0688e32edf7212f3f428c603e73d8",
       "size": 4500560
     },
     "win32-x64": {
       "path": "bin/win32-x64/anyweb.exe",
-      "sha256": "ae1922bfd421a024ccd904643a95eac5f0bca4c32db6eae3e0a9552a61c0d260",
+      "sha256": "14169737eaa7a41764bfe5a98b4bc6fec99ff34fc7c58d1f2ad30b940fb132f4",
       "size": 6096896
     },
     "linux-x64": {
       "path": "bin/linux-x64/anyweb",
-      "sha256": "1ff824df08341ee0082adb5748a2ade5c27b926a6878fc129ed77f6ee68b3fdc",
+      "sha256": "fe86e361f95a1ed7625c1d212b24aeac00d7b7452dce3fb48f795ed2799b7d16",
       "size": 5602952
     }
   },

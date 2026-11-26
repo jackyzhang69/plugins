@@ -1,3 +1,3 @@
-# AnyWeb — what changed in 0.2.31
+# AnyWeb — what changed in 0.2.32
 
-Updating AnyWeb now leaves a single clean copy behind: the old version, its leftovers and old downloaded runtime files are removed. Your login, saved website logins and settings are kept. AnyWeb also checks once a day, quietly, whether a newer version exists. If one does, your assistant mentions it after finishing your request and updates only when you agree. Filling a supported profile or portal application works exactly as before, and nothing is ever submitted for you. The command guide your assistant reads is now generated from the program itself, so it always matches what AnyWeb can do.
+On the IRCC Permanent Residence Portal, your assistant can now start a new PR application for a client and fill the applicant profile, and then fill an existing application's four forms up to the last page before submission. Starting a new application happens only after you confirm it. The existing PR application filling works as before, and nothing is ever submitted for you.
