@@ -2,25 +2,25 @@
   "version": 4,
   "binary": {
     "name": "anychat",
-    "version": "0.1.107",
+    "version": "0.1.108",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat",
-        "sha256": "8b2b0d611a4e62f925725b0746039f4e69450ccea42d155ea30226c2f00a74bc"
+        "sha256": "1d35dbb2359c355164a5ea3b4809fef7f77979b9e5a77f06bb4261f64e074582"
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat.exe",
-        "sha256": "e4f8709191cfe3a9c039f0e8c7f1983b654061fa270eb30117126f3f1c33ec90"
+        "sha256": "cab3e108da93c711119ab18844234b36a9f6d25499b47473437a4c457e068148"
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/anychat",
-        "sha256": "2261f5a26f6d73cb418a3ef9294310312f0779325f3231d840d60a658d8efc8b"
+        "sha256": "7d7981a4af2df169583224444282e3415c34ca0806ab62dd9d993a4aa5e37895"
       }
     },
     "release": {
       "host": "github-releases",
       "repo": "jackyzhang69/plugins",
-      "tag": "anychat-v0.1.107"
+      "tag": "anychat-v0.1.108"
     },
     "resolutionOrder": [
       "${platform}-${arch}"
@@ -30,7 +30,7 @@
   },
   "helper": {
     "name": "anychat-access",
-    "version": "0.1.107",
+    "version": "0.1.108",
     "platforms": {
       "darwin-arm64": {
         "entrypoint": "bin/darwin-arm64/anychat-access",
@@ -38,11 +38,11 @@
       },
       "win32-x64": {
         "entrypoint": "bin/win32-x64/anychat-access.exe",
-        "sha256": "d6de2a74555fe4de7f641aa9bbf30e28b766a46aab96af52bcec6a842c38871c"
+        "sha256": "149d3ada08e04d945c8cadff477ef94887b6ebb0b662a14fcd98286ccacaf16e"
       },
       "linux-x64": {
         "entrypoint": "bin/linux-x64/anychat-access",
-        "sha256": "e6e0df882a0ffce25e4ec4502b9607d5fbb86423d90d0fb1a8ccf868be1c5560"
+        "sha256": "284259c1b90ba837bd2f6d0a7b4b99fb9e5c8314aafb9180a99efdc5de30dd3e"
       }
     },
     "verifyChecksum": true
@@ -52,7 +52,7 @@
     "linux-x64",
     "win32-x64"
   ],
-  "source_sha": "e2988a2ac007d37bf0140b8ff0dbf760582959b2",
+  "source_sha": "1ebaa7216344acfae59daceac610fdc1ec6101eb",
   "cacheDir": {
     "darwin": "${HOME}/.cache/anychat-cli",
     "linux": "${HOME}/.cache/anychat-cli",

@@ -1,3 +1,3 @@
-# AnyChat — what changed in 0.1.107
+# AnyChat — what changed in 0.1.108
 
-- The Linux program now starts after installation; before this it was installed without permission to run.
+- AnyChat no longer keeps a list of computers; signing in with the shared token works on any computer.
