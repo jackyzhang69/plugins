@@ -50,7 +50,7 @@ Hard rules for every flow:
 
 Every command prints one JSON result; the lines below say what each command is for. A command's name is the words after the binary, so `anywrite definitions save` is the command `definitions save`. Every command also accepts `--json`, which changes nothing.
 
-- `anywrite doctor`: read-only readiness check (login, this computer's approval, service, pending writes).
+- `anywrite doctor`: read-only readiness check (login, service, pending writes).
 - `anywrite login --token-stdin`: connect the shared Jacky Zhang login from a token piped on stdin.
 - `anywrite logout`: disconnect the shared login (only when the user asks).
 - `anywrite whoami`: show the connected account with a masked subject.
@@ -64,11 +64,10 @@ Every command prints one JSON result; the lines below say what each command is f
 - `anywrite definitions forget --id <id> --expected-revision <n> --confirm-id <id> --confirmed`: permanently delete a method and every revision.
 - `anywrite operations show --key <idempotency-key>`: see what the service recorded for an earlier write.
 - `anywrite feedback --input <path-or-> --user-confirmed`: preview Jacky feedback (JSON with type, title, description, idempotency_key; or `-` for stdin), and send it only with the confirmation flag; then `anywrite feedback-list` and `anywrite feedback-status --id <id>` list it and read one receipt.
-- `anywrite device status`, `anywrite device remove-this --confirmed` and `anywrite device reset-key --confirmed`: check, remove or re-approve this computer on the account.
 - `anywrite doctor --repair-install`: make this package the only installed copy; used after an update.
 - `anywrite commands --json`: print the command surface of this build.
 
-This package is version 0.1.8. Use the readiness check to learn whether the current account can reach the service.
+This package is version 0.1.10. Use the readiness check to learn whether the current account can reach the service.
 
 ## Updates
 

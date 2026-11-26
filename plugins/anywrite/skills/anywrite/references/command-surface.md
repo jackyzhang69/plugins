@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anywrite command reference
 
-Generated from `anywrite commands --json` (version `0.1.9`). Every public command is listed.
+Generated from `anywrite commands --json` (version `0.1.10`). Every public command is listed.
 
 ## Global options
 
@@ -17,7 +17,7 @@ No arguments.
 
 ## `anywrite doctor`
 
-Check that login, this computer's approval and the service are ready, and report pending writes, without installing anything; with `--repair-install`, instead make the running package the only installed copy (keeps login and saved methods)
+Check that login and the service are ready, and report pending writes, without installing anything; with `--repair-install`, instead make the running package the only installed copy (keeps login and saved methods)
 
 | Argument | Kind | Required | Values | Meaning |
 |---|---|---|---|---|
@@ -150,28 +150,6 @@ Preview a feedback draft for Jacky, or send it after the user confirmed the exac
 |---|---|---|---|---|
 | `--input` | option | yes |  | Feedback draft JSON file path (type, title, description, idempotency_key), or `-` for stdin |
 | `--user-confirmed` | flag | no |  | Send for real after the user saw the exact draft; without it only a preview is returned |
-
-## `anywrite device status`
-
-Show whether this computer is approved on the account; read-only
-
-No arguments.
-
-## `anywrite device remove-this`
-
-Remove this computer from the account and free its slot after the user confirmed
-
-| Argument | Kind | Required | Values | Meaning |
-|---|---|---|---|---|
-| `--confirmed` | flag | no |  | The person has confirmed removing this computer |
-
-## `anywrite device reset-key`
-
-Set this computer up again after it was removed in the account page, once the user agreed
-
-| Argument | Kind | Required | Values | Meaning |
-|---|---|---|---|---|
-| `--confirmed` | flag | no |  | The person has said yes to using this computer again |
 
 ## `anywrite feedback-list`
 

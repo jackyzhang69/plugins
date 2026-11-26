@@ -1,10 +1,10 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "anywrite",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "capabilities": [
     {
-      "goal": "Check whether AnyWrite is ready to use, including sign-in, computer approval, service availability, and saved format.",
+      "goal": "Check whether AnyWrite is ready to use, including sign-in, service availability, and saved format.",
       "command": [
         "doctor"
       ],
@@ -197,38 +197,6 @@
       ],
       "flags": [
         "--id",
-        "--json"
-      ]
-    },
-    {
-      "goal": "Check whether this computer is approved for the account.",
-      "command": [
-        "device",
-        "status"
-      ],
-      "flags": [
-        "--json"
-      ]
-    },
-    {
-      "goal": "Remove this computer's approval and free its account slot.",
-      "command": [
-        "device",
-        "remove-this"
-      ],
-      "flags": [
-        "--confirmed",
-        "--json"
-      ]
-    },
-    {
-      "goal": "Reset this computer's identity and re-approve it when needed.",
-      "command": [
-        "device",
-        "reset-key"
-      ],
-      "flags": [
-        "--confirmed",
         "--json"
       ]
     },

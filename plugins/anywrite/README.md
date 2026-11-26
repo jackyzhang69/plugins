@@ -1,7 +1,7 @@
 <!-- generated-by: render_public_plugin_docs.py ; do not edit -->
 # anywrite
 
-Version `0.1.9`.
+Version `0.1.10`.
 
 Teach the assistant how you write a kind of document, keep confirmed writing methods, and write new documents in your style.
 
