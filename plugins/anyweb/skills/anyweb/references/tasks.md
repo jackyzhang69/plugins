@@ -125,24 +125,6 @@ the dashboard that the row for that case number shows the applicant's family
 and given name; on any mismatch, a missing row, or missing names it stops
 without writing. The applicant's names are therefore required facts.
 
-Two more PR General tasks on `site="ircc-pr-portal"` use the same stored login:
-
-- `task="create-application"` starts a new PR application from the dashboard,
-  fills the applicant profile (with date of birth written `YYYY/MM/DD`) and
-  stops on the new application's page. A new application cannot be undone on
-  the user's account, so start it only after the user explicitly confirms, and
-  never twice for one client. Verified so far for program "Economic", category
-  "Provincial Nominee Program (PNP)"; any other choice stops before Chrome
-  opens. The new application's number is at the end of its page address; ask
-  the user for it before continuing.
-- `task="update-application"` opens an existing application by its case number
-  (`site.pr_general.pr.case_id`) after the same dashboard name check, fills
-  IMM 0008, IMM 5406, IMM 5669 and IMM 5562 with Save and continue, and stops
-  before submission. Verified so far for one family shape: a principal
-  applicant with one accompanying common-law partner. The primary telephone's
-  country code is set by the portal for Canada/US numbers; do not supply it
-  then.
-
 For a PR card renewal (`task="prc-fill-to-pre-submit"`) or Permanent Resident
 Travel Document (`task="prtd-fill-to-pre-submit"`) on `site="ircc-pr-portal"`,
 the stored portal login is the same one used for PR General
@@ -172,7 +154,7 @@ without opening Chrome:
   "request": {
     "request_ref": "a caller-generated stable id",
     "site": "ircc-apr | ircc-ee-profile | bcpnp-register | ircc-pr-portal",
-    "task": "first-reversible-page | fill-to-pre-submit | fill-to-pre-register | create-application | update-application | prc-fill-to-pre-submit | prtd-fill-to-pre-submit",
+    "task": "first-reversible-page | fill-to-pre-submit | fill-to-pre-register",
     "register_submit": false,
     "after_fill": "complete"
   },
