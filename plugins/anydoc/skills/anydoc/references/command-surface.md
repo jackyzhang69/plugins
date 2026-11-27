@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # anydoc command reference
 
-Generated from `anydoc commands --json` (version `0.3.18`). Every public command is listed.
+Generated from `anydoc commands --json` (version `0.3.19`). Every public command is listed.
 
 ## `anydoc doctor`
 
@@ -109,7 +109,7 @@ Resume an interrupted assemble from its journal and finish the same snapshot
 
 ## `anydoc clean`
 
-Remove derived cache, staging and journal files only; inspection, document map, plans, receipts, sources and every output snapshot are kept
+Remove derived cache, host scratch, staging and journal files only; inspection, document map, plans, receipts, sources and every output snapshot are kept
 
 | Argument | Kind | Required | Values | Meaning |
 |---|---|---|---|---|

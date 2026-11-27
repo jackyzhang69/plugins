@@ -62,7 +62,7 @@ Do not answer from a frozen command list. Run the live client and translate
 | User intent | Host does | Human may be asked |
 |---|---|---|
 | "what can AnyDoc do" | Live `"$ANYDOC_BIN" commands --json`; translate inspect/plan/assemble capabilities | Connect when resolving or saving a private model ([connect](references/connect.md)) |
-| pack this folder / assemble the upload package / inspect this client directory / rename and merge these PDFs / build the IRCC document folder | [assemble](references/assemble.md): inspect → plan → approve → assemble → verify | Document list or confirmed private model; explicit yes on the packing list; facts for ambiguous subjects |
+| pack this folder / assemble the upload package / inspect this client directory / rename and merge these PDFs / build the IRCC document folder | [assemble](references/assemble.md): inspect → plan → approve → assemble → verify → clean. For a saved model, show the whole model's coverage before the yes | Document list or confirmed private model; explicit yes on the packing list; facts for ambiguous subjects |
 | change the saved packing rules / update the assembly model | [models](references/models.md): host edits scratch, validates, replaces after a yes | Confirm the new rules in plain language |
 | connect to anydoc / log in / save my portal token | [connect](references/connect.md): pipe Portal token via stdin | Token file path or one-time paste (never argv) |
 | tell Jacky / report bug / feature / tip | [tell-jacky](references/tell-jacky.md) | Confirm the exact draft before send |
@@ -97,7 +97,7 @@ always JSON. For every argument of every command, ask the live CLI with
 - `assemble --input <folder> --plan <file> --receipt <file>` — write the approved outputs as a new `anydoc-output/vNNN` snapshot.
 - `verify --input <folder> --plan <file> --receipt <file>` — mechanically check the written outputs against the plan.
 - `resume --input <folder>` — finish an interrupted assemble from its journal.
-- `clean --input <folder>` — delete scratch, staging and journal files only.
+- `clean --input <folder>` — delete page previews, host scratch, staging and journal files only; run it once after verify passes.
 - `login --token-stdin` — save the Portal token read from stdin; `--force` replaces an existing valid one.
 - `logout` — clear the local login. `whoami` — check the login and show a masked identity.
 - `guides list [--pathway-id <id> --stage <stage> --channel <channel>]` — bundled conventions, or scoped public guide revisions.

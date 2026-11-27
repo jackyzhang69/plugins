@@ -1,7 +1,7 @@
 {
   "schema": "jz.plugin.cold_read.v1",
   "plugin_id": "anydoc",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "capabilities": [
     {
       "goal": "Discover the live command surface and its options.",
@@ -130,7 +130,7 @@
       ]
     },
     {
-      "goal": "Remove scratch, staging, and journal files from the input folder.",
+      "goal": "Remove page previews, host scratch, staging, and journal files from the input folder.",
       "command": [
         "clean"
       ],

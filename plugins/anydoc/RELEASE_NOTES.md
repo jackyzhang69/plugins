@@ -1,3 +1,15 @@
+# AnyDoc 0.3.19
+
+- Packing by a saved model now shows the whole model before approval: the plan
+  preview reports how many deliverables the model has, how many this batch
+  writes, and every model output it does not write with the reason. The
+  playbook requires the agent to name outputs that already have material but
+  are left out, to judge duplicates by content and covered period, and to keep
+  "not this time" as a deferral for this batch only.
+- `clean` now also removes the agent's scratch folder (OCR text, review images,
+  old drafts) and runs once after a pack is verified. Originals, finished
+  packs, plans, receipts and the inspection are kept.
+
 # AnyDoc 0.3.18
 
 - AnyDoc 0.3.17 was never published: its release stopped when the Windows

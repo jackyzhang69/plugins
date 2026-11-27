@@ -291,6 +291,35 @@ actually present but neither included nor excluded is separately `source
 pending` and always blocks approval. Plan v1/v2 is rejected and regenerated,
 never silently upgraded.
 
+### Show the whole model before the yes
+
+This applies to every saved model, whatever its size or case type.
+
+- **"Assemble by the model" means the whole model.** When the user asks for the
+  complete or whole model, write `authority.scope` as `{"kind":"all"}`. Use
+  `selected` only when the user explicitly names the part they want; then finish
+  exactly that part without waiting for the rest.
+- **Report the whole model, not only this batch.** Before asking for the yes on
+  any `private_model` plan, read `model_coverage` from `plan show` and tell the
+  human in one short block: how many deliverables the model has
+  (`model_deliverables`), how many this batch writes (`planned_deliverables`),
+  and every `not_planned` output with its reason in plain words. A count such as
+  "10 of 10 checked" describes this batch only; never present it as the model.
+- **Name material that is present but left out.** For each `not_planned` output,
+  check the inspection and document map. If the folder already holds related
+  material, list that output as "has material, not in this batch" and say why.
+  Material that covers only one of several expected items is still listed.
+- **Same kind is not the same file.** Judge duplicates by content and by the
+  period or scope each file covers. Statements for different months, or
+  different items of one kind, complement each other and are all listed. The
+  `duplicate` exclusion stays reserved for byte-identical files.
+- **"Not this time" is a deferral, not a decision.** When the user holds a file
+  or an output back for now, record it as deferred for this batch only: the file
+  is `user_excluded`, the output stays outside this batch's `selected` scope,
+  and the summary says "deferred this batch". Never record a deferral as a
+  condition result, and never describe it as not needed or not applicable. Its
+  applicability stays open; raise it again in the next batch.
+
 ```bash
 "$ANYDOC_BIN" plan validate --input /absolute/folder --plan /absolute/assembly-plan.json --json
 "$ANYDOC_BIN" plan show --input /absolute/folder --plan /absolute/assembly-plan.json --json
@@ -304,10 +333,21 @@ Show the human the packing list in plain language, including estimated pages/siz
 "$ANYDOC_BIN" verify --input /absolute/folder --plan /absolute/assembly-plan.json --receipt /absolute/approval-receipt.json --json
 ```
 
-If assemble was interrupted: `resume --input …`. To drop scratch files only:
-`clean --input …`. It preserves the inspection, document map, plans, receipts,
-output history, sources, and all `anydoc-output/vNNN` snapshots. Re-inspection
-skips both AnyDoc roots and flags copied-back prior outputs.
+If assemble was interrupted: `resume --input …`.
+
+### Scratch files and cleanup after delivery
+
+Put every throwaway file you create for this case under
+`<input>/.anydoc-work/scratch/` and nowhere else in the client folder: OCR text,
+rendered review images, and superseded plan or map drafts. Never keep the
+current inspection, document map, plan, or receipt there.
+
+After verify passes and you have told the human the result, run
+`clean --input …` once. It removes page previews, `scratch/`, staging and journal
+files. It preserves the inspection, document map, plans, receipts,
+output history, sources, and all `anydoc-output/vNNN` snapshots. Do not clean
+while verify has not passed or the human is still reviewing pages.
+Re-inspection skips both AnyDoc roots and flags copied-back prior outputs.
 
 ## Plan actions this version can execute
 
