@@ -1,7 +1,7 @@
 <!-- generated-by: assert-skill-surface.py ; do not edit -->
 # formbro command reference
 
-Generated from `formbro commands --json` (version `1.9.14`). Every public command is listed.
+Generated from `formbro commands --json` (version `1.9.15`). Every public command is listed.
 
 ## Global options
 

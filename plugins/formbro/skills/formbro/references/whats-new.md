@@ -1,4 +1,6 @@
-# What's new in 1.9.14
+# What's new in 1.9.15
 
-You can now create a case even when the client's information is incomplete: import with `--allow-incomplete`, the case is saved, and the result lists what is still missing.
-When a new case is imported, any value still written in Chinese, Japanese or Korean is caught before saving and must be translated into English first; names in the original language stay in the native-name fields.
+This release republishes the 1.9.14 improvements with corrected marketplace tagging: `plugin-v1.9.15` points to the exact `release(formbro): 1.9.15` commit.
+
+- Use `formbro import apply-json --allow-incomplete` to save a case before all the client's information is available. The result lists what is still missing.
+- New-case imports reject values still written in Chinese, Japanese, or Korean until they are translated into English. Native-name fields and the case name are exempt.
